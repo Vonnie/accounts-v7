@@ -14,12 +14,12 @@
     <string name="accedit_user_email_hint">Valid user email</string>
     <string name="accedit_corp_website_hint">Valid corp website</string>
     <string name="accedit_save_text">Save</string>
-    <string name="title_activity_account">AccountActivity</string>
+    <string name="title_activity_account">Account Edit</string>
     <string name="menu_add_account">Add an account</string>
     <string name="title_activity_launch">LaunchActivity</string>
     <string name="title_activity_no_launch">NoLaunchActivity</string>
-    <string name="title_activity_account_list">AccountListActivity</string>
-    <string name="title_activity_suggest_list">SuggestListActivity</string>
+    <string name="title_activity_account_list">Accounts List</string>
+    <string name="title_activity_suggest_list">Suggest Passwords</string>
     <string name="home_btn_accounts_text">Accounts List</string>
     <string name="home_btn_suggest_text">Suggestions List</string>
     <string name="home_instruction_tex">Click function</string>
@@ -27,4 +27,8 @@
     <string name="accedit_notes_hint">Add notes</string>
     <string name="up_button_description">Up item on list</string>
     <string name="down_button_description">Down item on list</string>
+    <string name="home_btn_accounts_by_open_text">Accounts List, sorted by Open Date</string>
+    <string name="home_btn_import_text">Import Accounts from a prior export</string>
+    <string name="home_btn_export_text">Export Accounts</string>
+    <string name="home_btn_search_text">Search Accounts</string>
 </resources>
