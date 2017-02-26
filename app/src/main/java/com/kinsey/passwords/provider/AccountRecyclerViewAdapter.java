@@ -89,13 +89,13 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
                 public void onClick(View view) {
 //                    Log.d(TAG, "onClick: starts");
                     switch (view.getId()) {
-                        case R.id.tli_acct_edit:
+                        case R.id.tli_suggest_up:
                             if (mListener != null) {
                                 Log.d(TAG, "onClick: account " + account);
                                 mListener.onAccountEditClick(account);
                             }
                             break;
-                        case R.id.tli_acct_delete:
+                        case R.id.tli_suggest_delete:
                             if (mListener != null) {
                                 mListener.onAccountDeleteClick(account);
                             }
@@ -165,8 +165,8 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
 
             this.corp_name = (TextView) itemView.findViewById(R.id.tli_corp_name);
             this.user_name = (TextView) itemView.findViewById(R.id.tli_user_name);
-            this.editButton = (ImageButton) itemView.findViewById(R.id.tli_acct_edit);
-            this.deleteButton = (ImageButton) itemView.findViewById(R.id.tli_acct_delete);
+            this.editButton = (ImageButton) itemView.findViewById(R.id.tli_suggest_up);
+            this.deleteButton = (ImageButton) itemView.findViewById(R.id.tli_suggest_delete);
         }
     }
 }

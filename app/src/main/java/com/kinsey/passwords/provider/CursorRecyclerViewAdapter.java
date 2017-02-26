@@ -24,7 +24,11 @@ public class CursorRecyclerViewAdapter extends RecyclerView.Adapter<CursorRecycl
     private OnSuggestClickListener mListener;
 
     public interface OnSuggestClickListener {
-        void onSuggestEditClick(Suggest suggest);
+
+        void onSuggestUpClick(Suggest suggest);
+
+        void onSuggestDownClick(Suggest suggest);
+
         void onSuggestDeleteClick(Suggest suggest);
     }
 
@@ -51,13 +55,14 @@ public class CursorRecyclerViewAdapter extends RecyclerView.Adapter<CursorRecycl
 //        } else {
 //            Log.d(TAG, "onBindViewHolder: mCursor count " + mCursor.getCount());
 //        }
-        if((mCursor == null) || (mCursor.getCount() == 0)) {
+        if ((mCursor == null) || (mCursor.getCount() == 0)) {
             Log.d(TAG, "onBindViewHolder: providing instructions");
             holder.password.setText(R.string.generate_passwords_instruction);
-            holder.editButton.setVisibility(View.GONE);
+            holder.upButton.setVisibility(View.GONE);
+            holder.downButton.setVisibility(View.GONE);
             holder.deleteButton.setVisibility(View.GONE);
         } else {
-            if(!mCursor.moveToPosition(position)) {
+            if (!mCursor.moveToPosition(position)) {
                 throw new IllegalStateException("Couldn't move cursor to position " + position);
             }
 
@@ -66,11 +71,13 @@ public class CursorRecyclerViewAdapter extends RecyclerView.Adapter<CursorRecycl
                     mCursor.getInt(mCursor.getColumnIndex(SuggestsContract.Columns.SEQUENCE_COL)));
 
             holder.password.setText(mCursor.getString(mCursor.getColumnIndex(SuggestsContract.Columns.PASSWORD_COL)));
-            holder.editButton.setVisibility(View.VISIBLE);  // TODO add onClick listener
+            holder.upButton.setVisibility(View.VISIBLE);  // TODO add onClick listener
+            holder.downButton.setVisibility(View.VISIBLE);  // TODO add onClick listener
             holder.deleteButton.setVisibility(View.VISIBLE); // TODO add onClick listener
 
             holder.password.setText(suggest.getPassword());
-            holder.editButton.setVisibility(View.VISIBLE);  // TODO add onClick listener
+            holder.upButton.setVisibility(View.VISIBLE);  // TODO add onClick listener
+            holder.downButton.setVisibility(View.VISIBLE);  // TODO add onClick listener
             holder.deleteButton.setVisibility(View.VISIBLE); // TODO add onClick listener
 
             View.OnClickListener buttonListener = new View.OnClickListener() {
@@ -79,13 +86,18 @@ public class CursorRecyclerViewAdapter extends RecyclerView.Adapter<CursorRecycl
                 public void onClick(View view) {
 //                    Log.d(TAG, "onClick: starts");
                     switch (view.getId()) {
-                        case R.id.tli_acct_edit:
-                            if(mListener != null) {
-                                mListener.onSuggestEditClick(suggest);
+                        case R.id.tli_suggest_up:
+                            if (mListener != null) {
+                                mListener.onSuggestUpClick(suggest);
                             }
                             break;
-                        case R.id.tli_acct_delete:
-                            if(mListener != null) {
+                        case R.id.tli_suggest_down:
+                            if (mListener != null) {
+                                mListener.onSuggestDownClick(suggest);
+                            }
+                            break;
+                        case R.id.tli_suggest_delete:
+                            if (mListener != null) {
                                 mListener.onSuggestDeleteClick(suggest);
                             }
                             break;
@@ -97,7 +109,8 @@ public class CursorRecyclerViewAdapter extends RecyclerView.Adapter<CursorRecycl
                 }
             };
 
-            holder.editButton.setOnClickListener(buttonListener);
+            holder.upButton.setOnClickListener(buttonListener);
+            holder.downButton.setOnClickListener(buttonListener);
             holder.deleteButton.setOnClickListener(buttonListener);
         }
 
@@ -112,6 +125,7 @@ public class CursorRecyclerViewAdapter extends RecyclerView.Adapter<CursorRecycl
             return mCursor.getCount();
         }
     }
+
     /**
      * Swap in a new Cursor, returning the old Cursor,
      * The returned old Cursor is <em>not</em> closed.
@@ -139,20 +153,22 @@ public class CursorRecyclerViewAdapter extends RecyclerView.Adapter<CursorRecycl
     }
 
     public static class PasswordViewHolder extends RecyclerView.ViewHolder {
-    private static final String TAG = "PasswordViewHolder";
+        private static final String TAG = "PasswordViewHolder";
 
-    TextView password = null;
-    ImageButton editButton = null;
-    ImageButton deleteButton = null;
+        TextView password = null;
+        ImageButton upButton = null;
+        ImageButton downButton = null;
+        ImageButton deleteButton = null;
 
 
-    public PasswordViewHolder(View itemView) {
-        super(itemView);
+        public PasswordViewHolder(View itemView) {
+            super(itemView);
 //        Log.d(TAG, "TaskViewHolder: starts");
 
-        this.password = (TextView) itemView.findViewById(R.id.tli_password);
-        this.editButton = (ImageButton) itemView.findViewById(R.id.tli_acct_edit);
-        this.deleteButton = (ImageButton) itemView.findViewById(R.id.tli_acct_delete);
+            this.password = (TextView) itemView.findViewById(R.id.tli_password);
+            this.upButton = (ImageButton) itemView.findViewById(R.id.tli_suggest_up);
+            this.downButton = (ImageButton) itemView.findViewById(R.id.tli_suggest_down);
+            this.deleteButton = (ImageButton) itemView.findViewById(R.id.tli_suggest_delete);
+        }
     }
 }
-        }

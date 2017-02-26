@@ -22,7 +22,9 @@
     <string name="title_activity_suggest_list">SuggestListActivity</string>
     <string name="home_btn_accounts_text">Accounts List</string>
     <string name="home_btn_suggest_text">Suggestions List</string>
-    <string name="home_instruction_tex">Click on the function</string>
+    <string name="home_instruction_tex">Click function</string>
     <string name="home_btn_add_account_text">Add an account</string>
     <string name="accedit_notes_hint">Add notes</string>
+    <string name="up_button_description">Up item on list</string>
+    <string name="down_button_description">Down item on list</string>
 </resources>

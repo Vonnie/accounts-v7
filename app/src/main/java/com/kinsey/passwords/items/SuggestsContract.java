@@ -37,6 +37,7 @@ public class SuggestsContract {
      */
 //    public static final Uri CONTENT_URI = Uri.withAppendedPath(SuggestProvider.CONTENT_AUTHORITY_URI, TABLE_NAME);
     public static final Uri CONTENT_URI = Uri.withAppendedPath(SuggestProvider.CONTENT_AUTHORITY_URI, SuggestDatabase.DATABASE_NAME);
+    public static final Uri CONTENT_MAX_VALUE_URI = Uri.withAppendedPath(CONTENT_URI, "maxvalue");
 
     //    public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.kinsey.passport";
 

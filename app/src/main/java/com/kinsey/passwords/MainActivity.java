@@ -14,12 +14,10 @@ import android.view.View;
 import com.kinsey.passwords.items.Account;
 import com.kinsey.passwords.items.AccountsContract;
 import com.kinsey.passwords.items.Suggest;
-import com.kinsey.passwords.items.SuggestsContract;
 import com.kinsey.passwords.provider.AccountRecyclerViewAdapter;
-import com.kinsey.passwords.provider.CursorRecyclerViewAdapter;
 
 public class MainActivity extends AppCompatActivity
-        implements CursorRecyclerViewAdapter.OnSuggestClickListener,
+        implements
         AccountRecyclerViewAdapter.OnAccountClickListener,
         MainActivityFragment.OnActionClicked{
     public static final String TAG = "MainActivity";
@@ -227,17 +225,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onAccountEditClick(Account account) {
         editAccountRequest(account);
-    }
-
-    @Override
-    public void onSuggestEditClick(Suggest suggest) {
-
-    }
-
-    @Override
-    public void onSuggestDeleteClick(Suggest suggest) {
-        getContentResolver().delete(SuggestsContract.buildIdUri(suggest.getId()), null, null);
-
     }
 
     @Override

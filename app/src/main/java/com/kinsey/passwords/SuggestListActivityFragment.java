@@ -48,8 +48,8 @@ public class SuggestListActivityFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView: starts");
-        View view = inflater.inflate(R.layout.fragment_account_list, container, false);
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.account_items_list);
+        View view = inflater.inflate(R.layout.fragment_suggest_list, container, false);
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.suggest_items_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         twCurrentTitle = (TextView) view.findViewById(R.id.current_title);

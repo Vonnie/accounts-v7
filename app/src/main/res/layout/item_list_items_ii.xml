@@ -46,7 +46,7 @@
         android:weightSum="2">
 
         <ImageButton
-            android:id="@+id/tli_acct_edit"
+            android:id="@+id/tli_suggest_up"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -56,7 +56,7 @@
             app:srcCompat="@android:drawable/ic_menu_edit"/>
 
         <ImageButton
-            android:id="@+id/tli_acct_delete"
+            android:id="@+id/tli_suggest_delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"

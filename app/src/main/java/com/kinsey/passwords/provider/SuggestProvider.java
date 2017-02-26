@@ -35,14 +35,14 @@ public class SuggestProvider extends ContentProvider {
 
     private static final int BOOK = 1;
     private static final int ROW_ID = 2;
-    private static final int MAX_VALUE = 3;
+    private static final int MAX_SEQUENCE_VALUE = 3;
 
     private static UriMatcher buildUriMatcher() {
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
 
         matcher.addURI(AUTHORITY, SuggestDatabase.DATABASE_NAME, BOOK);
         matcher.addURI(AUTHORITY, SuggestDatabase.DATABASE_NAME + "/#", ROW_ID);
-        matcher.addURI(AUTHORITY, SuggestDatabase.DATABASE_NAME + "/maxvalue", MAX_VALUE);
+        matcher.addURI(AUTHORITY, SuggestDatabase.DATABASE_NAME + "/maxvalue", MAX_SEQUENCE_VALUE);
 
         return matcher;
     }
@@ -70,20 +70,22 @@ public class SuggestProvider extends ContentProvider {
                 queryBuilder.setTables(SuggestsContract.TABLE_NAME);
 //                selection = SuggestsContract.Columns._ID_COL;
 //                selectionArgs[0] = uri.getPathSegments().get(1);
-                long taskId = SuggestsContract.getId(uri);
-                queryBuilder.appendWhere(SuggestsContract.Columns._ID_COL + " = " + taskId);
+                long suggestId = SuggestsContract.getId(uri);
+                queryBuilder.appendWhere(SuggestsContract.Columns._ID_COL + " = " + suggestId);
                 break;
-            case MAX_VALUE:
+            case MAX_SEQUENCE_VALUE:
                 queryBuilder.setTables(SuggestsContract.TABLE_NAME);
 //                sortOrder = sortOrder + " DESC";
-                sortOrder = SuggestsContract.Columns._ID_COL + " DESC";
+//                sortOrder = SuggestsContract.Columns.SEQUENCE_COL + " DESC";
+                sortOrder = sortOrder + " DESC";
 //                c = queryBuilder.query(mOpenHelper, null, selection,
 //                        selectionArgs, null, null, sortOrder, "1");
                 break;
             default:
                 queryBuilder.setTables(SuggestsContract.TABLE_NAME);
                 if (sortOrder == null || sortOrder == "")
-                    sortOrder = SEQUENCE_COL + " ASC";
+                    sortOrder = SEQUENCE_COL;
+                sortOrder = sortOrder + " ASC";
 
 //                c = queryBuilder.query(passwordDB, projection, selection,
 //                        selectionArgs, null, null, sortOrder);
@@ -112,7 +114,40 @@ public class SuggestProvider extends ContentProvider {
     @Nullable
     @Override
     public Uri insert(Uri uri, ContentValues contentValues) {
-        return null;
+        Log.d(TAG, "Entering insert, called with uri:" + uri);
+        final int match = sUriMatcher.match(uri);
+        Log.d(TAG, "match is " + match);
+
+        final SQLiteDatabase db;
+
+        Uri returnUri;
+        long recordId;
+
+        switch(match) {
+            case BOOK:
+                db = mOpenHelper.getWritableDatabase();
+                recordId = db.insert(SuggestsContract.TABLE_NAME, null, contentValues);
+                if(recordId >=0) {
+                    returnUri = SuggestsContract.buildIdUri(recordId);
+                } else {
+                    throw new android.database.SQLException("Failed to insert into " + uri.toString());
+                }
+                break;
+
+            default:
+                throw new IllegalArgumentException("Unknown uri: " + uri);
+        }
+
+        if (recordId >= 0) {
+            // something was inserted
+            Log.d(TAG, "insert: Setting notifyChanged with " + uri);
+            getContext().getContentResolver().notifyChange(uri, null);
+        } else {
+            Log.d(TAG, "insert: nothing inserted");
+        }
+        Log.d(TAG, "Exiting insert, returning " + returnUri);
+        return returnUri;
+
     }
 
     @Override
@@ -161,8 +196,51 @@ public class SuggestProvider extends ContentProvider {
     }
 
     @Override
-    public int update(Uri uri, ContentValues contentValues, String s, String[] strings) {
-        return 0;
+    public int update(Uri uri, ContentValues contentValues, String selection, String[] selectionArgs) {
+        Log.d(TAG, "update called with uri " + uri);
+        final int match = sUriMatcher.match(uri);
+        Log.d(TAG, "match is " + match);
+
+        final SQLiteDatabase db;
+        int count;
+
+        String selectionCriteria;
+
+        switch(match) {
+            case BOOK:
+                db = mOpenHelper.getWritableDatabase();
+                count = db.update(SuggestsContract.TABLE_NAME, contentValues, selection, selectionArgs);
+                break;
+
+            case ROW_ID:
+                db = mOpenHelper.getWritableDatabase();
+                long suggestId = SuggestsContract.getId(uri);
+                selectionCriteria = SuggestsContract.Columns._ID_COL + " = " + suggestId;
+                Log.d(TAG, "update: selectionCriteria " + selectionCriteria);
+                Log.d(TAG, "update: contentValues " + contentValues);
+
+                if((selection != null) && (selection.length()>0)) {
+                    selectionCriteria += " AND (" + selection + ")";
+                }
+                count = db.update(SuggestsContract.TABLE_NAME, contentValues, selectionCriteria, selectionArgs);
+                break;
+
+
+            default:
+                throw new IllegalArgumentException("Unknown uri: " + uri);
+        }
+
+        if(count > 0) {
+            // something was deleted
+            Log.d(TAG, "updatead: Setting notifyChange with " + uri);
+            getContext().getContentResolver().notifyChange(uri, null);
+        } else {
+            Log.d(TAG, "update: nothing updated");
+        }
+
+        Log.d(TAG, "Exiting update, returning " + count);
+        return count;
+
     }
 }
 

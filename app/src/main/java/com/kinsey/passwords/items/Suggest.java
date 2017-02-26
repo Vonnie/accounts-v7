@@ -16,6 +16,7 @@ public class Suggest implements Serializable {
     private String note = "";
     private Date actvyDate = null;
     private int rating = 0;
+    private int newSequence = 0;
 
     public Suggest(int id, String password, int sequence) {
         this.id = id;
@@ -47,6 +48,10 @@ public class Suggest implements Serializable {
         return sequence;
     }
 
+    public int getNewSequence() {
+        return newSequence;
+    }
+
     public void setActvyDate(Date actvyDate) {
         this.actvyDate = actvyDate;
     }
@@ -65,6 +70,10 @@ public class Suggest implements Serializable {
 
     public void setSequence(int sequence) {
         this.sequence = sequence;
+    }
+
+    public void setNewSequence(int newSequence) {
+        this.newSequence = newSequence;
     }
 
     @Override
