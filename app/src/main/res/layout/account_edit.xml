@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <EditText
+        android:id="@+id/acc_corp_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/accedit_corp_name_hint"
+        android:inputType="textCapWords|textNoSuggestions" />
+
+    <EditText
+        android:id="@+id/acc_user_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/accedit_user_name_hint"
+        android:inputType="textNoSuggestions" />
+
+    <EditText
+        android:id="@+id/acc_user_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/accedit_user_email_hint"
+        android:inputType="textEmailAddress" />
+
+    <EditText
+        android:id="@+id/acc_corp_website"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/accedit_corp_website_hint"
+        android:inputType="textNoSuggestions" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:drawableLeft="@android:drawable/ic_menu_save"
+        android:drawableStart="@android:drawable/ic_menu_save"
+        android:text="@string/accedit_save_text" />
+
+</LinearLayout>

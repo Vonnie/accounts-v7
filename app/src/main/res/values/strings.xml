@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">Accounts</string>
+    <string name="action_settings">Settings</string>
+    <string name="menu_accounts">Accounts</string>
+    <string name="menu_suggests">Suggestions</string>
+    <string name="no_items_message">No Items</string>
+    <string name="edit_description_description">Button to edit passwords</string>
+    <string name="delete_button_description">Button to delete password</string>
+    <string name="edit_button_description">Edit password text</string>
+    <string name="generate_passwords_instruction">Generate passwords with button below</string>
+    <string name="no_account_items">No account items</string>
+    <string name="accedit_corp_name_hint">Corporation name required</string>
+    <string name="accedit_user_name_hint">User name required</string>
+    <string name="accedit_user_email_hint">Valid user email</string>
+    <string name="accedit_corp_website_hint">Valid corp website</string>
+    <string name="accedit_save_text">Save</string>
+    <string name="title_activity_account">AccountActivity</string>
+    <string name="menu_add_account">Add an account</string>
+    <string name="title_activity_launch">LaunchActivity</string>
+    <string name="title_activity_no_launch">NoLaunchActivity</string>
+    <string name="title_activity_account_list">AccountListActivity</string>
+    <string name="title_activity_suggest_list">SuggestListActivity</string>
+    <string name="home_btn_accounts_text">Accounts List</string>
+    <string name="home_btn_suggest_text">Suggestions List</string>
+    <string name="home_instruction_tex">Click on the function</string>
+    <string name="home_btn_add_account_text">Add an account</string>
+    <string name="accedit_notes_hint">Add notes</string>
+</resources>
