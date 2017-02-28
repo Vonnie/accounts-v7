@@ -31,11 +31,12 @@ public class MainActivityFragment extends Fragment {
     TextView twCurrentTitle;
 //    Loader<Cursor> loader;
 
-    Button mAccountsButton, mAddAccountButton, mSuggestsButton;
+    Button mAccountsButton, mAccountsByOpenButton, mAddAccountButton, mSuggestsButton;
     private OnActionClicked mActionListener = null;
 
     interface OnActionClicked {
         void onAccountsClicked();
+        void onAccountsByOpenClicked();
         void onAddAccountClicked();
         void onSuggestsClicked();
     }
@@ -61,7 +62,7 @@ public class MainActivityFragment extends Fragment {
 //        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 //        return inflater.inflate(R.layout.fragment_main, container, false);
 
-        twCurrentTitle = (TextView) view.findViewById(R.id.current_title);
+//        twCurrentTitle = (TextView) view.findViewById(R.id.current_title);
 
 
         Bundle bundle=getArguments();
@@ -80,6 +81,7 @@ public class MainActivityFragment extends Fragment {
 
 
         mAccountsButton = (Button) view.findViewById(R.id.home_btn_accounts);
+        mAccountsByOpenButton = (Button) view.findViewById(R.id.home_btn_accounts_by_open);
         mAddAccountButton = (Button) view.findViewById(R.id.home_btn_add_account);
         mSuggestsButton = (Button) view.findViewById(R.id.home_btn_suggests);
 
@@ -90,6 +92,13 @@ public class MainActivityFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 mActionListener.onAccountsClicked();
+            }
+        });
+
+        mAccountsByOpenButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mActionListener.onAccountsByOpenClicked();
             }
         });
 

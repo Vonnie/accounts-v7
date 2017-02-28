@@ -19,7 +19,7 @@ import com.kinsey.passwords.provider.AccountRecyclerViewAdapter;
 public class MainActivity extends AppCompatActivity
         implements
         AccountRecyclerViewAdapter.OnAccountClickListener,
-        MainActivityFragment.OnActionClicked{
+        MainActivityFragment.OnActionClicked {
     public static final String TAG = "MainActivity";
 
     // whether or not the activity is i 2-pane mode
@@ -27,6 +27,9 @@ public class MainActivity extends AppCompatActivity
     private boolean mTwoPane = false;
 
     private static final String ACCOUNT_FRAGMENT = "AccountFragment";
+
+    public static final int REQUEST_ACCOUNTS_LIST = 1;
+    public static final int REQUEST_SUGGESTS_LIST = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -179,7 +182,7 @@ public class MainActivity extends AppCompatActivity
 
         Intent detailIntent = new Intent(this, AccountListActivity.class);
         detailIntent.putExtra(Account.class.getSimpleName(), "sortorder");
-        startActivity(detailIntent);
+        startActivityForResult(detailIntent, REQUEST_ACCOUNTS_LIST);
 
 //        AccountListActivityFragment fragment = new AccountListActivityFragment();
 //
@@ -218,6 +221,43 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_CANCELED) {
+            return;
+        }
+        // Check which request we're responding to
+        switch (requestCode) {
+            case REQUEST_ACCOUNTS_LIST: {
+//                Log.d(TAG, "onActivityResult: you're back");
+                // Make sure the request was successful
+
+                if (resultCode == RESULT_OK) {
+                    Log.d(TAG, "onActivityResult: success");
+                    int resultWhich = data.getIntExtra("which", 0);
+                    Log.d(TAG, "onActivityResult: which " + resultWhich);
+                    if (resultWhich == 4) {
+                        suggestsListRequest();
+                    }
+                    // The user picked a contact.
+                    // The Intent's data Uri identifies which contact was selected.
+
+                    // Do something with the contact here (bigger example below)
+                }
+                break;
+            }
+            case REQUEST_SUGGESTS_LIST:
+                if (resultCode == RESULT_OK) {
+                    String result = data.getStringExtra("result");
+                    Log.d(TAG, "onActivityResult: result " + result);
+                    suggestsListRequest();
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
     public void onAccountDeleteClick(Account account) {
         getContentResolver().delete(AccountsContract.buildIdUri(account.getId()), null, null);
     }
@@ -233,6 +273,11 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    public void onAccountsByOpenClicked() {
+        accountsListRequest();
+    }
+
+    @Override
     public void onSuggestsClicked() {
         suggestsListRequest();
     }
@@ -241,4 +286,7 @@ public class MainActivity extends AppCompatActivity
     public void onAddAccountClicked() {
         editAccountRequest(null);
     }
+
+
+
 }

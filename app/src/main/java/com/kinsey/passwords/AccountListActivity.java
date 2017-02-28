@@ -1,20 +1,23 @@
 package com.kinsey.passwords;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 
 import com.kinsey.passwords.items.Account;
-import com.kinsey.passwords.items.AccountsContract;
 import com.kinsey.passwords.provider.AccountRecyclerViewAdapter;
+import com.kinsey.passwords.tools.AppDialog;
 
 public class AccountListActivity extends AppCompatActivity
-        implements AccountRecyclerViewAdapter.OnAccountClickListener{
+        implements AccountRecyclerViewAdapter.OnAccountClickListener,
+        AppDialog.DialogEvents {
 
     private static final String TAG = "AccountListActivity";
 
@@ -22,12 +25,18 @@ public class AccountListActivity extends AppCompatActivity
     // i.e. running in landscape on a tablet
     private boolean mTwoPane = false;
 
+    private OnListClickListener mListener;
+    public interface OnListClickListener {
+        void onListSuggestsClick();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account_list);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -41,7 +50,17 @@ public class AccountListActivity extends AppCompatActivity
 //                                        Toast.makeText(AccountListActivity.this,
 //                                                "Snackbar action clicked",
 //                                                Toast.LENGTH_SHORT).show();
-                                        editAccountRequest(null);
+//                                        editAccountRequest(null);
+//                                        mListener.onListSuggestsClick();
+
+                                        FragmentManager fragmentManager = getSupportFragmentManager();
+                                        AppDialog newFragment = AppDialog.newInstance(2, "select action");
+                                        newFragment.show(fragmentManager, "dialog");
+
+//                                        Intent returnIntent = new Intent();
+//                                        returnIntent.putExtra("result", "open_date");
+//                                        setResult(Activity.RESULT_OK, returnIntent);
+//                                        finish();
                                     }
                                 }
                                 ).show();
@@ -68,7 +87,40 @@ public class AccountListActivity extends AppCompatActivity
 
     @Override
     public void onAccountDeleteClick(Account account) {
-        getContentResolver().delete(AccountsContract.buildIdUri(account.getId()), null, null);
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        AppDialog newFragment = AppDialog.newInstance(1, "hi from dialog");
+        newFragment.show(fragmentManager, "dialog");
+
+//        FragmentManager fragmentManager = getSupportFragmentManager();
+//        AppDialog newFragment = new AppDialog();
+//        Bundle args = new Bundle();
+//        args.putInt("id", 1);
+//        args.putString("message", "hi from dialog");
+//        newFragment.setArguments(args);
+//        newFragment.show(fragmentManager, "dialog");
+
+
+////        newFragment.show(getSupportFragmentManager(), "NoticeDialogFragment");
+//
+//        FragmentTransaction transaction = fragmentManager.beginTransaction();
+//        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+////        transaction.add(android.R.id.content, newFragment)
+////                .addToBackStack(null).commit();
+
+//        FragmentManager fm = getFragmentManager();
+//        AppDialog dialogFragment = new AppDialog ();
+//        dialogFragment.show(fm, "Sample Fragment");
+
+//        Intent detailIntent = new Intent(this, AppDialog.class);
+//        detailIntent.putExtra("id", 1);
+//        detailIntent.putExtra("message", "hi from dialog");
+//        startActivity(detailIntent);
+
+//        AppDialog dialog = new AppDialog();
+//        FragmentManager fragmentManager = getSupportFragmentManager();
+//        dialog.show(fragmentManager, "NoticeDialogFragment");
+//        getContentResolver().delete(AccountsContract.buildIdUri(account.getId()), null, null);
     }
 
     @Override
@@ -94,4 +146,34 @@ public class AccountListActivity extends AppCompatActivity
         }
     }
 
+    @Override
+    public void onDialogCancelled(int dialogId) {
+
+    }
+
+    @Override
+    public void onPositiveDialogResult(int dialogId, Bundle args) {
+        Log.d(TAG, "onPositiveDialogResult: confirmed to delete");
+    }
+
+    @Override
+    public void onNegativeDialogResult(int dialogId, Bundle args) {
+        Log.d(TAG, "onNegativeDialogResult: delete cancel");
+    }
+
+    @Override
+    public void onActionRequestDialogResult(int dialogId, Bundle args, int which) {
+        switch (which) {
+            case 0:
+                editAccountRequest(null);
+                break;
+            case 4:
+                Intent returnIntent = new Intent();
+                returnIntent.putExtra("which", which);
+                setResult(Activity.RESULT_OK, returnIntent);
+                finish();
+                break;
+            default:
+        }
+    }
 }

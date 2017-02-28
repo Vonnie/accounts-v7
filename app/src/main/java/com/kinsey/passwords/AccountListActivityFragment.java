@@ -31,6 +31,12 @@ public class AccountListActivityFragment extends Fragment
     TextView twCurrentTitle;
     Loader<Cursor> loader;
 
+    public enum FragmentListMode { CORP_NAME, OPEN_DATE };
+    private FragmentListMode mListMode = FragmentListMode.CORP_NAME;
+
+    public enum FragmentMsgMode { ADD, SORTED_OPT };
+    private FragmentMsgMode mMsgMode = FragmentMsgMode.ADD;
+
     public AccountListActivityFragment() {
         Log.d(TAG, "AccountListActivityFragment: starts");
     }
@@ -51,6 +57,7 @@ public class AccountListActivityFragment extends Fragment
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         twCurrentTitle = (TextView) view.findViewById(R.id.current_title);
+//        Bundle arguments = getActivity().getIntent().getExtras();
 
         mAccountAdapter = new AccountRecyclerViewAdapter(null,
                 (AccountRecyclerViewAdapter.OnAccountClickListener) getActivity());
@@ -72,6 +79,7 @@ public class AccountListActivityFragment extends Fragment
                         AccountsContract.Columns.USER_EMAIL_COL,
                         AccountsContract.Columns.CORP_WEBSITE_COL,
                         AccountsContract.Columns.NOTE_COL,
+                        AccountsContract.Columns.OPEN_DATE_COL,
                         AccountsContract.Columns.SEQUENCE_COL};
 //        , SuggestsContract.Columns.ACTVY_DATE_COL,
 //                SuggestsContract.Columns.NOTE_COL};

@@ -13,6 +13,9 @@ import com.kinsey.passwords.R;
 import com.kinsey.passwords.items.Account;
 import com.kinsey.passwords.items.AccountsContract;
 
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+
 /**
  * Created by Yvonne on 2/21/2017.
  */
@@ -27,6 +30,10 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
         void onAccountEditClick(Account account);
         void onAccountDeleteClick(Account account);
     }
+
+    private static String pattern_mdy_display = "M/d/y";
+    public static SimpleDateFormat format_mdy_display = new SimpleDateFormat(
+            pattern_mdy_display, Locale.US);
 
 
     public AccountRecyclerViewAdapter(Cursor cursor, OnAccountClickListener listener) {
@@ -73,6 +80,21 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
             }
             holder.corp_name.setText(mCursor.getString(mCursor.getColumnIndex(AccountsContract.Columns.CORP_NAME_COL)));
             holder.user_name.setText(mCursor.getString(mCursor.getColumnIndex(AccountsContract.Columns.USER_NAME_COL)));
+
+            Log.d(TAG, "onBindViewHolder: dte col " + mCursor.getColumnIndex(AccountsContract.Columns.OPEN_DATE_COL));
+            if (mCursor.getColumnIndex(AccountsContract.Columns.OPEN_DATE_COL) != -1) {
+                if (mCursor.isNull(mCursor.getColumnIndex(AccountsContract.Columns.OPEN_DATE_COL))) {
+                    holder.open_date.setText("");
+                } else {
+
+                    long actvyDt = mCursor.getLong(mCursor.getColumnIndex(AccountsContract.Columns.OPEN_DATE_COL));
+//            Date dte = new Date(item.getActvyLong());
+                    holder.open_date.setText(format_mdy_display.format(actvyDt));
+                }
+            } else {
+                holder.open_date.setText("");
+            }
+
 //            holder.user_email.setText(mCursor.getString(mCursor.getColumnIndex(AccountsContract.Columns.USER_EMAIL_COL)));
 //            holder.corp_.setText(mCursor.getString(mCursor.getColumnIndex(AccountsContract.Columns.CORP_WEBSITE_COL)));
             holder.editButton.setVisibility(View.VISIBLE);  // TODO add onClick listener
@@ -155,6 +177,7 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
 
         TextView corp_name = null;
         TextView user_name = null;
+        TextView open_date = null;
         ImageButton editButton = null;
         ImageButton deleteButton = null;
 
@@ -165,6 +188,7 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
 
             this.corp_name = (TextView) itemView.findViewById(R.id.tli_corp_name);
             this.user_name = (TextView) itemView.findViewById(R.id.tli_user_name);
+            this.open_date = (TextView) itemView.findViewById(R.id.tli_open_date);
             this.editButton = (ImageButton) itemView.findViewById(R.id.tli_suggest_up);
             this.deleteButton = (ImageButton) itemView.findViewById(R.id.tli_suggest_delete);
         }

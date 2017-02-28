@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Accounts</string>
+    <string name="app_name">Accounts, choose function</string>
     <string name="action_settings">Settings</string>
     <string name="menu_accounts">Accounts</string>
     <string name="menu_suggests">Suggestions</string>
@@ -31,4 +31,6 @@
     <string name="home_btn_import_text">Import Accounts from a prior export</string>
     <string name="home_btn_export_text">Export Accounts</string>
     <string name="home_btn_search_text">Search Accounts</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
 </resources>

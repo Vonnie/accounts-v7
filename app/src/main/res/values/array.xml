@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="account_list_options">
+        <item>Add an Account</item>
+        <item>Account sorted by Corp Name</item>
+        <item>Account sorted by Open Date</item>
+        <item>Account Favorites</item>
+        <item>Suggestions</item>
+    </string-array>
+</resources>

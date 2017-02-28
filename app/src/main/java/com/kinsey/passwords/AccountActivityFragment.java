@@ -129,6 +129,7 @@ public class AccountActivityFragment extends Fragment {
                             values.put(AccountsContract.Columns.USER_EMAIL_COL, mUserEmailTextView.getText().toString());
                             values.put(AccountsContract.Columns.CORP_WEBSITE_COL, mCorpWebsiteTextView.getText().toString());
                             values.put(AccountsContract.Columns.NOTE_COL, mNoteTextView.getText().toString());
+                            values.put(AccountsContract.Columns.OPEN_DATE_COL, System.currentTimeMillis());
 //                            values.put(AccountsContract.Columns.TASKS_SORTORDER, so);
                             contentResolver.insert(AccountsContract.CONTENT_URI, values);
                         }
