@@ -90,12 +90,11 @@ public class SuggestListActivity extends AppCompatActivity
         return iId;
     }
 
-    List<Suggest> loadPasswords(Suggest suggest) {
-        Log.d(TAG, "loadPasswords: seq " + suggest.getSequence());
+    List<Suggest> loadPasswords() {
+        Log.d(TAG, "loadPasswords: starts ");
         Cursor cursor = getContentResolver().query(
                 SuggestsContract.CONTENT_URI, null, null, null, SuggestsContract.Columns.SEQUENCE_COL);
 
-        int reseq = 1;
         List<Suggest> listSuggests = new ArrayList<Suggest>();
         if (cursor != null) {
             while(cursor.moveToNext()) {
@@ -105,14 +104,8 @@ public class SuggestListActivity extends AppCompatActivity
                         cursor.getInt(cursor.getColumnIndex(SuggestsContract.Columns._ID_COL)),
                         cursor.getString(cursor.getColumnIndex(SuggestsContract.Columns.PASSWORD_COL)),
                         cursor.getInt(cursor.getColumnIndex(SuggestsContract.Columns.SEQUENCE_COL)));
-                item.setNewSequence(reseq);
-                if (suggest.getId() == item.getId()) {
-                    Log.d(TAG, "loadPasswords: item to move " + item.getId()
-                            + ":" + item.getSequence());
-                }
+                item.setNewSequence(cursor.getInt(cursor.getColumnIndex(SuggestsContract.Columns.SEQUENCE_COL)));
                 listSuggests.add(item);
-                Log.d(TAG, "loadPasswords: reseq " + reseq);
-                reseq++;
             }
             cursor.close();
         }
@@ -128,7 +121,7 @@ public class SuggestListActivity extends AppCompatActivity
 
     @Override
     public void onSuggestDownClick(Suggest suggest) {
-        List<Suggest> listSuggests = loadPasswords(suggest);
+        List<Suggest> listSuggests = loadPasswords();
         int nextId = -1;
         int iLimit = listSuggests.size();
         for (int i = 0; i < iLimit; i++) {
@@ -188,7 +181,7 @@ public class SuggestListActivity extends AppCompatActivity
 
     @Override
     public void onSuggestUpClick(Suggest suggest) {
-        List<Suggest> listSuggests = loadPasswords(suggest);
+        List<Suggest> listSuggests = loadPasswords();
         int priorId = -1;
         int iLimit = listSuggests.size();
         for (int i = 0; i < iLimit; i++) {

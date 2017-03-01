@@ -2,8 +2,10 @@ package com.kinsey.passwords;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -15,11 +17,16 @@ import com.kinsey.passwords.items.Account;
 import com.kinsey.passwords.items.AccountsContract;
 import com.kinsey.passwords.items.Suggest;
 import com.kinsey.passwords.provider.AccountRecyclerViewAdapter;
+import com.kinsey.passwords.tools.AppDialog;
+
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity
         implements
         AccountRecyclerViewAdapter.OnAccountClickListener,
-        MainActivityFragment.OnActionClicked {
+        MainActivityFragment.OnActionClicked,
+        AppDialog.DialogEvents {
     public static final String TAG = "MainActivity";
 
     // whether or not the activity is i 2-pane mode
@@ -27,9 +34,16 @@ public class MainActivity extends AppCompatActivity
     private boolean mTwoPane = false;
 
     private static final String ACCOUNT_FRAGMENT = "AccountFragment";
+    public static String DEFAULT_APP_DIRECTORY = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath()
+            + "/Passport";
+
 
     public static final int REQUEST_ACCOUNTS_LIST = 1;
     public static final int REQUEST_SUGGESTS_LIST = 2;
+
+    private static String pattern_ymdtime = "yyyy-MM-dd HH:mm:ss.0";
+    public static SimpleDateFormat format_ymdtime = new SimpleDateFormat(
+            pattern_ymdtime, Locale.US);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,7 +158,7 @@ public class MainActivity extends AppCompatActivity
                 editAccountRequest(null);
                 break;
             case R.id.menumain_showAccounts:
-                accountsListRequest();
+                accountsListRequest(AccountsContract.ACCOUNT_LIST_BY_CORP_NAME);
                 break;
             case R.id.menumain_showSuggests:
                 suggestsListRequest();
@@ -174,14 +188,14 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private void accountsListRequest() {
+    private void accountsListRequest(int sortorder) {
         Log.d(TAG, "accountsListRequest: starts");
         if (mTwoPane) {
         } else {
         }
 
         Intent detailIntent = new Intent(this, AccountListActivity.class);
-        detailIntent.putExtra(Account.class.getSimpleName(), "sortorder");
+        detailIntent.putExtra(Account.class.getSimpleName(), sortorder);
         startActivityForResult(detailIntent, REQUEST_ACCOUNTS_LIST);
 
 //        AccountListActivityFragment fragment = new AccountListActivityFragment();
@@ -235,8 +249,18 @@ public class MainActivity extends AppCompatActivity
                     Log.d(TAG, "onActivityResult: success");
                     int resultWhich = data.getIntExtra("which", 0);
                     Log.d(TAG, "onActivityResult: which " + resultWhich);
-                    if (resultWhich == 4) {
-                        suggestsListRequest();
+                    switch (resultWhich) {
+                        case 1:
+                            accountsListRequest(AccountsContract.ACCOUNT_LIST_BY_CORP_NAME);
+                            break;
+                        case 2:
+                            accountsListRequest(AccountsContract.ACCOUNT_LIST_BY_OPEN_DATE);
+                            break;
+                        case 4:
+                            suggestsListRequest();
+                            break;
+                        default:
+                            break;
                     }
                     // The user picked a contact.
                     // The Intent's data Uri identifies which contact was selected.
@@ -269,12 +293,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onAccountsClicked() {
-        accountsListRequest();
-    }
-
-    @Override
-    public void onAccountsByOpenClicked() {
-        accountsListRequest();
+        accountsListRequest(AccountsContract.ACCOUNT_LIST_BY_CORP_NAME);
     }
 
     @Override
@@ -287,6 +306,41 @@ public class MainActivity extends AppCompatActivity
         editAccountRequest(null);
     }
 
+    @Override
+    public void onAccountsExportClicked() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        AppDialog newFragment = AppDialog.newInstance(AppDialog.DIALOG_ACCOUNT_FILE_OPTIONS,
+                "Select action");
+        newFragment.show(fragmentManager, "dialog");
+    }
 
+    @Override
+    public void onActionRequestDialogResult(int dialogId, Bundle args, int which) {
+        Log.d(TAG, "onActionRequestDialogResult: starts which " + which);
+        switch (which) {
+            case 0:
+                break;
+            case 1:
+            case 2:
+            case 4:
+                break;
+            default:
+        }
 
+    }
+
+    @Override
+    public void onPositiveDialogResult(int dialogId, Bundle args) {
+
+    }
+
+    @Override
+    public void onNegativeDialogResult(int dialogId, Bundle args) {
+
+    }
+
+    @Override
+    public void onDialogCancelled(int dialogId) {
+
+    }
 }

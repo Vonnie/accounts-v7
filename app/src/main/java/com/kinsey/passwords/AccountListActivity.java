@@ -2,18 +2,31 @@ package com.kinsey.passwords;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.JsonWriter;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.kinsey.passwords.items.Account;
+import com.kinsey.passwords.items.AccountsContract;
 import com.kinsey.passwords.provider.AccountRecyclerViewAdapter;
 import com.kinsey.passwords.tools.AppDialog;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.kinsey.passwords.MainActivity.DEFAULT_APP_DIRECTORY;
 
 public class AccountListActivity extends AppCompatActivity
         implements AccountRecyclerViewAdapter.OnAccountClickListener,
@@ -42,8 +55,8 @@ public class AccountListActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Add a new account", Snackbar.LENGTH_LONG)
-                        .setAction("Action",
+                Snackbar.make(view, "Request an action", Snackbar.LENGTH_LONG)
+                        .setAction("See list",
                                 new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
@@ -54,7 +67,8 @@ public class AccountListActivity extends AppCompatActivity
 //                                        mListener.onListSuggestsClick();
 
                                         FragmentManager fragmentManager = getSupportFragmentManager();
-                                        AppDialog newFragment = AppDialog.newInstance(2, "select action");
+                                        AppDialog newFragment = AppDialog.newInstance(AppDialog.DIALOG_ACCOUNT_LIST_OPTIONS,
+                                                                "Select action");
                                         newFragment.show(fragmentManager, "dialog");
 
 //                                        Intent returnIntent = new Intent();
@@ -85,11 +99,192 @@ public class AccountListActivity extends AppCompatActivity
 //        fragmentTransaction.commit();
     }
 
+
+    public String ExportAccountDB() {
+        String msgError = "";
+        int count = -1;
+        try {
+
+            String jsonDownload = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath();
+
+            File folder = new File(jsonDownload);
+            if (!folder.exists()) {
+                Log.d(TAG, "ExportAccountDB: create download " + jsonDownload);
+//                 create directory
+                folder.mkdirs();
+                Log.v(TAG, "dirCreated " + DEFAULT_APP_DIRECTORY);
+            }
+
+
+            folder = new File(DEFAULT_APP_DIRECTORY);
+            if (!folder.exists()) {
+                Log.d(TAG, "ExportAccountDB: create download passport " + DEFAULT_APP_DIRECTORY);
+                // create directory
+                folder.mkdirs();
+                Log.v(TAG, "dirCreated " + DEFAULT_APP_DIRECTORY);
+            }
+
+
+            String jsonFile = DEFAULT_APP_DIRECTORY
+                    + "/accounts.json";
+
+////			FileWriter fileWriter = new FileWriter(jsonFilePath);
+//            File file = new File(jsonFilePath);
+//
+            Log.d(TAG, "ExportAccountDB: accounts.json " + jsonFile);
+//
+////            if (file.exists()) {
+////                file.delete();
+////            }
+//
+//            if (file.exists()) {
+//                Log.d(TAG, "ExportAccountDB: file exists");
+//            } else {
+//                Log.d(TAG, "ExportAccountDB: file not exists");
+//            }
+//
+//            OutputStream fos = new BufferedOutputStream(new FileOutputStream(file));
+//            OutputStreamWriter out = new OutputStreamWriter(fos, "UTF-8");
+
+
+
+//			JsonWriter writer = new JsonWriter(fileWriter);
+//            JsonWriter writer = new JsonWriter(out);
+            JsonWriter writer = new JsonWriter(new FileWriter(jsonFile));
+            writer.setIndent("  ");
+            count = writeMessagesArray(writer);
+            writer.flush();
+            writer.close();
+        } catch (IOException e1) {
+            msgError = e1.getMessage();
+            Log.e(TAG, "ExportAccountDB error: " + e1.getMessage());
+        } catch (Exception e2) {
+            e2.printStackTrace();
+            System.out.println(e2.getMessage());
+            msgError = "jsonError: " + e2.getMessage();
+            Log.v(TAG, msgError);
+        }
+        Log.d(TAG, "ExportAccountDB: return msg " + msgError);
+        if (count != -1) {
+            Toast.makeText(AccountListActivity.this,
+                    count + " Exported accounts",
+                    Toast.LENGTH_SHORT).show();
+        }
+        return msgError;
+    }
+
+    public int writeMessagesArray(JsonWriter writer) throws IOException {
+        int count = -1;
+        try {
+
+            List<Account> listAccounts = loadAccounts();
+
+            writer.beginArray();
+            for (Account item : listAccounts) {
+                writeMessage(writer, item);
+                count++;
+            }
+            writer.endArray();
+        } catch (Exception e2) {
+            e2.printStackTrace();
+            System.out.println(e2.getMessage());
+            Log.v(TAG, "writeMessageArrayError: " + e2.getMessage());
+        }
+        return count;
+    }
+
+    public void writeMessage(JsonWriter writer, Account item)
+            throws IOException {
+        try {
+            writer.beginObject();
+            writer.name("corpName").value(item.getCorpName());
+            writer.name("accountId").value(item.getPassportId());
+            writer.name("seq").value(item.getSequence());
+            writer.name("userName").value(item.getUserName());
+            writer.name("userEmail").value(item.getUserEmail());
+            writer.name("refFrom").value(item.getRefFrom());
+            writer.name("refTo").value(item.getRefTo());
+            if (item.getCorpWebsite() == null) {
+                writer.name("website").nullValue();
+            } else {
+                writer.name("website").value(item.getCorpWebsite().toString());
+            }
+            if (item.getOpenLong() == 0) {
+                writer.name("openDt").nullValue();
+            } else {
+                writer.name("openDt").value(
+                        MainActivity.format_ymdtime.format(item.getOpenLong()));
+            }
+            if (item.getActvyLong() == 0) {
+                writer.name("actvyDt").nullValue();
+            } else {
+                writer.name("actvyDt").value(
+                        MainActivity.format_ymdtime.format(item.getActvyLong()));
+            }
+            writer.name("note").value(item.getNote());
+            writer.endObject();
+        } catch (Exception e2) {
+            e2.printStackTrace();
+            System.out.println(e2.getMessage());
+            Log.v(TAG, "writeMessageError: " + e2.getMessage());
+        }
+    }
+
+
+    List<Account> loadAccounts() {
+        Log.d(TAG, "loadPasswords: starts ");
+        Cursor cursor = getContentResolver().query(
+                AccountsContract.CONTENT_URI, null, null, null, AccountsContract.Columns.CORP_NAME_COL);
+
+        List<Account> listAccounts = new ArrayList<Account>();
+        if (cursor != null) {
+            while(cursor.moveToNext()) {
+                Account item = new Account(
+                        cursor.getInt(cursor.getColumnIndex(AccountsContract.Columns._ID_COL)),
+                        cursor.getString(cursor.getColumnIndex(AccountsContract.Columns.CORP_NAME_COL)),
+                        cursor.getString(cursor.getColumnIndex(AccountsContract.Columns.USER_NAME_COL)),
+                        cursor.getString(cursor.getColumnIndex(AccountsContract.Columns.USER_EMAIL_COL)),
+                        cursor.getString(cursor.getColumnIndex(AccountsContract.Columns.CORP_WEBSITE_COL)),
+                        cursor.getInt(cursor.getColumnIndex(AccountsContract.Columns.SEQUENCE_COL)));
+
+                if (cursor.getColumnIndex(AccountsContract.Columns.PASSPORT_ID_COL) != -1) {
+                    if (!cursor.isNull(cursor.getColumnIndex(AccountsContract.Columns.PASSPORT_ID_COL))) {
+                        item.setPassportId(cursor.getInt(cursor.getColumnIndex(AccountsContract.Columns.PASSPORT_ID_COL)));
+                    }
+                }
+                if (cursor.getColumnIndex(AccountsContract.Columns.OPEN_DATE_COL) != -1) {
+                    if (!cursor.isNull(cursor.getColumnIndex(AccountsContract.Columns.OPEN_DATE_COL))) {
+                        item.setOpenLong(cursor.getLong(cursor.getColumnIndex(AccountsContract.Columns.OPEN_DATE_COL)));
+                    }
+                }
+                if (cursor.getColumnIndex(AccountsContract.Columns.ACTVY_DATE_COL) != -1) {
+                    if (!cursor.isNull(cursor.getColumnIndex(AccountsContract.Columns.ACTVY_DATE_COL))) {
+                        item.setActvyLong(cursor.getLong(cursor.getColumnIndex(AccountsContract.Columns.ACTVY_DATE_COL)));
+                    }
+                }
+                if (cursor.getColumnIndex(AccountsContract.Columns.REF_FROM_COL) != -1) {
+                    if (!cursor.isNull(cursor.getColumnIndex(AccountsContract.Columns.REF_FROM_COL))) {
+                        item.setRefFrom(cursor.getInt(cursor.getColumnIndex(AccountsContract.Columns.REF_FROM_COL)));
+                    }
+                }
+                if (cursor.getColumnIndex(AccountsContract.Columns.REF_TO_COL) != -1) {
+                    if (!cursor.isNull(cursor.getColumnIndex(AccountsContract.Columns.REF_TO_COL))) {
+                        item.setRefFrom(cursor.getInt(cursor.getColumnIndex(AccountsContract.Columns.REF_TO_COL)));
+                    }
+                }
+                listAccounts.add(item);
+            }
+            cursor.close();
+        }
+
+        return listAccounts;
+    }
+
     @Override
     public void onAccountDeleteClick(Account account) {
 
         FragmentManager fragmentManager = getSupportFragmentManager();
-        AppDialog newFragment = AppDialog.newInstance(1, "hi from dialog");
+        AppDialog newFragment = AppDialog.newInstance(AppDialog.DIALOG_YES_NO, "Confirm account delete", account.getId());
         newFragment.show(fragmentManager, "dialog");
 
 //        FragmentManager fragmentManager = getSupportFragmentManager();
@@ -154,6 +349,8 @@ public class AccountListActivity extends AppCompatActivity
     @Override
     public void onPositiveDialogResult(int dialogId, Bundle args) {
         Log.d(TAG, "onPositiveDialogResult: confirmed to delete");
+        Log.d(TAG, "onPositiveDialogResult: acctid " + args.getInt(AppDialog.DIALOG_ACCOUNT_ID));
+        getContentResolver().delete(AccountsContract.buildIdUri(args.getInt(AppDialog.DIALOG_ACCOUNT_ID)), null, null);
     }
 
     @Override
@@ -163,11 +360,19 @@ public class AccountListActivity extends AppCompatActivity
 
     @Override
     public void onActionRequestDialogResult(int dialogId, Bundle args, int which) {
+        Log.d(TAG, "onActionRequestDialogResult: starts");
+
         switch (which) {
             case 0:
                 editAccountRequest(null);
                 break;
+            case 1:
+            case 2:
+                break;
             case 4:
+                ExportAccountDB();
+                break;
+            case 5:
                 Intent returnIntent = new Intent();
                 returnIntent.putExtra("which", which);
                 setResult(Activity.RESULT_OK, returnIntent);

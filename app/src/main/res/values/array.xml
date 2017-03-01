@@ -6,6 +6,15 @@
         <item>Account sorted by Corp Name</item>
         <item>Account sorted by Open Date</item>
         <item>Account Favorites</item>
+        <item>Export Accounts</item>
+        <item>Import Accounts</item>
         <item>Suggestions</item>
+    </string-array>
+    <string-array name="file_list_options">
+        <item>Import</item>
+        <item>Export</item>
+        <item>HTML Accounts</item>
+        <item>Account Id&quot;s</item>
+        <item>Accounts JSON</item>
     </string-array>
 </resources>

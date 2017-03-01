@@ -37,8 +37,24 @@
         android:hint="@string/accedit_corp_website_hint"
         android:inputType="textNoSuggestions" />
 
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:ems="10"
+        android:id="@+id/acc_open_date"
+        android:hint="@string/accedit_open_date" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textMultiLine"
+        android:ems="10"
+        android:id="@+id/acc_notes"
+        android:hint="@string/accedit_notes_hint" />
+
     <Button
-        android:id="@+id/button"
+        android:id="@+id/acc_save_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"

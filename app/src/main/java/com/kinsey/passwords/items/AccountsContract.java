@@ -46,11 +46,15 @@ public class AccountsContract {
             // private constructor to prevent instantiation
         }
     }
+
+    public static final int ACCOUNT_LIST_BY_CORP_NAME = 1;
+    public static final int ACCOUNT_LIST_BY_OPEN_DATE = 2;
     /**
      *  The URI to access the Tasks table
      */
 //    public static final Uri CONTENT_URI = Uri.withAppendedPath(CONTENT_AUTHORITY_URI, TABLE_NAME);
     public static final Uri CONTENT_URI = Uri.withAppendedPath(CONTENT_AUTHORITY_URI, AccountDatabase.DATABASE_NAME);
+    public static final Uri CONTENT_MAX_VALUE_URI = Uri.withAppendedPath(CONTENT_URI, "maxvalue");
 
 //    public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.kinsey.passport";
 //    public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd." + CONTENT_AUTHORITY + "." + TABLE_NAME;

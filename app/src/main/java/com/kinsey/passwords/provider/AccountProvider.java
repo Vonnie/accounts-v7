@@ -73,7 +73,7 @@ public class AccountProvider extends ContentProvider {
             case MAX_VALUE:
                 queryBuilder.setTables(AccountsContract.TABLE_NAME);
 //                sortOrder = sortOrder + " DESC";
-                sortOrder = AccountsContract.Columns._ID_COL + " DESC";
+                sortOrder = AccountsContract.Columns.PASSPORT_ID_COL + " DESC";
 //                c = queryBuilder.query(mOpenHelper, null, selection,
 //                        selectionArgs, null, null, sortOrder, "1");
                 break;

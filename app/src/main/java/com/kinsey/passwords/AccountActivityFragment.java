@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -12,9 +13,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.kinsey.passwords.items.Account;
 import com.kinsey.passwords.items.AccountsContract;
+
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -30,8 +35,13 @@ public class AccountActivityFragment extends Fragment {
     private EditText mUserEmailTextView;
     private EditText mCorpWebsiteTextView;
     private EditText mNoteTextView;
+    private TextView mOpenDateTextView;
     private Button mSaveButton;
     private OnSaveClicked mSaveListener = null;
+
+    private static String pattern_ymdtimehm = "yyyy-MM-dd kk:mm";
+    public static SimpleDateFormat format_ymdtimehm = new SimpleDateFormat(
+            pattern_ymdtimehm, Locale.US);
 
     interface OnSaveClicked {
         void onSaveClicked();
@@ -52,6 +62,7 @@ public class AccountActivityFragment extends Fragment {
         mUserEmailTextView = (EditText) view.findViewById(R.id.acc_user_email);
         mCorpWebsiteTextView = (EditText) view.findViewById(R.id.acc_corp_website);
         mNoteTextView = (EditText) view.findViewById(R.id.acc_notes);
+        mOpenDateTextView = (TextView) view.findViewById(R.id.acc_open_date);
         mSaveButton = (Button) view.findViewById(R.id.acc_save);
 
 //        Bundle arguments = getArguments();
@@ -69,6 +80,14 @@ public class AccountActivityFragment extends Fragment {
                 mUserEmailTextView.setText(account.getUserEmail());
                 mCorpWebsiteTextView.setText(account.getCorpWebsite());
                 mNoteTextView.setText(account.getNote());
+                if (account.getOpenLong() != 0) {
+                    Log.d(TAG, "onCreateView: openLong " + account.getOpenLong());
+                    mOpenDateTextView.setText("Open: " + format_ymdtimehm.format(account.getOpenLong()));
+                } else {
+                    Log.d(TAG, "onCreateView: zero open date");
+                }
+
+
 //                mSortOrderTextView.setText(Integer.toString(account.getSortOrder()));
                 mMode = FragmentEditMode.EDIT;
             } else {
@@ -124,12 +143,16 @@ public class AccountActivityFragment extends Fragment {
                     case ADD:
                         if (mCorpNameTextView.length()>0) {
                             Log.d(TAG, "onClick: adding new account");
+                            values.put(AccountsContract.Columns.PASSPORT_ID_COL,
+                                    String.valueOf(getMaxValue(AccountsContract.Columns.PASSPORT_ID_COL)));
                             values.put(AccountsContract.Columns.CORP_NAME_COL, mCorpNameTextView.getText().toString());
                             values.put(AccountsContract.Columns.USER_NAME_COL, mUserNameTextView.getText().toString());
                             values.put(AccountsContract.Columns.USER_EMAIL_COL, mUserEmailTextView.getText().toString());
                             values.put(AccountsContract.Columns.CORP_WEBSITE_COL, mCorpWebsiteTextView.getText().toString());
                             values.put(AccountsContract.Columns.NOTE_COL, mNoteTextView.getText().toString());
-                            values.put(AccountsContract.Columns.OPEN_DATE_COL, System.currentTimeMillis());
+                            values.put(AccountsContract.Columns.OPEN_DATE_COL, String.valueOf(System.currentTimeMillis()));
+                            Log.d(TAG, "onClick: open date entered "  + mOpenDateTextView.getText().toString());
+                            Log.d(TAG, "onClick: open date millis " + System.currentTimeMillis());
 //                            values.put(AccountsContract.Columns.TASKS_SORTORDER, so);
                             contentResolver.insert(AccountsContract.CONTENT_URI, values);
                         }
@@ -147,6 +170,23 @@ public class AccountActivityFragment extends Fragment {
 //        return inflater.inflate(R.layout.fragment_account, container, false);
     }
 
+
+    private int getMaxValue(String col) {
+        int iId = 0;
+        Cursor cursor = getActivity().getContentResolver().query(
+                AccountsContract.CONTENT_MAX_VALUE_URI, null, null, null, col);
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                int iIndex = cursor.getColumnIndex(col);
+                iId = cursor.getInt(iIndex);
+                Log.d(TAG, "getMaxValue: " + iId);
+            }
+            cursor.close();
+        }
+
+        Log.d(TAG, "getMaxValue: " + iId);
+        return iId;
+    }
 
     @Override
     public void onAttach(Context context) {

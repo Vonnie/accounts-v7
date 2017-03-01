@@ -20,11 +20,13 @@ public class AppDialog extends DialogFragment {
 
     public static final String DIALOG_ID = "id";
     public static final String DIALOG_MESSAGE = "message";
+    public static final String DIALOG_ACCOUNT_ID = "acct_id";
     public static final String DIALOG_POSITIVE_RID = "positive_rid";
     public static final String DIALOG_NEGATIVE_RID = "negative_rid";
 
     public static final int DIALOG_YES_NO = 1;
     public static final int DIALOG_ACCOUNT_LIST_OPTIONS = 2;
+    public static final int DIALOG_ACCOUNT_FILE_OPTIONS = 3;
 
     private EditText mEditText;
 
@@ -57,6 +59,15 @@ public class AppDialog extends DialogFragment {
         return frag;
     }
 
+    public static AppDialog newInstance(int dialogId, String messageString, int acctId) {
+        AppDialog frag = new AppDialog();
+        Bundle args = new Bundle();
+        args.putInt("id", dialogId);
+        args.putString("message", messageString);
+        args.putInt("acct_id", acctId);
+        frag.setArguments(args);
+        return frag;
+    }
 //    @Nullable
 //    @Override
 //    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -94,6 +105,7 @@ public class AppDialog extends DialogFragment {
 
         final Bundle arguments = getArguments();
         final int dialogId;
+        final int accountId;
         String messageString;
         int positiveStringId;
         int negativeStringId;
@@ -101,6 +113,7 @@ public class AppDialog extends DialogFragment {
         if (arguments != null) {
             dialogId = arguments.getInt(DIALOG_ID);
             messageString = arguments.getString(DIALOG_MESSAGE);
+            accountId = arguments.getInt(DIALOG_ID);
 
             if (dialogId == 0 || messageString == null) {
                 throw new IllegalArgumentException("DIALOG_ID and/or DIALOG_MESSAGE not present in the bundle");
@@ -120,32 +133,51 @@ public class AppDialog extends DialogFragment {
 
         Log.d(TAG, "onCreateDialog: posString " + positiveStringId);
         Log.d(TAG, "onCreateDialog: negString " + negativeStringId);
-        if (dialogId == DIALOG_YES_NO) {
-            builder.setMessage(messageString)
-                    .setPositiveButton(positiveStringId, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int which) {
-                            // callback positive result method
-                            mDialogEvents.onPositiveDialogResult(dialogId, arguments);
-                        }
-                    })
-                    .setNegativeButton(negativeStringId, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int which) {
-                            // callback negative result method
-                            mDialogEvents.onNegativeDialogResult(dialogId, arguments);
-                        }
-                    });
-        } else {
-            builder.setTitle(messageString)
-                    .setItems(R.array.account_list_options,
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int which) {
-                                    Log.d(TAG, "onClick: which " + which);
-                                    mDialogEvents.onActionRequestDialogResult(dialogId, arguments, which);
-                                }
-                            });
+        switch (dialogId) {
+            case DIALOG_YES_NO: {
+                builder.setMessage(messageString)
+                        .setPositiveButton(positiveStringId, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int which) {
+                                // callback positive result method
+                                mDialogEvents.onPositiveDialogResult(dialogId, arguments);
+                            }
+                        })
+                        .setNegativeButton(negativeStringId, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int which) {
+                                // callback negative result method
+                                mDialogEvents.onNegativeDialogResult(dialogId, arguments);
+                            }
+                        });
+                break;
+            }
+            case DIALOG_ACCOUNT_LIST_OPTIONS: {
+                builder.setTitle(messageString)
+                        .setItems(R.array.account_list_options,
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int which) {
+                                        Log.d(TAG, "onClick: which " + which);
+                                        mDialogEvents.onActionRequestDialogResult(dialogId, arguments, which);
+                                    }
+                                });
+                break;
+            }
+            case DIALOG_ACCOUNT_FILE_OPTIONS: {
+                builder.setTitle(messageString)
+                        .setItems(R.array.file_list_options,
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int which) {
+                                        Log.d(TAG, "onClick: which " + which);
+                                        mDialogEvents.onActionRequestDialogResult(dialogId, arguments, which);
+                                    }
+                                });
+                break;
+            }
+            default:
+                break;
         }
 //        return super.onCreateDialog(savedInstanceState);
         return builder.create();

@@ -31,14 +31,14 @@ public class MainActivityFragment extends Fragment {
     TextView twCurrentTitle;
 //    Loader<Cursor> loader;
 
-    Button mAccountsButton, mAccountsByOpenButton, mAddAccountButton, mSuggestsButton;
+    Button mAccountsButton, mAddAccountButton, mSuggestsButton, mAccountsExport;
     private OnActionClicked mActionListener = null;
 
     interface OnActionClicked {
         void onAccountsClicked();
-        void onAccountsByOpenClicked();
         void onAddAccountClicked();
         void onSuggestsClicked();
+        void onAccountsExportClicked();
     }
 
 
@@ -81,9 +81,9 @@ public class MainActivityFragment extends Fragment {
 
 
         mAccountsButton = (Button) view.findViewById(R.id.home_btn_accounts);
-        mAccountsByOpenButton = (Button) view.findViewById(R.id.home_btn_accounts_by_open);
         mAddAccountButton = (Button) view.findViewById(R.id.home_btn_add_account);
         mSuggestsButton = (Button) view.findViewById(R.id.home_btn_suggests);
+        mAccountsExport = (Button) view.findViewById(R.id.home_btn_export);
 
         Log.d(TAG, "onCreateView: loader_id " + LOADER_ID);
 
@@ -92,13 +92,6 @@ public class MainActivityFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 mActionListener.onAccountsClicked();
-            }
-        });
-
-        mAccountsByOpenButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mActionListener.onAccountsByOpenClicked();
             }
         });
 
@@ -116,6 +109,13 @@ public class MainActivityFragment extends Fragment {
             }
         });
 
+
+        mAccountsExport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mActionListener.onAccountsExportClicked();
+            }
+        });
 
 //        Log.d(TAG, "onCreateView: to cast");
 //        Log.d(TAG, "onCreateView: activity " + getActivity());

@@ -61,6 +61,8 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
         if ((mCursor == null) || (mCursor.getCount() == 0)) {
             Log.d(TAG, "onBindViewHolder: no accts");
             holder.corp_name.setText(R.string.no_account_items);
+            holder.user_name.setText("Click Info button to add accounts");
+            holder.open_date.setText("");
             holder.editButton.setVisibility(View.GONE);
             holder.deleteButton.setVisibility(View.GONE);
         } else {
@@ -75,25 +77,30 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
                     mCursor.getString(mCursor.getColumnIndex(AccountsContract.Columns.CORP_WEBSITE_COL)),
                     mCursor.getInt(mCursor.getColumnIndex(AccountsContract.Columns.SEQUENCE_COL)));
 
+            if (mCursor.getColumnIndex(AccountsContract.Columns.PASSPORT_ID_COL) != -1) {
+                if (!mCursor.isNull(mCursor.getColumnIndex(AccountsContract.Columns.PASSPORT_ID_COL))) {
+                    account.setPassportId(mCursor.getInt(mCursor.getColumnIndex(AccountsContract.Columns.PASSPORT_ID_COL)));
+                }
+            }
+
             if (mCursor.getColumnIndex(AccountsContract.Columns.NOTE_COL) != -1) {
                 account.setNote(mCursor.getString(mCursor.getColumnIndex(AccountsContract.Columns.NOTE_COL)));
             }
-            holder.corp_name.setText(mCursor.getString(mCursor.getColumnIndex(AccountsContract.Columns.CORP_NAME_COL)));
-            holder.user_name.setText(mCursor.getString(mCursor.getColumnIndex(AccountsContract.Columns.USER_NAME_COL)));
-
-            Log.d(TAG, "onBindViewHolder: dte col " + mCursor.getColumnIndex(AccountsContract.Columns.OPEN_DATE_COL));
+//            Log.d(TAG, "onBindViewHolder: dte col " + mCursor.getColumnIndex(AccountsContract.Columns.OPEN_DATE_COL));
             if (mCursor.getColumnIndex(AccountsContract.Columns.OPEN_DATE_COL) != -1) {
                 if (mCursor.isNull(mCursor.getColumnIndex(AccountsContract.Columns.OPEN_DATE_COL))) {
                     holder.open_date.setText("");
                 } else {
-
-                    long actvyDt = mCursor.getLong(mCursor.getColumnIndex(AccountsContract.Columns.OPEN_DATE_COL));
+                    account.setOpenLong(mCursor.getLong(mCursor.getColumnIndex(AccountsContract.Columns.OPEN_DATE_COL)));
 //            Date dte = new Date(item.getActvyLong());
-                    holder.open_date.setText(format_mdy_display.format(actvyDt));
+                    holder.open_date.setText(format_mdy_display.format(account.getOpenLong()));
                 }
             } else {
                 holder.open_date.setText("");
             }
+
+            holder.corp_name.setText(mCursor.getString(mCursor.getColumnIndex(AccountsContract.Columns.CORP_NAME_COL)));
+            holder.user_name.setText(mCursor.getString(mCursor.getColumnIndex(AccountsContract.Columns.USER_NAME_COL)));
 
 //            holder.user_email.setText(mCursor.getString(mCursor.getColumnIndex(AccountsContract.Columns.USER_EMAIL_COL)));
 //            holder.corp_.setText(mCursor.getString(mCursor.getColumnIndex(AccountsContract.Columns.CORP_WEBSITE_COL)));
@@ -111,13 +118,13 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
                 public void onClick(View view) {
 //                    Log.d(TAG, "onClick: starts");
                     switch (view.getId()) {
-                        case R.id.tli_suggest_up:
+                        case R.id.tli_acct_edit:
                             if (mListener != null) {
                                 Log.d(TAG, "onClick: account " + account);
                                 mListener.onAccountEditClick(account);
                             }
                             break;
-                        case R.id.tli_suggest_delete:
+                        case R.id.tli_acct_delete:
                             if (mListener != null) {
                                 mListener.onAccountDeleteClick(account);
                             }
@@ -189,8 +196,8 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
             this.corp_name = (TextView) itemView.findViewById(R.id.tli_corp_name);
             this.user_name = (TextView) itemView.findViewById(R.id.tli_user_name);
             this.open_date = (TextView) itemView.findViewById(R.id.tli_open_date);
-            this.editButton = (ImageButton) itemView.findViewById(R.id.tli_suggest_up);
-            this.deleteButton = (ImageButton) itemView.findViewById(R.id.tli_suggest_delete);
+            this.editButton = (ImageButton) itemView.findViewById(R.id.tli_acct_edit);
+            this.deleteButton = (ImageButton) itemView.findViewById(R.id.tli_acct_delete);
         }
     }
 }
