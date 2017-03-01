@@ -10,6 +10,8 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.JsonReader;
+import android.util.JsonToken;
 import android.util.JsonWriter;
 import android.util.Log;
 import android.view.View;
@@ -21,12 +23,17 @@ import com.kinsey.passwords.provider.AccountRecyclerViewAdapter;
 import com.kinsey.passwords.tools.AppDialog;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import static com.kinsey.passwords.MainActivity.DEFAULT_APP_DIRECTORY;
+import static com.kinsey.passwords.MainActivity.format_ymdtime;
 
 public class AccountListActivity extends AppCompatActivity
         implements AccountRecyclerViewAdapter.OnAccountClickListener,
@@ -168,7 +175,7 @@ public class AccountListActivity extends AppCompatActivity
         if (count != -1) {
             Toast.makeText(AccountListActivity.this,
                     count + " Exported accounts",
-                    Toast.LENGTH_SHORT).show();
+                    Toast.LENGTH_LONG).show();
         }
         return msgError;
     }
@@ -213,13 +220,13 @@ public class AccountListActivity extends AppCompatActivity
                 writer.name("openDt").nullValue();
             } else {
                 writer.name("openDt").value(
-                        MainActivity.format_ymdtime.format(item.getOpenLong()));
+                        format_ymdtime.format(item.getOpenLong()));
             }
             if (item.getActvyLong() == 0) {
                 writer.name("actvyDt").nullValue();
             } else {
                 writer.name("actvyDt").value(
-                        MainActivity.format_ymdtime.format(item.getActvyLong()));
+                        format_ymdtime.format(item.getActvyLong()));
             }
             writer.name("note").value(item.getNote());
             writer.endObject();
@@ -232,7 +239,7 @@ public class AccountListActivity extends AppCompatActivity
 
 
     List<Account> loadAccounts() {
-        Log.d(TAG, "loadPasswords: starts ");
+        Log.d(TAG, "loadAccounts: starts ");
         Cursor cursor = getContentResolver().query(
                 AccountsContract.CONTENT_URI, null, null, null, AccountsContract.Columns.CORP_NAME_COL);
 
@@ -278,6 +285,126 @@ public class AccountListActivity extends AppCompatActivity
         }
 
         return listAccounts;
+    }
+
+    private void ImportAccountDB() {
+        Log.d(TAG, "ImportAccountDB: starts");
+        String msg = "";
+        try {
+            List<Account> listAccounts = new ArrayList<Account>();
+            JsonReader reader = new JsonReader(new FileReader(
+                    MainActivity.DEFAULT_APP_DIRECTORY + "/accounts.json"));
+            // reader.beginObject();
+
+            reader.beginArray();
+            while (reader.hasNext()) {
+                Account account = readMessage(reader);
+                if (account == null) {
+                    break;
+                } else {
+                    listAccounts.add(account);
+                }
+            }
+            reader.endArray();
+            reader.close();
+
+            msg = listAccounts.size() + " Accounts Imported";
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            msg = "import file not found";
+        } catch (IOException e) {
+            e.printStackTrace();
+            msg = "import file error " + e.getMessage();
+//			savePassports();
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            msg = "import exception";
+        }
+        Toast.makeText(AccountListActivity.this,
+                msg, Toast.LENGTH_LONG).show();
+
+    }
+
+    public Account readMessage(JsonReader reader) {
+        Account item = new Account();
+        boolean retSuccess = true;
+        try {
+            reader.beginObject();
+            Calendar c1 = Calendar.getInstance();
+            while (reader.hasNext()) {
+                String name = reader.nextName();
+                String value = "";
+                int iValue = 0;
+                if (name.equals("corpName")) {
+                    // System.out.println(reader.nextString());
+                    value = reader.nextString();
+//					Log.v(TAG, "json corpName " + value);
+                    item.setCorpName(value);
+                } else if (name.equals("accountId")) {
+                    // System.out.println(reader.nextInt());
+                    iValue = reader.nextInt();
+//					Log.v(TAG, "json id " + iValue);
+                    item.setPassportId(iValue);
+                } else if (name.equals("seq")) {
+                    // System.out.println(reader.nextInt());
+                    iValue = reader.nextInt();
+//					Log.v(TAG, "json seq " + iValue);
+                    item.setSequence(iValue);
+                } else if (name.equals("userName")) {
+                    value = reader.nextString();
+//					Log.v(TAG, "json userName " + value);
+                    item.setUserName(value);
+                } else if (name.equals("userEmail")) {
+                    value = reader.nextString();
+//					Log.v(TAG, "json userEmail " + value);
+                    item.setUserEmail(value);
+                } else if (name.equals("refFrom")) {
+                    iValue = reader.nextInt();
+//					Log.v(TAG, "json refFrom " + iValue);
+                    item.setRefFrom(iValue);
+                } else if (name.equals("refTo")) {
+                    iValue = reader.nextInt();
+//					Log.v(TAG, "json refTo " + iValue);
+                    item.setRefTo(iValue);
+                } else if (name.equals("website")) {
+                    value = reader.nextString();
+//					Log.v(TAG, "json website " + value);
+//                    URL urlValue = new URL(value);
+//                    item.setCorpWebsite(urlValue);
+                    item.setCorpWebsite(value);
+                } else if (name.equals("openDt")) {
+                    value = reader.nextString();
+//					Log.v(TAG, "json openDt " + value);
+                    Date dte = format_ymdtime.parse(value);
+                    c1.setTime(dte);
+                    item.setOpenLong(c1.getTimeInMillis());
+                } else if (name.equals("actvyDt")) {
+//					Log.v(TAG, "actvyDt reader " + reader);
+                    Date dte;
+                    if (reader.peek() == JsonToken.NULL) {
+                        reader.nextNull();
+                        dte = new Date();
+                    } else {
+                        value = reader.nextString();
+//						Log.v(TAG, "json actvyDt " + value);
+                        dte = format_ymdtime.parse(value);
+                    }
+                    c1.setTime(dte);
+                    item.setActvyLong(c1.getTimeInMillis());
+                } else {
+                    reader.skipValue(); // avoid some unhandle events
+                }
+            }
+
+            reader.endObject();
+
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            item = null;
+        }
+        return item;
     }
 
     @Override
@@ -373,6 +500,9 @@ public class AccountListActivity extends AppCompatActivity
                 ExportAccountDB();
                 break;
             case 5:
+                ImportAccountDB();
+                break;
+            case 6:
                 Intent returnIntent = new Intent();
                 returnIntent.putExtra("which", which);
                 setResult(Activity.RESULT_OK, returnIntent);

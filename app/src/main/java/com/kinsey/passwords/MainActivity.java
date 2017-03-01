@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -306,13 +305,13 @@ public class MainActivity extends AppCompatActivity
         editAccountRequest(null);
     }
 
-    @Override
-    public void onAccountsExportClicked() {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        AppDialog newFragment = AppDialog.newInstance(AppDialog.DIALOG_ACCOUNT_FILE_OPTIONS,
-                "Select action");
-        newFragment.show(fragmentManager, "dialog");
-    }
+//    @Override
+//    public void onAccountsExportClicked() {
+//        FragmentManager fragmentManager = getSupportFragmentManager();
+//        AppDialog newFragment = AppDialog.newInstance(AppDialog.DIALOG_ACCOUNT_FILE_OPTIONS,
+//                "Select action");
+//        newFragment.show(fragmentManager, "dialog");
+//    }
 
     @Override
     public void onActionRequestDialogResult(int dialogId, Bundle args, int which) {

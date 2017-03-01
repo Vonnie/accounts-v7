@@ -22,6 +22,8 @@ public class Account implements Serializable {
     private int refFrom = 0;
     private int refTo = 0;
 
+    public Account() {}
+
     public Account(int _Id,
                    String corpName,
                    String userName,
