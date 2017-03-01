@@ -1,6 +1,8 @@
 package com.kinsey.passwords;
 
 import android.app.Activity;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -308,6 +310,15 @@ public class AccountListActivity extends AppCompatActivity
             reader.endArray();
             reader.close();
 
+            ContentResolver contentResolver = getContentResolver();
+            getContentResolver().delete(null, null, null);
+
+            for (Account item : listAccounts) {
+                Log.d(TAG, "ImportAccountDB: acc " + item.getPassportId()
+                        + " " + item.getCorpName());
+                addAccountToDB(contentResolver, item);
+            }
+
             msg = listAccounts.size() + " Accounts Imported";
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -326,7 +337,25 @@ public class AccountListActivity extends AppCompatActivity
 
     }
 
-    public Account readMessage(JsonReader reader) {
+    private void addAccountToDB(ContentResolver contentResolver, Account account) {
+
+        ContentValues values = new ContentValues();
+        values.put(AccountsContract.Columns.PASSPORT_ID_COL, account.getPassportId());
+        values.put(AccountsContract.Columns.CORP_NAME_COL, account.getCorpName());
+        values.put(AccountsContract.Columns.USER_NAME_COL, account.getUserName());
+        values.put(AccountsContract.Columns.USER_EMAIL_COL, account.getUserEmail());
+        values.put(AccountsContract.Columns.CORP_WEBSITE_COL, account.getCorpWebsite());
+        values.put(AccountsContract.Columns.NOTE_COL, account.getNote());
+        values.put(AccountsContract.Columns.OPEN_DATE_COL, account.getOpenLong());
+        values.put(AccountsContract.Columns.ACTVY_DATE_COL, account.getActvyLong());
+        values.put(AccountsContract.Columns.REF_FROM_COL, account.getRefFrom());
+        values.put(AccountsContract.Columns.REF_TO_COL, account.getRefTo());
+        values.put(AccountsContract.Columns.SEQUENCE_COL, account.getSequence());
+        contentResolver.insert(AccountsContract.CONTENT_URI, values);
+
+    }
+
+    private Account readMessage(JsonReader reader) {
         Account item = new Account();
         boolean retSuccess = true;
         try {
@@ -344,7 +373,7 @@ public class AccountListActivity extends AppCompatActivity
                 } else if (name.equals("accountId")) {
                     // System.out.println(reader.nextInt());
                     iValue = reader.nextInt();
-//					Log.v(TAG, "json id " + iValue);
+					Log.v(TAG, "json id " + iValue);
                     item.setPassportId(iValue);
                 } else if (name.equals("seq")) {
                     // System.out.println(reader.nextInt());

@@ -38,20 +38,20 @@
         android:inputType="textNoSuggestions" />
 
     <EditText
+        android:id="@+id/acc_open_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="text"
         android:ems="10"
-        android:id="@+id/acc_open_date"
-        android:hint="@string/accedit_open_date" />
+        android:hint="@string/accedit_open_date"
+        android:inputType="text" />
 
     <EditText
+        android:id="@+id/acc_notes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textMultiLine"
         android:ems="10"
-        android:id="@+id/acc_notes"
-        android:hint="@string/accedit_notes_hint" />
+        android:hint="@string/accedit_notes_hint"
+        android:inputType="textMultiLine" />
 
     <Button
         android:id="@+id/acc_save_button"

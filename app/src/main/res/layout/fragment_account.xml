@@ -41,11 +41,6 @@
         android:hint="@string/accedit_corp_website_hint"
         android:inputType="textNoSuggestions" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/acc_open_date" />
-
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -62,5 +57,15 @@
         android:drawableLeft="@android:drawable/ic_menu_save"
         android:drawableStart="@android:drawable/ic_menu_save"
         android:text="@string/accedit_save_text" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/acc_open_date" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/acc_account_id" />
 
 </LinearLayout>

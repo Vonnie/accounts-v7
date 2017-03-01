@@ -36,6 +36,7 @@ public class AccountActivityFragment extends Fragment {
     private EditText mCorpWebsiteTextView;
     private EditText mNoteTextView;
     private TextView mOpenDateTextView;
+    private TextView mAccountIdTextView;
     private Button mSaveButton;
     private OnSaveClicked mSaveListener = null;
 
@@ -63,6 +64,7 @@ public class AccountActivityFragment extends Fragment {
         mCorpWebsiteTextView = (EditText) view.findViewById(R.id.acc_corp_website);
         mNoteTextView = (EditText) view.findViewById(R.id.acc_notes);
         mOpenDateTextView = (TextView) view.findViewById(R.id.acc_open_date);
+        mAccountIdTextView = (TextView) view.findViewById(R.id.acc_account_id);
         mSaveButton = (Button) view.findViewById(R.id.acc_save);
 
 //        Bundle arguments = getArguments();
@@ -86,6 +88,7 @@ public class AccountActivityFragment extends Fragment {
                 } else {
                     Log.d(TAG, "onCreateView: zero open date");
                 }
+                mAccountIdTextView.setText(account.getPassportId());
 
 
 //                mSortOrderTextView.setText(Integer.toString(account.getSortOrder()));
