@@ -259,7 +259,7 @@ public class MainActivity extends AppCompatActivity
                         case 2:
                             accountsListRequest(AccountsContract.ACCOUNT_LIST_BY_OPEN_DATE);
                             break;
-                        case 4:
+                        case 7:
                             suggestsListRequest();
                             break;
                         default:

@@ -44,7 +44,7 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
 
     @Override
     public AccountViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        Log.d(TAG, "onCreateViewHolder: new view requested");
+//        Log.d(TAG, "onCreateViewHolder: new view requested");
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.account_list_items, parent, false);
         return new AccountViewHolder(view);
     }
@@ -53,11 +53,11 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
     public void onBindViewHolder(AccountViewHolder holder, int position) {
 //        Log.d(TAG, "onBindViewHolder: starts");
 
-        if (mCursor == null) {
-            Log.d(TAG, "onBindViewHolder: mCursor null");
-        } else {
-            Log.d(TAG, "onBindViewHolder: mCursor count " + mCursor.getCount());
-        }
+//        if (mCursor == null) {
+//            Log.d(TAG, "onBindViewHolder: mCursor null");
+//        } else {
+//            Log.d(TAG, "onBindViewHolder: mCursor count " + mCursor.getCount());
+//        }
         if ((mCursor == null) || (mCursor.getCount() == 0)) {
             Log.d(TAG, "onBindViewHolder: no accts");
             holder.corp_name.setText(R.string.no_account_items);

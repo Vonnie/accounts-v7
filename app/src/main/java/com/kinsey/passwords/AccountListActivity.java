@@ -78,7 +78,13 @@ public class AccountListActivity extends AppCompatActivity
 
                                         FragmentManager fragmentManager = getSupportFragmentManager();
                                         AppDialog newFragment = AppDialog.newInstance(AppDialog.DIALOG_ACCOUNT_LIST_OPTIONS,
-                                                "Select action");
+                                                getString(R.string.listdiag_acc_message));
+                                        Bundle args = new Bundle();
+                                        args.putInt(AppDialog.DIALOG_ID, AppDialog.DIALOG_ACCOUNT_LIST_OPTIONS);
+                                        args.putString(AppDialog.DIALOG_MESSAGE, getString(R.string.listdiag_acc_message));
+
+                                        newFragment.setArguments(args);
+
                                         newFragment.show(fragmentManager, "dialog");
 
 //                                        Intent returnIntent = new Intent();
@@ -467,7 +473,8 @@ public class AccountListActivity extends AppCompatActivity
         AppDialog newFragment = AppDialog.newInstance(AppDialog.DIALOG_YES_NO, "Confirm account delete", account.getId());
         Bundle args = new Bundle();
         args.putInt(AppDialog.DIALOG_ID, AppDialog.DIALOG_YES_NO);
-        args.putString(AppDialog.DIALOG_MESSAGE, getString(R.string.deldiag_message, 1, "abc"));
+        args.putString(AppDialog.DIALOG_MESSAGE, getString(R.string.deldiag_message, 1, account.getCorpName()));
+        args.putInt(AppDialog.DIALOG_ACCOUNT_ID, account.getId());
         args.putInt(AppDialog.DIALOG_POSITIVE_RID, R.string.deldiag_positive_caption);
 
         newFragment.setArguments(args);
@@ -550,12 +557,18 @@ public class AccountListActivity extends AppCompatActivity
     public void onActionRequestDialogResult(int dialogId, Bundle args, int which) {
         Log.d(TAG, "onActionRequestDialogResult: starts");
 
+        Intent returnIntent;
         switch (which) {
             case 0:
                 editAccountRequest(null);
                 break;
             case 1:
             case 2:
+                Log.d(TAG, "onActionRequestDialogResult: request list");
+                returnIntent = new Intent();
+                returnIntent.putExtra("which", which);
+                setResult(Activity.RESULT_OK, returnIntent);
+                finish();
                 break;
             case 4:
                 ExportAccountDB();
@@ -567,7 +580,7 @@ public class AccountListActivity extends AppCompatActivity
                 viewAccountsFile();
                 break;
             case 7:
-                Intent returnIntent = new Intent();
+                returnIntent = new Intent();
                 returnIntent.putExtra("which", which);
                 setResult(Activity.RESULT_OK, returnIntent);
                 finish();
