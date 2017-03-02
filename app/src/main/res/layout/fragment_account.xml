@@ -61,11 +61,11 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/acc_open_date" />
+        android:id="@+id/acc_account_id" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/acc_account_id" />
+        android:id="@+id/acc_open_date" />
 
 </LinearLayout>

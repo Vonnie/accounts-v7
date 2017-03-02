@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity
 
     public static final int REQUEST_ACCOUNTS_LIST = 1;
     public static final int REQUEST_SUGGESTS_LIST = 2;
+    public static final int REQUEST_ACCOUNT_EDIT = 3;
 
     private static String pattern_ymdtime = "yyyy-MM-dd HH:mm:ss.0";
     public static SimpleDateFormat format_ymdtime = new SimpleDateFormat(
@@ -180,9 +181,11 @@ public class MainActivity extends AppCompatActivity
 
             if (account != null) { // editing an account
                 detailIntent.putExtra(Account.class.getSimpleName(), account);
-                startActivity(detailIntent);
+//                detailIntent.putExtra(Account.class.getSimpleName(), AccountsContract.ACCOUNT_ACTION_CHG);
+                startActivityForResult(detailIntent, REQUEST_ACCOUNT_EDIT);
             } else { // adding an account
-                startActivity(detailIntent);
+//                detailIntent.putExtra(Account.class.getSimpleName(), AccountsContract.ACCOUNT_ACTION_ADD);
+                startActivityForResult(detailIntent, REQUEST_ACCOUNT_EDIT);
             }
         }
     }
@@ -235,9 +238,12 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d(TAG, "onActivityResult: starts");
         if (resultCode == RESULT_CANCELED) {
             return;
         }
+        Log.d(TAG, "onActivityResult: requestCode " + requestCode);
+        Log.d(TAG, "onActivityResult: resultCode " + resultCode);
         // Check which request we're responding to
         switch (requestCode) {
             case REQUEST_ACCOUNTS_LIST: {
@@ -274,6 +280,9 @@ public class MainActivity extends AppCompatActivity
                     Log.d(TAG, "onActivityResult: result " + result);
                     suggestsListRequest();
                 }
+                break;
+            case REQUEST_ACCOUNT_EDIT:
+                accountsListRequest(AccountsContract.ACCOUNT_LIST_BY_CORP_NAME);
                 break;
             default:
                 break;

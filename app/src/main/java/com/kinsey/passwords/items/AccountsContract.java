@@ -49,6 +49,10 @@ public class AccountsContract {
 
     public static final int ACCOUNT_LIST_BY_CORP_NAME = 1;
     public static final int ACCOUNT_LIST_BY_OPEN_DATE = 2;
+    public static final int ACCOUNT_EDIT = 3;
+
+    public static final int ACCOUNT_ACTION_ADD = 1;
+    public static final int ACCOUNT_ACTION_CHG = 2;
     /**
      *  The URI to access the Tasks table
      */

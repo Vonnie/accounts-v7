@@ -58,7 +58,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:drawableLeft="@android:drawable/ic_menu_save"
         android:drawableStart="@android:drawable/ic_menu_save"
         android:text="@string/accedit_save_text" />
 

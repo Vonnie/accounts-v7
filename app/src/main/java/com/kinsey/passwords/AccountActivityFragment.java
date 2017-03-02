@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.kinsey.passwords.items.Account;
 import com.kinsey.passwords.items.AccountsContract;
@@ -38,6 +39,7 @@ public class AccountActivityFragment extends Fragment {
     private TextView mOpenDateTextView;
     private TextView mAccountIdTextView;
     private Button mSaveButton;
+
     private OnSaveClicked mSaveListener = null;
 
     private static String pattern_ymdtimehm = "yyyy-MM-dd kk:mm";
@@ -88,7 +90,11 @@ public class AccountActivityFragment extends Fragment {
                 } else {
                     Log.d(TAG, "onCreateView: zero open date");
                 }
-                mAccountIdTextView.setText(account.getPassportId());
+
+                Log.d(TAG, "onCreateView: passwordId " + account.getPassportId());
+//                mAccountIdTextView.setText("see this");
+//                Log.d(TAG, "onCreateView: textView " + mAccountIdTextView.getText().toString());
+                mAccountIdTextView.setText(String.valueOf(account.getPassportId()));
 
 
 //                mSortOrderTextView.setText(Integer.toString(account.getSortOrder()));
@@ -115,6 +121,9 @@ public class AccountActivityFragment extends Fragment {
 //                    so = 0;
 //                }
 
+                if (!verifiedAccount()) {
+                    return;
+                }
                 ContentResolver contentResolver = getActivity().getContentResolver();
                 ContentValues values = new ContentValues();
 
@@ -141,6 +150,13 @@ public class AccountActivityFragment extends Fragment {
                         if (values.size() != 0) {
                             Log.d(TAG, "onClick: updating accountId " + AccountsContract.buildIdUri(account.getId()));
                             contentResolver.update(AccountsContract.buildIdUri(account.getId()), values, null, null);
+                            Toast.makeText(getActivity(),
+                                    values.size() + " changed columns",
+                                    Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(getActivity(),
+                                    " no changes detected",
+                                    Toast.LENGTH_SHORT).show();
                         }
                         break;
                     case ADD:
@@ -161,7 +177,7 @@ public class AccountActivityFragment extends Fragment {
                         }
                         break;
                 }
-
+                
                 Log.d(TAG, "onClick: Done editing");
 
                 if (mSaveListener != null) {
@@ -174,6 +190,18 @@ public class AccountActivityFragment extends Fragment {
     }
 
 
+
+    private boolean verifiedAccount() {
+        if (mCorpNameTextView.getText().toString().equals("")) {
+            mCorpNameTextView.setError("Corporation name is required");
+            Toast.makeText(getActivity(),
+                    "Corporation name is required",
+                    Toast.LENGTH_LONG).show();
+            return false;
+        }
+        return true;
+    }
+
     private int getMaxValue(String col) {
         int iId = 0;
         Cursor cursor = getActivity().getContentResolver().query(
@@ -181,7 +209,7 @@ public class AccountActivityFragment extends Fragment {
         if (cursor != null) {
             if (cursor.moveToFirst()) {
                 int iIndex = cursor.getColumnIndex(col);
-                iId = cursor.getInt(iIndex);
+                iId = cursor.getInt(iIndex) + 1;
                 Log.d(TAG, "getMaxValue: " + iId);
             }
             cursor.close();
@@ -196,11 +224,11 @@ public class AccountActivityFragment extends Fragment {
         Log.d(TAG, "onAttach: starts");
         super.onAttach(context);
 
-        // Activies containing this fragment must implement it's callbacks
+        // Activities containing this fragment must implement it's callbacks
         Activity activity = getActivity();
         if (!(activity instanceof OnSaveClicked)) {
             throw new ClassCastException(activity.getClass().getSimpleName()
-                    + " must implement AddEditActivityFragment.OnSaveClicked interface");
+                    + " must implement AddEditActivityFragment interface");
         }
         mSaveListener = (OnSaveClicked) activity;
     }

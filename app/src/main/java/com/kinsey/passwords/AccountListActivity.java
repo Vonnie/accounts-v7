@@ -48,6 +48,7 @@ public class AccountListActivity extends AppCompatActivity
     private boolean mTwoPane = false;
 
     private OnListClickListener mListener;
+
     public interface OnListClickListener {
         void onListSuggestsClick();
     }
@@ -77,7 +78,7 @@ public class AccountListActivity extends AppCompatActivity
 
                                         FragmentManager fragmentManager = getSupportFragmentManager();
                                         AppDialog newFragment = AppDialog.newInstance(AppDialog.DIALOG_ACCOUNT_LIST_OPTIONS,
-                                                                "Select action");
+                                                "Select action");
                                         newFragment.show(fragmentManager, "dialog");
 
 //                                        Intent returnIntent = new Intent();
@@ -86,7 +87,7 @@ public class AccountListActivity extends AppCompatActivity
 //                                        finish();
                                     }
                                 }
-                                ).show();
+                        ).show();
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -108,6 +109,25 @@ public class AccountListActivity extends AppCompatActivity
 //        fragmentTransaction.commit();
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Log.d(TAG, "onBackPressed: starts");
+    }
+
+    @Override
+    protected void onStop() {
+        Log.d(TAG, "onStop: starts");
+        super.onStop();
+        Log.d(TAG, "onStop: ends");
+    }
+
+    @Override
+    protected void onDestroy() {
+        Log.d(TAG, "onDestroy: starts");
+        super.onDestroy();
+        Log.d(TAG, "onDestroy: ends");
+    }
 
     public String ExportAccountDB() {
         String msgError = "";
@@ -154,7 +174,6 @@ public class AccountListActivity extends AppCompatActivity
 //
 //            OutputStream fos = new BufferedOutputStream(new FileOutputStream(file));
 //            OutputStreamWriter out = new OutputStreamWriter(fos, "UTF-8");
-
 
 
 //			JsonWriter writer = new JsonWriter(fileWriter);
@@ -247,7 +266,7 @@ public class AccountListActivity extends AppCompatActivity
 
         List<Account> listAccounts = new ArrayList<Account>();
         if (cursor != null) {
-            while(cursor.moveToNext()) {
+            while (cursor.moveToNext()) {
                 Account item = new Account(
                         cursor.getInt(cursor.getColumnIndex(AccountsContract.Columns._ID_COL)),
                         cursor.getString(cursor.getColumnIndex(AccountsContract.Columns.CORP_NAME_COL)),
@@ -373,7 +392,7 @@ public class AccountListActivity extends AppCompatActivity
                 } else if (name.equals("accountId")) {
                     // System.out.println(reader.nextInt());
                     iValue = reader.nextInt();
-					Log.v(TAG, "json id " + iValue);
+                    Log.v(TAG, "json id " + iValue);
                     item.setPassportId(iValue);
                 } else if (name.equals("seq")) {
                     // System.out.println(reader.nextInt());
@@ -490,9 +509,9 @@ public class AccountListActivity extends AppCompatActivity
 
             if (account != null) { // editing an account
                 detailIntent.putExtra(Account.class.getSimpleName(), account);
-                startActivity(detailIntent);
+                startActivityForResult(detailIntent, AccountsContract.ACCOUNT_ACTION_CHG);
             } else { // adding an account
-                startActivity(detailIntent);
+                startActivityForResult(detailIntent, AccountsContract.ACCOUNT_ACTION_ADD);
             }
         }
     }
@@ -538,6 +557,25 @@ public class AccountListActivity extends AppCompatActivity
                 finish();
                 break;
             default:
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d(TAG, "onActivityResult: starts");
+        if (resultCode == RESULT_CANCELED) {
+            return;
+        }
+        // Check which request we're responding to
+        switch (requestCode) {
+            case AccountsContract.ACCOUNT_ACTION_CHG: {
+                Log.d(TAG, "onActivityResult: returned from edit change");
+                break;
+            }
+            case AccountsContract.ACCOUNT_ACTION_ADD: {
+                Log.d(TAG, "onActivityResult: returned from edit add");
+                break;
+            }
         }
     }
 }
