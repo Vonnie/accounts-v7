@@ -62,8 +62,8 @@ public class AppDialog extends DialogFragment {
     public static AppDialog newInstance(int dialogId, String messageString, int acctId) {
         AppDialog frag = new AppDialog();
         Bundle args = new Bundle();
-        args.putInt("id", dialogId);
-        args.putString("message", messageString);
+//        args.putInt("id", dialogId);
+//        args.putString("message", messageString);
         args.putInt("acct_id", acctId);
         frag.setArguments(args);
         return frag;
@@ -113,41 +113,46 @@ public class AppDialog extends DialogFragment {
         if (arguments != null) {
             dialogId = arguments.getInt(DIALOG_ID);
             messageString = arguments.getString(DIALOG_MESSAGE);
-            accountId = arguments.getInt(DIALOG_ID);
+            accountId = arguments.getInt(DIALOG_ACCOUNT_ID);
 
             if (dialogId == 0 || messageString == null) {
                 throw new IllegalArgumentException("DIALOG_ID and/or DIALOG_MESSAGE not present in the bundle");
             }
 
-            positiveStringId = arguments.getInt(DIALOG_POSITIVE_RID);
-            if (positiveStringId == 0) {
-                positiveStringId = R.string.ok;
-            }
-            negativeStringId = arguments.getInt(DIALOG_NEGATIVE_RID);
-            if (negativeStringId == 0) {
-                negativeStringId = R.string.cancel;
-            }
         } else {
             throw new IllegalArgumentException("Must pass DIALOG_ID and DIALOG_MESSAGE in the bundle");
         }
 
-        Log.d(TAG, "onCreateDialog: posString " + positiveStringId);
-        Log.d(TAG, "onCreateDialog: negString " + negativeStringId);
+//        Log.d(TAG, "onCreateDialog: posString " + positiveStringId);
+//        Log.d(TAG, "onCreateDialog: negString " + negativeStringId);
         switch (dialogId) {
             case DIALOG_YES_NO: {
+                positiveStringId = arguments.getInt(DIALOG_POSITIVE_RID);
+                if (positiveStringId == 0) {
+                    positiveStringId = R.string.ok;
+                }
+                negativeStringId = arguments.getInt(DIALOG_NEGATIVE_RID);
+                if (negativeStringId == 0) {
+                    negativeStringId = R.string.cancel;
+                }
+
                 builder.setMessage(messageString)
                         .setPositiveButton(positiveStringId, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int which) {
                                 // callback positive result method
-                                mDialogEvents.onPositiveDialogResult(dialogId, arguments);
+                                if (mDialogEvents != null) {
+                                    mDialogEvents.onPositiveDialogResult(dialogId, arguments);
+                                }
                             }
                         })
                         .setNegativeButton(negativeStringId, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int which) {
                                 // callback negative result method
-                                mDialogEvents.onNegativeDialogResult(dialogId, arguments);
+                                if (mDialogEvents != null) {
+                                    mDialogEvents.onNegativeDialogResult(dialogId, arguments);
+                                }
                             }
                         });
                 break;

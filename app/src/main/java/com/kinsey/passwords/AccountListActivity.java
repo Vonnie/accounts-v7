@@ -330,7 +330,7 @@ public class AccountListActivity extends AppCompatActivity
             reader.close();
 
             ContentResolver contentResolver = getContentResolver();
-            getContentResolver().delete(null, null, null);
+            getContentResolver().delete(AccountsContract.CONTENT_URI, null, null);
 
             for (Account item : listAccounts) {
                 Log.d(TAG, "ImportAccountDB: acc " + item.getPassportId()
@@ -455,11 +455,22 @@ public class AccountListActivity extends AppCompatActivity
         return item;
     }
 
+    private void viewAccountsFile() {
+        Intent detailIntent = new Intent(this, FileViewActivity.class);
+        startActivity(detailIntent);
+    }
+
     @Override
     public void onAccountDeleteClick(Account account) {
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         AppDialog newFragment = AppDialog.newInstance(AppDialog.DIALOG_YES_NO, "Confirm account delete", account.getId());
+        Bundle args = new Bundle();
+        args.putInt(AppDialog.DIALOG_ID, AppDialog.DIALOG_YES_NO);
+        args.putString(AppDialog.DIALOG_MESSAGE, getString(R.string.deldiag_message, 1, "abc"));
+        args.putInt(AppDialog.DIALOG_POSITIVE_RID, R.string.deldiag_positive_caption);
+
+        newFragment.setArguments(args);
         newFragment.show(fragmentManager, "dialog");
 
 //        FragmentManager fragmentManager = getSupportFragmentManager();
@@ -518,7 +529,9 @@ public class AccountListActivity extends AppCompatActivity
 
     @Override
     public void onDialogCancelled(int dialogId) {
-
+        Log.d(TAG, "onDialogCancelled: starts");
+        Intent detailIntent = new Intent(this, FileViewActivity.class);
+        startActivity(detailIntent);
     }
 
     @Override
@@ -551,6 +564,9 @@ public class AccountListActivity extends AppCompatActivity
                 ImportAccountDB();
                 break;
             case 6:
+                viewAccountsFile();
+                break;
+            case 7:
                 Intent returnIntent = new Intent();
                 returnIntent.putExtra("which", which);
                 setResult(Activity.RESULT_OK, returnIntent);

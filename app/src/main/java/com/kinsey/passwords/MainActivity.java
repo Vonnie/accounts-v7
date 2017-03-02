@@ -212,7 +212,6 @@ public class MainActivity extends AppCompatActivity
 //                .commit();
     }
 
-
     private void suggestsListRequest() {
         Log.d(TAG, "suggestsListRequest: starts");
         if (mTwoPane) {
@@ -247,9 +246,8 @@ public class MainActivity extends AppCompatActivity
         // Check which request we're responding to
         switch (requestCode) {
             case REQUEST_ACCOUNTS_LIST: {
-//                Log.d(TAG, "onActivityResult: you're back");
-                // Make sure the request was successful
 
+                // Make sure the request was successful
                 if (resultCode == RESULT_OK) {
                     Log.d(TAG, "onActivityResult: success");
                     int resultWhich = data.getIntExtra("which", 0);

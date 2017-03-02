@@ -2,8 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.kinsey.passwords">
 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:required="false" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:required="false" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:required="false" />
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:required="false" />
 
     <application
         android:allowBackup="true"
@@ -50,6 +54,15 @@
         <activity
             android:name=".SuggestListActivity"
             android:label="@string/title_activity_suggest_list"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.kinsey.passwords.MainActivity" />
+        </activity>
+        <activity
+            android:name=".FileViewActivity"
+            android:label="@string/title_activity_file_view"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data

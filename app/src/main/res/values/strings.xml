@@ -34,4 +34,7 @@
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="accedit_open_date">Open Date</string>
+    <string name="title_activity_file_view">FileViewActivity</string>
+    <string name="deldiag_positive_caption">Delete</string>
+    <string name="deldiag_message">Deleting will also delete all timing data associated with task id %1$d: %2$s.</string>
 </resources>

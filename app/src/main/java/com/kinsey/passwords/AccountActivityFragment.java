@@ -21,6 +21,8 @@ import com.kinsey.passwords.items.AccountsContract;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -177,7 +179,7 @@ public class AccountActivityFragment extends Fragment {
                         }
                         break;
                 }
-                
+
                 Log.d(TAG, "onClick: Done editing");
 
                 if (mSaveListener != null) {
@@ -194,12 +196,48 @@ public class AccountActivityFragment extends Fragment {
     private boolean verifiedAccount() {
         if (mCorpNameTextView.getText().toString().equals("")) {
             mCorpNameTextView.setError("Corporation name is required");
-            Toast.makeText(getActivity(),
-                    "Corporation name is required",
-                    Toast.LENGTH_LONG).show();
+//            Toast.makeText(getActivity(),
+//                    "Corporation name is required",
+//                    Toast.LENGTH_LONG).show();
             return false;
         }
+        if (mUserNameTextView.getText().toString().equals("")) {
+            mUserNameTextView.setError("User name is required");
+            return false;
+        }
+        if (mUserEmailTextView.getText().toString().equals("")) {
+            mUserEmailTextView.setError("User email is required");
+            return false;
+        }
+        if (!isEmailValid(mUserEmailTextView.getText().toString())) {
+            mUserEmailTextView.setError("User email is invalid format");
+            return false;
+        }
+        if (!mCorpWebsiteTextView.getText().toString().equals("")) {
+            if (!mCorpWebsiteTextView.getText().toString().toLowerCase().startsWith("http://")) {
+                mCorpWebsiteTextView.setText("http://" + mCorpWebsiteTextView.getText().toString());
+            }
+        }
+
         return true;
+    }
+    public boolean isEmailValid(String email) {
+        String regExpn = "^(([\\w-]+\\.)+[\\w-]+|([a-zA-Z]{1}|[\\w-]{2,}))@"
+                + "((([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
+                + "[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\."
+                + "([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
+                + "[0-9]{1,2}|25[0-5]|2[0-4][0-9])){1}|"
+                + "([a-zA-Z]+[\\w-]+\\.)+[a-zA-Z]{2,4})$";
+
+        CharSequence inputStr = email;
+
+        Pattern pattern = Pattern.compile(regExpn, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(inputStr);
+
+        if (matcher.matches())
+            return true;
+        else
+            return false;
     }
 
     private int getMaxValue(String col) {
