@@ -16,6 +16,7 @@ import com.kinsey.passwords.items.Account;
 import com.kinsey.passwords.items.AccountsContract;
 import com.kinsey.passwords.items.Suggest;
 import com.kinsey.passwords.provider.AccountRecyclerViewAdapter;
+import com.kinsey.passwords.provider.AccountsLoaderCallbacks;
 import com.kinsey.passwords.tools.AppDialog;
 
 import java.text.SimpleDateFormat;
@@ -305,6 +306,11 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onSuggestsClicked() {
         suggestsListRequest();
+    }
+
+    @Override
+    public void onSearchClicked() {
+        AccountsLoaderCallbacks loaderAcctCallbacks = new AccountsLoaderCallbacks(this);
     }
 
     @Override

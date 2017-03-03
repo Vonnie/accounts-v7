@@ -31,13 +31,14 @@ public class MainActivityFragment extends Fragment {
     TextView twCurrentTitle;
 //    Loader<Cursor> loader;
 
-    Button mAccountsButton, mAddAccountButton, mSuggestsButton;
+    Button mAccountsButton, mAddAccountButton, mSuggestsButton, mSearchButton;
     private OnActionClicked mActionListener = null;
 
     interface OnActionClicked {
         void onAccountsClicked();
         void onAddAccountClicked();
         void onSuggestsClicked();
+        void onSearchClicked();
     }
 
 
@@ -82,6 +83,7 @@ public class MainActivityFragment extends Fragment {
         mAccountsButton = (Button) view.findViewById(R.id.home_btn_accounts);
         mAddAccountButton = (Button) view.findViewById(R.id.home_btn_add_account);
         mSuggestsButton = (Button) view.findViewById(R.id.home_btn_suggests);
+        mSearchButton = (Button) view.findViewById(R.id.home_btn_search);
 
         Log.d(TAG, "onCreateView: loader_id " + LOADER_ID);
 
@@ -104,6 +106,13 @@ public class MainActivityFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 mActionListener.onSuggestsClicked();
+            }
+        });
+
+        mSearchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mActionListener.onSearchClicked();
             }
         });
 
