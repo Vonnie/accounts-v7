@@ -16,7 +16,6 @@ import com.kinsey.passwords.items.Account;
 import com.kinsey.passwords.items.AccountsContract;
 import com.kinsey.passwords.items.Suggest;
 import com.kinsey.passwords.provider.AccountRecyclerViewAdapter;
-import com.kinsey.passwords.provider.AccountsLoaderCallbacks;
 import com.kinsey.passwords.tools.AppDialog;
 
 import java.text.SimpleDateFormat;
@@ -25,7 +24,7 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity
         implements
         AccountRecyclerViewAdapter.OnAccountClickListener,
-        MainActivityFragment.OnActionClicked,
+        MainActivityFragment.OnActionListener,
         AppDialog.DialogEvents {
     public static final String TAG = "MainActivity";
 
@@ -310,7 +309,9 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onSearchClicked() {
-        AccountsLoaderCallbacks loaderAcctCallbacks = new AccountsLoaderCallbacks(this);
+        Intent detailIntent = new Intent(this, SearchListActivity.class);
+//        detailIntent.putExtra(Suggest.class.getSimpleName(), "sortorder");
+        startActivity(detailIntent);
     }
 
     @Override

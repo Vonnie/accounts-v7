@@ -32,9 +32,9 @@ public class MainActivityFragment extends Fragment {
 //    Loader<Cursor> loader;
 
     Button mAccountsButton, mAddAccountButton, mSuggestsButton, mSearchButton;
-    private OnActionClicked mActionListener = null;
+    private OnActionListener mActionListener = null;
 
-    interface OnActionClicked {
+    interface OnActionListener {
         void onAccountsClicked();
         void onAddAccountClicked();
         void onSuggestsClicked();
@@ -271,11 +271,11 @@ public class MainActivityFragment extends Fragment {
 
         // Activies containing this fragment must implement it's callbacks
         Activity activity = getActivity();
-        if (!(activity instanceof OnActionClicked)) {
+        if (!(activity instanceof OnActionListener)) {
             throw new ClassCastException(activity.getClass().getSimpleName()
                     + " must implement MainActivityFragment.OnActionClicked interface");
         }
-        mActionListener = (OnActionClicked) activity;
+        mActionListener = (OnActionListener) activity;
     }
 
     @Override
