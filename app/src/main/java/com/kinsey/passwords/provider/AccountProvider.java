@@ -30,9 +30,9 @@ public class AccountProvider extends ContentProvider {
 //public static final String CONTENT_AUTHORITY = AUTHORITY + "/" + AccountDatabase.DATABASE_NAME;
     public static final Uri CONTENT_AUTHORITY_URI = Uri.parse("content://" + AUTHORITY);
 
-    private static final int BOOK = 1;
-    private static final int ROW_ID = 2;
-    private static final int MAX_VALUE = 3;
+    public static final int BOOK = 1;
+    public static final int ROW_ID = 2;
+    public static final int MAX_VALUE = 3;
 
     private static UriMatcher buildUriMatcher() {
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);

@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.kinsey.passwords.R;
 import com.kinsey.passwords.items.Account;
-import com.kinsey.passwords.items.AccountsContract;
+import com.kinsey.passwords.items.SearchesContract;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
@@ -20,8 +20,8 @@ import java.util.Locale;
  * Created by Yvonne on 2/21/2017.
  */
 
-public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecyclerViewAdapter.AccountViewHolder> {
-    private static final String TAG = "AcctRecyclerViewAdpt";
+public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecyclerViewAdapter.AccountViewHolder> {
+    private static final String TAG = "SuggRecyclerViewAdpt";
 
     private Cursor mCursor;
     private OnAccountClickListener mListener;
@@ -36,7 +36,7 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
             pattern_mdy_display, Locale.US);
 
 
-    public AccountRecyclerViewAdapter(Cursor cursor, OnAccountClickListener listener) {
+    public SearchRecyclerViewAdapter(Cursor cursor, OnAccountClickListener listener) {
 //        Log.d(TAG, "CursorRecyclerViewAdapter: Constructor called");
         mCursor = cursor;
         mListener = listener;
@@ -45,7 +45,7 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
     @Override
     public AccountViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 //        Log.d(TAG, "onCreateViewHolder: new view requested");
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.account_list_items, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.suggest_list_items, parent, false);
         return new AccountViewHolder(view);
     }
 
@@ -59,9 +59,9 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
 //            Log.d(TAG, "onBindViewHolder: mCursor count " + mCursor.getCount());
 //        }
         if ((mCursor == null) || (mCursor.getCount() == 0)) {
-            Log.d(TAG, "onBindViewHolder: no accts");
+            Log.d(TAG, "onBindViewHolder: no search db items");
             holder.corp_name.setText(R.string.no_account_items);
-            holder.user_name.setText("Click Info button to add accounts");
+//            holder.user_name.setText("Click Info button to add accounts");
             holder.open_date.setText("");
             holder.editButton.setVisibility(View.GONE);
             holder.deleteButton.setVisibility(View.GONE);
@@ -70,53 +70,12 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
                 throw new IllegalStateException("Couldn't move cursor to position " + position);
             }
 
-            final Account account = AccountsContract.getAccountFromCursor(mCursor);
-//            final Account account = new Account(mCursor.getInt(mCursor.getColumnIndex(AccountsContract.Columns._ID_COL)),
-//                    mCursor.getString(mCursor.getColumnIndex(AccountsContract.Columns.CORP_NAME_COL)),
-//                    mCursor.getString(mCursor.getColumnIndex(AccountsContract.Columns.USER_NAME_COL)),
-//                    mCursor.getString(mCursor.getColumnIndex(AccountsContract.Columns.USER_EMAIL_COL)),
-//                    mCursor.getString(mCursor.getColumnIndex(AccountsContract.Columns.CORP_WEBSITE_COL)),
-//                    mCursor.getInt(mCursor.getColumnIndex(AccountsContract.Columns.SEQUENCE_COL)));
-//
-//            if (mCursor.getColumnIndex(AccountsContract.Columns.PASSPORT_ID_COL) != -1) {
-//                if (!mCursor.isNull(mCursor.getColumnIndex(AccountsContract.Columns.PASSPORT_ID_COL))) {
-//                    account.setPassportId(mCursor.getInt(mCursor.getColumnIndex(AccountsContract.Columns.PASSPORT_ID_COL)));
-////                    holder.account_id.setText(String.valueOf(mCursor.getInt(mCursor.getColumnIndex(AccountsContract.Columns.PASSPORT_ID_COL))));
-//                }
-//            }
-//
-//            if (mCursor.getColumnIndex(AccountsContract.Columns.NOTE_COL) != -1) {
-//                account.setNote(mCursor.getString(mCursor.getColumnIndex(AccountsContract.Columns.NOTE_COL)));
-//            }
-////            Log.d(TAG, "onBindViewHolder: dte col " + mCursor.getColumnIndex(AccountsContract.Columns.OPEN_DATE_COL));
-//            if (mCursor.getColumnIndex(AccountsContract.Columns.OPEN_DATE_COL) != -1) {
-//                if (mCursor.isNull(mCursor.getColumnIndex(AccountsContract.Columns.OPEN_DATE_COL))) {
-//                    holder.open_date.setText("");
-//                } else {
-//                    account.setOpenLong(mCursor.getLong(mCursor.getColumnIndex(AccountsContract.Columns.OPEN_DATE_COL)));
-////            Date dte = new Date(item.getActvyLong());
-//                    holder.open_date.setText(format_mdy_display.format(account.getOpenLong()));
-//                }
-//            } else {
-//                holder.open_date.setText("");
-//            }
+            holder.corp_name.setText(mCursor.getString(mCursor.getColumnIndex(SearchesContract.Columns.SUGGEST_TEXT_1_COL)));
+            holder.corp_name.setText(mCursor.getString(mCursor.getColumnIndex(SearchesContract.Columns.SUGGEST_TEXT_2_COL)));
 
-            if (account.getOpenLong() == 0) {
-                holder.open_date.setText("");
-            } else {
-                //            Date dte = new Date(item.getActvyLong());
-                holder.open_date.setText(format_mdy_display.format(account.getOpenLong()));
-            }
-            holder.corp_name.setText(mCursor.getString(mCursor.getColumnIndex(AccountsContract.Columns.CORP_NAME_COL)));
-            holder.user_name.setText(mCursor.getString(mCursor.getColumnIndex(AccountsContract.Columns.USER_NAME_COL)));
 
 //            holder.user_email.setText(mCursor.getString(mCursor.getColumnIndex(AccountsContract.Columns.USER_EMAIL_COL)));
 //            holder.corp_.setText(mCursor.getString(mCursor.getColumnIndex(AccountsContract.Columns.CORP_WEBSITE_COL)));
-            holder.editButton.setVisibility(View.VISIBLE);  // TODO add onClick listener
-            holder.deleteButton.setVisibility(View.VISIBLE); // TODO add onClick listener
-
-            holder.corp_name.setText(account.getCorpName());
-            holder.user_name.setText(account.getUserName());
             holder.editButton.setVisibility(View.VISIBLE);  // TODO add onClick listener
             holder.deleteButton.setVisibility(View.VISIBLE); // TODO add onClick listener
 
@@ -128,13 +87,13 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
                     switch (view.getId()) {
                         case R.id.tli_acct_edit:
                             if (mListener != null) {
-                                Log.d(TAG, "onClick: account " + account);
-                                mListener.onAccountEditClick(account);
+//                                Log.d(TAG, "onClick: account " + account);
+//                                mListener.onAccountEditClick(account);
                             }
                             break;
                         case R.id.tli_acct_delete:
                             if (mListener != null) {
-                                mListener.onAccountDeleteClick(account);
+//                                mListener.onAccountDeleteClick(account);
                             }
                             break;
                         default:
@@ -191,7 +150,7 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
         private static final String TAG = "AccountViewHolder";
 
         TextView corp_name = null;
-        TextView user_name = null;
+        TextView website = null;
         TextView open_date = null;
         ImageButton editButton = null;
         ImageButton deleteButton = null;
@@ -202,8 +161,7 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
         Log.d(TAG, "AccountViewHolder: starts");
 
             this.corp_name = (TextView) itemView.findViewById(R.id.tli_corp_name);
-            this.user_name = (TextView) itemView.findViewById(R.id.tli_user_name);
-            this.open_date = (TextView) itemView.findViewById(R.id.tli_open_date);
+//            this.user_name = (TextView) itemView.findViewById(R.id.tli_user_name);
             this.editButton = (ImageButton) itemView.findViewById(R.id.tli_acct_edit);
             this.deleteButton = (ImageButton) itemView.findViewById(R.id.tli_acct_delete);
         }

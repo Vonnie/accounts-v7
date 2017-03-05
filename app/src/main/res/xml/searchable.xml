@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <searchable xmlns:android="http://schemas.android.com/apk/res/android"
     android:hint="@string/searchable_hint"
-    android:label="@string/title_activity_search_list">
+    android:label="@string/title_activity_search_list"
+    android:searchSuggestAuthority="com.kinsey.passwords.provider.SearchProvider"
+    android:searchSuggestIntentAction="android.intent.action.VIEW"
+    android:searchSuggestIntentData="content://com.kinsey.passwords.provider.SearchProvider/corpnamebank"
+    android:searchSuggestThreshold="1"
+    android:searchSuggestSelection="suggest_text_1 like ?">
 </searchable>

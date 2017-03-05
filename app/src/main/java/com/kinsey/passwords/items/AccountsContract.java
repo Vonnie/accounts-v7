@@ -1,10 +1,12 @@
 package com.kinsey.passwords.items;
 
 import android.content.ContentUris;
+import android.database.Cursor;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
 import com.kinsey.passwords.provider.AccountDatabase;
+import com.kinsey.passwords.provider.AccountProvider;
 
 import static com.kinsey.passwords.provider.AccountProvider.CONTENT_AUTHORITY_URI;
 
@@ -50,6 +52,7 @@ public class AccountsContract {
     public static final int ACCOUNT_LIST_BY_CORP_NAME = 1;
     public static final int ACCOUNT_LIST_BY_OPEN_DATE = 2;
     public static final int ACCOUNT_EDIT = 3;
+    public static final int ACCOUNT_SEARCH = 4;
 
     public static final int ACCOUNT_ACTION_ADD = 1;
     public static final int ACCOUNT_ACTION_CHG = 2;
@@ -59,6 +62,7 @@ public class AccountsContract {
 //    public static final Uri CONTENT_URI = Uri.withAppendedPath(CONTENT_AUTHORITY_URI, TABLE_NAME);
     public static final Uri CONTENT_URI = Uri.withAppendedPath(CONTENT_AUTHORITY_URI, AccountDatabase.DATABASE_NAME);
     public static final Uri CONTENT_MAX_VALUE_URI = Uri.withAppendedPath(CONTENT_URI, "maxvalue");
+    public static final Uri CONTENT_ROW_ID_URI = Uri.withAppendedPath(CONTENT_URI, String.valueOf(AccountProvider.ROW_ID));
 
 //    public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.kinsey.passport";
 //    public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd." + CONTENT_AUTHORITY + "." + TABLE_NAME;
@@ -68,8 +72,36 @@ public class AccountsContract {
         return ContentUris.withAppendedId(CONTENT_URI, id);
     }
 
-
     public static long getId(Uri uri) {
         return ContentUris.parseId(uri);
+    }
+
+    public static Account getAccountFromCursor(Cursor cursor) {
+        final Account account = new Account(cursor.getInt(cursor.getColumnIndex(AccountsContract.Columns._ID_COL)),
+                cursor.getString(cursor.getColumnIndex(AccountsContract.Columns.CORP_NAME_COL)),
+                cursor.getString(cursor.getColumnIndex(AccountsContract.Columns.USER_NAME_COL)),
+                cursor.getString(cursor.getColumnIndex(AccountsContract.Columns.USER_EMAIL_COL)),
+                cursor.getString(cursor.getColumnIndex(AccountsContract.Columns.CORP_WEBSITE_COL)),
+                cursor.getInt(cursor.getColumnIndex(AccountsContract.Columns.SEQUENCE_COL)));
+
+        if (cursor.getColumnIndex(AccountsContract.Columns.PASSPORT_ID_COL) != -1) {
+            if (!cursor.isNull(cursor.getColumnIndex(AccountsContract.Columns.PASSPORT_ID_COL))) {
+                account.setPassportId(cursor.getInt(cursor.getColumnIndex(AccountsContract.Columns.PASSPORT_ID_COL)));
+//                    holder.account_id.setText(String.valueOf(mCursor.getInt(mCursor.getColumnIndex(AccountsContract.Columns.PASSPORT_ID_COL))));
+            }
+        }
+
+        if (cursor.getColumnIndex(AccountsContract.Columns.NOTE_COL) != -1) {
+            account.setNote(cursor.getString(cursor.getColumnIndex(AccountsContract.Columns.NOTE_COL)));
+        }
+//            Log.d(TAG, "onBindViewHolder: dte col " + mCursor.getColumnIndex(AccountsContract.Columns.OPEN_DATE_COL));
+        if (cursor.getColumnIndex(AccountsContract.Columns.OPEN_DATE_COL) != -1) {
+            if (cursor.isNull(cursor.getColumnIndex(AccountsContract.Columns.OPEN_DATE_COL))) {
+            } else {
+                account.setOpenLong(cursor.getLong(cursor.getColumnIndex(AccountsContract.Columns.OPEN_DATE_COL)));
+            }
+        }
+
+        return account;
     }
 }

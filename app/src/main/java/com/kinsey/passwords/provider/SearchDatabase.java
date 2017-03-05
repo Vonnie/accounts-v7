@@ -262,7 +262,7 @@ public class SearchDatabase {
 //                }
 //            }).start();
 //        }
-//
+
 //        private void loadWords() throws IOException {
 ////            Log.d(TAG, "Loading accounts...");
 //

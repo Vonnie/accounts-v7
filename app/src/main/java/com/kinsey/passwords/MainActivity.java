@@ -1,8 +1,11 @@
 package com.kinsey.passwords;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -20,6 +23,9 @@ import com.kinsey.passwords.tools.AppDialog;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
+
+import static com.kinsey.passwords.SearchActivity.SEARCH_ACCOUNT;
+import static com.kinsey.passwords.SearchActivity.SEARCH_QUERY;
 
 public class MainActivity extends AppCompatActivity
         implements
@@ -40,6 +46,7 @@ public class MainActivity extends AppCompatActivity
     public static final int REQUEST_ACCOUNTS_LIST = 1;
     public static final int REQUEST_SUGGESTS_LIST = 2;
     public static final int REQUEST_ACCOUNT_EDIT = 3;
+    public static final int REQUEST_ACCOUNT_SEARCH = 4;
 
     private static String pattern_ymdtime = "yyyy-MM-dd HH:mm:ss.0";
     public static SimpleDateFormat format_ymdtime = new SimpleDateFormat(
@@ -51,6 +58,8 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        resetPreferences();
 
 //        String[] projection = {AccountsContract.Columns._ID_COL,
 //                AccountsContract.Columns.PASSPORT_ID_COL,
@@ -282,9 +291,70 @@ public class MainActivity extends AppCompatActivity
             case REQUEST_ACCOUNT_EDIT:
                 accountsListRequest(AccountsContract.ACCOUNT_LIST_BY_CORP_NAME);
                 break;
+//            case REQUEST_ACCOUNT_SEARCH:
+//                Log.d(TAG, "onActivityResult: return from search");
+//                break;
             default:
                 break;
         }
+    }
+
+    @Override
+    protected void onResume() {
+        Log.d(TAG, "onResume: starts");
+        super.onResume();
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        String queryResult = sharedPreferences.getString(SEARCH_QUERY, "");
+
+        if (queryResult.length() > 0) {
+            Log.d(TAG, "onResume: return a value " + queryResult);
+
+            int queryResultId = sharedPreferences.getInt(SearchActivity.SEARCH_ACCOUNT, -1);
+            Log.d(TAG, "onResume: queryResultsId " + queryResultId);
+            if (queryResultId != -1) {
+                resetPreferences();
+                Cursor cursor = getContentResolver().query(
+                        AccountsContract.buildIdUri(queryResultId), null, null, null, null);
+                if (cursor.moveToFirst()) {
+                    Account account = AccountsContract.getAccountFromCursor(cursor);
+                    Log.d(TAG, "showAccount: account " + account.toString());
+//            return account;
+////            setResult(RESULT_OK);
+                    Intent detailIntent = new Intent(this, AccountActivity.class);
+
+                    detailIntent.putExtra(Account.class.getSimpleName(), account);
+//////            startActivityForResult(detailIntent, AccountsContract.ACCOUNT_ACTION_CHG);
+                    startActivity(detailIntent);
+//        } else return null;
+//        }
+
+                }
+//            Intent detailIntent = new Intent(this, AccountActivity.class);
+
+//            detailIntent.putExtra(Account.class.getSimpleName(), account);
+////            startActivityForResult(detailIntent, AccountsContract.ACCOUNT_ACTION_CHG);
+//            startActivity(detailIntent);
+
+            }
+            
+        }
+
+
+//        onSearchRequested();
+    }
+
+
+    private void resetPreferences() {
+        Log.d(TAG, "resetPreferences: starts");
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        sharedPreferences.edit().putString(SEARCH_QUERY, "").apply();
+        sharedPreferences.edit().putInt(SEARCH_ACCOUNT, -1).apply();
+    }
+    @Override
+    public boolean onSearchRequested() {
+        Log.d(TAG, "onSearchRequested: started");
+        return super.onSearchRequested();
     }
 
     @Override
@@ -309,7 +379,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onSearchClicked() {
-        Intent detailIntent = new Intent(this, SearchListActivity.class);
+        Intent detailIntent = new Intent(this, SearchActivity.class);
 //        detailIntent.putExtra(Suggest.class.getSimpleName(), "sortorder");
         startActivity(detailIntent);
     }

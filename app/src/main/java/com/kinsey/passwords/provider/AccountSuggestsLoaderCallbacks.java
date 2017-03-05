@@ -37,6 +37,7 @@ public class AccountSuggestsLoaderCallbacks implements LoaderManager.LoaderCallb
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        Log.d(TAG, "onLoadFinished: starts data count " + data.getCount());
         try {
             SearchesContract.listSearches.clear();
             data.moveToFirst();

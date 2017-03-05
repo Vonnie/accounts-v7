@@ -1,6 +1,7 @@
 package com.kinsey.passwords.items;
 
 import android.content.ContentUris;
+import android.database.Cursor;
 import android.net.Uri;
 
 import com.kinsey.passwords.provider.SearchDatabase;
@@ -15,13 +16,16 @@ import java.util.List;
 
 public class SearchesContract {
 
+    public static Cursor cursorSearch;
+
     public static final class Columns {
 
         public static final String _ID_COL = "_id";
 
         public static final String SUGGEST_ID_COL = "suggest_id";
 
-        public static final String CORP_NAME_COL = "corporation_name";
+        public static final String SUGGEST_TEXT_1_COL = "suggest_text_1";
+        public static final String SUGGEST_TEXT_2_COL = "suggest_text_2";
 
         private Columns() {
         }
