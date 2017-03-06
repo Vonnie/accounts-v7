@@ -56,14 +56,6 @@
                 android:inputType="textNoSuggestions" />
 
             <EditText
-                android:id="@+id/acc_ref_from"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="@string/accedit_ref_from"
-                android:inputType="number" />
-
-            <EditText
                 android:id="@+id/acc_notes"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -71,22 +63,30 @@
                 android:hint="@string/accedit_notes_hint"
                 android:inputType="textMultiLine" />
 
-            <DatePicker
-                android:id="@+id/acc_datePicker"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <Button
-                android:id="@+id/acc_save"
+            <EditText
+                android:id="@+id/acc_ref_from"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:drawableLeft="@android:drawable/ic_menu_save"
-                android:drawableStart="@android:drawable/ic_menu_save"
-                android:text="@string/accedit_save_text" />
+                android:ems="10"
+                android:hint="@string/accedit_ref_from_hint"
+                android:inputType="number" />
+
+            <EditText
+                android:id="@+id/acc_ref_to"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/accedit_ref_to_hint"
+                android:inputType="number" />
 
             <TextView
-                android:id="@+id/acc_open_date"
+                android:id="@+id/acc_open_date_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/accedit_date_open_label" />
+
+            <DatePicker
+                android:id="@+id/acc_datePicker"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 

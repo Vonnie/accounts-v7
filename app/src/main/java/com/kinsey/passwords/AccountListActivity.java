@@ -526,7 +526,7 @@ public class AccountListActivity extends AppCompatActivity
             Intent detailIntent = new Intent(this, AccountActivity.class);
 
             if (account != null) { // editing an account
-                detailIntent.putExtra(Account.class.getSimpleName(), account);
+                detailIntent.putExtra(Account.class.getSimpleName(), account.getId());
                 startActivityForResult(detailIntent, AccountsContract.ACCOUNT_ACTION_CHG);
             } else { // adding an account
                 startActivityForResult(detailIntent, AccountsContract.ACCOUNT_ACTION_ADD);

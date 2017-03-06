@@ -33,6 +33,7 @@ public class AccountProvider extends ContentProvider {
     public static final int BOOK = 1;
     public static final int ROW_ID = 2;
     public static final int MAX_VALUE = 3;
+    public static final int ACCT_ID = 4;
 
     private static UriMatcher buildUriMatcher() {
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
@@ -40,6 +41,7 @@ public class AccountProvider extends ContentProvider {
         matcher.addURI(AUTHORITY, AccountDatabase.DATABASE_NAME, BOOK);
         matcher.addURI(AUTHORITY, AccountDatabase.DATABASE_NAME + "/#", ROW_ID);
         matcher.addURI(AUTHORITY, AccountDatabase.DATABASE_NAME + "/maxvalue", MAX_VALUE);
+        matcher.addURI(AUTHORITY, AccountDatabase.DATABASE_NAME + "/accountid", ACCT_ID);
 
         return matcher;
     }
@@ -61,16 +63,17 @@ public class AccountProvider extends ContentProvider {
 
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
 
+        long accountId;
         switch (match) {
             case ROW_ID:
 //                queryBuilder.appendWhere(_ID + " = " + uri.getPathSegments().get(1));
                 queryBuilder.setTables(AccountsContract.TABLE_NAME);
 //                selection = SuggestsContract.Columns._ID_COL;
 //                selectionArgs[0] = uri.getPathSegments().get(1);
-                Log.d(TAG, "query: uri " + uri);
-                long accountId = AccountsContract.getId(uri);
+//                Log.d(TAG, "query: uri " + uri);
+                accountId = AccountsContract.getId(uri);
                 queryBuilder.appendWhere(AccountsContract.Columns._ID_COL + " = " + accountId);
-                Log.d(TAG, "query: getRow " + AccountsContract.Columns._ID_COL + " = " + accountId);
+//                Log.d(TAG, "query: getRow " + AccountsContract.Columns._ID_COL + " = " + accountId);
                 break;
             case MAX_VALUE:
                 queryBuilder.setTables(AccountsContract.TABLE_NAME);
@@ -78,6 +81,11 @@ public class AccountProvider extends ContentProvider {
                 sortOrder = AccountsContract.Columns.PASSPORT_ID_COL + " DESC";
 //                c = queryBuilder.query(mOpenHelper, null, selection,
 //                        selectionArgs, null, null, sortOrder, "1");
+                break;
+            case ACCT_ID:
+                queryBuilder.setTables(AccountsContract.TABLE_NAME);
+                accountId = AccountsContract.getId(uri);
+                queryBuilder.appendWhere(AccountsContract.Columns.PASSPORT_ID_COL + " = " + accountId);
                 break;
             default:
                 queryBuilder.setTables(AccountsContract.TABLE_NAME);

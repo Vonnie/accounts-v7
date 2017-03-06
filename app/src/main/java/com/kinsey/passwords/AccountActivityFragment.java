@@ -5,13 +5,13 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -41,13 +41,15 @@ public class AccountActivityFragment extends Fragment {
     private EditText mUserEmailTextView;
     private EditText mCorpWebsiteTextView;
     private EditText mNoteTextView;
-    private TextView mOpenDateTextView;
+//    private TextView mOpenDateTextView;
     private TextView mAccountIdTextView;
+    private TextView mRefIdFromTextView;
+    private TextView mRefIdToTextView;
     private DatePicker mDtePickOpen;
     private long lngOpenDate;
-    private Button mSaveButton;
 
     private OnSaveClicked mSaveListener = null;
+    private Account account;
 
     private static String pattern_ymdtimehm = "yyyy-MM-dd kk:mm";
     public static SimpleDateFormat format_ymdtimehm = new SimpleDateFormat(
@@ -72,19 +74,21 @@ public class AccountActivityFragment extends Fragment {
         mUserEmailTextView = (EditText) view.findViewById(R.id.acc_user_email);
         mCorpWebsiteTextView = (EditText) view.findViewById(R.id.acc_corp_website);
         mNoteTextView = (EditText) view.findViewById(R.id.acc_notes);
-        mOpenDateTextView = (TextView) view.findViewById(R.id.acc_open_date);
+//        mOpenDateTextView = (TextView) view.findViewById(R.id.acc_open_date);
         mDtePickOpen = (DatePicker) view.findViewById(R.id.acc_datePicker);
         mAccountIdTextView = (TextView) view.findViewById(R.id.acc_account_id);
-        mSaveButton = (Button) view.findViewById(R.id.acc_save);
+        mRefIdFromTextView = (EditText) view.findViewById(R.id.acc_ref_from);
+        mRefIdToTextView = (EditText) view.findViewById(R.id.acc_ref_to);
 
 //        Bundle arguments = getArguments();
         Bundle arguments = getActivity().getIntent().getExtras();  // The line we'll change later
 
-        final Account account;
         if (arguments != null) {
             Log.d(TAG, "onCreateView: retrieving task details.");
 
-            account = (Account) arguments.getSerializable(Account.class.getSimpleName());
+            int accountId = (int) arguments.getSerializable(Account.class.getSimpleName());
+            account = getAccount(accountId);
+            Log.d(TAG, "onCreateView: acctChk " + account.toString());
             if (account != null) {
                 Log.d(TAG, "onCreateView: Account found, editing..." + account.getId());
                 mCorpNameTextView.setText(account.getCorpName());
@@ -94,7 +98,7 @@ public class AccountActivityFragment extends Fragment {
                 mNoteTextView.setText(account.getNote());
                 if (account.getOpenLong() != 0) {
                     Log.d(TAG, "onCreateView: openLong " + account.getOpenLong());
-                    mOpenDateTextView.setText("Open: " + format_ymdtimehm.format(account.getOpenLong()));
+//                    mOpenDateTextView.setText("Open: " + format_ymdtimehm.format(account.getOpenLong()));
                     mDtePickOpen.setMaxDate(new Date().getTime());
                     mDtePickOpen.setMinDate(0);
                     Date dte = new Date(account.getOpenLong());
@@ -116,10 +120,13 @@ public class AccountActivityFragment extends Fragment {
                     Log.d(TAG, "onCreateView: zero open date");
                 }
 
-                Log.d(TAG, "onCreateView: passwordId " + account.getPassportId());
+//                Log.d(TAG, "onCreateView: passwordId " + account.getPassportId());
 //                mAccountIdTextView.setText("see this");
 //                Log.d(TAG, "onCreateView: textView " + mAccountIdTextView.getText().toString());
-                mAccountIdTextView.setText(String.valueOf(account.getPassportId()));
+                mAccountIdTextView.setText("Account Id: " + String.valueOf(account.getPassportId()));
+//                Log.d(TAG, "onCreateView: refFrom/To " + account.getRefFrom() + ", " + account.getRefTo());
+                mRefIdFromTextView.setText(String.valueOf(account.getRefFrom()));
+                mRefIdToTextView.setText(String.valueOf(account.getRefTo()));
 
 
 //                mSortOrderTextView.setText(Integer.toString(account.getSortOrder()));
@@ -135,85 +142,25 @@ public class AccountActivityFragment extends Fragment {
         }
 
 
-        mSaveButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                // Update the database if at least one field has changed.
-                // -- There's no need to hit the database unless this has happened.
-//                int so; // to save repeated conversions to init.
-//                if (mSortOrderTextView.length() > 0) {
-//                    so = Integer.parseInt(mSortOrderTextView.getText().toString());
-//                } else {
-//                    so = 0;
+//        mSaveButton.setOnClickListener(new View.OnClickListener(){
+//            @Override
+//            public void onClick(View view) {
+//                // Update the database if at least one field has changed.
+//                // -- There's no need to hit the database unless this has happened.
+////                int so; // to save repeated conversions to init.
+////                if (mSortOrderTextView.length() > 0) {
+////                    so = Integer.parseInt(mSortOrderTextView.getText().toString());
+////                } else {
+////                    so = 0;
+////                }
+//
+//                save();
+//
+//                if (mSaveListener != null) {
+//                    mSaveListener.onSaveClicked();
 //                }
-
-                if (!verifiedAccount()) {
-                    return;
-                }
-                ContentResolver contentResolver = getActivity().getContentResolver();
-                ContentValues values = new ContentValues();
-
-                switch (mMode) {
-                    case EDIT:
-                        if (!mCorpNameTextView.getText().toString().equals((account.getCorpName()))) {
-                            values.put(AccountsContract.Columns.CORP_NAME_COL, mCorpNameTextView.getText().toString());
-                        }
-                        if (!mUserNameTextView.getText().toString().equals((account.getUserName()))) {
-                            values.put(AccountsContract.Columns.USER_NAME_COL, mUserNameTextView.getText().toString());
-                        }
-                        if (!mUserEmailTextView.getText().toString().equals((account.getUserEmail()))) {
-                            values.put(AccountsContract.Columns.USER_EMAIL_COL, mUserEmailTextView.getText().toString());
-                        }
-                        if (!mCorpWebsiteTextView.getText().toString().equals((account.getCorpWebsite()))) {
-                            values.put(AccountsContract.Columns.CORP_WEBSITE_COL, mCorpWebsiteTextView.getText().toString());
-                        }
-                        if (!mNoteTextView.getText().toString().equals((account.getNote()))) {
-                            values.put(AccountsContract.Columns.NOTE_COL, mNoteTextView.getText().toString());
-                        }
-                        if (lngOpenDate != account.getOpenLong()) {
-                            values.put(AccountsContract.Columns.OPEN_DATE_COL, lngOpenDate);
-                        }
-//                        if (so != task.getSortOrder()) {
-//                            values.put(TasksContract.Columns.TASKS_SORTORDER, so);
-//                        }
-                        if (values.size() != 0) {
-                            Log.d(TAG, "onClick: updating accountId " + AccountsContract.buildIdUri(account.getId()));
-                            contentResolver.update(AccountsContract.buildIdUri(account.getId()), values, null, null);
-                            Toast.makeText(getActivity(),
-                                    values.size() + " changed columns",
-                                    Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(getActivity(),
-                                    " no changes detected",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                        break;
-                    case ADD:
-                        if (mCorpNameTextView.length()>0) {
-                            Log.d(TAG, "onClick: adding new account");
-                            values.put(AccountsContract.Columns.PASSPORT_ID_COL,
-                                    String.valueOf(getMaxValue(AccountsContract.Columns.PASSPORT_ID_COL)));
-                            values.put(AccountsContract.Columns.CORP_NAME_COL, mCorpNameTextView.getText().toString());
-                            values.put(AccountsContract.Columns.USER_NAME_COL, mUserNameTextView.getText().toString());
-                            values.put(AccountsContract.Columns.USER_EMAIL_COL, mUserEmailTextView.getText().toString());
-                            values.put(AccountsContract.Columns.CORP_WEBSITE_COL, mCorpWebsiteTextView.getText().toString());
-                            values.put(AccountsContract.Columns.NOTE_COL, mNoteTextView.getText().toString());
-                            values.put(AccountsContract.Columns.OPEN_DATE_COL, String.valueOf(System.currentTimeMillis()));
-                            Log.d(TAG, "onClick: open date entered "  + mOpenDateTextView.getText().toString());
-                            Log.d(TAG, "onClick: open date millis " + System.currentTimeMillis());
-//                            values.put(AccountsContract.Columns.TASKS_SORTORDER, so);
-                            contentResolver.insert(AccountsContract.CONTENT_URI, values);
-                        }
-                        break;
-                }
-
-                Log.d(TAG, "onClick: Done editing");
-
-                if (mSaveListener != null) {
-                    mSaveListener.onSaveClicked();
-                }
-            }
-        });
+//            }
+//        });
         return view;
 //        return inflater.inflate(R.layout.fragment_account, container, false);
     }
@@ -245,9 +192,21 @@ public class AccountActivityFragment extends Fragment {
                 mCorpWebsiteTextView.setText("http://" + mCorpWebsiteTextView.getText().toString());
             }
         }
+        if (!mRefIdFromTextView.getText().toString().equals("")) {
+            if (!isIdOnDB(mRefIdFromTextView.getText().toString())) {
+                mRefIdFromTextView.setError("Reference back id does not exists");
+            };
+        }
+        if (!mRefIdToTextView.getText().toString().equals("")) {
+            if (!isIdOnDB(mRefIdToTextView.getText().toString())) {
+                mRefIdToTextView.setError("Reference to id does not exists");
+            };
+        }
 
         return true;
     }
+
+
     public boolean isEmailValid(String email) {
         String regExpn = "^(([\\w-]+\\.)+[\\w-]+|([a-zA-Z]{1}|[\\w-]{2,}))@"
                 + "((([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
@@ -284,6 +243,112 @@ public class AccountActivityFragment extends Fragment {
         return iId;
     }
 
+    private boolean isIdOnDB(String id) {
+        Cursor cursor = getActivity().getContentResolver()
+                .query(AccountsContract.buildAcctIdUri(Long.parseLong(id)), null, null, null, null);
+        if (cursor == null) {
+            return false;
+        } else {
+            if (cursor.moveToFirst()) {
+                cursor.close();
+                return true;
+            }
+            cursor.close();
+            return false;
+        }
+    }
+
+    private Account getAccount(int id) {
+        int iId = 0;
+        Cursor cursor = getActivity().getContentResolver()
+                .query(AccountsContract.buildIdUri(id), null, null, null, null);
+        if (cursor == null) {
+            return null;
+        } else {
+            if (cursor.moveToFirst()) {
+                Account account = AccountsContract.getAccountFromCursor(cursor);
+                cursor.close();
+                return account;
+            }
+            cursor.close();
+            return null;
+        }
+    }
+
+    public void save() {
+        if (!verifiedAccount()) {
+            return;
+        }
+        ContentResolver contentResolver = getActivity().getContentResolver();
+        ContentValues values = new ContentValues();
+
+        switch (mMode) {
+            case EDIT:
+                if (!mCorpNameTextView.getText().toString().equals((account.getCorpName()))) {
+                    values.put(AccountsContract.Columns.CORP_NAME_COL, mCorpNameTextView.getText().toString());
+                }
+                if (!mUserNameTextView.getText().toString().equals((account.getUserName()))) {
+                    values.put(AccountsContract.Columns.USER_NAME_COL, mUserNameTextView.getText().toString());
+                }
+                if (!mUserEmailTextView.getText().toString().equals((account.getUserEmail()))) {
+                    values.put(AccountsContract.Columns.USER_EMAIL_COL, mUserEmailTextView.getText().toString());
+                }
+                if (!mCorpWebsiteTextView.getText().toString().equals((account.getCorpWebsite()))) {
+                    values.put(AccountsContract.Columns.CORP_WEBSITE_COL, mCorpWebsiteTextView.getText().toString());
+                }
+                if (!mNoteTextView.getText().toString().equals((account.getNote()))) {
+                    values.put(AccountsContract.Columns.NOTE_COL, mNoteTextView.getText().toString());
+                }
+                if (lngOpenDate != account.getOpenLong()) {
+                    values.put(AccountsContract.Columns.OPEN_DATE_COL, lngOpenDate);
+                }
+                if (!mRefIdFromTextView.getText().toString().equals(String.valueOf(account.getRefFrom()))) {
+                    values.put(AccountsContract.Columns.REF_FROM_COL, mRefIdFromTextView.getText().toString());
+                }
+                if (!mRefIdToTextView.getText().toString().equals(String.valueOf(account.getRefTo()))) {
+                    values.put(AccountsContract.Columns.REF_TO_COL, mRefIdToTextView.getText().toString());
+                }
+//                        if (so != task.getSortOrder()) {
+//                            values.put(TasksContract.Columns.TASKS_SORTORDER, so);
+//                        }
+                Log.d(TAG, "save: values " + values);
+                if (values.size() != 0) {
+                    Log.d(TAG, "onClick: updating accountId " + AccountsContract.buildIdUri(account.getId()));
+                    contentResolver.update(AccountsContract.buildIdUri(account.getId()), values, null, null);
+                    account = getAccount(account.getId());
+                    Toast.makeText(getActivity(),
+                            values.size() + " changed columns",
+                            Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getActivity(),
+                            " no changes detected",
+                            Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case ADD:
+                if (mCorpNameTextView.length()>0) {
+                    Log.d(TAG, "onClick: adding new account");
+                    values.put(AccountsContract.Columns.PASSPORT_ID_COL,
+                            String.valueOf(getMaxValue(AccountsContract.Columns.PASSPORT_ID_COL)));
+                    values.put(AccountsContract.Columns.CORP_NAME_COL, mCorpNameTextView.getText().toString());
+                    values.put(AccountsContract.Columns.USER_NAME_COL, mUserNameTextView.getText().toString());
+                    values.put(AccountsContract.Columns.USER_EMAIL_COL, mUserEmailTextView.getText().toString());
+                    values.put(AccountsContract.Columns.CORP_WEBSITE_COL, mCorpWebsiteTextView.getText().toString());
+                    values.put(AccountsContract.Columns.NOTE_COL, mNoteTextView.getText().toString());
+                    values.put(AccountsContract.Columns.OPEN_DATE_COL, String.valueOf(System.currentTimeMillis()));
+//                    Log.d(TAG, "onClick: open date entered "  + mOpenDateTextView.getText().toString());
+//                    Log.d(TAG, "onClick: open date millis " + System.currentTimeMillis());
+//                            values.put(AccountsContract.Columns.TASKS_SORTORDER, so);
+                    Uri uri = contentResolver.insert(AccountsContract.CONTENT_URI, values);
+
+                    long id = AccountsContract.getId(uri);
+                    account = getAccount((int)id);
+                }
+                break;
+        }
+
+        Log.d(TAG, "onClick: Done editing");
+    }
     @Override
     public void onAttach(Context context) {
         Log.d(TAG, "onAttach: starts");

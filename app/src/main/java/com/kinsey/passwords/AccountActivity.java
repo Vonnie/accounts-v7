@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 
 public class AccountActivity extends AppCompatActivity
         implements AccountActivityFragment.OnSaveClicked {
@@ -58,6 +60,35 @@ public class AccountActivity extends AppCompatActivity
 //        }
 //    }
 
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_account, menu);
+        return true;
+//        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        Log.d(TAG, "onOptionsItemSelected: id " + id);
+        switch (id) {
+            case R.id.menu_save:
+                saveAccount();
+                break;
+            default:
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void saveAccount() {
+//        FragmentManager fragmentManager = getSupportFragmentManager();
+//        android.support.v4.app.Fragment frag = fragmentManager.findFragmentById(R.id.fragmentEdit);
+        AccountActivityFragment fragment = (AccountActivityFragment) getSupportFragmentManager().findFragmentById(R.id.fragmentEdit);
+        fragment.save();
+    }
 
     @Override
     public void onBackPressed() {

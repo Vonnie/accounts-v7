@@ -50,9 +50,12 @@
     <string name="home_message_text">
         Keeping passwords electronically, even if encrypted, may leave you open to have your credentials stolen.
         <em>Important:</em> Having an electronic copy (from a file or the app&quot;s database) with the credentials of company, user name, and password would highly exposed your accounts to hackers.
-        \nFor this security reason, the passwords are not saved on a file or database. This app keeps account information excluding passwords. Your action is to manually tie together using the password id from this app to the written list of password id and password value.
+        \nFor this security reason, the passwords are not saved on a file or database. This app keeps account information excluding passwords. Your action is to manually tie together using the account id from this app to the written list of account id and password value.
         \nUse the menu to add an account, see a account list, search accounts, generate passwords.
     </string>
     <string name="menu_search">Search Accounts</string>
-    <string name="accedit_ref_from">Prior closed into this account</string>
+    <string name="accedit_ref_from_hint">Prior closed into this account Id</string>
+    <string name="accedit_ref_to_hint">This account closed to another account Id</string>
+    <string name="menu_save">Save</string>
+    <string name="accedit_date_open_label">Open Date</string>
 </resources>

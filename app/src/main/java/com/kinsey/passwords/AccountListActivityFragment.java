@@ -62,7 +62,7 @@ public class AccountListActivityFragment extends Fragment
         Bundle arguments = getActivity().getIntent().getExtras();
 
         mSortorder = (int) arguments.getSerializable(Account.class.getSimpleName());
-        mAccountAdapter = new AccountRecyclerViewAdapter(null,
+        mAccountAdapter = new AccountRecyclerViewAdapter(mSortorder, null,
                 (AccountRecyclerViewAdapter.OnAccountClickListener) getActivity());
         recyclerView.setAdapter(mAccountAdapter);
         Log.d(TAG, "onCreateView: returning adapter count: " + mAccountAdapter.getItemCount());
@@ -94,9 +94,13 @@ public class AccountListActivityFragment extends Fragment
 //        String sortOrder = AccountsContract.Columns.CORP_NAME_COL + "," + AccountsContract.Columns.SEQUENCE_COL + " COLLATE NOCASE";
         String sortOrder;
         if (mSortorder == AccountsContract.ACCOUNT_LIST_BY_OPEN_DATE) {
-            sortOrder = AccountsContract.Columns.OPEN_DATE_COL + " DESC," + AccountsContract.Columns.SEQUENCE_COL + " COLLATE NOCASE";
+            sortOrder = AccountsContract.Columns.OPEN_DATE_COL + " DESC," + AccountsContract.Columns.CORP_NAME_COL + " COLLATE NOCASE";
         } else {
-            sortOrder = AccountsContract.Columns.CORP_NAME_COL + "," + AccountsContract.Columns.SEQUENCE_COL + " COLLATE NOCASE";
+            if (mSortorder == AccountsContract.ACCOUNT_LIST_BY_OPEN_DATE) {
+                sortOrder = AccountsContract.Columns.SEQUENCE_COL + "," + AccountsContract.Columns.CORP_NAME_COL + " COLLATE NOCASE";
+            } else {
+                sortOrder = AccountsContract.Columns.CORP_NAME_COL + "," + AccountsContract.Columns.SEQUENCE_COL + " COLLATE NOCASE";
+            }
         }
 //        String sortOrder = TasksContract.Columns.TASKS_SORTORDER + "," + TasksContract.Columns.TASKS_NAME;
         Loader<Cursor> cursor = new CursorLoader(getActivity(),

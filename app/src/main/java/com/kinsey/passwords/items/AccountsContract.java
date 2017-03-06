@@ -50,6 +50,7 @@ public class AccountsContract {
 
     public static final int ACCOUNT_LIST_BY_CORP_NAME = 1;
     public static final int ACCOUNT_LIST_BY_OPEN_DATE = 2;
+    public static final int ACCOUNT_LIST_BY_SEQUENCE = 3;
     public static final int ACCOUNT_EDIT = 3;
     public static final int ACCOUNT_SEARCH = 4;
 
@@ -61,6 +62,7 @@ public class AccountsContract {
 //    public static final Uri CONTENT_URI = Uri.withAppendedPath(CONTENT_AUTHORITY_URI, TABLE_NAME);
     public static final Uri CONTENT_URI = Uri.withAppendedPath(CONTENT_AUTHORITY_URI, AccountDatabase.DATABASE_NAME);
     public static final Uri CONTENT_MAX_VALUE_URI = Uri.withAppendedPath(CONTENT_URI, "maxvalue");
+    public static final Uri CONTENT_ACCOUNT_ID_URI = Uri.withAppendedPath(CONTENT_URI, "accountid");
 //    public static final Uri CONTENT_ROW_ID_URI = Uri.withAppendedPath(CONTENT_URI, String.valueOf(AccountProvider.ROW_ID));
 
 //    public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.kinsey.passport";
@@ -69,6 +71,10 @@ public class AccountsContract {
 
     public static Uri buildIdUri(long id) {
         return ContentUris.withAppendedId(CONTENT_URI, id);
+    }
+
+    public static Uri buildAcctIdUri(long id) {
+        return ContentUris.withAppendedId(CONTENT_ACCOUNT_ID_URI, id);
     }
 
     public static long getId(Uri uri) {
@@ -98,6 +104,20 @@ public class AccountsContract {
             if (cursor.isNull(cursor.getColumnIndex(AccountsContract.Columns.OPEN_DATE_COL))) {
             } else {
                 account.setOpenLong(cursor.getLong(cursor.getColumnIndex(AccountsContract.Columns.OPEN_DATE_COL)));
+            }
+        }
+
+        if (cursor.getColumnIndex(Columns.REF_FROM_COL) != -1) {
+            if (cursor.isNull(cursor.getColumnIndex(AccountsContract.Columns.REF_FROM_COL))) {
+            } else {
+                account.setRefFrom(cursor.getInt(cursor.getColumnIndex(AccountsContract.Columns.REF_FROM_COL)));
+            }
+        }
+
+        if (cursor.getColumnIndex(Columns.REF_TO_COL) != -1) {
+            if (cursor.isNull(cursor.getColumnIndex(AccountsContract.Columns.REF_TO_COL))) {
+            } else {
+                account.setRefTo(cursor.getInt(cursor.getColumnIndex(AccountsContract.Columns.REF_TO_COL)));
             }
         }
 

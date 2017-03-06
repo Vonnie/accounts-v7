@@ -23,6 +23,7 @@ import java.util.Locale;
 public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecyclerViewAdapter.AccountViewHolder> {
     private static final String TAG = "AcctRecyclerViewAdpt";
 
+    private int mSortorder;
     private Cursor mCursor;
     private OnAccountClickListener mListener;
 
@@ -36,8 +37,9 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
             pattern_mdy_display, Locale.US);
 
 
-    public AccountRecyclerViewAdapter(Cursor cursor, OnAccountClickListener listener) {
+    public AccountRecyclerViewAdapter(int sortorder, Cursor cursor, OnAccountClickListener listener) {
 //        Log.d(TAG, "CursorRecyclerViewAdapter: Constructor called");
+        mSortorder = sortorder;
         mCursor = cursor;
         mListener = listener;
     }
@@ -101,24 +103,36 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
 //                holder.open_date.setText("");
 //            }
 
+//            holder.corp_name.setText(mCursor.getString(mCursor.getColumnIndex(AccountsContract.Columns.CORP_NAME_COL)));
+//            holder.user_name.setText(mCursor.getString(mCursor.getColumnIndex(AccountsContract.Columns.USER_NAME_COL)));
+
+//            holder.user_email.setText(mCursor.getString(mCursor.getColumnIndex(AccountsContract.Columns.USER_EMAIL_COL)));
+//            holder.corp_.setText(mCursor.getString(mCursor.getColumnIndex(AccountsContract.Columns.CORP_WEBSITE_COL)));
+
+            holder.corp_name.setText(account.getCorpName());
+            holder.user_name.setText(account.getUserName());
             if (account.getOpenLong() == 0) {
                 holder.open_date.setText("");
             } else {
                 //            Date dte = new Date(item.getActvyLong());
                 holder.open_date.setText(format_mdy_display.format(account.getOpenLong()));
             }
-            holder.corp_name.setText(mCursor.getString(mCursor.getColumnIndex(AccountsContract.Columns.CORP_NAME_COL)));
-            holder.user_name.setText(mCursor.getString(mCursor.getColumnIndex(AccountsContract.Columns.USER_NAME_COL)));
+            holder.editButton.setVisibility(View.VISIBLE);
+            holder.deleteButton.setVisibility(View.VISIBLE);
 
-//            holder.user_email.setText(mCursor.getString(mCursor.getColumnIndex(AccountsContract.Columns.USER_EMAIL_COL)));
-//            holder.corp_.setText(mCursor.getString(mCursor.getColumnIndex(AccountsContract.Columns.CORP_WEBSITE_COL)));
-            holder.editButton.setVisibility(View.VISIBLE);  // TODO add onClick listener
-            holder.deleteButton.setVisibility(View.VISIBLE); // TODO add onClick listener
+            if (mSortorder == AccountsContract.ACCOUNT_LIST_BY_OPEN_DATE) {
+                holder.user_name.setVisibility(View.GONE);
+                holder.open_date.setVisibility(View.VISIBLE);
+            } else {
+                if (mSortorder == AccountsContract.ACCOUNT_LIST_BY_SEQUENCE) {
+                    holder.user_name.setVisibility(View.GONE);
+                    holder.open_date.setVisibility(View.GONE);
+                } else {
+                    holder.user_name.setVisibility(View.VISIBLE);
+                    holder.open_date.setVisibility(View.GONE);
+                }
+            }
 
-            holder.corp_name.setText(account.getCorpName());
-            holder.user_name.setText(account.getUserName());
-            holder.editButton.setVisibility(View.VISIBLE);  // TODO add onClick listener
-            holder.deleteButton.setVisibility(View.VISIBLE); // TODO add onClick listener
 
             View.OnClickListener buttonListener = new View.OnClickListener() {
 
