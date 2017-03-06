@@ -58,4 +58,5 @@
     <string name="accedit_ref_to_hint">This account closed to another account Id</string>
     <string name="menu_save">Save</string>
     <string name="accedit_date_open_label">Open Date</string>
+    <string name="title_activity_web_view">WebViewActivity</string>
 </resources>

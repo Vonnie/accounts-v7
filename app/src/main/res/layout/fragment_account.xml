@@ -55,6 +55,13 @@
                 android:hint="@string/accedit_corp_website_hint"
                 android:inputType="textNoSuggestions" />
 
+            <ImageButton
+                android:id="@+id/acc_img_website"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                app:srcCompat="@android:drawable/ic_menu_view" />
+
             <EditText
                 android:id="@+id/acc_notes"
                 android:layout_width="match_parent"
@@ -69,7 +76,8 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:hint="@string/accedit_ref_from_hint"
-                android:inputType="number" />
+                android:inputType="number"
+                android:labelFor="@id/acc_ref_from_label" />
 
             <EditText
                 android:id="@+id/acc_ref_to"

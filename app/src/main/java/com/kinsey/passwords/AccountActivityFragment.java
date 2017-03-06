@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,6 +49,7 @@ public class AccountActivityFragment extends Fragment {
     private TextView mRefIdToTextView;
     private DatePicker mDtePickOpen;
     private long lngOpenDate;
+    private ImageButton mImgWebView;
 
     private OnSaveClicked mSaveListener = null;
     private Account account;
@@ -79,6 +82,7 @@ public class AccountActivityFragment extends Fragment {
         mAccountIdTextView = (TextView) view.findViewById(R.id.acc_account_id);
         mRefIdFromTextView = (EditText) view.findViewById(R.id.acc_ref_from);
         mRefIdToTextView = (EditText) view.findViewById(R.id.acc_ref_to);
+        mImgWebView = (ImageButton) view.findViewById(R.id.acc_img_website);
 
 //        Bundle arguments = getArguments();
         Bundle arguments = getActivity().getIntent().getExtras();  // The line we'll change later
@@ -125,9 +129,16 @@ public class AccountActivityFragment extends Fragment {
 //                Log.d(TAG, "onCreateView: textView " + mAccountIdTextView.getText().toString());
                 mAccountIdTextView.setText("Account Id: " + String.valueOf(account.getPassportId()));
 //                Log.d(TAG, "onCreateView: refFrom/To " + account.getRefFrom() + ", " + account.getRefTo());
-                mRefIdFromTextView.setText(String.valueOf(account.getRefFrom()));
-                mRefIdToTextView.setText(String.valueOf(account.getRefTo()));
-
+                if (account.getRefFrom() == 0) {
+                    mRefIdFromTextView.setText("");
+                } else {
+                    mRefIdFromTextView.setText(String.valueOf(account.getRefFrom()));
+                }
+                if (account.getRefTo() == 0) {
+                    mRefIdToTextView.setText("");
+                } else {
+                    mRefIdToTextView.setText(String.valueOf(account.getRefTo()));
+                }
 
 //                mSortOrderTextView.setText(Integer.toString(account.getSortOrder()));
                 mMode = FragmentEditMode.EDIT;
@@ -161,6 +172,19 @@ public class AccountActivityFragment extends Fragment {
 //                }
 //            }
 //        });
+
+        mImgWebView.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent detailIntent = new Intent(getActivity(), WebViewActivity.class);
+                detailIntent.putExtra(WebViewActivity.class.getSimpleName(), mCorpWebsiteTextView.getText().toString());
+                Log.d(TAG, "onClick: website " + account.getCorpWebsite());
+                Log.d(TAG, "onClick: wv class " + WebViewActivity.class.getSimpleName());
+                startActivity(detailIntent);
+
+            }
+        });
+
         return view;
 //        return inflater.inflate(R.layout.fragment_account, container, false);
     }
