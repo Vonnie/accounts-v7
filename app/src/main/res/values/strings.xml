@@ -50,5 +50,6 @@
     <string name="home_message_text"><em>Important:</em> Having an electronic copy (from a file or the app&quot;s database) with the credentials of company, user name, and password would highly exposed your accounts to hackers.
         Keeping passwords electronically, even if encrypted, may leave you open to have your credentials stolen.
         For this security reason, the passwords are not saved on a file or database. Instead, this app keeps account information without passwords. Your action ties them manually together.</string>
+    This app is unable to provide password security. To ensure this security, passwords are kept outside this app on paper. This app provides a report from the key list icon from above.
     <string name="menu_search">Search Accounts</string>
 </resources>
