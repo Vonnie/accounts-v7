@@ -1,5 +1,7 @@
 package com.kinsey.passwords.provider;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -11,7 +13,7 @@ import android.widget.TextView;
 
 import com.kinsey.passwords.R;
 import com.kinsey.passwords.items.Account;
-import com.kinsey.passwords.items.SearchesContract;
+import com.kinsey.passwords.items.AccountsContract;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
@@ -20,9 +22,10 @@ import java.util.Locale;
  * Created by Yvonne on 2/21/2017.
  */
 
-public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecyclerViewAdapter.AccountViewHolder> {
-    private static final String TAG = "SuggRecyclerViewAdpt";
+public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecyclerViewAdapter.SearchViewHolder> {
+    private static final String TAG = "SrchRecyclerViewAdpt";
 
+    private Context mContext;
     private Cursor mCursor;
     private OnAccountClickListener mListener;
 
@@ -36,21 +39,22 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
             pattern_mdy_display, Locale.US);
 
 
-    public SearchRecyclerViewAdapter(Cursor cursor, OnAccountClickListener listener) {
+    public SearchRecyclerViewAdapter(Context context, Cursor cursor, OnAccountClickListener listener) {
 //        Log.d(TAG, "CursorRecyclerViewAdapter: Constructor called");
+        mContext = context;
         mCursor = cursor;
         mListener = listener;
     }
 
     @Override
-    public AccountViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public SearchViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 //        Log.d(TAG, "onCreateViewHolder: new view requested");
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.suggest_list_items, parent, false);
-        return new AccountViewHolder(view);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.search_list_items, parent, false);
+        return new SearchViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(AccountViewHolder holder, int position) {
+    public void onBindViewHolder(SearchViewHolder holder, int position) {
 //        Log.d(TAG, "onBindViewHolder: starts");
 
 //        if (mCursor == null) {
@@ -62,7 +66,6 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
             Log.d(TAG, "onBindViewHolder: no search db items");
             holder.corp_name.setText(R.string.no_account_items);
 //            holder.user_name.setText("Click Info button to add accounts");
-            holder.open_date.setText("");
             holder.editButton.setVisibility(View.GONE);
             holder.deleteButton.setVisibility(View.GONE);
         } else {
@@ -70,8 +73,27 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
                 throw new IllegalStateException("Couldn't move cursor to position " + position);
             }
 
-            holder.corp_name.setText(mCursor.getString(mCursor.getColumnIndex(SearchesContract.Columns.SUGGEST_TEXT_1_COL)));
-            holder.corp_name.setText(mCursor.getString(mCursor.getColumnIndex(SearchesContract.Columns.SUGGEST_TEXT_2_COL)));
+            holder.corp_name.setText(mCursor.getString(mCursor.getColumnIndex(SearchManager.SUGGEST_COLUMN_TEXT_1)));
+            holder.userName.setText(mCursor.getString(mCursor.getColumnIndex(SearchManager.SUGGEST_COLUMN_TEXT_2)));
+            holder.website.setText(mCursor.getString(mCursor.getColumnIndex(SearchManager.SUGGEST_COLUMN_TEXT_2_URL)));
+
+            int dbId = mCursor.getInt(mCursor.getColumnIndex(SearchManager.SUGGEST_COLUMN_INTENT_DATA));
+            Log.d(TAG, "onBindViewHolder: acctId " + dbId);
+//            Log.d(TAG, "onBindViewHolder: column count " + mCursor.getColumnCount());
+//            for (int i = 0; i < mCursor.getColumnCount(); i++) {
+//                Log.d(TAG, "showSuggestions: " + mCursor.getColumnName(i)
+//                        + ": " + mCursor.getString(i));
+//            }
+//            Log.d(TAG, "searched Accounts: ==========================");
+//
+//
+            Cursor cursorAccount = mContext.getContentResolver().query(
+                    AccountsContract.buildIdUri(dbId), null, null, null, null);
+            if (cursorAccount.moveToFirst()) {
+                if (mCursor.getColumnIndex(AccountsContract.Columns.USER_EMAIL_COL) != -1){
+                    holder.userEmail.setText(mCursor.getString(mCursor.getColumnIndex(AccountsContract.Columns.USER_EMAIL_COL)));
+                }
+            }
 
 
 //            holder.user_email.setText(mCursor.getString(mCursor.getColumnIndex(AccountsContract.Columns.USER_EMAIL_COL)));
@@ -85,13 +107,13 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
                 public void onClick(View view) {
 //                    Log.d(TAG, "onClick: starts");
                     switch (view.getId()) {
-                        case R.id.tli_acct_edit:
+                        case R.id.srli_acct_edit:
                             if (mListener != null) {
 //                                Log.d(TAG, "onClick: account " + account);
 //                                mListener.onAccountEditClick(account);
                             }
                             break;
-                        case R.id.tli_acct_delete:
+                        case R.id.srli_acct_delete:
                             if (mListener != null) {
 //                                mListener.onAccountDeleteClick(account);
                             }
@@ -146,24 +168,28 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
         return oldCursor;
     }
 
-    public static class AccountViewHolder extends RecyclerView.ViewHolder {
-        private static final String TAG = "AccountViewHolder";
+    public static class SearchViewHolder extends RecyclerView.ViewHolder {
+        private static final String TAG = "SearchViewHolder";
 
         TextView corp_name = null;
         TextView website = null;
-        TextView open_date = null;
+        TextView userName = null;
+        TextView userEmail = null;
+//        TextView open_date = null;
         ImageButton editButton = null;
         ImageButton deleteButton = null;
 
 
-        public AccountViewHolder(View itemView) {
+        public SearchViewHolder(View itemView) {
             super(itemView);
-        Log.d(TAG, "AccountViewHolder: starts");
+        Log.d(TAG, "SearchViewHolder: starts");
 
-            this.corp_name = (TextView) itemView.findViewById(R.id.tli_corp_name);
-//            this.user_name = (TextView) itemView.findViewById(R.id.tli_user_name);
-            this.editButton = (ImageButton) itemView.findViewById(R.id.tli_acct_edit);
-            this.deleteButton = (ImageButton) itemView.findViewById(R.id.tli_acct_delete);
+            this.corp_name = (TextView) itemView.findViewById(R.id.srli_corp_name);
+            this.website = (TextView) itemView.findViewById(R.id.srli_website);
+            this.userName = (TextView) itemView.findViewById(R.id.srli_user_name);
+            this.userEmail = (TextView) itemView.findViewById(R.id.srli_user_email);
+            this.editButton = (ImageButton) itemView.findViewById(R.id.srli_acct_edit);
+            this.deleteButton = (ImageButton) itemView.findViewById(R.id.srli_acct_delete);
         }
     }
 }

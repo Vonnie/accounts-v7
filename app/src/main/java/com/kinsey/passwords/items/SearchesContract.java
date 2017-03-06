@@ -7,9 +7,6 @@ import android.net.Uri;
 import com.kinsey.passwords.provider.SearchDatabase;
 import com.kinsey.passwords.provider.SearchProvider;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created by Yvonne on 3/2/2017.
  */
@@ -18,21 +15,24 @@ public class SearchesContract {
 
     public static Cursor cursorSearch;
 
-    public static final class Columns {
+//    public static final class Columns {
+//
+//        public static final String _ID_COL = "_id";
+//
+//        public static final String SUGGEST_ID_COL = "suggest_id";
+//
+//        public static final String SUGGEST_FLAGS_COL = "suggest_flags";
+//        public static final String SUGGEST_TEXT_1_COL = "suggest_text_1";
+//        public static final String SUGGEST_TEXT_2_COL = "suggest_text_2";
+//        public static final String SUGGEST_INTENT_DATA_ID_COL = "suggest_intent_data_id";
+//        public static final String SUGGEST_ALT_DB_ID_COL = "suggest_alt_db_id";
+//
+//        private Columns() {
+//        }
+//    }
 
-        public static final String _ID_COL = "_id";
 
-        public static final String SUGGEST_ID_COL = "suggest_id";
-
-        public static final String SUGGEST_TEXT_1_COL = "suggest_text_1";
-        public static final String SUGGEST_TEXT_2_COL = "suggest_text_2";
-
-        private Columns() {
-        }
-    }
-
-
-    public static List<SearchItem> listSearches = new ArrayList<SearchItem>();
+//    public static List<SearchItem> listSearches = new ArrayList<SearchItem>();
 
     /**
      *  The URI to access the Tasks table

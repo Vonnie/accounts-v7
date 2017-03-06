@@ -3,7 +3,6 @@ package com.kinsey.passwords;
 import android.app.SearchManager;
 import android.app.SearchableInfo;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -106,8 +105,8 @@ public class SearchActivity extends AppCompatActivity
                 showSuggestions();
 
                 mSearchView.clearFocus();
-//                finish();
-                return false;
+                finish();
+                return true;
             }
 
             @Override
@@ -182,8 +181,8 @@ public class SearchActivity extends AppCompatActivity
 
 
                 SearchesContract.cursorSearch = mSearchView.getSuggestionsAdapter().getCursor();
-                Intent detailIntent = new Intent(this, SearchListActivity.class);
-                startActivity(detailIntent);
+//                Intent detailIntent = new Intent(this, SearchListActivity.class);
+//                startActivity(detailIntent);
 
 //                if (account != null) { // editing an account
 //                    detailIntent.putExtra(Account.class.getSimpleName(), mSearchView.getSuggestionsAdapter().getCursor());
@@ -199,10 +198,11 @@ public class SearchActivity extends AppCompatActivity
         Log.d(TAG, "showAccount: pos " + position);
         mSearchView.getSuggestionsAdapter().getCursor().moveToFirst();
         mSearchView.getSuggestionsAdapter().getCursor().move(position);
-        Log.d(TAG, "showAccount: " + mSearchView.getSuggestionsAdapter().getCursor().getColumnName(3));
-        Log.d(TAG, "showAccount: " + mSearchView.getSuggestionsAdapter().getCursor().getString(3));
-        Log.d(TAG, "showAccount: " + mSearchView.getSuggestionsAdapter().getCursor().getColumnName(5));
-        int dbId = mSearchView.getSuggestionsAdapter().getCursor().getInt(5);
+//        Log.d(TAG, "showAccount: " + mSearchView.getSuggestionsAdapter().getCursor().getColumnName(3));
+//        Log.d(TAG, "showAccount: " + mSearchView.getSuggestionsAdapter().getCursor().getString(3));
+//        Log.d(TAG, "showAccount: " + mSearchView.getSuggestionsAdapter().getCursor().getColumnName(5));
+        int dbId = Integer.valueOf(mSearchView.getSuggestionsAdapter().getCursor()
+                .getString(mSearchView.getSuggestionsAdapter().getCursor().getColumnIndex(SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID)));
         Log.d(TAG, "showAccount: " + dbId);
 
         return dbId;

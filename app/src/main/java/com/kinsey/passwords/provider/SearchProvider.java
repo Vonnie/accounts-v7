@@ -139,15 +139,17 @@ public class SearchProvider extends SearchRecentSuggestionsProvider {
             query = query.toLowerCase();
             String[] columns = new String[]{
                     BaseColumns._ID,
-                    SearchDatabase.KEY_CORP_NAME,
-                    SearchDatabase.CORP_NAME_TEXT_2,
-                    SearchDatabase.ID_CORP_NAME,
-                    SearchDatabase.ICON_CORP_NAME,
-                    SearchDatabase.SEARCH_DB_ID,
-                    SearchDatabase.LOOKUP_KEY,
+                    SearchManager.SUGGEST_COLUMN_TEXT_1,
+                    SearchManager.SUGGEST_COLUMN_TEXT_2,
+                    SearchManager.SUGGEST_COLUMN_TEXT_2_URL,
+                    SearchManager.SUGGEST_COLUMN_INTENT_DATA,
+                    SearchManager.SUGGEST_COLUMN_INTENT_EXTRA_DATA,
+                    SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID,
        /* SearchManager.SUGGEST_COLUMN_SHORTCUT_ID,
                         (only if you want to refresh shortcuts) */
-                    SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID};
+                    SearchManager.SUGGEST_COLUMN_SHORTCUT_ID,
+                    SearchManager.SUGGEST_COLUMN_QUERY,
+                    SearchManager.SUGGEST_COLUMN_FLAGS};
 
             Log.v(TAG, "getSuggestions " + query);
 
@@ -164,12 +166,15 @@ public class SearchProvider extends SearchRecentSuggestionsProvider {
         query = query.toLowerCase();
         String[] columns = new String[]{
                 BaseColumns._ID,
-                SearchDatabase.KEY_CORP_NAME,
-                SearchDatabase.CORP_NAME_TEXT_2,
-                SearchDatabase.ID_CORP_NAME,
-                SearchDatabase.ICON_CORP_NAME,
-                SearchDatabase.SEARCH_DB_ID,
-                SearchDatabase.LOOKUP_KEY};
+                SearchManager.SUGGEST_COLUMN_TEXT_1,
+                SearchManager.SUGGEST_COLUMN_TEXT_2,
+                SearchManager.SUGGEST_COLUMN_TEXT_2_URL,
+                SearchManager.SUGGEST_COLUMN_INTENT_DATA,
+                SearchManager.SUGGEST_COLUMN_INTENT_EXTRA_DATA,
+                SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID,
+                SearchManager.SUGGEST_COLUMN_SHORTCUT_ID,
+                SearchManager.SUGGEST_COLUMN_QUERY,
+                SearchManager.SUGGEST_COLUMN_FLAGS};
 
 //        for (String item : columns) {
 //            Log.v(TAG, "col " + item);
@@ -182,15 +187,27 @@ public class SearchProvider extends SearchRecentSuggestionsProvider {
 //        Log.v(TAG, "getWord " + uri);
         String rowId = uri.getLastPathSegment();
         String[] columns = new String[]{
-                SearchDatabase.KEY_CORP_NAME,
-                SearchDatabase.CORP_NAME_TEXT_2,
-                SearchDatabase.ID_CORP_NAME,
-                SearchDatabase.ICON_CORP_NAME,
-                SearchDatabase.SEARCH_DB_ID,
-                SearchDatabase.LOOKUP_KEY
-        };
+                BaseColumns._ID,
+                SearchManager.SUGGEST_COLUMN_TEXT_1,
+                SearchManager.SUGGEST_COLUMN_TEXT_2,
+                SearchManager.SUGGEST_COLUMN_TEXT_2_URL,
+                SearchManager.SUGGEST_COLUMN_INTENT_DATA,
+                SearchManager.SUGGEST_COLUMN_INTENT_EXTRA_DATA,
+                SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID,
+                SearchManager.SUGGEST_COLUMN_SHORTCUT_ID,
+                SearchManager.SUGGEST_COLUMN_QUERY,
+                SearchManager.SUGGEST_COLUMN_FLAGS};
+//        String[] columns = new String[]{
+//                SearchDatabase.KEY_CORP_NAME,
+//                SearchDatabase.CORP_NAME_TEXT_2,
+//                SearchDatabase.ID_CORP_NAME,
+//                SearchDatabase.ICON_CORP_NAME,
+//                SearchDatabase.SEARCH_DB_ID,
+//                SearchDatabase.LOOKUP_KEY
+//        };
 
         return mDictionary.getWord(rowId, columns);
+
     }
 
     private Cursor refreshShortcut(Uri uri) {
@@ -204,16 +221,28 @@ public class SearchProvider extends SearchRecentSuggestionsProvider {
         String rowId = uri.getLastPathSegment();
         String[] columns = new String[]{
                 BaseColumns._ID,
-                SearchDatabase.KEY_CORP_NAME,
-                SearchDatabase.CORP_NAME_TEXT_2,
-                SearchDatabase.ID_CORP_NAME,
-                SearchDatabase.ICON_CORP_NAME,
-                SearchDatabase.SEARCH_DB_ID,
-                SearchDatabase.LOOKUP_KEY,
+                SearchManager.SUGGEST_COLUMN_TEXT_1,
+                SearchManager.SUGGEST_COLUMN_TEXT_2,
+                SearchManager.SUGGEST_COLUMN_TEXT_2_URL,
+                SearchManager.SUGGEST_COLUMN_INTENT_DATA,
+                SearchManager.SUGGEST_COLUMN_INTENT_EXTRA_DATA,
+                SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID,
                 SearchManager.SUGGEST_COLUMN_SHORTCUT_ID,
-                SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID};
+                SearchManager.SUGGEST_COLUMN_QUERY,
+                SearchManager.SUGGEST_COLUMN_FLAGS};
+//        String[] columns = new String[]{
+//                BaseColumns._ID,
+//                SearchDatabase.KEY_CORP_NAME,
+//                SearchDatabase.CORP_NAME_TEXT_2,
+//                SearchDatabase.ID_CORP_NAME,
+//                SearchDatabase.ICON_CORP_NAME,
+//                SearchDatabase.SEARCH_DB_ID,
+//                SearchDatabase.LOOKUP_KEY,
+//                SearchManager.SUGGEST_COLUMN_SHORTCUT_ID,
+//                SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID};
 
         return mDictionary.getWord(rowId, columns);
+
     }
 
     @Nullable
@@ -243,6 +272,8 @@ public class SearchProvider extends SearchRecentSuggestionsProvider {
 
         long rowID = mDictionary.addSuggestion(values);
 
+        Log.d(TAG, "insert: rowId " + rowID);
+        Log.d(TAG, "insert: values " + values);
         // ---if added successfully---
         if (rowID > 0) {
             Uri _uri = ContentUris.withAppendedId(CONTENT_URI, rowID);

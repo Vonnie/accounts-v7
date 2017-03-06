@@ -19,13 +19,13 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
-        android:id="@+id/tli_acct_edit"
+        android:id="@+id/srli_acct_edit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:contentDescription="@string/up_button_description"
-        app:layout_constraintRight_toLeftOf="@+id/tli_acct_delete"
-        app:layout_constraintTop_toTopOf="@+id/tli_acct_delete"
+        app:layout_constraintRight_toLeftOf="@+id/srli_acct_delete"
+        app:layout_constraintTop_toTopOf="@+id/srli_acct_delete"
         app:srcCompat="@android:drawable/arrow_up_float" />
 
     <ImageButton
@@ -33,16 +33,16 @@
         android:layout_height="wrap_content"
         app:srcCompat="@android:drawable/arrow_down_float"
         android:id="@+id/tli_suggest_down"
-        app:layout_constraintTop_toBottomOf="@+id/tli_acct_edit"
-        app:layout_constraintBottom_toBottomOf="@+id/tli_acct_delete"
-        app:layout_constraintRight_toLeftOf="@+id/tli_acct_delete"
+        app:layout_constraintTop_toBottomOf="@+id/srli_acct_edit"
+        app:layout_constraintBottom_toBottomOf="@+id/srli_acct_delete"
+        app:layout_constraintRight_toLeftOf="@+id/srli_acct_delete"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         app:layout_constraintLeft_toRightOf="@+id/tli_password"
         android:contentDescription="@string/down_button_description" />
 
     <ImageButton
-        android:id="@+id/tli_acct_delete"
+        android:id="@+id/srli_acct_delete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"

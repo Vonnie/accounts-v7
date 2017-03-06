@@ -126,13 +126,13 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
                 public void onClick(View view) {
 //                    Log.d(TAG, "onClick: starts");
                     switch (view.getId()) {
-                        case R.id.tli_acct_edit:
+                        case R.id.srli_acct_edit:
                             if (mListener != null) {
                                 Log.d(TAG, "onClick: account " + account);
                                 mListener.onAccountEditClick(account);
                             }
                             break;
-                        case R.id.tli_acct_delete:
+                        case R.id.srli_acct_delete:
                             if (mListener != null) {
                                 mListener.onAccountDeleteClick(account);
                             }
@@ -201,11 +201,11 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
             super(itemView);
         Log.d(TAG, "AccountViewHolder: starts");
 
-            this.corp_name = (TextView) itemView.findViewById(R.id.tli_corp_name);
-            this.user_name = (TextView) itemView.findViewById(R.id.tli_user_name);
+            this.corp_name = (TextView) itemView.findViewById(R.id.srli_corp_name);
+            this.user_name = (TextView) itemView.findViewById(R.id.srli_website);
             this.open_date = (TextView) itemView.findViewById(R.id.tli_open_date);
-            this.editButton = (ImageButton) itemView.findViewById(R.id.tli_acct_edit);
-            this.deleteButton = (ImageButton) itemView.findViewById(R.id.tli_acct_delete);
+            this.editButton = (ImageButton) itemView.findViewById(R.id.srli_acct_edit);
+            this.deleteButton = (ImageButton) itemView.findViewById(R.id.srli_acct_delete);
         }
     }
 }

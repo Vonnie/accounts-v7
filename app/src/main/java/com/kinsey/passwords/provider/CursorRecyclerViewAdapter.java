@@ -86,7 +86,7 @@ public class CursorRecyclerViewAdapter extends RecyclerView.Adapter<CursorRecycl
                 public void onClick(View view) {
 //                    Log.d(TAG, "onClick: starts");
                     switch (view.getId()) {
-                        case R.id.tli_acct_edit:
+                        case R.id.srli_acct_edit:
                             if (mListener != null) {
                                 mListener.onSuggestUpClick(suggest);
                             }
@@ -96,7 +96,7 @@ public class CursorRecyclerViewAdapter extends RecyclerView.Adapter<CursorRecycl
                                 mListener.onSuggestDownClick(suggest);
                             }
                             break;
-                        case R.id.tli_acct_delete:
+                        case R.id.srli_acct_delete:
                             if (mListener != null) {
                                 mListener.onSuggestDeleteClick(suggest);
                             }
@@ -166,9 +166,9 @@ public class CursorRecyclerViewAdapter extends RecyclerView.Adapter<CursorRecycl
 //        Log.d(TAG, "TaskViewHolder: starts");
 
             this.password = (TextView) itemView.findViewById(R.id.tli_password);
-            this.upButton = (ImageButton) itemView.findViewById(R.id.tli_acct_edit);
+            this.upButton = (ImageButton) itemView.findViewById(R.id.srli_acct_edit);
             this.downButton = (ImageButton) itemView.findViewById(R.id.tli_suggest_down);
-            this.deleteButton = (ImageButton) itemView.findViewById(R.id.tli_acct_delete);
+            this.deleteButton = (ImageButton) itemView.findViewById(R.id.srli_acct_delete);
         }
     }
 }

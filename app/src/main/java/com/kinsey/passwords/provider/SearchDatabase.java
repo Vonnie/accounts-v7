@@ -8,7 +8,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.provider.BaseColumns;
-import android.provider.ContactsContract;
 import android.util.Log;
 
 import com.kinsey.passwords.items.Account;
@@ -27,16 +26,16 @@ public class SearchDatabase {
     private static final String TAG = "SearchDatabase";
 
     //The columns we'll include in the dictionary table
-    public static final String KEY_CORP_NAME = SearchManager.SUGGEST_COLUMN_TEXT_1;
-    public static final String CORP_NAME_TEXT_2 = SearchManager.SUGGEST_COLUMN_TEXT_2;
-    public static final String ID_CORP_NAME = SearchManager.SUGGEST_COLUMN_FLAGS;
-    public static final String ICON_CORP_NAME = SearchManager.SUGGEST_COLUMN_ICON_1;
-    public static final String SEARCH_DB_ID = "search_alt_db_id";
-    public static final String LOOKUP_KEY = ContactsContract.CommonDataKinds.Contactables.LOOKUP_KEY;
+//    public static final String KEY_CORP_NAME = SearchManager.SUGGEST_COLUMN_TEXT_1;
+//    public static final String CORP_NAME_TEXT_2 = SearchManager.SUGGEST_COLUMN_TEXT_2;
+//    public static final String ID_CORP_NAME = SearchManager.SUGGEST_COLUMN_FLAGS;
+//    public static final String ICON_CORP_NAME = SearchManager.SUGGEST_COLUMN_ICON_1;
+//    public static final String SEARCH_DB_ID = "search_alt_db_id";
+//    public static final String LOOKUP_KEY = ContactsContract.CommonDataKinds.Contactables.LOOKUP_KEY;
 
     public static final String DATABASE_NAME = "corpnamebank";
     public static final String FTS_VIRTUAL_TABLE = "FTSdictionary";
-    private static final int DATABASE_VERSION = 7;
+    private static final int DATABASE_VERSION = 10;
 
     private DictionaryOpenHelper mDatabaseOpenHelper;
 //    public static SQLiteDatabase dictionaryDB;
@@ -68,12 +67,18 @@ public class SearchDatabase {
      */
     private static HashMap<String,String> buildColumnMap() {
         HashMap<String,String> map = new HashMap<String,String>();
-        map.put(KEY_CORP_NAME, KEY_CORP_NAME);
-        map.put(CORP_NAME_TEXT_2, CORP_NAME_TEXT_2);
-        map.put(ID_CORP_NAME, ID_CORP_NAME);
-        map.put(ICON_CORP_NAME, ICON_CORP_NAME);
-        map.put(SEARCH_DB_ID, SEARCH_DB_ID);
-        map.put(LOOKUP_KEY, LOOKUP_KEY);
+        map.put(SearchManager.SUGGEST_COLUMN_FORMAT, SearchManager.SUGGEST_COLUMN_FORMAT);
+        map.put(SearchManager.SUGGEST_COLUMN_TEXT_1, SearchManager.SUGGEST_COLUMN_TEXT_1);
+        map.put(SearchManager.SUGGEST_COLUMN_TEXT_2, SearchManager.SUGGEST_COLUMN_TEXT_2);
+        map.put(SearchManager.SUGGEST_COLUMN_TEXT_2_URL, SearchManager.SUGGEST_COLUMN_TEXT_2_URL);
+//        map.put(SearchManager.SUGGEST_COLUMN_ICON_1, SearchManager.SUGGEST_COLUMN_ICON_1);
+//        map.put(SearchManager.SUGGEST_COLUMN_ICON_2, SearchManager.SUGGEST_COLUMN_ICON_2);
+//        map.put(SearchManager.SUGGEST_COLUMN_RESULT_CARD_IMAGE, SearchManager.SUGGEST_COLUMN_RESULT_CARD_IMAGE);
+//        map.put(SearchManager.SUGGEST_COLUMN_INTENT_ACTION, SearchManager.SUGGEST_COLUMN_INTENT_ACTION);
+        map.put(SearchManager.SUGGEST_COLUMN_INTENT_DATA, SearchManager.SUGGEST_COLUMN_INTENT_DATA);
+        map.put(SearchManager.SUGGEST_COLUMN_INTENT_EXTRA_DATA, SearchManager.SUGGEST_COLUMN_INTENT_EXTRA_DATA);
+        map.put(SearchManager.SUGGEST_COLUMN_QUERY, SearchManager.SUGGEST_COLUMN_QUERY);
+        map.put(SearchManager.SUGGEST_COLUMN_FLAGS, SearchManager.SUGGEST_COLUMN_FLAGS);
         map.put(BaseColumns._ID, "rowid AS " +
                 BaseColumns._ID);
         map.put(SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID, "rowid AS " +
@@ -82,6 +87,7 @@ public class SearchDatabase {
                 SearchManager.SUGGEST_COLUMN_SHORTCUT_ID);
         return map;
     }
+
 
     /**
      * Returns a Cursor positioned at the word specified by rowId
@@ -110,9 +116,12 @@ public class SearchDatabase {
      * @return Cursor over all words that match, or null if none found.
      */
     public Cursor getWordMatches(String query, String[] columns) {
-        String selection = KEY_CORP_NAME + " MATCH ? ";
+        String selection = SearchManager.SUGGEST_COLUMN_TEXT_1 + " MATCH ? ";
         String[] selectionArgs = new String[] {query+"*"};
 
+        Log.d(TAG, "getWordMatches: selection " + selection);
+        Log.d(TAG, "getWordMatches: selectionArgs " + selectionArgs);
+        Log.d(TAG, "getWordMatches: columns " + columns);
         return query(selection, selectionArgs, columns);
 
         /* This builds a query that looks like:
@@ -215,12 +224,16 @@ public class SearchDatabase {
         private static final String FTS_TABLE_CREATE =
                 "CREATE VIRTUAL TABLE " + FTS_VIRTUAL_TABLE +
                         " USING fts3 (" +
-                        KEY_CORP_NAME + "," +
-                        CORP_NAME_TEXT_2 + "," +
-                        ID_CORP_NAME + "," +
-                        ICON_CORP_NAME + "," +
-                        SEARCH_DB_ID + "," +
-                        LOOKUP_KEY + ");";
+                        SearchManager.SUGGEST_COLUMN_FORMAT + "," +
+                        SearchManager.SUGGEST_COLUMN_TEXT_1 + "," +
+                        SearchManager.SUGGEST_COLUMN_TEXT_2 + "," +
+                        SearchManager.SUGGEST_COLUMN_TEXT_2_URL + "," +
+                        SearchManager.SUGGEST_COLUMN_INTENT_DATA + "," +
+                        SearchManager.SUGGEST_COLUMN_INTENT_EXTRA_DATA + "," +
+                        SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID + "," +
+                        SearchManager.SUGGEST_COLUMN_SHORTCUT_ID + "," +
+                        SearchManager.SUGGEST_COLUMN_QUERY + "," +
+                        SearchManager.SUGGEST_COLUMN_FLAGS + ");";
 
 
         DictionaryOpenHelper(Context context, int dbVers) {

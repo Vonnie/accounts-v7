@@ -6,7 +6,6 @@ import android.net.Uri;
 import android.provider.BaseColumns;
 
 import com.kinsey.passwords.provider.AccountDatabase;
-import com.kinsey.passwords.provider.AccountProvider;
 
 import static com.kinsey.passwords.provider.AccountProvider.CONTENT_AUTHORITY_URI;
 
@@ -62,7 +61,7 @@ public class AccountsContract {
 //    public static final Uri CONTENT_URI = Uri.withAppendedPath(CONTENT_AUTHORITY_URI, TABLE_NAME);
     public static final Uri CONTENT_URI = Uri.withAppendedPath(CONTENT_AUTHORITY_URI, AccountDatabase.DATABASE_NAME);
     public static final Uri CONTENT_MAX_VALUE_URI = Uri.withAppendedPath(CONTENT_URI, "maxvalue");
-    public static final Uri CONTENT_ROW_ID_URI = Uri.withAppendedPath(CONTENT_URI, String.valueOf(AccountProvider.ROW_ID));
+//    public static final Uri CONTENT_ROW_ID_URI = Uri.withAppendedPath(CONTENT_URI, String.valueOf(AccountProvider.ROW_ID));
 
 //    public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.kinsey.passport";
 //    public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd." + CONTENT_AUTHORITY + "." + TABLE_NAME;

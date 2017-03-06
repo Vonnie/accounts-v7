@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string-array name="home_list_options">
+        <item>Accounts List</item>
+        <item>Add an Account</item>
+        <item>Password generate</item>
+        <item>Search Account</item>
+    </string-array>
     <string-array name="account_list_options">
         <item>Add an Account</item>
         <item>Account sorted by Corp Name</item>

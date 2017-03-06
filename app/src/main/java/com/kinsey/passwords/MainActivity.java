@@ -172,7 +172,10 @@ public class MainActivity extends AppCompatActivity
             case R.id.menumain_showSuggests:
                 suggestsListRequest();
                 break;
-            case R.id.menumain_settings:
+            case R.id.menumain_search:
+                Intent detailIntent = new Intent(this, SearchActivity.class);
+//        detailIntent.putExtra(Suggest.class.getSimpleName(), "sortorder");
+                startActivity(detailIntent);
                 break;
         }
 
@@ -312,32 +315,31 @@ public class MainActivity extends AppCompatActivity
 
             int queryResultId = sharedPreferences.getInt(SearchActivity.SEARCH_ACCOUNT, -1);
             Log.d(TAG, "onResume: queryResultsId " + queryResultId);
-            if (queryResultId != -1) {
+            if (queryResultId == -1) {
+                Intent detailIntent = new Intent(this, SearchListActivity.class);
+                startActivity(detailIntent);
+            } else {
                 resetPreferences();
                 Cursor cursor = getContentResolver().query(
                         AccountsContract.buildIdUri(queryResultId), null, null, null, null);
                 if (cursor.moveToFirst()) {
-                    Account account = AccountsContract.getAccountFromCursor(cursor);
-                    Log.d(TAG, "showAccount: account " + account.toString());
-//            return account;
-////            setResult(RESULT_OK);
                     Intent detailIntent = new Intent(this, AccountActivity.class);
-
+                    Account account = AccountsContract.getAccountFromCursor(cursor);
                     detailIntent.putExtra(Account.class.getSimpleName(), account);
-//////            startActivityForResult(detailIntent, AccountsContract.ACCOUNT_ACTION_CHG);
-                    startActivity(detailIntent);
-//        } else return null;
-//        }
-
+                    Log.d(TAG, "showAccount: account " + account.toString());
                 }
+            }
+
+
+
+
 //            Intent detailIntent = new Intent(this, AccountActivity.class);
 
 //            detailIntent.putExtra(Account.class.getSimpleName(), account);
 ////            startActivityForResult(detailIntent, AccountsContract.ACCOUNT_ACTION_CHG);
 //            startActivity(detailIntent);
 
-            }
-            
+
         }
 
 

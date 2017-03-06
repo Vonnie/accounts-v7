@@ -80,41 +80,41 @@ public class MainActivityFragment extends Fragment {
         }
 
 
-        mAccountsButton = (Button) view.findViewById(R.id.home_btn_accounts);
-        mAddAccountButton = (Button) view.findViewById(R.id.home_btn_add_account);
-        mSuggestsButton = (Button) view.findViewById(R.id.home_btn_suggests);
-        mSearchButton = (Button) view.findViewById(R.id.home_btn_search);
+//        mAccountsButton = (Button) view.findViewById(R.id.home_btn_accounts);
+//        mAddAccountButton = (Button) view.findViewById(R.id.home_btn_add_account);
+//        mSuggestsButton = (Button) view.findViewById(R.id.home_btn_suggests);
+//        mSearchButton = (Button) view.findViewById(R.id.home_btn_search);
 
         Log.d(TAG, "onCreateView: loader_id " + LOADER_ID);
 
 
-        mAccountsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mActionListener.onAccountsClicked();
-            }
-        });
-
-        mAddAccountButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mActionListener.onAddAccountClicked();
-            }
-        });
-
-        mSuggestsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mActionListener.onSuggestsClicked();
-            }
-        });
-
-        mSearchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mActionListener.onSearchClicked();
-            }
-        });
+//        mAccountsButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                mActionListener.onAccountsClicked();
+//            }
+//        });
+//
+//        mAddAccountButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                mActionListener.onAddAccountClicked();
+//            }
+//        });
+//
+//        mSuggestsButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                mActionListener.onSuggestsClicked();
+//            }
+//        });
+//
+//        mSearchButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                mActionListener.onSearchClicked();
+//            }
+//        });
 
 
 //        Log.d(TAG, "onCreateView: to cast");

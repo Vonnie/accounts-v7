@@ -67,8 +67,10 @@ public class AccountProvider extends ContentProvider {
                 queryBuilder.setTables(AccountsContract.TABLE_NAME);
 //                selection = SuggestsContract.Columns._ID_COL;
 //                selectionArgs[0] = uri.getPathSegments().get(1);
+                Log.d(TAG, "query: uri " + uri);
                 long accountId = AccountsContract.getId(uri);
                 queryBuilder.appendWhere(AccountsContract.Columns._ID_COL + " = " + accountId);
+                Log.d(TAG, "query: getRow " + AccountsContract.Columns._ID_COL + " = " + accountId);
                 break;
             case MAX_VALUE:
                 queryBuilder.setTables(AccountsContract.TABLE_NAME);

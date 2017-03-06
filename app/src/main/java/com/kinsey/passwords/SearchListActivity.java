@@ -13,7 +13,12 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.SearchView;
 
-public class SearchListActivity extends AppCompatActivity {
+import com.kinsey.passwords.items.Account;
+import com.kinsey.passwords.provider.SearchRecyclerViewAdapter;
+
+public class SearchListActivity extends AppCompatActivity
+        implements SearchListActivityFragment.OnActionListener,
+        SearchRecyclerViewAdapter.OnAccountClickListener {
     private static final String TAG = "SearchListActivity";
 
     private SearchView mSearchView;
@@ -67,5 +72,23 @@ public class SearchListActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    public void onLoadSearchClicked() {
 
+    }
+
+    @Override
+    public void onSearchRequestClicked(String searchValue) {
+
+    }
+
+    @Override
+    public void onAccountEditClick(Account account) {
+
+    }
+
+    @Override
+    public void onAccountDeleteClick(Account account) {
+
+    }
 }
