@@ -67,7 +67,6 @@ public class AccountActivity extends AppCompatActivity
 
     @Override
     public void onSaveClicked() {
-//        finish();
         setResult(Activity.RESULT_OK);
         finish();
     }

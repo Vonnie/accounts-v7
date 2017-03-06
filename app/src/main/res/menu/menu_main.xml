@@ -13,17 +13,15 @@
         android:id="@+id/menumain_showAccounts"
         android:icon="@android:drawable/ic_menu_view"
         android:orderInCategory="101"
-        android:title="@string/menu_accounts"
-        app:showAsAction="withText" />
-    <item
-        android:title="@string/menu_suggests"
-        android:orderInCategory="102"
-        android:id="@+id/menumain_showSuggests"
-        android:icon="@android:drawable/ic_secure" />
+        android:title="@string/menu_accounts" />
     <item
         android:id="@+id/menumain_search"
         android:icon="@android:drawable/ic_menu_search"
+        android:orderInCategory="102"
+        android:title="@string/menu_search" />
+    <item
+        android:title="@string/menu_suggests"
         android:orderInCategory="103"
-        android:title="@string/menu_search"
-        app:showAsAction="never" />
+        android:id="@+id/menumain_showSuggests"
+        android:icon="@android:drawable/ic_secure" />
 </menu>

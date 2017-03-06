@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Accounts</string>
     <string name="action_settings">Settings</string>
-    <string name="menu_accounts">Accounts</string>
+    <string name="menu_accounts">Accounts List</string>
     <string name="menu_suggests">Suggestions</string>
     <string name="no_items_message">No Items</string>
     <string name="edit_description_description">Button to edit passwords</string>
@@ -47,9 +47,12 @@
     <string name="title_activity_search_list">SearchListActivity</string>
     <string name="searchable_hint">Enter corporation name</string>
     <string name="home_message_title">Organize Accounts, Search Accounts, Suggested Passwords</string>
-    <string name="home_message_text"><em>Important:</em> Having an electronic copy (from a file or the app&quot;s database) with the credentials of company, user name, and password would highly exposed your accounts to hackers.
+    <string name="home_message_text">
         Keeping passwords electronically, even if encrypted, may leave you open to have your credentials stolen.
-        For this security reason, the passwords are not saved on a file or database. Instead, this app keeps account information without passwords. Your action ties them manually together.</string>
-    This app is unable to provide password security. To ensure this security, passwords are kept outside this app on paper. This app provides a report from the key list icon from above.
+        <em>Important:</em> Having an electronic copy (from a file or the app&quot;s database) with the credentials of company, user name, and password would highly exposed your accounts to hackers.
+        \nFor this security reason, the passwords are not saved on a file or database. This app keeps account information excluding passwords. Your action is to manually tie together using the password id from this app to the written list of password id and password value.
+        \nUse the menu to add an account, see a account list, search accounts, generate passwords.
+    </string>
     <string name="menu_search">Search Accounts</string>
+    <string name="accedit_ref_from">Prior closed into this account</string>
 </resources>

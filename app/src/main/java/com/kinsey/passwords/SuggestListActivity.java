@@ -41,7 +41,7 @@ public class SuggestListActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, "Add a generated password", Snackbar.LENGTH_LONG)
-                        .setAction("Action",
+                        .setAction("Add",
                                 new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {

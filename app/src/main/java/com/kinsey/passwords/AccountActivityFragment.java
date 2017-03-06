@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,6 +21,8 @@ import com.kinsey.passwords.items.Account;
 import com.kinsey.passwords.items.AccountsContract;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -40,6 +43,8 @@ public class AccountActivityFragment extends Fragment {
     private EditText mNoteTextView;
     private TextView mOpenDateTextView;
     private TextView mAccountIdTextView;
+    private DatePicker mDtePickOpen;
+    private long lngOpenDate;
     private Button mSaveButton;
 
     private OnSaveClicked mSaveListener = null;
@@ -68,6 +73,7 @@ public class AccountActivityFragment extends Fragment {
         mCorpWebsiteTextView = (EditText) view.findViewById(R.id.acc_corp_website);
         mNoteTextView = (EditText) view.findViewById(R.id.acc_notes);
         mOpenDateTextView = (TextView) view.findViewById(R.id.acc_open_date);
+        mDtePickOpen = (DatePicker) view.findViewById(R.id.acc_datePicker);
         mAccountIdTextView = (TextView) view.findViewById(R.id.acc_account_id);
         mSaveButton = (Button) view.findViewById(R.id.acc_save);
 
@@ -89,6 +95,23 @@ public class AccountActivityFragment extends Fragment {
                 if (account.getOpenLong() != 0) {
                     Log.d(TAG, "onCreateView: openLong " + account.getOpenLong());
                     mOpenDateTextView.setText("Open: " + format_ymdtimehm.format(account.getOpenLong()));
+                    mDtePickOpen.setMaxDate(new Date().getTime());
+                    mDtePickOpen.setMinDate(0);
+                    Date dte = new Date(account.getOpenLong());
+                    Calendar c1 = Calendar.getInstance();
+                    c1.setTime(dte);
+                    lngOpenDate = c1.getTimeInMillis();
+                    mDtePickOpen.init(c1.get(Calendar.YEAR),
+                            c1.get(Calendar.MONTH),
+                            c1.get(Calendar.DAY_OF_MONTH),
+                            new DatePicker.OnDateChangedListener(){
+                                @Override
+                                public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                                    Calendar c2 = Calendar.getInstance();
+                                    c2.set(year, monthOfYear, dayOfMonth);
+                                    lngOpenDate = c2.getTimeInMillis();
+                                }
+                            });
                 } else {
                     Log.d(TAG, "onCreateView: zero open date");
                 }
@@ -110,6 +133,7 @@ public class AccountActivityFragment extends Fragment {
             Log.d(TAG, "onCreateView: No arguments, adding new record");
             mMode = FragmentEditMode.ADD;
         }
+
 
         mSaveButton.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -145,6 +169,9 @@ public class AccountActivityFragment extends Fragment {
                         }
                         if (!mNoteTextView.getText().toString().equals((account.getNote()))) {
                             values.put(AccountsContract.Columns.NOTE_COL, mNoteTextView.getText().toString());
+                        }
+                        if (lngOpenDate != account.getOpenLong()) {
+                            values.put(AccountsContract.Columns.OPEN_DATE_COL, lngOpenDate);
                         }
 //                        if (so != task.getSortOrder()) {
 //                            values.put(TasksContract.Columns.TASKS_SORTORDER, so);
