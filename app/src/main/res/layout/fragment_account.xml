@@ -71,6 +71,14 @@
                 android:inputType="textMultiLine" />
 
             <EditText
+                android:id="@+id/acc_seq"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/accedit_seq_hint"
+                android:inputType="textPersonName" />
+
+            <EditText
                 android:id="@+id/acc_ref_from"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

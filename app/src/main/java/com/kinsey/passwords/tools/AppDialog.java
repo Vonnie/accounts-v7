@@ -19,6 +19,7 @@ public class AppDialog extends DialogFragment {
     private static final String TAG = "AppDialog";
 
     public static final String DIALOG_ID = "id";
+    public static final String DIALOG_TYPE = "type";
     public static final String DIALOG_MESSAGE = "message";
     public static final String DIALOG_ACCOUNT_ID = "acct_id";
     public static final String DIALOG_POSITIVE_RID = "positive_rid";
@@ -27,6 +28,10 @@ public class AppDialog extends DialogFragment {
     public static final int DIALOG_YES_NO = 1;
     public static final int DIALOG_ACCOUNT_LIST_OPTIONS = 2;
     public static final int DIALOG_ACCOUNT_FILE_OPTIONS = 3;
+
+    public static final int DIALOG_ID_CONFIRM_DELETE_ACCOUNT = 1;
+    public static final int DIALOG_ID_REQUEST_GEN_PASSWORD_LENGTH = 2;
+    public static final int DIALOG_ID_ACCOUNT_ACTIONS_LIST = 3;
 
     private EditText mEditText;
 
@@ -50,24 +55,29 @@ public class AppDialog extends DialogFragment {
 
     }
 
-    public static AppDialog newInstance(int dialogId, String messageString) {
+    public static AppDialog newInstance() {
         AppDialog frag = new AppDialog();
-        Bundle args = new Bundle();
-        args.putInt("id", dialogId);
-        args.putString("message", messageString);
-        frag.setArguments(args);
         return frag;
     }
 
-    public static AppDialog newInstance(int dialogId, String messageString, int acctId) {
-        AppDialog frag = new AppDialog();
-        Bundle args = new Bundle();
+//    public static AppDialog newInstance(int dialogId, String messageString) {
+//        AppDialog frag = new AppDialog();
+//        Bundle args = new Bundle();
 //        args.putInt("id", dialogId);
 //        args.putString("message", messageString);
-        args.putInt(DIALOG_ACCOUNT_ID, acctId);
-        frag.setArguments(args);
-        return frag;
-    }
+//        frag.setArguments(args);
+//        return frag;
+//    }
+//
+//    public static AppDialog newInstance(int dialogId, String messageString, int acctId) {
+//        AppDialog frag = new AppDialog();
+//        Bundle args = new Bundle();
+////        args.putInt("id", dialogId);
+////        args.putString("message", messageString);
+//        args.putInt(DIALOG_ACCOUNT_ID, acctId);
+//        frag.setArguments(args);
+//        return frag;
+//    }
 //    @Nullable
 //    @Override
 //    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -105,6 +115,7 @@ public class AppDialog extends DialogFragment {
 
         final Bundle arguments = getArguments();
         final int dialogId;
+        final int dialogType;
         final int accountId;
         String messageString;
         int positiveStringId;
@@ -112,11 +123,12 @@ public class AppDialog extends DialogFragment {
 
         if (arguments != null) {
             dialogId = arguments.getInt(DIALOG_ID);
+            dialogType = arguments.getInt(DIALOG_TYPE);
             messageString = arguments.getString(DIALOG_MESSAGE);
             accountId = arguments.getInt(DIALOG_ACCOUNT_ID);
 
-            if (dialogId == 0 || messageString == null) {
-                throw new IllegalArgumentException("DIALOG_ID and/or DIALOG_MESSAGE not present in the bundle");
+            if (dialogId == 0 || dialogType == 0 || messageString == null) {
+                throw new IllegalArgumentException("DIALOG_ID, DIALOG_TYPE, and/or DIALOG_MESSAGE not present in the bundle");
             }
 
         } else {
@@ -125,7 +137,7 @@ public class AppDialog extends DialogFragment {
 
 //        Log.d(TAG, "onCreateDialog: posString " + positiveStringId);
 //        Log.d(TAG, "onCreateDialog: negString " + negativeStringId);
-        switch (dialogId) {
+        switch (dialogType) {
             case DIALOG_YES_NO: {
                 positiveStringId = arguments.getInt(DIALOG_POSITIVE_RID);
                 if (positiveStringId == 0) {

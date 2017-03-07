@@ -97,7 +97,7 @@ public class AccountListActivityFragment extends Fragment
         if (mSortorder == AccountsContract.ACCOUNT_LIST_BY_OPEN_DATE) {
             sortOrder = AccountsContract.Columns.OPEN_DATE_COL + " DESC," + AccountsContract.Columns.CORP_NAME_COL + " COLLATE NOCASE";
         } else {
-            if (mSortorder == AccountsContract.ACCOUNT_LIST_BY_OPEN_DATE) {
+            if (mSortorder == AccountsContract.ACCOUNT_LIST_BY_SEQUENCE) {
                 sortOrder = AccountsContract.Columns.SEQUENCE_COL + "," + AccountsContract.Columns.CORP_NAME_COL + " COLLATE NOCASE";
             } else {
                 sortOrder = AccountsContract.Columns.CORP_NAME_COL + "," + AccountsContract.Columns.SEQUENCE_COL + " COLLATE NOCASE";

@@ -43,6 +43,7 @@ public class AccountActivityFragment extends Fragment {
     private EditText mUserEmailTextView;
     private EditText mCorpWebsiteTextView;
     private EditText mNoteTextView;
+    private EditText mSeqTextView;
 //    private TextView mOpenDateTextView;
     private TextView mAccountIdTextView;
     private TextView mRefIdFromTextView;
@@ -77,6 +78,7 @@ public class AccountActivityFragment extends Fragment {
         mUserEmailTextView = (EditText) view.findViewById(R.id.acc_user_email);
         mCorpWebsiteTextView = (EditText) view.findViewById(R.id.acc_corp_website);
         mNoteTextView = (EditText) view.findViewById(R.id.acc_notes);
+        mSeqTextView = (EditText) view.findViewById(R.id.acc_seq);
 //        mOpenDateTextView = (TextView) view.findViewById(R.id.acc_open_date);
         mDtePickOpen = (DatePicker) view.findViewById(R.id.acc_datePicker);
         mAccountIdTextView = (TextView) view.findViewById(R.id.acc_account_id);
@@ -100,6 +102,10 @@ public class AccountActivityFragment extends Fragment {
                 mUserEmailTextView.setText(account.getUserEmail());
                 mCorpWebsiteTextView.setText(account.getCorpWebsite());
                 mNoteTextView.setText(account.getNote());
+                if (account.getSequence() == 0) {
+                } else {
+                    mSeqTextView.setText(String.valueOf(account.getSequence()));
+                }
                 if (account.getOpenLong() != 0) {
                     Log.d(TAG, "onCreateView: openLong " + account.getOpenLong());
 //                    mOpenDateTextView.setText("Open: " + format_ymdtimehm.format(account.getOpenLong()));
@@ -322,6 +328,9 @@ public class AccountActivityFragment extends Fragment {
                 }
                 if (!mNoteTextView.getText().toString().equals((account.getNote()))) {
                     values.put(AccountsContract.Columns.NOTE_COL, mNoteTextView.getText().toString());
+                }
+                if (!mSeqTextView.getText().toString().equals((account.getSequence()))) {
+                    values.put(AccountsContract.Columns.SEQUENCE_COL, mSeqTextView.getText().toString());
                 }
                 if (lngOpenDate != account.getOpenLong()) {
                     values.put(AccountsContract.Columns.OPEN_DATE_COL, lngOpenDate);

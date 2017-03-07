@@ -11,7 +11,7 @@
         <item>Add an Account</item>
         <item>Account sorted by Corp Name</item>
         <item>Account sorted by Open Date</item>
-        <item>Account Favorites</item>
+        <item>Account sorted by custom sequence</item>
         <item>Export Accounts</item>
         <item>Import Accounts</item>
         <item>View Exported Accounts</item>

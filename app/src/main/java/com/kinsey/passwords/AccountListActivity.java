@@ -77,10 +77,10 @@ public class AccountListActivity extends AppCompatActivity
 //                                        mListener.onListSuggestsClick();
 
                                         FragmentManager fragmentManager = getSupportFragmentManager();
-                                        AppDialog newFragment = AppDialog.newInstance(AppDialog.DIALOG_ACCOUNT_LIST_OPTIONS,
-                                                getString(R.string.listdiag_acc_message));
+                                        AppDialog newFragment = AppDialog.newInstance();
                                         Bundle args = new Bundle();
-                                        args.putInt(AppDialog.DIALOG_ID, AppDialog.DIALOG_ACCOUNT_LIST_OPTIONS);
+                                        args.putInt(AppDialog.DIALOG_ID, AppDialog.DIALOG_ID_ACCOUNT_ACTIONS_LIST);
+                                        args.putInt(AppDialog.DIALOG_TYPE, AppDialog.DIALOG_ACCOUNT_LIST_OPTIONS);
                                         args.putString(AppDialog.DIALOG_MESSAGE, getString(R.string.listdiag_acc_message));
 
                                         newFragment.setArguments(args);
@@ -470,9 +470,10 @@ public class AccountListActivity extends AppCompatActivity
     public void onAccountDeleteClick(Account account) {
 
         FragmentManager fragmentManager = getSupportFragmentManager();
-        AppDialog newFragment = AppDialog.newInstance(AppDialog.DIALOG_YES_NO, "Confirm account delete", account.getId());
+        AppDialog newFragment = AppDialog.newInstance();
         Bundle args = new Bundle();
-        args.putInt(AppDialog.DIALOG_ID, AppDialog.DIALOG_YES_NO);
+        args.putInt(AppDialog.DIALOG_ID, AppDialog.DIALOG_ID_CONFIRM_DELETE_ACCOUNT);
+        args.putInt(AppDialog.DIALOG_TYPE, AppDialog.DIALOG_YES_NO);
         args.putString(AppDialog.DIALOG_MESSAGE, getString(R.string.deldiag_message, account.getPassportId(), account.getCorpName()));
         args.putInt(AppDialog.DIALOG_ACCOUNT_ID, account.getId());
         args.putInt(AppDialog.DIALOG_POSITIVE_RID, R.string.deldiag_positive_caption);

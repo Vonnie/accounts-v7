@@ -94,9 +94,10 @@ public class SuggestListActivity extends AppCompatActivity
 
     private void requestPassword() {
         FragmentManager fragmentManager = getSupportFragmentManager();
-        AppDialog newFragment = AppDialog.newInstance(AppDialog.DIALOG_YES_NO, "Password at 8 or 10 length");
+        AppDialog newFragment = AppDialog.newInstance();
         Bundle args = new Bundle();
-        args.putInt(AppDialog.DIALOG_ID, AppDialog.DIALOG_YES_NO);
+        args.putInt(AppDialog.DIALOG_ID, AppDialog.DIALOG_ID_REQUEST_GEN_PASSWORD_LENGTH);
+        args.putInt(AppDialog.DIALOG_TYPE, AppDialog.DIALOG_YES_NO);
         args.putString(AppDialog.DIALOG_MESSAGE, "Password at 8 or 10 length");
 //        args.putString(AppDialog.DIALOG_MESSAGE, getString(R.string.deldiag_message, 1, account.getCorpName()));
 //        args.putInt(AppDialog.DIALOG_ACCOUNT_ID, account.getId());
@@ -255,12 +256,16 @@ public class SuggestListActivity extends AppCompatActivity
 
     @Override
     public void onPositiveDialogResult(int dialogId, Bundle args) {
-        generatePasswords(10);
+        if (dialogId == AppDialog.DIALOG_ID_REQUEST_GEN_PASSWORD_LENGTH) {
+            generatePasswords(10);
+        }
     }
 
     @Override
     public void onNegativeDialogResult(int dialogId, Bundle args) {
-        generatePasswords(8);
+        if (dialogId == AppDialog.DIALOG_ID_REQUEST_GEN_PASSWORD_LENGTH) {
+            generatePasswords(8);
+        }
     }
 
     @Override

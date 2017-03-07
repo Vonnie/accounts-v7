@@ -99,6 +99,10 @@ public class AccountsContract {
         if (cursor.getColumnIndex(AccountsContract.Columns.NOTE_COL) != -1) {
             account.setNote(cursor.getString(cursor.getColumnIndex(AccountsContract.Columns.NOTE_COL)));
         }
+
+        if (cursor.getColumnIndex(Columns.SEQUENCE_COL) != -1) {
+            account.setSequence(cursor.getInt(cursor.getColumnIndex(Columns.SEQUENCE_COL)));
+        }
 //            Log.d(TAG, "onBindViewHolder: dte col " + mCursor.getColumnIndex(AccountsContract.Columns.OPEN_DATE_COL));
         if (cursor.getColumnIndex(AccountsContract.Columns.OPEN_DATE_COL) != -1) {
             if (cursor.isNull(cursor.getColumnIndex(AccountsContract.Columns.OPEN_DATE_COL))) {
