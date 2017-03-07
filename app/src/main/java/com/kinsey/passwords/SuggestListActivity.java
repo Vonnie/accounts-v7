@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -15,13 +16,15 @@ import android.widget.Toast;
 import com.kinsey.passwords.items.Suggest;
 import com.kinsey.passwords.items.SuggestsContract;
 import com.kinsey.passwords.provider.CursorRecyclerViewAdapter;
+import com.kinsey.passwords.tools.AppDialog;
 import com.kinsey.passwords.tools.PasswordFormula;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class SuggestListActivity extends AppCompatActivity
-        implements CursorRecyclerViewAdapter.OnSuggestClickListener {
+        implements CursorRecyclerViewAdapter.OnSuggestClickListener,
+        AppDialog.DialogEvents {
     private static final String TAG = "SuggestListActivity";
 
     // whether or not the activity is i 2-pane mode
@@ -45,11 +48,8 @@ public class SuggestListActivity extends AppCompatActivity
                                 new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
-                                        generatePasswords();
-                                        Toast.makeText(SuggestListActivity.this,
-                                                "Password generated",
-                                                Toast.LENGTH_SHORT).show();
-
+                                        requestPassword();
+//                                        generatePasswords();
                                     }
                                 }
 
@@ -59,7 +59,7 @@ public class SuggestListActivity extends AppCompatActivity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
-    private void generatePasswords() {
+    private void generatePasswords(int passwordLen) {
         ContentResolver contentResolver = getContentResolver();
         ContentValues values = new ContentValues();
 
@@ -68,10 +68,12 @@ public class SuggestListActivity extends AppCompatActivity
 //        strUUID = java.util.UUID.randomUUID().toString();
 //        createPassword(++iSeq);
 
-        values.put(SuggestsContract.Columns.PASSWORD_COL, passwordFormula.createPassword());
+        values.put(SuggestsContract.Columns.PASSWORD_COL, passwordFormula.createPassword(passwordLen));
         values.put(SuggestsContract.Columns.SEQUENCE_COL, ++iSeq);
         contentResolver.insert(SuggestsContract.CONTENT_URI, values);
-
+        Toast.makeText(SuggestListActivity.this,
+                "Password generated",
+                Toast.LENGTH_SHORT).show();
     }
 
     private int getMaxValue(String col) {
@@ -88,6 +90,21 @@ public class SuggestListActivity extends AppCompatActivity
         }
 
         return iId;
+    }
+
+    private void requestPassword() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        AppDialog newFragment = AppDialog.newInstance(AppDialog.DIALOG_YES_NO, "Password at 8 or 10 length");
+        Bundle args = new Bundle();
+        args.putInt(AppDialog.DIALOG_ID, AppDialog.DIALOG_YES_NO);
+        args.putString(AppDialog.DIALOG_MESSAGE, "Password at 8 or 10 length");
+//        args.putString(AppDialog.DIALOG_MESSAGE, getString(R.string.deldiag_message, 1, account.getCorpName()));
+//        args.putInt(AppDialog.DIALOG_ACCOUNT_ID, account.getId());
+        args.putInt(AppDialog.DIALOG_POSITIVE_RID, R.string.suggdiag_positive_caption);
+        args.putInt(AppDialog.DIALOG_NEGATIVE_RID, R.string.suggdiag_negative_caption);
+
+        newFragment.setArguments(args);
+        newFragment.show(fragmentManager, "dialog");
     }
 
     List<Suggest> loadPasswords() {
@@ -234,5 +251,25 @@ public class SuggestListActivity extends AppCompatActivity
                 contentResolver.update(SuggestsContract.buildIdUri(item.getId()), values, null, null);
             }
         }
+    }
+
+    @Override
+    public void onPositiveDialogResult(int dialogId, Bundle args) {
+        generatePasswords(10);
+    }
+
+    @Override
+    public void onNegativeDialogResult(int dialogId, Bundle args) {
+        generatePasswords(8);
+    }
+
+    @Override
+    public void onActionRequestDialogResult(int dialogId, Bundle args, int which) {
+
+    }
+
+    @Override
+    public void onDialogCancelled(int dialogId) {
+
     }
 }

@@ -473,7 +473,7 @@ public class AccountListActivity extends AppCompatActivity
         AppDialog newFragment = AppDialog.newInstance(AppDialog.DIALOG_YES_NO, "Confirm account delete", account.getId());
         Bundle args = new Bundle();
         args.putInt(AppDialog.DIALOG_ID, AppDialog.DIALOG_YES_NO);
-        args.putString(AppDialog.DIALOG_MESSAGE, getString(R.string.deldiag_message, 1, account.getCorpName()));
+        args.putString(AppDialog.DIALOG_MESSAGE, getString(R.string.deldiag_message, account.getPassportId(), account.getCorpName()));
         args.putInt(AppDialog.DIALOG_ACCOUNT_ID, account.getId());
         args.putInt(AppDialog.DIALOG_POSITIVE_RID, R.string.deldiag_positive_caption);
 

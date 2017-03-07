@@ -64,7 +64,7 @@ public class AppDialog extends DialogFragment {
         Bundle args = new Bundle();
 //        args.putInt("id", dialogId);
 //        args.putString("message", messageString);
-        args.putInt("acct_id", acctId);
+        args.putInt(DIALOG_ACCOUNT_ID, acctId);
         frag.setArguments(args);
         return frag;
     }

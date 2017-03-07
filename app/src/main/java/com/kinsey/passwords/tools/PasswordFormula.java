@@ -23,7 +23,7 @@ public class PasswordFormula {
 
     final Random myRandom = new Random();
 
-    public String createPassword() {
+    public String createPassword(int passwordLen) {
         String aLetter = findPrimaryLetter();
         String password = aLetter.toLowerCase(Locale.ENGLISH);
         password = password + getAdjacentLetter(aLetter).toLowerCase(Locale.ENGLISH);
@@ -32,11 +32,11 @@ public class PasswordFormula {
         int randLtr = 0;
         if (rightHand) {
             iSize = keyRbrd.length;
-            randLtr = myRandom.nextInt(iSize-1);
+            randLtr = myRandom.nextInt(iSize - 1);
             aLetter = keyRbrd[randLtr];
         } else {
             iSize = keyLbrd.length;
-            randLtr = myRandom.nextInt(iSize-1);
+            randLtr = myRandom.nextInt(iSize - 1);
             aLetter = keyLbrd[randLtr];
         }
 //		Log.v(TAG, "password2Prime: " + aLetter);
@@ -47,11 +47,11 @@ public class PasswordFormula {
 //		Log.i(TAG, "password start " + password);
         if (rightHand) {
             iSize = keyRbrd.length;
-            randLtr = myRandom.nextInt(iSize-1);
+            randLtr = myRandom.nextInt(iSize - 1);
             aLetter = keyRbrd[randLtr];
         } else {
             iSize = keyLbrd.length;
-            randLtr = myRandom.nextInt(iSize-1);
+            randLtr = myRandom.nextInt(iSize - 1);
             aLetter = keyLbrd[randLtr];
         }
         password = password + aLetter.toLowerCase(Locale.ENGLISH);
@@ -60,48 +60,56 @@ public class PasswordFormula {
         password = password + getAdjacentLetter(aLetter).toLowerCase(Locale.ENGLISH);
 //		Log.i(TAG, "password start " + password);
 
-        int cap = myRandom.nextInt(password.length()-1);
+        int cap = myRandom.nextInt(passwordLen - 1);
 //		Log.v(TAG, "password: " + password + ":" + password.length() + ":" + cap);
 //		Log.v(TAG, "passwordCap: " + password.substring(0, cap));
 //		Log.v(TAG, "passwordCap: " + password.substring(cap, cap+1).toUpperCase(Locale.ENGLISH));
         if (cap == password.length() - 1) {
             password = password.substring(0, cap)
-                    + password.substring(cap, cap+1).toUpperCase(Locale.ENGLISH);
+                    + password.substring(cap, cap + 1).toUpperCase(Locale.ENGLISH);
         } else {
 //			Log.v(TAG, "passwordCap: " + password.substring(cap+1));
             password = password.substring(0, cap)
-                    + password.substring(cap, cap+1).toUpperCase(Locale.ENGLISH)
-                    + password.substring(cap+1);
+                    + password.substring(cap, cap + 1).toUpperCase(Locale.ENGLISH)
+                    + password.substring(cap + 1);
         }
 //		r.nextInt(max - min + 1) + min;
-        int num = myRandom.nextInt(9 - 1 + 1) + 1;
+        int num = 0;
+
+        num = myRandom.nextInt(9 - 1 + 1) + 1;
+
 //		int numPlace = myRandom.nextInt(password.length()-1);
         double dblPlace = Math.random();
+        if (passwordLen == 10) {
+        } else {
+            dblPlace = .8 * dblPlace;
+        }
+
         if (dblPlace < 0.1) {
             password = String.valueOf(num) + password.substring(0);
         } else if (dblPlace < 0.2) {
-            password = password.substring(0,1) + String.valueOf(num) + password.substring(1);
+            password = password.substring(0, 1) + String.valueOf(num) + password.substring(1);
         } else if (dblPlace < 0.3) {
-            password = password.substring(0,2) + String.valueOf(num) + password.substring(2);
+            password = password.substring(0, 2) + String.valueOf(num) + password.substring(2);
         } else if (dblPlace < 0.4) {
-            password = password.substring(0,3) + String.valueOf(num) + password.substring(3);
+            password = password.substring(0, 3) + String.valueOf(num) + password.substring(3);
         } else if (dblPlace < 0.5) {
-            password = password.substring(0,4) + String.valueOf(num) + password.substring(4);
+            password = password.substring(0, 4) + String.valueOf(num) + password.substring(4);
         } else if (dblPlace < 0.6) {
-            password = password.substring(0,5) + String.valueOf(num) + password.substring(5);
+            password = password.substring(0, 5) + String.valueOf(num) + password.substring(5);
         } else if (dblPlace < 0.7) {
-            password = password.substring(0,6) + String.valueOf(num) + password.substring(6);
+            password = password.substring(0, 6) + String.valueOf(num) + password.substring(6);
         } else if (dblPlace < 0.8) {
-            password = password.substring(0,7) + String.valueOf(num) + password.substring(7);
+            password = password.substring(0, 7) + String.valueOf(num) + password.substring(7);
         } else if (dblPlace < 0.9) {
 //			Log.i(TAG, "pswd8 " + password.substring(0,8));
-            password = password.substring(0,8) + String.valueOf(num) + password.substring(8);
+            password = password.substring(0, 8) + String.valueOf(num) + password.substring(8);
         } else {
             dblPlace = Math.random();
             if (dblPlace < 0.3) {
-                password = password.substring(0,9) + String.valueOf(num) + password.substring(9);
+                password = password.substring(0, 9) + String.valueOf(num) + password.substring(9);
             } else if (dblPlace < 0.6) {
-                password = password.substring(0,10) + String.valueOf(num) + password.substring(10);
+                password = password.substring(0, 10) + String.valueOf(num) + password.substring(10);
             } else {
                 password = password.substring(0) + String.valueOf(num);
             }
@@ -110,9 +118,12 @@ public class PasswordFormula {
 //				+ num
 //				+ password.substring(numPlace);
 //		return password.substring(0,8);
-        return password;
+        if (passwordLen == 10) {
+            return password;
+        } else {
+            return password.substring(0, 8);
+        }
     }
-
     private String findPrimaryLetter() {
         String aLetter = "";
         int iSize = 0;
