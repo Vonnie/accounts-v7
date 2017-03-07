@@ -218,8 +218,8 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
             super(itemView);
         Log.d(TAG, "SearchViewHolder: starts");
 
-            this.corp_name = (TextView) itemView.findViewById(R.id.srli_corp_name);
-            this.website = (TextView) itemView.findViewById(R.id.srli_website);
+            this.corp_name = (TextView) itemView.findViewById(R.id.tli_corp_name);
+            this.website = (TextView) itemView.findViewById(R.id.tli_website);
             this.userName = (TextView) itemView.findViewById(R.id.srli_user_name);
             this.userEmail = (TextView) itemView.findViewById(R.id.srli_user_email);
             this.note = (TextView) itemView.findViewById(R.id.srli_note);

@@ -564,6 +564,7 @@ public class AccountListActivity extends AppCompatActivity
                 break;
             case 1:
             case 2:
+            case 3:
                 Log.d(TAG, "onActionRequestDialogResult: request list");
                 returnIntent = new Intent();
                 returnIntent.putExtra("which", which);

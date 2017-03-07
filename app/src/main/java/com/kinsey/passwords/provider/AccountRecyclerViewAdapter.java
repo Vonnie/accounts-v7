@@ -39,6 +39,7 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
 
     public AccountRecyclerViewAdapter(int sortorder, Cursor cursor, OnAccountClickListener listener) {
 //        Log.d(TAG, "CursorRecyclerViewAdapter: Constructor called");
+        Log.d(TAG, "AccountRecyclerViewAdapter: sortorder " + mSortorder);
         mSortorder = sortorder;
         mCursor = cursor;
         mListener = listener;
@@ -117,19 +118,23 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
                 //            Date dte = new Date(item.getActvyLong());
                 holder.open_date.setText(format_mdy_display.format(account.getOpenLong()));
             }
+            holder.seq.setText(String.valueOf(account.getSequence()));
             holder.editButton.setVisibility(View.VISIBLE);
             holder.deleteButton.setVisibility(View.VISIBLE);
 
             if (mSortorder == AccountsContract.ACCOUNT_LIST_BY_OPEN_DATE) {
                 holder.user_name.setVisibility(View.GONE);
                 holder.open_date.setVisibility(View.VISIBLE);
+                holder.seq.setVisibility(View.GONE);
             } else {
                 if (mSortorder == AccountsContract.ACCOUNT_LIST_BY_SEQUENCE) {
                     holder.user_name.setVisibility(View.GONE);
                     holder.open_date.setVisibility(View.GONE);
+                    holder.seq.setVisibility(View.VISIBLE);
                 } else {
                     holder.user_name.setVisibility(View.VISIBLE);
                     holder.open_date.setVisibility(View.GONE);
+                    holder.seq.setVisibility(View.GONE);
                 }
             }
 
@@ -207,6 +212,7 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
         TextView corp_name = null;
         TextView user_name = null;
         TextView open_date = null;
+        TextView seq = null;
         ImageButton editButton = null;
         ImageButton deleteButton = null;
 
@@ -215,9 +221,10 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
             super(itemView);
         Log.d(TAG, "AccountViewHolder: starts");
 
-            this.corp_name = (TextView) itemView.findViewById(R.id.srli_corp_name);
-            this.user_name = (TextView) itemView.findViewById(R.id.srli_website);
+            this.corp_name = (TextView) itemView.findViewById(R.id.tli_corp_name);
+            this.user_name = (TextView) itemView.findViewById(R.id.tli_website);
             this.open_date = (TextView) itemView.findViewById(R.id.tli_open_date);
+            this.seq = (TextView) itemView.findViewById(R.id.tli_seq);
             this.editButton = (ImageButton) itemView.findViewById(R.id.srli_acct_edit);
             this.deleteButton = (ImageButton) itemView.findViewById(R.id.srli_acct_delete);
         }

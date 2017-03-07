@@ -62,6 +62,7 @@ public class AccountListActivityFragment extends Fragment
         Bundle arguments = getActivity().getIntent().getExtras();
 
         mSortorder = (int) arguments.getSerializable(Account.class.getSimpleName());
+        Log.d(TAG, "onCreateView: mSortorder " + mSortorder);
         mAccountAdapter = new AccountRecyclerViewAdapter(mSortorder, null,
                 (AccountRecyclerViewAdapter.OnAccountClickListener) getActivity());
         recyclerView.setAdapter(mAccountAdapter);
