@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.kinsey.passwords.R;
@@ -26,6 +25,7 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
     private static final String TAG = "SrchRecyclerViewAdpt";
 
     private Context mContext;
+    private int mAccountId;
     private Cursor mCursor;
     private OnAccountClickListener mListener;
 
@@ -39,9 +39,10 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
             pattern_mdy_display, Locale.US);
 
 
-    public SearchRecyclerViewAdapter(Context context, Cursor cursor, OnAccountClickListener listener) {
+    public SearchRecyclerViewAdapter(Context context, int accountId, Cursor cursor, OnAccountClickListener listener) {
 //        Log.d(TAG, "CursorRecyclerViewAdapter: Constructor called");
         mContext = context;
+        mAccountId = accountId;
         mCursor = cursor;
         mListener = listener;
     }
@@ -66,18 +67,23 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
             Log.d(TAG, "onBindViewHolder: no search db items");
             holder.corp_name.setText(R.string.no_account_items);
 //            holder.user_name.setText("Click Info button to add accounts");
-            holder.editButton.setVisibility(View.GONE);
-            holder.deleteButton.setVisibility(View.GONE);
+//            holder.editButton.setVisibility(View.GONE);
+//            holder.deleteButton.setVisibility(View.GONE);
         } else {
             if (!mCursor.moveToPosition(position)) {
                 throw new IllegalStateException("Couldn't move cursor to position " + position);
             }
 
-            holder.corp_name.setText(mCursor.getString(mCursor.getColumnIndex(SearchManager.SUGGEST_COLUMN_TEXT_1)));
-            holder.userName.setText(mCursor.getString(mCursor.getColumnIndex(SearchManager.SUGGEST_COLUMN_TEXT_2)));
-            holder.website.setText(mCursor.getString(mCursor.getColumnIndex(SearchManager.SUGGEST_COLUMN_TEXT_2_URL)));
+//            holder.corp_name.setText(mCursor.getString(mCursor.getColumnIndex(SearchManager.SUGGEST_COLUMN_TEXT_1)));
+//            holder.userName.setText(mCursor.getString(mCursor.getColumnIndex(SearchManager.SUGGEST_COLUMN_TEXT_2)));
+//            holder.website.setText(mCursor.getString(mCursor.getColumnIndex(SearchManager.SUGGEST_COLUMN_TEXT_2_URL)));
 
-            int dbId = mCursor.getInt(mCursor.getColumnIndex(SearchManager.SUGGEST_COLUMN_INTENT_DATA));
+            int dbId;
+            if (mAccountId == -1) {
+                dbId = mCursor.getInt(mCursor.getColumnIndex(SearchManager.SUGGEST_COLUMN_INTENT_DATA));
+            } else {
+                dbId = mAccountId;
+            }
             Log.d(TAG, "onBindViewHolder: acctId " + dbId);
 //            Log.d(TAG, "onBindViewHolder: column count " + mCursor.getColumnCount());
 //            for (int i = 0; i < mCursor.getColumnCount(); i++) {
@@ -90,44 +96,71 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
             Cursor cursorAccount = mContext.getContentResolver().query(
                     AccountsContract.buildIdUri(dbId), null, null, null, null);
             if (cursorAccount.moveToFirst()) {
-                if (mCursor.getColumnIndex(AccountsContract.Columns.USER_EMAIL_COL) != -1){
-                    holder.userEmail.setText(mCursor.getString(mCursor.getColumnIndex(AccountsContract.Columns.USER_EMAIL_COL)));
+                Log.d(TAG, "onBindViewHolder: account found ");
+
+                holder.corp_name.setText(cursorAccount.getString(cursorAccount.getColumnIndex(AccountsContract.Columns.CORP_NAME_COL)));
+                if (cursorAccount.getColumnIndex(AccountsContract.Columns.CORP_WEBSITE_COL) == -1) {
+                    holder.website.setVisibility(View.GONE);
+                } else {
+                    String website = cursorAccount.getString(cursorAccount.getColumnIndex(AccountsContract.Columns.CORP_WEBSITE_COL));
+                    if (website == null || website.equals("")) {
+                        holder.website.setVisibility(View.GONE);
+                    } else {
+                        holder.website.setText(website);
+                    }
                 }
+                holder.userName.setText(cursorAccount.getString(cursorAccount.getColumnIndex(AccountsContract.Columns.USER_NAME_COL)));
+                if (cursorAccount.getColumnIndex(AccountsContract.Columns.USER_EMAIL_COL) != -1){
+                    Log.d(TAG, "onBindViewHolder: email " + cursorAccount.getString(cursorAccount.getColumnIndex(AccountsContract.Columns.USER_EMAIL_COL)));
+                    holder.userEmail.setText(cursorAccount.getString(cursorAccount.getColumnIndex(AccountsContract.Columns.USER_EMAIL_COL)));
+                }
+                if (cursorAccount.getColumnIndex(AccountsContract.Columns.NOTE_COL) == -1) {
+                    holder.note.setVisibility(View.GONE);
+                } else {
+                    String note = cursorAccount.getString(cursorAccount.getColumnIndex(AccountsContract.Columns.NOTE_COL));
+                    if (note == null || note.equals("")) {
+                        holder.note.setVisibility(View.GONE);
+                    } else {
+                        holder.note.setText(note);
+                    }
+                }
+
             }
 
 
 //            holder.user_email.setText(mCursor.getString(mCursor.getColumnIndex(AccountsContract.Columns.USER_EMAIL_COL)));
 //            holder.corp_.setText(mCursor.getString(mCursor.getColumnIndex(AccountsContract.Columns.CORP_WEBSITE_COL)));
-            holder.editButton.setVisibility(View.VISIBLE);  // TODO add onClick listener
-            holder.deleteButton.setVisibility(View.VISIBLE); // TODO add onClick listener
 
-            View.OnClickListener buttonListener = new View.OnClickListener() {
+//            holder.editButton.setVisibility(View.VISIBLE);  // TODO add onClick listener
+//            holder.deleteButton.setVisibility(View.VISIBLE); // TODO add onClick listener
+//
+//            View.OnClickListener buttonListener = new View.OnClickListener() {
+//
+//                @Override
+//                public void onClick(View view) {
+////                    Log.d(TAG, "onClick: starts");
+//                    switch (view.getId()) {
+//                        case R.id.srli_acct_edit:
+//                            if (mListener != null) {
+////                                Log.d(TAG, "onClick: account " + account);
+////                                mListener.onAccountEditClick(account);
+//                            }
+//                            break;
+//                        case R.id.srli_acct_delete:
+//                            if (mListener != null) {
+////                                mListener.onAccountDeleteClick(account);
+//                            }
+//                            break;
+//                        default:
+//                            Log.d(TAG, "onClick: found unexpected button id");
+//                    }
+//                    Log.d(TAG, "onClick: button with id " + view.getId() + " clicked");
+////                    Log.d(TAG, "onClick: task name is " + task.getName());
+//                }
+//            };
 
-                @Override
-                public void onClick(View view) {
-//                    Log.d(TAG, "onClick: starts");
-                    switch (view.getId()) {
-                        case R.id.srli_acct_edit:
-                            if (mListener != null) {
-//                                Log.d(TAG, "onClick: account " + account);
-//                                mListener.onAccountEditClick(account);
-                            }
-                            break;
-                        case R.id.srli_acct_delete:
-                            if (mListener != null) {
-//                                mListener.onAccountDeleteClick(account);
-                            }
-                            break;
-                        default:
-                            Log.d(TAG, "onClick: found unexpected button id");
-                    }
-                    Log.d(TAG, "onClick: button with id " + view.getId() + " clicked");
-//                    Log.d(TAG, "onClick: task name is " + task.getName());
-                }
-            };
-
-            holder.editButton.setOnClickListener(buttonListener);
-            holder.deleteButton.setOnClickListener(buttonListener);
+//            holder.editButton.setOnClickListener(buttonListener);
+//            holder.deleteButton.setOnClickListener(buttonListener);
         }
 
     }
@@ -175,9 +208,10 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
         TextView website = null;
         TextView userName = null;
         TextView userEmail = null;
+        TextView note = null;
 //        TextView open_date = null;
-        ImageButton editButton = null;
-        ImageButton deleteButton = null;
+//        ImageButton editButton = null;
+//        ImageButton deleteButton = null;
 
 
         public SearchViewHolder(View itemView) {
@@ -188,8 +222,9 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
             this.website = (TextView) itemView.findViewById(R.id.srli_website);
             this.userName = (TextView) itemView.findViewById(R.id.srli_user_name);
             this.userEmail = (TextView) itemView.findViewById(R.id.srli_user_email);
-            this.editButton = (ImageButton) itemView.findViewById(R.id.srli_acct_edit);
-            this.deleteButton = (ImageButton) itemView.findViewById(R.id.srli_acct_delete);
+            this.note = (TextView) itemView.findViewById(R.id.srli_note);
+//            this.editButton = (ImageButton) itemView.findViewById(R.id.srli_acct_edit);
+//            this.deleteButton = (ImageButton) itemView.findViewById(R.id.srli_acct_delete);
         }
     }
 }

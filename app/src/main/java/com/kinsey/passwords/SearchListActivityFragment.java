@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.kinsey.passwords.items.Account;
+import com.kinsey.passwords.items.AccountsContract;
 import com.kinsey.passwords.items.SearchesContract;
 import com.kinsey.passwords.provider.SearchRecyclerViewAdapter;
 
@@ -49,14 +50,30 @@ public class SearchListActivityFragment extends Fragment
 
 
         Bundle arguments = getActivity().getIntent().getExtras();
+        int accountId = (int) arguments.getSerializable(SearchListActivity.class.getSimpleName());
+        Log.d(TAG, "onCreateView: accountid " + accountId);
 
-        Log.d(TAG, "onCreateView: search adt cursor");
+//        Log.d(TAG, "onCreateView: search adt cursor");
 
-        mSearchListAdapter = new SearchRecyclerViewAdapter(this.getContext(),
-                SearchesContract.cursorSearch,
-                (SearchRecyclerViewAdapter.OnAccountClickListener) getActivity());
+        if (accountId == -1) {
+            mSearchListAdapter = new SearchRecyclerViewAdapter(this.getContext(),
+                    accountId,
+                    SearchesContract.cursorSearch,
+                    (SearchRecyclerViewAdapter.OnAccountClickListener) getActivity());
+        } else {
+            Cursor cursor = getAccount(accountId);
+            mSearchListAdapter = new SearchRecyclerViewAdapter(this.getContext(),
+                    accountId,
+                    cursor,
+                    (SearchRecyclerViewAdapter.OnAccountClickListener) getActivity());
+        }
         recyclerView.setAdapter(mSearchListAdapter);
         return view;
+    }
+
+    private Cursor getAccount(int accountId) {
+        return getActivity().getContentResolver().query(
+                AccountsContract.buildIdUri(accountId), null, null, null, null);
     }
 
     @Override

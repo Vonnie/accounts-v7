@@ -1,19 +1,13 @@
 package com.kinsey.passwords;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Environment;
-import android.preference.PreferenceManager;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.kinsey.passwords.items.Account;
 import com.kinsey.passwords.items.AccountsContract;
@@ -23,9 +17,6 @@ import com.kinsey.passwords.tools.AppDialog;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
-
-import static com.kinsey.passwords.SearchActivity.SEARCH_ACCOUNT;
-import static com.kinsey.passwords.SearchActivity.SEARCH_QUERY;
 
 public class MainActivity extends AppCompatActivity
         implements
@@ -59,7 +50,7 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        resetPreferences();
+//        resetPreferences();
 
 //        String[] projection = {AccountsContract.Columns._ID_COL,
 //                AccountsContract.Columns.PASSPORT_ID_COL,
@@ -137,14 +128,14 @@ public class MainActivity extends AppCompatActivity
 //        final SQLiteDatabase dbSuggest = suggestDatabase.getReadableDatabase();
 
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+//            }
+//        });
     }
 
     @Override
@@ -305,57 +296,57 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    @Override
-    protected void onResume() {
-        Log.d(TAG, "onResume: starts");
-        super.onResume();
+//    @Override
+//    protected void onResume() {
+//        Log.d(TAG, "onResume: starts");
+//        super.onResume();
+//
+//        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+//        String queryResult = sharedPreferences.getString(SEARCH_QUERY, "");
+//
+//        if (queryResult.length() > 0) {
+//            Log.d(TAG, "onResume: return a value " + queryResult);
+//
+//            int queryResultId = sharedPreferences.getInt(SearchActivity.SEARCH_ACCOUNT, -1);
+//            Log.d(TAG, "onResume: queryResultsId " + queryResultId);
+//            if (queryResultId == -1) {
+//                Intent detailIntent = new Intent(this, SearchListActivity.class);
+//                startActivity(detailIntent);
+//            } else {
+//                resetPreferences();
+//                Cursor cursor = getContentResolver().query(
+//                        AccountsContract.buildIdUri(queryResultId), null, null, null, null);
+//                if (cursor.moveToFirst()) {
+//                    Intent detailIntent = new Intent(this, AccountActivity.class);
+//                    Account account = AccountsContract.getAccountFromCursor(cursor);
+//                    detailIntent.putExtra(Account.class.getSimpleName(), account);
+//                    Log.d(TAG, "showAccount: account " + account.toString());
+//                }
+//            }
+//
+//
+//
+//
+////            Intent detailIntent = new Intent(this, AccountActivity.class);
+//
+////            detailIntent.putExtra(Account.class.getSimpleName(), account);
+//////            startActivityForResult(detailIntent, AccountsContract.ACCOUNT_ACTION_CHG);
+////            startActivity(detailIntent);
+//
+//
+//        }
+//
+//
+////        onSearchRequested();
+//    }
 
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        String queryResult = sharedPreferences.getString(SEARCH_QUERY, "");
 
-        if (queryResult.length() > 0) {
-            Log.d(TAG, "onResume: return a value " + queryResult);
-
-            int queryResultId = sharedPreferences.getInt(SearchActivity.SEARCH_ACCOUNT, -1);
-            Log.d(TAG, "onResume: queryResultsId " + queryResultId);
-            if (queryResultId == -1) {
-                Intent detailIntent = new Intent(this, SearchListActivity.class);
-                startActivity(detailIntent);
-            } else {
-                resetPreferences();
-                Cursor cursor = getContentResolver().query(
-                        AccountsContract.buildIdUri(queryResultId), null, null, null, null);
-                if (cursor.moveToFirst()) {
-                    Intent detailIntent = new Intent(this, AccountActivity.class);
-                    Account account = AccountsContract.getAccountFromCursor(cursor);
-                    detailIntent.putExtra(Account.class.getSimpleName(), account);
-                    Log.d(TAG, "showAccount: account " + account.toString());
-                }
-            }
-
-
-
-
-//            Intent detailIntent = new Intent(this, AccountActivity.class);
-
-//            detailIntent.putExtra(Account.class.getSimpleName(), account);
-////            startActivityForResult(detailIntent, AccountsContract.ACCOUNT_ACTION_CHG);
-//            startActivity(detailIntent);
-
-
-        }
-
-
-//        onSearchRequested();
-    }
-
-
-    private void resetPreferences() {
-        Log.d(TAG, "resetPreferences: starts");
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        sharedPreferences.edit().putString(SEARCH_QUERY, "").apply();
-        sharedPreferences.edit().putInt(SEARCH_ACCOUNT, -1).apply();
-    }
+//    private void resetPreferences() {
+//        Log.d(TAG, "resetPreferences: starts");
+//        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+//        sharedPreferences.edit().putString(SEARCH_QUERY, "").apply();
+//        sharedPreferences.edit().putInt(SEARCH_ACCOUNT, -1).apply();
+//    }
     @Override
     public boolean onSearchRequested() {
         Log.d(TAG, "onSearchRequested: started");

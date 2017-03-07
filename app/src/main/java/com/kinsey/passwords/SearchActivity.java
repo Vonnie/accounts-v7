@@ -3,9 +3,8 @@ package com.kinsey.passwords;
 import android.app.SearchManager;
 import android.app.SearchableInfo;
 import android.content.Context;
-import android.content.SharedPreferences;
+import android.content.Intent;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -100,20 +99,24 @@ public class SearchActivity extends AppCompatActivity
             @Override
             public boolean onQueryTextSubmit(String query) {
                 Log.d(TAG, "onQueryTextSubmit: called");
-                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                sharedPreferences.edit().putString(SEARCH_QUERY, query).apply();
-                showSuggestions();
+//                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+//                sharedPreferences.edit().putString(SEARCH_QUERY, query).apply();
+//                showSuggestions();
 
+                SearchesContract.cursorSearch = mSearchView.getSuggestionsAdapter().getCursor();
                 mSearchView.clearFocus();
-                finish();
+                Log.d(TAG, "onQueryTextSubmit: showSearches");
+
+                showSearches(-1);
+//                finish();
                 return true;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                Log.d(TAG, "onQueryTextChange: adt " + mSearchView.getSuggestionsAdapter().getCount());
-                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                sharedPreferences.edit().putString(SEARCH_QUERY, newText).apply();
+//                Log.d(TAG, "onQueryTextChange: adt " + mSearchView.getSuggestionsAdapter().getCount());
+//                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+//                sharedPreferences.edit().putString(SEARCH_QUERY, newText).apply();
                 return true;
             }
 
@@ -124,8 +127,8 @@ public class SearchActivity extends AppCompatActivity
             @Override
             public boolean onClose() {
                 Log.d(TAG, "SearchView onClose: starts");
-                showSuggestions();
-//                finish();
+//                showSuggestions();
+                finish();
 
 //                Intent detailIntent = new Intent(this, AccountListActivity.class);
 //                detailIntent.putExtra(Account.class.getSimpleName(), sortorder);
@@ -140,23 +143,24 @@ public class SearchActivity extends AppCompatActivity
             @Override
             public boolean onSuggestionSelect(int position) {
                 Log.d(TAG, "onSuggestionSelect: position " + position);
-                showSuggestions();
+//                showSuggestions();
                 return false;
             }
 
             @Override
             public boolean onSuggestionClick(int position) {
                 Log.d(TAG, "onSuggestionClick: position " + position);
-                showSuggestions();
+//                showSuggestions();
                 int accountId = showAccount(position);
-                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                sharedPreferences.edit().putInt(SEARCH_ACCOUNT, accountId).apply();
-                finish();
+                showSearches(accountId);
+//                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+//                sharedPreferences.edit().putInt(SEARCH_ACCOUNT, accountId).apply();
+//                finish();
                 return true;
             }
         });
 
-//        Log.d(TAG, "onCreateOptionsMenu: returned " + true);
+        Log.d(TAG, "onCreateOptionsMenu: returned " + true);
 
         return true;
     }
@@ -207,6 +211,13 @@ public class SearchActivity extends AppCompatActivity
 
         return dbId;
 
+    }
+
+    private void showSearches(int accountId) {
+        Log.d(TAG, "showSearches: starts");
+        Intent detailIntent = new Intent(this, SearchListActivity.class);
+        detailIntent.putExtra(SearchListActivity.class.getSimpleName(), accountId);
+        startActivity(detailIntent);
     }
 
     @Override

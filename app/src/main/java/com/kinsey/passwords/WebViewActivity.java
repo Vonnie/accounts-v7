@@ -22,6 +22,6 @@ public class WebViewActivity extends AppCompatActivity {
         if (fragment.canBackOut()) {
             super.onBackPressed();
         }
-        
+
     }
 }
