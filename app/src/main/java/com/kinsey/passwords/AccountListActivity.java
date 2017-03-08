@@ -21,7 +21,9 @@ import android.widget.Toast;
 
 import com.kinsey.passwords.items.Account;
 import com.kinsey.passwords.items.AccountsContract;
+import com.kinsey.passwords.items.SearchesContract;
 import com.kinsey.passwords.provider.AccountRecyclerViewAdapter;
+import com.kinsey.passwords.provider.AccountSuggestsLoaderCallbacks;
 import com.kinsey.passwords.tools.AppDialog;
 
 import java.io.File;
@@ -36,6 +38,7 @@ import java.util.List;
 
 import static com.kinsey.passwords.MainActivity.DEFAULT_APP_DIRECTORY;
 import static com.kinsey.passwords.MainActivity.format_ymdtime;
+import static com.kinsey.passwords.SearchActivity.CONTACT_QUERY_LOADER;
 
 public class AccountListActivity extends AppCompatActivity
         implements AccountRecyclerViewAdapter.OnAccountClickListener,
@@ -82,6 +85,7 @@ public class AccountListActivity extends AppCompatActivity
                                         args.putInt(AppDialog.DIALOG_ID, AppDialog.DIALOG_ID_ACCOUNT_ACTIONS_LIST);
                                         args.putInt(AppDialog.DIALOG_TYPE, AppDialog.DIALOG_ACCOUNT_LIST_OPTIONS);
                                         args.putString(AppDialog.DIALOG_MESSAGE, getString(R.string.listdiag_acc_message));
+                                        args.putString(AppDialog.DIALOG_SUB_MESSAGE, getString(R.string.listdiag_acc_sub_message));
 
                                         newFragment.setArguments(args);
 
@@ -115,25 +119,6 @@ public class AccountListActivity extends AppCompatActivity
 //        fragmentTransaction.commit();
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        Log.d(TAG, "onBackPressed: starts");
-    }
-
-    @Override
-    protected void onStop() {
-        Log.d(TAG, "onStop: starts");
-        super.onStop();
-        Log.d(TAG, "onStop: ends");
-    }
-
-    @Override
-    protected void onDestroy() {
-        Log.d(TAG, "onDestroy: starts");
-        super.onDestroy();
-        Log.d(TAG, "onDestroy: ends");
-    }
 
     public String ExportAccountDB() {
         String msgError = "";
@@ -144,7 +129,7 @@ public class AccountListActivity extends AppCompatActivity
 
             File folder = new File(jsonDownload);
             if (!folder.exists()) {
-                Log.d(TAG, "ExportAccountDB: create download " + jsonDownload);
+//                Log.d(TAG, "ExportAccountDB: create download " + jsonDownload);
 //                 create directory
                 folder.mkdirs();
                 Log.v(TAG, "dirCreated " + DEFAULT_APP_DIRECTORY);
@@ -153,7 +138,7 @@ public class AccountListActivity extends AppCompatActivity
 
             folder = new File(DEFAULT_APP_DIRECTORY);
             if (!folder.exists()) {
-                Log.d(TAG, "ExportAccountDB: create download passport " + DEFAULT_APP_DIRECTORY);
+//                Log.d(TAG, "ExportAccountDB: create download passport " + DEFAULT_APP_DIRECTORY);
                 // create directory
                 folder.mkdirs();
                 Log.v(TAG, "dirCreated " + DEFAULT_APP_DIRECTORY);
@@ -166,7 +151,7 @@ public class AccountListActivity extends AppCompatActivity
 ////			FileWriter fileWriter = new FileWriter(jsonFilePath);
 //            File file = new File(jsonFilePath);
 //
-            Log.d(TAG, "ExportAccountDB: accounts.json " + jsonFile);
+//            Log.d(TAG, "ExportAccountDB: accounts.json " + jsonFile);
 //
 ////            if (file.exists()) {
 ////                file.delete();
@@ -198,7 +183,7 @@ public class AccountListActivity extends AppCompatActivity
             msgError = "jsonError: " + e2.getMessage();
             Log.v(TAG, msgError);
         }
-        Log.d(TAG, "ExportAccountDB: return msg " + msgError);
+//        Log.d(TAG, "ExportAccountDB: return msg " + msgError);
         if (count != -1) {
             Toast.makeText(AccountListActivity.this,
                     count + " Exported accounts",
@@ -266,7 +251,7 @@ public class AccountListActivity extends AppCompatActivity
 
 
     List<Account> loadAccounts() {
-        Log.d(TAG, "loadAccounts: starts ");
+//        Log.d(TAG, "loadAccounts: starts ");
         Cursor cursor = getContentResolver().query(
                 AccountsContract.CONTENT_URI, null, null, null, AccountsContract.Columns.CORP_NAME_COL);
 
@@ -315,7 +300,7 @@ public class AccountListActivity extends AppCompatActivity
     }
 
     private void ImportAccountDB() {
-        Log.d(TAG, "ImportAccountDB: starts");
+//        Log.d(TAG, "ImportAccountDB: starts");
         String msg = "";
         try {
             List<Account> listAccounts = new ArrayList<Account>();
@@ -339,8 +324,8 @@ public class AccountListActivity extends AppCompatActivity
             getContentResolver().delete(AccountsContract.CONTENT_URI, null, null);
 
             for (Account item : listAccounts) {
-                Log.d(TAG, "ImportAccountDB: acc " + item.getPassportId()
-                        + " " + item.getCorpName());
+//                Log.d(TAG, "ImportAccountDB: acc " + item.getPassportId()
+//                        + " " + item.getCorpName());
                 addAccountToDB(contentResolver, item);
             }
 
@@ -359,6 +344,17 @@ public class AccountListActivity extends AppCompatActivity
         }
         Toast.makeText(AccountListActivity.this,
                 msg, Toast.LENGTH_LONG).show();
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        AppDialog newFragment = AppDialog.newInstance();
+        Bundle args = new Bundle();
+        args.putInt(AppDialog.DIALOG_ID, AppDialog.DIALOG_ID_ASK_IF_NEED_DICTIONARY_REBUILD);
+        args.putInt(AppDialog.DIALOG_TYPE, AppDialog.DIALOG_YES_NO);
+        args.putString(AppDialog.DIALOG_MESSAGE, "Ask to rebuild search dictionary");
+        args.putString(AppDialog.DIALOG_SUB_MESSAGE, "Accounts changed, rebuild dictionary to sync up?");
+
+        newFragment.setArguments(args);
+        newFragment.show(fragmentManager, "dialog");
 
     }
 
@@ -474,7 +470,8 @@ public class AccountListActivity extends AppCompatActivity
         Bundle args = new Bundle();
         args.putInt(AppDialog.DIALOG_ID, AppDialog.DIALOG_ID_CONFIRM_DELETE_ACCOUNT);
         args.putInt(AppDialog.DIALOG_TYPE, AppDialog.DIALOG_YES_NO);
-        args.putString(AppDialog.DIALOG_MESSAGE, getString(R.string.deldiag_message, account.getPassportId(), account.getCorpName()));
+        args.putString(AppDialog.DIALOG_MESSAGE, getString(R.string.deldiag_message));
+        args.putString(AppDialog.DIALOG_SUB_MESSAGE, getString(R.string.deldiag_sub_message, account.getPassportId(), account.getCorpName()));
         args.putInt(AppDialog.DIALOG_ACCOUNT_ID, account.getId());
         args.putInt(AppDialog.DIALOG_POSITIVE_RID, R.string.deldiag_positive_caption);
 
@@ -518,11 +515,11 @@ public class AccountListActivity extends AppCompatActivity
     }
 
     private void editAccountRequest(Account account) {
-        Log.d(TAG, "addAccountRequest: starts");
+//        Log.d(TAG, "addAccountRequest: starts");
         if (mTwoPane) {
-            Log.d(TAG, "addAccountRequest: in two-pane mode (tablet)");
+//            Log.d(TAG, "addAccountRequest: in two-pane mode (tablet)");
         } else {
-            Log.d(TAG, "addAccountRequest: in single-pan mode (phone)");
+//            Log.d(TAG, "addAccountRequest: in single-pan mode (phone)");
             // in single-pane mode, start the detail activity for the selected item Id.
             Intent detailIntent = new Intent(this, AccountActivity.class);
 
@@ -537,26 +534,53 @@ public class AccountListActivity extends AppCompatActivity
 
     @Override
     public void onDialogCancelled(int dialogId) {
-        Log.d(TAG, "onDialogCancelled: starts");
+//        Log.d(TAG, "onDialogCancelled: starts");
         Intent detailIntent = new Intent(this, FileViewActivity.class);
         startActivity(detailIntent);
     }
 
     @Override
     public void onPositiveDialogResult(int dialogId, Bundle args) {
-        Log.d(TAG, "onPositiveDialogResult: confirmed to delete");
-        Log.d(TAG, "onPositiveDialogResult: acctid " + args.getInt(AppDialog.DIALOG_ACCOUNT_ID));
-        getContentResolver().delete(AccountsContract.buildIdUri(args.getInt(AppDialog.DIALOG_ACCOUNT_ID)), null, null);
+        if (dialogId == AppDialog.DIALOG_ID_CONFIRM_DELETE_ACCOUNT) {
+//            Log.d(TAG, "onPositiveDialogResult: confirmed to delete");
+//            Log.d(TAG, "onPositiveDialogResult: acctid " + args.getInt(AppDialog.DIALOG_ACCOUNT_ID));
+            getContentResolver().delete(AccountsContract.buildIdUri(args.getInt(AppDialog.DIALOG_ACCOUNT_ID)), null, null);
+        } else {
+            if (dialogId == AppDialog.DIALOG_ID_ASK_IF_NEED_DICTIONARY_REBUILD) {
+//                Log.d(TAG, "onPositiveDialogResult: rebuild req");
+                loadSearchDB();
+            }
+        }
     }
 
     @Override
     public void onNegativeDialogResult(int dialogId, Bundle args) {
-        Log.d(TAG, "onNegativeDialogResult: delete cancel");
+//        Log.d(TAG, "onNegativeDialogResult: delete cancel");
+    }
+
+    private void loadSearchDB() {
+        deleteAllSuggestions();
+        AccountSuggestsLoaderCallbacks loaderAcctCallbacks = new AccountSuggestsLoaderCallbacks(this);
+        getLoaderManager().restartLoader(CONTACT_QUERY_LOADER, null, loaderAcctCallbacks);
+        Toast.makeText(this,
+                "Search Dictionary DB built",
+                Toast.LENGTH_LONG).show();
+
+    }
+
+    private void deleteAllSuggestions() {
+//		String selectionClause = SearchManager.SUGGEST_COLUMN_FLAGS + " = ?";
+//		String[] selectionArgs = { "account" };
+//        Log.d(TAG, "deleteAllSuggestions: delUri " + SearchesContract.CONTENT_URI_TRUNCATE);
+        getContentResolver().delete(
+                SearchesContract.CONTENT_URI_TRUNCATE,
+                null, null);
+
     }
 
     @Override
     public void onActionRequestDialogResult(int dialogId, Bundle args, int which) {
-        Log.d(TAG, "onActionRequestDialogResult: starts");
+//        Log.d(TAG, "onActionRequestDialogResult: starts");
 
         Intent returnIntent;
         switch (which) {
@@ -566,7 +590,7 @@ public class AccountListActivity extends AppCompatActivity
             case 1:
             case 2:
             case 3:
-                Log.d(TAG, "onActionRequestDialogResult: request list");
+//                Log.d(TAG, "onActionRequestDialogResult: request list");
                 returnIntent = new Intent();
                 returnIntent.putExtra("which", which);
                 setResult(Activity.RESULT_OK, returnIntent);
@@ -593,18 +617,18 @@ public class AccountListActivity extends AppCompatActivity
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.d(TAG, "onActivityResult: starts");
+//        Log.d(TAG, "onActivityResult: starts");
         if (resultCode == RESULT_CANCELED) {
             return;
         }
         // Check which request we're responding to
         switch (requestCode) {
             case AccountsContract.ACCOUNT_ACTION_CHG: {
-                Log.d(TAG, "onActivityResult: returned from edit change");
+//                Log.d(TAG, "onActivityResult: returned from edit change");
                 break;
             }
             case AccountsContract.ACCOUNT_ACTION_ADD: {
-                Log.d(TAG, "onActivityResult: returned from edit add");
+//                Log.d(TAG, "onActivityResult: returned from edit add");
                 break;
             }
         }

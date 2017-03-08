@@ -69,7 +69,7 @@ public class SearchActivity extends AppCompatActivity
         AccountSuggestsLoaderCallbacks loaderAcctCallbacks = new AccountSuggestsLoaderCallbacks(this);
         getLoaderManager().restartLoader(CONTACT_QUERY_LOADER, null, loaderAcctCallbacks);
         Toast.makeText(this,
-                "Search DB built",
+                "Search Dictionary DB built",
                 Toast.LENGTH_LONG).show();
 
     }
@@ -78,7 +78,7 @@ public class SearchActivity extends AppCompatActivity
     private void deleteAllSuggestions() {
 //		String selectionClause = SearchManager.SUGGEST_COLUMN_FLAGS + " = ?";
 //		String[] selectionArgs = { "account" };
-        Log.d(TAG, "deleteAllSuggestions: delUri " + SearchesContract.CONTENT_URI_TRUNCATE);
+//        Log.d(TAG, "deleteAllSuggestions: delUri " + SearchesContract.CONTENT_URI_TRUNCATE);
         getContentResolver().delete(
                 SearchesContract.CONTENT_URI_TRUNCATE,
                 null, null);
@@ -98,16 +98,16 @@ public class SearchActivity extends AppCompatActivity
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener(){
             @Override
             public boolean onQueryTextSubmit(String query) {
-                Log.d(TAG, "onQueryTextSubmit: called");
+//                Log.d(TAG, "onQueryTextSubmit: called");
 //                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 //                sharedPreferences.edit().putString(SEARCH_QUERY, query).apply();
 //                showSuggestions();
 
                 SearchesContract.cursorSearch = mSearchView.getSuggestionsAdapter().getCursor();
                 mSearchView.clearFocus();
-                Log.d(TAG, "onQueryTextSubmit: showSearches");
+//                Log.d(TAG, "onQueryTextSubmit: showSearches");
 
-                showSearches(-1);
+//                showSearches(-1);
 //                finish();
                 return true;
             }
@@ -126,7 +126,7 @@ public class SearchActivity extends AppCompatActivity
         mSearchView.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
-                Log.d(TAG, "SearchView onClose: starts");
+//                Log.d(TAG, "SearchView onClose: starts");
 //                showSuggestions();
                 finish();
 
@@ -142,15 +142,15 @@ public class SearchActivity extends AppCompatActivity
         mSearchView.setOnSuggestionListener(new SearchView.OnSuggestionListener() {
             @Override
             public boolean onSuggestionSelect(int position) {
-                Log.d(TAG, "onSuggestionSelect: position " + position);
+//                Log.d(TAG, "onSuggestionSelect: position " + position);
 //                showSuggestions();
                 return false;
             }
 
             @Override
             public boolean onSuggestionClick(int position) {
-                Log.d(TAG, "onSuggestionClick: position " + position);
-//                showSuggestions();
+//                Log.d(TAG, "onSuggestionClick: position " + position);
+                showSuggestions();
                 int accountId = showAccount(position);
                 showSearches(accountId);
 //                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -160,7 +160,7 @@ public class SearchActivity extends AppCompatActivity
             }
         });
 
-        Log.d(TAG, "onCreateOptionsMenu: returned " + true);
+//        Log.d(TAG, "onCreateOptionsMenu: returned " + true);
 
         return true;
     }
@@ -206,15 +206,18 @@ public class SearchActivity extends AppCompatActivity
 //        Log.d(TAG, "showAccount: " + mSearchView.getSuggestionsAdapter().getCursor().getString(3));
 //        Log.d(TAG, "showAccount: " + mSearchView.getSuggestionsAdapter().getCursor().getColumnName(5));
         int dbId = Integer.valueOf(mSearchView.getSuggestionsAdapter().getCursor()
-                .getString(mSearchView.getSuggestionsAdapter().getCursor().getColumnIndex(SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID)));
+                .getString(mSearchView.getSuggestionsAdapter().getCursor().getColumnIndex(SearchManager.SUGGEST_COLUMN_INTENT_DATA)));
         Log.d(TAG, "showAccount: " + dbId);
+        String corpName = mSearchView.getSuggestionsAdapter().getCursor()
+                .getString(mSearchView.getSuggestionsAdapter().getCursor().getColumnIndex(SearchManager.SUGGEST_COLUMN_TEXT_1));
+        Log.d(TAG, "showAccount: corpName " + corpName);
 
         return dbId;
 
     }
 
     private void showSearches(int accountId) {
-        Log.d(TAG, "showSearches: starts");
+//        Log.d(TAG, "showSearches: starts");
         Intent detailIntent = new Intent(this, SearchListActivity.class);
         detailIntent.putExtra(SearchListActivity.class.getSimpleName(), accountId);
         startActivity(detailIntent);

@@ -4,7 +4,6 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,7 +63,7 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
 //            Log.d(TAG, "onBindViewHolder: mCursor count " + mCursor.getCount());
 //        }
         if ((mCursor == null) || (mCursor.getCount() == 0)) {
-            Log.d(TAG, "onBindViewHolder: no search db items");
+//            Log.d(TAG, "onBindViewHolder: no search db items");
             holder.corp_name.setText(R.string.no_account_items);
 //            holder.user_name.setText("Click Info button to add accounts");
 //            holder.editButton.setVisibility(View.GONE);
@@ -84,7 +83,7 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
             } else {
                 dbId = mAccountId;
             }
-            Log.d(TAG, "onBindViewHolder: acctId " + dbId);
+//            Log.d(TAG, "onBindViewHolder: acctId " + dbId);
 //            Log.d(TAG, "onBindViewHolder: column count " + mCursor.getColumnCount());
 //            for (int i = 0; i < mCursor.getColumnCount(); i++) {
 //                Log.d(TAG, "showSuggestions: " + mCursor.getColumnName(i)
@@ -96,7 +95,7 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
             Cursor cursorAccount = mContext.getContentResolver().query(
                     AccountsContract.buildIdUri(dbId), null, null, null, null);
             if (cursorAccount.moveToFirst()) {
-                Log.d(TAG, "onBindViewHolder: account found ");
+//                Log.d(TAG, "onBindViewHolder: account found ");
 
                 holder.corp_name.setText(cursorAccount.getString(cursorAccount.getColumnIndex(AccountsContract.Columns.CORP_NAME_COL)));
                 if (cursorAccount.getColumnIndex(AccountsContract.Columns.CORP_WEBSITE_COL) == -1) {
@@ -111,7 +110,7 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
                 }
                 holder.userName.setText(cursorAccount.getString(cursorAccount.getColumnIndex(AccountsContract.Columns.USER_NAME_COL)));
                 if (cursorAccount.getColumnIndex(AccountsContract.Columns.USER_EMAIL_COL) != -1){
-                    Log.d(TAG, "onBindViewHolder: email " + cursorAccount.getString(cursorAccount.getColumnIndex(AccountsContract.Columns.USER_EMAIL_COL)));
+//                    Log.d(TAG, "onBindViewHolder: email " + cursorAccount.getString(cursorAccount.getColumnIndex(AccountsContract.Columns.USER_EMAIL_COL)));
                     holder.userEmail.setText(cursorAccount.getString(cursorAccount.getColumnIndex(AccountsContract.Columns.USER_EMAIL_COL)));
                 }
                 if (cursorAccount.getColumnIndex(AccountsContract.Columns.NOTE_COL) == -1) {
@@ -216,7 +215,7 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
 
         public SearchViewHolder(View itemView) {
             super(itemView);
-        Log.d(TAG, "SearchViewHolder: starts");
+//        Log.d(TAG, "SearchViewHolder: starts");
 
             this.corp_name = (TextView) itemView.findViewById(R.id.tli_corp_name);
             this.website = (TextView) itemView.findViewById(R.id.tli_website);

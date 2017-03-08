@@ -36,10 +36,12 @@
     <string name="accedit_open_date">Open Date</string>
     <string name="title_activity_file_view">FileViewActivity</string>
     <string name="deldiag_positive_caption">Delete</string>
-    <string name="deldiag_message">Delete account %1$d: %2$s.</string>
+    <string name="deldiag_message">Delete account</string>
+    <string name="deldiag_sub_message">%1$d: %2$s.</string>
     <string name="suggdiag_negative_caption">8</string>
     <string name="suggdiag_positive_caption">10</string>
     <string name="listdiag_acc_message">Select account action</string>
+    <string name="listdiag_acc_sub_message">Choose with click</string>
     <string name="title_activity_search">SearchActivity</string>
     <string name="srch_load_search_db">Load Search DB with accounts</string>
     <string name="srch_value_hint">Enter value to search</string>
@@ -64,4 +66,5 @@
     <string name="srch_instruction_text">Search on accounts for Corp-Names</string>
     <string name="srch_instruction_2_text">When items are found, either select search icon on keyboard or select one of the items from the dropdown list.</string>
     <string name="accedit_seq_hint">Sequence for custom sorting</string>
+    <string name="srch_instruction_3">Warning: Reload Search Dictionary DB when account corp names are new, deleted, or changed.\nUse button below to rebuild search dictionary.</string>
 </resources>

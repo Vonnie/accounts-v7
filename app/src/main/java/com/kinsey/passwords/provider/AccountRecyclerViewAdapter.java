@@ -39,7 +39,7 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
 
     public AccountRecyclerViewAdapter(int sortorder, Cursor cursor, OnAccountClickListener listener) {
 //        Log.d(TAG, "CursorRecyclerViewAdapter: Constructor called");
-        Log.d(TAG, "AccountRecyclerViewAdapter: sortorder " + mSortorder);
+//        Log.d(TAG, "AccountRecyclerViewAdapter: sortorder " + mSortorder);
         mSortorder = sortorder;
         mCursor = cursor;
         mListener = listener;
@@ -219,7 +219,7 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
 
         public AccountViewHolder(View itemView) {
             super(itemView);
-        Log.d(TAG, "AccountViewHolder: starts");
+//        Log.d(TAG, "AccountViewHolder: starts");
 
             this.corp_name = (TextView) itemView.findViewById(R.id.tli_corp_name);
             this.user_name = (TextView) itemView.findViewById(R.id.tli_website);

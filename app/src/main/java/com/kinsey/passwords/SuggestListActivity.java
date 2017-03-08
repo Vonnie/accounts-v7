@@ -99,6 +99,7 @@ public class SuggestListActivity extends AppCompatActivity
         args.putInt(AppDialog.DIALOG_ID, AppDialog.DIALOG_ID_REQUEST_GEN_PASSWORD_LENGTH);
         args.putInt(AppDialog.DIALOG_TYPE, AppDialog.DIALOG_YES_NO);
         args.putString(AppDialog.DIALOG_MESSAGE, "Password at 8 or 10 length");
+        args.putString(AppDialog.DIALOG_SUB_MESSAGE, "choose from buttons");
 //        args.putString(AppDialog.DIALOG_MESSAGE, getString(R.string.deldiag_message, 1, account.getCorpName()));
 //        args.putInt(AppDialog.DIALOG_ACCOUNT_ID, account.getId());
         args.putInt(AppDialog.DIALOG_POSITIVE_RID, R.string.suggdiag_positive_caption);

@@ -72,7 +72,8 @@ public class AccountSuggestsLoaderCallbacks implements LoaderManager.LoaderCallb
                 data.getString(data.getColumnIndex(AccountsContract.Columns.CORP_NAME_COL)));
         cvs.put(SearchManager.SUGGEST_COLUMN_TEXT_2,
                 data.getString(data.getColumnIndex(AccountsContract.Columns.USER_NAME_COL)));
-        Log.d(TAG, "loadAccountDictionary: dictUserName " + data.getString(data.getColumnIndex(AccountsContract.Columns.USER_NAME_COL))
+        Log.d(TAG, "loadAccountDictionary: dictUserName "
+                + data.getString(data.getColumnIndex(AccountsContract.Columns.CORP_NAME_COL))
         );
         if (data.getColumnIndex(AccountsContract.Columns.CORP_WEBSITE_COL) == -1) {
             cvs.put(SearchManager.SUGGEST_COLUMN_TEXT_2_URL, "");
@@ -82,12 +83,15 @@ public class AccountSuggestsLoaderCallbacks implements LoaderManager.LoaderCallb
         }
 //        cvs.put(SearchDatabase.ICON_CORP_NAME, myUrlStr);
         cvs.put(SearchManager.SUGGEST_COLUMN_INTENT_DATA,
-                data.getString(data.getColumnIndex(AccountsContract.Columns._ID_COL)));
+                String.valueOf(data.getInt(data.getColumnIndex(AccountsContract.Columns._ID_COL))));
         cvs.put(SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID,
-                data.getString(data.getColumnIndex(AccountsContract.Columns._ID_COL)));
+                String.valueOf(data.getInt(data.getColumnIndex(AccountsContract.Columns._ID_COL))));
         cvs.put(SearchManager.SUGGEST_COLUMN_QUERY, "");
 
+        Log.d(TAG, "loadAccountDictionary: id "
+                + data.getString(data.getColumnIndex(AccountsContract.Columns._ID_COL)));
 //            Log.v(TAG, "accSuggest " + item.getCorpName() + ":" + item.getPassportId());
+        Log.d(TAG, "loadAccountDictionary: cvs " + cvs);
         mContext.getContentResolver().insert(
                 SearchesContract.CONTENT_URI, cvs);
 

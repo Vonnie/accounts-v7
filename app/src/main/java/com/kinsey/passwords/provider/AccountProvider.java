@@ -8,7 +8,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.kinsey.passwords.items.AccountsContract;
 
@@ -41,14 +40,14 @@ public class AccountProvider extends ContentProvider {
         matcher.addURI(AUTHORITY, AccountDatabase.DATABASE_NAME, BOOK);
         matcher.addURI(AUTHORITY, AccountDatabase.DATABASE_NAME + "/#", ROW_ID);
         matcher.addURI(AUTHORITY, AccountDatabase.DATABASE_NAME + "/maxvalue", MAX_VALUE);
-        matcher.addURI(AUTHORITY, AccountDatabase.DATABASE_NAME + "/accountid", ACCT_ID);
+        matcher.addURI(AUTHORITY, AccountDatabase.DATABASE_NAME + "/accountid/#", ACCT_ID);
 
         return matcher;
     }
 
     @Override
     public boolean onCreate() {
-        Log.d(TAG, "onCreate: starts");
+//        Log.d(TAG, "onCreate: starts");
         mOpenHelper = AccountDatabase.getInstance(getContext());
         return true;
     }
@@ -57,9 +56,13 @@ public class AccountProvider extends ContentProvider {
     @Override
     public Cursor query(Uri uri, String[] projection, String selection,
                         String[] selectionArgs, String sortOrder) {
-        Log.d(TAG, "query: called with URI " + uri);
+//        Log.d(TAG, "query: called with URI " + uri);
         final int match = sUriMatcher.match(uri);
-        Log.d(TAG, "query: match is " + match);
+//        Log.d(TAG, "query: match is " + match);
+
+        if (match == -1) {
+            throw new android.database.SQLException("Failed to inquire into db for uri " + uri.toString());
+        }
 
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
 
@@ -100,11 +103,11 @@ public class AccountProvider extends ContentProvider {
         SQLiteDatabase db = mOpenHelper.getReadableDatabase();
         Cursor cursor = queryBuilder.query(db, projection, selection, selectionArgs, null, null, sortOrder);
 
-        Log.d(TAG, "query: cursor " + cursor.getCount());
+//        Log.d(TAG, "query: cursor " + cursor.getCount());
 
 
-        Log.d(TAG, "query: called with URI " + uri);
-        Log.d(TAG, "query: called with context " + getContext().getContentResolver());
+//        Log.d(TAG, "query: called with URI " + uri);
+//        Log.d(TAG, "query: called with context " + getContext().getContentResolver());
         // ---register to watch a content URI for changes---
         cursor.setNotificationUri(getContext().getContentResolver(), uri);
         return cursor;
@@ -121,9 +124,9 @@ public class AccountProvider extends ContentProvider {
     @Nullable
     @Override
     public Uri insert(Uri uri, ContentValues contentValues) {
-        Log.d(TAG, "Entering insert, called with uri:" + uri);
+//        Log.d(TAG, "Entering insert, called with uri:" + uri);
         final int match = sUriMatcher.match(uri);
-        Log.d(TAG, "match is " + match);
+//        Log.d(TAG, "match is " + match);
 
         final SQLiteDatabase db;
 
@@ -157,21 +160,21 @@ public class AccountProvider extends ContentProvider {
 
         if (recordId >= 0) {
             // something was inserted
-            Log.d(TAG, "insert: Setting notifyChanged with " + uri);
+//            Log.d(TAG, "insert: Setting notifyChanged with " + uri);
             getContext().getContentResolver().notifyChange(uri, null);
         } else {
-            Log.d(TAG, "insert: nothing inserted");
+//            Log.d(TAG, "insert: nothing inserted");
         }
-        Log.d(TAG, "Exiting insert, returning " + returnUri);
+//        Log.d(TAG, "Exiting insert, returning " + returnUri);
         return returnUri;
 
     }
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
-        Log.d(TAG, "update called with uri " + uri);
+//        Log.d(TAG, "update called with uri " + uri);
         final int match = sUriMatcher.match(uri);
-        Log.d(TAG, "match is " + match);
+//        Log.d(TAG, "match is " + match);
 
         final SQLiteDatabase db;
         int count;
@@ -201,22 +204,22 @@ public class AccountProvider extends ContentProvider {
 
         if(count > 0) {
             // something was deleted
-            Log.d(TAG, "delete: Setting notifyChange with " + uri);
+//            Log.d(TAG, "delete: Setting notifyChange with " + uri);
             getContext().getContentResolver().notifyChange(uri, null);
         } else {
-            Log.d(TAG, "delete: nothing deleted");
+//            Log.d(TAG, "delete: nothing deleted");
         }
 
-        Log.d(TAG, "Exiting delete, returning " + count);
+//        Log.d(TAG, "Exiting delete, returning " + count);
         return count;
 
     }
 
     @Override
     public int update(Uri uri, ContentValues contentValues, String selection, String[] selectionArgs) {
-        Log.d(TAG, "update called with uri " + uri);
+//        Log.d(TAG, "update called with uri " + uri);
         final int match = sUriMatcher.match(uri);
-        Log.d(TAG, "match is " + match);
+//        Log.d(TAG, "match is " + match);
 
         final SQLiteDatabase db;
         int count;
@@ -233,8 +236,8 @@ public class AccountProvider extends ContentProvider {
                 db = mOpenHelper.getWritableDatabase();
                 long accountId = AccountsContract.getId(uri);
                 selectionCriteria = AccountsContract.Columns._ID_COL + " = " + accountId;
-                Log.d(TAG, "update: selectionCriteria " + selectionCriteria);
-                Log.d(TAG, "update: contentValues " + contentValues);
+//                Log.d(TAG, "update: selectionCriteria " + selectionCriteria);
+//                Log.d(TAG, "update: contentValues " + contentValues);
 
                 if((selection != null) && (selection.length()>0)) {
                     selectionCriteria += " AND (" + selection + ")";
@@ -249,13 +252,13 @@ public class AccountProvider extends ContentProvider {
 
         if(count > 0) {
             // something was deleted
-            Log.d(TAG, "updatead: Setting notifyChange with " + uri);
+//            Log.d(TAG, "updated: Setting notifyChange with " + uri);
             getContext().getContentResolver().notifyChange(uri, null);
         } else {
-            Log.d(TAG, "update: nothing updated");
+//            Log.d(TAG, "update: nothing updated");
         }
 
-        Log.d(TAG, "Exiting update, returning " + count);
+//        Log.d(TAG, "Exiting update, returning " + count);
         return count;
 
     }

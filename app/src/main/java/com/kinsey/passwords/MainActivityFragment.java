@@ -5,7 +5,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,12 +42,12 @@ public class MainActivityFragment extends Fragment {
 
 
     public MainActivityFragment() {
-        Log.d(TAG, "MainActivityFragment: starts");
+//        Log.d(TAG, "MainActivityFragment: starts");
     }
     
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        Log.d(TAG, "onActivityCreated: starts loader_id " + LOADER_ID);
+//        Log.d(TAG, "onActivityCreated: starts loader_id " + LOADER_ID);
         super.onActivityCreated(savedInstanceState);
 //        getLoaderManager().initLoader(LOADER_ID, null, this);
     }
@@ -56,7 +55,7 @@ public class MainActivityFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.d(TAG, "onCreateView: starts");
+//        Log.d(TAG, "onCreateView: starts");
         View view = inflater.inflate(R.layout.fragment_main, container, false);
 //        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.items_list);
 //        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -69,9 +68,9 @@ public class MainActivityFragment extends Fragment {
         if (bundle == null) {
 //            LOADER_ID = 1;
         } else {
-            Log.d(TAG, "onCreateView: bundle " + bundle);
+//            Log.d(TAG, "onCreateView: bundle " + bundle);
             String arg1 = bundle.getString(BUNDLE_TABLE_ID, "none");
-            Log.d(TAG, "onCreateView: arg1 " + arg1);
+//            Log.d(TAG, "onCreateView: arg1 " + arg1);
             if (arg1 == "passport_detail") {
                 LOADER_ID = 1;
             } else {
@@ -85,7 +84,7 @@ public class MainActivityFragment extends Fragment {
 //        mSuggestsButton = (Button) view.findViewById(R.id.home_btn_suggests);
 //        mSearchButton = (Button) view.findViewById(R.id.home_btn_search);
 
-        Log.d(TAG, "onCreateView: loader_id " + LOADER_ID);
+//        Log.d(TAG, "onCreateView: loader_id " + LOADER_ID);
 
 
 //        mAccountsButton.setOnClickListener(new View.OnClickListener() {
@@ -266,7 +265,7 @@ public class MainActivityFragment extends Fragment {
 
     @Override
     public void onAttach(Context context) {
-        Log.d(TAG, "onAttach: starts");
+//        Log.d(TAG, "onAttach: starts");
         super.onAttach(context);
 
         // Activies containing this fragment must implement it's callbacks
@@ -280,7 +279,7 @@ public class MainActivityFragment extends Fragment {
 
     @Override
     public void onDetach() {
-        Log.d(TAG, "onDetach: starts");
+//        Log.d(TAG, "onDetach: starts");
         super.onDetach();
         mActionListener = null;
     }

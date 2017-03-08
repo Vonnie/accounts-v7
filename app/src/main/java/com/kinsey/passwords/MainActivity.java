@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -174,11 +173,11 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void editAccountRequest(Account account) {
-        Log.d(TAG, "addAccountRequest: starts");
+//        Log.d(TAG, "addAccountRequest: starts");
         if (mTwoPane) {
-            Log.d(TAG, "addAccountRequest: in two-pane mode (tablet)");
+//            Log.d(TAG, "addAccountRequest: in two-pane mode (tablet)");
         } else {
-            Log.d(TAG, "addAccountRequest: in single-pan mode (phone)");
+//            Log.d(TAG, "addAccountRequest: in single-pan mode (phone)");
             // in single-pane mode, start the detail activity for the selected item Id.
             Intent detailIntent = new Intent(this, AccountActivity.class);
 
@@ -194,7 +193,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void accountsListRequest(int sortorder) {
-        Log.d(TAG, "accountsListRequest: starts");
+//        Log.d(TAG, "accountsListRequest: starts");
         if (mTwoPane) {
         } else {
         }
@@ -216,7 +215,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void suggestsListRequest() {
-        Log.d(TAG, "suggestsListRequest: starts");
+//        Log.d(TAG, "suggestsListRequest: starts");
         if (mTwoPane) {
         } else {
         }
@@ -240,21 +239,21 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.d(TAG, "onActivityResult: starts");
+//        Log.d(TAG, "onActivityResult: starts");
         if (resultCode == RESULT_CANCELED) {
             return;
         }
-        Log.d(TAG, "onActivityResult: requestCode " + requestCode);
-        Log.d(TAG, "onActivityResult: resultCode " + resultCode);
+//        Log.d(TAG, "onActivityResult: requestCode " + requestCode);
+//        Log.d(TAG, "onActivityResult: resultCode " + resultCode);
         // Check which request we're responding to
         switch (requestCode) {
             case REQUEST_ACCOUNTS_LIST: {
 
                 // Make sure the request was successful
                 if (resultCode == RESULT_OK) {
-                    Log.d(TAG, "onActivityResult: success");
+//                    Log.d(TAG, "onActivityResult: success");
                     int resultWhich = data.getIntExtra("which", 0);
-                    Log.d(TAG, "onActivityResult: which " + resultWhich);
+//                    Log.d(TAG, "onActivityResult: which " + resultWhich);
                     switch (resultWhich) {
                         case 1:
                             accountsListRequest(AccountsContract.ACCOUNT_LIST_BY_CORP_NAME);
@@ -281,7 +280,7 @@ public class MainActivity extends AppCompatActivity
             case REQUEST_SUGGESTS_LIST:
                 if (resultCode == RESULT_OK) {
                     String result = data.getStringExtra("result");
-                    Log.d(TAG, "onActivityResult: result " + result);
+//                    Log.d(TAG, "onActivityResult: result " + result);
                     suggestsListRequest();
                 }
                 break;
@@ -349,7 +348,7 @@ public class MainActivity extends AppCompatActivity
 //    }
     @Override
     public boolean onSearchRequested() {
-        Log.d(TAG, "onSearchRequested: started");
+//        Log.d(TAG, "onSearchRequested: started");
         return super.onSearchRequested();
     }
 
@@ -395,7 +394,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onActionRequestDialogResult(int dialogId, Bundle args, int which) {
-        Log.d(TAG, "onActionRequestDialogResult: starts which " + which);
+//        Log.d(TAG, "onActionRequestDialogResult: starts which " + which);
         switch (which) {
             case 0:
                 break;

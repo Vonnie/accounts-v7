@@ -37,7 +37,7 @@ public class FileViewActivity extends AppCompatActivity {
                                 ).show();
             }
         });
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
     }
 
     private void shareExport() {

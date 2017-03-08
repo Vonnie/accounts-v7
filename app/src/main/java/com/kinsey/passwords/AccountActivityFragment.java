@@ -46,8 +46,9 @@ public class AccountActivityFragment extends Fragment {
     private EditText mSeqTextView;
 //    private TextView mOpenDateTextView;
     private TextView mAccountIdTextView;
-    private TextView mRefIdFromTextView;
-    private TextView mRefIdToTextView;
+    private EditText mRefIdFromTextView;
+    private EditText mRefIdToTextView;
+    private TextView mActvyDtTextView;
     private DatePicker mDtePickOpen;
     private long lngOpenDate;
     private ImageButton mImgWebView;
@@ -64,13 +65,13 @@ public class AccountActivityFragment extends Fragment {
     }
 
     public AccountActivityFragment() {
-        Log.d(TAG, "AccountActivityFragment: constructor called");
+//        Log.d(TAG, "AccountActivityFragment: constructor called");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.d(TAG, "onCreateView: starts");
+//        Log.d(TAG, "onCreateView: starts");
         View view = inflater.inflate(R.layout.fragment_account, container, false);
 
         mCorpNameTextView = (EditText) view.findViewById(R.id.acc_corp_name);
@@ -82,6 +83,7 @@ public class AccountActivityFragment extends Fragment {
 //        mOpenDateTextView = (TextView) view.findViewById(R.id.acc_open_date);
         mDtePickOpen = (DatePicker) view.findViewById(R.id.acc_datePicker);
         mAccountIdTextView = (TextView) view.findViewById(R.id.acc_account_id);
+        mActvyDtTextView = (TextView) view.findViewById(R.id.acc_actvy_date);
         mRefIdFromTextView = (EditText) view.findViewById(R.id.acc_ref_from);
         mRefIdToTextView = (EditText) view.findViewById(R.id.acc_ref_to);
         mImgWebView = (ImageButton) view.findViewById(R.id.acc_img_website);
@@ -90,13 +92,14 @@ public class AccountActivityFragment extends Fragment {
         Bundle arguments = getActivity().getIntent().getExtras();  // The line we'll change later
 
         if (arguments != null) {
-            Log.d(TAG, "onCreateView: retrieving task details.");
+//            Log.d(TAG, "onCreateView: retrieving task details.");
 
             int accountId = (int) arguments.getSerializable(Account.class.getSimpleName());
             account = getAccount(accountId);
-            Log.d(TAG, "onCreateView: acctChk " + account.toString());
+//            Log.d(TAG, "onCreateView: acctChk " + account.toString());
+//            Log.d(TAG, "onCreateView: _id " + account.getId());
             if (account != null) {
-                Log.d(TAG, "onCreateView: Account found, editing..." + account.getId());
+//                Log.d(TAG, "onCreateView: Account found, editing..." + account.getId());
                 mCorpNameTextView.setText(account.getCorpName());
                 mUserNameTextView.setText(account.getUserName());
                 mUserEmailTextView.setText(account.getUserEmail());
@@ -106,30 +109,41 @@ public class AccountActivityFragment extends Fragment {
                 } else {
                     mSeqTextView.setText(String.valueOf(account.getSequence()));
                 }
-                if (account.getOpenLong() != 0) {
-                    Log.d(TAG, "onCreateView: openLong " + account.getOpenLong());
+
+//                    Log.d(TAG, "onCreateView: openLong " + account.getOpenLong());
 //                    mOpenDateTextView.setText("Open: " + format_ymdtimehm.format(account.getOpenLong()));
                     mDtePickOpen.setMaxDate(new Date().getTime());
                     mDtePickOpen.setMinDate(0);
-                    Date dte = new Date(account.getOpenLong());
-                    Calendar c1 = Calendar.getInstance();
-                    c1.setTime(dte);
-                    lngOpenDate = c1.getTimeInMillis();
-                    mDtePickOpen.init(c1.get(Calendar.YEAR),
-                            c1.get(Calendar.MONTH),
-                            c1.get(Calendar.DAY_OF_MONTH),
-                            new DatePicker.OnDateChangedListener(){
-                                @Override
-                                public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                                    Calendar c2 = Calendar.getInstance();
-                                    c2.set(year, monthOfYear, dayOfMonth);
-                                    lngOpenDate = c2.getTimeInMillis();
-                                }
-                            });
+                Date dte;
+                if (account.getOpenLong() != 0) {
+                    dte = new Date(account.getOpenLong());
+//                    Log.d(TAG, "onCreateView: db openLong " + account.getOpenLong());
                 } else {
-                    Log.d(TAG, "onCreateView: zero open date");
+                    dte = new Date();
                 }
+                Calendar c1 = Calendar.getInstance();
+                c1.setTime(dte);
+                lngOpenDate = c1.getTimeInMillis();
+//                Log.d(TAG, "onDateChanged: DB lngOpenDate " + lngOpenDate);
+                mDtePickOpen.init(c1.get(Calendar.YEAR),
+                        c1.get(Calendar.MONTH),
+                        c1.get(Calendar.DAY_OF_MONTH),
+                        new DatePicker.OnDateChangedListener() {
+                            @Override
+                            public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+//                                Log.d(TAG, "onDateChanged: clicked ");
+                                Calendar c2 = Calendar.getInstance();
+                                c2.set(year, monthOfYear, dayOfMonth);
+                                lngOpenDate = c2.getTimeInMillis();
+                                Log.d(TAG, "onDateChanged: lngOpenDate " + lngOpenDate);
+                            }
+                        });
 
+                if (account.getActvyLong() == 0) {
+                    mActvyDtTextView.setText("");
+                } else {
+                    mActvyDtTextView.setText("ActvyDate: " + format_ymdtimehm.format(account.getActvyLong()));
+                }
 //                Log.d(TAG, "onCreateView: passwordId " + account.getPassportId());
 //                mAccountIdTextView.setText("see this");
 //                Log.d(TAG, "onCreateView: textView " + mAccountIdTextView.getText().toString());
@@ -154,7 +168,7 @@ public class AccountActivityFragment extends Fragment {
             }
         } else {
             account = null;
-            Log.d(TAG, "onCreateView: No arguments, adding new record");
+//            Log.d(TAG, "onCreateView: No arguments, adding new record");
             mMode = FragmentEditMode.ADD;
         }
 
@@ -184,8 +198,8 @@ public class AccountActivityFragment extends Fragment {
             public void onClick(View v) {
                 Intent detailIntent = new Intent(getActivity(), WebViewActivity.class);
                 detailIntent.putExtra(WebViewActivity.class.getSimpleName(), mCorpWebsiteTextView.getText().toString());
-                Log.d(TAG, "onClick: website " + account.getCorpWebsite());
-                Log.d(TAG, "onClick: wv class " + WebViewActivity.class.getSimpleName());
+//                Log.d(TAG, "onClick: website " + account.getCorpWebsite());
+//                Log.d(TAG, "onClick: wv class " + WebViewActivity.class.getSimpleName());
                 startActivity(detailIntent);
 
             }
@@ -217,20 +231,22 @@ public class AccountActivityFragment extends Fragment {
             mUserEmailTextView.setError("User email is invalid format");
             return false;
         }
-        if (!mCorpWebsiteTextView.getText().toString().equals("")) {
-            if (!mCorpWebsiteTextView.getText().toString().toLowerCase().startsWith("http://")) {
-                mCorpWebsiteTextView.setText("http://" + mCorpWebsiteTextView.getText().toString());
-            }
-        }
         if (!mRefIdFromTextView.getText().toString().equals("")) {
             if (!isIdOnDB(mRefIdFromTextView.getText().toString())) {
                 mRefIdFromTextView.setError("Reference back id does not exists");
+                return false;
             };
         }
         if (!mRefIdToTextView.getText().toString().equals("")) {
             if (!isIdOnDB(mRefIdToTextView.getText().toString())) {
                 mRefIdToTextView.setError("Reference to id does not exists");
+                return false;
             };
+        }
+        if (!mCorpWebsiteTextView.getText().toString().equals("")) {
+            if (!mCorpWebsiteTextView.getText().toString().toLowerCase().startsWith("http://")) {
+                mCorpWebsiteTextView.setText("http://" + mCorpWebsiteTextView.getText().toString());
+            }
         }
 
         return true;
@@ -264,12 +280,12 @@ public class AccountActivityFragment extends Fragment {
             if (cursor.moveToFirst()) {
                 int iIndex = cursor.getColumnIndex(col);
                 iId = cursor.getInt(iIndex) + 1;
-                Log.d(TAG, "getMaxValue: " + iId);
+//                Log.d(TAG, "getMaxValue: " + iId);
             }
             cursor.close();
         }
 
-        Log.d(TAG, "getMaxValue: " + iId);
+//        Log.d(TAG, "getMaxValue: " + iId);
         return iId;
     }
 
@@ -305,9 +321,9 @@ public class AccountActivityFragment extends Fragment {
         }
     }
 
-    public void save() {
+    public boolean save() {
         if (!verifiedAccount()) {
-            return;
+            return false;
         }
         ContentResolver contentResolver = getActivity().getContentResolver();
         ContentValues values = new ContentValues();
@@ -329,38 +345,72 @@ public class AccountActivityFragment extends Fragment {
                 if (!mNoteTextView.getText().toString().equals((account.getNote()))) {
                     values.put(AccountsContract.Columns.NOTE_COL, mNoteTextView.getText().toString());
                 }
-                if (!mSeqTextView.getText().toString().equals((account.getSequence()))) {
-                    values.put(AccountsContract.Columns.SEQUENCE_COL, mSeqTextView.getText().toString());
+                if (mSeqTextView.getText().toString().equals("")
+                        && account.getSequence() == 0) {
+                } else {
+                    if (!mSeqTextView.getText().toString().equals((String.valueOf(account.getSequence())))) {
+                        values.put(AccountsContract.Columns.SEQUENCE_COL, mSeqTextView.getText().toString());
+                    }
                 }
-                if (lngOpenDate != account.getOpenLong()) {
-                    values.put(AccountsContract.Columns.OPEN_DATE_COL, lngOpenDate);
+                if (mRefIdFromTextView.getText().toString().equals("")
+                        && account.getRefFrom() == 0) {
+                } else {
+                    if (!mRefIdFromTextView.getText().toString().equals(String.valueOf(account.getRefFrom()))) {
+                        values.put(AccountsContract.Columns.REF_FROM_COL, mRefIdFromTextView.getText().toString());
+                    }
                 }
-                if (!mRefIdFromTextView.getText().toString().equals(String.valueOf(account.getRefFrom()))) {
-                    values.put(AccountsContract.Columns.REF_FROM_COL, mRefIdFromTextView.getText().toString());
+                if (mRefIdToTextView.getText().toString().equals("")
+                        && account.getRefTo() == 0) {
+                } else {
+                    if (!mRefIdToTextView.getText().toString().equals(String.valueOf(account.getRefTo()))) {
+                        values.put(AccountsContract.Columns.REF_TO_COL, mRefIdToTextView.getText().toString());
+                    }
                 }
-                if (!mRefIdToTextView.getText().toString().equals(String.valueOf(account.getRefTo()))) {
-                    values.put(AccountsContract.Columns.REF_TO_COL, mRefIdToTextView.getText().toString());
+//                Calendar calDatePicker = Calendar.getInstance();
+//                calDatePicker.set(
+//                        mDtePickOpen.getYear(),
+//                        mDtePickOpen.getMonth(),
+//                        mDtePickOpen.getDayOfMonth());
+//                Date dte = new Date(account.getOpenLong());
+//                Calendar calOpenDateDB = Calendar.getInstance();
+//                calOpenDateDB.setTime(dte);
+//                Log.d(TAG, "save: datePicker " + mDtePickOpen.getYear());
+//                Log.d(TAG, "save: datePicker " + mDtePickOpen.getMonth());
+//                Log.d(TAG, "save: datePicker " + mDtePickOpen.getDayOfMonth());
+//                Log.d(TAG, "save: dateDB " + calOpenDateDB.get(Calendar.YEAR));
+//                Log.d(TAG, "save: dateDB " + calOpenDateDB.get(Calendar.MONTH));
+//                Log.d(TAG, "save: dateDB " + calOpenDateDB.get(Calendar.DAY_OF_MONTH));
+
+                Calendar c2 = Calendar.getInstance();
+                c2.set(mDtePickOpen.getYear(), mDtePickOpen.getMonth(), mDtePickOpen.getDayOfMonth());
+                long lngDatePickerOpenDate = c2.getTimeInMillis();
+
+//                Log.d(TAG, "save: lngOpenDate " + lngDatePickerOpenDate);
+//                Log.d(TAG, "save: account.getOpenLong() " + account.getOpenLong());
+                if (lngDatePickerOpenDate != account.getOpenLong()) {
+                    values.put(AccountsContract.Columns.OPEN_DATE_COL, lngDatePickerOpenDate);
                 }
-//                        if (so != task.getSortOrder()) {
-//                            values.put(TasksContract.Columns.TASKS_SORTORDER, so);
-//                        }
-                Log.d(TAG, "save: values " + values);
+
+
                 if (values.size() != 0) {
-                    Log.d(TAG, "onClick: updating accountId " + AccountsContract.buildIdUri(account.getId()));
+                    account.setActvyLong(System.currentTimeMillis());
+                    values.put(AccountsContract.Columns.ACTVY_DATE_COL, account.getActvyLong());
+//                    Log.d(TAG, "save: values " + values);
+
+//                    Log.d(TAG, "onClick: updating accountId " + AccountsContract.buildIdUri(account.getId()));
                     contentResolver.update(AccountsContract.buildIdUri(account.getId()), values, null, null);
                     account = getAccount(account.getId());
                     Toast.makeText(getActivity(),
-                            values.size() + " changed columns",
+                            values.size()-1 + " changed columns",
                             Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(getActivity(),
-                            " no changes detected",
+                    Toast.makeText(getActivity(), "no changes detected",
                             Toast.LENGTH_SHORT).show();
                 }
                 break;
             case ADD:
                 if (mCorpNameTextView.length()>0) {
-                    Log.d(TAG, "onClick: adding new account");
+//                    Log.d(TAG, "onClick: adding new account");
                     values.put(AccountsContract.Columns.PASSPORT_ID_COL,
                             String.valueOf(getMaxValue(AccountsContract.Columns.PASSPORT_ID_COL)));
                     values.put(AccountsContract.Columns.CORP_NAME_COL, mCorpNameTextView.getText().toString());
@@ -376,15 +426,19 @@ public class AccountActivityFragment extends Fragment {
 
                     long id = AccountsContract.getId(uri);
                     account = getAccount((int)id);
+                    Toast.makeText(getActivity(),
+                            "New account added",
+                            Toast.LENGTH_SHORT).show();
                 }
                 break;
         }
 
-        Log.d(TAG, "onClick: Done editing");
+//        Log.d(TAG, "onClick: Done editing");
+        return true;
     }
     @Override
     public void onAttach(Context context) {
-        Log.d(TAG, "onAttach: starts");
+//        Log.d(TAG, "onAttach: starts");
         super.onAttach(context);
 
         // Activities containing this fragment must implement it's callbacks
@@ -398,7 +452,7 @@ public class AccountActivityFragment extends Fragment {
 
     @Override
     public void onDetach() {
-        Log.d(TAG, "onDetach: starts");
+//        Log.d(TAG, "onDetach: starts");
         super.onDetach();
         mSaveListener = null;
     }

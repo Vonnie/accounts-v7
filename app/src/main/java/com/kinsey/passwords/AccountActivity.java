@@ -87,8 +87,9 @@ public class AccountActivity extends AppCompatActivity
 //        FragmentManager fragmentManager = getSupportFragmentManager();
 //        android.support.v4.app.Fragment frag = fragmentManager.findFragmentById(R.id.fragmentEdit);
         AccountActivityFragment fragment = (AccountActivityFragment) getSupportFragmentManager().findFragmentById(R.id.fragmentEdit);
-        fragment.save();
-        finish();
+        if (fragment.save()) {
+            finish();
+        }
     }
 
     @Override

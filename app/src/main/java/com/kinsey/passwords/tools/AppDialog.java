@@ -21,6 +21,7 @@ public class AppDialog extends DialogFragment {
     public static final String DIALOG_ID = "id";
     public static final String DIALOG_TYPE = "type";
     public static final String DIALOG_MESSAGE = "message";
+    public static final String DIALOG_SUB_MESSAGE = "sub-message";
     public static final String DIALOG_ACCOUNT_ID = "acct_id";
     public static final String DIALOG_POSITIVE_RID = "positive_rid";
     public static final String DIALOG_NEGATIVE_RID = "negative_rid";
@@ -32,6 +33,7 @@ public class AppDialog extends DialogFragment {
     public static final int DIALOG_ID_CONFIRM_DELETE_ACCOUNT = 1;
     public static final int DIALOG_ID_REQUEST_GEN_PASSWORD_LENGTH = 2;
     public static final int DIALOG_ID_ACCOUNT_ACTIONS_LIST = 3;
+    public static final int DIALOG_ID_ASK_IF_NEED_DICTIONARY_REBUILD = 4;
 
     private EditText mEditText;
 
@@ -103,21 +105,20 @@ public class AppDialog extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        Log.d(TAG, "onCreateDialog: starts");
+//        Log.d(TAG, "onCreateDialog: starts");
 
-        String message = getArguments().getString("message");
+//        String message = getArguments().getString("message");
 
-        Log.d(TAG, "onCreateDialog: message " + message);
+//        Log.d(TAG, "onCreateDialog: message " + message);
 //        mEditText.setText(message);
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
-        builder.setTitle(message);
 
         final Bundle arguments = getArguments();
         final int dialogId;
         final int dialogType;
         final int accountId;
         String messageString;
+        String subMessageString;
         int positiveStringId;
         int negativeStringId;
 
@@ -125,6 +126,7 @@ public class AppDialog extends DialogFragment {
             dialogId = arguments.getInt(DIALOG_ID);
             dialogType = arguments.getInt(DIALOG_TYPE);
             messageString = arguments.getString(DIALOG_MESSAGE);
+            subMessageString = arguments.getString(DIALOG_SUB_MESSAGE);
             accountId = arguments.getInt(DIALOG_ACCOUNT_ID);
 
             if (dialogId == 0 || dialogType == 0 || messageString == null) {
@@ -137,8 +139,11 @@ public class AppDialog extends DialogFragment {
 
 //        Log.d(TAG, "onCreateDialog: posString " + positiveStringId);
 //        Log.d(TAG, "onCreateDialog: negString " + negativeStringId);
+
+
         switch (dialogType) {
             case DIALOG_YES_NO: {
+                builder.setTitle(messageString);
                 positiveStringId = arguments.getInt(DIALOG_POSITIVE_RID);
                 if (positiveStringId == 0) {
                     positiveStringId = R.string.ok;
@@ -148,7 +153,7 @@ public class AppDialog extends DialogFragment {
                     negativeStringId = R.string.cancel;
                 }
 
-                builder.setMessage(messageString)
+                builder.setMessage(subMessageString)
                         .setPositiveButton(positiveStringId, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int which) {
@@ -202,7 +207,7 @@ public class AppDialog extends DialogFragment {
 
     @Override
     public void onAttach(Context context) {
-        Log.d(TAG, "onAttach: Entering onAttach, activity is " + context.toString());
+//        Log.d(TAG, "onAttach: Entering onAttach, activity is " + context.toString());
         super.onAttach(context);
 
         // Activities containing this fragment must implement its callbacks.
@@ -215,7 +220,7 @@ public class AppDialog extends DialogFragment {
 
     @Override
     public void onDetach() {
-        Log.d(TAG, "onDetach: Entering...");
+//        Log.d(TAG, "onDetach: Entering...");
         super.onDetach();
 
         // Reset the active callbacks interface, because we don't have an activity any longer.
@@ -224,7 +229,7 @@ public class AppDialog extends DialogFragment {
 
     @Override
     public void onCancel(DialogInterface dialog) {
-        Log.d(TAG, "onCancel: called");
+//        Log.d(TAG, "onCancel: called");
 //        super.onCancel(dialog);
         if (mDialogEvents != null) {
             int dialogId = getArguments().getInt(DIALOG_ID);
@@ -234,7 +239,7 @@ public class AppDialog extends DialogFragment {
 
     @Override
     public void onDismiss(DialogInterface dialog) {
-        Log.d(TAG, "onDismiss: called");
+//        Log.d(TAG, "onDismiss: called");
         super.onDismiss(dialog);
     }
 }

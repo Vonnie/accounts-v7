@@ -72,8 +72,10 @@ public class SearchListActivityFragment extends Fragment
     }
 
     private Cursor getAccount(int accountId) {
+        Log.d(TAG, "getAccount: " + AccountsContract.buildIdUri(accountId));
         return getActivity().getContentResolver().query(
-                AccountsContract.buildIdUri(accountId), null, null, null, null);
+                AccountsContract.buildIdUri(accountId),
+                null, null, null, null);
     }
 
     @Override

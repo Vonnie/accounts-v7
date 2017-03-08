@@ -111,6 +111,13 @@ public class AccountsContract {
             }
         }
 
+        if (cursor.getColumnIndex(Columns.ACTVY_DATE_COL) != -1) {
+            if (cursor.isNull(cursor.getColumnIndex(Columns.ACTVY_DATE_COL))) {
+            } else {
+                account.setActvyLong(cursor.getLong(cursor.getColumnIndex(Columns.ACTVY_DATE_COL)));
+            }
+        }
+
         if (cursor.getColumnIndex(Columns.REF_FROM_COL) != -1) {
             if (cursor.isNull(cursor.getColumnIndex(AccountsContract.Columns.REF_FROM_COL))) {
             } else {

@@ -11,6 +11,14 @@
     tools:showIn="@layout/activity_account">
 
 
+    <EditText
+        android:id="@+id/acc_corp_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/accedit_corp_name_hint"
+        android:inputType="textCapWords|textNoSuggestions" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -22,14 +30,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical" >
-
-            <EditText
-                android:id="@+id/acc_corp_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="@string/accedit_corp_name_hint"
-                android:inputType="textCapWords|textNoSuggestions" />
 
             <EditText
                 android:id="@+id/acc_user_name"
@@ -76,7 +76,7 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:hint="@string/accedit_seq_hint"
-                android:inputType="textPersonName" />
+                android:inputType="number" />
 
             <EditText
                 android:id="@+id/acc_ref_from"
@@ -108,6 +108,11 @@
 
             <TextView
                 android:id="@+id/acc_account_id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/acc_actvy_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
