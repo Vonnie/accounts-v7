@@ -56,7 +56,7 @@ public class CursorRecyclerViewAdapter extends RecyclerView.Adapter<CursorRecycl
 //            Log.d(TAG, "onBindViewHolder: mCursor count " + mCursor.getCount());
 //        }
         if ((mCursor == null) || (mCursor.getCount() == 0)) {
-            Log.d(TAG, "onBindViewHolder: providing instructions");
+//            Log.d(TAG, "onBindViewHolder: providing instructions");
             holder.password.setText(R.string.generate_passwords_instruction);
             holder.upButton.setVisibility(View.GONE);
             holder.downButton.setVisibility(View.GONE);

@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -89,7 +88,7 @@ public class SearchActivityFragment extends Fragment
 
     @Override
     public void onAttach(Context context) {
-        Log.d(TAG, "onAttach: starts");
+//        Log.d(TAG, "onAttach: starts");
         super.onAttach(context);
 
         // Activies containing this fragment must implement it's callbacks
@@ -103,7 +102,7 @@ public class SearchActivityFragment extends Fragment
 
     @Override
     public void onDetach() {
-        Log.d(TAG, "onDetach: starts");
+//        Log.d(TAG, "onDetach: starts");
         super.onDetach();
         mActionListener = null;
     }

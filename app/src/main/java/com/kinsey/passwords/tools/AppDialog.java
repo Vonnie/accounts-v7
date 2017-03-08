@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.util.Log;
 import android.widget.EditText;
 
 import com.kinsey.passwords.R;
@@ -180,7 +179,7 @@ public class AppDialog extends DialogFragment {
                                 new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int which) {
-                                        Log.d(TAG, "onClick: which " + which);
+//                                        Log.d(TAG, "onClick: which " + which);
                                         mDialogEvents.onActionRequestDialogResult(dialogId, arguments, which);
                                     }
                                 });
@@ -192,7 +191,7 @@ public class AppDialog extends DialogFragment {
                                 new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int which) {
-                                        Log.d(TAG, "onClick: which " + which);
+//                                        Log.d(TAG, "onClick: which " + which);
                                         mDialogEvents.onActionRequestDialogResult(dialogId, arguments, which);
                                     }
                                 });

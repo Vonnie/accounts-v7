@@ -150,7 +150,7 @@ public class SearchActivity extends AppCompatActivity
             @Override
             public boolean onSuggestionClick(int position) {
 //                Log.d(TAG, "onSuggestionClick: position " + position);
-                showSuggestions();
+//                showSuggestions();
                 int accountId = showAccount(position);
                 showSearches(accountId);
 //                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -199,7 +199,7 @@ public class SearchActivity extends AppCompatActivity
     }
 
     private int showAccount(int position) {
-        Log.d(TAG, "showAccount: pos " + position);
+//        Log.d(TAG, "showAccount: pos " + position);
         mSearchView.getSuggestionsAdapter().getCursor().moveToFirst();
         mSearchView.getSuggestionsAdapter().getCursor().move(position);
 //        Log.d(TAG, "showAccount: " + mSearchView.getSuggestionsAdapter().getCursor().getColumnName(3));
@@ -207,10 +207,10 @@ public class SearchActivity extends AppCompatActivity
 //        Log.d(TAG, "showAccount: " + mSearchView.getSuggestionsAdapter().getCursor().getColumnName(5));
         int dbId = Integer.valueOf(mSearchView.getSuggestionsAdapter().getCursor()
                 .getString(mSearchView.getSuggestionsAdapter().getCursor().getColumnIndex(SearchManager.SUGGEST_COLUMN_INTENT_DATA)));
-        Log.d(TAG, "showAccount: " + dbId);
+//        Log.d(TAG, "showAccount: " + dbId);
         String corpName = mSearchView.getSuggestionsAdapter().getCursor()
                 .getString(mSearchView.getSuggestionsAdapter().getCursor().getColumnIndex(SearchManager.SUGGEST_COLUMN_TEXT_1));
-        Log.d(TAG, "showAccount: corpName " + corpName);
+//        Log.d(TAG, "showAccount: corpName " + corpName);
 
         return dbId;
 

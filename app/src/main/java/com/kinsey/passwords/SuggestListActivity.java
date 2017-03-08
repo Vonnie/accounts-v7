@@ -9,7 +9,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -64,7 +63,7 @@ public class SuggestListActivity extends AppCompatActivity
         ContentValues values = new ContentValues();
 
         int iSeq = getMaxValue(SuggestsContract.Columns.SEQUENCE_COL);
-        Log.d(TAG, "generatePasswords: " + iSeq);
+//        Log.d(TAG, "generatePasswords: " + iSeq);
 //        strUUID = java.util.UUID.randomUUID().toString();
 //        createPassword(++iSeq);
 
@@ -84,7 +83,7 @@ public class SuggestListActivity extends AppCompatActivity
             if (cursor.moveToFirst()) {
                 int iIndex = cursor.getColumnIndex(col);
                 iId = cursor.getInt(iIndex);
-                Log.d(TAG, "getMaxValue: " + iId);
+//                Log.d(TAG, "getMaxValue: " + iId);
             }
             cursor.close();
         }
@@ -110,15 +109,15 @@ public class SuggestListActivity extends AppCompatActivity
     }
 
     List<Suggest> loadPasswords() {
-        Log.d(TAG, "loadPasswords: starts ");
+//        Log.d(TAG, "loadPasswords: starts ");
         Cursor cursor = getContentResolver().query(
                 SuggestsContract.CONTENT_URI, null, null, null, SuggestsContract.Columns.SEQUENCE_COL);
 
         List<Suggest> listSuggests = new ArrayList<Suggest>();
         if (cursor != null) {
             while(cursor.moveToNext()) {
-                Log.d(TAG, "loadPasswords: seq " + cursor.getInt(cursor.getColumnIndex(SuggestsContract.Columns.SEQUENCE_COL))
-                        + ":" + cursor.getString(cursor.getColumnIndex(SuggestsContract.Columns.PASSWORD_COL)));
+//                Log.d(TAG, "loadPasswords: seq " + cursor.getInt(cursor.getColumnIndex(SuggestsContract.Columns.SEQUENCE_COL))
+//                        + ":" + cursor.getString(cursor.getColumnIndex(SuggestsContract.Columns.PASSWORD_COL)));
                 Suggest item = new Suggest(
                         cursor.getInt(cursor.getColumnIndex(SuggestsContract.Columns._ID_COL)),
                         cursor.getString(cursor.getColumnIndex(SuggestsContract.Columns.PASSWORD_COL)),
@@ -153,7 +152,7 @@ public class SuggestListActivity extends AppCompatActivity
                 nextId = item.getId();
             }
         }
-        Log.d(TAG, "onSuggestDownClick: nextId " + nextId);
+//        Log.d(TAG, "onSuggestDownClick: nextId " + nextId);
 
         int reseq = 0;
         for (int i = 0; i < iLimit; i++) {
@@ -190,7 +189,7 @@ public class SuggestListActivity extends AppCompatActivity
         for (int i = 0; i < iLimit; i++) {
             Suggest item = listSuggests.get(i);
             if (item.getSequence() != item.getNewSequence()) {
-                Log.d(TAG, "onSuggestDownClick: " + item.getSequence() + ":" + item.getNewSequence());
+//                Log.d(TAG, "onSuggestDownClick: " + item.getSequence() + ":" + item.getNewSequence());
                 ContentValues values = new ContentValues();
                 values.put(SuggestsContract.Columns.SEQUENCE_COL, item.getNewSequence());
                 contentResolver.update(SuggestsContract.buildIdUri(item.getId()), values, null, null);
@@ -210,7 +209,7 @@ public class SuggestListActivity extends AppCompatActivity
             }
             priorId = item.getId();
         }
-        Log.d(TAG, "onSuggestDownClick: priorId " + priorId);
+//        Log.d(TAG, "onSuggestDownClick: priorId " + priorId);
 
         int reseq = 0;
         for (int i = 0; i < iLimit; i++) {
@@ -247,7 +246,7 @@ public class SuggestListActivity extends AppCompatActivity
         for (int i = 0; i < iLimit; i++) {
             Suggest item = listSuggests.get(i);
             if (item.getSequence() != item.getNewSequence()) {
-                Log.d(TAG, "onSuggestDownClick: " + item.getSequence() + ":" + item.getNewSequence());
+//                Log.d(TAG, "onSuggestDownClick: " + item.getSequence() + ":" + item.getNewSequence());
                 ContentValues values = new ContentValues();
                 values.put(SuggestsContract.Columns.SEQUENCE_COL, item.getNewSequence());
                 contentResolver.update(SuggestsContract.buildIdUri(item.getId()), values, null, null);

@@ -104,7 +104,7 @@ public class SearchProvider extends SearchRecentSuggestionsProvider {
     @Nullable
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-        Log.d(TAG, "query: starts");
+//        Log.d(TAG, "query: starts");
 //        if (selection != null) {
 //            Log.d(TAG, "query " + selection + selectionArgs[0]);
 //        }
@@ -272,8 +272,8 @@ public class SearchProvider extends SearchRecentSuggestionsProvider {
 
         long rowID = mDictionary.addSuggestion(values);
 
-        Log.d(TAG, "insert: rowId " + rowID);
-        Log.d(TAG, "insert: values " + values);
+//        Log.d(TAG, "insert: rowId " + rowID);
+//        Log.d(TAG, "insert: values " + values);
         // ---if added successfully---
         if (rowID > 0) {
             Uri _uri = ContentUris.withAppendedId(CONTENT_URI, rowID);
@@ -286,8 +286,8 @@ public class SearchProvider extends SearchRecentSuggestionsProvider {
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
-        Log.d(TAG, "delete: uri " + uri);
-        Log.d(TAG, "delete: match " + sURIMatcher.match(uri));
+//        Log.d(TAG, "delete: uri " + uri);
+//        Log.d(TAG, "delete: match " + sURIMatcher.match(uri));
         int count;
 
         switch (sURIMatcher.match(uri)) {

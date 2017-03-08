@@ -22,7 +22,7 @@ public class SuggestDatabase extends SQLiteOpenHelper {
 
     private SuggestDatabase(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        Log.d(TAG, "SuggestDatabase: constructor");
+//        Log.d(TAG, "SuggestDatabase: constructor");
     }
 
     /**
@@ -32,7 +32,7 @@ public class SuggestDatabase extends SQLiteOpenHelper {
      */
     public static SuggestDatabase getInstance(Context context) {
         if (instance == null) {
-            Log.d(TAG, "getInstance: creating new instance");
+//            Log.d(TAG, "getInstance: creating new instance");
             instance = new SuggestDatabase(context);
         }
         return instance;
@@ -59,7 +59,7 @@ public class SuggestDatabase extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
-        Log.d(TAG, "onUpgrade: starts");
+//        Log.d(TAG, "onUpgrade: starts");
         switch (oldVersion) {
             case 1:
                 // upgrade logic from version

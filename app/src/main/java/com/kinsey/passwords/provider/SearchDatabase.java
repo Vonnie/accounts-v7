@@ -119,9 +119,9 @@ public class SearchDatabase {
         String selection = SearchManager.SUGGEST_COLUMN_TEXT_1 + " MATCH ? ";
         String[] selectionArgs = new String[] {query+"*"};
 
-        Log.d(TAG, "getWordMatches: selection " + selection);
-        Log.d(TAG, "getWordMatches: selectionArgs " + selectionArgs);
-        Log.d(TAG, "getWordMatches: columns " + columns);
+//        Log.d(TAG, "getWordMatches: selection " + selection);
+//        Log.d(TAG, "getWordMatches: selectionArgs " + selectionArgs);
+//        Log.d(TAG, "getWordMatches: columns " + columns);
         return query(selection, selectionArgs, columns);
 
         /* This builds a query that looks like:

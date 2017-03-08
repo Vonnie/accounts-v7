@@ -9,7 +9,6 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,12 +33,12 @@ public class SuggestListActivityFragment extends Fragment
     Loader<Cursor> loader;
 
     public SuggestListActivityFragment() {
-        Log.d(TAG, "SuggestListActivityFragment: starts");
+//        Log.d(TAG, "SuggestListActivityFragment: starts");
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        Log.d(TAG, "onActivityCreated: starts loader_id " + LOADER_ID);
+//        Log.d(TAG, "onActivityCreated: starts loader_id " + LOADER_ID);
         super.onActivityCreated(savedInstanceState);
         getLoaderManager().initLoader(LOADER_ID, null, this);
     }
@@ -47,7 +46,7 @@ public class SuggestListActivityFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.d(TAG, "onCreateView: starts");
+//        Log.d(TAG, "onCreateView: starts");
         View view = inflater.inflate(R.layout.fragment_suggest_list, container, false);
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.suggest_items_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -57,7 +56,7 @@ public class SuggestListActivityFragment extends Fragment
         mSuggestAdapter = new CursorRecyclerViewAdapter(null,
                 (CursorRecyclerViewAdapter.OnSuggestClickListener) getActivity());
         recyclerView.setAdapter(mSuggestAdapter);
-        Log.d(TAG, "onCreateView: returning adapter count: " + mSuggestAdapter.getItemCount());
+//        Log.d(TAG, "onCreateView: returning adapter count: " + mSuggestAdapter.getItemCount());
 
         return view;
 

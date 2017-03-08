@@ -10,7 +10,6 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,7 +50,7 @@ public class SearchListActivityFragment extends Fragment
 
         Bundle arguments = getActivity().getIntent().getExtras();
         int accountId = (int) arguments.getSerializable(SearchListActivity.class.getSimpleName());
-        Log.d(TAG, "onCreateView: accountid " + accountId);
+//        Log.d(TAG, "onCreateView: accountid " + accountId);
 
 //        Log.d(TAG, "onCreateView: search adt cursor");
 
@@ -72,7 +71,7 @@ public class SearchListActivityFragment extends Fragment
     }
 
     private Cursor getAccount(int accountId) {
-        Log.d(TAG, "getAccount: " + AccountsContract.buildIdUri(accountId));
+//        Log.d(TAG, "getAccount: " + AccountsContract.buildIdUri(accountId));
         return getActivity().getContentResolver().query(
                 AccountsContract.buildIdUri(accountId),
                 null, null, null, null);
@@ -103,7 +102,7 @@ public class SearchListActivityFragment extends Fragment
 
     @Override
     public void onAttach(Context context) {
-        Log.d(TAG, "onAttach: starts");
+//        Log.d(TAG, "onAttach: starts");
         super.onAttach(context);
 
         // Activies containing this fragment must implement it's callbacks
@@ -117,7 +116,7 @@ public class SearchListActivityFragment extends Fragment
 
     @Override
     public void onDetach() {
-        Log.d(TAG, "onDetach: starts");
+//        Log.d(TAG, "onDetach: starts");
         super.onDetach();
         mActionListener = null;
     }

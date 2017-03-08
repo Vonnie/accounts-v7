@@ -9,7 +9,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -135,7 +134,7 @@ public class AccountActivityFragment extends Fragment {
                                 Calendar c2 = Calendar.getInstance();
                                 c2.set(year, monthOfYear, dayOfMonth);
                                 lngOpenDate = c2.getTimeInMillis();
-                                Log.d(TAG, "onDateChanged: lngOpenDate " + lngOpenDate);
+//                                Log.d(TAG, "onDateChanged: lngOpenDate " + lngOpenDate);
                             }
                         });
 

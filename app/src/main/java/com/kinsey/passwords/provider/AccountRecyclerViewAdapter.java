@@ -62,7 +62,7 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
 //            Log.d(TAG, "onBindViewHolder: mCursor count " + mCursor.getCount());
 //        }
         if ((mCursor == null) || (mCursor.getCount() == 0)) {
-            Log.d(TAG, "onBindViewHolder: no accts");
+//            Log.d(TAG, "onBindViewHolder: no accts");
             holder.corp_name.setText(R.string.no_account_items);
             holder.user_name.setText("Click Info button to add accounts");
             holder.open_date.setText("");
@@ -147,7 +147,7 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
                     switch (view.getId()) {
                         case R.id.srli_acct_edit:
                             if (mListener != null) {
-                                Log.d(TAG, "onClick: account " + account);
+//                                Log.d(TAG, "onClick: account " + account);
                                 mListener.onAccountEditClick(account);
                             }
                             break;
@@ -159,7 +159,7 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
                         default:
                             Log.d(TAG, "onClick: found unexpected button id");
                     }
-                    Log.d(TAG, "onClick: button with id " + view.getId() + " clicked");
+//                    Log.d(TAG, "onClick: button with id " + view.getId() + " clicked");
 //                    Log.d(TAG, "onClick: task name is " + task.getName());
                 }
             };

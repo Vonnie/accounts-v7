@@ -31,7 +31,7 @@ public class AccountDatabase extends SQLiteOpenHelper {
      */
     public static AccountDatabase getInstance(Context context) {
         if (instance == null) {
-            Log.d(TAG, "getInstance: creating new instance");
+//            Log.d(TAG, "getInstance: creating new instance");
             instance = new AccountDatabase(context);
         }
         return instance;
@@ -73,7 +73,7 @@ public class AccountDatabase extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
-        Log.d(TAG, "onUpgrade: starts");
+//        Log.d(TAG, "onUpgrade: starts");
         switch (oldVersion) {
             case 1:
                 // upgrade logic from version

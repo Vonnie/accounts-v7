@@ -24,13 +24,13 @@ public class AccountSuggestsLoaderCallbacks implements LoaderManager.LoaderCallb
     Context mContext;
 
     public AccountSuggestsLoaderCallbacks(Context context) {
-        Log.d(TAG, "AccountsLoaderCallbacks: starts");
+//        Log.d(TAG, "AccountsLoaderCallbacks: starts");
         mContext = context;
     }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Log.d(TAG, "onCreateLoader: starts id " + id);
+//        Log.d(TAG, "onCreateLoader: starts id " + id);
         return new CursorLoader(
                 mContext,
                 AccountsContract.CONTENT_URI, null, null, null,
@@ -39,7 +39,7 @@ public class AccountSuggestsLoaderCallbacks implements LoaderManager.LoaderCallb
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        Log.d(TAG, "onLoadFinished: starts data count " + data.getCount());
+//        Log.d(TAG, "onLoadFinished: starts data count " + data.getCount());
         try {
 //            SearchesContract.listSearches.clear();
             data.moveToFirst();
@@ -57,7 +57,7 @@ public class AccountSuggestsLoaderCallbacks implements LoaderManager.LoaderCallb
                     null, null, selectionArgs, null);
 
 
-            Log.d(TAG, "onLoadFinished: dictCount " + dict.getCount());
+//            Log.d(TAG, "onLoadFinished: dictCount " + dict.getCount());
 
         } catch (Exception e) {
             Log.e(TAG, "onLoadFinished() error: " + e.getMessage());
@@ -72,9 +72,9 @@ public class AccountSuggestsLoaderCallbacks implements LoaderManager.LoaderCallb
                 data.getString(data.getColumnIndex(AccountsContract.Columns.CORP_NAME_COL)));
         cvs.put(SearchManager.SUGGEST_COLUMN_TEXT_2,
                 data.getString(data.getColumnIndex(AccountsContract.Columns.USER_NAME_COL)));
-        Log.d(TAG, "loadAccountDictionary: dictUserName "
-                + data.getString(data.getColumnIndex(AccountsContract.Columns.CORP_NAME_COL))
-        );
+//        Log.d(TAG, "loadAccountDictionary: dictUserName "
+//                + data.getString(data.getColumnIndex(AccountsContract.Columns.CORP_NAME_COL))
+//        );
         if (data.getColumnIndex(AccountsContract.Columns.CORP_WEBSITE_COL) == -1) {
             cvs.put(SearchManager.SUGGEST_COLUMN_TEXT_2_URL, "");
         } else {
@@ -88,10 +88,10 @@ public class AccountSuggestsLoaderCallbacks implements LoaderManager.LoaderCallb
                 String.valueOf(data.getInt(data.getColumnIndex(AccountsContract.Columns._ID_COL))));
         cvs.put(SearchManager.SUGGEST_COLUMN_QUERY, "");
 
-        Log.d(TAG, "loadAccountDictionary: id "
-                + data.getString(data.getColumnIndex(AccountsContract.Columns._ID_COL)));
+//        Log.d(TAG, "loadAccountDictionary: id "
+//                + data.getString(data.getColumnIndex(AccountsContract.Columns._ID_COL)));
 //            Log.v(TAG, "accSuggest " + item.getCorpName() + ":" + item.getPassportId());
-        Log.d(TAG, "loadAccountDictionary: cvs " + cvs);
+//        Log.d(TAG, "loadAccountDictionary: cvs " + cvs);
         mContext.getContentResolver().insert(
                 SearchesContract.CONTENT_URI, cvs);
 

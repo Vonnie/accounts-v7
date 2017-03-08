@@ -2,7 +2,6 @@ package com.kinsey.passwords;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +30,7 @@ public class WebViewActivityFragment extends Fragment {
 
         webAddr = (String) arguments.getSerializable(WebViewActivity.class.getSimpleName());
 
-        Log.d(TAG, "onCreateView: webAddr " + webAddr);
+//        Log.d(TAG, "onCreateView: webAddr " + webAddr);
         if (webAddr == null) {
             return view;
         }

@@ -40,12 +40,12 @@ public class AccountListActivityFragment extends Fragment
     private FragmentMsgMode mMsgMode = FragmentMsgMode.ADD;
 
     public AccountListActivityFragment() {
-        Log.d(TAG, "AccountListActivityFragment: starts");
+//        Log.d(TAG, "AccountListActivityFragment: starts");
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        Log.d(TAG, "onActivityCreated: starts loader_id " + LOADER_ID);
+//        Log.d(TAG, "onActivityCreated: starts loader_id " + LOADER_ID);
         super.onActivityCreated(savedInstanceState);
         getLoaderManager().initLoader(LOADER_ID, null, this);
     }
@@ -53,7 +53,7 @@ public class AccountListActivityFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.d(TAG, "onCreateView: starts");
+//        Log.d(TAG, "onCreateView: starts");
         View view = inflater.inflate(R.layout.fragment_account_list, container, false);
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.account_items_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -62,19 +62,19 @@ public class AccountListActivityFragment extends Fragment
         Bundle arguments = getActivity().getIntent().getExtras();
 
         mSortorder = (int) arguments.getSerializable(Account.class.getSimpleName());
-        Log.d(TAG, "onCreateView: mSortorder " + mSortorder);
+//        Log.d(TAG, "onCreateView: mSortorder " + mSortorder);
         mAccountAdapter = new AccountRecyclerViewAdapter(mSortorder, null,
                 (AccountRecyclerViewAdapter.OnAccountClickListener) getActivity());
         recyclerView.setAdapter(mAccountAdapter);
-        Log.d(TAG, "onCreateView: returning adapter count: " + mAccountAdapter.getItemCount());
+//        Log.d(TAG, "onCreateView: returning adapter count: " + mAccountAdapter.getItemCount());
 
         return view;
     }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Log.d(TAG, "onCreateLoader: starts");
-        Log.d(TAG, "onCreateLoader: id " + String.valueOf(id));
+//        Log.d(TAG, "onCreateLoader: starts");
+//        Log.d(TAG, "onCreateLoader: id " + String.valueOf(id));
 
         String[] projectionAcct =
                 {AccountsContract.Columns._ID_COL,
@@ -110,13 +110,13 @@ public class AccountListActivityFragment extends Fragment
                 null,
                 null,
                 sortOrder);
-        Log.d(TAG, "onCreateLoader: cursor " + cursor.toString());
+//        Log.d(TAG, "onCreateLoader: cursor " + cursor.toString());
         return cursor;
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        Log.d(TAG, "onLoadFinished: starts");
+//        Log.d(TAG, "onLoadFinished: starts");
         this.loader = loader;
         int count = 0;
         mAccountAdapter.swapCursor(data);
@@ -126,12 +126,12 @@ public class AccountListActivityFragment extends Fragment
         } else {
             twCurrentTitle.setText("Accounts");
         }
-        Log.d(TAG, "onLoadFinished: count is " + count);
+//        Log.d(TAG, "onLoadFinished: count is " + count);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        Log.d(TAG, "onLoaderReset: starts");
+//        Log.d(TAG, "onLoaderReset: starts");
         mAccountAdapter.swapCursor(null);
     }
 }

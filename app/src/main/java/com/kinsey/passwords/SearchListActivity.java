@@ -3,7 +3,6 @@ package com.kinsey.passwords;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.widget.SearchView;
 
 import com.kinsey.passwords.items.Account;
@@ -18,7 +17,7 @@ public class SearchListActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.d(TAG, "onCreate: starts");
+//        Log.d(TAG, "onCreate: starts");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_list);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -46,7 +45,7 @@ public class SearchListActivity extends AppCompatActivity
 //        });
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
-        Log.d(TAG, "onCreate: ends");
+//        Log.d(TAG, "onCreate: ends");
     }
 
 
