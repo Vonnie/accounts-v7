@@ -608,10 +608,12 @@ public class AccountListActivity extends AppCompatActivity
             case 7:
                 returnIntent = new Intent();
                 returnIntent.putExtra("which", which);
+                Log.d(TAG, "onActionRequestDialogResult: which " + which);
                 setResult(Activity.RESULT_OK, returnIntent);
                 finish();
                 break;
             default:
+                Log.d(TAG, "onActionRequestDialogResult: default " + which);
         }
     }
 

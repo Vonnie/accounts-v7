@@ -52,9 +52,12 @@
     <string name="searchable_hint">Enter corporation name</string>
     <string name="home_message_title">Organize Accounts, Search Accounts, Suggested Passwords</string>
     <string name="home_message_text">
-        Keeping passwords electronically, even if encrypted, may leave you open to have your credentials stolen.
+        This app tracks your accounts, has sorted lists, search of accounts, suggests 8 or 10 character passwords.
+        \n\nKeeping passwords electronically, even if encrypted, may leave you open to have your credentials stolen.
         <em>Important:</em> Having an electronic copy (from a file or the app&quot;s database) with the credentials of company, user name, and password would highly exposed your accounts to hackers.
         \nFor this security reason, the passwords are not saved on a file or database. This app keeps account information excluding passwords. Your action is to manually tie together using the account id from this app to the written list of account id and password value.
+        \nTip: Use the export as the backup of your app data. If the databases is uninstalled, import of the previously exported file. Share exported file to email or Dropbox.
+        \nPasswords are generated with a capital letter, a number, and all letters are either from left or right-hand keyboard keys.
         \nUse the menu to add an account, see a account list, search accounts, generate passwords.
     </string>
     <string name="menu_search">Search Accounts</string>

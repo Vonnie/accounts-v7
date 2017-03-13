@@ -182,7 +182,17 @@ public class AppDialog extends DialogFragment {
 //                                        Log.d(TAG, "onClick: which " + which);
                                         mDialogEvents.onActionRequestDialogResult(dialogId, arguments, which);
                                     }
-                                });
+                                })
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int which) {
+                        // callback negative result method
+                        if (mDialogEvents != null) {
+                            mDialogEvents.onNegativeDialogResult(dialogId, arguments);
+                        }
+                    }
+                })
+                ;
                 break;
             }
             case DIALOG_ACCOUNT_FILE_OPTIONS: {
