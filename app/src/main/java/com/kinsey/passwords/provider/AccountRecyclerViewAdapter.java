@@ -119,6 +119,7 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
                 holder.open_date.setText(format_mdy_display.format(account.getOpenLong()));
             }
             holder.seq.setText(String.valueOf(account.getSequence()));
+            holder.acctId.setText("Acct:" + String.valueOf(account.getPassportId()));
             holder.editButton.setVisibility(View.VISIBLE);
             holder.deleteButton.setVisibility(View.VISIBLE);
 
@@ -137,6 +138,8 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
                     holder.seq.setVisibility(View.GONE);
                 }
             }
+
+
 
 
             View.OnClickListener buttonListener = new View.OnClickListener() {
@@ -213,6 +216,7 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
         TextView user_name = null;
         TextView open_date = null;
         TextView seq = null;
+        TextView acctId = null;
         ImageButton editButton = null;
         ImageButton deleteButton = null;
 
@@ -222,9 +226,10 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
 //        Log.d(TAG, "AccountViewHolder: starts");
 
             this.corp_name = (TextView) itemView.findViewById(R.id.tli_corp_name);
-            this.user_name = (TextView) itemView.findViewById(R.id.tli_website);
+            this.user_name = (TextView) itemView.findViewById(R.id.srli_website);
             this.open_date = (TextView) itemView.findViewById(R.id.tli_open_date);
             this.seq = (TextView) itemView.findViewById(R.id.tli_seq);
+            this.acctId = (TextView) itemView.findViewById(R.id.tli_acct_id);
             this.editButton = (ImageButton) itemView.findViewById(R.id.srli_acct_edit);
             this.deleteButton = (ImageButton) itemView.findViewById(R.id.srli_acct_delete);
         }

@@ -105,9 +105,9 @@ public class SearchActivity extends AppCompatActivity
 
                 SearchesContract.cursorSearch = mSearchView.getSuggestionsAdapter().getCursor();
                 mSearchView.clearFocus();
-//                Log.d(TAG, "onQueryTextSubmit: showSearches");
+                Log.d(TAG, "onQueryTextSubmit: showSearches");
 
-//                showSearches(-1);
+                showSearches(-1);
 //                finish();
                 return true;
             }

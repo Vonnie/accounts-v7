@@ -33,6 +33,8 @@ public class AppDialog extends DialogFragment {
     public static final int DIALOG_ID_REQUEST_GEN_PASSWORD_LENGTH = 2;
     public static final int DIALOG_ID_ACCOUNT_ACTIONS_LIST = 3;
     public static final int DIALOG_ID_ASK_IF_NEED_DICTIONARY_REBUILD = 4;
+    public static final int DIALOG_ID_CONFIRM_TO_IMPORT = 5;
+    public static final int DIALOG_ID_CONFIRM_TO_EXPORT = 6;
 
     private EditText mEditText;
 

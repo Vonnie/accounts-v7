@@ -272,7 +272,7 @@ public class AccountActivityFragment extends Fragment {
     }
 
     private int getMaxValue(String col) {
-        int iId = 0;
+        int iId = 1;
         Cursor cursor = getActivity().getContentResolver().query(
                 AccountsContract.CONTENT_MAX_VALUE_URI, null, null, null, col);
         if (cursor != null) {

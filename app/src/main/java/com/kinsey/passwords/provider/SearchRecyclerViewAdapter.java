@@ -4,6 +4,7 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -113,16 +114,24 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
 //                    Log.d(TAG, "onBindViewHolder: email " + cursorAccount.getString(cursorAccount.getColumnIndex(AccountsContract.Columns.USER_EMAIL_COL)));
                     holder.userEmail.setText(cursorAccount.getString(cursorAccount.getColumnIndex(AccountsContract.Columns.USER_EMAIL_COL)));
                 }
-                if (cursorAccount.getColumnIndex(AccountsContract.Columns.NOTE_COL) == -1) {
-                    holder.note.setVisibility(View.GONE);
-                } else {
-                    String note = cursorAccount.getString(cursorAccount.getColumnIndex(AccountsContract.Columns.NOTE_COL));
-                    if (note == null || note.equals("")) {
-                        holder.note.setVisibility(View.GONE);
-                    } else {
-                        holder.note.setText(note);
+
+                Log.d(TAG, "onBindViewHolder: passportId " + cursorAccount.getColumnIndex(AccountsContract.Columns.PASSPORT_ID_COL));
+                if (cursorAccount.getColumnIndex(AccountsContract.Columns.PASSPORT_ID_COL) != -1) {
+                    if (!cursorAccount.isNull(cursorAccount.getColumnIndex(AccountsContract.Columns.PASSPORT_ID_COL))) {
+                        holder.acctId.setText("Acct:" + String.valueOf(cursorAccount.getInt(cursorAccount.getColumnIndex(AccountsContract.Columns.PASSPORT_ID_COL))));
                     }
                 }
+
+//                if (cursorAccount.getColumnIndex(AccountsContract.Columns.NOTE_COL) == -1) {
+//                    holder.note.setVisibility(View.GONE);
+//                } else {
+//                    String note = cursorAccount.getString(cursorAccount.getColumnIndex(AccountsContract.Columns.NOTE_COL));
+//                    if (note == null || note.equals("")) {
+//                        holder.note.setVisibility(View.GONE);
+//                    } else {
+//                        holder.note.setText(note);
+//                    }
+//                }
 
             }
 
@@ -207,7 +216,8 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
         TextView website = null;
         TextView userName = null;
         TextView userEmail = null;
-        TextView note = null;
+        TextView acctId = null;
+//        TextView note = null;
 //        TextView open_date = null;
 //        ImageButton editButton = null;
 //        ImageButton deleteButton = null;
@@ -218,10 +228,11 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
 //        Log.d(TAG, "SearchViewHolder: starts");
 
             this.corp_name = (TextView) itemView.findViewById(R.id.tli_corp_name);
-            this.website = (TextView) itemView.findViewById(R.id.tli_website);
+            this.website = (TextView) itemView.findViewById(R.id.srli_website);
             this.userName = (TextView) itemView.findViewById(R.id.srli_user_name);
             this.userEmail = (TextView) itemView.findViewById(R.id.srli_user_email);
-            this.note = (TextView) itemView.findViewById(R.id.srli_note);
+            this.acctId = (TextView) itemView.findViewById(R.id.srli_account_id);
+//            this.note = (TextView) itemView.findViewById(R.id.srli_note);
 //            this.editButton = (ImageButton) itemView.findViewById(R.id.srli_acct_edit);
 //            this.deleteButton = (ImageButton) itemView.findViewById(R.id.srli_acct_delete);
         }

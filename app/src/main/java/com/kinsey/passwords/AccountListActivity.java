@@ -541,17 +541,26 @@ public class AccountListActivity extends AppCompatActivity
 
     @Override
     public void onPositiveDialogResult(int dialogId, Bundle args) {
-        if (dialogId == AppDialog.DIALOG_ID_CONFIRM_DELETE_ACCOUNT) {
+        switch (dialogId) {
+            case AppDialog.DIALOG_ID_CONFIRM_DELETE_ACCOUNT:
 //            Log.d(TAG, "onPositiveDialogResult: confirmed to delete");
 //            Log.d(TAG, "onPositiveDialogResult: acctid " + args.getInt(AppDialog.DIALOG_ACCOUNT_ID));
-            getContentResolver().delete(AccountsContract.buildIdUri(args.getInt(AppDialog.DIALOG_ACCOUNT_ID)), null, null);
-        } else {
-            if (dialogId == AppDialog.DIALOG_ID_ASK_IF_NEED_DICTIONARY_REBUILD) {
+                getContentResolver().delete(AccountsContract.buildIdUri(args.getInt(AppDialog.DIALOG_ACCOUNT_ID)), null, null);
+                break;
+            case AppDialog.DIALOG_ID_ASK_IF_NEED_DICTIONARY_REBUILD:
 //                Log.d(TAG, "onPositiveDialogResult: rebuild req");
                 loadSearchDB();
+                break;
+            case AppDialog.DIALOG_ID_CONFIRM_TO_IMPORT:
+                ImportAccountDB();
+                break;
+            case AppDialog.DIALOG_ID_CONFIRM_TO_EXPORT:
+                ExportAccountDB();
+                break;
+            default:
+                break;
             }
         }
-    }
 
     @Override
     public void onNegativeDialogResult(int dialogId, Bundle args) {
@@ -578,6 +587,32 @@ public class AccountListActivity extends AppCompatActivity
 
     }
 
+    private void confirmImport() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        AppDialog newFragment = AppDialog.newInstance();
+        Bundle args = new Bundle();
+        args.putInt(AppDialog.DIALOG_ID, AppDialog.DIALOG_ID_CONFIRM_TO_IMPORT);
+        args.putInt(AppDialog.DIALOG_TYPE, AppDialog.DIALOG_YES_NO);
+        args.putString(AppDialog.DIALOG_MESSAGE, "Confirmation");
+        args.putString(AppDialog.DIALOG_SUB_MESSAGE, "Import?");
+
+        newFragment.setArguments(args);
+        newFragment.show(fragmentManager, "dialog");
+    }
+
+    private void confirmExport() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        AppDialog newFragment = AppDialog.newInstance();
+        Bundle args = new Bundle();
+        args.putInt(AppDialog.DIALOG_ID, AppDialog.DIALOG_ID_CONFIRM_TO_EXPORT);
+        args.putInt(AppDialog.DIALOG_TYPE, AppDialog.DIALOG_YES_NO);
+        args.putString(AppDialog.DIALOG_MESSAGE, "Confirmation");
+        args.putString(AppDialog.DIALOG_SUB_MESSAGE, "Export?");
+
+        newFragment.setArguments(args);
+        newFragment.show(fragmentManager, "dialog");
+    }
+
     @Override
     public void onActionRequestDialogResult(int dialogId, Bundle args, int which) {
 //        Log.d(TAG, "onActionRequestDialogResult: starts");
@@ -597,10 +632,10 @@ public class AccountListActivity extends AppCompatActivity
                 finish();
                 break;
             case 4:
-                ExportAccountDB();
+                confirmExport();
                 break;
             case 5:
-                ImportAccountDB();
+                confirmImport();
                 break;
             case 6:
                 viewAccountsFile();

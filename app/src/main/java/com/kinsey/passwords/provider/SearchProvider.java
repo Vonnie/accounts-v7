@@ -151,7 +151,7 @@ public class SearchProvider extends SearchRecentSuggestionsProvider {
                     SearchManager.SUGGEST_COLUMN_QUERY,
                     SearchManager.SUGGEST_COLUMN_FLAGS};
 
-            Log.v(TAG, "getSuggestions " + query);
+//            Log.v(TAG, "getSuggestions " + query);
 
             return mDictionary.getWordMatches(query, columns);
         } catch (Exception e) {
