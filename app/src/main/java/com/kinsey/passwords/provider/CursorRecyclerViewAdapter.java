@@ -96,7 +96,7 @@ public class CursorRecyclerViewAdapter extends RecyclerView.Adapter<CursorRecycl
                                 mListener.onSuggestDownClick(suggest);
                             }
                             break;
-                        case R.id.srli_acct_delete:
+                        case R.id.acc_delete:
                             if (mListener != null) {
                                 mListener.onSuggestDeleteClick(suggest);
                             }
@@ -168,7 +168,7 @@ public class CursorRecyclerViewAdapter extends RecyclerView.Adapter<CursorRecycl
             this.password = (TextView) itemView.findViewById(R.id.tli_password);
             this.upButton = (ImageButton) itemView.findViewById(R.id.srli_acct_edit);
             this.downButton = (ImageButton) itemView.findViewById(R.id.tli_suggest_down);
-            this.deleteButton = (ImageButton) itemView.findViewById(R.id.srli_acct_delete);
+            this.deleteButton = (ImageButton) itemView.findViewById(R.id.acc_delete);
         }
     }
 }

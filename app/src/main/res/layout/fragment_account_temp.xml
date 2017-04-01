@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content_account"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    app:layout_scrollFlags="scroll"
+    tools:context="com.kinsey.passwords.AccountActivityFragment"
+    tools:showIn="@layout/activity_account">
+
+
+    <EditText
+        android:id="@+id/acc_corp_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/accedit_corp_name_hint"
+        android:inputType="textCapWords|textNoSuggestions"
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintBottom_creator="1"
+        app:layout_constraintBottom_toTopOf="@+id/acc_user_name"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:layout_constraintLeft_creator="1"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+
+    <EditText
+        android:id="@+id/acc_user_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/accedit_user_name_hint"
+        android:inputType="textNoSuggestions"
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintBottom_creator="1"
+        app:layout_constraintBottom_toTopOf="@+id/acc_user_email"
+        app:layout_constraintRight_toRightOf="@+id/acc_corp_name"
+        tools:layout_constraintLeft_creator="1"
+        android:layout_marginBottom="1dp"
+        app:layout_constraintLeft_toLeftOf="@+id/acc_corp_name" />
+
+    <EditText
+        android:id="@+id/acc_user_email"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/accedit_user_email_hint"
+        android:inputType="textEmailAddress"
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintBottom_creator="1"
+        app:layout_constraintBottom_toTopOf="@+id/acc_corp_website"
+        app:layout_constraintRight_toRightOf="@+id/acc_user_name"
+        tools:layout_constraintLeft_creator="1"
+        app:layout_constraintLeft_toLeftOf="@+id/acc_user_name" />
+
+    <EditText
+        android:id="@+id/acc_corp_website"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/accedit_corp_website_hint"
+        android:inputType="textNoSuggestions"
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintBottom_creator="1"
+        app:layout_constraintBottom_toTopOf="@+id/acc_notes"
+        app:layout_constraintRight_toRightOf="@+id/acc_user_email"
+        tools:layout_constraintLeft_creator="1"
+        android:layout_marginBottom="53dp"
+        app:layout_constraintLeft_toLeftOf="@+id/acc_user_email" />
+
+    <ImageButton
+        android:id="@+id/acc_img_website"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@android:drawable/ic_menu_view"
+        tools:layout_constraintBottom_creator="1"
+        app:layout_constraintBottom_toTopOf="@+id/acc_notes"
+        tools:layout_constraintLeft_creator="1"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+    <EditText
+        android:id="@+id/acc_notes"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/accedit_notes_hint"
+        android:inputType="textMultiLine"
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintBottom_creator="1"
+        app:layout_constraintBottom_toTopOf="@+id/acc_seq"
+        app:layout_constraintRight_toRightOf="@+id/acc_corp_website"
+        tools:layout_constraintLeft_creator="1"
+        app:layout_constraintLeft_toLeftOf="@+id/acc_corp_website" />
+
+    <EditText
+        android:id="@+id/acc_seq"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/accedit_seq_hint"
+        android:inputType="number"
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintBottom_creator="1"
+        app:layout_constraintBottom_toTopOf="@+id/acc_ref_from"
+        app:layout_constraintRight_toRightOf="@+id/acc_notes"
+        tools:layout_constraintLeft_creator="1"
+        android:layout_marginBottom="1dp"
+        app:layout_constraintLeft_toLeftOf="@+id/acc_notes" />
+
+    <EditText
+        android:id="@+id/acc_ref_from"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/accedit_ref_from_hint"
+        android:inputType="number"
+        android:labelFor="@id/acc_ref_from_label"
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintBottom_creator="1"
+        app:layout_constraintBottom_toTopOf="@+id/acc_ref_to"
+        app:layout_constraintRight_toRightOf="@+id/acc_seq"
+        tools:layout_constraintLeft_creator="1"
+        app:layout_constraintLeft_toLeftOf="@+id/acc_seq" />
+
+    <EditText
+        android:id="@+id/acc_ref_to"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/accedit_ref_to_hint"
+        android:inputType="number"
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintBottom_creator="1"
+        app:layout_constraintBottom_toTopOf="@+id/acc_open_date_label"
+        app:layout_constraintRight_toRightOf="@+id/acc_ref_from"
+        tools:layout_constraintLeft_creator="1"
+        android:layout_marginBottom="1dp"
+        app:layout_constraintLeft_toLeftOf="@+id/acc_ref_from" />
+
+    <TextView
+        android:id="@+id/acc_open_date_label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/accedit_date_open_label"
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintBottom_creator="1"
+        app:layout_constraintBottom_toTopOf="@+id/acc_datePicker"
+        app:layout_constraintRight_toRightOf="@+id/acc_ref_to"
+        tools:layout_constraintLeft_creator="1"
+        app:layout_constraintLeft_toLeftOf="@+id/acc_ref_to" />
+
+    <DatePicker
+        android:id="@+id/acc_datePicker"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintBottom_creator="1"
+        app:layout_constraintBottom_toTopOf="@+id/acc_account_id"
+        app:layout_constraintRight_toRightOf="@+id/acc_open_date_label"
+        tools:layout_constraintLeft_creator="1"
+        app:layout_constraintLeft_toLeftOf="@+id/acc_open_date_label" />
+
+    <TextView
+        android:id="@+id/acc_account_id"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintBottom_creator="1"
+        app:layout_constraintBottom_toTopOf="@+id/acc_actvy_date"
+        app:layout_constraintRight_toRightOf="@+id/acc_datePicker"
+        tools:layout_constraintLeft_creator="1"
+        app:layout_constraintLeft_toLeftOf="@+id/acc_datePicker" />
+
+    <TextView
+        android:id="@+id/acc_actvy_date"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        tools:layout_constraintTop_creator="1"
+        tools:layout_constraintRight_creator="1"
+        app:layout_constraintRight_toRightOf="@+id/acc_account_id"
+        app:layout_constraintTop_toBottomOf="parent"
+        tools:layout_constraintLeft_creator="1"
+        app:layout_constraintLeft_toLeftOf="@+id/acc_account_id" />
+
+
+</android.support.constraint.ConstraintLayout>

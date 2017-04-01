@@ -56,7 +56,7 @@
             app:srcCompat="@android:drawable/ic_menu_edit"/>
 
         <ImageButton
-            android:id="@+id/srli_acct_delete"
+            android:id="@+id/acc_delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"

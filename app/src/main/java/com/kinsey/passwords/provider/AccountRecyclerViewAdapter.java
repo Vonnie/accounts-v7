@@ -67,7 +67,7 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
             holder.user_name.setText("Click Info button to add accounts");
             holder.open_date.setText("");
             holder.editButton.setVisibility(View.GONE);
-            holder.deleteButton.setVisibility(View.GONE);
+//            holder.deleteButton.setVisibility(View.GONE);
         } else {
             if (!mCursor.moveToPosition(position)) {
                 throw new IllegalStateException("Couldn't move cursor to position " + position);
@@ -118,24 +118,24 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
                 //            Date dte = new Date(item.getActvyLong());
                 holder.open_date.setText(format_mdy_display.format(account.getOpenLong()));
             }
-            holder.seq.setText(String.valueOf(account.getSequence()));
-            holder.acctId.setText("Acct:" + String.valueOf(account.getPassportId()));
+            holder.seq.setText("Seq:" + String.valueOf(account.getSequence()));
+            holder.acctId.setText("AcctId:" + String.valueOf(account.getPassportId()));
             holder.editButton.setVisibility(View.VISIBLE);
-            holder.deleteButton.setVisibility(View.VISIBLE);
+//            holder.deleteButton.setVisibility(View.VISIBLE);
 
             if (mSortorder == AccountsContract.ACCOUNT_LIST_BY_OPEN_DATE) {
-                holder.user_name.setVisibility(View.GONE);
+//                holder.user_name.setVisibility(View.GONE);?
                 holder.open_date.setVisibility(View.VISIBLE);
                 holder.seq.setVisibility(View.GONE);
             } else {
                 if (mSortorder == AccountsContract.ACCOUNT_LIST_BY_SEQUENCE) {
-                    holder.user_name.setVisibility(View.GONE);
-                    holder.open_date.setVisibility(View.GONE);
+//                    holder.user_name.setVisibility(View.GONE);
+//                    holder.open_date.setVisibility(View.GONE);
                     holder.seq.setVisibility(View.VISIBLE);
                 } else {
                     holder.user_name.setVisibility(View.VISIBLE);
-                    holder.open_date.setVisibility(View.GONE);
-                    holder.seq.setVisibility(View.GONE);
+//                    holder.open_date.setVisibility(View.GONE);
+//                    holder.seq.setVisibility(View.GONE);
                 }
             }
 
@@ -154,7 +154,7 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
                                 mListener.onAccountEditClick(account);
                             }
                             break;
-                        case R.id.srli_acct_delete:
+                        case R.id.acc_delete:
                             if (mListener != null) {
                                 mListener.onAccountDeleteClick(account);
                             }
@@ -168,7 +168,7 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
             };
 
             holder.editButton.setOnClickListener(buttonListener);
-            holder.deleteButton.setOnClickListener(buttonListener);
+//            holder.deleteButton.setOnClickListener(buttonListener);
         }
 
     }
@@ -218,7 +218,7 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
         TextView seq = null;
         TextView acctId = null;
         ImageButton editButton = null;
-        ImageButton deleteButton = null;
+//        ImageButton deleteButton = null;
 
 
         public AccountViewHolder(View itemView) {
@@ -226,12 +226,12 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
 //        Log.d(TAG, "AccountViewHolder: starts");
 
             this.corp_name = (TextView) itemView.findViewById(R.id.tli_corp_name);
-            this.user_name = (TextView) itemView.findViewById(R.id.srli_website);
+            this.user_name = (TextView) itemView.findViewById(R.id.srli_user_name);
             this.open_date = (TextView) itemView.findViewById(R.id.tli_open_date);
             this.seq = (TextView) itemView.findViewById(R.id.tli_seq);
             this.acctId = (TextView) itemView.findViewById(R.id.tli_acct_id);
             this.editButton = (ImageButton) itemView.findViewById(R.id.srli_acct_edit);
-            this.deleteButton = (ImageButton) itemView.findViewById(R.id.srli_acct_delete);
+//            this.deleteButton = (ImageButton) itemView.findViewById(R.id.acc_delete);
         }
     }
 }

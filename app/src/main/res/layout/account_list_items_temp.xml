@@ -20,8 +20,9 @@
         android:textColor="?android:attr/textColorPrimary"
         android:textSize="22sp"
         android:textStyle="normal|bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/parent" />
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/srli_user_name"
@@ -29,7 +30,7 @@
         android:layout_height="wrap_content"
 
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="0dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintLeft_toLeftOf="@+id/tli_corp_name"
         app:layout_constraintTop_toBottomOf="@+id/tli_corp_name" />
 
@@ -38,7 +39,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
 
-        android:layout_marginTop="0dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintTop_toBottomOf="@+id/tli_corp_name"
         app:layout_constraintRight_toLeftOf="@+id/srli_acct_edit"
         android:layout_marginRight="8dp" />
@@ -50,7 +51,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="0dp"
         app:layout_constraintLeft_toLeftOf="@+id/srli_user_name"
-        android:layout_marginTop="0dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintTop_toBottomOf="@+id/srli_user_name" />
 
 
@@ -60,17 +61,18 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
         app:layout_constraintLeft_toRightOf="@+id/tli_seq"
-        android:layout_marginTop="0dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintTop_toBottomOf="@+id/tli_open_date" />
 
     <ImageButton
         android:id="@+id/srli_acct_edit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:contentDescription="@string/edit_button_description"
+        app:srcCompat="@android:drawable/ic_menu_edit"
         android:layout_marginRight="0dp"
+        app:layout_constraintRight_toRightOf="@+id/tli_corp_name"
         android:layout_marginTop="0dp"
-        android:contentDescription="@string/edit_acct_btn_hint"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@android:drawable/ic_menu_edit" />
+        app:layout_constraintTop_toBottomOf="@+id/tli_corp_name" />
 
 </android.support.constraint.ConstraintLayout>

@@ -55,7 +55,7 @@
         app:layout_constraintTop_toBottomOf="@+id/srli_user_name" />
 
     <TextView
-        android:id="@+id/srli_website"
+        android:id="@+id/srli_user_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"

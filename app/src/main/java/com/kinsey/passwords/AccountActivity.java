@@ -8,7 +8,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 public class AccountActivity extends AppCompatActivity
-        implements AccountActivityFragment.OnSaveClicked {
+        implements AccountActivityFragment.OnSaveClicked,
+        AccountActivity1Fragment.OnSaveClicked{
     private static final String TAG = "AccountActivity";
 
     @Override
@@ -20,6 +21,18 @@ public class AccountActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+
+
+//        AccountActivity1Fragment fragment = new AccountActivity1Fragment();
+//
+//        getSupportFragmentManager().beginTransaction()
+//                .add(R.id.fragmentEdit, fragment).commit();
+
+
+//        ==============================================================
+
+
+//        fragment.setArguments(getIntent().getExtras());
 
 //        AccountActivityFragment fragment = new AccountActivityFragment();
 //
