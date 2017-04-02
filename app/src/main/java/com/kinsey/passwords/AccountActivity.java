@@ -2,15 +2,24 @@ package com.kinsey.passwords;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
+
+import com.kinsey.passwords.items.Account;
+import com.kinsey.passwords.items.AccountsContract;
+import com.kinsey.passwords.tools.AppDialog;
 
 public class AccountActivity extends AppCompatActivity
-        implements AccountActivityFragment.OnSaveClicked,
-        AccountActivity1Fragment.OnSaveClicked{
+        implements AccountActivityFragment.OnActionListener,
+        AppDialog.DialogEvents,
+        AccountActivity1Fragment.OnSaveClicked {
     private static final String TAG = "AccountActivity";
+
+    private Account account;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +97,9 @@ public class AccountActivity extends AppCompatActivity
             case R.id.menu_save:
                 saveAccount();
                 break;
+            case R.id.menu_delete:
+                deleteAccount();
+                break;
             default:
                 break;
         }
@@ -104,6 +116,28 @@ public class AccountActivity extends AppCompatActivity
         }
     }
 
+    private void deleteAccount() {
+//        Log.d(TAG, "deleteAccount: ");
+        if (account == null) {
+            Toast.makeText(this,
+                    "account not added in order to delete",
+                    Toast.LENGTH_LONG).show();
+            return;
+        }
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        AppDialog newFragment = AppDialog.newInstance();
+        Bundle args = new Bundle();
+        args.putInt(AppDialog.DIALOG_ID, AppDialog.DIALOG_ID_CONFIRM_DELETE_ACCOUNT);
+        args.putInt(AppDialog.DIALOG_TYPE, AppDialog.DIALOG_YES_NO);
+        args.putString(AppDialog.DIALOG_MESSAGE, getString(R.string.deldiag_message));
+        args.putString(AppDialog.DIALOG_SUB_MESSAGE, getString(R.string.deldiag_sub_message, account.getPassportId(), account.getCorpName()));
+        args.putInt(AppDialog.DIALOG_ACCOUNT_ID, account.getId());
+        args.putInt(AppDialog.DIALOG_POSITIVE_RID, R.string.deldiag_positive_caption);
+
+        newFragment.setArguments(args);
+        newFragment.show(fragmentManager, "dialog");
+    }
+
     @Override
     public void onBackPressed() {
         setResult(Activity.RESULT_OK);
@@ -116,5 +150,47 @@ public class AccountActivity extends AppCompatActivity
         finish();
     }
 
+    @Override
+    public void onAccountRetreived(Account account) {
+        this.account = account;
+    }
+
+    @Override
+    public void onPositiveDialogResult(int dialogId, Bundle args) {
+//        Log.d(TAG, "onPositiveDialogResult: ");
+        switch (dialogId) {
+            case AppDialog.DIALOG_ID_CONFIRM_DELETE_ACCOUNT:
+//            Log.d(TAG, "onPositiveDialogResult: confirmed to delete");
+//            Log.d(TAG, "onPositiveDialogResult: acctid " + args.getInt(AppDialog.DIALOG_ACCOUNT_ID));
+                getContentResolver().delete(AccountsContract.buildIdUri(args.getInt(AppDialog.DIALOG_ACCOUNT_ID)), null, null);
+                finish();
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void onNegativeDialogResult(int dialogId, Bundle args) {
+//        Log.d(TAG, "onNegativeDialogResult: ");
+        switch (dialogId) {
+            case AppDialog.DIALOG_ID_CONFIRM_DELETE_ACCOUNT:
+                finish();
+                break;
+            default:
+                break;
+        }
+
+    }
+
+    @Override
+    public void onActionRequestDialogResult(int dialogId, Bundle args, int which) {
+
+    }
+
+    @Override
+    public void onDialogCancelled(int dialogId) {
+
+    }
 }
 

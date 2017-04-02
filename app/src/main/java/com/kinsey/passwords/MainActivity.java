@@ -264,7 +264,10 @@ public class MainActivity extends AppCompatActivity
                         case 3:
                             accountsListRequest(AccountsContract.ACCOUNT_LIST_BY_SEQUENCE);
                             break;
-                        case 7:
+                        case 4:
+                            accountsListRequest(AccountsContract.ACCOUNT_LIST_BY_PASSPORT_ID);
+                            break;
+                        case 8:
                             suggestsListRequest();
                             break;
                         default:

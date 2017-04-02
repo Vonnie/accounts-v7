@@ -52,15 +52,16 @@ public class AccountActivityFragment extends Fragment {
     private long lngOpenDate;
     private ImageButton mImgWebView;
 
-    private OnSaveClicked mSaveListener = null;
+    private OnActionListener mActionListener = null;
     private Account account;
 
     private static String pattern_ymdtimehm = "yyyy-MM-dd kk:mm";
     public static SimpleDateFormat format_ymdtimehm = new SimpleDateFormat(
             pattern_ymdtimehm, Locale.US);
 
-    interface OnSaveClicked {
-        void onSaveClicked();
+    interface OnActionListener {
+//        void onSaveClicked();
+        void onAccountRetreived(Account account);
     }
 
     public AccountActivityFragment() {
@@ -98,6 +99,7 @@ public class AccountActivityFragment extends Fragment {
 //            Log.d(TAG, "onCreateView: acctChk " + account.toString());
 //            Log.d(TAG, "onCreateView: _id " + account.getId());
             if (account != null) {
+                mActionListener.onAccountRetreived(account);
 //                Log.d(TAG, "onCreateView: Account found, editing..." + account.getId());
                 mCorpNameTextView.setText(account.getCorpName());
                 mUserNameTextView.setText(account.getUserName());
@@ -442,18 +444,18 @@ public class AccountActivityFragment extends Fragment {
 
         // Activities containing this fragment must implement it's callbacks
         Activity activity = getActivity();
-        if (!(activity instanceof OnSaveClicked)) {
+        if (!(activity instanceof OnActionListener)) {
             throw new ClassCastException(activity.getClass().getSimpleName()
                     + " must implement AddEditActivityFragment interface");
         }
-        mSaveListener = (OnSaveClicked) activity;
+        mActionListener = (OnActionListener) activity;
     }
 
     @Override
     public void onDetach() {
 //        Log.d(TAG, "onDetach: starts");
         super.onDetach();
-        mSaveListener = null;
+        mActionListener = null;
     }
 
 }

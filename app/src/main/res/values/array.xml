@@ -12,6 +12,7 @@
         <item>Account sorted by Corp Name</item>
         <item>Account sorted by Open Date</item>
         <item>Account sorted by custom sequence</item>
+        <item>Account sorted by Account Id</item>
         <item>Export Accounts</item>
         <item>Import Accounts</item>
         <item>View Exported Accounts</item>

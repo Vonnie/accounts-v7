@@ -51,6 +51,7 @@ public class AccountsContract {
     public static final int ACCOUNT_LIST_BY_CORP_NAME = 1;
     public static final int ACCOUNT_LIST_BY_OPEN_DATE = 2;
     public static final int ACCOUNT_LIST_BY_SEQUENCE = 3;
+    public static final int ACCOUNT_LIST_BY_PASSPORT_ID = 4;
     public static final int ACCOUNT_EDIT = 3;
     public static final int ACCOUNT_SEARCH = 4;
 

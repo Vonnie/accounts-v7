@@ -9,7 +9,7 @@
     tools:layout_editor_absoluteY="81dp">
 
     <TextView
-        android:id="@+id/tli_corp_name"
+        android:id="@+id/srli_corp_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -21,7 +21,7 @@
         android:textSize="22sp"
         android:textStyle="normal|bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/parent" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/srli_user_name"
@@ -30,18 +30,18 @@
 
         android:layout_marginLeft="8dp"
         android:layout_marginTop="0dp"
-        app:layout_constraintLeft_toLeftOf="@+id/tli_corp_name"
-        app:layout_constraintTop_toBottomOf="@+id/tli_corp_name" />
+        app:layout_constraintLeft_toLeftOf="@+id/srli_corp_name"
+        app:layout_constraintTop_toBottomOf="@+id/srli_corp_name" />
 
     <TextView
         android:id="@+id/tli_open_date"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
 
+        android:layout_marginRight="8dp"
         android:layout_marginTop="0dp"
-        app:layout_constraintTop_toBottomOf="@+id/tli_corp_name"
         app:layout_constraintRight_toLeftOf="@+id/srli_acct_edit"
-        android:layout_marginRight="8dp" />
+        app:layout_constraintTop_toBottomOf="@+id/srli_corp_name" />
 
     <TextView
         android:id="@+id/tli_seq"
@@ -59,8 +59,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
-        app:layout_constraintLeft_toRightOf="@+id/tli_seq"
         android:layout_marginTop="0dp"
+        app:layout_constraintRight_toRightOf="@+id/tli_open_date"
         app:layout_constraintTop_toBottomOf="@+id/tli_open_date" />
 
     <ImageButton

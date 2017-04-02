@@ -65,7 +65,7 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
 //        }
         if ((mCursor == null) || (mCursor.getCount() == 0)) {
 //            Log.d(TAG, "onBindViewHolder: no search db items");
-            holder.corp_name.setText(R.string.no_account_items);
+            holder.corp_name.setText(R.string.no_search_items);
 //            holder.user_name.setText("Click Info button to add accounts");
 //            holder.editButton.setVisibility(View.GONE);
 //            holder.deleteButton.setVisibility(View.GONE);
@@ -114,6 +114,7 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
 //                    Log.d(TAG, "onBindViewHolder: email " + cursorAccount.getString(cursorAccount.getColumnIndex(AccountsContract.Columns.USER_EMAIL_COL)));
                     holder.userEmail.setText(cursorAccount.getString(cursorAccount.getColumnIndex(AccountsContract.Columns.USER_EMAIL_COL)));
                 }
+                holder.acctseq.setText("Seq:" + String.valueOf(cursorAccount.getColumnIndex(AccountsContract.Columns.SEQUENCE_COL)));
 
                 Log.d(TAG, "onBindViewHolder: passportId " + cursorAccount.getColumnIndex(AccountsContract.Columns.PASSPORT_ID_COL));
                 if (cursorAccount.getColumnIndex(AccountsContract.Columns.PASSPORT_ID_COL) != -1) {
@@ -217,6 +218,7 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
         TextView userName = null;
         TextView userEmail = null;
         TextView acctId = null;
+        TextView acctseq = null;
 //        TextView note = null;
 //        TextView open_date = null;
 //        ImageButton editButton = null;
@@ -227,11 +229,12 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
             super(itemView);
 //        Log.d(TAG, "SearchViewHolder: starts");
 
-            this.corp_name = (TextView) itemView.findViewById(R.id.tli_corp_name);
-            this.website = (TextView) itemView.findViewById(R.id.srli_user_name);
+            this.corp_name = (TextView) itemView.findViewById(R.id.srli_corp_name);
+            this.website = (TextView) itemView.findViewById(R.id.srli_website);
             this.userName = (TextView) itemView.findViewById(R.id.srli_user_name);
             this.userEmail = (TextView) itemView.findViewById(R.id.srli_user_email);
-            this.acctId = (TextView) itemView.findViewById(R.id.srli_account_id);
+            this.acctId = (TextView) itemView.findViewById(R.id.srli_acct_id);
+            this.acctseq = (TextView) itemView.findViewById(R.id.srli_acct_seq);
 //            this.note = (TextView) itemView.findViewById(R.id.srli_note);
 //            this.editButton = (ImageButton) itemView.findViewById(R.id.srli_acct_edit);
 //            this.deleteButton = (ImageButton) itemView.findViewById(R.id.srli_acct_delete);

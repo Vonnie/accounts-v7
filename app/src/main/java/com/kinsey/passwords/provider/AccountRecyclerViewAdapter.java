@@ -225,7 +225,7 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
             super(itemView);
 //        Log.d(TAG, "AccountViewHolder: starts");
 
-            this.corp_name = (TextView) itemView.findViewById(R.id.tli_corp_name);
+            this.corp_name = (TextView) itemView.findViewById(R.id.srli_corp_name);
             this.user_name = (TextView) itemView.findViewById(R.id.srli_user_name);
             this.open_date = (TextView) itemView.findViewById(R.id.tli_open_date);
             this.seq = (TextView) itemView.findViewById(R.id.tli_seq);

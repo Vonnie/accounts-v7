@@ -625,22 +625,23 @@ public class AccountListActivity extends AppCompatActivity
             case 1:
             case 2:
             case 3:
+            case 4:
 //                Log.d(TAG, "onActionRequestDialogResult: request list");
                 returnIntent = new Intent();
                 returnIntent.putExtra("which", which);
                 setResult(Activity.RESULT_OK, returnIntent);
                 finish();
                 break;
-            case 4:
+            case 5:
                 confirmExport();
                 break;
-            case 5:
+            case 6:
                 confirmImport();
                 break;
-            case 6:
+            case 7:
                 viewAccountsFile();
                 break;
-            case 7:
+            case 8:
                 returnIntent = new Intent();
                 returnIntent.putExtra("which", which);
                 Log.d(TAG, "onActionRequestDialogResult: which " + which);

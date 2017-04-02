@@ -160,7 +160,7 @@ public class SearchActivity extends AppCompatActivity
             }
         });
 
-//        Log.d(TAG, "onCreateOptionsMenu: returned " + true);
+        Log.d(TAG, "onCreateOptionsMenu: returned " + true);
 
         return true;
     }
