@@ -41,6 +41,10 @@
     <string name="deldiag_sub_message">%1$d: %2$s.</string>
     <string name="suggdiag_negative_caption">8</string>
     <string name="suggdiag_positive_caption">10</string>
+    <string name="searchdiag_message">Refresh Search DB from Accounts DB</string>
+    <string name="searchdiag_sub_message">For efficient reasons, Search DB is a small copy of Accounts DB</string>
+    <string name="searchdiag_negative_caption">Continue</string>
+    <string name="searchdiag_positive_caption">Copy</string>
     <string name="listdiag_acc_message">Select account action</string>
     <string name="listdiag_acc_sub_message">Choose with click</string>
     <string name="title_activity_search">SearchActivity</string>
@@ -73,4 +77,6 @@
     <string name="srch_instruction_3">Warning: Reload Search Dictionary DB when account corp names are new, deleted, or changed.\nUse button below to rebuild search dictionary.</string>
     <string name="delete_cap">Delete</string>
     <string name="edit_acct_btn_hint">Edit Account</string>
+    <string name="tag_portrait">port</string>
+    <string name="tag_landscape">land</string>
 </resources>

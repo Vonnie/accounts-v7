@@ -15,8 +15,9 @@ import android.view.View;
 import android.widget.SearchView;
 import android.widget.Toast;
 
+import com.kinsey.passwords.items.AccountsContract;
 import com.kinsey.passwords.items.SearchesContract;
-import com.kinsey.passwords.provider.AccountSuggestsLoaderCallbacks;
+import com.kinsey.passwords.provider.AccountSearchLoaderCallbacks;
 
 public class SearchActivity extends AppCompatActivity
         implements SearchActivityFragment.OnActionListener {
@@ -35,6 +36,17 @@ public class SearchActivity extends AppCompatActivity
         setContentView(R.layout.activity_search);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        Bundle arguments = getIntent().getExtras();
+
+        boolean blnRefresh = (Boolean) arguments.getSerializable(SearchActivity.class.getSimpleName());
+
+        if (blnRefresh) {
+            Log.d(TAG, "onCreate: request to refresh search db");
+            loadSearchDB();
+        } else {
+            Log.d(TAG, "onCreate: request to continue");
+        }
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -66,7 +78,7 @@ public class SearchActivity extends AppCompatActivity
 
     private void loadSearchDB() {
         deleteAllSuggestions();
-        AccountSuggestsLoaderCallbacks loaderAcctCallbacks = new AccountSuggestsLoaderCallbacks(this);
+        AccountSearchLoaderCallbacks loaderAcctCallbacks = new AccountSearchLoaderCallbacks(this);
         getLoaderManager().restartLoader(CONTACT_QUERY_LOADER, null, loaderAcctCallbacks);
         Toast.makeText(this,
                 "Search Dictionary DB built",
@@ -107,7 +119,7 @@ public class SearchActivity extends AppCompatActivity
                 mSearchView.clearFocus();
                 Log.d(TAG, "onQueryTextSubmit: showSearches");
 
-                showSearches(-1);
+                showSearches();
 //                finish();
                 return true;
             }
@@ -142,7 +154,7 @@ public class SearchActivity extends AppCompatActivity
         mSearchView.setOnSuggestionListener(new SearchView.OnSuggestionListener() {
             @Override
             public boolean onSuggestionSelect(int position) {
-//                Log.d(TAG, "onSuggestionSelect: position " + position);
+                Log.d(TAG, "onSuggestionSelect: position " + position);
 //                showSuggestions();
                 return false;
             }
@@ -152,7 +164,8 @@ public class SearchActivity extends AppCompatActivity
 //                Log.d(TAG, "onSuggestionClick: position " + position);
 //                showSuggestions();
                 int accountId = showAccount(position);
-                showSearches(accountId);
+                Log.d(TAG, "onSuggestionClick: accountId " + accountId);
+                showOneSearches(accountId, position);
 //                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 //                sharedPreferences.edit().putInt(SEARCH_ACCOUNT, accountId).apply();
 //                finish();
@@ -208,18 +221,40 @@ public class SearchActivity extends AppCompatActivity
         int dbId = Integer.valueOf(mSearchView.getSuggestionsAdapter().getCursor()
                 .getString(mSearchView.getSuggestionsAdapter().getCursor().getColumnIndex(SearchManager.SUGGEST_COLUMN_INTENT_DATA)));
 //        Log.d(TAG, "showAccount: " + dbId);
-        String corpName = mSearchView.getSuggestionsAdapter().getCursor()
-                .getString(mSearchView.getSuggestionsAdapter().getCursor().getColumnIndex(SearchManager.SUGGEST_COLUMN_TEXT_1));
+//        String corpName = mSearchView.getSuggestionsAdapter().getCursor()
+//                .getString(mSearchView.getSuggestionsAdapter().getCursor().getColumnIndex(SearchManager.SUGGEST_COLUMN_TEXT_1));
 //        Log.d(TAG, "showAccount: corpName " + corpName);
 
         return dbId;
 
     }
 
-    private void showSearches(int accountId) {
-//        Log.d(TAG, "showSearches: starts");
+    private void showSearches() {
         Intent detailIntent = new Intent(this, SearchListActivity.class);
-        detailIntent.putExtra(SearchListActivity.class.getSimpleName(), accountId);
+        detailIntent.putExtra(SearchListActivity.class.getSimpleName(), (int)-1);
+//        if (accountId == -1) {
+            SearchesContract.cursorSearch = mSearchView.getSuggestionsAdapter().getCursor();
+//        } else {
+//            mSearchView.getSuggestionsAdapter().getCursor().moveToFirst();
+//            do {
+//
+//            } while (mSearchView.getSuggestionsAdapter().getCursor().moveToNext());
+//        }
+        startActivity(detailIntent);
+    }
+
+    private void showOneSearches(int id, int position) {
+        Log.d(TAG, "showOneSearches: starts " + id);
+        Intent detailIntent = new Intent(this, SearchListActivity.class);
+        detailIntent.putExtra(SearchListActivity.class.getSimpleName(), id);
+//        mSearchView.getSuggestionsAdapter().getCursor().moveToFirst();
+//        mSearchView.getSuggestionsAdapter().getCursor().move(position);
+//        Cursor cursor = mSearchView.getSuggestionsAdapter().getCursor();
+
+//        int dbId = cursor.getInt(cursor.getColumnIndex(SearchManager.SUGGEST_COLUMN_INTENT_DATA));
+        SearchesContract.cursorSearch = getContentResolver().query(
+                AccountsContract.buildIdUri(id), null, null, null, null);
+
         startActivity(detailIntent);
     }
 

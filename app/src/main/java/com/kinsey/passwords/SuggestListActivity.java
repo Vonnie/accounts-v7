@@ -38,6 +38,7 @@ public class SuggestListActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,14 +63,19 @@ public class SuggestListActivity extends AppCompatActivity
         ContentResolver contentResolver = getContentResolver();
         ContentValues values = new ContentValues();
 
-        int iSeq = getMaxValue(SuggestsContract.Columns.SEQUENCE_COL);
+        int nbrPasswords = 0;
+        while(nbrPasswords < 10) {
+            int iSeq = getMaxValue(SuggestsContract.Columns.SEQUENCE_COL);
 //        Log.d(TAG, "generatePasswords: " + iSeq);
 //        strUUID = java.util.UUID.randomUUID().toString();
 //        createPassword(++iSeq);
 
-        values.put(SuggestsContract.Columns.PASSWORD_COL, passwordFormula.createPassword(passwordLen));
-        values.put(SuggestsContract.Columns.SEQUENCE_COL, ++iSeq);
-        contentResolver.insert(SuggestsContract.CONTENT_URI, values);
+            values.put(SuggestsContract.Columns.PASSWORD_COL, passwordFormula.createPassword(passwordLen));
+            values.put(SuggestsContract.Columns.SEQUENCE_COL, ++iSeq);
+            values.put(SuggestsContract.Columns.NOTE_COL, "");
+            contentResolver.insert(SuggestsContract.CONTENT_URI, values);
+            nbrPasswords++;
+        }
         Toast.makeText(SuggestListActivity.this,
                 "Password generated",
                 Toast.LENGTH_SHORT).show();

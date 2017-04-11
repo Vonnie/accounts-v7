@@ -6,7 +6,6 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
@@ -23,7 +22,7 @@ import com.kinsey.passwords.items.Account;
 import com.kinsey.passwords.items.AccountsContract;
 import com.kinsey.passwords.items.SearchesContract;
 import com.kinsey.passwords.provider.AccountRecyclerViewAdapter;
-import com.kinsey.passwords.provider.AccountSuggestsLoaderCallbacks;
+import com.kinsey.passwords.provider.AccountSearchLoaderCallbacks;
 import com.kinsey.passwords.tools.AppDialog;
 
 import java.io.File;
@@ -31,6 +30,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -123,53 +124,86 @@ public class AccountListActivity extends AppCompatActivity
     public String ExportAccountDB() {
         String msgError = "";
         int count = -1;
+
         try {
 
-            String jsonDownload = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath();
 
-            File folder = new File(jsonDownload);
-            if (!folder.exists()) {
-//                Log.d(TAG, "ExportAccountDB: create download " + jsonDownload);
-//                 create directory
-                folder.mkdirs();
-                Log.v(TAG, "dirCreated " + DEFAULT_APP_DIRECTORY);
-            }
-
-
-            folder = new File(DEFAULT_APP_DIRECTORY);
-            if (!folder.exists()) {
-//                Log.d(TAG, "ExportAccountDB: create download passport " + DEFAULT_APP_DIRECTORY);
-                // create directory
-                folder.mkdirs();
-                Log.v(TAG, "dirCreated " + DEFAULT_APP_DIRECTORY);
-            }
-
-
-            String jsonFile = DEFAULT_APP_DIRECTORY
-                    + "/accounts.json";
-
-////			FileWriter fileWriter = new FileWriter(jsonFilePath);
-//            File file = new File(jsonFilePath);
+////            File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath(), filename);
 //
-//            Log.d(TAG, "ExportAccountDB: accounts.json " + jsonFile);
+//            String jsonDownload = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath();
+//
+//            File folder = new File(jsonDownload);
+//            if (!folder.exists()) {
+////                Log.d(TAG, "ExportAccountDB: create download " + jsonDownload);
+////                 create directory
+//                folder.mkdirs();
+//                Log.v(TAG, "dirCreated " + DEFAULT_APP_DIRECTORY);
+//            }
+//
+////            Log.v(TAG, "default dir " + DEFAULT_APP_DIRECTORY);
+
+//            File folder = new File(DEFAULT_APP_DIRECTORY);
+//            if (!folder.exists()) {
+////                Log.d(TAG, "ExportAccountDB: create download passport " + DEFAULT_APP_DIRECTORY);
+//                // create directory
+//                folder.mkdirs();
+//                Log.v(TAG, "dirCreated " + DEFAULT_APP_DIRECTORY);
+//            }
+
+
+//            String jsonFile = DEFAULT_APP_DIRECTORY
+//                    + "/accounts.json";
+//
+////            Log.d(TAG, "ExportAccountDB: accounts.json " + jsonFile);
+//
+////			FileWriter fileWriter = new FileWriter(jsonFilePath);
+////            File file = new File(jsonFile);
+//            File fileDir = new File(DEFAULT_APP_DIRECTORY);
+//
+//            if (fileDir.exists()) {
+//                Log.d(TAG, "ExportAccountDB: dir exists " + fileDir.getAbsoluteFile());
+//            } else {
+//                Log.d(TAG, "ExportAccountDB: dir not exists " + fileDir.getAbsoluteFile());
+//            }
+            File file = new File(DEFAULT_APP_DIRECTORY, "accounts.json");
 //
 ////            if (file.exists()) {
 ////                file.delete();
 ////            }
 //
-//            if (file.exists()) {
+            if (file.exists()) {
 //                Log.d(TAG, "ExportAccountDB: file exists");
-//            } else {
-//                Log.d(TAG, "ExportAccountDB: file not exists");
-//            }
+            } else {
+//                Log.d(TAG, "ExportAccountDB: file does not exists");
+//                if (file.isDirectory()) {
+//                    Log.d(TAG, "ExportAccountDB: file is dir");
+//                }
+                if (file.getParentFile().mkdirs()) {
+                    Log.d(TAG, "ExportAccountDB: dirs made");
+                } else {
+//                    Log.d(TAG, "ExportAccountDB: dirs already exists");
+                }
+                Log.d(TAG, "ExportAccountDB: file " + file.getAbsoluteFile());
+                if (file.createNewFile()) {
+                    Log.d(TAG, "ExportAccountDB: file created " + file.getAbsoluteFile());
+                };
+//                Log.d(TAG, "ExportAccountDB: file created");
+
+//                OutputStream fos = new BufferedOutputStream(new FileOutputStream(file));
+//                Log.d(TAG, "ExportAccountDB: fos created");
+//                writeJson(fos);
+//                Log.d(TAG, "ExportAccountDB: fos written & closed");
+            }
 //
 //            OutputStream fos = new BufferedOutputStream(new FileOutputStream(file));
 //            OutputStreamWriter out = new OutputStreamWriter(fos, "UTF-8");
 
+//            FileWriter fos = new FileWriter(jsonFile);
+//            fos.write(response);
 
 //			JsonWriter writer = new JsonWriter(fileWriter);
 //            JsonWriter writer = new JsonWriter(out);
-            JsonWriter writer = new JsonWriter(new FileWriter(jsonFile));
+            JsonWriter writer = new JsonWriter(new FileWriter(file));
             writer.setIndent("  ");
             count = writeMessagesArray(writer);
             writer.flush();
@@ -190,6 +224,19 @@ public class AccountListActivity extends AppCompatActivity
                     Toast.LENGTH_LONG).show();
         }
         return msgError;
+    }
+
+    public void writeJson(OutputStream out) throws IOException {
+        JsonWriter writer = new JsonWriter(new OutputStreamWriter(out, "UTF-8"));
+        writer.setIndent("    ");
+        jsonFinal(writer);}
+
+    public void jsonFinal(JsonWriter writer) throws IOException{
+        writer.beginObject();
+        writer.name("status").value("OK");
+        writer.name("num_results").value("");
+        writer.endObject();
+        writer.close();
     }
 
     public int writeMessagesArray(JsonWriter writer) throws IOException {
@@ -569,7 +616,7 @@ public class AccountListActivity extends AppCompatActivity
 
     private void loadSearchDB() {
         deleteAllSuggestions();
-        AccountSuggestsLoaderCallbacks loaderAcctCallbacks = new AccountSuggestsLoaderCallbacks(this);
+        AccountSearchLoaderCallbacks loaderAcctCallbacks = new AccountSearchLoaderCallbacks(this);
         getLoaderManager().restartLoader(CONTACT_QUERY_LOADER, null, loaderAcctCallbacks);
         Toast.makeText(this,
                 "Search Dictionary DB built",

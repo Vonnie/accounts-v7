@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.kinsey.passwords.items.AccountsContract;
 
@@ -56,7 +57,7 @@ public class AccountProvider extends ContentProvider {
     @Override
     public Cursor query(Uri uri, String[] projection, String selection,
                         String[] selectionArgs, String sortOrder) {
-//        Log.d(TAG, "query: called with URI " + uri);
+        Log.d(TAG, "query: called with URI " + uri);
         final int match = sUriMatcher.match(uri);
 //        Log.d(TAG, "query: match is " + match);
 
@@ -73,8 +74,9 @@ public class AccountProvider extends ContentProvider {
                 queryBuilder.setTables(AccountsContract.TABLE_NAME);
 //                selection = SuggestsContract.Columns._ID_COL;
 //                selectionArgs[0] = uri.getPathSegments().get(1);
-//                Log.d(TAG, "query: uri " + uri);
+
                 accountId = AccountsContract.getId(uri);
+                Log.d(TAG, "query: uri " + uri + ":" + accountId);
                 queryBuilder.appendWhere(AccountsContract.Columns._ID_COL + " = " + accountId);
 //                Log.d(TAG, "query: getRow " + AccountsContract.Columns._ID_COL + " = " + accountId);
                 break;
@@ -88,6 +90,7 @@ public class AccountProvider extends ContentProvider {
             case ACCT_ID:
                 queryBuilder.setTables(AccountsContract.TABLE_NAME);
                 accountId = AccountsContract.getId(uri);
+                Log.d(TAG, "query: uri " + uri + ":byAcct: " + accountId);
                 queryBuilder.appendWhere(AccountsContract.Columns.PASSPORT_ID_COL + " = " + accountId);
                 break;
             default:

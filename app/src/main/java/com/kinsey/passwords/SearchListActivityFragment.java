@@ -4,12 +4,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +22,8 @@ import com.kinsey.passwords.provider.SearchRecyclerViewAdapter;
  * A placeholder fragment containing a simple view.
  */
 public class SearchListActivityFragment extends Fragment
-        implements LoaderManager.LoaderCallbacks<Cursor>,
+        implements
+//        LoaderManager.LoaderCallbacks<Cursor>,
         SearchRecyclerViewAdapter.OnAccountClickListener {
     private static final String TAG = "SearchListActivityFragm";
 
@@ -40,6 +40,13 @@ public class SearchListActivityFragment extends Fragment
     }
 
     @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+//        Log.d(TAG, "onActivityCreated: starts loader_id " + LOADER_ID);
+        super.onActivityCreated(savedInstanceState);
+//        getLoaderManager().initLoader(LOADER_ID, null, this);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search_list, container, false);
@@ -49,55 +56,55 @@ public class SearchListActivityFragment extends Fragment
 
 
         Bundle arguments = getActivity().getIntent().getExtras();
-        int accountId = (int) arguments.getSerializable(SearchListActivity.class.getSimpleName());
-//        Log.d(TAG, "onCreateView: accountid " + accountId);
+        int dbId = (int) arguments.getSerializable(SearchListActivity.class.getSimpleName());
+        Log.d(TAG, "onCreateView: dbid " + dbId);
 
 //        Log.d(TAG, "onCreateView: search adt cursor");
 
-        if (accountId == -1) {
+//        if (dbId == -1) {
             mSearchListAdapter = new SearchRecyclerViewAdapter(this.getContext(),
-                    accountId,
+                    dbId,
                     SearchesContract.cursorSearch,
                     (SearchRecyclerViewAdapter.OnAccountClickListener) getActivity());
-        } else {
-            Cursor cursor = getAccount(accountId);
-            mSearchListAdapter = new SearchRecyclerViewAdapter(this.getContext(),
-                    accountId,
-                    cursor,
-                    (SearchRecyclerViewAdapter.OnAccountClickListener) getActivity());
-        }
+//        } else {
+//            Cursor cursor = getAccountById(dbId);
+//            Log.d(TAG, "onCreateView: cursor count " + cursor.getCount());
+//            mSearchListAdapter = new SearchRecyclerViewAdapter(this.getContext(),
+//                    dbId,
+//                    cursor,
+//                    (SearchRecyclerViewAdapter.OnAccountClickListener) getActivity());
+//        }
         recyclerView.setAdapter(mSearchListAdapter);
         return view;
     }
 
-    private Cursor getAccount(int accountId) {
+    private Cursor getAccountById(int dbId) {
 //        Log.d(TAG, "getAccount: " + AccountsContract.buildIdUri(accountId));
         return getActivity().getContentResolver().query(
-                AccountsContract.buildIdUri(accountId),
+                AccountsContract.buildIdUri(dbId),
                 null, null, null, null);
     }
 
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Loader<Cursor> cursor = new CursorLoader(getActivity(),
-                SearchesContract.CONTENT_URI,
-                null,
-                null,
-                null,
-                null);
-        return cursor;
-
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-
-    }
+//    @Override
+//    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+//        Loader<Cursor> cursor = new CursorLoader(getActivity(),
+//                SearchesContract.CONTENT_URI,
+//                null,
+//                null,
+//                null,
+//                null);
+//        return cursor;
+//    }
+//
+//    @Override
+//    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+//
+//    }
+//
+//    @Override
+//    public void onLoaderReset(Loader<Cursor> loader) {
+//
+//    }
 
 
     @Override

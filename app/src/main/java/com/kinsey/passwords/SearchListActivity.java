@@ -43,7 +43,7 @@ public class SearchListActivity extends AppCompatActivity
 //                ).show();
 //            }
 //        });
-        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 //        Log.d(TAG, "onCreate: ends");
     }

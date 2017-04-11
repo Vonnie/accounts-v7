@@ -25,7 +25,7 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
     private static final String TAG = "SrchRecyclerViewAdpt";
 
     private Context mContext;
-    private int mAccountId;
+    private int mId;
     private Cursor mCursor;
     private OnAccountClickListener mListener;
 
@@ -39,18 +39,22 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
             pattern_mdy_display, Locale.US);
 
 
-    public SearchRecyclerViewAdapter(Context context, int accountId, Cursor cursor, OnAccountClickListener listener) {
-//        Log.d(TAG, "CursorRecyclerViewAdapter: Constructor called");
+    public SearchRecyclerViewAdapter(Context context,
+                                     int id,
+                                     Cursor cursor, OnAccountClickListener listener) {
+        Log.d(TAG, "CursorRecyclerViewAdapter: Constructor called");
         mContext = context;
-        mAccountId = accountId;
+        mId = id;
+//        Log.d(TAG, "SearchRecyclerViewAdapter: accountId " + mAccountId);
         mCursor = cursor;
         mListener = listener;
+
     }
 
     @Override
     public SearchViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 //        Log.d(TAG, "onCreateViewHolder: new view requested");
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.search_list_items, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_search_items, parent, false);
         return new SearchViewHolder(view);
     }
 
@@ -74,17 +78,20 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
                 throw new IllegalStateException("Couldn't move cursor to position " + position);
             }
 
+            Log.d(TAG, "onBindViewHolder: count " + mCursor.getCount());
 //            holder.corp_name.setText(mCursor.getString(mCursor.getColumnIndex(SearchManager.SUGGEST_COLUMN_TEXT_1)));
 //            holder.userName.setText(mCursor.getString(mCursor.getColumnIndex(SearchManager.SUGGEST_COLUMN_TEXT_2)));
 //            holder.website.setText(mCursor.getString(mCursor.getColumnIndex(SearchManager.SUGGEST_COLUMN_TEXT_2_URL)));
 
-            int dbId;
-            if (mAccountId == -1) {
-                dbId = mCursor.getInt(mCursor.getColumnIndex(SearchManager.SUGGEST_COLUMN_INTENT_DATA));
-            } else {
-                dbId = mAccountId;
-            }
-//            Log.d(TAG, "onBindViewHolder: acctId " + dbId);
+//            int dbId;
+//            if (mAccountId == -1) {
+//                dbId = mCursor.getInt(mCursor.getColumnIndex(SearchManager.SUGGEST_COLUMN_INTENT_DATA));
+//            } else {
+//                dbId = mAccountId;
+//                Log.d(TAG, "onBindViewHolder: dbId " + dbId);
+//            }
+
+            //            Log.d(TAG, "onBindViewHolder: acctId " + dbId);
 //            Log.d(TAG, "onBindViewHolder: column count " + mCursor.getColumnCount());
 //            for (int i = 0; i < mCursor.getColumnCount(); i++) {
 //                Log.d(TAG, "showSuggestions: " + mCursor.getColumnName(i)
@@ -93,37 +100,63 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
 //            Log.d(TAG, "searched Accounts: ==========================");
 //
 //
-            Cursor cursorAccount = mContext.getContentResolver().query(
-                    AccountsContract.buildIdUri(dbId), null, null, null, null);
+            Cursor cursorAccount;
+            if (mId == -1) {
+                int dbId = mCursor.getInt(mCursor.getColumnIndex(SearchManager.SUGGEST_COLUMN_INTENT_DATA));
+                Log.d(TAG, "onBindViewHolder: dbId " + dbId);
+                cursorAccount = mContext.getContentResolver().query(
+                        AccountsContract.buildIdUri(dbId), null, null, null, null);
+            } else {
+                cursorAccount = mCursor;
+            }
+            Log.d(TAG, "onBindViewHolder: acct count " + cursorAccount.getCount());
             if (cursorAccount.moveToFirst()) {
 //                Log.d(TAG, "onBindViewHolder: account found ");
 
-                holder.corp_name.setText(cursorAccount.getString(cursorAccount.getColumnIndex(AccountsContract.Columns.CORP_NAME_COL)));
+                final Account account = AccountsContract.getAccountFromCursor(cursorAccount);
+                Log.d(TAG, "onBindViewHolder: name " + account.getCorpName());
+                Log.d(TAG, "onBindViewHolder: website " + account.getCorpWebsite());
+                Log.d(TAG, "onBindViewHolder: dbId " + account.getId());
+                Log.d(TAG, "onBindViewHolder: passportId " + account.getPassportId());
+                holder.corp_name.setText(account.getCorpName());
                 if (cursorAccount.getColumnIndex(AccountsContract.Columns.CORP_WEBSITE_COL) == -1) {
                     holder.website.setVisibility(View.GONE);
+                } else if (account.getCorpWebsite().equals("http://")) {
+                    holder.website.setVisibility(View.GONE);
                 } else {
-                    String website = cursorAccount.getString(cursorAccount.getColumnIndex(AccountsContract.Columns.CORP_WEBSITE_COL));
+                    String website = account.getCorpWebsite();
                     if (website == null || website.equals("")) {
                         holder.website.setVisibility(View.GONE);
                     } else {
                         holder.website.setText(website);
                     }
                 }
-                holder.userName.setText(cursorAccount.getString(cursorAccount.getColumnIndex(AccountsContract.Columns.USER_NAME_COL)));
-                if (cursorAccount.getColumnIndex(AccountsContract.Columns.USER_EMAIL_COL) != -1){
-//                    Log.d(TAG, "onBindViewHolder: email " + cursorAccount.getString(cursorAccount.getColumnIndex(AccountsContract.Columns.USER_EMAIL_COL)));
-                    holder.userEmail.setText(cursorAccount.getString(cursorAccount.getColumnIndex(AccountsContract.Columns.USER_EMAIL_COL)));
+                holder.userName.setText(account.getUserName());
+                if (cursorAccount.getColumnIndex(AccountsContract.Columns.USER_EMAIL_COL) != -1) {
+                    Log.d(TAG, "onBindViewHolder: email " + account.getUserEmail());
+                    holder.userEmail.setText(account.getUserEmail());
                 }
-                holder.acctseq.setText("Seq:" + String.valueOf(cursorAccount.getColumnIndex(AccountsContract.Columns.SEQUENCE_COL)));
+                holder.acctseq.setText("Seq:" + String.valueOf(account.getSequence()));
 
-                Log.d(TAG, "onBindViewHolder: passportId " + cursorAccount.getColumnIndex(AccountsContract.Columns.PASSPORT_ID_COL));
-                if (cursorAccount.getColumnIndex(AccountsContract.Columns.PASSPORT_ID_COL) != -1) {
-                    if (!cursorAccount.isNull(cursorAccount.getColumnIndex(AccountsContract.Columns.PASSPORT_ID_COL))) {
-                        holder.acctId.setText("Acct:" + String.valueOf(cursorAccount.getInt(cursorAccount.getColumnIndex(AccountsContract.Columns.PASSPORT_ID_COL))));
-                    }
+                Log.d(TAG, "onBindViewHolder: Id " + account.getId());
+                Log.d(TAG, "onBindViewHolder: passportId " + String.valueOf(account.getPassportId()));
+                holder.acctId.setText("Acct:" + String.valueOf(account.getPassportId()));
+
+                if (account.getOpenLong() == 0) {
+                    holder.open_date.setText("");
+                } else {
+//                    Date dte = new Date(account.getActvyLong());
+                    holder.open_date.setText(format_mdy_display.format(account.getOpenLong()));
+                }
+
+                if (account.getNote().equals("")) {
+                    holder.notes.setVisibility(View.GONE);
+                } else {
+                    holder.notes.setText(account.getNote());
                 }
 
 //                if (cursorAccount.getColumnIndex(AccountsContract.Columns.NOTE_COL) == -1) {
+
 //                    holder.note.setVisibility(View.GONE);
 //                } else {
 //                    String note = cursorAccount.getString(cursorAccount.getColumnIndex(AccountsContract.Columns.NOTE_COL));
@@ -219,6 +252,8 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
         TextView userEmail = null;
         TextView acctId = null;
         TextView acctseq = null;
+        TextView open_date = null;
+        TextView notes = null;
 //        TextView note = null;
 //        TextView open_date = null;
 //        ImageButton editButton = null;
@@ -235,7 +270,8 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
             this.userEmail = (TextView) itemView.findViewById(R.id.srli_user_email);
             this.acctId = (TextView) itemView.findViewById(R.id.srli_acct_id);
             this.acctseq = (TextView) itemView.findViewById(R.id.srli_acct_seq);
-//            this.note = (TextView) itemView.findViewById(R.id.srli_note);
+            this.open_date = (TextView) itemView.findViewById(R.id.srli_open_date);
+            this.notes = (TextView) itemView.findViewById(R.id.srli_notes);
 //            this.editButton = (ImageButton) itemView.findViewById(R.id.srli_acct_edit);
 //            this.deleteButton = (ImageButton) itemView.findViewById(R.id.srli_acct_delete);
         }

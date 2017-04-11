@@ -10,18 +10,21 @@
         android:title="@string/menu_add_account"
         app:showAsAction="ifRoom" />
     <item
-        android:id="@+id/menumain_showAccounts"
-        android:icon="@android:drawable/ic_menu_view"
-        android:orderInCategory="101"
-        android:title="@string/menu_accounts" />
-    <item
         android:id="@+id/menumain_search"
         android:icon="@android:drawable/ic_menu_search"
-        android:orderInCategory="102"
-        android:title="@string/menu_search" />
+        android:orderInCategory="101"
+        android:title="@string/menu_search"
+        app:showAsAction="ifRoom" />
     <item
-        android:title="@string/menu_suggests"
-        android:orderInCategory="103"
+        android:id="@+id/menumain_showAccounts"
+        android:icon="@android:drawable/ic_menu_view"
+        android:orderInCategory="102"
+        android:title="@string/menu_accounts"
+        app:showAsAction="ifRoom" />
+    <item
         android:id="@+id/menumain_showSuggests"
-        android:icon="@android:drawable/ic_secure" />
+        android:icon="@android:drawable/ic_secure"
+        android:orderInCategory="103"
+        android:title="@string/menu_suggests"
+        app:showAsAction="ifRoom" />
 </menu>

@@ -3,8 +3,10 @@ package com.kinsey.passwords;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -29,7 +31,7 @@ public class MainActivity extends AppCompatActivity
     private boolean mTwoPane = false;
 
     private static final String ACCOUNT_FRAGMENT = "AccountFragment";
-    public static String DEFAULT_APP_DIRECTORY = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath()
+    public static String DEFAULT_APP_DIRECTORY = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath()
             + "/Passport";
 
 
@@ -163,13 +165,29 @@ public class MainActivity extends AppCompatActivity
                 suggestsListRequest();
                 break;
             case R.id.menumain_search:
-                Intent detailIntent = new Intent(this, SearchActivity.class);
-//        detailIntent.putExtra(Suggest.class.getSimpleName(), "sortorder");
-                startActivity(detailIntent);
+
+                searchListRequest();
+
                 break;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void searchListRequest() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+
+        AppDialog newFragment = AppDialog.newInstance();
+        Bundle args = new Bundle();
+        args.putInt(AppDialog.DIALOG_ID, AppDialog.DIALOG_ID_ASK_REFRESH_SEARCHDB);
+        args.putInt(AppDialog.DIALOG_TYPE, AppDialog.DIALOG_YES_NO);
+        args.putString(AppDialog.DIALOG_MESSAGE, getString(R.string.searchdiag_message));
+        args.putString(AppDialog.DIALOG_SUB_MESSAGE, getString(R.string.searchdiag_sub_message));
+        args.putInt(AppDialog.DIALOG_NEGATIVE_RID, R.string.searchdiag_negative_caption);
+        args.putInt(AppDialog.DIALOG_POSITIVE_RID, R.string.searchdiag_positive_caption);
+
+        newFragment.setArguments(args);
+        newFragment.show(fragmentManager, "dialog");
     }
 
     private void editAccountRequest(Account account) {
@@ -412,11 +430,29 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onPositiveDialogResult(int dialogId, Bundle args) {
+        switch (dialogId) {
 
+            case AppDialog.DIALOG_ID_ASK_REFRESH_SEARCHDB:
+
+                Log.d(TAG, "onPositiveDialogResult: request to rebuild search");
+                Intent detailIntent = new Intent(this, SearchActivity.class);
+                detailIntent.putExtra(SearchActivity.class.getSimpleName(), true);
+                startActivity(detailIntent);
+                break;
+        }
     }
 
     @Override
     public void onNegativeDialogResult(int dialogId, Bundle args) {
+        switch (dialogId) {
+
+            case AppDialog.DIALOG_ID_ASK_REFRESH_SEARCHDB:
+                Intent detailIntent = new Intent(this, SearchActivity.class);
+        detailIntent.putExtra(SearchActivity.class.getSimpleName(), false);
+                startActivity(detailIntent);
+                break;
+
+        }
 
     }
 

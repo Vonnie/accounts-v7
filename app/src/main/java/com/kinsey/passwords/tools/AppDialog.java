@@ -35,7 +35,7 @@ public class AppDialog extends DialogFragment {
     public static final int DIALOG_ID_ASK_IF_NEED_DICTIONARY_REBUILD = 4;
     public static final int DIALOG_ID_CONFIRM_TO_IMPORT = 6;
     public static final int DIALOG_ID_CONFIRM_TO_EXPORT = 7;
-    public static final int DIALOG_ID_CONFIRM_DELETE = 7;
+    public static final int DIALOG_ID_ASK_REFRESH_SEARCHDB = 8;
 
     private EditText mEditText;
 

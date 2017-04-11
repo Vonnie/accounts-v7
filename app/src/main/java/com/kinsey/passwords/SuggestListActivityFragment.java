@@ -91,7 +91,8 @@ public class SuggestListActivityFragment extends Fragment
         if (count == 0) {
             twCurrentTitle.setText("No generated passwords, check below");
         } else {
-            twCurrentTitle.setText("Generated passwords");
+            twCurrentTitle.setText("");
+            twCurrentTitle.setVisibility(View.GONE);
         }
 
     }
