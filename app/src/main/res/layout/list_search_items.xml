@@ -9,12 +9,13 @@
 
     <TextView
         android:id="@+id/srli_corp_name"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:textColor="?android:attr/textColorPrimary"
         android:textSize="18sp"
         android:textStyle="normal|bold"
+        app:layout_constraintLeft_toLeftOf="@+id/cnstrnt_layout"
         app:layout_constraintTop_toBottomOf="@+id/cnstrnt_layout"
         tools:layout_editor_absoluteX="8dp"
         tools:layout_editor_absoluteY="4dp" />

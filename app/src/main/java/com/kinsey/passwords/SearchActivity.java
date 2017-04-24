@@ -39,7 +39,7 @@ public class SearchActivity extends AppCompatActivity
 
         Bundle arguments = getIntent().getExtras();
 
-        boolean blnRefresh = (Boolean) arguments.getSerializable(SearchActivity.class.getSimpleName());
+        boolean blnRefresh = (boolean) arguments.getSerializable(SearchActivity.class.getSimpleName());
 
         if (blnRefresh) {
             Log.d(TAG, "onCreate: request to refresh search db");

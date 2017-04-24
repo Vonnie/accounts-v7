@@ -1,7 +1,5 @@
 package com.kinsey.passwords;
 
-import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -31,14 +29,14 @@ public class MainActivityFragment extends Fragment {
 //    Loader<Cursor> loader;
 
     Button mAccountsButton, mAddAccountButton, mSuggestsButton, mSearchButton;
-    private OnActionListener mActionListener = null;
+//    private OnActionListener mActionListener = null;
 
-    interface OnActionListener {
-        void onAccountsClicked();
-        void onAddAccountClicked();
-        void onSuggestsClicked();
-        void onSearchClicked();
-    }
+//    interface OnActionListener {
+//        void onAccountsClicked();
+//        void onAddAccountClicked();
+//        void onSuggestsClicked();
+//        void onSearchClicked();
+//    }
 
 
     public MainActivityFragment() {
@@ -263,25 +261,25 @@ public class MainActivityFragment extends Fragment {
 ////        }
 //    }
 
-    @Override
-    public void onAttach(Context context) {
-//        Log.d(TAG, "onAttach: starts");
-        super.onAttach(context);
-
-        // Activies containing this fragment must implement it's callbacks
-        Activity activity = getActivity();
-        if (!(activity instanceof OnActionListener)) {
-            throw new ClassCastException(activity.getClass().getSimpleName()
-                    + " must implement MainActivityFragment.OnActionClicked interface");
-        }
-        mActionListener = (OnActionListener) activity;
-    }
-
-    @Override
-    public void onDetach() {
-//        Log.d(TAG, "onDetach: starts");
-        super.onDetach();
-        mActionListener = null;
-    }
+//    @Override
+//    public void onAttach(Context context) {
+////        Log.d(TAG, "onAttach: starts");
+//        super.onAttach(context);
+//
+//        // Activies containing this fragment must implement it's callbacks
+//        Activity activity = getActivity();
+//        if (!(activity instanceof OnActionListener)) {
+//            throw new ClassCastException(activity.getClass().getSimpleName()
+//                    + " must implement MainActivityFragment.OnActionClicked interface");
+//        }
+//        mActionListener = (OnActionListener) activity;
+//    }
+//
+//    @Override
+//    public void onDetach() {
+////        Log.d(TAG, "onDetach: starts");
+//        super.onDetach();
+//        mActionListener = null;
+//    }
 
 }

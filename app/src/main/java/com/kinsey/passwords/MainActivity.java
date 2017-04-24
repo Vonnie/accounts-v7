@@ -13,7 +13,6 @@ import android.view.MenuItem;
 import com.kinsey.passwords.items.Account;
 import com.kinsey.passwords.items.AccountsContract;
 import com.kinsey.passwords.items.Suggest;
-import com.kinsey.passwords.provider.AccountRecyclerViewAdapter;
 import com.kinsey.passwords.tools.AppDialog;
 
 import java.text.SimpleDateFormat;
@@ -21,8 +20,8 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity
         implements
-        AccountRecyclerViewAdapter.OnAccountClickListener,
-        MainActivityFragment.OnActionListener,
+//        AccountRecyclerViewAdapter.OnAccountClickListener,
+//        MainActivityFragment.OnActionListener,
         AppDialog.DialogEvents {
     public static final String TAG = "MainActivity";
 
@@ -373,37 +372,38 @@ public class MainActivity extends AppCompatActivity
         return super.onSearchRequested();
     }
 
-    @Override
-    public void onAccountDeleteClick(Account account) {
-        getContentResolver().delete(AccountsContract.buildIdUri(account.getId()), null, null);
-    }
+//    @Override
+//    public void onAccountDeleteClick(Account account) {
+//        getContentResolver().delete(AccountsContract.buildIdUri(account.getId()), null, null);
+//    }
+//
+//    @Override
+//    public void onAccountEditClick(Account account) {
+//        editAccountRequest(account);
+//    }
 
-    @Override
-    public void onAccountEditClick(Account account) {
-        editAccountRequest(account);
-    }
+//    @Override
+//    public void onAccountsClicked() {
+//        accountsListRequest(AccountsContract.ACCOUNT_LIST_BY_CORP_NAME);
+//    }
+//
+//    @Override
+//    public void onSuggestsClicked() {
+//        suggestsListRequest();
+//    }
 
-    @Override
-    public void onAccountsClicked() {
-        accountsListRequest(AccountsContract.ACCOUNT_LIST_BY_CORP_NAME);
-    }
+//    @Override
+//    public void onSearchClicked() {
+//        Intent detailIntent = new Intent(this, SearchActivity.class);
+//        detailIntent.putExtra(SearchActivity.class.getSimpleName(), (int)-1);
+////        detailIntent.putExtra(Suggest.class.getSimpleName(), "sortorder");
+//        startActivity(detailIntent);
+//    }
 
-    @Override
-    public void onSuggestsClicked() {
-        suggestsListRequest();
-    }
-
-    @Override
-    public void onSearchClicked() {
-        Intent detailIntent = new Intent(this, SearchActivity.class);
-//        detailIntent.putExtra(Suggest.class.getSimpleName(), "sortorder");
-        startActivity(detailIntent);
-    }
-
-    @Override
-    public void onAddAccountClicked() {
-        editAccountRequest(null);
-    }
+//    @Override
+//    public void onAddAccountClicked() {
+//        editAccountRequest(null);
+//    }
 
 //    @Override
 //    public void onAccountsExportClicked() {

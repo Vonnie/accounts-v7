@@ -29,7 +29,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
             <EditText
                 android:id="@+id/acc_user_name"
@@ -47,20 +47,28 @@
                 android:hint="@string/accedit_user_email_hint"
                 android:inputType="textEmailAddress" />
 
-            <EditText
-                android:id="@+id/acc_corp_website"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="@string/accedit_corp_website_hint"
-                android:inputType="textNoSuggestions" />
+                android:orientation="horizontal">
 
-            <ImageButton
-                android:id="@+id/acc_img_website"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                app:srcCompat="@android:drawable/ic_menu_view" />
+                <ImageButton
+                    android:id="@+id/acc_img_website"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:contentDescription="@string/acct_show_website"
+                    app:srcCompat="@android:drawable/ic_menu_view" />
+
+                <EditText
+                    android:id="@+id/acc_corp_website"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="@string/accedit_corp_website_hint"
+                    android:inputType="textNoSuggestions" />
+
+            </LinearLayout>
 
             <EditText
                 android:id="@+id/acc_notes"

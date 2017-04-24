@@ -9,12 +9,17 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.JsonReader;
 import android.util.JsonToken;
 import android.util.JsonWriter;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -37,19 +42,24 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import static android.R.attr.id;
 import static com.kinsey.passwords.MainActivity.DEFAULT_APP_DIRECTORY;
 import static com.kinsey.passwords.MainActivity.format_ymdtime;
 import static com.kinsey.passwords.SearchActivity.CONTACT_QUERY_LOADER;
 
 public class AccountListActivity extends AppCompatActivity
         implements AccountRecyclerViewAdapter.OnAccountClickListener,
+        AccountActivityFragment.OnActionListener,
+//        LoaderManager.LoaderCallbacks<Cursor>,
         AppDialog.DialogEvents {
 
     private static final String TAG = "AccountListActivity";
 
-    // whether or not the activity is i 2-pane mode
-    // i.e. running in landscape on a tablet
     private boolean mTwoPane = false;
+    int mSortorder = AccountsContract.ACCOUNT_LIST_BY_CORP_NAME;
+    private AccountRecyclerViewAdapter mAccountAdapter; // add adapter reference
+    Loader<Cursor> loader;
+    int LOADER_ID = 1;
 
     private OnListClickListener mListener;
 
@@ -63,6 +73,42 @@ public class AccountListActivity extends AppCompatActivity
         setContentView(R.layout.activity_account_list);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+
+        if (findViewById(R.id.item_detail_container) != null) {
+            // The detail container view will be present only in the
+            // large-screen layouts (res/values-w900dp).
+            // If this view is present, then the
+            // activity should be in two-pane mode.
+            mTwoPane = true;
+        }
+
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.account_items_list);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+
+        Cursor cursor = createCursor();
+//        getLoaderManager().initLoader(LOADER_ID, null, null);
+
+        mAccountAdapter = new AccountRecyclerViewAdapter(mTwoPane, mSortorder, cursor,
+                (AccountRecyclerViewAdapter.OnAccountClickListener) this);
+        recyclerView.setAdapter(mAccountAdapter);
+//
+//        if (savedInstanceState == null) {
+//            // Create the detail fragment and add it to the activity
+//            // using a fragment transaction.
+//            Bundle arguments = new Bundle();
+//            arguments.putBoolean(AccountsContract.ACCOUNT_TWO_PANE, false);
+//            arguments.putInt(Account.class.getSimpleName(),
+//                    AccountsContract.ACCOUNT_LIST_BY_CORP_NAME);
+//
+////            arguments.putBoolean(AccountsContract.ACCOUNT_TWO_PANE, false);
+//            AccountListActivityFragment fragment = new AccountListActivityFragment();
+//            fragment.setArguments(arguments);
+//            getSupportFragmentManager().beginTransaction()
+//                    .add(R.id.frameLayout, fragment)
+//                    .commit();
+//        }
+
 
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -118,6 +164,111 @@ public class AccountListActivity extends AppCompatActivity
 ////        fragmentTransaction.commit();
 //        fragmentTransaction.replace(R.id.fragmentAccount, fragment);
 //        fragmentTransaction.commit();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_account, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        for (int i = 0; i < menu.size(); i++) {
+            MenuItem menuItem = menu.getItem(i);
+            switch (menuItem.getItemId()) {
+                case R.id.menuacct_add:
+                    menuItem.setVisible(true);
+                    Log.d(TAG, "onMenuOpened: set off add");
+                    break;
+                default:
+                    if (mTwoPane) {
+                        menuItem.setVisible(true);
+                    } else {
+                        menuItem.setVisible(false);
+                    }
+                    break;
+            }
+        }
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        switch (id) {
+            case R.id.menuacct_add:
+                editAccountRequest(null);
+                break;
+            case R.id.menuacct_save:
+                break;
+            case R.id.menuacct_delete:
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+
+    public Cursor createCursor() {
+//        Log.d(TAG, "onCreateLoader: starts");
+        Log.d(TAG, "onCreateLoader: id " + String.valueOf(id));
+
+        String[] projectionAcct =
+                {AccountsContract.Columns._ID_COL,
+                        AccountsContract.Columns.PASSPORT_ID_COL,
+                        AccountsContract.Columns.CORP_NAME_COL,
+                        AccountsContract.Columns.USER_NAME_COL,
+                        AccountsContract.Columns.USER_EMAIL_COL,
+                        AccountsContract.Columns.CORP_WEBSITE_COL,
+                        AccountsContract.Columns.NOTE_COL,
+                        AccountsContract.Columns.OPEN_DATE_COL,
+                        AccountsContract.Columns.ACTVY_DATE_COL,
+                        AccountsContract.Columns.SEQUENCE_COL,
+                        AccountsContract.Columns.REF_FROM_COL,
+                        AccountsContract.Columns.REF_TO_COL};
+//        , SuggestsContract.Columns.ACTVY_DATE_COL,
+//                SuggestsContract.Columns.NOTE_COL};{
+        // <order by> Tasks.SortOrder, Tasks.Name COLLATE NOCASE
+//        String sortOrder = AccountsContract.Columns.CORP_NAME_COL + "," + AccountsContract.Columns.SEQUENCE_COL + " COLLATE NOCASE";
+        String sortOrder;
+        if (mSortorder == AccountsContract.ACCOUNT_LIST_BY_OPEN_DATE) {
+            sortOrder = AccountsContract.Columns.OPEN_DATE_COL + " DESC," + AccountsContract.Columns.CORP_NAME_COL + " COLLATE NOCASE ASC";
+        } else {
+            if (mSortorder == AccountsContract.ACCOUNT_LIST_BY_SEQUENCE) {
+                sortOrder = AccountsContract.Columns.SEQUENCE_COL + "," + AccountsContract.Columns.CORP_NAME_COL + " COLLATE NOCASE ASC";
+            } else {
+                if (mSortorder == AccountsContract.ACCOUNT_LIST_BY_PASSPORT_ID) {
+                    sortOrder = AccountsContract.Columns.PASSPORT_ID_COL + "," + AccountsContract.Columns.CORP_NAME_COL + " COLLATE NOCASE ASC";
+                } else {
+                    sortOrder = AccountsContract.Columns.CORP_NAME_COL + "," + AccountsContract.Columns.SEQUENCE_COL + " COLLATE NOCASE ASC";
+                }
+            }
+        }
+//        String sortOrder = AccountsContract.Columns.TASKS_SORTORDER + "," + TasksContract.Columns.TASKS_NAME;
+//        Cursor cursor = new CursorLoader(this,
+//                AccountsContract.CONTENT_URI,
+//                projectionAcct,
+//                null,
+//                null,
+//                sortOrder);
+        Cursor cursor = getContentResolver().query(
+                AccountsContract.CONTENT_URI, null, null, null, AccountsContract.Columns.CORP_NAME_COL);
+        Log.d(TAG, "onCreateLoader: cursor " + cursor.toString());
+        return cursor;
+    }
+
+
+    @Override
+    public void onAccountRetreived(Account account) {
+
     }
 
 
@@ -563,8 +714,21 @@ public class AccountListActivity extends AppCompatActivity
 
     private void editAccountRequest(Account account) {
 //        Log.d(TAG, "addAccountRequest: starts");
+        boolean mTwoPane = false;
         if (mTwoPane) {
 //            Log.d(TAG, "addAccountRequest: in two-pane mode (tablet)");
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            AppDialog newFragment = AppDialog.newInstance();
+            Bundle args = new Bundle();
+            args.putInt(AppDialog.DIALOG_ID, AppDialog.DIALOG_ID_ACCOUNT_ACTIONS_LIST);
+            args.putInt(AppDialog.DIALOG_TYPE, AppDialog.DIALOG_ACCOUNT_LIST_OPTIONS);
+            args.putString(AppDialog.DIALOG_MESSAGE, getString(R.string.listdiag_acc_message));
+            args.putString(AppDialog.DIALOG_SUB_MESSAGE, getString(R.string.listdiag_acc_sub_message));
+
+            newFragment.setArguments(args);
+
+            newFragment.show(fragmentManager, "dialog");
+
         } else {
 //            Log.d(TAG, "addAccountRequest: in single-pan mode (phone)");
             // in single-pane mode, start the detail activity for the selected item Id.
@@ -572,12 +736,38 @@ public class AccountListActivity extends AppCompatActivity
 
             if (account != null) { // editing an account
                 detailIntent.putExtra(Account.class.getSimpleName(), account.getId());
+                detailIntent.putExtra(AccountsContract.ACCOUNT_TWO_PANE, false);
                 startActivityForResult(detailIntent, AccountsContract.ACCOUNT_ACTION_CHG);
             } else { // adding an account
                 startActivityForResult(detailIntent, AccountsContract.ACCOUNT_ACTION_ADD);
             }
         }
     }
+
+
+    @Override
+    public void onAccountListSelect(Account account) {
+//        Context context = getContext();
+        Intent intent = new Intent(this, AccountActivity.class);
+        intent.putExtra(Account.class.getSimpleName(), account.getId());
+
+        startActivity(intent);
+
+    }
+
+    @Override
+    public void onAccountLandListSelect(Account account) {
+        Log.d(TAG, "onAccountLandListSelect: id " + account.getId());
+        Bundle arguments = new Bundle();
+        arguments.putInt(Account.class.getSimpleName(), account.getId());
+        AccountActivityFragment fragment = new AccountActivityFragment();
+        fragment.setArguments(arguments);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.item_detail_container, fragment)
+                .commit();
+
+    }
+
 
     @Override
     public void onDialogCancelled(int dialogId) {

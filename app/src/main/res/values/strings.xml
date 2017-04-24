@@ -79,4 +79,5 @@
     <string name="edit_acct_btn_hint">Edit Account</string>
     <string name="tag_portrait">port</string>
     <string name="tag_landscape">land</string>
+    <string name="acct_show_website">Show Website</string>
 </resources>

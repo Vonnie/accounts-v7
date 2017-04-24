@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -89,15 +90,50 @@ public class AccountActivity extends AppCompatActivity
 //        return super.onCreateOptionsMenu(menu);
     }
 
+//    @Override
+//    public boolean onMenuOpened(int featureId, Menu menu) {
+//        Log.d(TAG, "onMenuOpened: menuSize " + menu.size());
+//        for (int i = 0; i < menu.size(); i++) {
+//            MenuItem menuItem = menu.getItem(i);
+//            switch (menuItem.getItemId()) {
+//                case R.id.menuacct_add:
+//                    menuItem.setVisible(false);
+//                    Log.d(TAG, "onMenuOpened: set off add");
+//                    break;
+//                default:
+//                    menuItem.setVisible(true);
+//                    break;
+//            }
+//        }
+//        return super.onMenuOpened(featureId, menu);
+//    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        for (int i = 0; i < menu.size(); i++) {
+            MenuItem menuItem = menu.getItem(i);
+            switch (menuItem.getItemId()) {
+                case R.id.menuacct_add:
+                    menuItem.setVisible(false);
+                    Log.d(TAG, "onMenuOpened: set off add");
+                    break;
+                default:
+                    menuItem.setVisible(true);
+                    break;
+            }
+        }
+        return super.onPrepareOptionsMenu(menu);
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 //        Log.d(TAG, "onOptionsItemSelected: id " + id);
         switch (id) {
-            case R.id.menu_save:
+            case R.id.menuacct_save:
                 saveAccount();
                 break;
-            case R.id.menu_delete:
+            case R.id.menuacct_delete:
                 deleteAccount();
                 break;
             default:

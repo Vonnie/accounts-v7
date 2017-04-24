@@ -9,6 +9,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -88,8 +89,16 @@ public class AccountActivityFragment extends Fragment {
         mRefIdToTextView = (EditText) view.findViewById(R.id.acc_ref_to);
         mImgWebView = (ImageButton) view.findViewById(R.id.acc_img_website);
 
-//        Bundle arguments = getArguments();
-        Bundle arguments = getActivity().getIntent().getExtras();  // The line we'll change later
+
+        if (savedInstanceState == null) {
+            Log.d(TAG, "onCreateView: savedInstanceState is null");
+        } else {
+            Log.d(TAG, "onCreateView: savedInstanceState is not null");
+        }
+        Bundle arguments = getArguments();
+        if (arguments == null) {
+            arguments = getActivity().getIntent().getExtras();  // The line we'll change later
+        }
 
         if (arguments != null) {
 //            Log.d(TAG, "onCreateView: retrieving task details.");
@@ -394,8 +403,8 @@ public class AccountActivityFragment extends Fragment {
 
 
                 if (values.size() != 0) {
-                    account.setActvyLong(System.currentTimeMillis());
-                    values.put(AccountsContract.Columns.ACTVY_DATE_COL, account.getActvyLong());
+//                    account.setActvyLong((long)System.currentTimeMillis());
+                    values.put(AccountsContract.Columns.ACTVY_DATE_COL, System.currentTimeMillis());
 //                    Log.d(TAG, "save: values " + values);
 
 //                    Log.d(TAG, "onClick: updating accountId " + AccountsContract.buildIdUri(account.getId()));
@@ -418,8 +427,14 @@ public class AccountActivityFragment extends Fragment {
                     values.put(AccountsContract.Columns.USER_NAME_COL, mUserNameTextView.getText().toString());
                     values.put(AccountsContract.Columns.USER_EMAIL_COL, mUserEmailTextView.getText().toString());
                     values.put(AccountsContract.Columns.CORP_WEBSITE_COL, mCorpWebsiteTextView.getText().toString());
+                    values.put(AccountsContract.Columns.SEQUENCE_COL, mSeqTextView.getText().toString());
                     values.put(AccountsContract.Columns.NOTE_COL, mNoteTextView.getText().toString());
                     values.put(AccountsContract.Columns.OPEN_DATE_COL, String.valueOf(System.currentTimeMillis()));
+                    values.put(AccountsContract.Columns.REF_FROM_COL, mRefIdFromTextView.getText().toString());
+                    values.put(AccountsContract.Columns.REF_TO_COL, mRefIdToTextView.getText().toString());
+//                    account.setActvyLong((long)System.currentTimeMillis());
+                    values.put(AccountsContract.Columns.ACTVY_DATE_COL, System.currentTimeMillis());
+
 //                    Log.d(TAG, "onClick: open date entered "  + mOpenDateTextView.getText().toString());
 //                    Log.d(TAG, "onClick: open date millis " + System.currentTimeMillis());
 //                            values.put(AccountsContract.Columns.TASKS_SORTORDER, so);
