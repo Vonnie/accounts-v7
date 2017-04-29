@@ -17,7 +17,7 @@ import android.widget.TextView;
 import com.kinsey.passwords.items.SuggestsContract;
 import com.kinsey.passwords.provider.CursorRecyclerViewAdapter;
 
-import static com.kinsey.passwords.MainActivityFragment.LOADER_ID;
+import static com.kinsey.passwords.MainActivityFragment.SUGGEST_LOADER_ID;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -40,7 +40,7 @@ public class SuggestListActivityFragment extends Fragment
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
 //        Log.d(TAG, "onActivityCreated: starts loader_id " + LOADER_ID);
         super.onActivityCreated(savedInstanceState);
-        getLoaderManager().initLoader(LOADER_ID, null, this);
+        getLoaderManager().initLoader(SUGGEST_LOADER_ID, null, this);
     }
 
     @Override

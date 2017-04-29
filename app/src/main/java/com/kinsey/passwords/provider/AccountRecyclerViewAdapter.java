@@ -1,6 +1,7 @@
 package com.kinsey.passwords.provider;
 
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
@@ -33,6 +34,8 @@ implements LoaderManager.LoaderCallbacks<Cursor>{
      * device.
      */
     private boolean mTwoPane;
+    Account selectedAccount = new Account();
+    int selected_position = -1;
 
     private OnAccountClickListener mListener;
 
@@ -73,8 +76,8 @@ implements LoaderManager.LoaderCallbacks<Cursor>{
     }
 
     @Override
-    public void onBindViewHolder(AccountViewHolder holder, int position) {
-        Log.d(TAG, "onBindViewHolder: starts");
+    public void onBindViewHolder(final AccountViewHolder holder, final int position) {
+//        Log.d(TAG, "onBindViewHolder: starts");
 
 //        if (mCursor == null) {
 //            Log.d(TAG, "onBindViewHolder: mCursor null");
@@ -91,6 +94,13 @@ implements LoaderManager.LoaderCallbacks<Cursor>{
         } else {
             if (!mCursor.moveToPosition(position)) {
                 throw new IllegalStateException("Couldn't move cursor to position " + position);
+            }
+
+            if(selected_position == position){
+                // Here I am just highlighting the background
+                holder.itemView.setBackgroundColor(Color.GREEN);
+            }else{
+                holder.itemView.setBackgroundColor(Color.TRANSPARENT);
             }
 
             final Account account = AccountsContract.getAccountFromCursor(mCursor);
@@ -169,6 +179,10 @@ implements LoaderManager.LoaderCallbacks<Cursor>{
                         Log.d(TAG, "onClick: listener is null");
                         return;
                     }
+                    notifyItemChanged(selected_position);
+                    selected_position = position;
+                    notifyItemChanged(selected_position);
+
                     if (mTwoPane) {
                         mListener.onAccountLandListSelect(account);
                     } else {
@@ -264,6 +278,11 @@ implements LoaderManager.LoaderCallbacks<Cursor>{
         return oldCursor;
     }
 
+    public void resetSelection() {
+        selected_position = -1;
+//        holder.itemView.setBackgroundColor(Color.TRANSPARENT);
+    }
+
     public static class AccountViewHolder extends RecyclerView.ViewHolder {
         private static final String TAG = "AccountViewHolder";
         public final View mView;
@@ -278,7 +297,7 @@ implements LoaderManager.LoaderCallbacks<Cursor>{
 
         public AccountViewHolder(View itemView) {
             super(itemView);
-            Log.d(TAG, "AccountViewHolder: starts");
+//            Log.d(TAG, "AccountViewHolder: starts");
             mView = itemView;
             this.corp_name = (TextView) itemView.findViewById(R.id.srli_corp_name);
             this.user_name = (TextView) itemView.findViewById(R.id.srli_user_name);

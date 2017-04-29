@@ -9,6 +9,8 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -72,7 +74,7 @@ public class AccountActivityFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-//        Log.d(TAG, "onCreateView: starts");
+        Log.d(TAG, "onCreateView: starts");
         View view = inflater.inflate(R.layout.fragment_account, container, false);
 
         mCorpNameTextView = (EditText) view.findViewById(R.id.acc_corp_name);
@@ -104,77 +106,83 @@ public class AccountActivityFragment extends Fragment {
 //            Log.d(TAG, "onCreateView: retrieving task details.");
 
             int accountId = (int) arguments.getSerializable(Account.class.getSimpleName());
-            account = getAccount(accountId);
+            if (accountId == -1) {
+                account = null;
+//            Log.d(TAG, "onCreateView: No arguments, adding new record");
+                mMode = FragmentEditMode.ADD;
+            } else {
+                account = getAccount(accountId);
 //            Log.d(TAG, "onCreateView: acctChk " + account.toString());
 //            Log.d(TAG, "onCreateView: _id " + account.getId());
-            if (account != null) {
-                mActionListener.onAccountRetreived(account);
+                if (account != null) {
+                    mActionListener.onAccountRetreived(account);
 //                Log.d(TAG, "onCreateView: Account found, editing..." + account.getId());
-                mCorpNameTextView.setText(account.getCorpName());
-                mUserNameTextView.setText(account.getUserName());
-                mUserEmailTextView.setText(account.getUserEmail());
-                mCorpWebsiteTextView.setText(account.getCorpWebsite());
-                mNoteTextView.setText(account.getNote());
-                if (account.getSequence() == 0) {
-                } else {
-                    mSeqTextView.setText(String.valueOf(account.getSequence()));
-                }
+                    mCorpNameTextView.setText(account.getCorpName());
+                    mUserNameTextView.setText(account.getUserName());
+                    mUserEmailTextView.setText(account.getUserEmail());
+                    mCorpWebsiteTextView.setText(account.getCorpWebsite());
+                    mNoteTextView.setText(account.getNote());
+                    if (account.getSequence() == 0) {
+                    } else {
+                        mSeqTextView.setText(String.valueOf(account.getSequence()));
+                    }
 
 //                    Log.d(TAG, "onCreateView: openLong " + account.getOpenLong());
 //                    mOpenDateTextView.setText("Open: " + format_ymdtimehm.format(account.getOpenLong()));
                     mDtePickOpen.setMaxDate(new Date().getTime());
                     mDtePickOpen.setMinDate(0);
-                Date dte;
-                if (account.getOpenLong() != 0) {
-                    dte = new Date(account.getOpenLong());
+                    Date dte;
+                    if (account.getOpenLong() != 0) {
+                        dte = new Date(account.getOpenLong());
 //                    Log.d(TAG, "onCreateView: db openLong " + account.getOpenLong());
-                } else {
-                    dte = new Date();
-                }
-                Calendar c1 = Calendar.getInstance();
-                c1.setTime(dte);
-                lngOpenDate = c1.getTimeInMillis();
+                    } else {
+                        dte = new Date();
+                    }
+                    Calendar c1 = Calendar.getInstance();
+                    c1.setTime(dte);
+                    lngOpenDate = c1.getTimeInMillis();
 //                Log.d(TAG, "onDateChanged: DB lngOpenDate " + lngOpenDate);
-                mDtePickOpen.init(c1.get(Calendar.YEAR),
-                        c1.get(Calendar.MONTH),
-                        c1.get(Calendar.DAY_OF_MONTH),
-                        new DatePicker.OnDateChangedListener() {
-                            @Override
-                            public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                    mDtePickOpen.init(c1.get(Calendar.YEAR),
+                            c1.get(Calendar.MONTH),
+                            c1.get(Calendar.DAY_OF_MONTH),
+                            new DatePicker.OnDateChangedListener() {
+                                @Override
+                                public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
 //                                Log.d(TAG, "onDateChanged: clicked ");
-                                Calendar c2 = Calendar.getInstance();
-                                c2.set(year, monthOfYear, dayOfMonth);
-                                lngOpenDate = c2.getTimeInMillis();
+                                    Calendar c2 = Calendar.getInstance();
+                                    c2.set(year, monthOfYear, dayOfMonth);
+                                    lngOpenDate = c2.getTimeInMillis();
 //                                Log.d(TAG, "onDateChanged: lngOpenDate " + lngOpenDate);
-                            }
-                        });
+                                }
+                            });
 
-                if (account.getActvyLong() == 0) {
-                    mActvyDtTextView.setText("");
-                } else {
-                    mActvyDtTextView.setText("ActvyDate: " + format_ymdtimehm.format(account.getActvyLong()));
-                }
+                    if (account.getActvyLong() == 0) {
+                        mActvyDtTextView.setText("");
+                    } else {
+                        mActvyDtTextView.setText("ActvyDate: " + format_ymdtimehm.format(account.getActvyLong()));
+                    }
 //                Log.d(TAG, "onCreateView: passwordId " + account.getPassportId());
 //                mAccountIdTextView.setText("see this");
 //                Log.d(TAG, "onCreateView: textView " + mAccountIdTextView.getText().toString());
-                mAccountIdTextView.setText("Account Id: " + String.valueOf(account.getPassportId()));
+                    mAccountIdTextView.setText("Account Id: " + String.valueOf(account.getPassportId()));
 //                Log.d(TAG, "onCreateView: refFrom/To " + account.getRefFrom() + ", " + account.getRefTo());
-                if (account.getRefFrom() == 0) {
-                    mRefIdFromTextView.setText("");
-                } else {
-                    mRefIdFromTextView.setText(String.valueOf(account.getRefFrom()));
-                }
-                if (account.getRefTo() == 0) {
-                    mRefIdToTextView.setText("");
-                } else {
-                    mRefIdToTextView.setText(String.valueOf(account.getRefTo()));
-                }
+                    if (account.getRefFrom() == 0) {
+                        mRefIdFromTextView.setText("");
+                    } else {
+                        mRefIdFromTextView.setText(String.valueOf(account.getRefFrom()));
+                    }
+                    if (account.getRefTo() == 0) {
+                        mRefIdToTextView.setText("");
+                    } else {
+                        mRefIdToTextView.setText(String.valueOf(account.getRefTo()));
+                    }
 
 //                mSortOrderTextView.setText(Integer.toString(account.getSortOrder()));
-                mMode = FragmentEditMode.EDIT;
-            } else {
-                // No task, so we must be adding a new task, and not editing an existing
-                mMode = FragmentEditMode.ADD;
+                    mMode = FragmentEditMode.EDIT;
+                } else {
+                    // No task, so we must be adding a new task, and not editing an existing
+                    mMode = FragmentEditMode.ADD;
+                }
             }
         } else {
             account = null;
@@ -473,4 +481,41 @@ public class AccountActivityFragment extends Fragment {
         mActionListener = null;
     }
 
+
+    /**
+     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
+     * one of the sections/tabs/pages.
+     */
+    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+
+        public SectionsPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            // getItem is called to instantiate the fragment for the given page.
+            // Return a PlaceholderFragment (defined as a static inner class below).
+            return AccountPlaceholderFragment.newInstance(position + 1);
+        }
+
+        @Override
+        public int getCount() {
+            // Show 3 total pages.
+            return 3;
+        }
+
+//        @Override
+//        public CharSequence getPageTitle(int position) {
+//            switch (position) {
+//                case 0:
+//                    return "Page 1 of 3";
+//                case 1:
+//                    return "Page 2 of 3";
+//                case 2:
+//                    return "Page 3 of 3";
+//            }
+//            return null;
+//        }
+    }
 }

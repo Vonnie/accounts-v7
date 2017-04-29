@@ -37,6 +37,16 @@ public class AppDialog extends DialogFragment {
     public static final int DIALOG_ID_CONFIRM_TO_EXPORT = 7;
     public static final int DIALOG_ID_ASK_REFRESH_SEARCHDB = 8;
 
+
+    public static final int DIALOG_ACCT_LIST_CORP_NAME = 0;
+    public static final int DIALOG_ACCT_LIST_OPEN_DATE = 1;
+    public static final int DIALOG_ACCT_LIST_ACCT_ID = 2;
+    public static final int DIALOG_ACCT_LIST_USER_SEQ = 3;
+    public static final int DIALOG_ACCT_LIST_EXPORT = 4;
+    public static final int DIALOG_ACCT_LIST_IMPORT = 5;
+    public static final int DIALOG_ACCT_LIST_VIEW_EXPORT_FILE = 6;
+    public static final int DIALOG_ACCT_LIST_VIEW_SUGGESTIONS = 7;
+
     private EditText mEditText;
 
     /**

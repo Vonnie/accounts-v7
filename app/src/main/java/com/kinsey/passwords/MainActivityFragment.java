@@ -16,9 +16,11 @@ public class MainActivityFragment extends Fragment {
 //        implements LoaderManager.LoaderCallbacks<Cursor> {
     private static final String TAG = "MainActivityFragment";
 
-    public static int LOADER_ID = 1;
-    public static final int LOADER_SUGGESTS_ID = 0;
-    public static final int LOADER_ACCOUNTS_ID = 1;
+    public static int ACCOUNT_LOADER_ID = 1;
+    public static int SEARCH_LOADER_ID = 2;
+    public static int SUGGEST_LOADER_ID = 3;
+//    public static final int LOADER_SUGGESTS_ID = 0;
+//    public static final int LOADER_ACCOUNTS_ID = 1;
 
     public static final String BUNDLE_TABLE_ID = "TABLE_ID";
 
@@ -61,20 +63,20 @@ public class MainActivityFragment extends Fragment {
 
 //        twCurrentTitle = (TextView) view.findViewById(R.id.current_title);
 
-
-        Bundle bundle=getArguments();
-        if (bundle == null) {
-//            LOADER_ID = 1;
-        } else {
-//            Log.d(TAG, "onCreateView: bundle " + bundle);
-            String arg1 = bundle.getString(BUNDLE_TABLE_ID, "none");
-//            Log.d(TAG, "onCreateView: arg1 " + arg1);
-            if (arg1 == "passport_detail") {
-                LOADER_ID = 1;
-            } else {
-                LOADER_ID = 0;
-            }
-        }
+//
+//        Bundle bundle=getArguments();
+//        if (bundle == null) {
+////            LOADER_ID = 1;
+//        } else {
+////            Log.d(TAG, "onCreateView: bundle " + bundle);
+//            String arg1 = bundle.getString(BUNDLE_TABLE_ID, "none");
+////            Log.d(TAG, "onCreateView: arg1 " + arg1);
+//            if (arg1 == "passport_detail") {
+//                LOADER_ID = 1;
+//            } else {
+//                LOADER_ID = 0;
+//            }
+//        }
 
 
 //        mAccountsButton = (Button) view.findViewById(R.id.home_btn_accounts);

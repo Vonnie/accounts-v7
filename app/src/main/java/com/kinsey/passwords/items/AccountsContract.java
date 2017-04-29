@@ -60,7 +60,7 @@ public class AccountsContract {
 
     public static final String ACCOUNT_TWO_PANE = "twopane";
     /**
-     *  The URI to access the Tasks table
+     * The URI to access the Tasks table
      */
 //    public static final Uri CONTENT_URI = Uri.withAppendedPath(CONTENT_AUTHORITY_URI, TABLE_NAME);
     public static final Uri CONTENT_URI = Uri.withAppendedPath(CONTENT_AUTHORITY_URI, AccountDatabase.DATABASE_NAME);
@@ -137,4 +137,6 @@ public class AccountsContract {
 
         return account;
     }
+
+
 }

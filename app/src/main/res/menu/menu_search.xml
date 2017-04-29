@@ -9,9 +9,4 @@
         android:title="@string/home_btn_search_text"
         app:actionViewClass="android.widget.SearchView"
         app:showAsAction="ifRoom" />
-    <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:title="@string/action_settings"
-        app:showAsAction="never" />
 </menu>

@@ -8,15 +8,14 @@
         <item>Search Account</item>
     </string-array>
     <string-array name="account_list_options">
-        <item>Add an Account</item>
         <item>Account sorted by Corp Name</item>
         <item>Account sorted by Open Date</item>
-        <item>Account sorted by custom sequence</item>
         <item>Account sorted by Account Id</item>
+        <item>Account sorted by User Sequence</item>
         <item>Export Accounts</item>
         <item>Import Accounts</item>
         <item>View Exported Accounts</item>
-        <item>Suggestions</item>
+        <item>Suggested Passwords</item>
     </string-array>
     <string-array name="file_list_options">
         <item>Import</item>

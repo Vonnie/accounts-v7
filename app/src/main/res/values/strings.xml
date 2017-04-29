@@ -38,7 +38,7 @@
     <string name="title_activity_file_view">FileViewActivity</string>
     <string name="deldiag_positive_caption">Delete</string>
     <string name="deldiag_message">Delete account</string>
-    <string name="deldiag_sub_message">%1$d: %2$s.</string>
+    <string name="deldiag_sub_message">%1$s.\nAcctId:%2$d</string>
     <string name="suggdiag_negative_caption">8</string>
     <string name="suggdiag_positive_caption">10</string>
     <string name="searchdiag_message">Refresh Search DB from Accounts DB</string>
@@ -66,10 +66,13 @@
         \nUse the menu to add an account, see a account list, search accounts, generate passwords.
     </string>
     <string name="menu_search">Search Accounts</string>
-    <string name="accedit_ref_from_hint">Prior closed into this account Id</string>
-    <string name="accedit_ref_to_hint">This account closed to another account Id</string>
+    <string name="accedit_ref_from_label">Prior closed into this account Id</string>
+    <string name="accedit_ref_to_label">This account closed to another account Id</string>
+    <string name="accedit_ref_from_hint">From Id</string>
+    <string name="accedit_ref_to_hint">To Id</string>
     <string name="menu_save">Save</string>
     <string name="accedit_date_open_label">Open Date</string>
+    <string name="accedit_note_label">Notes:</string>
     <string name="title_activity_web_view">WebViewActivity</string>
     <string name="srch_instruction_text">Search on accounts for Corp-Names</string>
     <string name="srch_instruction_2_text">When items are found, either select search icon on keyboard or select one of the items from the dropdown list.</string>
@@ -80,4 +83,5 @@
     <string name="tag_portrait">port</string>
     <string name="tag_landscape">land</string>
     <string name="acct_show_website">Show Website</string>
+    <string name="section_format">Hello World from section: %1$d</string>
 </resources>

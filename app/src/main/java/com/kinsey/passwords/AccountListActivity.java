@@ -1,15 +1,17 @@
 package com.kinsey.passwords;
 
-import android.app.Activity;
+import android.app.LoaderManager;
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.content.Loader;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -26,8 +28,10 @@ import android.widget.Toast;
 import com.kinsey.passwords.items.Account;
 import com.kinsey.passwords.items.AccountsContract;
 import com.kinsey.passwords.items.SearchesContract;
+import com.kinsey.passwords.items.Suggest;
 import com.kinsey.passwords.provider.AccountRecyclerViewAdapter;
 import com.kinsey.passwords.provider.AccountSearchLoaderCallbacks;
+import com.kinsey.passwords.provider.SectionsPagerAdapter;
 import com.kinsey.passwords.tools.AppDialog;
 
 import java.io.File;
@@ -42,24 +46,40 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import static android.R.attr.id;
 import static com.kinsey.passwords.MainActivity.DEFAULT_APP_DIRECTORY;
 import static com.kinsey.passwords.MainActivity.format_ymdtime;
+import static com.kinsey.passwords.MainActivityFragment.ACCOUNT_LOADER_ID;
 import static com.kinsey.passwords.SearchActivity.CONTACT_QUERY_LOADER;
 
 public class AccountListActivity extends AppCompatActivity
         implements AccountRecyclerViewAdapter.OnAccountClickListener,
         AccountActivityFragment.OnActionListener,
-//        LoaderManager.LoaderCallbacks<Cursor>,
-        AppDialog.DialogEvents {
+        ViewPager.OnPageChangeListener,
+        AppDialog.DialogEvents,
+        LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String TAG = "AccountListActivity";
 
     private boolean mTwoPane = false;
     int mSortorder = AccountsContract.ACCOUNT_LIST_BY_CORP_NAME;
     private AccountRecyclerViewAdapter mAccountAdapter; // add adapter reference
-    Loader<Cursor> loader;
-    int LOADER_ID = 1;
+    RecyclerView mRecyclerView;
+//    Loader<Cursor> loader;
+//    int LOADER_ID = 1;
+
+    private Account account;
+
+    AccountActivityFragment accountActivityFragment = new AccountActivityFragment();
+
+    private SectionsPagerAdapter mSectionsPagerAdapter;
+    /**
+     * The {@link ViewPager} that will host the section contents.
+     */
+    private ViewPager mViewPager;
+    private AccountPlaceholderFrag1 frag1;
+    private AccountPlaceholderFrag2 frag2;
+    private AccountPlaceholderFrag3 frag3;
+
 
     private OnListClickListener mListener;
 
@@ -81,17 +101,79 @@ public class AccountListActivity extends AppCompatActivity
             // If this view is present, then the
             // activity should be in two-pane mode.
             mTwoPane = true;
+
+//            List<Fragment> fragments = new Vector<Fragment>();
+////            frag1 = AccountPlaceholderFrag1.newInstance(0);
+//            fragments.add(frag1);
+////            frag2 = AccountPlaceholderFrag2.newInstance(1);
+//            fragments.add(frag2);
+////            frag3 = AccountPlaceholderFrag3.newInstance(2);
+//            fragments.add(frag3);
+
+            // primary sections of the activity.
+//            mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), fragments);
+            mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), new Account());
+//            mSectionsPagerAdapter.setAccount(new Account());
+
+            // Create the adapter that will return a fragment for each of the three
+
+            // Set up the ViewPager with the sections adapter.
+            mViewPager = (ViewPager) findViewById(R.id.item_detail_container);
+            mViewPager.setAdapter(mSectionsPagerAdapter);
+
+// Attach the page change listener inside the activity
+            mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+
+                // This method will be invoked when a new page becomes selected.
+                @Override
+                public void onPageSelected(int position) {
+                    mSectionsPagerAdapter.refreshPage(position);
+                    String msg = "";
+                    switch (position) {
+                        case 0:
+                            msg = "Account Id info";
+                            break;
+                        case 1:
+                            msg = "Account Open Date calendar";
+                            break;
+                        case 2:
+                            msg = "Account Notes & ref";
+                            break;
+                    }
+                    Toast.makeText(AccountListActivity.this,
+                            msg, Toast.LENGTH_SHORT).show();
+                }
+
+                // This method will be invoked when the current page is scrolled
+                @Override
+                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                    // Code goes here
+                }
+
+                // Called when the scroll state changes:
+                // SCROLL_STATE_IDLE, SCROLL_STATE_DRAGGING, SCROLL_STATE_SETTLING
+                @Override
+                public void onPageScrollStateChanged(int state) {
+                    // Code goes here
+                    Log.d(TAG, "onPageScrollStateChanged: state " + state);
+                }
+            });
+
+//
+//            mViewPager.setCurrentItem(2);
+////            mSectionsPagerAdapter.getItem(2);
+////            mViewPager.setAdapter(mSectionsPagerAdapter);
+//            mViewPager.setCurrentItem(1);
+////            mSectionsPagerAdapter.getItem(1);
+////            mViewPager.setAdapter(mSectionsPagerAdapter);
+//            mViewPager.setCurrentItem(0);
+////            mSectionsPagerAdapter.getItem(0);
         }
 
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.account_items_list);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
 
-        Cursor cursor = createCursor();
-//        getLoaderManager().initLoader(LOADER_ID, null, null);
-
-        mAccountAdapter = new AccountRecyclerViewAdapter(mTwoPane, mSortorder, cursor,
-                (AccountRecyclerViewAdapter.OnAccountClickListener) this);
-        recyclerView.setAdapter(mAccountAdapter);
+        mRecyclerView = (RecyclerView) findViewById(R.id.account_items_list);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        setupAdapter();
 //
 //        if (savedInstanceState == null) {
 //            // Create the detail fragment and add it to the activity
@@ -100,15 +182,12 @@ public class AccountListActivity extends AppCompatActivity
 //            arguments.putBoolean(AccountsContract.ACCOUNT_TWO_PANE, false);
 //            arguments.putInt(Account.class.getSimpleName(),
 //                    AccountsContract.ACCOUNT_LIST_BY_CORP_NAME);
-//
-////            arguments.putBoolean(AccountsContract.ACCOUNT_TWO_PANE, false);
 //            AccountListActivityFragment fragment = new AccountListActivityFragment();
 //            fragment.setArguments(arguments);
 //            getSupportFragmentManager().beginTransaction()
 //                    .add(R.id.frameLayout, fragment)
 //                    .commit();
 //        }
-
 
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -208,17 +287,92 @@ public class AccountListActivity extends AppCompatActivity
                 editAccountRequest(null);
                 break;
             case R.id.menuacct_save:
+                saveAccount();
+//                accountActivityFragment.save();
+//                setupAdapter();
                 break;
             case R.id.menuacct_delete:
+                deleteAccount();
                 break;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
+    private void deleteAccount() {
+//        Log.d(TAG, "deleteAccount: ");
+        if (account == null) {
+            Toast.makeText(this,
+                    "No Account selected to delete",
+                    Toast.LENGTH_LONG).show();
+            return;
+        }
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        AppDialog newFragment = AppDialog.newInstance();
+        Bundle args = new Bundle();
+        args.putInt(AppDialog.DIALOG_ID, AppDialog.DIALOG_ID_CONFIRM_DELETE_ACCOUNT);
+        args.putInt(AppDialog.DIALOG_TYPE, AppDialog.DIALOG_YES_NO);
+        args.putString(AppDialog.DIALOG_MESSAGE, getString(R.string.deldiag_message));
+        args.putString(AppDialog.DIALOG_SUB_MESSAGE, getString(R.string.deldiag_sub_message, account.getCorpName(), account.getPassportId()));
+        args.putInt(AppDialog.DIALOG_ACCOUNT_ID, account.getId());
+        args.putInt(AppDialog.DIALOG_POSITIVE_RID, R.string.deldiag_positive_caption);
 
-    public Cursor createCursor() {
-//        Log.d(TAG, "onCreateLoader: starts");
+        newFragment.setArguments(args);
+        newFragment.show(fragmentManager, "dialog");
+    }
+
+    private void saveAccount() {
+
+//        if (mSectionsPagerAdapter == null) {
+//            return;
+//        }
+//        boolean updateReady = true;
+//        int limit = mSectionsPagerAdapter.getCountBuilt();
+//        for (int i = 0; i < limit; i++) {
+//            if (!mSectionsPagerAdapter.getItemUpdates(i)) {
+//                updateReady = false;
+//            }
+//        }
+
+//        if (!mSectionsPagerAdapter.validateFrags()) {
+//            Toast.makeText(AccountListActivity.this,
+//                                                "Error on account entry",
+//                                                Toast.LENGTH_LONG).show();
+//            return;
+//        };
+//        int currentItem = mViewPager.getCurrentItem();
+//        Fragment item = mSectionsPagerAdapter.getItem(currentItem);
+//        if (null != item && item.isVisible()) {
+//            Fragment childFragment = (Fragment) mSectionsPagerAdapter.instantiateItem(mViewPager, mViewPager.getCurrentItem());
+//
+//        }
+
+        int currentItem = mViewPager.getCurrentItem();
+        if (!mSectionsPagerAdapter.validateFrags(currentItem)) {
+            Toast.makeText(AccountListActivity.this,
+                                                "Error on account entry",
+                                                Toast.LENGTH_LONG).show();
+            return;
+        };
+
+        mSectionsPagerAdapter.collectChgs();
+    }
+
+
+    private void setupAdapter() {
+//        Cursor cursor = createCursor();
+        Cursor cursor = null;
+        getLoaderManager().initLoader(ACCOUNT_LOADER_ID, null, this);
+
+        mAccountAdapter = new AccountRecyclerViewAdapter(mTwoPane, mSortorder, cursor,
+                (AccountRecyclerViewAdapter.OnAccountClickListener) this);
+        mRecyclerView.setAdapter(mAccountAdapter);
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+//    public Cursor createCursor() {
+//        Log.d(TAG, "createCursor: starts");
         Log.d(TAG, "onCreateLoader: id " + String.valueOf(id));
 
         String[] projectionAcct =
@@ -239,32 +393,66 @@ public class AccountListActivity extends AppCompatActivity
         // <order by> Tasks.SortOrder, Tasks.Name COLLATE NOCASE
 //        String sortOrder = AccountsContract.Columns.CORP_NAME_COL + "," + AccountsContract.Columns.SEQUENCE_COL + " COLLATE NOCASE";
         String sortOrder;
-        if (mSortorder == AccountsContract.ACCOUNT_LIST_BY_OPEN_DATE) {
-            sortOrder = AccountsContract.Columns.OPEN_DATE_COL + " DESC," + AccountsContract.Columns.CORP_NAME_COL + " COLLATE NOCASE ASC";
-        } else {
-            if (mSortorder == AccountsContract.ACCOUNT_LIST_BY_SEQUENCE) {
+        switch (mSortorder) {
+            case AccountsContract.ACCOUNT_LIST_BY_OPEN_DATE:
+                sortOrder = AccountsContract.Columns.OPEN_DATE_COL + " DESC," + AccountsContract.Columns.CORP_NAME_COL + " COLLATE NOCASE ASC";
+                break;
+            case AccountsContract.ACCOUNT_LIST_BY_SEQUENCE:
                 sortOrder = AccountsContract.Columns.SEQUENCE_COL + "," + AccountsContract.Columns.CORP_NAME_COL + " COLLATE NOCASE ASC";
-            } else {
-                if (mSortorder == AccountsContract.ACCOUNT_LIST_BY_PASSPORT_ID) {
-                    sortOrder = AccountsContract.Columns.PASSPORT_ID_COL + "," + AccountsContract.Columns.CORP_NAME_COL + " COLLATE NOCASE ASC";
-                } else {
-                    sortOrder = AccountsContract.Columns.CORP_NAME_COL + "," + AccountsContract.Columns.SEQUENCE_COL + " COLLATE NOCASE ASC";
-                }
-            }
+                break;
+            case AccountsContract.ACCOUNT_LIST_BY_PASSPORT_ID:
+                sortOrder = AccountsContract.Columns.PASSPORT_ID_COL + "," + AccountsContract.Columns.CORP_NAME_COL + " COLLATE NOCASE ASC";
+                break;
+            default:
+                sortOrder = AccountsContract.Columns.CORP_NAME_COL + "," + AccountsContract.Columns.SEQUENCE_COL + " COLLATE NOCASE ASC";
+                break;
         }
 //        String sortOrder = AccountsContract.Columns.TASKS_SORTORDER + "," + TasksContract.Columns.TASKS_NAME;
-//        Cursor cursor = new CursorLoader(this,
-//                AccountsContract.CONTENT_URI,
-//                projectionAcct,
+        return new CursorLoader(this,
+                AccountsContract.CONTENT_URI,
+                projectionAcct,
 //                null,
-//                null,
-//                sortOrder);
-        Cursor cursor = getContentResolver().query(
-                AccountsContract.CONTENT_URI, null, null, null, AccountsContract.Columns.CORP_NAME_COL);
-        Log.d(TAG, "onCreateLoader: cursor " + cursor.toString());
-        return cursor;
+                null,
+                null,
+                sortOrder);
+//        Cursor cursor = getContentResolver().query(
+//                AccountsContract.CONTENT_URI, null, null, null, sortOrder);
+////        Log.d(TAG, "onCreateLoader: cursor " + cursor.toString());
+//        return cursor;
     }
 
+    @Override
+    public void onLoadFinished(Loader<Cursor > loader, Cursor data) {
+        //        Log.d(TAG, "onLoadFinished: starts");
+//        this.loader = loader;
+        int count = 0;
+        mAccountAdapter.swapCursor(data);
+        count = mAccountAdapter.getItemCount();
+//        if (count == 0) {
+//            twCurrentTitle.setText("No accounts, + to add");
+//        } else {
+//            twCurrentTitle.setText("Accounts");
+//        }
+//        Log.d(TAG, "onLoadFinished: count is " + count);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+//        Log.d(TAG, "onLoaderReset: starts");
+        mAccountAdapter.swapCursor(null);
+    }
+
+
+//    @Override
+//    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+//
+//
+//    }
+//
+//    @Override
+//    public void onLoaderReset(Loader<Cursor> loader) {
+//
+//    }
 
     @Override
     public void onAccountRetreived(Account account) {
@@ -337,7 +525,8 @@ public class AccountListActivity extends AppCompatActivity
                 Log.d(TAG, "ExportAccountDB: file " + file.getAbsoluteFile());
                 if (file.createNewFile()) {
                     Log.d(TAG, "ExportAccountDB: file created " + file.getAbsoluteFile());
-                };
+                }
+                ;
 //                Log.d(TAG, "ExportAccountDB: file created");
 
 //                OutputStream fos = new BufferedOutputStream(new FileOutputStream(file));
@@ -362,6 +551,9 @@ public class AccountListActivity extends AppCompatActivity
         } catch (IOException e1) {
             msgError = e1.getMessage();
             Log.e(TAG, "ExportAccountDB error: " + e1.getMessage());
+            Toast.makeText(AccountListActivity.this,
+                    " Exported directory not exists",
+                    Toast.LENGTH_LONG).show();
         } catch (Exception e2) {
             e2.printStackTrace();
             System.out.println(e2.getMessage());
@@ -380,9 +572,10 @@ public class AccountListActivity extends AppCompatActivity
     public void writeJson(OutputStream out) throws IOException {
         JsonWriter writer = new JsonWriter(new OutputStreamWriter(out, "UTF-8"));
         writer.setIndent("    ");
-        jsonFinal(writer);}
+        jsonFinal(writer);
+    }
 
-    public void jsonFinal(JsonWriter writer) throws IOException{
+    public void jsonFinal(JsonWriter writer) throws IOException {
         writer.beginObject();
         writer.name("status").value("OK");
         writer.name("num_results").value("");
@@ -669,7 +862,7 @@ public class AccountListActivity extends AppCompatActivity
         args.putInt(AppDialog.DIALOG_ID, AppDialog.DIALOG_ID_CONFIRM_DELETE_ACCOUNT);
         args.putInt(AppDialog.DIALOG_TYPE, AppDialog.DIALOG_YES_NO);
         args.putString(AppDialog.DIALOG_MESSAGE, getString(R.string.deldiag_message));
-        args.putString(AppDialog.DIALOG_SUB_MESSAGE, getString(R.string.deldiag_sub_message, account.getPassportId(), account.getCorpName()));
+        args.putString(AppDialog.DIALOG_SUB_MESSAGE, getString(R.string.deldiag_sub_message, account.getCorpName(), account.getPassportId()));
         args.putInt(AppDialog.DIALOG_ACCOUNT_ID, account.getId());
         args.putInt(AppDialog.DIALOG_POSITIVE_RID, R.string.deldiag_positive_caption);
 
@@ -714,20 +907,31 @@ public class AccountListActivity extends AppCompatActivity
 
     private void editAccountRequest(Account account) {
 //        Log.d(TAG, "addAccountRequest: starts");
-        boolean mTwoPane = false;
+//        boolean mTwoPane = false;
         if (mTwoPane) {
-//            Log.d(TAG, "addAccountRequest: in two-pane mode (tablet)");
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            AppDialog newFragment = AppDialog.newInstance();
-            Bundle args = new Bundle();
-            args.putInt(AppDialog.DIALOG_ID, AppDialog.DIALOG_ID_ACCOUNT_ACTIONS_LIST);
-            args.putInt(AppDialog.DIALOG_TYPE, AppDialog.DIALOG_ACCOUNT_LIST_OPTIONS);
-            args.putString(AppDialog.DIALOG_MESSAGE, getString(R.string.listdiag_acc_message));
-            args.putString(AppDialog.DIALOG_SUB_MESSAGE, getString(R.string.listdiag_acc_sub_message));
+            mAccountAdapter.resetSelection();
+            this.account = new Account();
+            mSectionsPagerAdapter.setAccount(this.account);
+            mViewPager.setCurrentItem(2);
+//            mSectionsPagerAdapter.notifyDataSetChanged();
+            mViewPager.setCurrentItem(1);
+//            mSectionsPagerAdapter.notifyDataSetChanged();
+            mViewPager.setCurrentItem(0);
+            mSectionsPagerAdapter.notifyDataSetChanged();
+            getLoaderManager().restartLoader(ACCOUNT_LOADER_ID, null, this);
 
-            newFragment.setArguments(args);
-
-            newFragment.show(fragmentManager, "dialog");
+////            Log.d(TAG, "addAccountRequest: in two-pane mode (tablet)");
+//            FragmentManager fragmentManager = getSupportFragmentManager();
+//            AppDialog newFragment = AppDialog.newInstance();
+//            Bundle args = new Bundle();
+//            args.putInt(AppDialog.DIALOG_ID, AppDialog.DIALOG_ID_ACCOUNT_ACTIONS_LIST);
+//            args.putInt(AppDialog.DIALOG_TYPE, AppDialog.DIALOG_ACCOUNT_LIST_OPTIONS);
+//            args.putString(AppDialog.DIALOG_MESSAGE, getString(R.string.listdiag_acc_message));
+//            args.putString(AppDialog.DIALOG_SUB_MESSAGE, getString(R.string.listdiag_acc_sub_message));
+//
+//            newFragment.setArguments(args);
+//
+//            newFragment.show(fragmentManager, "dialog");
 
         } else {
 //            Log.d(TAG, "addAccountRequest: in single-pan mode (phone)");
@@ -751,23 +955,94 @@ public class AccountListActivity extends AppCompatActivity
         Intent intent = new Intent(this, AccountActivity.class);
         intent.putExtra(Account.class.getSimpleName(), account.getId());
 
-        startActivity(intent);
+        startActivityForResult(intent, AccountsContract.ACCOUNT_ACTION_CHG);
 
     }
 
     @Override
     public void onAccountLandListSelect(Account account) {
         Log.d(TAG, "onAccountLandListSelect: id " + account.getId());
-        Bundle arguments = new Bundle();
-        arguments.putInt(Account.class.getSimpleName(), account.getId());
-        AccountActivityFragment fragment = new AccountActivityFragment();
-        fragment.setArguments(arguments);
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.item_detail_container, fragment)
-                .commit();
+//        accountActivityFragment = new AccountActivityFragment();
+//        this.account = account;
+//        Bundle arguments = new Bundle();
+//        arguments.putInt(Account.class.getSimpleName(), account.getId());
+//        accountActivityFragment.setArguments(arguments);
+//        getSupportFragmentManager().beginTransaction()
+//                .replace(R.id.item_detail_container, accountActivityFragment)
+//                .commit();
+
+//        Log.d(TAG, "onAccountLandListSelect: account " + account);
+        mSectionsPagerAdapter.setAccount(account);
+        mSectionsPagerAdapter.notifyDataSetChanged();
+//        mSectionsPagerAdapter.getItem(0);
+//        mSectionsPagerAdapter.getItem(1);
+//        mSectionsPagerAdapter.getItem(2);
+////        mViewPager.setCurrentItem(2);
+////        mViewPager.setCurrentItem(1);
+//        mViewPager.setCurrentItem(0);
+//        mViewPager.setCurrentItem(2);
+//        mViewPager.setCurrentItem(1);
+//        mViewPager.setCurrentItem(0);
+//        frag1.fillPage(account);
+//        frag2.fillPage(account);
+//        frag3.fillPage(account);
+//        if (mSectionsPagerAdapter != null) {
+//            mSectionsPagerAdapter.setAccount(account);
+//            mViewPager.setCurrentItem(2);
+//            mSectionsPagerAdapter.notifyDataSetChanged();
+//            mViewPager.setCurrentItem(1);
+//            mSectionsPagerAdapter.notifyDataSetChanged();
+//            mViewPager.setCurrentItem(0);
+//            mSectionsPagerAdapter.notifyDataSetChanged();
+////            mSectionsPagerAdapter.fillPages();
+////            int limit = mSectionsPagerAdapter.getCountBuilt();
+////            for (int i = 0; i < limit; i++) {
+////                mSectionsPagerAdapter.fillPages;
+//////                mSectionsPagerAdapter.removeFrag(0);
+//
+////            if (mSectionsPagerAdapter.getCountBuilt() > 0) {
+//////        getSupportFragmentManager().beginTransaction().remove(frag).commit();
+////                getFragmentManager().beginTransaction().remove(getFragmentManager().findFragmentById(R.id.item_detail_container)).commit();
+////
+////            }
+//        }
+
+
+//        // primary sections of the activity.
+//        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+//
+//
+//        // Create the adapter that will return a fragment for each of the three
+//
+//        // Set up the ViewPager with the sections adapter.
+//        mViewPager = (ViewPager) findViewById(R.id.item_detail_container);
+//        mViewPager.setAdapter(mSectionsPagerAdapter);
+
 
     }
 
+    private void clearFrag() {
+        this.account = null;
+        Bundle arguments = new Bundle();
+        arguments.putInt(Account.class.getSimpleName(), -1);
+        accountActivityFragment = new AccountActivityFragment();
+        accountActivityFragment.setArguments(arguments);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.item_detail_container, accountActivityFragment)
+                .commit();
+    }
+
+//    @Override
+//    public void onBackPressed() {
+//        if (mViewPager.getCurrentItem() == 0) {
+//            // If the user is currently looking at the first step, allow the system to handle the
+//            // Back button. This calls finish() on this activity and pops the back stack.
+//            super.onBackPressed();
+//        } else {
+//            // Otherwise, select the previous step.
+//            mViewPager.setCurrentItem(mViewPager.getCurrentItem() - 1);
+//        }
+//    }
 
     @Override
     public void onDialogCancelled(int dialogId) {
@@ -783,6 +1058,8 @@ public class AccountListActivity extends AppCompatActivity
 //            Log.d(TAG, "onPositiveDialogResult: confirmed to delete");
 //            Log.d(TAG, "onPositiveDialogResult: acctid " + args.getInt(AppDialog.DIALOG_ACCOUNT_ID));
                 getContentResolver().delete(AccountsContract.buildIdUri(args.getInt(AppDialog.DIALOG_ACCOUNT_ID)), null, null);
+                setupAdapter();
+                clearFrag();
                 break;
             case AppDialog.DIALOG_ID_ASK_IF_NEED_DICTIONARY_REBUILD:
 //                Log.d(TAG, "onPositiveDialogResult: rebuild req");
@@ -796,8 +1073,8 @@ public class AccountListActivity extends AppCompatActivity
                 break;
             default:
                 break;
-            }
         }
+    }
 
     @Override
     public void onNegativeDialogResult(int dialogId, Bundle args) {
@@ -821,7 +1098,7 @@ public class AccountListActivity extends AppCompatActivity
         getContentResolver().delete(
                 SearchesContract.CONTENT_URI_TRUNCATE,
                 null, null);
-
+        getLoaderManager().restartLoader(ACCOUNT_LOADER_ID, null, null);
     }
 
     private void confirmImport() {
@@ -854,40 +1131,61 @@ public class AccountListActivity extends AppCompatActivity
     public void onActionRequestDialogResult(int dialogId, Bundle args, int which) {
 //        Log.d(TAG, "onActionRequestDialogResult: starts");
 
+        if (dialogId != AppDialog.DIALOG_ID_ACCOUNT_ACTIONS_LIST) {
+            return;
+        }
         Intent returnIntent;
         switch (which) {
-            case 0:
-                editAccountRequest(null);
+            case AppDialog.DIALOG_ACCT_LIST_CORP_NAME:
+                mSortorder = AccountsContract.ACCOUNT_LIST_BY_CORP_NAME;
+                setupAdapter();
                 break;
-            case 1:
-            case 2:
-            case 3:
-            case 4:
-//                Log.d(TAG, "onActionRequestDialogResult: request list");
-                returnIntent = new Intent();
-                returnIntent.putExtra("which", which);
-                setResult(Activity.RESULT_OK, returnIntent);
-                finish();
+            case AppDialog.DIALOG_ACCT_LIST_OPEN_DATE:
+                mSortorder = AccountsContract.ACCOUNT_LIST_BY_OPEN_DATE;
+                setupAdapter();
                 break;
-            case 5:
+            case AppDialog.DIALOG_ACCT_LIST_ACCT_ID:
+                mSortorder = AccountsContract.ACCOUNT_LIST_BY_PASSPORT_ID;
+                setupAdapter();
+                break;
+            case AppDialog.DIALOG_ACCT_LIST_USER_SEQ:
+                mSortorder = AccountsContract.ACCOUNT_LIST_BY_SEQUENCE;
+                setupAdapter();
+                break;
+//            case 4:
+////                Log.d(TAG, "onActionRequestDialogResult: request list");
+//                returnIntent = new Intent();
+//                returnIntent.putExtra("which", which);
+//                setResult(Activity.RESULT_OK, returnIntent);
+//                finish();
+//                break;
+            case AppDialog.DIALOG_ACCT_LIST_EXPORT:
                 confirmExport();
                 break;
-            case 6:
+            case AppDialog.DIALOG_ACCT_LIST_IMPORT:
                 confirmImport();
                 break;
-            case 7:
+            case AppDialog.DIALOG_ACCT_LIST_VIEW_EXPORT_FILE:
                 viewAccountsFile();
                 break;
-            case 8:
-                returnIntent = new Intent();
-                returnIntent.putExtra("which", which);
-                Log.d(TAG, "onActionRequestDialogResult: which " + which);
-                setResult(Activity.RESULT_OK, returnIntent);
-                finish();
+            case AppDialog.DIALOG_ACCT_LIST_VIEW_SUGGESTIONS:
+                suggestPasswordList();
+//                returnIntent = new Intent();
+//                returnIntent.putExtra("which", which);
+//                Log.d(TAG, "onActionRequestDialogResult: which " + which);
+//                setResult(Activity.RESULT_OK, returnIntent);
+//                finish();
                 break;
             default:
                 Log.d(TAG, "onActionRequestDialogResult: default " + which);
         }
+    }
+
+    private void suggestPasswordList() {
+        Intent detailIntent = new Intent(this, SuggestListActivity.class);
+        detailIntent.putExtra(Suggest.class.getSimpleName(), "sortorder");
+        startActivity(detailIntent);
+
     }
 
     @Override
@@ -899,13 +1197,33 @@ public class AccountListActivity extends AppCompatActivity
         // Check which request we're responding to
         switch (requestCode) {
             case AccountsContract.ACCOUNT_ACTION_CHG: {
-//                Log.d(TAG, "onActivityResult: returned from edit change");
+                Log.d(TAG, "onActivityResult: returned from edit change");
+                setupAdapter();
                 break;
             }
             case AccountsContract.ACCOUNT_ACTION_ADD: {
-//                Log.d(TAG, "onActivityResult: returned from edit add");
+                Log.d(TAG, "onActivityResult: returned from edit add");
+                setupAdapter();
                 break;
             }
         }
     }
+
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        Log.d(TAG, "onPageScrolled: " + position);
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        Log.d(TAG, "onPageSelected: " + position);
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+        Log.d(TAG, "onPageScrollStateChanged: " + state);
+    }
+
+
 }

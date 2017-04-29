@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -19,14 +20,15 @@ import com.kinsey.passwords.items.Account;
 import com.kinsey.passwords.items.AccountsContract;
 import com.kinsey.passwords.provider.AccountRecyclerViewAdapter;
 
-import static com.kinsey.passwords.MainActivityFragment.LOADER_ID;
+import static com.kinsey.passwords.MainActivityFragment.ACCOUNT_LOADER_ID;
 
 /**
  * A placeholder fragment containing a simple view.
  */
 public class AccountListActivityFragment extends Fragment
         implements LoaderManager.LoaderCallbacks<Cursor>,
-        AccountRecyclerViewAdapter.OnAccountClickListener {
+        AccountRecyclerViewAdapter.OnAccountClickListener,
+        ViewPager.OnPageChangeListener {
 
     private static final String TAG = "AccountListActivityFrag";
 
@@ -73,6 +75,7 @@ public class AccountListActivityFragment extends Fragment
     }
 
 
+
     public enum FragmentListMode {CORP_NAME, OPEN_DATE}
 
     ;
@@ -91,7 +94,7 @@ public class AccountListActivityFragment extends Fragment
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
 //        Log.d(TAG, "onActivityCreated: starts loader_id " + LOADER_ID);
         super.onActivityCreated(savedInstanceState);
-        getLoaderManager().initLoader(LOADER_ID, null, this);
+        getLoaderManager().initLoader(ACCOUNT_LOADER_ID, null, this);
     }
 
     @Override
@@ -204,4 +207,21 @@ public class AccountListActivityFragment extends Fragment
 //        Log.d(TAG, "onLoaderReset: starts");
         mAccountAdapter.swapCursor(null);
     }
+
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
+    }
+
 }

@@ -1,8 +1,12 @@
 package com.kinsey.passwords;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -12,14 +16,24 @@ import android.widget.Toast;
 
 import com.kinsey.passwords.items.Account;
 import com.kinsey.passwords.items.AccountsContract;
+import com.kinsey.passwords.provider.SectionsPagerAdapter;
 import com.kinsey.passwords.tools.AppDialog;
+
+import java.util.List;
+import java.util.Vector;
 
 public class AccountActivity extends AppCompatActivity
         implements AccountActivityFragment.OnActionListener,
         AppDialog.DialogEvents,
-        AccountActivity1Fragment.OnSaveClicked {
+        ViewPager.OnPageChangeListener {
+
     private static final String TAG = "AccountActivity";
 
+    private SectionsPagerAdapter mSectionsPagerAdapter;
+    /**
+     * The {@link ViewPager} that will host the section contents.
+     */
+    private ViewPager mViewPager;
     private Account account;
 
     @Override
@@ -29,6 +43,57 @@ public class AccountActivity extends AppCompatActivity
         setContentView(R.layout.activity_account);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+//        AccountPlaceholderFrag1 frag = AccountPlaceholderFrag1.newInstance(0);
+//        Log.d(TAG, "onCreate: see frag1 msgs");
+//        AccountPlaceholderFrag1 frag11 = new AccountPlaceholderFrag1();
+//        Log.d(TAG, "onCreate: see frag11 msgs");
+
+        Bundle arguments = getIntent().getExtras();
+        if (arguments == null) {
+            Log.d(TAG, "onCreate: arguments is null");
+            return;
+        }
+        int accountId = (int) arguments.getInt(Account.class.getSimpleName());  // The line we'll change later
+        Log.d(TAG, "onCreate: id " + accountId);
+
+
+        account = getAccount(accountId);
+
+
+
+//        List<Fragment> fragments = new Vector<Fragment>();
+////        fragments.add(Fragment.instantiate(this, AccountPlaceholderFrag1.class.getName()));
+////        fragments.add(Fragment.instantiate(this, AccountPlaceholderFrag2.class.getName()));
+////        fragments.add(Fragment.instantiate(this, AccountPlaceholderFrag3.class.getName()));
+//        fragments.add(AccountPlaceholderFrag1.newInstance(0));
+//        fragments.add(AccountPlaceholderFrag2.newInstance(1));
+//        fragments.add(AccountPlaceholderFrag3.newInstance(2));
+////        fragments.add(Fragment.instantiate(this, AccountPlaceholderFrag2.class.getName()));
+////        fragments.add(Fragment.instantiate(this, AccountPlaceholderFrag3.class.getName()));
+
+        // Create the adapter that will return a fragment for each of the three
+        // primary sections of the activity.
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), account);
+        mSectionsPagerAdapter.setAccount(account);
+        Log.d(TAG, "onCreate: mSectionsPagerAdapter ");
+
+        // Set up the ViewPager with the sections adapter.
+        mViewPager = (ViewPager) findViewById(R.id.item_detail_container);
+        mViewPager.setAdapter(mSectionsPagerAdapter);
+
+//        mViewPager.setCurrentItem(2);
+//        AccountPlaceholderFrag3 frag3 = (AccountPlaceholderFrag3)mSectionsPagerAdapter.getItem(2);
+////        frag3.fillPage(account);
+//        mViewPager.setCurrentItem(1);
+//        AccountPlaceholderFrag2 frag2 = (AccountPlaceholderFrag2)mSectionsPagerAdapter.getItem(1);
+////        frag2.fillPage(account);
+//        mViewPager.setCurrentItem(0);
+//        AccountPlaceholderFrag1 frag1 = (AccountPlaceholderFrag1)mSectionsPagerAdapter.getItem(0);
+////        frag1.fillPage(account);
+//        mSectionsPagerAdapter.notifyDataSetChanged();
+
+
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
@@ -115,7 +180,7 @@ public class AccountActivity extends AppCompatActivity
             switch (menuItem.getItemId()) {
                 case R.id.menuacct_add:
                     menuItem.setVisible(false);
-                    Log.d(TAG, "onMenuOpened: set off add");
+//                    Log.d(TAG, "onMenuOpened: set off add");
                     break;
                 default:
                     menuItem.setVisible(true);
@@ -143,13 +208,33 @@ public class AccountActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    private void saveAccount() {
-//        FragmentManager fragmentManager = getSupportFragmentManager();
-//        android.support.v4.app.Fragment frag = fragmentManager.findFragmentById(R.id.fragmentEdit);
-        AccountActivityFragment fragment = (AccountActivityFragment) getSupportFragmentManager().findFragmentById(R.id.fragmentEdit);
-        if (fragment.save()) {
-            finish();
+
+    private Account getAccount(int id) {
+        int iId = 0;
+        Cursor cursor = getContentResolver()
+                .query(AccountsContract.buildIdUri(id), null, null, null, null);
+        if (cursor == null) {
+            return null;
+        } else {
+            if (cursor.moveToFirst()) {
+                Account account = AccountsContract.getAccountFromCursor(cursor);
+                cursor.close();
+                return account;
+            }
+            cursor.close();
+            return null;
         }
+    }
+
+    private void saveAccount() {
+
+        Intent resultIntent = new Intent();
+        setResult(Activity.RESULT_OK);
+//        AccountActivityFragment fragment = (AccountActivityFragment) getSupportFragmentManager().findFragmentById(R.id.fragmentEdit);
+//        if (fragment.save()) {
+//            setResult(Activity.RESULT_OK);
+//            finish();
+//        }
     }
 
     private void deleteAccount() {
@@ -180,11 +265,11 @@ public class AccountActivity extends AppCompatActivity
         super.onBackPressed();
     }
 
-    @Override
-    public void onSaveClicked() {
-        setResult(Activity.RESULT_OK);
-        finish();
-    }
+//    @Override
+//    public void onSaveClicked() {
+//        setResult(Activity.RESULT_OK);
+//        finish();
+//    }
 
     @Override
     public void onAccountRetreived(Account account) {
@@ -199,6 +284,7 @@ public class AccountActivity extends AppCompatActivity
 //            Log.d(TAG, "onPositiveDialogResult: confirmed to delete");
 //            Log.d(TAG, "onPositiveDialogResult: acctid " + args.getInt(AppDialog.DIALOG_ACCOUNT_ID));
                 getContentResolver().delete(AccountsContract.buildIdUri(args.getInt(AppDialog.DIALOG_ACCOUNT_ID)), null, null);
+                setResult(Activity.RESULT_OK);
                 finish();
                 break;
             default:
@@ -221,11 +307,27 @@ public class AccountActivity extends AppCompatActivity
 
     @Override
     public void onActionRequestDialogResult(int dialogId, Bundle args, int which) {
-
+        Log.d(TAG, "onActionRequestDialogResult: ");
     }
 
     @Override
     public void onDialogCancelled(int dialogId) {
+        Log.d(TAG, "onDialogCancelled: ");
+    }
+
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        Log.d(TAG, "onPageScrolled: ");
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
 
     }
 }

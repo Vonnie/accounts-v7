@@ -256,7 +256,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        Log.d(TAG, "onActivityResult: starts");
+        Log.d(TAG, "onActivityResult: starts");
         if (resultCode == RESULT_CANCELED) {
             return;
         }
@@ -271,25 +271,25 @@ public class MainActivity extends AppCompatActivity
 //                    Log.d(TAG, "onActivityResult: success");
                     int resultWhich = data.getIntExtra("which", 0);
 //                    Log.d(TAG, "onActivityResult: which " + resultWhich);
-                    switch (resultWhich) {
-                        case 1:
-                            accountsListRequest(AccountsContract.ACCOUNT_LIST_BY_CORP_NAME);
-                            break;
-                        case 2:
-                            accountsListRequest(AccountsContract.ACCOUNT_LIST_BY_OPEN_DATE);
-                            break;
-                        case 3:
-                            accountsListRequest(AccountsContract.ACCOUNT_LIST_BY_SEQUENCE);
-                            break;
-                        case 4:
-                            accountsListRequest(AccountsContract.ACCOUNT_LIST_BY_PASSPORT_ID);
-                            break;
-                        case 8:
-                            suggestsListRequest();
-                            break;
-                        default:
-                            break;
-                    }
+//                    switch (resultWhich) {
+//                        case 1:
+//                            accountsListRequest(AccountsContract.ACCOUNT_LIST_BY_CORP_NAME);
+//                            break;
+//                        case 2:
+//                            accountsListRequest(AccountsContract.ACCOUNT_LIST_BY_OPEN_DATE);
+//                            break;
+//                        case 3:
+//                            accountsListRequest(AccountsContract.ACCOUNT_LIST_BY_SEQUENCE);
+//                            break;
+//                        case 4:
+//                            accountsListRequest(AccountsContract.ACCOUNT_LIST_BY_PASSPORT_ID);
+//                            break;
+//                        case 8:
+//                            suggestsListRequest();
+//                            break;
+//                        default:
+//                            break;
+//                    }
                     // The user picked a contact.
                     // The Intent's data Uri identifies which contact was selected.
 
