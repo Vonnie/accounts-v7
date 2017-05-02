@@ -1,5 +1,7 @@
 package com.kinsey.passwords;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -33,9 +35,11 @@ public class AccountPlaceholderFrag2 extends Fragment {
     private static final String TAG = "AccountPlaceholderFrag2";
     private static final String ARG_SECTION_NUMBER = "section_number";
     private static final String ARG_ACCOUNT = "account";
+    public static final String ARG_ACCOUNT_ROWID = "account_rowid";
     private int sectNumber;
-    Account account = new Account();
-    private int accountId = -1;
+//    Account account = new Account();
+//    private int accountId = -1;
+    private int rowId = -1;
 
     private EditText mCorpNameTextView;
     private EditText mUserNameTextView;
@@ -52,9 +56,16 @@ public class AccountPlaceholderFrag2 extends Fragment {
     private long lngOpenDate;
     private ImageButton mImgWebView;
 
+    private long acctOpenDate = 0;
+
     private static String pattern_ymdtimehm = "yyyy-MM-dd kk:mm";
     public static SimpleDateFormat format_ymdtimehm = new SimpleDateFormat(
             pattern_ymdtimehm, Locale.US);
+
+    private OnAccountListener mListener;
+    public interface OnAccountListener {
+        void onAccount2Instance();
+    }
 
 
     public AccountPlaceholderFrag2() {
@@ -69,6 +80,7 @@ public class AccountPlaceholderFrag2 extends Fragment {
         Bundle args = new Bundle();
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
 //        args.putSerializable(ARG_ACCOUNT, account);
+//        args.putInt(ARG_ACCOUNT_ROWID, rowId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -76,12 +88,14 @@ public class AccountPlaceholderFrag2 extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        int sectNumber = getArguments().getInt(ARG_SECTION_NUMBER);
+        this.sectNumber = getArguments().getInt(ARG_SECTION_NUMBER);
+//        this.rowId = getArguments().getInt(ARG_ACCOUNT_ROWID);
         Log.d(TAG, "onCreateView: sectNumber " + sectNumber);
         Log.d(TAG, "onCreateView: sectNumber " + sectNumber);
 //        Account account = (Account)getArguments().getSerializable(ARG_ACCOUNT);
-        this.sectNumber = sectNumber;
+//        Log.d(TAG, "onCreateView: rowid " + this.rowId);
 //        this.account = account;
+
 
         View rootView;
         TextView tvPage;
@@ -106,6 +120,7 @@ public class AccountPlaceholderFrag2 extends Fragment {
 //                break;
 //        }
 
+        mListener.onAccount2Instance();
 //            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
 //            textView.setText(getString(R.string.section_format, sectNumber));
         return rootView;
@@ -159,9 +174,9 @@ public class AccountPlaceholderFrag2 extends Fragment {
 
     public void fillPage(Account account) {
 
-        Log.d(TAG, "setupPage2: corpname " + account.getCorpName());
-        accountId = account.getId();
-        this.account = account;
+        Log.d(TAG, "fillPage2: corpname " + account.getCorpName());
+        rowId = account.getId();
+//        this.account = account;
         mDtePickOpen.setMaxDate(new Date().getTime());
         mDtePickOpen.setMinDate(0);
         Date dte;
@@ -197,27 +212,30 @@ public class AccountPlaceholderFrag2 extends Fragment {
             Calendar c2 = Calendar.getInstance();
             c2.set(mDtePickOpen.getYear(), mDtePickOpen.getMonth(), mDtePickOpen.getDayOfMonth());
             long lngDatePickerOpenDate = c2.getTimeInMillis();
-            account.setOpenLong(lngDatePickerOpenDate);
+            acctOpenDate = lngDatePickerOpenDate;
         }
     }
 
 
     public boolean collectChgs(Account account) {
 
-        if (this.account == null) {
+        if (mDtePickOpen == null) {
             return false;
         }
 
-        if (this.account.getId() == account.getId()) {
+        boolean chgsMade = false;
+
+//        if (this.account.getId() == account.getId()) {
             loadFromMap();
 
-            if (this.account.getOpenLong() != account.getOpenLong()) {
-                return true;
+            if (acctOpenDate != account.getOpenLong()) {
+                account.setOpenLong(acctOpenDate);
+                chgsMade = true;
             }
 
-            return false;
-        }
-        return false;
+            return chgsMade;
+//        }
+//        return false;
     }
 //    private void setupPage3(View view) {
 //
@@ -277,8 +295,8 @@ public class AccountPlaceholderFrag2 extends Fragment {
 //        return true;
 //    }
 
-    public boolean validatePage2() {
-        return true;
+    public boolean validatePageErrors() {
+        return false;
     }
 
 //    private boolean validatePage3() {
@@ -322,5 +340,24 @@ public class AccountPlaceholderFrag2 extends Fragment {
         return null;
     }
 
+    @Override
+    public void onAttach(Context context) {
+//        Log.d(TAG, "onAttach: starts");
+        super.onAttach(context);
 
+        // Activities containing this fragment must implement it's callbacks
+        Activity activity = getActivity();
+        if (!(activity instanceof AccountPlaceholderFrag2.OnAccountListener)) {
+            throw new ClassCastException(activity.getClass().getSimpleName()
+                    + " must implement AddEditActivityFragment interface");
+        }
+        mListener = (AccountPlaceholderFrag2.OnAccountListener) activity;
+    }
+
+    @Override
+    public void onDetach() {
+//        Log.d(TAG, "onDetach: starts");
+        super.onDetach();
+        mListener = null;
+    }
 }

@@ -1,5 +1,7 @@
 package com.kinsey.passwords;
 
+import android.app.Activity;
+import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -32,9 +34,11 @@ public class AccountPlaceholderFrag3 extends Fragment {
     private static final String TAG = "AccountPlaceholderFrag3";
     private static final String ARG_SECTION_NUMBER = "section_number";
     private static final String ARG_ACCOUNT = "account";
+    public static final String ARG_ACCOUNT_ROWID = "account_rowid";
     private int sectNumber;
-    Account account = new Account();
-    private int accountId = -1;
+//    Account account = new Account();
+//    private int accountId = -1;
+    private int rowId = -1;
 
     private EditText mCorpNameTextView;
     private EditText mUserNameTextView;
@@ -51,9 +55,18 @@ public class AccountPlaceholderFrag3 extends Fragment {
     private long lngOpenDate;
     private ImageButton mImgWebView;
 
+    private String acctNote = "";
+    private int acctRefFrom = 0;
+    private int acctRefTo = 0;
+
     private static String pattern_ymdtimehm = "yyyy-MM-dd kk:mm";
     public static SimpleDateFormat format_ymdtimehm = new SimpleDateFormat(
             pattern_ymdtimehm, Locale.US);
+
+    private OnAccountListener mListener;
+    public interface OnAccountListener {
+        void onAccount3Instance();
+    }
 
 
     public AccountPlaceholderFrag3() {
@@ -75,11 +88,12 @@ public class AccountPlaceholderFrag3 extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        int sectNumber = getArguments().getInt(ARG_SECTION_NUMBER);
+        this.sectNumber = getArguments().getInt(ARG_SECTION_NUMBER);
+//        this.rowId = getArguments().getInt(ARG_ACCOUNT_ROWID);
         Log.d(TAG, "onCreateView: sectNumber " + sectNumber);
         Log.d(TAG, "onCreateView: sectNumber " + sectNumber);
+
 //        Account account = (Account)getArguments().getSerializable(ARG_ACCOUNT);
-        this.sectNumber = sectNumber;
 //        this.account = account;
 
         View rootView;
@@ -104,6 +118,8 @@ public class AccountPlaceholderFrag3 extends Fragment {
                 setupPage3(rootView);
 //                break;
 //        }
+
+        mListener.onAccount3Instance();
 
 //            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
 //            textView.setText(getString(R.string.section_format, sectNumber));
@@ -194,9 +210,9 @@ public class AccountPlaceholderFrag3 extends Fragment {
 
     public void fillPage(Account account) {
 
-        Log.d(TAG, "setupPage3: corpname " + account.getCorpName());
-        accountId = account.getId();
-        this.account = account;
+        Log.d(TAG, "fillPage3: corpname " + account.getCorpName());
+        rowId = account.getId();
+//        this.account = account;
         mNoteTextView.setText(account.getNote());
         Log.d(TAG, "fillPage: note " + account.getNote());
 
@@ -255,21 +271,24 @@ public class AccountPlaceholderFrag3 extends Fragment {
 //        return true;
 //    }
 
-    public boolean validatePage3() {
+    public boolean validatePageErrors() {
+
+        boolean hasErrors = false;
+
         if (!mRefIdFromTextView.getText().toString().equals("")) {
             if (!isIdOnDB(mRefIdFromTextView.getText().toString())) {
                 mRefIdFromTextView.setError("Reference back id does not exists");
-                return false;
+                hasErrors = true;
             };
         }
         if (!mRefIdToTextView.getText().toString().equals("")) {
             if (!isIdOnDB(mRefIdToTextView.getText().toString())) {
                 mRefIdToTextView.setError("Reference to id does not exists");
-                return false;
+                hasErrors = true;
             };
         }
 
-        return true;
+        return hasErrors;
     }
 
 
@@ -308,45 +327,53 @@ public class AccountPlaceholderFrag3 extends Fragment {
     }
 
     private void loadFromMap() {
-        this.account.setNote(mNoteTextView.getText().toString());
+        acctNote = mNoteTextView.getText().toString();
         if (mRefIdFromTextView.getText().toString().equals("")) {
-            this.account.setRefFrom(0);
+            acctRefFrom = 0;
         } else {
-            this.account.setRefFrom(Integer.parseInt(mRefIdFromTextView.getText().toString()));
+            acctRefFrom = Integer.parseInt(mRefIdFromTextView.getText().toString());
         }
-        if (mRefIdFromTextView.getText().toString().equals("")) {
-            this.account.setRefTo(0);
+        Log.d(TAG, "loadFromMap: refTo " + mRefIdToTextView.getText());
+        if (mRefIdToTextView.getText().toString().equals("")) {
+            acctRefTo = 0;
         } else {
-            this.account.setRefTo(Integer.parseInt(mRefIdToTextView.getText().toString()));
+            acctRefTo = Integer.parseInt(mRefIdToTextView.getText().toString());
         }
     }
 
 
     public boolean collectChgs(Account account) {
 
-        if (this.account == null) {
+        if (mNoteTextView == null) {
             return false;
         }
 
-        if (this.account.getId() == account.getId()) {
+        boolean chgsMade = false;
+
+//        if (this.account.getId() == account.getId()) {
 
             loadFromMap();
 
-            if (!this.account.getNote().equals(account.getNote())) {
-                return true;
+            if (!acctNote.equals(account.getNote())) {
+                account.setNote(acctNote);
+                chgsMade = true;
             }
 
-            if (this.account.getRefFrom() != account.getRefFrom()) {
-                return true;
+            if (acctRefFrom != account.getRefFrom()) {
+                account.setRefFrom(acctRefFrom);
+                chgsMade = true;
             }
 
-            if (this.account.getRefTo() != account.getRefTo()) {
-                return true;
+            if (acctRefTo != account.getRefTo()) {
+                account.setRefTo(acctRefTo);
+                chgsMade = true;
             }
 
-            return false;
-        }
-        return false;
+            return chgsMade;
+
+//            return false;
+//        }
+//        return false;
     }
 
 
@@ -366,5 +393,24 @@ public class AccountPlaceholderFrag3 extends Fragment {
         return null;
     }
 
+    @Override
+    public void onAttach(Context context) {
+//        Log.d(TAG, "onAttach: starts");
+        super.onAttach(context);
 
+        // Activities containing this fragment must implement it's callbacks
+        Activity activity = getActivity();
+        if (!(activity instanceof AccountPlaceholderFrag3.OnAccountListener)) {
+            throw new ClassCastException(activity.getClass().getSimpleName()
+                    + " must implement AddEditActivityFragment interface");
+        }
+        mListener = (AccountPlaceholderFrag3.OnAccountListener) activity;
+    }
+
+    @Override
+    public void onDetach() {
+//        Log.d(TAG, "onDetach: starts");
+        super.onDetach();
+        mListener = null;
+    }
 }

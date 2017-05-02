@@ -7,17 +7,18 @@ import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.ViewGroup;
 
+import com.kinsey.passwords.AccountListActivityFragment;
 import com.kinsey.passwords.AccountPlaceholderFrag1;
 import com.kinsey.passwords.AccountPlaceholderFrag2;
 import com.kinsey.passwords.AccountPlaceholderFrag3;
 import com.kinsey.passwords.items.Account;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Yvonne on 4/27/2017.
  */
+
 /**
  * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
  * one of the sections/tabs/pages.
@@ -28,36 +29,51 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     private static final boolean DEBUG = false;
 
     static final int NUM_ITEMS = 3;
-    int fragListPos = -1;
-    int frag1Pos = 0;
-    int frag2Pos = 1;
-    int frag3Pos = 2;
+    boolean mTwoPane = false;
+    public static int fragListPos = -1;
+    public static int frag1Pos = 0;
+    public static int frag2Pos = 1;
+    public static int frag3Pos = 2;
     private Account account = new Account();
     private final FragmentManager mFragmentManager;
     private FragmentTransaction mCurTransaction = null;
-//    private ArrayList<Fragment> mFragments = new ArrayList<Fragment>();
+    //    private ArrayList<Fragment> mFragments = new ArrayList<Fragment>();
     private Fragment mCurrentFragment = null;
     private List<Fragment> mFragments;
-//    private Map<Integer, Fragment> fragments = new HashMap<Integer, Fragment>();
+    //    private Map<Integer, Fragment> fragments = new HashMap<Integer, Fragment>();
 //    private AccountPlaceholderFrag1 frag1 = new AccountPlaceholderFrag1();
 //    private AccountPlaceholderFrag2 frag2 = new AccountPlaceholderFrag2();
 //    private AccountPlaceholderFrag3 frag3 = new AccountPlaceholderFrag3();
+    private AccountListActivityFragment fragList;
     private AccountPlaceholderFrag1 frag1;
     private AccountPlaceholderFrag2 frag2;
     private AccountPlaceholderFrag3 frag3;
+
+    private int frag1RowId = -1;
+    private int frag2RowId = -1;
+    private int frag3RowId = -1;
 
 //        final Context mContext;
 //        final WeakReference<Fragment>[] m_fragments;
 //        private SparseArray<WeakReference<Fragment>> mFragments = new SparseArray<>();
 //        List<AccountPlaceholderFragment> listFrags = new ArrayList<AccountPlaceholderFragment>();
 
-    public SectionsPagerAdapter(FragmentManager fragmentManager, Account account) {
+    public SectionsPagerAdapter(FragmentManager fragmentManager, Account account, boolean twopane) {
 //                                List<Fragment> fragments) {
         super(fragmentManager);
         this.mFragmentManager = fragmentManager;
 //        mFragments = fragments;
         this.account = account;
-
+        this.mTwoPane = twopane;
+        if (!mTwoPane) {
+            fragListPos = 0;
+            frag1Pos = 1;
+            frag2Pos = 2;
+            frag3Pos = 3;
+        }
+//        frag1 = AccountPlaceholderFrag1.newInstance(0);
+//        frag2 = AccountPlaceholderFrag2.newInstance(1);
+//        frag3 = AccountPlaceholderFrag3.newInstance(2);
 //        Fragment frag = AccountPlaceholderFrag1.newInstance(0);
 //        fragments.put(0, frag);
 //        frag = AccountPlaceholderFrag2.newInstance(1);
@@ -120,7 +136,11 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     @Override
     public int getCount() {
 //        return mFragments.size();
-        return 3;
+        if (mTwoPane) {
+            return 3;
+        } else {
+            return 4;
+        }
     }
 
 //    @Override
@@ -187,47 +207,47 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 //        return frag;
 //    }
 
-    @Override
-    public Fragment getItem(int position) {
-        // getItem is called to instantiate the fragment for the given page.
-        // Return a PlaceholderFragment (defined as a static inner class below).
-//            AccountPlaceholderFragment frag = AccountPlaceholderFragment.newInstance(position + 1);
-//            listFrags.add(frag);
-//            Log.d(TAG, "getItemUpdates: " + frag.getSection());
-//            return frag;
-//            return AccountPlaceholderFragment.newInstance(position + 1);
-
-//        Fragment frag = null;
-
-        Log.d(TAG, "getItem: pos " + position);
-        switch (position) {
-            case 0:
-                frag1 = AccountPlaceholderFrag1.newInstance(position);
-                frag1.setAccount(account);
-//                frag1 = AccountPlaceholderFrag1.newInstance(position, account.getId());
-//                frag1 = new AccountPlaceholderFrag1();
-//                Bundle arguments = new Bundle();
-//                arguments.putInt(AccountPlaceholderFrag1.ARG_SECTION_NUMBER, 0);
-
-                return frag1;
-//                mFragments.add(frag1);
-//                Log.d(TAG, "getItem: frag frag1 ");
-//                frag1 = (AccountPlaceholderFrag1)frag;
-//                frag = fragments.get("0");
-//                break;
-            case 1:
-                frag2 = AccountPlaceholderFrag2.newInstance(position);
-                return frag2;
-//                frag2 = (AccountPlaceholderFrag2)frag;
-//                frag = fragments.get("1");
-//                break;
-            case 2:
-                frag3 = AccountPlaceholderFrag3.newInstance(position);
-                return frag3;
-//                frag3 = (AccountPlaceholderFrag3)frag;
-//                frag = fragments.get("2");
-//                break;
-        }
+//    @Override
+//    public Fragment getItem(int position) {
+//        // getItem is called to instantiate the fragment for the given page.
+//        // Return a PlaceholderFragment (defined as a static inner class below).
+////            AccountPlaceholderFragment frag = AccountPlaceholderFragment.newInstance(position + 1);
+////            listFrags.add(frag);
+////            Log.d(TAG, "getItemUpdates: " + frag.getSection());
+////            return frag;
+////            return AccountPlaceholderFragment.newInstance(position + 1);
+//
+////        Fragment frag = null;
+//
+//        Log.d(TAG, "getItem: pos " + position);
+//        switch (position) {
+//            case 0:
+//                frag1 = AccountPlaceholderFrag1.newInstance(position, this.account.getId());
+////                frag1.setAccount(account);
+////                frag1 = AccountPlaceholderFrag1.newInstance(position, account.getId());
+////                frag1 = new AccountPlaceholderFrag1();
+////                Bundle arguments = new Bundle();
+////                arguments.putInt(AccountPlaceholderFrag1.ARG_SECTION_NUMBER, 0);
+//
+//                return frag1;
+////                mFragments.add(frag1);
+////                Log.d(TAG, "getItem: frag frag1 ");
+////                frag1 = (AccountPlaceholderFrag1)frag;
+////                frag = fragments.get("0");
+////                break;
+//            case 1:
+//                frag2 = AccountPlaceholderFrag2.newInstance(position, this.account.getId());
+//                return frag2;
+////                frag2 = (AccountPlaceholderFrag2)frag;
+////                frag = fragments.get("1");
+////                break;
+//            case 2:
+//                frag3 = AccountPlaceholderFrag3.newInstance(position, this.account.getId());
+//                return frag3;
+////                frag3 = (AccountPlaceholderFrag3)frag;
+////                frag = fragments.get("2");
+////                break;
+//        }
 
 //        if (frag != null) {
 //            fragments.put(position, frag);
@@ -235,36 +255,73 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 //
 //        return frag;
 
+//        return null;
+//    }
+//        frag1 = AccountPlaceholderFrag1.newInstance(0);
+//        frag2 = AccountPlaceholderFrag2.newInstance(1);
+//        frag3 = AccountPlaceholderFrag3.newInstance(2);
+
+    @Override
+    public Fragment getItem(int position) {
+        if (position == frag1Pos) {
+        } else if (position == frag1Pos) {
+            if (frag1RowId == -1) {
+                frag1 = AccountPlaceholderFrag1.newInstance(position);
+            }
+            return frag1;
+        } else if (position == frag2Pos) {
+            if (frag2RowId == -1) {
+                frag2 = AccountPlaceholderFrag2.newInstance(position);
+            }
+            return frag2;
+        } else if (position == frag3Pos) {
+            if (frag3RowId == -1) {
+                frag3 = AccountPlaceholderFrag3.newInstance(2);
+            }
+            return frag3;
+        }
         return null;
     }
 
+
     @Override
     public void notifyDataSetChanged() {
+        Log.d(TAG, "notifyDataSetChanged: id " + account.getId());
         if (frag1 != null) {
-            frag1.fillPage(this.account);
+            if (frag1RowId != -1) {
+                frag1RowId = account.getId();
+                frag1.fillPage(this.account);
+            }
         }
+
 //        AccountPlaceholderFrag2 frag2 = (AccountPlaceholderFrag2) fragments.get(1);
         if (frag2 != null) {
-            frag2.fillPage(this.account);
+            if (frag2RowId != -1) {
+                frag2RowId = account.getId();
+                frag2.fillPage(this.account);
+            }
         }
 //        AccountPlaceholderFrag3 frag3 = (AccountPlaceholderFrag3) fragments.get(2);
         if (frag3 != null) {
-            frag3.fillPage(this.account);
+            if (frag3RowId != -1) {
+                frag3RowId = account.getId();
+                frag3.fillPage(this.account);
+            }
         }
         super.notifyDataSetChanged();
     }
 
-    public void refreshPage(int position) {
-        switch (position) {
-            case 0:
-                frag1.fillPage(account);
-                break;
-            case 1:
-                frag2.fillPage(account);
-                break;
-            case 2:
-                frag3.fillPage(account);
-                break;
+    public void loadPage(int position) {
+        Log.d(TAG, "loadPage: pos " + position);
+        if (position == frag1Pos) {
+            frag1RowId = account.getId();
+            frag1.fillPage(account);
+        } else if (position == frag2Pos) {
+            frag2RowId = account.getId();
+            frag2.fillPage(account);
+        } else if (position == frag3Pos) {
+            frag3RowId = account.getId();
+            frag3.fillPage(account);
         }
     }
 
@@ -302,19 +359,31 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 //        super.notifyDataSetChanged();
 //    }
 
-    public boolean validateFrags(int position) {
-        switch (position) {
-            case 0:
-                frag1.validatePage1();
-                break;
-            case 1:
-                frag2.validatePage2();
-                break;
-            case 2:
-                frag3.validatePage3();
-                break;
-        }
-        return true;
+//    public boolean validateFrags(int position) {
+//        switch (position) {
+//            case 0:
+//                frag1.validatePage1();
+//                break;
+//            case 1:
+//                frag2.validatePage2();
+//                break;
+//            case 2:
+//                frag3.validatePage3();
+//                break;
+//        }
+//        return true;
+//    }
+
+    public boolean validateFrag1Errors() {
+        return frag1.validatePageErrors();
+    }
+
+    public boolean validateFrag2Errors() {
+        return frag2.validatePageErrors();
+    }
+
+    public boolean validateFrag3Errors() {
+        return frag3.validatePageErrors();
     }
 
 //    public boolean validateFrags() {
@@ -360,13 +429,16 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 //        frag3.fillPage(this.account);
 //    }
 
-    public void collectChgs() {
+    public Account collectChgs() {
         boolean areChgs;
+
         if (frag1 == null) {
             Log.d(TAG, "collectChgs: frag1 is null");
         } else {
+            Log.d(TAG, "collectChgs: ready to ask of collect " + this.account);
             areChgs = frag1.collectChgs(this.account);
             Log.d(TAG, "collectChgs: areChgs " + areChgs);
+            Log.d(TAG, "collectChgs: after asking of collect " + this.account);
         }
         if (frag2 == null) {
             Log.d(TAG, "collectChgs: frag2 is null");
@@ -380,11 +452,13 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
             areChgs = frag3.collectChgs(this.account);
             Log.d(TAG, "collectChgs: areChgs " + areChgs);
         }
+
+        return this.account;
     }
 
     @Override
     public void setPrimaryItem(ViewGroup container, int position, Object object) {
-        Fragment fragment = (Fragment)object;
+        Fragment fragment = (Fragment) object;
         if (fragment != mCurrentFragment) {
             mCurrentFragment = ((Fragment) object);
         }
@@ -448,11 +522,36 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         return mCurrentFragment;
     }
 
-    private List<Fragment> getFragments() {
-        List<Fragment> fList = new ArrayList<Fragment>();
-        fList.add(frag1.newInstance(0));
-        fList.add(frag2.newInstance(1));
-        fList.add(frag3.newInstance(2));
-        return fList;
+    public int getFrag1RowId() {
+        return frag1RowId;
     }
+
+    public void setFrag1RowId(int frag1RowId) {
+        this.frag1RowId = frag1RowId;
+    }
+
+    public int getFrag2RowId() {
+        return frag2RowId;
+    }
+
+    public void setFrag2RowId(int frag2RowId) {
+        this.frag2RowId = frag2RowId;
+    }
+
+    public int getFrag3RowId() {
+        return frag3RowId;
+    }
+
+    public void setFrag3RowId(int frag3RowId) {
+        this.frag3RowId = frag3RowId;
+    }
+
+
+//    private List<Fragment> getFragments() {
+//        List<Fragment> fList = new ArrayList<Fragment>();
+//        fList.add(frag1.newInstance(0));
+//        fList.add(frag2.newInstance(1));
+//        fList.add(frag3.newInstance(2));
+//        return fList;
+//    }
 }

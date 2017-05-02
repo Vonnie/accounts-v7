@@ -1,5 +1,7 @@
 package com.kinsey.passwords;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -35,8 +37,8 @@ public class AccountPlaceholderFrag1 extends Fragment {
     public static final String ARG_ACCOUNT = "account";
     public static final String ARG_ACCOUNT_ROWID = "account_rowid";
     private int sectNumber;
-    Account account = new Account();
-    private int accountId = -1;
+    //    Account account = new Account();
+//    private int accountId = -1;
     private int rowId = -1;
 
     private EditText mCorpNameTextView;
@@ -54,9 +56,21 @@ public class AccountPlaceholderFrag1 extends Fragment {
     private long lngOpenDate;
     private ImageButton mImgWebView;
 
+    private String acctCorpName = "";
+    private String acctCorpWebsite = "";
+    private String acctUserName = "";
+    private String acctUserEmail = "";
+    private int acctSequence = 0;
+
     private static String pattern_ymdtimehm = "yyyy-MM-dd kk:mm";
     public static SimpleDateFormat format_ymdtimehm = new SimpleDateFormat(
             pattern_ymdtimehm, Locale.US);
+
+    private OnAccountListener mListener;
+
+    public interface OnAccountListener {
+        void onAccount1Instance();
+    }
 
 
     public AccountPlaceholderFrag1() {
@@ -80,25 +94,23 @@ public class AccountPlaceholderFrag1 extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-//        int sectNumber = 99;
-        int sectNumber = getArguments().getInt(ARG_SECTION_NUMBER);
+        this.sectNumber = getArguments().getInt(ARG_SECTION_NUMBER);
 //        Account account = (Account)getArguments().getSerializable(ARG_ACCOUNT);
-//        int accountRowId = getArguments().getInt(ARG_ACCOUNT_ROWID);
-        Log.d(TAG, "onCreateView: sectNumber " + sectNumber);
-        Log.d(TAG, "onCreateView: sectNumber " + sectNumber);
-//        Log.d(TAG, "onCreateView: rowid " + accountRowId);
-        this.sectNumber = sectNumber;
+//        this.rowId = getArguments().getInt(ARG_ACCOUNT_ROWID);
+        Log.d(TAG, "onCreateView: sectNumber " + this.sectNumber);
+        Log.d(TAG, "onCreateView: sectNumber " + this.sectNumber);
+//        Log.d(TAG, "onCreateView: rowid " + this.rowId);
 //        this.account = getAccount(accountRowId);
-        Log.d(TAG, "onCreateView: acctId " + this.account);
+//        Log.d(TAG, "onCreateView: acctId " + this.account);
 
         View rootView;
         TextView tvPage;
 //        switch (sectNumber) {
 //            case 1:
-                rootView = inflater.inflate(R.layout.fragment_acct_page_1, container, false);
-                tvPage = (TextView) rootView.findViewById(R.id.section_label);
-                tvPage.setText(getPageTitle(1));
-                setupPage1(rootView);
+        rootView = inflater.inflate(R.layout.fragment_acct_page_1, container, false);
+        tvPage = (TextView) rootView.findViewById(R.id.section_label);
+        tvPage.setText(getPageTitle(1));
+        setupPage1(rootView);
 //                break;
 //            case 2:
 //                rootView = inflater.inflate(R.layout.fragment_acct_page_2, container, false);
@@ -118,8 +130,9 @@ public class AccountPlaceholderFrag1 extends Fragment {
 //            textView.setText(getString(R.string.section_format, sectNumber));
 
 //        fillPage(this.account);
+        mListener.onAccount1Instance();
 
-        mImgWebView.setOnClickListener(new View.OnClickListener(){
+        mImgWebView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent detailIntent = new Intent(getActivity(), WebViewActivity.class);
@@ -149,14 +162,15 @@ public class AccountPlaceholderFrag1 extends Fragment {
 
     public void fillPage(Account account) {
 
-        if (account == null) {
-            Log.d(TAG, "setupPage1: account is null");
-            return;
-        }
+//        if (account == null) {
+//            Log.d(TAG, "setupPage1: account is null");
+//            return;
+//        }
 
-        Log.d(TAG, "setupPage1: corpname " + account.getCorpName());
-        accountId = account.getId();
-        this.account = account;
+        Log.d(TAG, "fillPage1: corpname " + account.getCorpName());
+        Log.d(TAG, "fillPage1: account " + account);
+        rowId = account.getId();
+//        this.account = account;
 
         mCorpNameTextView.setText(account.getCorpName());
         mCorpNameTextView.setError(null);
@@ -184,54 +198,65 @@ public class AccountPlaceholderFrag1 extends Fragment {
     }
 
     private void loadFromMap() {
-        this.account.setCorpName(mCorpNameTextView.getText().toString());
-        this.account.setCorpWebsite(mCorpWebsiteTextView.getText().toString());
-        this.account.setUserName(mUserNameTextView.getText().toString());
-        Log.d(TAG, "loadFromMap: username " + this.account.getUserName());
-        this.account.setUserEmail(mUserEmailTextView.getText().toString());
+        acctCorpName = mCorpNameTextView.getText().toString();
+        acctCorpWebsite = mCorpWebsiteTextView.getText().toString();
+        acctUserName = mUserNameTextView.getText().toString();
+        Log.d(TAG, "loadFromMap: username " + acctUserName);
+        acctUserEmail = mUserEmailTextView.getText().toString();
         if (mSeqTextView.getText().toString().equals("")) {
-            this.account.setSequence(0);
+            acctSequence = 0;
         } else {
-            this.account.setSequence(Integer.parseInt(mSeqTextView.getText().toString()));
+            acctSequence = Integer.parseInt(mSeqTextView.getText().toString());
         }
     }
 
 
-    public boolean collectChgs(Account account) {
+    public boolean collectChgs(Account currentAccount) {
 
-        if (this.account == null) {
+        if (mCorpNameTextView == null) {
             return false;
         }
 
-        if (this.account.getId() == account.getId()) {
+        boolean chgsMade = false;
 
-            loadFromMap();
+        Log.d(TAG, "collectChgs: id " + currentAccount.getId());
+        Log.d(TAG, "collectChgs: id " + rowId);
+//        if (this.account.getId() == currentAccount.getId()) {
 
-            if (!this.account.getCorpName().equals(account.getCorpName())) {
-                return true;
-            }
+        loadFromMap();
 
-            if (!this.account.getCorpWebsite().equals(account.getCorpWebsite())) {
-                return true;
-            }
-
-            Log.d(TAG, "collectChgs: " + this.account.getUserName());
-            Log.d(TAG, "collectChgs: " + account.getUserName());
-
-            if (!this.account.getUserName().equals(account.getUserName())) {
-                return true;
-            }
-
-            if (!this.account.getUserEmail().equals(account.getUserEmail())) {
-                return true;
-            }
-
-            if (this.account.getSequence() != account.getSequence()) {
-                return true;
-            }
-            return false;
+        if (!acctCorpName.equals(currentAccount.getCorpName())) {
+            currentAccount.setCorpName(acctCorpName);
+            chgsMade = true;
         }
-        return false;
+
+        if (!acctCorpWebsite.equals(currentAccount.getCorpWebsite())) {
+            currentAccount.setCorpWebsite(acctCorpWebsite);
+            chgsMade = true;
+        }
+
+//        Log.d(TAG, "collectChgs: " + acctUserName);
+//        Log.d(TAG, "collectChgs: " + currentAccount.getUserName());
+
+        if (!acctUserName.equals(currentAccount.getUserName())) {
+            currentAccount.setUserName(acctUserName);
+            chgsMade = true;
+        }
+
+        if (!acctUserEmail.equals(currentAccount.getUserEmail())) {
+            currentAccount.setUserEmail(acctUserEmail);
+            chgsMade = true;
+        }
+
+        if (acctSequence != currentAccount.getSequence()) {
+            currentAccount.setSequence(acctSequence);
+            chgsMade = true;
+        }
+
+        return chgsMade;
+//            return false;
+//        }
+//        return false;
     }
 
 //    private void setupPage2(View view) {
@@ -301,39 +326,45 @@ public class AccountPlaceholderFrag1 extends Fragment {
 //        return true;
 //    }
 
-    public boolean validatePage1() {
+    public boolean validatePageErrors() {
+
+        boolean hasErrors = false;
         if (mCorpNameTextView.getText().toString().equals("")) {
             mCorpNameTextView.setError("Corporation name is required");
 //            Toast.makeText(getActivity(),
 //                    "Corporation name is required",
 //                    Toast.LENGTH_LONG).show();
-            return false;
+            hasErrors = true;
+        }
+
+        if (!mCorpWebsiteTextView.getText().toString().toLowerCase().startsWith("http://")) {
+            mCorpWebsiteTextView.setText("http://" + mCorpWebsiteTextView.getText().toString());
         }
 
         if (mUserNameTextView.getText().toString().equals("")) {
             mUserNameTextView.setError("User name is required");
-            return false;
+            hasErrors = true;
         }
         if (mUserEmailTextView.getText().toString().equals("")) {
             mUserEmailTextView.setError("Email is required");
-            return false;
+            hasErrors = true;
         }
         if (!isEmailValid(mUserEmailTextView.getText().toString())) {
             mUserEmailTextView.setError("Email is invalid format");
-            return false;
+            hasErrors = true;
         }
 
-        return true;
+        return hasErrors;
     }
 
-    public Account collectPage(Account account) {
-
-        account.setCorpName(mCorpNameTextView.getText().toString());
-        account.setCorpWebsite(mCorpWebsiteTextView.getText().toString());
-        account.setUserName(mUserNameTextView.getText().toString());
-        account.setUserEmail(mUserEmailTextView.getText().toString());
-        return account;
-    }
+//    public Account collectPage(Account account) {
+//
+//        account.setCorpName(mCorpNameTextView.getText().toString());
+//        account.setCorpWebsite(mCorpWebsiteTextView.getText().toString());
+//        account.setUserName(mUserNameTextView.getText().toString());
+//        account.setUserEmail(mUserEmailTextView.getText().toString());
+//        return account;
+//    }
 
     private boolean validatePage2() {
         return true;
@@ -398,11 +429,33 @@ public class AccountPlaceholderFrag1 extends Fragment {
 //    }
 
 
-    public Account getAccount() {
-        return account;
+//    public Account getAccount() {
+//        return account;
+//    }
+//
+//    public void setAccount(Account account) {
+//        this.account = account;
+//    }
+
+
+    @Override
+    public void onAttach(Context context) {
+//        Log.d(TAG, "onAttach: starts");
+        super.onAttach(context);
+
+        // Activities containing this fragment must implement it's callbacks
+        Activity activity = getActivity();
+        if (!(activity instanceof AccountPlaceholderFrag1.OnAccountListener)) {
+            throw new ClassCastException(activity.getClass().getSimpleName()
+                    + " must implement AccountPlaceholderFrag1 interface");
+        }
+        mListener = (AccountPlaceholderFrag1.OnAccountListener) activity;
     }
 
-    public void setAccount(Account account) {
-        this.account = account;
+    @Override
+    public void onDetach() {
+//        Log.d(TAG, "onDetach: starts");
+        super.onDetach();
+        mListener = null;
     }
 }

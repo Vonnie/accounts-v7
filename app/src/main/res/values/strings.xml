@@ -8,7 +8,9 @@
     <string name="delete_button_description">Button to delete password</string>
     <string name="edit_button_description">Edit password text</string>
     <string name="generate_passwords_instruction">Request a Generate of Password with button below</string>
-    <string name="no_account_items">No account items</string>
+    <string name="no_account_items">Currently, no accounts setup.</string>
+    <string name="no_account_items_line2">Click plus icon to add accounts</string>
+    <string name="no_account_items_twopane_line2">Enter first account on the right</string>
     <string name="no_search_items">No search items. May need to ask to prepare search db from account db in previous panel.</string>
     <string name="accedit_corp_name_hint">Corporation name required</string>
     <string name="accedit_user_name_hint">User name required</string>

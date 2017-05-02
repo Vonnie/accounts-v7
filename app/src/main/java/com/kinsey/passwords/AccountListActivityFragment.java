@@ -42,15 +42,15 @@ public class AccountListActivityFragment extends Fragment
 
     private int mSortorder;
 
-    @Override
-    public void onAccountEditClick(Account account) {
-
-    }
-
-    @Override
-    public void onAccountDeleteClick(Account account) {
-
-    }
+//    @Override
+//    public void onAccountEditClick(Account account) {
+//
+//    }
+//
+//    @Override
+//    public void onAccountDeleteClick(Account account) {
+//
+//    }
 
     @Override
     public void onAccountListSelect(Account account) {
@@ -88,6 +88,11 @@ public class AccountListActivityFragment extends Fragment
 
     public AccountListActivityFragment() {
 //        Log.d(TAG, "AccountListActivityFragment: starts");
+    }
+
+    public static AccountListActivityFragment newInstance() {
+        AccountListActivityFragment fragment = new AccountListActivityFragment();
+        return fragment;
     }
 
     @Override

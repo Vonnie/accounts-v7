@@ -40,9 +40,9 @@ implements LoaderManager.LoaderCallbacks<Cursor>{
     private OnAccountClickListener mListener;
 
     public interface OnAccountClickListener {
-        void onAccountEditClick(Account account);
+//        void onAccountEditClick(Account account);
 
-        void onAccountDeleteClick(Account account);
+//        void onAccountDeleteClick(Account account);
 
         void onAccountListSelect(Account account);
 
@@ -87,7 +87,11 @@ implements LoaderManager.LoaderCallbacks<Cursor>{
         if ((mCursor == null) || (mCursor.getCount() == 0)) {
             Log.d(TAG, "onBindViewHolder: no accts");
             holder.corp_name.setText(R.string.no_account_items);
-            holder.user_name.setText("Click Info button to add accounts");
+            if (mTwoPane) {
+                holder.user_name.setText(R.string.no_account_items_twopane_line2);
+            } else {
+                holder.user_name.setText(R.string.no_account_items_line2);
+            }
             holder.open_date.setText("");
 //            holder.editButton.setVisibility(View.GONE);
 //            holder.deleteButton.setVisibility(View.GONE);
