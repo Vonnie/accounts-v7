@@ -80,25 +80,25 @@ public class AccountPlaceholderFrag1 extends Fragment {
      * Returns a new instance of this fragment for the given section
      * number.
      */
-    public static AccountPlaceholderFrag1 newInstance(int sectionNumber) {
+    public static AccountPlaceholderFrag1 newInstance() {
         AccountPlaceholderFrag1 fragment = new AccountPlaceholderFrag1();
-        Bundle args = new Bundle();
-        args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+//        Bundle args = new Bundle();
+//        args.putInt(ARG_SECTION_NUMBER, sectionNumber);
 //        args.putSerializable(ARG_ACCOUNT, account);
 //        args.putInt(ARG_ACCOUNT_ROWID, rowId);
 //        Log.d(TAG, "newInstance: acct " + rowId);
-        fragment.setArguments(args);
+//        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        this.sectNumber = getArguments().getInt(ARG_SECTION_NUMBER);
+//        this.sectNumber = getArguments().getInt(ARG_SECTION_NUMBER);
 //        Account account = (Account)getArguments().getSerializable(ARG_ACCOUNT);
 //        this.rowId = getArguments().getInt(ARG_ACCOUNT_ROWID);
-        Log.d(TAG, "onCreateView: sectNumber " + this.sectNumber);
-        Log.d(TAG, "onCreateView: sectNumber " + this.sectNumber);
+//        Log.d(TAG, "onCreateView: sectNumber " + this.sectNumber);
+//        Log.d(TAG, "onCreateView: sectNumber " + this.sectNumber);
 //        Log.d(TAG, "onCreateView: rowid " + this.rowId);
 //        this.account = getAccount(accountRowId);
 //        Log.d(TAG, "onCreateView: acctId " + this.account);
@@ -395,9 +395,9 @@ public class AccountPlaceholderFrag1 extends Fragment {
     }
 
 
-    public int getSection() {
-        return sectNumber;
-    }
+//    public int getSection() {
+//        return sectNumber;
+//    }
 
     public CharSequence getPageTitle(int position) {
         switch (position) {

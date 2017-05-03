@@ -33,7 +33,7 @@ implements LoaderManager.LoaderCallbacks<Cursor>{
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
      * device.
      */
-    private boolean mTwoPane;
+//    private boolean mTwoPane;
     Account selectedAccount = new Account();
     int selected_position = -1;
 
@@ -61,7 +61,7 @@ implements LoaderManager.LoaderCallbacks<Cursor>{
         Log.d(TAG, "AccountRecyclerViewAdapter: twopane " + twoPane);
         Log.d(TAG, "AccountRecyclerViewAdapter: sortorder " + sortorder);
 
-        mTwoPane = twoPane;
+//        mTwoPane = twoPane;
         mSortorder = sortorder;
         mCursor = cursor;
         mListener = listener;
@@ -87,11 +87,12 @@ implements LoaderManager.LoaderCallbacks<Cursor>{
         if ((mCursor == null) || (mCursor.getCount() == 0)) {
             Log.d(TAG, "onBindViewHolder: no accts");
             holder.corp_name.setText(R.string.no_account_items);
-            if (mTwoPane) {
-                holder.user_name.setText(R.string.no_account_items_twopane_line2);
-            } else {
-                holder.user_name.setText(R.string.no_account_items_line2);
-            }
+//            if (mTwoPane) {
+//                holder.user_name.setText(R.string.no_account_items_twopane_line2);
+//            } else {
+//                holder.user_name.setText(R.string.no_account_items_line2);
+//            }
+            holder.user_name.setText(R.string.no_account_items_line2);
             holder.open_date.setText("");
 //            holder.editButton.setVisibility(View.GONE);
 //            holder.deleteButton.setVisibility(View.GONE);
@@ -187,11 +188,12 @@ implements LoaderManager.LoaderCallbacks<Cursor>{
                     selected_position = position;
                     notifyItemChanged(selected_position);
 
-                    if (mTwoPane) {
-                        mListener.onAccountLandListSelect(account);
-                    } else {
-                        mListener.onAccountListSelect(account);
-                    }
+//                    if (mTwoPane) {
+//                        mListener.onAccountLandListSelect(account);
+//                    } else {
+//                        mListener.onAccountListSelect(account);
+//                    }
+                    mListener.onAccountListSelect(account);
                 }
             });
 

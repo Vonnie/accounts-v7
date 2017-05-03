@@ -1,6 +1,7 @@
 package com.kinsey.passwords;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.FragmentManager;
@@ -9,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.kinsey.passwords.items.Account;
 import com.kinsey.passwords.items.AccountsContract;
@@ -49,6 +51,8 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        Log.d(TAG, "onCreate: layout activity_main");
 
 //        resetPreferences();
 
@@ -136,6 +140,22 @@ public class MainActivity extends AppCompatActivity
 //                        .setAction("Action", null).show();
 //            }
 //        });
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        // Checks the orientation of the screen
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            Log.d(TAG, "onConfigurationChanged: landscape");
+            Toast.makeText(this, "landscape", Toast.LENGTH_SHORT).show();
+        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            Log.d(TAG, "onConfigurationChanged: portrait");
+            Toast.makeText(this, "portrait", Toast.LENGTH_SHORT).show();
+        } else {
+            Log.d(TAG, "onConfigurationChanged: unk");
+        }
     }
 
     @Override

@@ -75,26 +75,26 @@ public class AccountPlaceholderFrag2 extends Fragment {
      * Returns a new instance of this fragment for the given section
      * number.
      */
-    public static AccountPlaceholderFrag2 newInstance(int sectionNumber) {
+    public static AccountPlaceholderFrag2 newInstance() {
         AccountPlaceholderFrag2 fragment = new AccountPlaceholderFrag2();
-        Bundle args = new Bundle();
-        args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-//        args.putSerializable(ARG_ACCOUNT, account);
-//        args.putInt(ARG_ACCOUNT_ROWID, rowId);
-        fragment.setArguments(args);
+//        Bundle args = new Bundle();
+//        args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+////        args.putSerializable(ARG_ACCOUNT, account);
+////        args.putInt(ARG_ACCOUNT_ROWID, rowId);
+//        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        this.sectNumber = getArguments().getInt(ARG_SECTION_NUMBER);
-//        this.rowId = getArguments().getInt(ARG_ACCOUNT_ROWID);
-        Log.d(TAG, "onCreateView: sectNumber " + sectNumber);
-        Log.d(TAG, "onCreateView: sectNumber " + sectNumber);
-//        Account account = (Account)getArguments().getSerializable(ARG_ACCOUNT);
-//        Log.d(TAG, "onCreateView: rowid " + this.rowId);
-//        this.account = account;
+//        this.sectNumber = getArguments().getInt(ARG_SECTION_NUMBER);
+////        this.rowId = getArguments().getInt(ARG_ACCOUNT_ROWID);
+//        Log.d(TAG, "onCreateView: sectNumber " + sectNumber);
+//        Log.d(TAG, "onCreateView: sectNumber " + sectNumber);
+////        Account account = (Account)getArguments().getSerializable(ARG_ACCOUNT);
+////        Log.d(TAG, "onCreateView: rowid " + this.rowId);
+////        this.account = account;
 
 
         View rootView;
@@ -324,9 +324,9 @@ public class AccountPlaceholderFrag2 extends Fragment {
     }
 
 
-    public int getSection() {
-        return sectNumber;
-    }
+//    public int getSection() {
+//        return sectNumber;
+//    }
 
     public CharSequence getPageTitle(int position) {
         switch (position) {

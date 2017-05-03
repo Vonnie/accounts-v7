@@ -16,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.kinsey.passwords.items.Account;
 import com.kinsey.passwords.items.AccountsContract;
 import com.kinsey.passwords.provider.AccountRecyclerViewAdapter;
 
@@ -27,11 +26,12 @@ import static com.kinsey.passwords.MainActivityFragment.ACCOUNT_LOADER_ID;
  */
 public class AccountListActivityFragment extends Fragment
         implements LoaderManager.LoaderCallbacks<Cursor>,
-        AccountRecyclerViewAdapter.OnAccountClickListener,
+//        AccountRecyclerViewAdapter.OnAccountClickListener,
         ViewPager.OnPageChangeListener {
 
     private static final String TAG = "AccountListActivityFrag";
 
+    RecyclerView mRecyclerView;
     private AccountRecyclerViewAdapter mAccountAdapter; // add adapter reference
     TextView twCurrentTitle;
     Loader<Cursor> loader;
@@ -40,7 +40,7 @@ public class AccountListActivityFragment extends Fragment
     // i.e. running in landscape on a tablet
     private boolean mTwoPane = false;
 
-    private int mSortorder;
+    private int mSortorder = AccountsContract.ACCOUNT_LIST_BY_CORP_NAME;
 
 //    @Override
 //    public void onAccountEditClick(Account account) {
@@ -52,27 +52,27 @@ public class AccountListActivityFragment extends Fragment
 //
 //    }
 
-    @Override
-    public void onAccountListSelect(Account account) {
-//        Context context = getContext();
-//        Intent intent = new Intent(context, AccountActivity.class);
-//        intent.putExtra(AccountActivity.ARG_ITEM_ID, holder.mItem.id);
+//    @Override
+//    public void onAccountListSelect(Account account) {
+////        Context context = getContext();
+////        Intent intent = new Intent(context, AccountActivity.class);
+////        intent.putExtra(AccountActivity.ARG_ITEM_ID, holder.mItem.id);
+////
+////        context.startActivity(intent);
 //
-//        context.startActivity(intent);
-
-    }
-
-    @Override
-    public void onAccountLandListSelect(Account account) {
-//        Bundle arguments = new Bundle();
-//        arguments.putString(AccountListActivityFragment.ARG_ITEM_ID, holder.mItem.id);
-//        AccountActivityFragment fragment = new AccountActivityFragment();
-//        fragment.setArguments(arguments);
-//        getSupportFragmentManager().beginTransaction()
-//                .replace(R.id.item_detail_container, fragment)
-//                .commit();
-
-    }
+//    }
+//
+//    @Override
+//    public void onAccountLandListSelect(Account account) {
+////        Bundle arguments = new Bundle();
+////        arguments.putString(AccountListActivityFragment.ARG_ITEM_ID, holder.mItem.id);
+////        AccountActivityFragment fragment = new AccountActivityFragment();
+////        fragment.setArguments(arguments);
+////        getSupportFragmentManager().beginTransaction()
+////                .replace(R.id.item_detail_container, fragment)
+////                .commit();
+//
+//    }
 
 
 
@@ -80,6 +80,7 @@ public class AccountListActivityFragment extends Fragment
 
     ;
     private FragmentListMode mListMode = FragmentListMode.CORP_NAME;
+
 
     public enum FragmentMsgMode {ADD, SORTED_OPT}
 
@@ -107,11 +108,11 @@ public class AccountListActivityFragment extends Fragment
                              Bundle savedInstanceState) {
 //        Log.d(TAG, "onCreateView: starts");
         View view = inflater.inflate(R.layout.fragment_account_list, container, false);
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.account_items_list);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.account_items_list);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        twCurrentTitle = (TextView) view.findViewById(R.id.current_title);
-        Bundle arguments = getActivity().getIntent().getExtras();
+//        twCurrentTitle = (TextView) view.findViewById(R.id.current_title);
+//        Bundle arguments = getActivity().getIntent().getExtras();
 //        Log.d(TAG, "onCreateView: agrs " + Account.class.getSimpleName());
 //        Log.d(TAG, "onCreateView: agrs " + arguments.getSize(Account.class.getSimpleName()));
 //        Log.d(TAG, "onCreateView: agrs " + arguments.getSize(AccountsContract.ACCOUNT_TWO_PANE));
@@ -126,22 +127,28 @@ public class AccountListActivityFragment extends Fragment
 //        boolean twopane = (boolean) getArguments().get(AccountsContract.ACCOUNT_TWO_PANE);
 //        Log.d(TAG, "onCreateView: mSortorder " + mSortorder);
 
-        if (view.findViewById(R.id.item_detail_container) != null) {
-            // The detail container view will be present only in the
-            // large-screen layouts (res/values-w900dp).
-            // If this view is present, then the
-            // activity should be in two-pane mode.
-            mTwoPane = true;
-        }
+//        if (view.findViewById(R.id.item_detail_container) != null) {
+//            // The detail container view will be present only in the
+//            // large-screen layouts (res/values-w900dp).
+//            // If this view is present, then the
+//            // activity should be in two-pane mode.
+//            mTwoPane = true;
+//        }
 
 //        Log.d(TAG, "onCreate: twoPane " + mTwoPane);
-        boolean twopane = false;
-        mSortorder = (int) arguments.getSerializable(Account.class.getSimpleName());
+//        boolean twopane = false;
+//        mSortorder = (int) arguments.getSerializable(Account.class.getSimpleName());
+//        Log.d(TAG, "onCreateView: sortorder " + mSortorder);
 //        mAccountAdapter = new AccountRecyclerViewAdapter(twopane, mSortorder, null,
 //                (AccountRecyclerViewAdapter.OnAccountClickListener) getActivity());
-        recyclerView.setAdapter(mAccountAdapter);
-        Log.d(TAG, "onCreateView: returning adapter count: " + mAccountAdapter.getItemCount());
+//        recyclerView.setAdapter(mAccountAdapter);
+//        Log.d(TAG, "onCreateView: returning adapter count: " + mAccountAdapter.getItemCount());
+        Cursor cursor = null;
+        getLoaderManager().initLoader(ACCOUNT_LOADER_ID, null, this);
 
+        mAccountAdapter = new AccountRecyclerViewAdapter(mTwoPane, mSortorder, cursor,
+                (AccountRecyclerViewAdapter.OnAccountClickListener) getActivity());
+        mRecyclerView.setAdapter(mAccountAdapter);
         return view;
     }
 

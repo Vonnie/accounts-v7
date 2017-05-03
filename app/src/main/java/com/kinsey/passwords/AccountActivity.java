@@ -74,7 +74,10 @@ public class AccountActivity extends AppCompatActivity
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), account, false);
+//        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), account, false,
+//                AccountPlaceholderFrag1.newInstance(),
+//                AccountPlaceholderFrag2.newInstance(),
+//                AccountPlaceholderFrag3.newInstance());
         mSectionsPagerAdapter.setAccount(account);
         Log.d(TAG, "onCreate: mSectionsPagerAdapter ");
 
