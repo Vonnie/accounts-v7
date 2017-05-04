@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,13 +15,14 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.kinsey.passwords.items.Account;
 import com.kinsey.passwords.items.AccountsContract;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static com.kinsey.passwords.AccountListActivity.account;
 
 /**
  * Created by Yvonne on 4/25/2017.
@@ -58,6 +60,8 @@ public class AccountPlaceholderFrag3 extends Fragment {
     private String acctNote = "";
     private int acctRefFrom = 0;
     private int acctRefTo = 0;
+    private boolean isReadyForUpdates = false;
+    private int numTries = 0;
 
     private static String pattern_ymdtimehm = "yyyy-MM-dd kk:mm";
     public static SimpleDateFormat format_ymdtimehm = new SimpleDateFormat(
@@ -116,10 +120,11 @@ public class AccountPlaceholderFrag3 extends Fragment {
                 tvPage = (TextView) rootView.findViewById(R.id.section_label);
                 tvPage.setText(getPageTitle(3));
                 setupPage3(rootView);
+        isReadyForUpdates = true;
+        fillPage();
 //                break;
 //        }
 
-        mListener.onAccount3Instance();
 
 //            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
 //            textView.setText(getString(R.string.section_format, sectNumber));
@@ -205,11 +210,28 @@ public class AccountPlaceholderFrag3 extends Fragment {
         mRefIdFromTextView = (EditText) view.findViewById(R.id.acc_ref_from);
         mRefIdToTextView = (EditText) view.findViewById(R.id.acc_ref_to);
 
-
     }
 
-    public void fillPage(Account account) {
+    public void fillPage() {
 
+        if (!isReadyForUpdates) {
+            new CountDownTimer(10000, 1000) {
+
+                public void onTick(long millisUntilFinished) {
+//                    mTextField.setText("seconds remaining: " + millisUntilFinished / 1000);
+                }
+
+                public void onFinish() {
+//                    mTextField.setText("done!");
+                }
+            }.start();
+
+            if (!isReadyForUpdates) {
+                Log.d(TAG, "fillPage: unable to update");
+                return;
+            }
+//            mListener.onAccount3Instance();
+        }
         Log.d(TAG, "fillPage3: corpname " + account.getCorpName());
         rowId = account.getId();
 //        this.account = account;
@@ -342,7 +364,7 @@ public class AccountPlaceholderFrag3 extends Fragment {
     }
 
 
-    public boolean collectChgs(Account account) {
+    public boolean collectChgs() {
 
         if (mNoteTextView == null) {
             return false;
@@ -391,6 +413,14 @@ public class AccountPlaceholderFrag3 extends Fragment {
                 return "Page 3 of 3";
         }
         return null;
+    }
+
+    public int getNumTries() {
+        return numTries;
+    }
+
+    public void setNumTries(int numTries) {
+        this.numTries = numTries;
     }
 
     @Override

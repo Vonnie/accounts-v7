@@ -23,6 +23,7 @@
 
     <FrameLayout
         android:id="@+id/fragList"
+        android:name="com.kinsey.passwords.AccountListActivityFragment"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="2"

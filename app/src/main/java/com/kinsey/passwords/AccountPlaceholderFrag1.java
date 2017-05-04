@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,8 +14,6 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-
-import com.kinsey.passwords.items.Account;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
@@ -61,6 +60,8 @@ public class AccountPlaceholderFrag1 extends Fragment {
     private String acctUserName = "";
     private String acctUserEmail = "";
     private int acctSequence = 0;
+    private boolean isReadyForUpdates = false;
+    private int numTries = 0;
 
     private static String pattern_ymdtimehm = "yyyy-MM-dd kk:mm";
     public static SimpleDateFormat format_ymdtimehm = new SimpleDateFormat(
@@ -111,6 +112,9 @@ public class AccountPlaceholderFrag1 extends Fragment {
         tvPage = (TextView) rootView.findViewById(R.id.section_label);
         tvPage.setText(getPageTitle(1));
         setupPage1(rootView);
+        isReadyForUpdates = true;
+        fillPage();
+
 //                break;
 //            case 2:
 //                rootView = inflater.inflate(R.layout.fragment_acct_page_2, container, false);
@@ -129,8 +133,7 @@ public class AccountPlaceholderFrag1 extends Fragment {
 //            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
 //            textView.setText(getString(R.string.section_format, sectNumber));
 
-//        fillPage(this.account);
-        mListener.onAccount1Instance();
+
 
         mImgWebView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -156,43 +159,58 @@ public class AccountPlaceholderFrag1 extends Fragment {
         mSeqTextView = (EditText) view.findViewById(R.id.acc_seq);
         mAccountIdTextView = (TextView) view.findViewById(R.id.acc_account_id);
         mActvyDtTextView = (TextView) view.findViewById(R.id.acc_actvy_date);
-
-
     }
 
-    public void fillPage(Account account) {
+    public void fillPage() {
 
 //        if (account == null) {
 //            Log.d(TAG, "setupPage1: account is null");
 //            return;
 //        }
+        if (!isReadyForUpdates) {
+            new CountDownTimer(10000, 1000) {
 
-        Log.d(TAG, "fillPage1: corpname " + account.getCorpName());
-        Log.d(TAG, "fillPage1: account " + account);
-        rowId = account.getId();
-//        this.account = account;
+                public void onTick(long millisUntilFinished) {
+//                    mTextField.setText("seconds remaining: " + millisUntilFinished / 1000);
+                }
 
-        mCorpNameTextView.setText(account.getCorpName());
-        mCorpNameTextView.setError(null);
-        mCorpWebsiteTextView.setText(account.getCorpWebsite());
-        mCorpWebsiteTextView.setError(null);
-        mUserNameTextView.setText(account.getUserName());
-        mUserNameTextView.setError(null);
-        mUserEmailTextView.setText(account.getUserEmail());
-        mUserEmailTextView.setError(null);
+                public void onFinish() {
+//                    mTextField.setText("done!");
+                }
+            }.start();
 
-        if (account.getSequence() == 0) {
-            mSeqTextView.setText("");
-        } else {
-            mSeqTextView.setText(String.valueOf(account.getSequence()));
+            if (!isReadyForUpdates) {
+                Log.d(TAG, "fillPage: unable to update");
+                return;
+            }
+//            mListener.onAccount1Instance();
         }
 
-        mAccountIdTextView.setText("Account Id: " + String.valueOf(account.getPassportId()));
+        Log.d(TAG, "fillPage1: corpname " + AccountListActivity.account.getCorpName());
+        Log.d(TAG, "fillPage1: account " + AccountListActivity.account);
+        rowId = AccountListActivity.account.getId();
 
-        if (account.getActvyLong() == 0) {
+        mCorpNameTextView.setText(AccountListActivity.account.getCorpName());
+        mCorpNameTextView.setError(null);
+        mCorpWebsiteTextView.setText(AccountListActivity.account.getCorpWebsite());
+        mCorpWebsiteTextView.setError(null);
+        mUserNameTextView.setText(AccountListActivity.account.getUserName());
+        mUserNameTextView.setError(null);
+        mUserEmailTextView.setText(AccountListActivity.account.getUserEmail());
+        mUserEmailTextView.setError(null);
+
+        if (AccountListActivity.account.getSequence() == 0) {
+            mSeqTextView.setText("");
+        } else {
+            mSeqTextView.setText(String.valueOf(AccountListActivity.account.getSequence()));
+        }
+
+        mAccountIdTextView.setText("Account Id: " + String.valueOf(AccountListActivity.account.getPassportId()));
+
+        if (AccountListActivity.account.getActvyLong() == 0) {
             mActvyDtTextView.setText("no activity date");
         } else {
-            mActvyDtTextView.setText("ActvyDate: " + format_ymdtimehm.format(account.getActvyLong()));
+            mActvyDtTextView.setText("ActvyDate: " + format_ymdtimehm.format(AccountListActivity.account.getActvyLong()));
         }
 
     }
@@ -211,7 +229,7 @@ public class AccountPlaceholderFrag1 extends Fragment {
     }
 
 
-    public boolean collectChgs(Account currentAccount) {
+    public boolean collectChgs() {
 
         if (mCorpNameTextView == null) {
             return false;
@@ -219,37 +237,37 @@ public class AccountPlaceholderFrag1 extends Fragment {
 
         boolean chgsMade = false;
 
-        Log.d(TAG, "collectChgs: id " + currentAccount.getId());
+        Log.d(TAG, "collectChgs: id " + AccountListActivity.account.getId());
         Log.d(TAG, "collectChgs: id " + rowId);
 //        if (this.account.getId() == currentAccount.getId()) {
 
         loadFromMap();
 
-        if (!acctCorpName.equals(currentAccount.getCorpName())) {
-            currentAccount.setCorpName(acctCorpName);
+        if (!acctCorpName.equals(AccountListActivity.account.getCorpName())) {
+            AccountListActivity.account.setCorpName(acctCorpName);
             chgsMade = true;
         }
 
-        if (!acctCorpWebsite.equals(currentAccount.getCorpWebsite())) {
-            currentAccount.setCorpWebsite(acctCorpWebsite);
+        if (!acctCorpWebsite.equals(AccountListActivity.account.getCorpWebsite())) {
+            AccountListActivity.account.setCorpWebsite(acctCorpWebsite);
             chgsMade = true;
         }
 
 //        Log.d(TAG, "collectChgs: " + acctUserName);
 //        Log.d(TAG, "collectChgs: " + currentAccount.getUserName());
 
-        if (!acctUserName.equals(currentAccount.getUserName())) {
-            currentAccount.setUserName(acctUserName);
+        if (!acctUserName.equals(AccountListActivity.account.getUserName())) {
+            AccountListActivity.account.setUserName(acctUserName);
             chgsMade = true;
         }
 
-        if (!acctUserEmail.equals(currentAccount.getUserEmail())) {
-            currentAccount.setUserEmail(acctUserEmail);
+        if (!acctUserEmail.equals(AccountListActivity.account.getUserEmail())) {
+            AccountListActivity.account.setUserEmail(acctUserEmail);
             chgsMade = true;
         }
 
-        if (acctSequence != currentAccount.getSequence()) {
-            currentAccount.setSequence(acctSequence);
+        if (acctSequence != AccountListActivity.account.getSequence()) {
+            AccountListActivity.account.setSequence(acctSequence);
             chgsMade = true;
         }
 
@@ -438,6 +456,14 @@ public class AccountPlaceholderFrag1 extends Fragment {
 //    }
 
 
+    public int getNumTries() {
+        return numTries;
+    }
+
+    public void setNumTries(int numTries) {
+        this.numTries = numTries;
+    }
+
     @Override
     public void onAttach(Context context) {
 //        Log.d(TAG, "onAttach: starts");
@@ -458,4 +484,5 @@ public class AccountPlaceholderFrag1 extends Fragment {
         super.onDetach();
         mListener = null;
     }
+
 }

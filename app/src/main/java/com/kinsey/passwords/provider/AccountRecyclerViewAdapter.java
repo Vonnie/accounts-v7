@@ -46,7 +46,7 @@ implements LoaderManager.LoaderCallbacks<Cursor>{
 
         void onAccountListSelect(Account account);
 
-        void onAccountLandListSelect(Account account);
+//        void onAccountLandListSelect(Account account);
     }
 
     private static String pattern_mdy_display = "M/d/y";
@@ -54,15 +54,16 @@ implements LoaderManager.LoaderCallbacks<Cursor>{
             pattern_mdy_display, Locale.US);
 
 
-    public AccountRecyclerViewAdapter(boolean twoPane, int sortorder, Cursor cursor
-            , OnAccountClickListener listener) {
+    public AccountRecyclerViewAdapter(int sortorder, int selected_position,
+                                      Cursor cursor, OnAccountClickListener listener) {
 //        Log.d(TAG, "CursorRecyclerViewAdapter: Constructor called");
 
-        Log.d(TAG, "AccountRecyclerViewAdapter: twopane " + twoPane);
+//        Log.d(TAG, "AccountRecyclerViewAdapter: twopane " + twoPane);
         Log.d(TAG, "AccountRecyclerViewAdapter: sortorder " + sortorder);
 
 //        mTwoPane = twoPane;
         mSortorder = sortorder;
+        this.selected_position = selected_position;
         mCursor = cursor;
         mListener = listener;
     }
@@ -287,6 +288,14 @@ implements LoaderManager.LoaderCallbacks<Cursor>{
     public void resetSelection() {
         selected_position = -1;
 //        holder.itemView.setBackgroundColor(Color.TRANSPARENT);
+    }
+
+    public void setSelected_position(int selected_position) {
+        this.selected_position = selected_position;
+    }
+
+    public int getSelected_position() {
+        return selected_position;
     }
 
     public static class AccountViewHolder extends RecyclerView.ViewHolder {

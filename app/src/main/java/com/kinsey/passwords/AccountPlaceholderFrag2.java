@@ -3,6 +3,7 @@ package com.kinsey.passwords;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,15 +14,14 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.kinsey.passwords.items.Account;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-//import static com.kinsey.passwords.AccountActivity.account;
+
+import static com.kinsey.passwords.AccountListActivity.account;
 
 /**
  * Created by Yvonne on 4/25/2017.
@@ -57,6 +57,8 @@ public class AccountPlaceholderFrag2 extends Fragment {
     private ImageButton mImgWebView;
 
     private long acctOpenDate = 0;
+    private boolean isReadyForUpdates = false;
+    private int numTries = 0;
 
     private static String pattern_ymdtimehm = "yyyy-MM-dd kk:mm";
     public static SimpleDateFormat format_ymdtimehm = new SimpleDateFormat(
@@ -111,6 +113,8 @@ public class AccountPlaceholderFrag2 extends Fragment {
                 tvPage = (TextView) rootView.findViewById(R.id.section_label);
                 tvPage.setText(getPageTitle(2));
                 setupPage2(rootView);
+        isReadyForUpdates = true;
+        fillPage();
 //                break;
 //            default:
 //                rootView = inflater.inflate(R.layout.fragment_acct_page_3, container, false);
@@ -120,7 +124,6 @@ public class AccountPlaceholderFrag2 extends Fragment {
 //                break;
 //        }
 
-        mListener.onAccount2Instance();
 //            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
 //            textView.setText(getString(R.string.section_format, sectNumber));
         return rootView;
@@ -169,11 +172,28 @@ public class AccountPlaceholderFrag2 extends Fragment {
 
         mDtePickOpen = (DatePicker) view.findViewById(R.id.acc_datePicker);
 
-
     }
 
-    public void fillPage(Account account) {
+    public void fillPage() {
 
+        if (!isReadyForUpdates) {
+            new CountDownTimer(10000, 1000) {
+
+                public void onTick(long millisUntilFinished) {
+//                    mTextField.setText("seconds remaining: " + millisUntilFinished / 1000);
+                }
+
+                public void onFinish() {
+//                    mTextField.setText("done!");
+                }
+            }.start();
+
+            if (!isReadyForUpdates) {
+                Log.d(TAG, "fillPage: unable to update");
+                return;
+            }
+//            mListener.onAccount2Instance();
+        }
         Log.d(TAG, "fillPage2: corpname " + account.getCorpName());
         rowId = account.getId();
 //        this.account = account;
@@ -217,7 +237,7 @@ public class AccountPlaceholderFrag2 extends Fragment {
     }
 
 
-    public boolean collectChgs(Account account) {
+    public boolean collectChgs() {
 
         if (mDtePickOpen == null) {
             return false;
@@ -338,6 +358,13 @@ public class AccountPlaceholderFrag2 extends Fragment {
                 return "Page 3 of 3";
         }
         return null;
+    }
+    public int getNumTries() {
+        return numTries;
+    }
+
+    public void setNumTries(int numTries) {
+        this.numTries = numTries;
     }
 
     @Override

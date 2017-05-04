@@ -12,7 +12,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -66,19 +68,22 @@ public class AccountListActivity extends AppCompatActivity
 
     private static final String TAG = "AccountListActivity";
     private static final String TAG_RETAINED_FRAGMENT = "RetainedFragment";
+    private static final String TAG_ACTIVITY_LIST_FRAG = "AccountListActivityFragment";
+    private static final String TAG_ACCOUNT_PLACEHOLDER_FRAG1 = "AccountPlaceholderFrag1";
+    private static final String TAG_ACCOUNT_PLACEHOLDER_FRAG2 = "AccountPlaceholderFrag2";
+    private static final String TAG_ACCOUNT_PLACEHOLDER_FRAG3 = "AccountPlaceholderFrag3";
+
+    public static Account account = new Account();
 
     private RetainedFragment mRetainedFragment;
-
+    FragmentManager fm;
+    AccountListActivityFragment fragList;
 
     private boolean mTwoPane = false;
     int mSortorder = AccountsContract.ACCOUNT_LIST_BY_CORP_NAME;
     RecyclerView mRecyclerView;
     private AccountRecyclerViewAdapter mAccountAdapter; // add adapter reference
 
-//    Loader<Cursor> loader;
-//    int LOADER_ID = 1;
-
-//    private Account account = new Account();
     private int accountMode = AccountsContract.ACCOUNT_ACTION_ADD;
 
 //    AccountActivityFragment accountActivityFragment = new AccountActivityFragment();
@@ -88,11 +93,17 @@ public class AccountListActivity extends AppCompatActivity
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
-//    private AccountPlaceholderFrag1 frag1;
-//    private AccountPlaceholderFrag2 frag2;
-//    private AccountPlaceholderFrag3 frag3;
+    private AccountPlaceholderFrag1 frag1;
+    private AccountPlaceholderFrag2 frag2;
+    private AccountPlaceholderFrag3 frag3;
+    private int fragListPos = -1;
+    private int frag1Pos = 0;
+    private int frag2Pos = 1;
+    private int frag3Pos = 2;
+    private ArrayList<Fragment> fragments=new ArrayList<Fragment>();
 
     boolean isUserPaging = true;
+    boolean isRotated = false;
 
     private OnListClickListener mListener;
 
@@ -110,8 +121,9 @@ public class AccountListActivity extends AppCompatActivity
 //        removeRetainedFrag();
 
         // find the retained fragment on activity restarts
-        FragmentManager fm = getSupportFragmentManager();
+        fm = getSupportFragmentManager();
         mRetainedFragment = (RetainedFragment) fm.findFragmentByTag(TAG_RETAINED_FRAGMENT);
+
 
         // create the fragment and data the first time
         if (mRetainedFragment == null) {
@@ -120,17 +132,87 @@ public class AccountListActivity extends AppCompatActivity
             fm.beginTransaction().add(mRetainedFragment, TAG_RETAINED_FRAGMENT).commit();
             // load data from a data source or perform any calculation
             mRetainedFragment.setData(loadMyData());
+            isRotated = false;
             Log.d(TAG, "onCreate: created new retained");
         } else {
             Log.d(TAG, "onCreate: retained present");
+            isRotated = true;
+//            mRetainedFragment.getData().getmSectionsPagerAdapter().setMyDataObject(mRetainedFragment.getData());
+
 //            this.account = mRetainedFragment.getData().getAccount();
 //            Log.d(TAG, "onCreate: retained account " + this.account);
         }
 
-        Log.d(TAG, "onCreate: check layout");
+//        Log.d(TAG, "onCreate: check layout");
 
         if (findViewById(R.id.item_detail_container) != null) {
             mViewPager = (ViewPager) findViewById(R.id.item_detail_container);
+//            if (isRotated) {
+//                emptyPager();
+//            }
+
+//            AccountPlaceholderFrag1 frag1_2 = (AccountPlaceholderFrag1) fm.findFragmentByTag(TAG_ACCOUNT_PLACEHOLDER_FRAG1);
+//
+//                if (frag1_2 == null) {
+//                    Log.d(TAG, "onCreate: frag1-2 is null");
+//                } else {
+//                    Log.d(TAG, "onCreate: has frag1-2");
+//                }
+
+//            fm = getSupportFragmentManager();
+//            List<Fragment> frags = fm.getFragments();
+//            if (frags == null) {
+//                Log.d(TAG, "onCreate: frags " + frags);
+//            } else {
+//                int fragSize = frags.size();
+//                Log.d(TAG, "emptyPager: size of frags " + fragSize);
+//                Fragment fragListItem = null;
+//                for (int i = 0; i < fragSize; i++) {
+//                    Fragment fragItem = frags.get(i);
+//                    Log.d(TAG, "onCreate: fragItem " + fragItem.getClass().getName());
+//                    if (fragItem.getClass().getName().equals("com.kinsey.passwords.AccountListActivityFragment")) {
+////                        fragList = (AccountListActivityFragment)fragItem;
+//                        fragListItem = fragItem;
+//                    } else if (fragItem.getClass().getName().equals("com.kinsey.passwords.AccountPlaceholderFrag1")) {
+//                        frag1 = (AccountPlaceholderFrag1)fragItem;
+//                    } else if (fragItem.getClass().getName().equals("com.kinsey.passwords.AccountPlaceholderFrag2")) {
+//                        frag2 = (AccountPlaceholderFrag2)fragItem;
+//                    } else if (fragItem.getClass().getName().equals("com.kinsey.passwords.AccountPlaceholderFrag3")) {
+//                        frag3 = (AccountPlaceholderFrag3)fragItem;
+//                    }
+//                }
+//                if (fragListItem != null) {
+//                    fm.beginTransaction().remove(fragListItem).commit();
+//                }
+//            }
+
+
+
+//            if (fragList == null) {
+                fragList = AccountListActivityFragment.newInstance(mRetainedFragment.getData().getSelectedPos());
+//            }
+            if (frag1 == null) {
+                frag1 = AccountPlaceholderFrag1.newInstance();
+            }
+            if (frag2 == null) {
+                frag2 = AccountPlaceholderFrag2.newInstance();
+            }
+            if (frag3 == null) {
+                frag3 = AccountPlaceholderFrag3.newInstance();
+            }
+
+
+
+//            fm.beginTransaction().replace(R.id.item_detail_container, frag1, TAG_ACCOUNT_PLACEHOLDER_FRAG1).commit();
+
+
+//            if (mSectionsPagerAdapter == null) {
+//                Log.d(TAG, "onCreate: mSectionsPagerAdapter is null ");
+//            } else {
+//                Log.d(TAG, "onCreate: has mSectionsPagerAdapter class ");
+//            }
+
+
             if (mViewPager.getTag().equals("land")) {
                 Log.d(TAG, "onCreate: landscape");
                 // The detail container view will be present only in the
@@ -138,6 +220,7 @@ public class AccountListActivity extends AppCompatActivity
                 // If this view is present, then the
                 // activity should be in two-pane mode.
                 mTwoPane = true;
+
 
 //            List<Fragment> fragments = new Vector<Fragment>();
 ////            frag1 = AccountPlaceholderFrag1.newInstance(0);
@@ -148,99 +231,94 @@ public class AccountListActivity extends AppCompatActivity
 //            fragments.add(frag3);
 
                 // primary sections of the activity.
-//            mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), fragments);
-                mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(),
-                        mTwoPane, mRetainedFragment.getData());
-//            mSectionsPagerAdapter.setAccount(new Account());
+////            mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), fragments);
+//                mRetainedFragment.getData().setmSectionsPagerAdapter(
+//                        new SectionsPagerAdapter(getSupportFragmentManager(),
+//                        mTwoPane, mRetainedFragment.getData()));
+////            mSectionsPagerAdapter.setAccount(new Account());
 
                 // Create the adapter that will return a fragment for each of the three
 
                 // Set up the ViewPager with the sections adapter.
+                fragments.add(frag1);
+                fragments.add(frag2);
+                fragments.add(frag3);
+                Log.d(TAG, "onCreate: new size " + fragments.size());
+                fragListPos = -1;
+                frag1Pos = 0;
+                frag2Pos = 1;
+                frag3Pos = 2;
+
+                mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(),
+                        fragListPos, frag1Pos, frag2Pos, frag3Pos, fragments);
+//                mRetainedFragment.setData(setPlacements(mRetainedFragment.getData()));
+
+//                mRetainedFragment.getData().getmSectionsPagerAdapter().setMyDataObject(mRetainedFragment.getData());
+
 
                 mViewPager.setAdapter(mSectionsPagerAdapter);
+                pagerEvents();
 
-// Attach the page change listener inside the activity
-                mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-
-                    // This method will be invoked when a new page becomes selected.
-                    @Override
-                    public void onPageSelected(int position) {
-//                    mSectionsPagerAdapter.refreshPage(position);
-                        String msg = "";
-                        if (position == SectionsPagerAdapter.frag1Pos) {
-                            msg = "Account Id info";
-                        } else if (position == SectionsPagerAdapter.frag2Pos) {
-                            msg = "Account Open Date calendar";
-                        } else if (position == SectionsPagerAdapter.frag3Pos) {
-                            msg = "Account Notes & ref";
-                        } else if (position == SectionsPagerAdapter.fragListPos) {
-                            msg = "Accounts List";
-                        }
-//                    switch (position) {
-//                        case 0:
-//                            if (mSectionsPagerAdapter.getFrag1RowId() == -1
-//                                    || mSectionsPagerAdapter.getFrag1RowId() == -1) {
-//
-//                            } else {
-//                                if (mSectionsPagerAdapter.getFrag1RowId() != mSectionsPagerAdapter.getAccount().getId()) {
-////                                    mSectionsPagerAdapter.loadPage(position);
-//                                }
-//                            }
-//                            msg = "Account Id info";
-//                            break;
-//                        case 1:
-//                            if (mSectionsPagerAdapter.getFrag2RowId() == -1
-//                                    || mSectionsPagerAdapter.getFrag2RowId() == -1) {
-//
-//                            } else {
-//                                if (mSectionsPagerAdapter.getFrag2RowId() != mSectionsPagerAdapter.getAccount().getId()) {
-////                                    mSectionsPagerAdapter.loadPage(position);
-//                                }
-//                            }
-//                            msg = "Account Open Date calendar";
-//                            break;
-//                        case 2:
-//                            if (mSectionsPagerAdapter.getFrag3RowId() == -1
-//                                    || mSectionsPagerAdapter.getFrag3RowId() == -1) {
-//
-//                            } else {
-//                                if (mSectionsPagerAdapter.getFrag3RowId() != mSectionsPagerAdapter.getAccount().getId()) {
-////                                    mSectionsPagerAdapter.loadPage(position);
-//                                }
-//                            }
-//                            msg = "Account Notes & ref";
-//                            break;
-//                    }
-                        if (isUserPaging) {
-                            Toast.makeText(AccountListActivity.this,
-                                    msg, Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
-                    // This method will be invoked when the current page is scrolled
-                    @Override
-                    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                        // Code goes here
-//                    Log.d(TAG, "onPageScrolled: scroll " + position + ":" + positionOffset);
-//                    mSectionsPagerAdapter.validateFrags(position);
-                    }
-
-                    // Called when the scroll state changes:
-                    // SCROLL_STATE_IDLE, SCROLL_STATE_DRAGGING, SCROLL_STATE_SETTLING
-                    @Override
-                    public void onPageScrollStateChanged(int state) {
-                        // Code goes here
-                        Log.d(TAG, "onPageScrollStateChanged: state " + state);
-                    }
-                });
 
 //                mRecyclerView = (RecyclerView) findViewById(R.id.account_items_list);
 //                mRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
 //                setupAdapter();
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.fragList, mRetainedFragment.getData().getFragList())
-                    .commit();
 
+//                getSupportFragmentManager().beginTransaction()
+//                        .add(fragList2, TAG_ACTIVITY_LIST_FRAG)
+////                                mRetainedFragment.getData().getFragList())
+//                        .commit();
+
+//                AccountListActivityFragment fragList2 = (AccountListActivityFragment) fm.findFragmentByTag(TAG_ACTIVITY_LIST_FRAG);
+
+//                if (fragList == null) {
+//                    Log.d(TAG, "onCreate: fragList is null");
+//                }
+
+
+                AccountListActivityFragment fragList3 = (AccountListActivityFragment) fm.findFragmentByTag(TAG_ACTIVITY_LIST_FRAG);
+
+                if (fragList3 == null) {
+                    Log.d(TAG, "onCreate: fragList3 is null");
+                } else {
+                    Log.d(TAG, "onCreate: has fragList3");
+                }
+
+//                findViewById(R.id.fragList).
+//                FragmentManager fmc = getSupportFragmentManager();
+                FragmentTransaction transaction = fm.beginTransaction();
+                transaction.replace(R.id.fragList, fragList, TAG_ACTIVITY_LIST_FRAG).commit();
+
+
+//                fragList2 = (AccountListActivityFragment)fmc.findFragmentById(R.id.fragList);
+//                if (fragList2 != null) {
+//                    transaction.hide(fragList2);
+//                }
+//                transaction.commit();
+
+//                if (isRotated) {
+//                    isUserPaging = false;
+//                    if (mRetainedFragment.getData().getFrag3() == null) {
+//                        Log.d(TAG, "onCreate: null frag3");
+//                    }
+//                    if (mRetainedFragment.getData().getFrag2() == null) {
+//                        Log.d(TAG, "onCreate: null frag2");
+//                    }
+//                    if (mRetainedFragment.getData().getFrag1() == null) {
+//                        Log.d(TAG, "onCreate: null frag1");
+//                    }
+//                    if (mRetainedFragment.getData().getFragList() == null) {
+//                        Log.d(TAG, "onCreate: null fragList");
+//                    }
+//                    mViewPager.setCurrentItem(mRetainedFragment.getData().getFrag3Pos());
+//                    mRetainedFragment.getData().getmSectionsPagerAdapter().loadPage(mRetainedFragment.getData().getFrag3Pos());
+//                    mViewPager.setCurrentItem(mRetainedFragment.getData().getFrag2Pos());
+//                    mRetainedFragment.getData().getmSectionsPagerAdapter().loadPage(mRetainedFragment.getData().getFrag2Pos());
+//                    mViewPager.setCurrentItem(mRetainedFragment.getData().getFrag1Pos());
+//                    mRetainedFragment.getData().getmSectionsPagerAdapter().loadPage(mRetainedFragment.getData().getFrag1Pos());
+////                    mSectionsPagerAdapter.notifyDataSetChanged();
+//                    isUserPaging = true;
+//                }
 
 
 //
@@ -252,18 +330,94 @@ public class AccountListActivity extends AppCompatActivity
 ////            mViewPager.setAdapter(mSectionsPagerAdapter);
 //            mViewPager.setCurrentItem(0);
 ////            mSectionsPagerAdapter.getItem(0);
+
+                isUserPaging = false;
+                mViewPager.setCurrentItem(frag3Pos);
+                mSectionsPagerAdapter.notifyDataSetChanged();
+                mViewPager.setCurrentItem(frag2Pos);
+                mSectionsPagerAdapter.notifyDataSetChanged();
+                mViewPager.setCurrentItem(frag1Pos);
+                mSectionsPagerAdapter.notifyDataSetChanged();
+                isUserPaging = true;
+
             } else {
                 Log.d(TAG, "onCreate: portrait");
+                mTwoPane = false;
 
+                if (fragList == null) {
+                    Log.d(TAG, "onCreate: fragList is null");
+                }
+
+                fragments.add(fragList);
+                fragments.add(frag1);
+                fragments.add(frag2);
+                fragments.add(frag3);
+                Log.d(TAG, "onCreate: new size " + fragments.size());
+
+                fragListPos = 0;
+                frag1Pos = 1;
+                frag2Pos = 2;
+                frag3Pos = 3;
                 mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(),
-                        mTwoPane, mRetainedFragment.getData());
+                        fragListPos, frag1Pos, frag2Pos, frag3Pos, fragments);
+
+//                mRetainedFragment.setData(setPlacements(mRetainedFragment.getData()));
+
+//                mRetainedFragment.getData().getmSectionsPagerAdapter().setMyDataObject(mRetainedFragment.getData());
+
+                //                mRetainedFragment.getData().setmSectionsPagerAdapter(
+//                        new SectionsPagerAdapter(getSupportFragmentManager(),
+//                        mTwoPane, mRetainedFragment.getData()));
                 mViewPager.setAdapter(mSectionsPagerAdapter);
+                pagerEvents();
+
+                isUserPaging = false;
+                mViewPager.setCurrentItem(frag3Pos);
+                mSectionsPagerAdapter.notifyDataSetChanged();
+                mViewPager.setCurrentItem(frag2Pos);
+                mSectionsPagerAdapter.notifyDataSetChanged();
+                mViewPager.setCurrentItem(frag1Pos);
+                mSectionsPagerAdapter.notifyDataSetChanged();
+                isUserPaging = true;
+
+                if (isRotated) {
+                    mViewPager.setCurrentItem(fragListPos);
+//                    isUserPaging = false;
+//                    mViewPager.setCurrentItem(mRetainedFragment.getData().getFrag3Pos());
+//                    mRetainedFragment.getData().getmSectionsPagerAdapter().instantiateItem(mViewPager, 2);
+//                    mRetainedFragment.getData().getmSectionsPagerAdapter().loadPage(mRetainedFragment.getData().getFrag3Pos());
+//                    mViewPager.setCurrentItem(mRetainedFragment.getData().getFrag2Pos());
+//                    mRetainedFragment.getData().getmSectionsPagerAdapter().loadPage(mRetainedFragment.getData().getFrag2Pos());
+//                    mViewPager.setCurrentItem(mRetainedFragment.getData().getFrag1Pos());
+//                    mRetainedFragment.getData().getmSectionsPagerAdapter().loadPage(mRetainedFragment.getData().getFrag1Pos());
+//                    mViewPager.setCurrentItem(mRetainedFragment.getData().getFragListPos());
+////                    mSectionsPagerAdapter.notifyDataSetChanged();
+//                    isUserPaging = true;
+                } else {
+                    isUserPaging = false;
+                    mViewPager.setCurrentItem(fragListPos);
+                    isUserPaging = true;
+                    Toast.makeText(AccountListActivity.this,
+                            "Account List, swipe to an item", Toast.LENGTH_LONG).show();
+                }
+
+
             }
         } else {
             Log.d(TAG, "onCreate: xlarge");
 
         }
 
+//        Log.d(TAG, "onCreate: port " + mRetainedFragment.getData().getmSectionsPagerAdapter().instantiateItem(
+//                mViewPager, mRetainedFragment.getData().getFrag1Pos()));
+//        Log.d(TAG, "onCreate: port " + mRetainedFragment.getData().getmSectionsPagerAdapter().instantiateItem(
+//                mViewPager, mRetainedFragment.getData().getFrag2Pos()));
+//        Log.d(TAG, "onCreate: port " + mRetainedFragment.getData().getmSectionsPagerAdapter().instantiateItem(
+//                mViewPager, mRetainedFragment.getData().getFrag3Pos()));
+//        if (mRetainedFragment.getData().getFragListPos() != -1) {
+//            Log.d(TAG, "onCreate: port " + mRetainedFragment.getData().getmSectionsPagerAdapter().instantiateItem(
+//                    mViewPager, mRetainedFragment.getData().getFragListPos()));
+//        }
 
 //
 //        if (savedInstanceState == null) {
@@ -317,7 +471,12 @@ public class AccountListActivity extends AppCompatActivity
                         ).show();
             }
         });
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        if (mTwoPane) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        } else {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
 
 //        AccountListActivityFragment fragment = new AccountListActivityFragment();
@@ -338,11 +497,259 @@ public class AccountListActivity extends AppCompatActivity
 
     private MyDataObject loadMyData() {
         MyDataObject obj = new MyDataObject();
-        obj.setFragList(AccountListActivityFragment.newInstance());
-        obj.setFrag1(AccountPlaceholderFrag1.newInstance());
-        obj.setFrag2(AccountPlaceholderFrag2.newInstance());
-        obj.setFrag3(AccountPlaceholderFrag3.newInstance());
+
+        obj.setAccount(account);
+        obj.setSelectedPos(-1);
+//        mRetainedFragment = new RetainedFragment();
+//        fm.beginTransaction().add(mRetainedFragment, TAG_RETAINED_FRAGMENT).commit();
+//        (RetainedFragment) retFrag = (RetainedFragment) fm.findFragmentByTag(TAG_RETAINED_FRAGMENT);
+
+//        fragList = AccountListActivityFragment.newInstance();
+//
+//        if (fragList == null) {
+//            Log.d(TAG, "loadMyData: fragList is null");
+//        } else {
+//            Log.d(TAG, "loadMyData: has fragList");
+//        }
+//
+//        fm.beginTransaction().replace(R.id.fragList, fragList, TAG_ACTIVITY_LIST_FRAG).commit();
+////                                mRetainedFragment.getData().getFragList())
+//
+//
+//        AccountListActivityFragment fragList3 = (AccountListActivityFragment) fm.findFragmentByTag(TAG_ACTIVITY_LIST_FRAG);
+//
+//        if (fragList3 == null) {
+//            Log.d(TAG, "loadMyData: fragList3 is null");
+//        } else {
+//            Log.d(TAG, "loadMyData: has fragList3");
+//        }
+
+//        FragmentManager fm = getSupportFragmentManager();
+//        List<Fragment> frags = fm.getFragments();
+//        int fragSize = frags.size();
+//        Log.d(TAG, "emptyPager: size of frags " + fragSize);
+//        for (int i = 0; i < fragSize; i++) {
+//            Fragment fragItem = frags.get(i);
+//            Log.d(TAG, "emptyPager: fragItem " + fragItem.getClass().getName());
+//        }
+
+//        obj.setFrag1(AccountPlaceholderFrag1.newInstance());
+//        obj.setFrag2(AccountPlaceholderFrag2.newInstance());
+//        obj.setFrag3(AccountPlaceholderFrag3.newInstance());
+//        obj.setmSectionsPagerAdapter(new SectionsPagerAdapter(getSupportFragmentManager()));
         return obj;
+    }
+
+//    private MyDataObject setPlacements(MyDataObject obj) {
+//        if (mTwoPane) {
+//            obj.setFragListPos(-1);
+//            obj.setFrag1Pos(0);
+//            obj.setFrag2Pos(1);
+//            obj.setFrag3Pos(2);
+//        } else {
+//            obj.setFragListPos(0);
+//            obj.setFrag1Pos(1);
+//            obj.setFrag2Pos(2);
+//            obj.setFrag3Pos(3);
+//        }
+//        return obj;
+//    }
+
+//    private void emptyPager() {
+//        if ( mRetainedFragment.getData().getFrag1() == null) {
+//            Log.d(TAG, "emptyPager: frag1 null");
+//        }
+//        mRetainedFragment.getData().getmSectionsPagerAdapter().destroyItem(mViewPager,
+//                mRetainedFragment.getData().getFrag1Pos(),
+//                mRetainedFragment.getData().getFrag1());
+//        mRetainedFragment.getData().getmSectionsPagerAdapter().destroyItem(mViewPager,
+//                mRetainedFragment.getData().getFrag2Pos(),
+//                mRetainedFragment.getData().getFrag2());
+//        mRetainedFragment.getData().getmSectionsPagerAdapter().destroyItem(mViewPager,
+//                mRetainedFragment.getData().getFrag3Pos(),
+//                mRetainedFragment.getData().getFrag3());
+//        if (mRetainedFragment.getData().getFragListPos() != -1) {
+//            mRetainedFragment.getData().getmSectionsPagerAdapter().destroyItem(mViewPager,
+//                    mRetainedFragment.getData().getFragListPos(),
+//                    mRetainedFragment.getData().getFragList());
+//        }
+//        Log.d(TAG, "emptyPager: is empty " + mViewPager.getChildCount());
+//        Log.d(TAG, "emptyPager: is empty " + mRetainedFragment.getData().getFragListPos());
+//        Fragment frag = (Fragment) mRetainedFragment.getData().getmSectionsPagerAdapter().instantiateItem(
+//                mViewPager, 0);
+////        Log.d(TAG, "emptyPager: is empty "
+////                + mRetainedFragment.getData().getmSectionsPagerAdapter().instantiateItem(
+////                mViewPager, 0)
+////        );
+//        Log.d(TAG, "emptyPager: " + frag.getClass().getName());
+//        mRetainedFragment.getData().getmSectionsPagerAdapter().destroyItem(mViewPager,
+//                0, frag);
+//        frag = (Fragment) mRetainedFragment.getData().getmSectionsPagerAdapter().instantiateItem(
+//                mViewPager, 0);
+//        Log.d(TAG, "emptyPager: " + frag.getClass().getName());
+//
+//        mViewPager.removeAllViews();
+//        frag = (Fragment) mRetainedFragment.getData().getmSectionsPagerAdapter().instantiateItem(
+//                mViewPager, 0);
+//        Log.d(TAG, "emptyPager: " + frag.getClass().getName());
+//
+//
+//        FragmentManager fm = getSupportFragmentManager();
+//
+//        List<Fragment> frags = fm.getFragments();
+//        int fragSize = frags.size();
+//        Log.d(TAG, "emptyPager: size of frags " + fragSize);
+//        for (int i = 0; i < fragSize; i++) {
+//            Fragment fragItem = frags.get(i);
+//            Log.d(TAG, "emptyPager: fragItem " + fragItem.getClass().getName());
+//            fm.beginTransaction().remove(fragItem).commit();
+//        }
+////        mRetainedFragment.getData().getmSectionsPagerAdapter().
+//
+//        frags = fm.getFragments();
+//        fragSize = frags.size();
+//        Log.d(TAG, "emptyPager: size of frags " + fragSize);
+//
+//        RetainedFragment retainFrag = (RetainedFragment) fm.findFragmentByTag(TAG_RETAINED_FRAGMENT);
+//
+//        if (retainFrag == null) {
+//            Log.d(TAG, "emptyPager: retainFrag is null");
+//        } else {
+//            Log.d(TAG, "emptyPager: retainFrag " + retainFrag.getClass().getName());
+//        }
+//
+////        FragmentManager fm = getSupportFragmentManager();
+//        AccountListActivityFragment fragList = (AccountListActivityFragment) fm.findFragmentByTag(TAG_ACTIVITY_LIST_FRAG);
+//
+//        if (fragList == null) {
+//            Log.d(TAG, "emptyPager: fragList is null");
+//        } else {
+//            Log.d(TAG, "emptyPager: fragList " + fragList.getClass().getName());
+//        }
+//
+//        AccountPlaceholderFrag1 frag1 = (AccountPlaceholderFrag1) fm.findFragmentByTag(TAG_ACCOUNT_PLACEHOLDER_FRAG);
+//        if (frag1 == null) {
+//            Log.d(TAG, "emptyPager: frag1 is null");
+//        } else {
+//            Log.d(TAG, "emptyPager: frag1 " + frag1.getClass().getName());
+//        }
+//
+//    }
+
+    private void pagerEvents() {
+// Attach the page change listener inside the activity
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+
+            // This method will be invoked when a new page becomes selected.
+            @Override
+            public void onPageSelected(int position) {
+//                    mSectionsPagerAdapter.refreshPage(position);
+                String msg = "";
+                if (position == frag1Pos) {
+                    msg = "Account Id info";
+                } else if (position == frag2Pos) {
+                    msg = "Account Open Date calendar";
+                } else if (position == frag3Pos) {
+                    msg = "Account Notes & ref";
+                } else if (position == fragListPos) {
+                    msg = "Accounts List";
+                }
+//                    switch (position) {
+//                        case 0:
+//                            if (mSectionsPagerAdapter.getFrag1RowId() == -1
+//                                    || mSectionsPagerAdapter.getFrag1RowId() == -1) {
+//
+//                            } else {
+//                                if (mSectionsPagerAdapter.getFrag1RowId() != mSectionsPagerAdapter.getAccount().getId()) {
+////                                    mSectionsPagerAdapter.loadPage(position);
+//                                }
+//                            }
+//                            msg = "Account Id info";
+//                            break;
+//                        case 1:
+//                            if (mSectionsPagerAdapter.getFrag2RowId() == -1
+//                                    || mSectionsPagerAdapter.getFrag2RowId() == -1) {
+//
+//                            } else {
+//                                if (mSectionsPagerAdapter.getFrag2RowId() != mSectionsPagerAdapter.getAccount().getId()) {
+////                                    mSectionsPagerAdapter.loadPage(position);
+//                                }
+//                            }
+//                            msg = "Account Open Date calendar";
+//                            break;
+//                        case 2:
+//                            if (mSectionsPagerAdapter.getFrag3RowId() == -1
+//                                    || mSectionsPagerAdapter.getFrag3RowId() == -1) {
+//
+//                            } else {
+//                                if (mSectionsPagerAdapter.getFrag3RowId() != mSectionsPagerAdapter.getAccount().getId()) {
+////                                    mSectionsPagerAdapter.loadPage(position);
+//                                }
+//                            }
+//                            msg = "Account Notes & ref";
+//                            break;
+//                    }
+                if (isUserPaging) {
+                    Toast.makeText(AccountListActivity.this,
+                            msg, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            // This method will be invoked when the current page is scrolled
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                // Code goes here
+//                    Log.d(TAG, "onPageScrolled: scroll " + position + ":" + positionOffset);
+//                    mSectionsPagerAdapter.validateFrags(position);
+            }
+
+            // Called when the scroll state changes:
+            // SCROLL_STATE_IDLE, SCROLL_STATE_DRAGGING, SCROLL_STATE_SETTLING
+            @Override
+            public void onPageScrollStateChanged(int state) {
+                // Code goes here
+//                Log.d(TAG, "onPageScrollStateChanged: state " + state);
+            }
+        });
+
+    }
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        if (mRetainedFragment != null) {
+
+            try {
+
+                mRetainedFragment.setData(collectMyData());
+                if (mSectionsPagerAdapter != null) {
+                    mSectionsPagerAdapter.clearAll();
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.e(TAG, "onSaveInstanceState Error " + e.getMessage());
+            }
+
+            super.onSaveInstanceState(outState);
+        }
+    }
+
+    private MyDataObject collectMyData() {
+        try {
+
+            MyDataObject myDataObject = mRetainedFragment.getData();
+            myDataObject.setAccount(account);
+            if (fragList == null) {
+                myDataObject.setSelectedPos(-1);
+            } else {
+                myDataObject.setSelectedPos(fragList.getSelected_position());
+            }
+            return myDataObject;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e(TAG, "collectMyData Error " + e.getMessage());
+            return null;
+        }
     }
 
     @Override
@@ -372,7 +779,8 @@ public class AccountListActivity extends AppCompatActivity
             fm.beginTransaction().remove(retainedFragment).commit();
         }
     }
-//    @Override
+
+    //    @Override
 //    public void onPause() {
 //        // perform other onPause related actions
 //        // ...
@@ -425,8 +833,7 @@ public class AccountListActivity extends AppCompatActivity
         //noinspection SimplifiableIfStatement
         switch (id) {
             case R.id.menuacct_add:
-                accountMode = AccountsContract.ACCOUNT_ACTION_ADD;
-                editAccountRequest();
+                addAccountRequest();
                 break;
             case R.id.menuacct_save:
                 saveAccount();
@@ -498,27 +905,27 @@ public class AccountListActivity extends AppCompatActivity
 //                                                Toast.LENGTH_LONG).show();
 //            return;
 //        };
-        if (mSectionsPagerAdapter.validateFrag1Errors()) {
+        if (frag1.validatePageErrors()) {
             isUserPaging = false;
-            mViewPager.setCurrentItem(SectionsPagerAdapter.frag1Pos);
+            mViewPager.setCurrentItem(frag1Pos);
             isUserPaging = true;
             Toast.makeText(AccountListActivity.this,
                     "Error on account entry, page 1",
                     Toast.LENGTH_LONG).show();
             return;
         }
-        if (mSectionsPagerAdapter.validateFrag2Errors()) {
+        if (frag2.validatePageErrors()) {
             isUserPaging = false;
-            mViewPager.setCurrentItem(SectionsPagerAdapter.frag2Pos);
+            mViewPager.setCurrentItem(frag2Pos);
             isUserPaging = true;
             Toast.makeText(AccountListActivity.this,
                     "Error on account entry, page 2",
                     Toast.LENGTH_LONG).show();
             return;
         }
-        if (mSectionsPagerAdapter.validateFrag3Errors()) {
+        if (frag3.validatePageErrors()) {
             isUserPaging = false;
-            mViewPager.setCurrentItem(SectionsPagerAdapter.frag3Pos);
+            mViewPager.setCurrentItem(frag3Pos);
             isUserPaging = true;
             Toast.makeText(AccountListActivity.this,
                     "Error on account entry, page 3",
@@ -526,12 +933,35 @@ public class AccountListActivity extends AppCompatActivity
             return;
         }
 
-        Account account = mSectionsPagerAdapter.collectChgs();
-        Log.d(TAG, "saveAccount: account to save " + account);
+//        Account account = mRetainedFragment.getData().getmSectionsPagerAdapter().collectChgs();
+//        Log.d(TAG, "saveAccount: account to save " + account);
 
-        Log.d(TAG, "saveAccount: org account " + mRetainedFragment.getData().getAccount());
+//        Log.d(TAG, "saveAccount: org account " + mRetainedFragment.getData().getAccount());
 
+        boolean chgsMade = false;
 
+        if (frag1 != null) {
+            if (frag1.collectChgs()) {
+                chgsMade = true;
+            }
+        }
+        if (frag2 != null) {
+            if (frag2.collectChgs()) {
+                chgsMade = true;
+            }
+        }
+        if (frag3 != null) {
+            if (frag3.collectChgs()) {
+                chgsMade = true;
+            }
+        }
+
+        if (!chgsMade) {
+            Toast.makeText(AccountListActivity.this,
+                    "No changes made to the Account",
+                    Toast.LENGTH_LONG).show();
+            return;
+        }
         ContentResolver contentResolver = getContentResolver();
         ContentValues values = new ContentValues();
 
@@ -546,7 +976,7 @@ public class AccountListActivity extends AppCompatActivity
         values.put(AccountsContract.Columns.REF_TO_COL, account.getRefTo());
         long actvylong = System.currentTimeMillis();
         values.put(AccountsContract.Columns.ACTVY_DATE_COL, actvylong);
-
+        account.setActvyLong(actvylong);
 
         if (accountMode == AccountsContract.ACCOUNT_ACTION_ADD) {
             Uri uri = contentResolver.insert(AccountsContract.CONTENT_URI, values);
@@ -557,9 +987,7 @@ public class AccountListActivity extends AppCompatActivity
             contentResolver.update(AccountsContract.buildIdUri(account.getId()), values, null, null);
         }
 
-        account.setActvyLong(actvylong);
-
-        mSectionsPagerAdapter.loadPage(SectionsPagerAdapter.frag1Pos);
+        frag1.fillPage();
 
         if (accountMode == AccountsContract.ACCOUNT_ACTION_ADD) {
             Toast.makeText(AccountListActivity.this,
@@ -579,7 +1007,7 @@ public class AccountListActivity extends AppCompatActivity
         Cursor cursor = null;
         getLoaderManager().initLoader(ACCOUNT_LOADER_ID, null, this);
 
-        mAccountAdapter = new AccountRecyclerViewAdapter(mTwoPane, mSortorder, cursor,
+        mAccountAdapter = new AccountRecyclerViewAdapter(mSortorder, 1, cursor,
                 (AccountRecyclerViewAdapter.OnAccountClickListener) this);
         mRecyclerView.setAdapter(mAccountAdapter);
     }
@@ -1069,47 +1497,81 @@ public class AccountListActivity extends AppCompatActivity
     }
 
 
-    private void editAccountRequest() {
+    private void addAccountRequest() {
 //        Log.d(TAG, "addAccountRequest: starts");
 //        if (mTwoPane) {
 //            mAccountAdapter.resetSelection();
-            mRetainedFragment.getData().setAccount(new Account());
-            mSectionsPagerAdapter.setAccount(mRetainedFragment.getData().getAccount());
-            mViewPager.setCurrentItem(SectionsPagerAdapter.frag3Pos);
-//            mSectionsPagerAdapter.notifyDataSetChanged();
-            mViewPager.setCurrentItem(SectionsPagerAdapter.frag2Pos);
-//            mSectionsPagerAdapter.notifyDataSetChanged();
-            mViewPager.setCurrentItem(SectionsPagerAdapter.frag1Pos);
-            mSectionsPagerAdapter.notifyDataSetChanged();
-//            getLoaderManager().restartLoader(ACCOUNT_LOADER_ID, null, this);
+        accountMode = AccountsContract.ACCOUNT_ACTION_ADD;
+        this.account = new Account();
+        updatePages();
 
-////            Log.d(TAG, "addAccountRequest: in two-pane mode (tablet)");
-//            FragmentManager fragmentManager = getSupportFragmentManager();
-//            AppDialog newFragment = AppDialog.newInstance();
-//            Bundle args = new Bundle();
-//            args.putInt(AppDialog.DIALOG_ID, AppDialog.DIALOG_ID_ACCOUNT_ACTIONS_LIST);
-//            args.putInt(AppDialog.DIALOG_TYPE, AppDialog.DIALOG_ACCOUNT_LIST_OPTIONS);
-//            args.putString(AppDialog.DIALOG_MESSAGE, getString(R.string.listdiag_acc_message));
-//            args.putString(AppDialog.DIALOG_SUB_MESSAGE, getString(R.string.listdiag_acc_sub_message));
+//        isUserPaging = false;
+//        mViewPager.setCurrentItem(frag3Pos);
+//        mSectionsPagerAdapter.notifyDataSetChanged();
+//        mViewPager.setCurrentItem(frag2Pos);
+//        mSectionsPagerAdapter.notifyDataSetChanged();
+//        mViewPager.setCurrentItem(frag1Pos);
+//        mSectionsPagerAdapter.notifyDataSetChanged();
+//        isUserPaging = true;
 //
-//            newFragment.setArguments(args);
+////        frag1 = AccountPlaceholderFrag1.newInstance();
+////        frag2 = AccountPlaceholderFrag2.newInstance();
+////        frag3 = AccountPlaceholderFrag3.newInstance();
+////        mSectionsPagerAdapter.setFrag1(frag1);
+////        mSectionsPagerAdapter.setFrag2(frag2);
+////        mSectionsPagerAdapter.setFrag3(frag3);
 //
-//            newFragment.show(fragmentManager, "dialog");
-
-//        } else {
-////            Log.d(TAG, "addAccountRequest: in single-pan mode (phone)");
-//            // in single-pane mode, start the detail activity for the selected item Id.
-//            Intent detailIntent = new Intent(this, AccountActivity.class);
-//
-//
-//            if (accountMode == AccountsContract.ACCOUNT_ACTION_CHG) { // editing an account
-//                detailIntent.putExtra(Account.class.getSimpleName(), account.getId());
-//                detailIntent.putExtra(AccountsContract.ACCOUNT_TWO_PANE, false);
-//                startActivityForResult(detailIntent, AccountsContract.ACCOUNT_ACTION_CHG);
-//            } else { // adding an account
-//                startActivityForResult(detailIntent, AccountsContract.ACCOUNT_ACTION_ADD);
-//            }
+//        if (frag1 != null) {
+//            frag1.fillPage();
+//            mSectionsPagerAdapter.notifyDataSetChanged();
 //        }
+//        if (frag2 != null) {
+//            frag2.fillPage();
+//            mSectionsPagerAdapter.notifyDataSetChanged();
+//        }
+//        if (frag3 != null) {
+//            frag3.fillPage();
+//            mSectionsPagerAdapter.notifyDataSetChanged();
+//        }
+//
+//        mViewPager.setCurrentItem(frag1Pos);
+////        mRetainedFragment.getData().setAccount(new Account());
+////            mSectionsPagerAdapter.setAccount(mRetainedFragment.getData().getAccount());
+////        mViewPager.setCurrentItem(mRetainedFragment.getData().getFrag3Pos());
+////            mSectionsPagerAdapter.notifyDataSetChanged();
+////        mViewPager.setCurrentItem(mRetainedFragment.getData().getFrag2Pos());
+////            mSectionsPagerAdapter.notifyDataSetChanged();
+////        mViewPager.setCurrentItem(mRetainedFragment.getData().getFrag1Pos());
+////        mRetainedFragment.getData().getmSectionsPagerAdapter().notifyDataSetChanged();
+////            getLoaderManager().restartLoader(ACCOUNT_LOADER_ID, null, this);
+//
+//////            Log.d(TAG, "addAccountRequest: in two-pane mode (tablet)");
+////            FragmentManager fragmentManager = getSupportFragmentManager();
+////            AppDialog newFragment = AppDialog.newInstance();
+////            Bundle args = new Bundle();
+////            args.putInt(AppDialog.DIALOG_ID, AppDialog.DIALOG_ID_ACCOUNT_ACTIONS_LIST);
+////            args.putInt(AppDialog.DIALOG_TYPE, AppDialog.DIALOG_ACCOUNT_LIST_OPTIONS);
+////            args.putString(AppDialog.DIALOG_MESSAGE, getString(R.string.listdiag_acc_message));
+////            args.putString(AppDialog.DIALOG_SUB_MESSAGE, getString(R.string.listdiag_acc_sub_message));
+////
+////            newFragment.setArguments(args);
+////
+////            newFragment.show(fragmentManager, "dialog");
+//
+////        } else {
+//////            Log.d(TAG, "addAccountRequest: in single-pan mode (phone)");
+////            // in single-pane mode, start the detail activity for the selected item Id.
+////            Intent detailIntent = new Intent(this, AccountActivity.class);
+////
+////
+////            if (accountMode == AccountsContract.ACCOUNT_ACTION_CHG) { // editing an account
+////                detailIntent.putExtra(Account.class.getSimpleName(), account.getId());
+////                detailIntent.putExtra(AccountsContract.ACCOUNT_TWO_PANE, false);
+////                startActivityForResult(detailIntent, AccountsContract.ACCOUNT_ACTION_CHG);
+////            } else { // adding an account
+////                startActivityForResult(detailIntent, AccountsContract.ACCOUNT_ACTION_ADD);
+////            }
+////        }
     }
 
 
@@ -1117,21 +1579,115 @@ public class AccountListActivity extends AppCompatActivity
     public void onAccountListSelect(Account account) {
         Log.d(TAG, "onAccountListSelect: ");
         accountMode = AccountsContract.ACCOUNT_ACTION_CHG;
-//        this.account = account;
-        mRetainedFragment.getData().setAccount(account);
-        mSectionsPagerAdapter.setAccount(account);
+        this.account = account;
+        updatePages();
+    }
+
+    private void updatePages() {
         isUserPaging = false;
-        int currPage = mViewPager.getCurrentItem();
-        mViewPager.setCurrentItem(SectionsPagerAdapter.frag3Pos);
-        mSectionsPagerAdapter.loadPage(SectionsPagerAdapter.frag3Pos);
-        mViewPager.setCurrentItem(SectionsPagerAdapter.frag2Pos);
-        mSectionsPagerAdapter.loadPage(SectionsPagerAdapter.frag2Pos);
-        mViewPager.setCurrentItem(SectionsPagerAdapter.frag1Pos);
-        mSectionsPagerAdapter.loadPage(SectionsPagerAdapter.frag1Pos);
-        if (currPage != 0) {
-            mSectionsPagerAdapter.loadPage(currPage);
-        }
+        mViewPager.setCurrentItem(frag2Pos);
+
+        frag1.fillPage();
+        mSectionsPagerAdapter.setPrimaryItem(mViewPager, frag1Pos, frag1);
+        mSectionsPagerAdapter.notifyDataSetChanged();
+//        new CountDownTimer(10000, 1000) {
+//
+//            public void onTick(long millisUntilFinished) {
+////                    mTextField.setText("seconds remaining: " + millisUntilFinished / 1000);
+//            }
+//
+//            public void onFinish() {
+////                    mTextField.setText("done!");
+//            }
+//        }.start();
+
+
+        frag2.fillPage();
+        mSectionsPagerAdapter.setPrimaryItem(mViewPager, frag2Pos, frag2);
+        mSectionsPagerAdapter.notifyDataSetChanged();
+//        new CountDownTimer(10000, 1000) {
+//
+//            public void onTick(long millisUntilFinished) {
+////                    mTextField.setText("seconds remaining: " + millisUntilFinished / 1000);
+//            }
+//
+//            public void onFinish() {
+////                    mTextField.setText("done!");
+//            }
+//        }.start();
+        frag3.fillPage();
+        mSectionsPagerAdapter.setPrimaryItem(mViewPager, frag3Pos, frag3);
+        mSectionsPagerAdapter.notifyDataSetChanged();
+//        new CountDownTimer(10000, 1000) {
+//
+//            public void onTick(long millisUntilFinished) {
+////                    mTextField.setText("seconds remaining: " + millisUntilFinished / 1000);
+//            }
+//
+//            public void onFinish() {
+////                    mTextField.setText("done!");
+//            }
+//        }.start();
         isUserPaging = true;
+
+//        mSectionsPagerAdapter.fillPages();
+
+//        isUserPaging = false;
+
+//        frag1 = (AccountPlaceholderFrag1)mSectionsPagerAdapter.instantiateItem(mViewPager, frag1Pos);
+//        frag2 = (AccountPlaceholderFrag2)mSectionsPagerAdapter.instantiateItem(mViewPager, frag2Pos);
+//        frag3 = (AccountPlaceholderFrag3)mSectionsPagerAdapter.instantiateItem(mViewPager, frag3Pos);
+
+//        if (frag1 != null) {
+//
+//            mViewPager.setCurrentItem(frag3Pos);
+//            frag1.fillPage();
+//            mSectionsPagerAdapter.notifyDataSetChanged();
+//            mViewPager.setCurrentItem(frag3Pos);
+//            mSectionsPagerAdapter.notifyDataSetChanged();
+//            mSectionsPagerAdapter.getItem(frag1Pos);
+//        }
+//        if (frag2 != null) {
+//            mViewPager.setCurrentItem(frag2Pos);
+//            frag2.fillPage();
+//            mSectionsPagerAdapter.notifyDataSetChanged();
+//            mSectionsPagerAdapter.getItem(frag2Pos);
+//            mViewPager.setCurrentItem(frag2Pos);
+//            mSectionsPagerAdapter.notifyDataSetChanged();
+//        }
+//        if (frag3 != null) {
+//            mViewPager.setCurrentItem(frag1Pos);
+//            frag3.fillPage();
+//            mSectionsPagerAdapter.notifyDataSetChanged();
+//            mSectionsPagerAdapter.getItem(frag3Pos);
+//            mViewPager.setCurrentItem(frag1Pos);
+//            mSectionsPagerAdapter.notifyDataSetChanged();
+//        }
+
+//        isUserPaging = true;
+
+        //        mRetainedFragment.getData().setAccount(account);
+//        mSectionsPagerAdapter.setAccount(account);
+//        isUserPaging = false;
+//        int currPage = mViewPager.getCurrentItem();
+//        frag1 = AccountPlaceholderFrag1.newInstance();
+//        frag2 = AccountPlaceholderFrag2.newInstance();
+//        frag3 = AccountPlaceholderFrag3.newInstance();
+//        mSectionsPagerAdapter.setFrag1(frag1);
+//        mSectionsPagerAdapter.setFrag2(frag2);
+//        mSectionsPagerAdapter.setFrag3(frag3);
+        mViewPager.setCurrentItem(frag1Pos);
+//        mViewPager.setCurrentItem(frag3Pos);
+//        mRetainedFragment.getData().getmSectionsPagerAdapter().loadPage(mRetainedFragment.getData().getFrag3Pos());
+//        mViewPager.setCurrentItem(mRetainedFragment.getData().getFrag2Pos());
+//        mRetainedFragment.getData().getmSectionsPagerAdapter().loadPage(mRetainedFragment.getData().getFrag2Pos());
+//        mViewPager.setCurrentItem(mRetainedFragment.getData().getFrag1Pos());
+//        mRetainedFragment.getData().getmSectionsPagerAdapter().loadPage(mRetainedFragment.getData().getFrag1Pos());
+//        Log.d(TAG, "onAccountListSelect: currPage " + currPage);
+//        if (currPage != 0) {
+//            mRetainedFragment.getData().getmSectionsPagerAdapter().loadPage(currPage);
+//        }
+//        isUserPaging = true;
 
 
 ////        Context context = getContext();
@@ -1143,82 +1699,82 @@ public class AccountListActivity extends AppCompatActivity
 
     }
 
-    @Override
-    public void onAccountLandListSelect(Account account) {
-        Log.d(TAG, "onAccountLandListSelect: id " + account.getId());
-//        accountActivityFragment = new AccountActivityFragment();
-//        this.account = account;
-//        Bundle arguments = new Bundle();
-//        arguments.putInt(Account.class.getSimpleName(), account.getId());
-//        accountActivityFragment.setArguments(arguments);
-//        getSupportFragmentManager().beginTransaction()
-//                .replace(R.id.item_detail_container, accountActivityFragment)
-//                .commit();
-
-//        Log.d(TAG, "onAccountLandListSelect: account " + account);
-        accountMode = AccountsContract.ACCOUNT_ACTION_CHG;
-//        this.account = account;
-        mRetainedFragment.getData().setAccount(account);
-        mSectionsPagerAdapter.setAccount(account);
-        isUserPaging = false;
-        int currPage = mViewPager.getCurrentItem();
-        mViewPager.setCurrentItem(SectionsPagerAdapter.frag3Pos);
-        mSectionsPagerAdapter.loadPage(SectionsPagerAdapter.frag3Pos);
-        mViewPager.setCurrentItem(SectionsPagerAdapter.frag2Pos);
-        mSectionsPagerAdapter.loadPage(SectionsPagerAdapter.frag2Pos);
-        mViewPager.setCurrentItem(SectionsPagerAdapter.frag1Pos);
-        mSectionsPagerAdapter.loadPage(SectionsPagerAdapter.frag1Pos);
-        if (currPage != 0) {
-            mSectionsPagerAdapter.loadPage(currPage);
-        }
-        isUserPaging = true;
-//        mSectionsPagerAdapter.notifyDataSetChanged();
-//        mSectionsPagerAdapter.getItem(0);
-//        mSectionsPagerAdapter.getItem(1);
-//        mSectionsPagerAdapter.getItem(2);
+//    @Override
+//    public void onAccountLandListSelect(Account account) {
+//        Log.d(TAG, "onAccountLandListSelect: id " + account.getId());
+////        accountActivityFragment = new AccountActivityFragment();
+////        this.account = account;
+////        Bundle arguments = new Bundle();
+////        arguments.putInt(Account.class.getSimpleName(), account.getId());
+////        accountActivityFragment.setArguments(arguments);
+////        getSupportFragmentManager().beginTransaction()
+////                .replace(R.id.item_detail_container, accountActivityFragment)
+////                .commit();
+//
+////        Log.d(TAG, "onAccountLandListSelect: account " + account);
+//        accountMode = AccountsContract.ACCOUNT_ACTION_CHG;
+////        this.account = account;
+//        mRetainedFragment.getData().setAccount(account);
+////        mRetainedFragment.getData().setAccount(account);
+//        isUserPaging = false;
+////        int currPage = mViewPager.getCurrentItem();
+//        mViewPager.setCurrentItem(mRetainedFragment.getData().getFrag3Pos());
+////        mRetainedFragment.getData().getmSectionsPagerAdapter().loadPage(SectionsPagerAdapter.frag3Pos);
+//        mViewPager.setCurrentItem(mRetainedFragment.getData().getFrag2Pos());
+////        mRetainedFragment.getData().getmSectionsPagerAdapter().loadPage(SectionsPagerAdapter.frag2Pos);
+//        mViewPager.setCurrentItem(mRetainedFragment.getData().getFrag1Pos());
+////        mRetainedFragment.getData().getmSectionsPagerAdapter().loadPage(SectionsPagerAdapter.frag1Pos);
+////        if (currPage != 0) {
+////            mSectionsPagerAdapter.loadPage(currPage);
+////        }
+//        isUserPaging = true;
+////        mSectionsPagerAdapter.notifyDataSetChanged();
+////        mSectionsPagerAdapter.getItem(0);
+////        mSectionsPagerAdapter.getItem(1);
+////        mSectionsPagerAdapter.getItem(2);
+//////        mViewPager.setCurrentItem(2);
+//////        mViewPager.setCurrentItem(1);
+////        mViewPager.setCurrentItem(0);
 ////        mViewPager.setCurrentItem(2);
 ////        mViewPager.setCurrentItem(1);
-//        mViewPager.setCurrentItem(0);
-//        mViewPager.setCurrentItem(2);
-//        mViewPager.setCurrentItem(1);
-//        mViewPager.setCurrentItem(0);
-//        frag1.fillPage(account);
-//        frag2.fillPage(account);
-//        frag3.fillPage(account);
-//        if (mSectionsPagerAdapter != null) {
-//            mSectionsPagerAdapter.setAccount(account);
-//            mViewPager.setCurrentItem(2);
-//            mSectionsPagerAdapter.notifyDataSetChanged();
-//            mViewPager.setCurrentItem(1);
-//            mSectionsPagerAdapter.notifyDataSetChanged();
-//            mViewPager.setCurrentItem(0);
-//            mSectionsPagerAdapter.notifyDataSetChanged();
-////            mSectionsPagerAdapter.fillPages();
-////            int limit = mSectionsPagerAdapter.getCountBuilt();
-////            for (int i = 0; i < limit; i++) {
-////                mSectionsPagerAdapter.fillPages;
-//////                mSectionsPagerAdapter.removeFrag(0);
-//
-////            if (mSectionsPagerAdapter.getCountBuilt() > 0) {
-//////        getSupportFragmentManager().beginTransaction().remove(frag).commit();
-////                getFragmentManager().beginTransaction().remove(getFragmentManager().findFragmentById(R.id.item_detail_container)).commit();
+////        mViewPager.setCurrentItem(0);
+////        frag1.fillPage(account);
+////        frag2.fillPage(account);
+////        frag3.fillPage(account);
+////        if (mSectionsPagerAdapter != null) {
+////            mSectionsPagerAdapter.setAccount(account);
+////            mViewPager.setCurrentItem(2);
+////            mSectionsPagerAdapter.notifyDataSetChanged();
+////            mViewPager.setCurrentItem(1);
+////            mSectionsPagerAdapter.notifyDataSetChanged();
+////            mViewPager.setCurrentItem(0);
+////            mSectionsPagerAdapter.notifyDataSetChanged();
+//////            mSectionsPagerAdapter.fillPages();
+//////            int limit = mSectionsPagerAdapter.getCountBuilt();
+//////            for (int i = 0; i < limit; i++) {
+//////                mSectionsPagerAdapter.fillPages;
+////////                mSectionsPagerAdapter.removeFrag(0);
 ////
-////            }
-//        }
-
-
-//        // primary sections of the activity.
-//        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+//////            if (mSectionsPagerAdapter.getCountBuilt() > 0) {
+////////        getSupportFragmentManager().beginTransaction().remove(frag).commit();
+//////                getFragmentManager().beginTransaction().remove(getFragmentManager().findFragmentById(R.id.item_detail_container)).commit();
+//////
+//////            }
+////        }
 //
 //
-//        // Create the adapter that will return a fragment for each of the three
+////        // primary sections of the activity.
+////        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+////
+////
+////        // Create the adapter that will return a fragment for each of the three
+////
+////        // Set up the ViewPager with the sections adapter.
+////        mViewPager = (ViewPager) findViewById(R.id.item_detail_container);
+////        mViewPager.setAdapter(mSectionsPagerAdapter);
 //
-//        // Set up the ViewPager with the sections adapter.
-//        mViewPager = (ViewPager) findViewById(R.id.item_detail_container);
-//        mViewPager.setAdapter(mSectionsPagerAdapter);
-
-
-    }
+//
+//    }
 
 //    private void clearFrag() {
 //        this.account = new Account();
@@ -1239,6 +1795,7 @@ public class AccountListActivity extends AppCompatActivity
         mAccountAdapter.resetSelection();
         getLoaderManager().restartLoader(ACCOUNT_LOADER_ID, null, this);
     }
+
     @Override
     public void onBackPressed() {
         Log.d(TAG, "onBackPressed: " + mViewPager.getCurrentItem());
@@ -1267,11 +1824,11 @@ public class AccountListActivity extends AppCompatActivity
 //            Log.d(TAG, "onPositiveDialogResult: acctid " + args.getInt(AppDialog.DIALOG_ACCOUNT_ID));
                 getContentResolver().delete(AccountsContract.buildIdUri(args.getInt(AppDialog.DIALOG_ACCOUNT_ID)), null, null);
                 setupAdapter();
-                if (mTwoPane) {
-                    clearAccount();
-                } else {
+//                if (mTwoPane) {
+                clearAccount();
+//                } else {
 //                    clearFrag();
-                }
+//                }
                 break;
             case AppDialog.DIALOG_ID_ASK_IF_NEED_DICTIONARY_REBUILD:
 //                Log.d(TAG, "onPositiveDialogResult: rebuild req");
@@ -1439,21 +1996,25 @@ public class AccountListActivity extends AppCompatActivity
 
     @Override
     public void onAccount2Instance() {
-        mSectionsPagerAdapter.loadPage(SectionsPagerAdapter.frag2Pos);
+        Log.d(TAG, "onAccount2Instance: ");
+//        mSectionsPagerAdapter.loadPage(SectionsPagerAdapter.frag2Pos);
 //        frag2RowId = rowId;
 //        frag2.fillPage(this.account);
     }
 
     @Override
     public void onAccount3Instance() {
-        mSectionsPagerAdapter.loadPage(SectionsPagerAdapter.frag3Pos);
+        Log.d(TAG, "onAccount3Instance: ");
+//        mSectionsPagerAdapter.loadPage(SectionsPagerAdapter.frag3Pos);
 //        frag3RowId = rowId;
 //        frag3.fillPage(this.account);
     }
 
     @Override
     public void onAccount1Instance() {
-        mSectionsPagerAdapter.loadPage(SectionsPagerAdapter.frag1Pos);
+        Log.d(TAG, "onAccount1Instance: ");
+
+//        mSectionsPagerAdapter.loadPage(SectionsPagerAdapter.frag1Pos);
 //        frag1RowId = rowId;
 //        frag1.fillPage(this.account);
     }

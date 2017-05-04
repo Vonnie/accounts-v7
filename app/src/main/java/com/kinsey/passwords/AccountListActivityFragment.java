@@ -30,6 +30,7 @@ public class AccountListActivityFragment extends Fragment
         ViewPager.OnPageChangeListener {
 
     private static final String TAG = "AccountListActivityFrag";
+    public static final String ARG_SELECTED_POS = "selected_pos";
 
     RecyclerView mRecyclerView;
     private AccountRecyclerViewAdapter mAccountAdapter; // add adapter reference
@@ -38,7 +39,7 @@ public class AccountListActivityFragment extends Fragment
 
     // whether or not the activity is i 2-pane mode
     // i.e. running in landscape on a tablet
-    private boolean mTwoPane = false;
+//    private boolean mTwoPane = false;
 
     private int mSortorder = AccountsContract.ACCOUNT_LIST_BY_CORP_NAME;
 
@@ -91,8 +92,11 @@ public class AccountListActivityFragment extends Fragment
 //        Log.d(TAG, "AccountListActivityFragment: starts");
     }
 
-    public static AccountListActivityFragment newInstance() {
+    public static AccountListActivityFragment newInstance(int selectedPos) {
         AccountListActivityFragment fragment = new AccountListActivityFragment();
+        Bundle args = new Bundle();
+        args.putInt(ARG_SELECTED_POS, selectedPos);
+        fragment.setArguments(args);
         return fragment;
     }
 
@@ -107,6 +111,7 @@ public class AccountListActivityFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 //        Log.d(TAG, "onCreateView: starts");
+        int selected_position = getArguments().getInt(ARG_SELECTED_POS);
         View view = inflater.inflate(R.layout.fragment_account_list, container, false);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.account_items_list);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -146,9 +151,10 @@ public class AccountListActivityFragment extends Fragment
         Cursor cursor = null;
         getLoaderManager().initLoader(ACCOUNT_LOADER_ID, null, this);
 
-        mAccountAdapter = new AccountRecyclerViewAdapter(mTwoPane, mSortorder, cursor,
+        mAccountAdapter = new AccountRecyclerViewAdapter(mSortorder, selected_position, cursor,
                 (AccountRecyclerViewAdapter.OnAccountClickListener) getActivity());
         mRecyclerView.setAdapter(mAccountAdapter);
+
         return view;
     }
 
@@ -236,4 +242,7 @@ public class AccountListActivityFragment extends Fragment
 
     }
 
+    public int getSelected_position() {
+        return mAccountAdapter.getSelected_position();
+    }
 }

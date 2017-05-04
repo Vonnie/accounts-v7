@@ -78,7 +78,7 @@ public class AccountActivity extends AppCompatActivity
 //                AccountPlaceholderFrag1.newInstance(),
 //                AccountPlaceholderFrag2.newInstance(),
 //                AccountPlaceholderFrag3.newInstance());
-        mSectionsPagerAdapter.setAccount(account);
+//        mSectionsPagerAdapter.setAccount(account);
         Log.d(TAG, "onCreate: mSectionsPagerAdapter ");
 
         // Set up the ViewPager with the sections adapter.
