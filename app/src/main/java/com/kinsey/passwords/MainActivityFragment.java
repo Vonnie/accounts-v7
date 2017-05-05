@@ -16,9 +16,6 @@ public class MainActivityFragment extends Fragment {
 //        implements LoaderManager.LoaderCallbacks<Cursor> {
     private static final String TAG = "MainActivityFragment";
 
-    public static int ACCOUNT_LOADER_ID = 1;
-    public static int SEARCH_LOADER_ID = 2;
-    public static int SUGGEST_LOADER_ID = 3;
 //    public static final int LOADER_SUGGESTS_ID = 0;
 //    public static final int LOADER_ACCOUNTS_ID = 1;
 

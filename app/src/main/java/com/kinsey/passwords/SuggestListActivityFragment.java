@@ -17,7 +17,8 @@ import android.widget.TextView;
 import com.kinsey.passwords.items.SuggestsContract;
 import com.kinsey.passwords.provider.CursorRecyclerViewAdapter;
 
-import static com.kinsey.passwords.MainActivityFragment.SUGGEST_LOADER_ID;
+import static com.kinsey.passwords.MainActivity.SUGGEST_LOADER_ID;
+
 
 /**
  * A placeholder fragment containing a simple view.

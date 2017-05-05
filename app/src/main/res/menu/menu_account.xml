@@ -15,7 +15,7 @@
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/menuacct_add"
-        android:icon="@android:drawable/ic_menu_add"
+        android:icon="@mipmap/ic_action_add"
         android:title="@string/menu_add_account"
         app:showAsAction="ifRoom" />
 </menu>

@@ -7,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -19,15 +18,15 @@ import android.widget.TextView;
 import com.kinsey.passwords.items.AccountsContract;
 import com.kinsey.passwords.provider.AccountRecyclerViewAdapter;
 
-import static com.kinsey.passwords.MainActivityFragment.ACCOUNT_LOADER_ID;
+import static com.kinsey.passwords.MainActivity.ACCOUNT_LOADER_ID;
 
 /**
  * A placeholder fragment containing a simple view.
  */
 public class AccountListActivityFragment extends Fragment
-        implements LoaderManager.LoaderCallbacks<Cursor>,
+        implements LoaderManager.LoaderCallbacks<Cursor> {
 //        AccountRecyclerViewAdapter.OnAccountClickListener,
-        ViewPager.OnPageChangeListener {
+//        ViewPager.OnPageChangeListener {
 
     private static final String TAG = "AccountListActivityFrag";
     public static final String ARG_SELECTED_POS = "selected_pos";
@@ -226,23 +225,30 @@ public class AccountListActivityFragment extends Fragment
         mAccountAdapter.swapCursor(null);
     }
 
-
-    @Override
-    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
+    public void deleteAccount(int accountId) {
+        getActivity().getContentResolver().delete(AccountsContract.buildIdUri((long)accountId), null, null);
+//        getLoaderManager().restartLoader(ACCOUNT_LOADER_ID, null, this);
     }
 
-    @Override
-    public void onPageSelected(int position) {
-
+    public void resortList(int sortorder) {
+        this.mSortorder = sortorder;
+        mAccountAdapter.setmSortorder(sortorder);
+        getLoaderManager().initLoader(ACCOUNT_LOADER_ID, null, this);
     }
 
-    @Override
-    public void onPageScrollStateChanged(int state) {
-
+    public void refreshList() {
+        getLoaderManager().restartLoader(ACCOUNT_LOADER_ID, null, this);
     }
 
     public int getSelected_position() {
         return mAccountAdapter.getSelected_position();
+    }
+
+    public void setSelected_position(int selectedPos) {
+        mAccountAdapter.setSelected_position(selectedPos);
+    }
+
+    public void resetSelection() {
+        mAccountAdapter.setSelected_position(-1);
     }
 }

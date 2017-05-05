@@ -35,6 +35,9 @@ public class MainActivity extends AppCompatActivity
     public static String DEFAULT_APP_DIRECTORY = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath()
             + "/Passport";
 
+    public static final int ACCOUNT_LOADER_ID = 1;
+    public static final int SEARCH_LOADER_ID = 2;
+    public static final int SUGGEST_LOADER_ID = 3;
 
     public static final int REQUEST_ACCOUNTS_LIST = 1;
     public static final int REQUEST_SUGGESTS_LIST = 2;

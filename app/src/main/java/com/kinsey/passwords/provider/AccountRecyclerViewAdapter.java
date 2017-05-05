@@ -298,6 +298,14 @@ implements LoaderManager.LoaderCallbacks<Cursor>{
         return selected_position;
     }
 
+    public int getmSortorder() {
+        return mSortorder;
+    }
+
+    public void setmSortorder(int mSortorder) {
+        this.mSortorder = mSortorder;
+    }
+
     public static class AccountViewHolder extends RecyclerView.ViewHolder {
         private static final String TAG = "AccountViewHolder";
         public final View mView;

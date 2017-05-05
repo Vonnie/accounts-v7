@@ -4,33 +4,27 @@
     tools:context="com.kinsey.passwords.MainActivity">
     <item
         android:id="@+id/menumain_addAccount"
-        android:icon="@android:drawable/ic_menu_add"
+        android:icon="@mipmap/ic_action_add"
         android:orderInCategory="100"
         android:showAsAction="ifRoom"
         android:title="@string/menu_add_account"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always" />
     <item
         android:id="@+id/menumain_search"
-        android:icon="@android:drawable/ic_menu_search"
+        android:icon="@mipmap/ic_action_search"
         android:orderInCategory="102"
         android:title="@string/menu_search"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/menumain_showAccounts"
-        android:icon="@android:drawable/ic_menu_view"
+        android:icon="@mipmap/ic_action_database"
         android:orderInCategory="103"
         android:title="@string/menu_accounts"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always" />
     <item
         android:id="@+id/menumain_showSuggests"
-        android:icon="@android:drawable/ic_secure"
+        android:icon="@mipmap/ic_action_key"
         android:orderInCategory="104"
         android:title="@string/menu_suggests"
-        app:showAsAction="ifRoom" />
-    <item
-        android:id="@+id/menumain_pager"
-        android:icon="@android:drawable/ic_menu_compass"
-        android:orderInCategory="105"
-        android:title="Pager"
         app:showAsAction="ifRoom" />
 </menu>

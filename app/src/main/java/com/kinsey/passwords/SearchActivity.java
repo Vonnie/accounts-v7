@@ -19,6 +19,9 @@ import com.kinsey.passwords.items.AccountsContract;
 import com.kinsey.passwords.items.SearchesContract;
 import com.kinsey.passwords.provider.AccountSearchLoaderCallbacks;
 
+import static com.kinsey.passwords.MainActivity.SEARCH_LOADER_ID;
+
+
 public class SearchActivity extends AppCompatActivity
         implements SearchActivityFragment.OnActionListener {
     private static final String TAG = "SearchActivity";
@@ -26,7 +29,6 @@ public class SearchActivity extends AppCompatActivity
     public static final String SEARCH_QUERY = "SearchActivity";
     public static final String SEARCH_ACCOUNT = "SearchActivityAccount";
 
-    public static final int CONTACT_QUERY_LOADER = 1;
 
     private SearchView mSearchView;
 
@@ -77,9 +79,9 @@ public class SearchActivity extends AppCompatActivity
     }
 
     private void loadSearchDB() {
-        deleteAllSuggestions();
+        deleteAllSearchItems();
         AccountSearchLoaderCallbacks loaderAcctCallbacks = new AccountSearchLoaderCallbacks(this);
-        getLoaderManager().restartLoader(CONTACT_QUERY_LOADER, null, loaderAcctCallbacks);
+        getLoaderManager().restartLoader(SEARCH_LOADER_ID, null, loaderAcctCallbacks);
         Toast.makeText(this,
                 "Search Dictionary DB built",
                 Toast.LENGTH_LONG).show();
@@ -87,7 +89,7 @@ public class SearchActivity extends AppCompatActivity
     }
 
 
-    private void deleteAllSuggestions() {
+    private void deleteAllSearchItems() {
 //		String selectionClause = SearchManager.SUGGEST_COLUMN_FLAGS + " = ?";
 //		String[] selectionArgs = { "account" };
 //        Log.d(TAG, "deleteAllSuggestions: delUri " + SearchesContract.CONTENT_URI_TRUNCATE);

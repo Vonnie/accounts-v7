@@ -1,11 +1,8 @@
 package com.kinsey.passwords;
 
-import android.app.LoaderManager;
 import android.content.ContentResolver;
 import android.content.ContentValues;
-import android.content.CursorLoader;
 import android.content.Intent;
-import android.content.Loader;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.net.Uri;
@@ -52,9 +49,8 @@ import java.util.Date;
 import java.util.List;
 
 import static com.kinsey.passwords.MainActivity.DEFAULT_APP_DIRECTORY;
+import static com.kinsey.passwords.MainActivity.SEARCH_LOADER_ID;
 import static com.kinsey.passwords.MainActivity.format_ymdtime;
-import static com.kinsey.passwords.MainActivityFragment.ACCOUNT_LOADER_ID;
-import static com.kinsey.passwords.SearchActivity.CONTACT_QUERY_LOADER;
 
 public class AccountListActivity extends AppCompatActivity
         implements AccountRecyclerViewAdapter.OnAccountClickListener,
@@ -63,8 +59,8 @@ public class AccountListActivity extends AppCompatActivity
         AccountPlaceholderFrag2.OnAccountListener,
         AccountPlaceholderFrag3.OnAccountListener,
         ViewPager.OnPageChangeListener,
-        AppDialog.DialogEvents,
-        LoaderManager.LoaderCallbacks<Cursor> {
+        AppDialog.DialogEvents {
+//        LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String TAG = "AccountListActivity";
     private static final String TAG_RETAINED_FRAGMENT = "RetainedFragment";
@@ -82,7 +78,7 @@ public class AccountListActivity extends AppCompatActivity
     private boolean mTwoPane = false;
     int mSortorder = AccountsContract.ACCOUNT_LIST_BY_CORP_NAME;
     RecyclerView mRecyclerView;
-    private AccountRecyclerViewAdapter mAccountAdapter; // add adapter reference
+//    private AccountRecyclerViewAdapter mAccountAdapter; // add adapter reference
 
     private int accountMode = AccountsContract.ACCOUNT_ACTION_ADD;
 
@@ -276,13 +272,13 @@ public class AccountListActivity extends AppCompatActivity
 //                }
 
 
-                AccountListActivityFragment fragList3 = (AccountListActivityFragment) fm.findFragmentByTag(TAG_ACTIVITY_LIST_FRAG);
-
-                if (fragList3 == null) {
-                    Log.d(TAG, "onCreate: fragList3 is null");
-                } else {
-                    Log.d(TAG, "onCreate: has fragList3");
-                }
+//                AccountListActivityFragment fragList3 = (AccountListActivityFragment) fm.findFragmentByTag(TAG_ACTIVITY_LIST_FRAG);
+//
+//                if (fragList3 == null) {
+//                    Log.d(TAG, "onCreate: fragList3 is null");
+//                } else {
+//                    Log.d(TAG, "onCreate: has fragList3");
+//                }
 
 //                findViewById(R.id.fragList).
 //                FragmentManager fmc = getSupportFragmentManager();
@@ -850,7 +846,7 @@ public class AccountListActivity extends AppCompatActivity
 
     private void deleteAccount() {
 //        Log.d(TAG, "deleteAccount: ");
-        if (mRetainedFragment.getData().getAccount() == null) {
+        if (account == null) {
             Toast.makeText(this,
                     "No Account selected to delete",
                     Toast.LENGTH_LONG).show();
@@ -862,8 +858,8 @@ public class AccountListActivity extends AppCompatActivity
         args.putInt(AppDialog.DIALOG_ID, AppDialog.DIALOG_ID_CONFIRM_DELETE_ACCOUNT);
         args.putInt(AppDialog.DIALOG_TYPE, AppDialog.DIALOG_YES_NO);
         args.putString(AppDialog.DIALOG_MESSAGE, getString(R.string.deldiag_message));
-        args.putString(AppDialog.DIALOG_SUB_MESSAGE, getString(R.string.deldiag_sub_message, mRetainedFragment.getData().getAccount().getCorpName(), mRetainedFragment.getData().getAccount().getPassportId()));
-        args.putInt(AppDialog.DIALOG_ACCOUNT_ID, mRetainedFragment.getData().getAccount().getId());
+        args.putString(AppDialog.DIALOG_SUB_MESSAGE, getString(R.string.deldiag_sub_message, account.getCorpName(), account.getPassportId()));
+        args.putInt(AppDialog.DIALOG_ACCOUNT_ID, account.getId());
         args.putInt(AppDialog.DIALOG_POSITIVE_RID, R.string.deldiag_positive_caption);
 
         newFragment.setArguments(args);
@@ -1001,89 +997,89 @@ public class AccountListActivity extends AppCompatActivity
         accountMode = AccountsContract.ACCOUNT_ACTION_CHG;
     }
 
+//
+//    private void setupAdapter() {
+////        Cursor cursor = createCursor();
+//        Cursor cursor = null;
+//        getLoaderManager().initLoader(ACCOUNT_LOADER_ID, null, this);
+//
+//        mAccountAdapter = new AccountRecyclerViewAdapter(mSortorder, 1, cursor,
+//                (AccountRecyclerViewAdapter.OnAccountClickListener) this);
+//        mRecyclerView.setAdapter(mAccountAdapter);
+//    }
 
-    private void setupAdapter() {
-//        Cursor cursor = createCursor();
-        Cursor cursor = null;
-        getLoaderManager().initLoader(ACCOUNT_LOADER_ID, null, this);
-
-        mAccountAdapter = new AccountRecyclerViewAdapter(mSortorder, 1, cursor,
-                (AccountRecyclerViewAdapter.OnAccountClickListener) this);
-        mRecyclerView.setAdapter(mAccountAdapter);
-    }
-
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-//    public Cursor createCursor() {
-//        Log.d(TAG, "createCursor: starts");
-        Log.d(TAG, "onCreateLoader: id " + String.valueOf(id));
-
-        String[] projectionAcct =
-                {AccountsContract.Columns._ID_COL,
-                        AccountsContract.Columns.PASSPORT_ID_COL,
-                        AccountsContract.Columns.CORP_NAME_COL,
-                        AccountsContract.Columns.USER_NAME_COL,
-                        AccountsContract.Columns.USER_EMAIL_COL,
-                        AccountsContract.Columns.CORP_WEBSITE_COL,
-                        AccountsContract.Columns.NOTE_COL,
-                        AccountsContract.Columns.OPEN_DATE_COL,
-                        AccountsContract.Columns.ACTVY_DATE_COL,
-                        AccountsContract.Columns.SEQUENCE_COL,
-                        AccountsContract.Columns.REF_FROM_COL,
-                        AccountsContract.Columns.REF_TO_COL};
-//        , SuggestsContract.Columns.ACTVY_DATE_COL,
-//                SuggestsContract.Columns.NOTE_COL};{
-        // <order by> Tasks.SortOrder, Tasks.Name COLLATE NOCASE
-//        String sortOrder = AccountsContract.Columns.CORP_NAME_COL + "," + AccountsContract.Columns.SEQUENCE_COL + " COLLATE NOCASE";
-        String sortOrder;
-        switch (mSortorder) {
-            case AccountsContract.ACCOUNT_LIST_BY_OPEN_DATE:
-                sortOrder = AccountsContract.Columns.OPEN_DATE_COL + " DESC," + AccountsContract.Columns.CORP_NAME_COL + " COLLATE NOCASE ASC";
-                break;
-            case AccountsContract.ACCOUNT_LIST_BY_SEQUENCE:
-                sortOrder = AccountsContract.Columns.SEQUENCE_COL + "," + AccountsContract.Columns.CORP_NAME_COL + " COLLATE NOCASE ASC";
-                break;
-            case AccountsContract.ACCOUNT_LIST_BY_PASSPORT_ID:
-                sortOrder = AccountsContract.Columns.PASSPORT_ID_COL + "," + AccountsContract.Columns.CORP_NAME_COL + " COLLATE NOCASE ASC";
-                break;
-            default:
-                sortOrder = AccountsContract.Columns.CORP_NAME_COL + "," + AccountsContract.Columns.SEQUENCE_COL + " COLLATE NOCASE ASC";
-                break;
-        }
-//        String sortOrder = AccountsContract.Columns.TASKS_SORTORDER + "," + TasksContract.Columns.TASKS_NAME;
-        return new CursorLoader(this,
-                AccountsContract.CONTENT_URI,
-                projectionAcct,
-//                null,
-                null,
-                null,
-                sortOrder);
-//        Cursor cursor = getContentResolver().query(
-//                AccountsContract.CONTENT_URI, null, null, null, sortOrder);
-////        Log.d(TAG, "onCreateLoader: cursor " + cursor.toString());
-//        return cursor;
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        //        Log.d(TAG, "onLoadFinished: starts");
-//        this.loader = loader;
-        int count = 0;
-        mAccountAdapter.swapCursor(data);
-        count = mAccountAdapter.getItemCount();
-//        if (count == 0) {
-//            twCurrentTitle.setText("No accounts, + to add");
-//        } else {
-//            twCurrentTitle.setText("Accounts");
+//    @Override
+//    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+////    public Cursor createCursor() {
+////        Log.d(TAG, "createCursor: starts");
+//        Log.d(TAG, "onCreateLoader: id " + String.valueOf(id));
+//
+//        String[] projectionAcct =
+//                {AccountsContract.Columns._ID_COL,
+//                        AccountsContract.Columns.PASSPORT_ID_COL,
+//                        AccountsContract.Columns.CORP_NAME_COL,
+//                        AccountsContract.Columns.USER_NAME_COL,
+//                        AccountsContract.Columns.USER_EMAIL_COL,
+//                        AccountsContract.Columns.CORP_WEBSITE_COL,
+//                        AccountsContract.Columns.NOTE_COL,
+//                        AccountsContract.Columns.OPEN_DATE_COL,
+//                        AccountsContract.Columns.ACTVY_DATE_COL,
+//                        AccountsContract.Columns.SEQUENCE_COL,
+//                        AccountsContract.Columns.REF_FROM_COL,
+//                        AccountsContract.Columns.REF_TO_COL};
+////        , SuggestsContract.Columns.ACTVY_DATE_COL,
+////                SuggestsContract.Columns.NOTE_COL};{
+//        // <order by> Tasks.SortOrder, Tasks.Name COLLATE NOCASE
+////        String sortOrder = AccountsContract.Columns.CORP_NAME_COL + "," + AccountsContract.Columns.SEQUENCE_COL + " COLLATE NOCASE";
+//        String sortOrder;
+//        switch (mSortorder) {
+//            case AccountsContract.ACCOUNT_LIST_BY_OPEN_DATE:
+//                sortOrder = AccountsContract.Columns.OPEN_DATE_COL + " DESC," + AccountsContract.Columns.CORP_NAME_COL + " COLLATE NOCASE ASC";
+//                break;
+//            case AccountsContract.ACCOUNT_LIST_BY_SEQUENCE:
+//                sortOrder = AccountsContract.Columns.SEQUENCE_COL + "," + AccountsContract.Columns.CORP_NAME_COL + " COLLATE NOCASE ASC";
+//                break;
+//            case AccountsContract.ACCOUNT_LIST_BY_PASSPORT_ID:
+//                sortOrder = AccountsContract.Columns.PASSPORT_ID_COL + "," + AccountsContract.Columns.CORP_NAME_COL + " COLLATE NOCASE ASC";
+//                break;
+//            default:
+//                sortOrder = AccountsContract.Columns.CORP_NAME_COL + "," + AccountsContract.Columns.SEQUENCE_COL + " COLLATE NOCASE ASC";
+//                break;
 //        }
-//        Log.d(TAG, "onLoadFinished: count is " + count);
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-//        Log.d(TAG, "onLoaderReset: starts");
-        mAccountAdapter.swapCursor(null);
-    }
+////        String sortOrder = AccountsContract.Columns.TASKS_SORTORDER + "," + TasksContract.Columns.TASKS_NAME;
+//        return new CursorLoader(this,
+//                AccountsContract.CONTENT_URI,
+//                projectionAcct,
+////                null,
+//                null,
+//                null,
+//                sortOrder);
+////        Cursor cursor = getContentResolver().query(
+////                AccountsContract.CONTENT_URI, null, null, null, sortOrder);
+//////        Log.d(TAG, "onCreateLoader: cursor " + cursor.toString());
+////        return cursor;
+//    }
+//
+//    @Override
+//    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+//        //        Log.d(TAG, "onLoadFinished: starts");
+////        this.loader = loader;
+//        int count = 0;
+//        mAccountAdapter.swapCursor(data);
+//        count = mAccountAdapter.getItemCount();
+////        if (count == 0) {
+////            twCurrentTitle.setText("No accounts, + to add");
+////        } else {
+////            twCurrentTitle.setText("Accounts");
+////        }
+////        Log.d(TAG, "onLoadFinished: count is " + count);
+//    }
+//
+//    @Override
+//    public void onLoaderReset(Loader<Cursor> loader) {
+////        Log.d(TAG, "onLoaderReset: starts");
+//        mAccountAdapter.swapCursor(null);
+//    }
 
 
 //    @Override
@@ -1790,10 +1786,10 @@ public class AccountListActivity extends AppCompatActivity
 
 
     private void clearAccount() {
-        mRetainedFragment.getData().setAccount(new Account());
+        account = new Account();
         accountMode = AccountsContract.ACCOUNT_ACTION_ADD;
-        mAccountAdapter.resetSelection();
-        getLoaderManager().restartLoader(ACCOUNT_LOADER_ID, null, this);
+        fragList.resetSelection();
+//        getLoaderManager().restartLoader(ACCOUNT_LOADER_ID, null, this);
     }
 
     @Override
@@ -1822,8 +1818,9 @@ public class AccountListActivity extends AppCompatActivity
             case AppDialog.DIALOG_ID_CONFIRM_DELETE_ACCOUNT:
 //            Log.d(TAG, "onPositiveDialogResult: confirmed to delete");
 //            Log.d(TAG, "onPositiveDialogResult: acctid " + args.getInt(AppDialog.DIALOG_ACCOUNT_ID));
-                getContentResolver().delete(AccountsContract.buildIdUri(args.getInt(AppDialog.DIALOG_ACCOUNT_ID)), null, null);
-                setupAdapter();
+                fragList.deleteAccount(args.getInt(AppDialog.DIALOG_ACCOUNT_ID));
+//                getContentResolver().delete(AccountsContract.buildIdUri(args.getInt(AppDialog.DIALOG_ACCOUNT_ID)), null, null);
+//                setupAdapter();
 //                if (mTwoPane) {
                 clearAccount();
 //                } else {
@@ -1851,23 +1848,23 @@ public class AccountListActivity extends AppCompatActivity
     }
 
     private void loadSearchDB() {
-        deleteAllSuggestions();
+        deleteAllSearchItems();
         AccountSearchLoaderCallbacks loaderAcctCallbacks = new AccountSearchLoaderCallbacks(this);
-        getLoaderManager().restartLoader(CONTACT_QUERY_LOADER, null, loaderAcctCallbacks);
+        getLoaderManager().restartLoader(SEARCH_LOADER_ID, null, loaderAcctCallbacks);
         Toast.makeText(this,
                 "Search Dictionary DB built",
                 Toast.LENGTH_LONG).show();
 
     }
 
-    private void deleteAllSuggestions() {
+    private void deleteAllSearchItems() {
 //		String selectionClause = SearchManager.SUGGEST_COLUMN_FLAGS + " = ?";
 //		String[] selectionArgs = { "account" };
 //        Log.d(TAG, "deleteAllSuggestions: delUri " + SearchesContract.CONTENT_URI_TRUNCATE);
         getContentResolver().delete(
                 SearchesContract.CONTENT_URI_TRUNCATE,
                 null, null);
-        getLoaderManager().restartLoader(ACCOUNT_LOADER_ID, null, null);
+        getLoaderManager().restartLoader(SEARCH_LOADER_ID, null, null);
     }
 
     private void confirmImport() {
@@ -1907,19 +1904,27 @@ public class AccountListActivity extends AppCompatActivity
         switch (which) {
             case AppDialog.DIALOG_ACCT_LIST_CORP_NAME:
                 mSortorder = AccountsContract.ACCOUNT_LIST_BY_CORP_NAME;
-                setupAdapter();
+                clearAccount();
+                fragList.resortList(mSortorder);
+//                setupAdapter();
                 break;
             case AppDialog.DIALOG_ACCT_LIST_OPEN_DATE:
                 mSortorder = AccountsContract.ACCOUNT_LIST_BY_OPEN_DATE;
-                setupAdapter();
+                clearAccount();
+                fragList.resortList(mSortorder);
+//                setupAdapter();
                 break;
             case AppDialog.DIALOG_ACCT_LIST_ACCT_ID:
                 mSortorder = AccountsContract.ACCOUNT_LIST_BY_PASSPORT_ID;
-                setupAdapter();
+                clearAccount();
+                fragList.resortList(mSortorder);
+//                setupAdapter();
                 break;
             case AppDialog.DIALOG_ACCT_LIST_USER_SEQ:
                 mSortorder = AccountsContract.ACCOUNT_LIST_BY_SEQUENCE;
-                setupAdapter();
+                clearAccount();
+                fragList.resortList(mSortorder);
+//                setupAdapter();
                 break;
 //            case 4:
 ////                Log.d(TAG, "onActionRequestDialogResult: request list");
@@ -1967,12 +1972,15 @@ public class AccountListActivity extends AppCompatActivity
         switch (requestCode) {
             case AccountsContract.ACCOUNT_ACTION_CHG: {
                 Log.d(TAG, "onActivityResult: returned from edit change");
-                setupAdapter();
+                fragList.setSelected_position(-1);
+                fragList.refreshList();
+//                setupAdapter();
                 break;
             }
             case AccountsContract.ACCOUNT_ACTION_ADD: {
                 Log.d(TAG, "onActivityResult: returned from edit add");
-                setupAdapter();
+                fragList.refreshList();
+//                setupAdapter();
                 break;
             }
         }
