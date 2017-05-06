@@ -19,6 +19,9 @@ import com.kinsey.passwords.items.AccountsContract;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
+import static com.kinsey.passwords.AccountListActivity.accountSelectedPos;
+import static com.kinsey.passwords.AccountListActivity.accountSortorder;
+
 /**
  * Created by Yvonne on 2/21/2017.
  */
@@ -27,15 +30,15 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
 implements LoaderManager.LoaderCallbacks<Cursor>{
     private static final String TAG = "AcctRecyclerViewAdpt";
 
-    private int mSortorder;
+//    private int mSortorder;
     private Cursor mCursor;
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
      * device.
      */
 //    private boolean mTwoPane;
-    Account selectedAccount = new Account();
-    int selected_position = -1;
+//    Account selectedAccount = new Account();
+//    int selected_position = -1;
 
     private OnAccountClickListener mListener;
 
@@ -54,23 +57,23 @@ implements LoaderManager.LoaderCallbacks<Cursor>{
             pattern_mdy_display, Locale.US);
 
 
-    public AccountRecyclerViewAdapter(int sortorder, int selected_position,
-                                      Cursor cursor, OnAccountClickListener listener) {
+    public AccountRecyclerViewAdapter(Cursor cursor, OnAccountClickListener listener) {
 //        Log.d(TAG, "CursorRecyclerViewAdapter: Constructor called");
 
 //        Log.d(TAG, "AccountRecyclerViewAdapter: twopane " + twoPane);
-        Log.d(TAG, "AccountRecyclerViewAdapter: sortorder " + sortorder);
+//        Log.d(TAG, "AccountRecyclerViewAdapter: sortorder " + sortorder);
+//        Log.d(TAG, "AccountRecyclerViewAdapter: selected_position " + selected_position);
 
 //        mTwoPane = twoPane;
-        mSortorder = sortorder;
-        this.selected_position = selected_position;
+//        mSortorder = sortorder;
+//        this.selected_position = selected_position;
         mCursor = cursor;
         mListener = listener;
     }
 
     @Override
     public AccountViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-//        Log.d(TAG, "onCreateViewHolder: new view requested");
+        Log.d(TAG, "onCreateViewHolder: new view requested");
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_account_items, parent, false);
 //        Log.d(TAG, "AccountRecyclerViewAdapter: cursor " + mCursor.getCount());
         return new AccountViewHolder(view);
@@ -102,7 +105,7 @@ implements LoaderManager.LoaderCallbacks<Cursor>{
                 throw new IllegalStateException("Couldn't move cursor to position " + position);
             }
 
-            if(selected_position == position){
+            if(accountSelectedPos == position){
                 // Here I am just highlighting the background
                 holder.itemView.setBackgroundColor(Color.GREEN);
             }else{
@@ -160,12 +163,12 @@ implements LoaderManager.LoaderCallbacks<Cursor>{
 //            holder.editButton.setVisibility(View.VISIBLE);
 //            holder.deleteButton.setVisibility(View.VISIBLE);
 
-            if (mSortorder == AccountsContract.ACCOUNT_LIST_BY_OPEN_DATE) {
+            if (accountSortorder == AccountsContract.ACCOUNT_LIST_BY_OPEN_DATE) {
 //                holder.user_name.setVisibility(View.GONE);?
                 holder.open_date.setVisibility(View.VISIBLE);
                 holder.seq.setVisibility(View.GONE);
             } else {
-                if (mSortorder == AccountsContract.ACCOUNT_LIST_BY_SEQUENCE) {
+                if (accountSortorder == AccountsContract.ACCOUNT_LIST_BY_SEQUENCE) {
 //                    holder.user_name.setVisibility(View.GONE);
 //                    holder.open_date.setVisibility(View.GONE);
                     holder.seq.setVisibility(View.VISIBLE);
@@ -185,16 +188,18 @@ implements LoaderManager.LoaderCallbacks<Cursor>{
                         Log.d(TAG, "onClick: listener is null");
                         return;
                     }
-                    notifyItemChanged(selected_position);
-                    selected_position = position;
-                    notifyItemChanged(selected_position);
+                    notifyItemChanged(accountSelectedPos);
+                    accountSelectedPos = position;
+                    notifyItemChanged(accountSelectedPos);
 
 //                    if (mTwoPane) {
 //                        mListener.onAccountLandListSelect(account);
 //                    } else {
 //                        mListener.onAccountListSelect(account);
 //                    }
+//                    Log.d(TAG, "onClick: selected " + selected_position + ":" + account.getId());
                     mListener.onAccountListSelect(account);
+//                    Log.d(TAG, "onClick: selected " + selected_position + ":" + account.getId());
                 }
             });
 
@@ -285,26 +290,29 @@ implements LoaderManager.LoaderCallbacks<Cursor>{
         return oldCursor;
     }
 
-    public void resetSelection() {
-        selected_position = -1;
-//        holder.itemView.setBackgroundColor(Color.TRANSPARENT);
-    }
+//    public void resetSelection() {
+//        selected_position = -1;
+////        holder.itemView.setBackgroundColor(Color.TRANSPARENT);
+//    }
 
-    public void setSelected_position(int selected_position) {
-        this.selected_position = selected_position;
-    }
-
-    public int getSelected_position() {
-        return selected_position;
-    }
-
-    public int getmSortorder() {
-        return mSortorder;
-    }
-
-    public void setmSortorder(int mSortorder) {
-        this.mSortorder = mSortorder;
-    }
+//    public void setSelected_position(int selected_position) {
+//        if (selected_position == -1) {
+//            Log.d(TAG, "setSelected_position: selected pos set to -1");
+//        }
+//        this.selected_position = selected_position;
+//    }
+//
+//    public int getSelected_position() {
+//        return selected_position;
+//    }
+//
+////    public int getmSortorder() {
+////        return mSortorder;
+////    }
+//
+//    public void setmSortorder(int mSortorder) {
+//        this.mSortorder = mSortorder;
+//    }
 
     public static class AccountViewHolder extends RecyclerView.ViewHolder {
         private static final String TAG = "AccountViewHolder";

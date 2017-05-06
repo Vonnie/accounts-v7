@@ -34,7 +34,7 @@ public class SuggestListActivityFragment extends Fragment
     Loader<Cursor> loader;
 
     public SuggestListActivityFragment() {
-//        Log.d(TAG, "SuggestListActivityFragment: starts");
+//        Log.d(TAG, "SuggestListActivityiFragment: starts");
     }
 
     @Override

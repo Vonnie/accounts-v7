@@ -8,10 +8,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.ViewGroup;
 
-import com.kinsey.passwords.AccountPlaceholderFrag1;
-import com.kinsey.passwords.AccountPlaceholderFrag2;
-import com.kinsey.passwords.AccountPlaceholderFrag3;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -300,7 +296,14 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
     @Override
     public Fragment getItem(int position) {
         Log.d(TAG, "getItem: position " + position);
+//        if (position == fragListPos) {
+//            AccountListActivityFragment fragList = AccountListActivityFragment.newInstance(2);
+//            return fragList;
+//        } else {
+//            return fragments.get(position);
+//        }
         return fragments.get(position);
+
 //        if (position == fragListPos) {
 ////            fragList = AccountListActivityFragment.newInstance();
 //            return fragList;
@@ -475,42 +478,42 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 //            return f;
 //        }
 
-    public void fillPages() {
-
-//        if (frag1 != null) {
-//            frag1.fillPage();
-//        }
-//        if (frag2 != null) {
-//            frag2.fillPage();
-//        }
-//        if (frag3 != null) {
-//            frag3.fillPage();
-//        }
-//        for (int i = 0; i < fragments.size(); i++) {
+//    public void fillPages() {
 //
-//            if (i == frag1Pos) {
-//                ((AccountPlaceholderFrag1) fragments.get(i)).fillPage();
-//            }
-//            if (i == frag2Pos) {
-//                ((AccountPlaceholderFrag2) fragments.get(i)).fillPage();
-//            }
-//            if (i == frag3Pos) {
-//                ((AccountPlaceholderFrag3) fragments.get(i)).fillPage();
-//            }
-//        }
-
-
-        AccountPlaceholderFrag1 frag1 = (AccountPlaceholderFrag1)getItem(frag1Pos);
-        frag1.fillPage();
-        notifyDataSetChanged();
-        AccountPlaceholderFrag2 frag2 = (AccountPlaceholderFrag2)getItem(frag2Pos);
-        frag2.fillPage();
-        notifyDataSetChanged();
-        AccountPlaceholderFrag3 frag3 = (AccountPlaceholderFrag3)getItem(frag3Pos);
-        frag3.fillPage();
-        notifyDataSetChanged();
-
-    }
+////        if (frag1 != null) {
+////            frag1.fillPage();
+////        }
+////        if (frag2 != null) {
+////            frag2.fillPage();
+////        }
+////        if (frag3 != null) {
+////            frag3.fillPage();
+////        }
+////        for (int i = 0; i < fragments.size(); i++) {
+////
+////            if (i == frag1Pos) {
+////                ((AccountPlaceholderFrag1) fragments.get(i)).fillPage();
+////            }
+////            if (i == frag2Pos) {
+////                ((AccountPlaceholderFrag2) fragments.get(i)).fillPage();
+////            }
+////            if (i == frag3Pos) {
+////                ((AccountPlaceholderFrag3) fragments.get(i)).fillPage();
+////            }
+////        }
+//
+//
+//        AccountPlaceholderFrag1 frag1 = (AccountPlaceholderFrag1)getItem(frag1Pos);
+//        frag1.fillPage();
+//        notifyDataSetChanged();
+//        AccountPlaceholderFrag2 frag2 = (AccountPlaceholderFrag2)getItem(frag2Pos);
+//        frag2.fillPage();
+//        notifyDataSetChanged();
+//        AccountPlaceholderFrag3 frag3 = (AccountPlaceholderFrag3)getItem(frag3Pos);
+//        frag3.fillPage();
+//        notifyDataSetChanged();
+//
+//    }
 
 //    public Account collectChgs() {
 //        boolean areChgs;

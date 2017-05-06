@@ -5,7 +5,6 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -14,7 +13,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.JsonReader;
 import android.util.JsonToken;
@@ -70,14 +68,17 @@ public class AccountListActivity extends AppCompatActivity
     private static final String TAG_ACCOUNT_PLACEHOLDER_FRAG3 = "AccountPlaceholderFrag3";
 
     public static Account account = new Account();
+    public static int accountSortorder = AccountsContract.ACCOUNT_LIST_BY_CORP_NAME;
+    public static int accountSelectedPos = -1;
+    public static int accountSelectedId = -1;
 
     private RetainedFragment mRetainedFragment;
     FragmentManager fm;
     AccountListActivityFragment fragList;
 
     private boolean mTwoPane = false;
-    int mSortorder = AccountsContract.ACCOUNT_LIST_BY_CORP_NAME;
-    RecyclerView mRecyclerView;
+//    int mSortorder = AccountsContract.ACCOUNT_LIST_BY_CORP_NAME;
+//    RecyclerView mRecyclerView;
 //    private AccountRecyclerViewAdapter mAccountAdapter; // add adapter reference
 
     private int accountMode = AccountsContract.ACCOUNT_ACTION_ADD;
@@ -133,6 +134,7 @@ public class AccountListActivity extends AppCompatActivity
         } else {
             Log.d(TAG, "onCreate: retained present");
             isRotated = true;
+            getRotatedData();
 //            mRetainedFragment.getData().getmSectionsPagerAdapter().setMyDataObject(mRetainedFragment.getData());
 
 //            this.account = mRetainedFragment.getData().getAccount();
@@ -185,7 +187,7 @@ public class AccountListActivity extends AppCompatActivity
 
 
 //            if (fragList == null) {
-                fragList = AccountListActivityFragment.newInstance(mRetainedFragment.getData().getSelectedPos());
+                fragList = AccountListActivityFragment.newInstance();
 //            }
             if (frag1 == null) {
                 frag1 = AccountPlaceholderFrag1.newInstance();
@@ -468,12 +470,14 @@ public class AccountListActivity extends AppCompatActivity
             }
         });
 
-        if (mTwoPane) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        } else {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
+//        if (mTwoPane) {
+//            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+//        } else {
+//            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        }
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        
 
 //        AccountListActivityFragment fragment = new AccountListActivityFragment();
 //
@@ -534,6 +538,12 @@ public class AccountListActivity extends AppCompatActivity
 //        obj.setFrag3(AccountPlaceholderFrag3.newInstance());
 //        obj.setmSectionsPagerAdapter(new SectionsPagerAdapter(getSupportFragmentManager()));
         return obj;
+    }
+
+    private void getRotatedData() {
+        account = mRetainedFragment.getData().getAccount();
+        accountSelectedPos = mRetainedFragment.getData().getSelectedPos();
+//        accountSortorder = mRetainedFragment.getData().getSortOrder();
     }
 
 //    private MyDataObject setPlacements(MyDataObject obj) {
@@ -734,11 +744,12 @@ public class AccountListActivity extends AppCompatActivity
 
             MyDataObject myDataObject = mRetainedFragment.getData();
             myDataObject.setAccount(account);
-            if (fragList == null) {
-                myDataObject.setSelectedPos(-1);
-            } else {
-                myDataObject.setSelectedPos(fragList.getSelected_position());
-            }
+            myDataObject.setSelectedPos(accountSelectedPos);
+//            if (fragList == null) {
+//                myDataObject.setSelectedPos(-1);
+//            } else {
+//                myDataObject.setSelectedPos(fragList.getSelected_position());
+//            }
             return myDataObject;
 
         } catch (Exception e) {
@@ -764,17 +775,17 @@ public class AccountListActivity extends AppCompatActivity
         }
     }
 
-    private void removeRetainedFrag() {
+//    private void removeRetainedFrag() {
+////        FragmentManager fm = getSupportFragmentManager();
+//        // we will not need this fragment anymore, this may also be a good place to signal
+//        // to the retained fragment object to perform its own cleanup.
+////        fm.beginTransaction().remove(mRetainedFragment).commit();
 //        FragmentManager fm = getSupportFragmentManager();
-        // we will not need this fragment anymore, this may also be a good place to signal
-        // to the retained fragment object to perform its own cleanup.
-//        fm.beginTransaction().remove(mRetainedFragment).commit();
-        FragmentManager fm = getSupportFragmentManager();
-        RetainedFragment retainedFragment = (RetainedFragment) fm.findFragmentByTag(TAG_RETAINED_FRAGMENT);
-        if (retainedFragment != null) {
-            fm.beginTransaction().remove(retainedFragment).commit();
-        }
-    }
+//        RetainedFragment retainedFragment = (RetainedFragment) fm.findFragmentByTag(TAG_RETAINED_FRAGMENT);
+//        if (retainedFragment != null) {
+//            fm.beginTransaction().remove(retainedFragment).commit();
+//        }
+//    }
 
     //    @Override
 //    public void onPause() {
@@ -958,44 +969,26 @@ public class AccountListActivity extends AppCompatActivity
                     Toast.LENGTH_LONG).show();
             return;
         }
-        ContentResolver contentResolver = getContentResolver();
-        ContentValues values = new ContentValues();
 
-        values.put(AccountsContract.Columns.CORP_NAME_COL, account.getCorpName());
-        values.put(AccountsContract.Columns.CORP_WEBSITE_COL, account.getCorpWebsite());
-        values.put(AccountsContract.Columns.USER_NAME_COL, account.getUserName());
-        values.put(AccountsContract.Columns.USER_EMAIL_COL, account.getUserEmail());
-        values.put(AccountsContract.Columns.SEQUENCE_COL, account.getSequence());
-        values.put(AccountsContract.Columns.OPEN_DATE_COL, account.getOpenLong());
-        values.put(AccountsContract.Columns.NOTE_COL, account.getNote());
-        values.put(AccountsContract.Columns.REF_FROM_COL, account.getRefFrom());
-        values.put(AccountsContract.Columns.REF_TO_COL, account.getRefTo());
-        long actvylong = System.currentTimeMillis();
-        values.put(AccountsContract.Columns.ACTVY_DATE_COL, actvylong);
-        account.setActvyLong(actvylong);
 
         if (accountMode == AccountsContract.ACCOUNT_ACTION_ADD) {
-            Uri uri = contentResolver.insert(AccountsContract.CONTENT_URI, values);
-
-            long id = AccountsContract.getId(uri);
-            account.setId((int) id);
-        } else {
-            contentResolver.update(AccountsContract.buildIdUri(account.getId()), values, null, null);
-        }
-
-        frag1.fillPage();
-
-        if (accountMode == AccountsContract.ACCOUNT_ACTION_ADD) {
+            fragList.saveAccount(true);
             Toast.makeText(AccountListActivity.this,
                     "Account entry added to database",
                     Toast.LENGTH_LONG).show();
         } else {
+            fragList.saveAccount(false);
             Toast.makeText(AccountListActivity.this,
                     "Account entry updated to database",
                     Toast.LENGTH_LONG).show();
         }
         accountMode = AccountsContract.ACCOUNT_ACTION_CHG;
+        mViewPager.setCurrentItem(frag1Pos);
+
+        Log.d(TAG, "saveAccount: ids: " + account.getId() + ":" + account.getPassportId());
+
     }
+
 
 //
 //    private void setupAdapter() {
@@ -1575,14 +1568,17 @@ public class AccountListActivity extends AppCompatActivity
     public void onAccountListSelect(Account account) {
         Log.d(TAG, "onAccountListSelect: ");
         accountMode = AccountsContract.ACCOUNT_ACTION_CHG;
+//        Log.d(TAG, "onAccountListSelect: selected pos " + selected_position);
+//        fragList.setSelected_position(selected_position);
+//        accountSelectedPos = selected_position;
         this.account = account;
         updatePages();
     }
 
     private void updatePages() {
         isUserPaging = false;
-        mViewPager.setCurrentItem(frag2Pos);
 
+        mViewPager.setCurrentItem(frag2Pos);
         frag1.fillPage();
         mSectionsPagerAdapter.setPrimaryItem(mViewPager, frag1Pos, frag1);
         mSectionsPagerAdapter.notifyDataSetChanged();
@@ -1788,7 +1784,8 @@ public class AccountListActivity extends AppCompatActivity
     private void clearAccount() {
         account = new Account();
         accountMode = AccountsContract.ACCOUNT_ACTION_ADD;
-        fragList.resetSelection();
+        accountSelectedPos = -1;
+//        fragList.resetSelection();
 //        getLoaderManager().restartLoader(ACCOUNT_LOADER_ID, null, this);
     }
 
@@ -1802,6 +1799,20 @@ public class AccountListActivity extends AppCompatActivity
         } else {
             // Otherwise, select the previous step.
             mViewPager.setCurrentItem(mViewPager.getCurrentItem() - 1);
+        }
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+//        Log.d(TAG, "onSupportNavigateUp: ");
+        if (mViewPager.getCurrentItem() == 0) {
+            // If the user is currently looking at the first step, allow the system to handle the
+            // Back button. This calls finish() on this activity and pops the back stack.
+            return super.onSupportNavigateUp();
+        } else {
+            // Otherwise, select the previous step.
+            mViewPager.setCurrentItem(mViewPager.getCurrentItem() - 1);
+            return false;
         }
     }
 
@@ -1903,27 +1914,27 @@ public class AccountListActivity extends AppCompatActivity
         Intent returnIntent;
         switch (which) {
             case AppDialog.DIALOG_ACCT_LIST_CORP_NAME:
-                mSortorder = AccountsContract.ACCOUNT_LIST_BY_CORP_NAME;
+                accountSortorder = AccountsContract.ACCOUNT_LIST_BY_CORP_NAME;
                 clearAccount();
-                fragList.resortList(mSortorder);
+                sortAccountList();
 //                setupAdapter();
                 break;
             case AppDialog.DIALOG_ACCT_LIST_OPEN_DATE:
-                mSortorder = AccountsContract.ACCOUNT_LIST_BY_OPEN_DATE;
+                accountSortorder = AccountsContract.ACCOUNT_LIST_BY_OPEN_DATE;
                 clearAccount();
-                fragList.resortList(mSortorder);
+                sortAccountList();
 //                setupAdapter();
                 break;
             case AppDialog.DIALOG_ACCT_LIST_ACCT_ID:
-                mSortorder = AccountsContract.ACCOUNT_LIST_BY_PASSPORT_ID;
+                accountSortorder = AccountsContract.ACCOUNT_LIST_BY_PASSPORT_ID;
                 clearAccount();
-                fragList.resortList(mSortorder);
+                sortAccountList();
 //                setupAdapter();
                 break;
             case AppDialog.DIALOG_ACCT_LIST_USER_SEQ:
-                mSortorder = AccountsContract.ACCOUNT_LIST_BY_SEQUENCE;
+                accountSortorder = AccountsContract.ACCOUNT_LIST_BY_SEQUENCE;
                 clearAccount();
-                fragList.resortList(mSortorder);
+                sortAccountList();
 //                setupAdapter();
                 break;
 //            case 4:
@@ -1955,6 +1966,15 @@ public class AccountListActivity extends AppCompatActivity
         }
     }
 
+
+    private void sortAccountList() {
+        if (fragListPos == -1) {
+            fragList.resortList();
+        } else {
+            mSectionsPagerAdapter.getItem(fragListPos);
+        }
+    }
+
     private void suggestPasswordList() {
         Intent detailIntent = new Intent(this, SuggestListActivity.class);
         detailIntent.putExtra(Suggest.class.getSimpleName(), "sortorder");
@@ -1972,15 +1992,30 @@ public class AccountListActivity extends AppCompatActivity
         switch (requestCode) {
             case AccountsContract.ACCOUNT_ACTION_CHG: {
                 Log.d(TAG, "onActivityResult: returned from edit change");
-                fragList.setSelected_position(-1);
                 fragList.refreshList();
 //                setupAdapter();
+                if (fragListPos == -1) {
+                    mViewPager.setCurrentItem(frag1Pos);
+                } else {
+                    mViewPager.setCurrentItem(fragListPos);
+                }
+                Toast.makeText(AccountListActivity.this,
+                        "Account updated", Toast.LENGTH_LONG).show();
                 break;
             }
             case AccountsContract.ACCOUNT_ACTION_ADD: {
                 Log.d(TAG, "onActivityResult: returned from edit add");
-                fragList.refreshList();
+                accountMode = AccountsContract.ACCOUNT_ACTION_CHG;
+                clearAccount();
+                if (fragListPos == -1) {
+                    mViewPager.setCurrentItem(frag1Pos);
+                } else {
+                    mViewPager.setCurrentItem(fragListPos);
+                }
 //                setupAdapter();
+                Toast.makeText(AccountListActivity.this,
+                        "Account added", Toast.LENGTH_LONG).show();
+
                 break;
             }
         }
