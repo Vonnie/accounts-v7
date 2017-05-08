@@ -21,6 +21,7 @@ public class Account implements Serializable {
     private String corpWebsite = "";
     private int refFrom = 0;
     private int refTo = 0;
+    private int newSequence = 0;
 
     public Account() {}
 
@@ -132,6 +133,14 @@ public class Account implements Serializable {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public int getNewSequence() {
+        return newSequence;
+    }
+
+    public void setNewSequence(int newSequence) {
+        this.newSequence = newSequence;
     }
 
     @Override

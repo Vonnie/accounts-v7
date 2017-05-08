@@ -1,6 +1,7 @@
 package com.kinsey.passwords;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -37,7 +38,7 @@ public class AccountListActivityFragment extends Fragment
     RecyclerView mRecyclerView;
     private AccountRecyclerViewAdapter mAccountAdapter; // add adapter reference
     TextView twCurrentTitle;
-    Loader<Cursor> loader;
+//    Loader<Cursor> loader;
 
     // whether or not the activity is i 2-pane mode
     // i.e. running in landscape on a tablet
@@ -158,7 +159,7 @@ public class AccountListActivityFragment extends Fragment
         getLoaderManager().initLoader(ACCOUNT_LOADER_ID, null, this);
 
 //        Log.d(TAG, "onCreateView: abt to call adapter sel: " + selected_position);
-        mAccountAdapter = new AccountRecyclerViewAdapter(cursor,
+        mAccountAdapter = new AccountRecyclerViewAdapter(getContext(), cursor,
                 (AccountRecyclerViewAdapter.OnAccountClickListener) getActivity());
         mRecyclerView.setAdapter(mAccountAdapter);
 
@@ -168,7 +169,7 @@ public class AccountListActivityFragment extends Fragment
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         Log.d(TAG, "onCreateLoader: starts");
-        Log.d(TAG, "onCreateLoader: id " + String.valueOf(id));
+//        Log.d(TAG, "onCreateLoader: id " + String.valueOf(id));
 
         String[] projectionAcct =
                 {AccountsContract.Columns._ID_COL,
@@ -208,17 +209,17 @@ public class AccountListActivityFragment extends Fragment
                 null,
                 null,
                 sortOrder);
-        Log.d(TAG, "onCreateLoader: cursor " + cursor.toString());
+//        Log.d(TAG, "onCreateLoader: cursor " + cursor.toString());
         return cursor;
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         Log.d(TAG, "onLoadFinished: starts");
-        this.loader = loader;
+//        this.loader = loader;
         int count = 0;
         mAccountAdapter.swapCursor(data);
-        count = mAccountAdapter.getItemCount();
+//        count = mAccountAdapter.getItemCount();
 //        if (count == 0) {
 //            twCurrentTitle.setText("No accounts, + to add");
 //        } else {
@@ -233,14 +234,12 @@ public class AccountListActivityFragment extends Fragment
         mAccountAdapter.swapCursor(null);
     }
 
-    public void deleteAccount(int accountId) {
-        getActivity().getContentResolver().delete(AccountsContract.buildIdUri((long)accountId), null, null);
+    public void deleteAccount(Context context, int accountId) {
+        context.getContentResolver().delete(AccountsContract.buildIdUri((long)accountId), null, null);
 //        getLoaderManager().restartLoader(ACCOUNT_LOADER_ID, null, this);
     }
 
-
-
-    public void saveAccount(boolean isForAdd) {
+    public void saveAccount(Context context, boolean isForAdd) {
 //        ContentResolver contentResolver = getActivity().getContentResolver();
         ContentValues values = new ContentValues();
 
@@ -258,22 +257,22 @@ public class AccountListActivityFragment extends Fragment
         account.setActvyLong(actvylong);
 
         if (isForAdd) {
-            account.setPassportId(getMaxValue(AccountsContract.Columns.PASSPORT_ID_COL));
+            account.setPassportId(getMaxValue(context, AccountsContract.Columns.PASSPORT_ID_COL));
             values.put(AccountsContract.Columns.PASSPORT_ID_COL,
                     String.valueOf(account.getPassportId()));
-            Uri uri = getContext().getContentResolver().insert(AccountsContract.CONTENT_URI, values);
+            Uri uri = context.getContentResolver().insert(AccountsContract.CONTENT_URI, values);
 
             long id = AccountsContract.getId(uri);
             account.setId((int) id);
         } else {
-            getContext().getContentResolver().update(AccountsContract.buildIdUri(account.getId()), values, null, null);
+            context.getContentResolver().update(AccountsContract.buildIdUri(account.getId()), values, null, null);
         }
 
     }
 
-    private int getMaxValue(String col) {
+    private int getMaxValue(Context context, String col) {
         int iId = 1;
-        Cursor cursor = getContext().getContentResolver().query(
+        Cursor cursor = context.getContentResolver().query(
                 AccountsContract.CONTENT_MAX_VALUE_URI, null, null, null, col);
         if (cursor != null) {
             if (cursor.moveToFirst()) {
@@ -288,10 +287,11 @@ public class AccountListActivityFragment extends Fragment
         return iId;
     }
 
-    public void resortList() {
+    public void resortFragList() {
 //        this.mSortorder = sortorder;
 //        mAccountAdapter.setmSortorder(sortorder);
         getLoaderManager().initLoader(ACCOUNT_LOADER_ID, null, this);
+
     }
 
     public void refreshList() {

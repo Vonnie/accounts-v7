@@ -8,6 +8,7 @@ public class MyDataObject {
 //    private SectionsPagerAdapter mSectionsPagerAdapter;
     Account account = new Account();
     int selectedPos = -1;
+    int sortOrder = -1;
 //    private AccountListActivityFragment fragList;
 //    private AccountPlaceholderFrag1 frag1;
 //    private AccountPlaceholderFrag2 frag2;
@@ -31,5 +32,13 @@ public class MyDataObject {
 
     public void setSelectedPos(int selectedPos) {
         this.selectedPos = selectedPos;
+    }
+
+    public int getSortOrder() {
+        return sortOrder;
+    }
+
+    public void setSortOrder(int sortOrder) {
+        this.sortOrder = sortOrder;
     }
 }

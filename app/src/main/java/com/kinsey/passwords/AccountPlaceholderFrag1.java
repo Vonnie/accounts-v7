@@ -15,6 +15,8 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.kinsey.passwords.items.AccountsContract;
+
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 import java.util.regex.Matcher;
@@ -71,6 +73,8 @@ public class AccountPlaceholderFrag1 extends Fragment {
 
     public interface OnAccountListener {
         void onAccount1Instance();
+        void onWebpage();
+        void offWebpage();
     }
 
 
@@ -142,11 +146,19 @@ public class AccountPlaceholderFrag1 extends Fragment {
                 detailIntent.putExtra(WebViewActivity.class.getSimpleName(), mCorpWebsiteTextView.getText().toString());
 //                Log.d(TAG, "onClick: website " + account.getCorpWebsite());
 //                Log.d(TAG, "onClick: wv class " + WebViewActivity.class.getSimpleName());
-                startActivity(detailIntent);
+                mListener.onWebpage();
+                startActivityForResult(detailIntent, AccountsContract.ACCOUNT_ACTION_WEBPAGE);
 
             }
         });
         return rootView;
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        mListener.offWebpage();
     }
 
     private void setupPage1(View view) {
@@ -355,7 +367,8 @@ public class AccountPlaceholderFrag1 extends Fragment {
             hasErrors = true;
         }
 
-        if (!mCorpWebsiteTextView.getText().toString().toLowerCase().startsWith("http://")) {
+        if (!mCorpWebsiteTextView.getText().toString().equals("")
+        && !mCorpWebsiteTextView.getText().toString().toLowerCase().startsWith("http://")) {
             mCorpWebsiteTextView.setText("http://" + mCorpWebsiteTextView.getText().toString());
         }
 

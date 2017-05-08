@@ -1,5 +1,6 @@
 package com.kinsey.passwords.provider;
 
+import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.kinsey.passwords.R;
@@ -27,11 +29,12 @@ import static com.kinsey.passwords.AccountListActivity.accountSortorder;
  */
 
 public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecyclerViewAdapter.AccountViewHolder>
-implements LoaderManager.LoaderCallbacks<Cursor>{
+        implements LoaderManager.LoaderCallbacks<Cursor> {
     private static final String TAG = "AcctRecyclerViewAdpt";
 
-//    private int mSortorder;
+    //    private int mSortorder;
     private Cursor mCursor;
+    private Context mContext;
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
      * device.
@@ -50,6 +53,10 @@ implements LoaderManager.LoaderCallbacks<Cursor>{
         void onAccountListSelect(Account account);
 
 //        void onAccountLandListSelect(Account account);
+
+        void onAccountUpClick(Account account);
+
+        void onAccountDownClick(Account account);
     }
 
     private static String pattern_mdy_display = "M/d/y";
@@ -57,7 +64,7 @@ implements LoaderManager.LoaderCallbacks<Cursor>{
             pattern_mdy_display, Locale.US);
 
 
-    public AccountRecyclerViewAdapter(Cursor cursor, OnAccountClickListener listener) {
+    public AccountRecyclerViewAdapter(Context context, Cursor cursor, OnAccountClickListener listener) {
 //        Log.d(TAG, "CursorRecyclerViewAdapter: Constructor called");
 
 //        Log.d(TAG, "AccountRecyclerViewAdapter: twopane " + twoPane);
@@ -67,6 +74,7 @@ implements LoaderManager.LoaderCallbacks<Cursor>{
 //        mTwoPane = twoPane;
 //        mSortorder = sortorder;
 //        this.selected_position = selected_position;
+        mContext = context;
         mCursor = cursor;
         mListener = listener;
     }
@@ -88,6 +96,11 @@ implements LoaderManager.LoaderCallbacks<Cursor>{
 //        } else {
 //            Log.d(TAG, "onBindViewHolder: mCursor count " + mCursor.getCount());
 //        }
+        if (accountSortorder != AccountsContract.ACCOUNT_LIST_BY_SEQUENCE ||
+                position != accountSelectedPos) {
+            holder.upAcctBtn.setVisibility(View.GONE);
+            holder.dnAcctBtn.setVisibility(View.GONE);
+        }
         if ((mCursor == null) || (mCursor.getCount() == 0)) {
             Log.d(TAG, "onBindViewHolder: no accts");
             holder.corp_name.setText(R.string.no_account_items);
@@ -96,8 +109,8 @@ implements LoaderManager.LoaderCallbacks<Cursor>{
 //            } else {
 //                holder.user_name.setText(R.string.no_account_items_line2);
 //            }
-            holder.user_name.setText(R.string.no_account_items_line2);
-            holder.open_date.setText("");
+//            holder.user_name.setText(R.string.no_account_items_line2);
+//            holder.open_date.setText("");
 //            holder.editButton.setVisibility(View.GONE);
 //            holder.deleteButton.setVisibility(View.GONE);
         } else {
@@ -105,10 +118,10 @@ implements LoaderManager.LoaderCallbacks<Cursor>{
                 throw new IllegalStateException("Couldn't move cursor to position " + position);
             }
 
-            if(accountSelectedPos == position){
+            if (accountSelectedPos == position) {
                 // Here I am just highlighting the background
                 holder.itemView.setBackgroundColor(Color.GREEN);
-            }else{
+            } else {
                 holder.itemView.setBackgroundColor(Color.TRANSPARENT);
             }
 
@@ -151,34 +164,56 @@ implements LoaderManager.LoaderCallbacks<Cursor>{
 //            holder.corp_.setText(mCursor.getString(mCursor.getColumnIndex(AccountsContract.Columns.CORP_WEBSITE_COL)));
 
             holder.corp_name.setText(account.getCorpName());
-            holder.user_name.setText(account.getUserName());
-            if (account.getOpenLong() == 0) {
-                holder.open_date.setText("");
+            if (!holder.corp_name.getTag().equals(mContext.getString(R.string.tag_xlarge)) &&
+            (accountSortorder == AccountsContract.ACCOUNT_LIST_BY_CORP_NAME ||
+                    accountSortorder == AccountsContract.ACCOUNT_LIST_BY_SEQUENCE ||
+                    accountSortorder == AccountsContract.ACCOUNT_LIST_BY_OPEN_DATE)) {
+                holder.user_name.setVisibility(View.GONE);
             } else {
-                //            Date dte = new Date(item.getActvyLong());
-                holder.open_date.setText(format_mdy_display.format(account.getOpenLong()));
+                holder.user_name.setText(account.getUserName());
             }
-            holder.seq.setText("Seq:" + String.valueOf(account.getSequence()));
-            holder.acctId.setText("AcctId:" + String.valueOf(account.getPassportId()));
+            if (holder.corp_name.getTag().equals(mContext.getString(R.string.tag_xlarge)) ||
+                    accountSortorder == AccountsContract.ACCOUNT_LIST_BY_OPEN_DATE) {
+                if (account.getOpenLong() == 0) {
+                    holder.open_date.setText("");
+                } else {
+                    //            Date dte = new Date(item.getActvyLong());
+                    holder.open_date.setText(format_mdy_display.format(account.getOpenLong()));
+                }
+            } else {
+                holder.open_date.setVisibility(View.GONE);
+            }
+//            holder.seq.setVisibility(View.GONE);
+            if (holder.corp_name.getTag().equals(mContext.getString(R.string.tag_xlarge))) {
+                holder.seq.setText("Seq:" + String.valueOf(account.getSequence()));
+            } else {
+                holder.seq.setVisibility(View.GONE);
+            }
+            if (accountSortorder == AccountsContract.ACCOUNT_LIST_BY_SEQUENCE) {
+                holder.acctId.setVisibility(View.GONE);
+            } else {
+                holder.acctId.setText("AcctId:" + String.valueOf(account.getPassportId()));
+            }
 //            holder.editButton.setVisibility(View.VISIBLE);
 //            holder.deleteButton.setVisibility(View.VISIBLE);
 
-            if (accountSortorder == AccountsContract.ACCOUNT_LIST_BY_OPEN_DATE) {
-//                holder.user_name.setVisibility(View.GONE);?
-                holder.open_date.setVisibility(View.VISIBLE);
-                holder.seq.setVisibility(View.GONE);
-            } else {
-                if (accountSortorder == AccountsContract.ACCOUNT_LIST_BY_SEQUENCE) {
-//                    holder.user_name.setVisibility(View.GONE);
-//                    holder.open_date.setVisibility(View.GONE);
-                    holder.seq.setVisibility(View.VISIBLE);
-                } else {
-                    holder.user_name.setVisibility(View.VISIBLE);
-//                    holder.open_date.setVisibility(View.GONE);
-//                    holder.seq.setVisibility(View.GONE);
-                }
-            }
+//            if (accountSortorder == AccountsContract.ACCOUNT_LIST_BY_OPEN_DATE) {
+////                holder.user_name.setVisibility(View.GONE);?
+//                holder.open_date.setVisibility(View.VISIBLE);
+//            } else {
+//                holder.open_date.setVisibility(View.GONE);
 
+//                if (accountSortorder == AccountsContract.ACCOUNT_LIST_BY_SEQUENCE) {
+////                    holder.user_name.setVisibility(View.GONE);
+////                    holder.open_date.setVisibility(View.GONE);
+//                    holder.seq.setVisibility(View.VISIBLE);
+//                } else {
+//                    holder.user_name.setVisibility(View.VISIBLE);
+//                    holder.seq.setVisibility(View.GONE);
+////                    holder.open_date.setVisibility(View.GONE);
+////                    holder.seq.setVisibility(View.GONE);
+//                }
+//            }
 
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
@@ -197,22 +232,18 @@ implements LoaderManager.LoaderCallbacks<Cursor>{
 //                    } else {
 //                        mListener.onAccountListSelect(account);
 //                    }
-//                    Log.d(TAG, "onClick: selected " + selected_position + ":" + account.getId());
+                    Log.d(TAG, "onClick: selected " + accountSelectedPos + ":" + account.getId());
                     mListener.onAccountListSelect(account);
 //                    Log.d(TAG, "onClick: selected " + selected_position + ":" + account.getId());
                 }
             });
 
+            View.OnClickListener buttonListener = new View.OnClickListener() {
 
-//            View.OnClickListener buttonListener = new View.OnClickListener() {
-//
-//                @Override
-//                public void onClick(View view) {
-////                    Log.d(TAG, "onClick: starts");
-//                    if (mTwoPane) {
-//
-//                    } else {
-//                        switch (view.getId()) {
+                @Override
+                public void onClick(View view) {
+//                    Log.d(TAG, "onClick: starts");
+                    switch (view.getId()) {
 //                            case R.id.srli_acct_edit:
 //                                if (mListener != null) {
 ////                                Log.d(TAG, "onClick: account " + account);
@@ -224,14 +255,24 @@ implements LoaderManager.LoaderCallbacks<Cursor>{
 //                                    mListener.onAccountDeleteClick(account);
 //                                }
 //                                break;
-//                            default:
-//                                Log.d(TAG, "onClick: found unexpected button id");
-//                        }
-//                    }
-////                    Log.d(TAG, "onClick: button with id " + view.getId() + " clicked");
-////                    Log.d(TAG, "onClick: task name is " + task.getName());
-//                }
-//            };
+                        case R.id.tli_account_up:
+                            Log.d(TAG, "onClick: click up");
+                            mListener.onAccountUpClick(account);
+                            break;
+                        case R.id.tli_account_down:
+                            Log.d(TAG, "onClick: click down");
+                            mListener.onAccountDownClick(account);
+                            break;
+                        default:
+                            Log.d(TAG, "onClick: found unexpected button id");
+                    }
+//                    Log.d(TAG, "onClick: button with id " + view.getId() + " clicked");
+//                    Log.d(TAG, "onClick: task name is " + task.getName());
+                }
+            };
+
+            holder.upAcctBtn.setOnClickListener(buttonListener);
+            holder.dnAcctBtn.setOnClickListener(buttonListener);
 
 //            holder.editButton.setOnClickListener(buttonListener);
 //            holder.deleteButton.setOnClickListener(buttonListener);
@@ -322,6 +363,8 @@ implements LoaderManager.LoaderCallbacks<Cursor>{
         TextView open_date = null;
         TextView seq = null;
         TextView acctId = null;
+        ImageButton upAcctBtn = null;
+        ImageButton dnAcctBtn = null;
 //        ImageButton editButton = null;
 //        ImageButton deleteButton = null;
 
@@ -335,8 +378,11 @@ implements LoaderManager.LoaderCallbacks<Cursor>{
             this.open_date = (TextView) itemView.findViewById(R.id.tli_open_date);
             this.seq = (TextView) itemView.findViewById(R.id.tli_seq);
             this.acctId = (TextView) itemView.findViewById(R.id.tli_acct_id);
+            this.upAcctBtn = (ImageButton) itemView.findViewById(R.id.tli_account_up);
+            this.dnAcctBtn = (ImageButton) itemView.findViewById(R.id.tli_account_down);
 //            this.editButton = (ImageButton) itemView.findViewById(R.id.srli_acct_edit);
 //            this.deleteButton = (ImageButton) itemView.findViewById(R.id.acc_delete);
+            Log.d(TAG, "AccountViewHolder: corp_name tag " + this.corp_name.getTag());
         }
     }
 

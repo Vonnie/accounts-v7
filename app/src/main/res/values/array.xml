@@ -9,7 +9,7 @@
     </string-array>
     <string-array name="account_list_options">
         <item>Account sorted by Corp Name</item>
-        <item>Account sorted by Open Date</item>
+        <item>Account sorted by Open Date, descending</item>
         <item>Account sorted by Account Id</item>
         <item>Account sorted by User Sequence</item>
         <item>Export Accounts</item>

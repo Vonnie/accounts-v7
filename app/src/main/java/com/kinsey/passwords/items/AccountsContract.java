@@ -57,6 +57,7 @@ public class AccountsContract {
 
     public static final int ACCOUNT_ACTION_ADD = 1;
     public static final int ACCOUNT_ACTION_CHG = 2;
+    public static final int ACCOUNT_ACTION_WEBPAGE = 3;
 
     public static final String ACCOUNT_TWO_PANE = "twopane";
     /**

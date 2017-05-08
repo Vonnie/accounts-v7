@@ -304,6 +304,14 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 //        }
         return fragments.get(position);
 
+//        int limit = fragments.size();
+//        for (int i = 0; i < limit; i++) {
+//            switch (position) {
+//
+//            }
+//          if (fragment)
+//        }
+
 //        if (position == fragListPos) {
 ////            fragList = AccountListActivityFragment.newInstance();
 //            return fragList;
@@ -672,6 +680,11 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 
     public void clearAll() //You can clear any specified page if you want...
     {
+
+        if (fragments.size() == 0) {
+            return;
+        }
+
         for (int i = 0; i < fragments.size(); i++) {
             Log.d(TAG, "clearAll: fragItem " + fragments.get(i).getClass().getName());
             if (!fragments.get(i).getClass().getName().equals("com.kinsey.passwords.provider.RetainedFragment")) {
@@ -680,12 +693,13 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
         }
         fragments.clear();
         fragments = new ArrayList<Fragment>();
-        notifyDataSetChanged();
+//        notifyDataSetChanged();
     }
 
-    public void addList() //Add some new fragment...
+    public void addList(List<Fragment> fragments) //Add some new fragment...
     {
 //        listFrag=new ListFragment();
 //        fragments.add(list);
+        this.fragments = fragments;
     }
 }

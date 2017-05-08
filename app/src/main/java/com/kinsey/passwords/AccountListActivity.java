@@ -28,6 +28,7 @@ import com.kinsey.passwords.items.AccountsContract;
 import com.kinsey.passwords.items.MyDataObject;
 import com.kinsey.passwords.items.SearchesContract;
 import com.kinsey.passwords.items.Suggest;
+import com.kinsey.passwords.items.SuggestsContract;
 import com.kinsey.passwords.provider.AccountRecyclerViewAdapter;
 import com.kinsey.passwords.provider.AccountSearchLoaderCallbacks;
 import com.kinsey.passwords.provider.RetainedFragment;
@@ -71,12 +72,12 @@ public class AccountListActivity extends AppCompatActivity
     public static int accountSortorder = AccountsContract.ACCOUNT_LIST_BY_CORP_NAME;
     public static int accountSelectedPos = -1;
     public static int accountSelectedId = -1;
+    public static boolean mTwoPane = false;
 
     private RetainedFragment mRetainedFragment;
     FragmentManager fm;
     AccountListActivityFragment fragList;
 
-    private boolean mTwoPane = false;
 //    int mSortorder = AccountsContract.ACCOUNT_LIST_BY_CORP_NAME;
 //    RecyclerView mRecyclerView;
 //    private AccountRecyclerViewAdapter mAccountAdapter; // add adapter reference
@@ -97,7 +98,8 @@ public class AccountListActivity extends AppCompatActivity
     private int frag1Pos = 0;
     private int frag2Pos = 1;
     private int frag3Pos = 2;
-    private ArrayList<Fragment> fragments=new ArrayList<Fragment>();
+    private ArrayList<Fragment> fragments = new ArrayList<Fragment>();
+    private boolean webpageActive = false;
 
     boolean isUserPaging = true;
     boolean isRotated = false;
@@ -185,20 +187,22 @@ public class AccountListActivity extends AppCompatActivity
 //            }
 
 
-
 //            if (fragList == null) {
-                fragList = AccountListActivityFragment.newInstance();
+            fragList = AccountListActivityFragment.newInstance();
 //            }
-            if (frag1 == null) {
-                frag1 = AccountPlaceholderFrag1.newInstance();
-            }
-            if (frag2 == null) {
-                frag2 = AccountPlaceholderFrag2.newInstance();
-            }
-            if (frag3 == null) {
-                frag3 = AccountPlaceholderFrag3.newInstance();
-            }
-
+            Log.d(TAG, "onCreate: created fragList");
+//            if (frag1 == null) {
+            frag1 = AccountPlaceholderFrag1.newInstance();
+//            }
+            Log.d(TAG, "onCreate: created frag1");
+//            if (frag2 == null) {
+            frag2 = AccountPlaceholderFrag2.newInstance();
+//            }
+            Log.d(TAG, "onCreate: created frag2");
+//            if (frag3 == null) {
+            frag3 = AccountPlaceholderFrag3.newInstance();
+//            }
+            Log.d(TAG, "onCreate: created frag3");
 
 
 //            fm.beginTransaction().replace(R.id.item_detail_container, frag1, TAG_ACCOUNT_PLACEHOLDER_FRAG1).commit();
@@ -350,7 +354,7 @@ public class AccountListActivity extends AppCompatActivity
                 fragments.add(frag1);
                 fragments.add(frag2);
                 fragments.add(frag3);
-                Log.d(TAG, "onCreate: new size " + fragments.size());
+                Log.d(TAG, "onCreate: new fragment size " + fragments.size());
 
                 fragListPos = 0;
                 frag1Pos = 1;
@@ -477,7 +481,7 @@ public class AccountListActivity extends AppCompatActivity
 //        }
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        
+
 
 //        AccountListActivityFragment fragment = new AccountListActivityFragment();
 //
@@ -499,7 +503,8 @@ public class AccountListActivity extends AppCompatActivity
         MyDataObject obj = new MyDataObject();
 
         obj.setAccount(account);
-        obj.setSelectedPos(-1);
+        obj.setSelectedPos(accountSelectedPos);
+        obj.setSortOrder(accountSortorder);
 //        mRetainedFragment = new RetainedFragment();
 //        fm.beginTransaction().add(mRetainedFragment, TAG_RETAINED_FRAGMENT).commit();
 //        (RetainedFragment) retFrag = (RetainedFragment) fm.findFragmentByTag(TAG_RETAINED_FRAGMENT);
@@ -543,7 +548,7 @@ public class AccountListActivity extends AppCompatActivity
     private void getRotatedData() {
         account = mRetainedFragment.getData().getAccount();
         accountSelectedPos = mRetainedFragment.getData().getSelectedPos();
-//        accountSortorder = mRetainedFragment.getData().getSortOrder();
+        accountSortorder = mRetainedFragment.getData().getSortOrder();
     }
 
 //    private MyDataObject setPlacements(MyDataObject obj) {
@@ -719,16 +724,19 @@ public class AccountListActivity extends AppCompatActivity
         });
 
     }
+
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         if (mRetainedFragment != null) {
 
             try {
 
-                mRetainedFragment.setData(collectMyData());
                 if (mSectionsPagerAdapter != null) {
                     mSectionsPagerAdapter.clearAll();
+                    mSectionsPagerAdapter.notifyDataSetChanged();
                 }
+
+                mRetainedFragment.setData(collectMyData());
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -912,28 +920,28 @@ public class AccountListActivity extends AppCompatActivity
 //                                                Toast.LENGTH_LONG).show();
 //            return;
 //        };
+        isUserPaging = false;
+        mViewPager.setCurrentItem(frag1Pos);
+        isUserPaging = true;
         if (frag1.validatePageErrors()) {
-            isUserPaging = false;
-            mViewPager.setCurrentItem(frag1Pos);
-            isUserPaging = true;
             Toast.makeText(AccountListActivity.this,
                     "Error on account entry, page 1",
                     Toast.LENGTH_LONG).show();
             return;
         }
+        isUserPaging = false;
+        mViewPager.setCurrentItem(frag2Pos);
+        isUserPaging = true;
         if (frag2.validatePageErrors()) {
-            isUserPaging = false;
-            mViewPager.setCurrentItem(frag2Pos);
-            isUserPaging = true;
             Toast.makeText(AccountListActivity.this,
                     "Error on account entry, page 2",
                     Toast.LENGTH_LONG).show();
             return;
         }
+        isUserPaging = false;
+        mViewPager.setCurrentItem(frag3Pos);
+        isUserPaging = true;
         if (frag3.validatePageErrors()) {
-            isUserPaging = false;
-            mViewPager.setCurrentItem(frag3Pos);
-            isUserPaging = true;
             Toast.makeText(AccountListActivity.this,
                     "Error on account entry, page 3",
                     Toast.LENGTH_LONG).show();
@@ -972,12 +980,12 @@ public class AccountListActivity extends AppCompatActivity
 
 
         if (accountMode == AccountsContract.ACCOUNT_ACTION_ADD) {
-            fragList.saveAccount(true);
+            fragList.saveAccount(getApplicationContext(), true);
             Toast.makeText(AccountListActivity.this,
                     "Account entry added to database",
                     Toast.LENGTH_LONG).show();
         } else {
-            fragList.saveAccount(false);
+            fragList.saveAccount(getApplicationContext(), false);
             Toast.makeText(AccountListActivity.this,
                     "Account entry updated to database",
                     Toast.LENGTH_LONG).show();
@@ -1668,7 +1676,11 @@ public class AccountListActivity extends AppCompatActivity
 //        mSectionsPagerAdapter.setFrag1(frag1);
 //        mSectionsPagerAdapter.setFrag2(frag2);
 //        mSectionsPagerAdapter.setFrag3(frag3);
-        mViewPager.setCurrentItem(frag1Pos);
+        if (!mTwoPane && accountSortorder == AccountsContract.ACCOUNT_LIST_BY_SEQUENCE) {
+            mViewPager.setCurrentItem(fragListPos);
+        } else {
+            mViewPager.setCurrentItem(frag1Pos);
+        }
 //        mViewPager.setCurrentItem(frag3Pos);
 //        mRetainedFragment.getData().getmSectionsPagerAdapter().loadPage(mRetainedFragment.getData().getFrag3Pos());
 //        mViewPager.setCurrentItem(mRetainedFragment.getData().getFrag2Pos());
@@ -1768,6 +1780,156 @@ public class AccountListActivity extends AppCompatActivity
 //
 //    }
 
+    @Override
+    public void onAccountUpClick(Account account) {
+        Log.d(TAG, "onAccountUpClick: " + account.getId());
+        List<Account> listAccounts = loadAccountsBySeq();
+        int priorId = -1;
+        int iLimit = listAccounts.size();
+        for (int i = 0; i < iLimit; i++) {
+            Account item = listAccounts.get(i);
+            if (account.getId() == item.getId()) {
+                break;
+            }
+            priorId = item.getId();
+        }
+//        Log.d(TAG, "onSuggestDownClick: priorId " + priorId);
+
+        int reseq = 0;
+        for (int i = 0; i < iLimit; i++) {
+            Account item = listAccounts.get(i);
+            if (priorId != item.getId()) {
+                reseq++;
+                item.setNewSequence(reseq);
+                if (account.getId() == item.getId()) {
+                    break;
+                }
+            }
+        }
+
+        boolean found = false;
+        for (int i = 0; i < iLimit; i++) {
+            Account item = listAccounts.get(i);
+            if (priorId == item.getId()) {
+                reseq++;
+                item.setNewSequence(reseq);
+            } else {
+                if (account.getId() == item.getId()) {
+                    found = true;
+                } else {
+                    if (found) {
+                        reseq++;
+                        item.setNewSequence(reseq);
+                    }
+                }
+            }
+        }
+
+        ContentResolver contentResolver = getContentResolver();
+
+        for (int i = 0; i < iLimit; i++) {
+            Account item = listAccounts.get(i);
+            if (item.getSequence() != item.getNewSequence()) {
+//                Log.d(TAG, "onSuggestDownClick: " + item.getSequence() + ":" + item.getNewSequence());
+                ContentValues values = new ContentValues();
+                values.put(AccountsContract.Columns.SEQUENCE_COL, item.getNewSequence());
+                contentResolver.update(AccountsContract.buildIdUri(item.getId()), values, null, null);
+            }
+        }
+
+        accountSelectedPos -= 1;
+    }
+
+    @Override
+    public void onAccountDownClick(Account account) {
+        Log.d(TAG, "onAccountDownClick: " + account.getId());
+        List<Account> listAccounts = loadAccountsBySeq();
+        int nextId = -1;
+        int iLimit = listAccounts.size();
+        for (int i = 0; i < iLimit; i++) {
+            Account item = listAccounts.get(i);
+            if (nextId != -1) {
+                nextId = item.getId();
+                break;
+            }
+            if (account.getId() == item.getId()) {
+                nextId = item.getId();
+            }
+        }
+//        Log.d(TAG, "onSuggestDownClick: nextId " + nextId);
+
+        int reseq = 0;
+        for (int i = 0; i < iLimit; i++) {
+            Account item = listAccounts.get(i);
+            if (account.getId() != item.getId()) {
+                reseq++;
+                item.setNewSequence(reseq);
+                if (nextId == item.getId()) {
+                    break;
+                }
+            }
+        }
+
+        boolean found = false;
+        for (int i = 0; i < iLimit; i++) {
+            Account item = listAccounts.get(i);
+            if (account.getId() == item.getId()) {
+                reseq++;
+                item.setNewSequence(reseq);
+            } else {
+                if (nextId == item.getId()) {
+                    found = true;
+                } else {
+                    if (found) {
+                        reseq++;
+                        item.setNewSequence(reseq);
+                    }
+                }
+            }
+        }
+
+        ContentResolver contentResolver = getContentResolver();
+
+        for (int i = 0; i < iLimit; i++) {
+            Account item = listAccounts.get(i);
+            if (item.getSequence() != item.getNewSequence()) {
+//                Log.d(TAG, "onSuggestDownClick: " + item.getSequence() + ":" + item.getNewSequence());
+                ContentValues values = new ContentValues();
+                values.put(AccountsContract.Columns.SEQUENCE_COL, item.getNewSequence());
+                contentResolver.update(AccountsContract.buildIdUri(item.getId()), values, null, null);
+            }
+        }
+        accountSelectedPos += 1;
+    }
+
+
+    List<Account> loadAccountsBySeq() {
+//        Log.d(TAG, "loadAccountsBySeq: starts ");
+        String sortOrder = AccountsContract.Columns.SEQUENCE_COL + "," + AccountsContract.Columns.CORP_NAME_COL + " COLLATE NOCASE ASC";
+        Cursor cursor = getContentResolver().query(
+                AccountsContract.CONTENT_URI, null, null, null, sortOrder);
+
+        List<Account> listAccounts = new ArrayList<Account>();
+        if (cursor != null) {
+            while(cursor.moveToNext()) {
+//                Log.d(TAG, "loadPasswords: seq " + cursor.getInt(cursor.getColumnIndex(SuggestsContract.Columns.SEQUENCE_COL))
+//                        + ":" + cursor.getString(cursor.getColumnIndex(SuggestsContract.Columns.PASSWORD_COL)));
+                Account item = new Account(
+                        cursor.getInt(cursor.getColumnIndex(AccountsContract.Columns._ID_COL)),
+                        cursor.getString(cursor.getColumnIndex(AccountsContract.Columns.CORP_NAME_COL)),
+                        cursor.getString(cursor.getColumnIndex(AccountsContract.Columns.USER_NAME_COL)),
+                        cursor.getString(cursor.getColumnIndex(AccountsContract.Columns.USER_EMAIL_COL)),
+                        cursor.getString(cursor.getColumnIndex(AccountsContract.Columns.CORP_WEBSITE_COL)),
+                        cursor.getInt(cursor.getColumnIndex(AccountsContract.Columns.SEQUENCE_COL)));
+                item.setNewSequence(cursor.getInt(cursor.getColumnIndex(SuggestsContract.Columns.SEQUENCE_COL)));
+                listAccounts.add(item);
+            }
+            cursor.close();
+        }
+
+        return listAccounts;
+    }
+
 //    private void clearFrag() {
 //        this.account = new Account();
 //        accountMode = AccountsContract.ACCOUNT_ACTION_ADD;
@@ -1791,7 +1953,12 @@ public class AccountListActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
+        if (webpageActive){
+            super.onBackPressed();
+            return;
+        }
         Log.d(TAG, "onBackPressed: " + mViewPager.getCurrentItem());
+
         if (mViewPager.getCurrentItem() == 0) {
             // If the user is currently looking at the first step, allow the system to handle the
             // Back button. This calls finish() on this activity and pops the back stack.
@@ -1829,7 +1996,7 @@ public class AccountListActivity extends AppCompatActivity
             case AppDialog.DIALOG_ID_CONFIRM_DELETE_ACCOUNT:
 //            Log.d(TAG, "onPositiveDialogResult: confirmed to delete");
 //            Log.d(TAG, "onPositiveDialogResult: acctid " + args.getInt(AppDialog.DIALOG_ACCOUNT_ID));
-                fragList.deleteAccount(args.getInt(AppDialog.DIALOG_ACCOUNT_ID));
+                fragList.deleteAccount(getApplicationContext(), args.getInt(AppDialog.DIALOG_ACCOUNT_ID));
 //                getContentResolver().delete(AccountsContract.buildIdUri(args.getInt(AppDialog.DIALOG_ACCOUNT_ID)), null, null);
 //                setupAdapter();
 //                if (mTwoPane) {
@@ -1966,13 +2133,88 @@ public class AccountListActivity extends AppCompatActivity
         }
     }
 
-
     private void sortAccountList() {
-        if (fragListPos == -1) {
-            fragList.resortList();
+//            Bundle arguments = new Bundle();
+//            arguments.putBoolean(AccountsContract.ACCOUNT_TWO_PANE, false);
+//            arguments.putInt(Account.class.getSimpleName(),
+//                    AccountsContract.ACCOUNT_LIST_BY_CORP_NAME);
+//            AccountListActivityFragment fragment = new AccountListActivityFragment();
+//            fragment.setArguments(arguments);
+
+        if (mTwoPane) {
+            fragList.refreshList();
         } else {
-            mSectionsPagerAdapter.getItem(fragListPos);
+            AccountListActivityFragment frag = (AccountListActivityFragment)mSectionsPagerAdapter.getItem(fragListPos);
+            frag.refreshList();
         }
+
+//        getLoaderManager().initLoader(ACCOUNT_LOADER_ID, arguments, this);
+        Toast.makeText(AccountListActivity.this,
+                "Accounts sorted", Toast.LENGTH_LONG).show();
+    }
+    private void sortAccountList2() {
+//            if (fragList == null) {
+//                Log.d(TAG, "sortAccountList: fragList is null");
+//                return;
+//            }
+////            mSectionsPagerAdapter.getItem(fragListPos);
+//            fragList.resortFragList();
+
+//            mSectionsPagerAdapter.getItem(fragListPos);
+        if (mSectionsPagerAdapter != null) {
+            mSectionsPagerAdapter.clearAll();
+        }
+
+        accountSelectedPos = -1;
+        //            if (fragList == null) {
+        fragList = AccountListActivityFragment.newInstance();
+//            }
+//            if (frag1 == null) {
+        frag1 = AccountPlaceholderFrag1.newInstance();
+//            }
+//            if (frag2 == null) {
+        frag2 = AccountPlaceholderFrag2.newInstance();
+//            }
+//            if (frag3 == null) {
+        frag3 = AccountPlaceholderFrag3.newInstance();
+//            }
+
+        fragments.clear();
+        if (!mTwoPane) {
+            fragments.add(fragList);
+        }
+        fragments.add(frag1);
+        fragments.add(frag2);
+        fragments.add(frag3);
+        Log.d(TAG, "onCreate: new size " + fragments.size());
+
+        mSectionsPagerAdapter.addList(fragments);
+
+//            fragListPos = 0;
+//            frag1Pos = 1;
+//            frag2Pos = 2;
+//            frag3Pos = 3;
+//            mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(),
+//                    fragListPos, frag1Pos, frag2Pos, frag3Pos, fragments);
+
+        mViewPager.setAdapter(mSectionsPagerAdapter);
+        pagerEvents();
+        isUserPaging = false;
+        mViewPager.setCurrentItem(frag3Pos);
+        mSectionsPagerAdapter.notifyDataSetChanged();
+        mViewPager.setCurrentItem(frag2Pos);
+        mSectionsPagerAdapter.notifyDataSetChanged();
+        mViewPager.setCurrentItem(frag1Pos);
+        mSectionsPagerAdapter.notifyDataSetChanged();
+        if (mTwoPane) {
+            mViewPager.setCurrentItem(frag1Pos);
+        } else {
+            mViewPager.setCurrentItem(fragListPos);
+        }
+        isUserPaging = true;
+        Toast.makeText(AccountListActivity.this,
+                "Accounts sorted", Toast.LENGTH_LONG).show();
+
     }
 
     private void suggestPasswordList() {
@@ -2062,5 +2304,13 @@ public class AccountListActivity extends AppCompatActivity
 //        frag1.fillPage(this.account);
     }
 
+    @Override
+    public void onWebpage() {
+        webpageActive = true;
+    }
 
+    @Override
+    public void offWebpage() {
+        webpageActive = false;
+    }
 }
