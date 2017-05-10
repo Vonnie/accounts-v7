@@ -21,6 +21,8 @@
         android:name="android.permission.INTERNET"
         android:required="false" />
 
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+
     <supports-screens
         android:largeScreens="true"
         android:normalScreens="true"

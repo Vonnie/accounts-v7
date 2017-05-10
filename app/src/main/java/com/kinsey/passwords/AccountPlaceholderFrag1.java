@@ -15,8 +15,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.kinsey.passwords.items.AccountsContract;
-
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 import java.util.regex.Matcher;
@@ -73,6 +71,7 @@ public class AccountPlaceholderFrag1 extends Fragment {
 
     public interface OnAccountListener {
         void onAccount1Instance();
+        void onWebsiteRequest(String website);
         void onWebpage();
         void offWebpage();
     }
@@ -142,12 +141,15 @@ public class AccountPlaceholderFrag1 extends Fragment {
         mImgWebView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent detailIntent = new Intent(getActivity(), WebViewActivity.class);
-                detailIntent.putExtra(WebViewActivity.class.getSimpleName(), mCorpWebsiteTextView.getText().toString());
-//                Log.d(TAG, "onClick: website " + account.getCorpWebsite());
-//                Log.d(TAG, "onClick: wv class " + WebViewActivity.class.getSimpleName());
-                mListener.onWebpage();
-                startActivityForResult(detailIntent, AccountsContract.ACCOUNT_ACTION_WEBPAGE);
+
+                mListener.onWebsiteRequest(mCorpWebsiteTextView.getText().toString());
+
+//                Intent detailIntent = new Intent(getActivity(), WebViewActivity.class);
+//                detailIntent.putExtra(WebViewActivity.class.getSimpleName(), mCorpWebsiteTextView.getText().toString());
+////                Log.d(TAG, "onClick: website " + account.getCorpWebsite());
+////                Log.d(TAG, "onClick: wv class " + WebViewActivity.class.getSimpleName());
+//                mListener.onWebpage();
+//                startActivityForResult(detailIntent, AccountsContract.ACCOUNT_ACTION_WEBPAGE);
 
             }
         });
@@ -361,6 +363,7 @@ public class AccountPlaceholderFrag1 extends Fragment {
         boolean hasErrors = false;
         if (mCorpNameTextView.getText().toString().equals("")) {
             mCorpNameTextView.setError("Corporation name is required");
+            mCorpNameTextView.requestFocus();
 //            Toast.makeText(getActivity(),
 //                    "Corporation name is required",
 //                    Toast.LENGTH_LONG).show();
@@ -374,14 +377,22 @@ public class AccountPlaceholderFrag1 extends Fragment {
 
         if (mUserNameTextView.getText().toString().equals("")) {
             mUserNameTextView.setError("User name is required");
+            if (!hasErrors) {
+                mUserNameTextView.requestFocus();
+            }
             hasErrors = true;
         }
         if (mUserEmailTextView.getText().toString().equals("")) {
             mUserEmailTextView.setError("Email is required");
+            if (!hasErrors) {
+                mUserEmailTextView.requestFocus();
+            }
             hasErrors = true;
-        }
-        if (!isEmailValid(mUserEmailTextView.getText().toString())) {
+        } else if (!isEmailValid(mUserEmailTextView.getText().toString())) {
             mUserEmailTextView.setError("Email is invalid format");
+            if (!hasErrors) {
+                mUserEmailTextView.requestFocus();
+            }
             hasErrors = true;
         }
 

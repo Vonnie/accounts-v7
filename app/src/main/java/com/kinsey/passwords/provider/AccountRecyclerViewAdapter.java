@@ -21,6 +21,8 @@ import com.kinsey.passwords.items.AccountsContract;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
+import static com.kinsey.passwords.AccountListActivity.accountSelectById;
+import static com.kinsey.passwords.AccountListActivity.accountSelectedId;
 import static com.kinsey.passwords.AccountListActivity.accountSelectedPos;
 import static com.kinsey.passwords.AccountListActivity.accountSortorder;
 
@@ -96,8 +98,7 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
 //        } else {
 //            Log.d(TAG, "onBindViewHolder: mCursor count " + mCursor.getCount());
 //        }
-        if (accountSortorder != AccountsContract.ACCOUNT_LIST_BY_SEQUENCE ||
-                position != accountSelectedPos) {
+        if (accountSortorder != AccountsContract.ACCOUNT_LIST_BY_SEQUENCE ) {
             holder.upAcctBtn.setVisibility(View.GONE);
             holder.dnAcctBtn.setVisibility(View.GONE);
         }
@@ -118,15 +119,29 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
                 throw new IllegalStateException("Couldn't move cursor to position " + position);
             }
 
-            if (accountSelectedPos == position) {
-                // Here I am just highlighting the background
-                holder.itemView.setBackgroundColor(Color.GREEN);
-            } else {
-                holder.itemView.setBackgroundColor(Color.TRANSPARENT);
-            }
-
             final Account account = AccountsContract.getAccountFromCursor(mCursor);
             Log.d(TAG, "onBindViewHolder: " + account.getPassportId());
+
+            if (accountSelectById) {
+                if (accountSelectedId == account.getId()) {
+                    notifyItemChanged(accountSelectedPos);
+                    accountSelectedPos = position;
+                    accountSelectById = false;
+                    accountSelectedId = -1;
+                    holder.itemView.setBackgroundColor(Color.GREEN);
+                    notifyItemChanged(accountSelectedPos);
+                } else {
+                    holder.itemView.setBackgroundColor(Color.TRANSPARENT);
+                }
+            } else {
+                if (accountSelectedPos == position) {
+                    // Here I am just highlighting the background
+                    holder.itemView.setBackgroundColor(Color.GREEN);
+                } else {
+                    holder.itemView.setBackgroundColor(Color.TRANSPARENT);
+                }
+            }
+
 //            final Account account = new Account(mCursor.getInt(mCursor.getColumnIndex(AccountsContract.Columns._ID_COL)),
 //                    mCursor.getString(mCursor.getColumnIndex(AccountsContract.Columns.CORP_NAME_COL)),
 //                    mCursor.getString(mCursor.getColumnIndex(AccountsContract.Columns.USER_NAME_COL)),

@@ -21,6 +21,7 @@ import com.kinsey.passwords.items.AccountsContract;
 import com.kinsey.passwords.provider.AccountRecyclerViewAdapter;
 
 import static com.kinsey.passwords.AccountListActivity.account;
+import static com.kinsey.passwords.AccountListActivity.accountSelectedPos;
 import static com.kinsey.passwords.AccountListActivity.accountSortorder;
 import static com.kinsey.passwords.MainActivity.ACCOUNT_LOADER_ID;
 
@@ -46,39 +47,6 @@ public class AccountListActivityFragment extends Fragment
 
     private int mSortorder = AccountsContract.ACCOUNT_LIST_BY_CORP_NAME;
 
-//    @Override
-//    public void onAccountEditClick(Account account) {
-//
-//    }
-//
-//    @Override
-//    public void onAccountDeleteClick(Account account) {
-//
-//    }
-
-//    @Override
-//    public void onAccountListSelect(Account account) {
-////        Context context = getContext();
-////        Intent intent = new Intent(context, AccountActivity.class);
-////        intent.putExtra(AccountActivity.ARG_ITEM_ID, holder.mItem.id);
-////
-////        context.startActivity(intent);
-//
-//    }
-//
-//    @Override
-//    public void onAccountLandListSelect(Account account) {
-////        Bundle arguments = new Bundle();
-////        arguments.putString(AccountListActivityFragment.ARG_ITEM_ID, holder.mItem.id);
-////        AccountActivityFragment fragment = new AccountActivityFragment();
-////        fragment.setArguments(arguments);
-////        getSupportFragmentManager().beginTransaction()
-////                .replace(R.id.item_detail_container, fragment)
-////                .commit();
-//
-//    }
-
-
 
     public enum FragmentListMode {CORP_NAME, OPEN_DATE}
 
@@ -97,6 +65,7 @@ public class AccountListActivityFragment extends Fragment
 
     public static AccountListActivityFragment newInstance() {
         AccountListActivityFragment fragment = new AccountListActivityFragment();
+        Log.d(TAG, "newInstance: ");
 //        Bundle args = new Bundle();
 //        args.putInt(ARG_SELECTED_POS, selectedPos);
 //        fragment.setArguments(args);
@@ -155,10 +124,10 @@ public class AccountListActivityFragment extends Fragment
 //        recyclerView.setAdapter(mAccountAdapter);
 //        Log.d(TAG, "onCreateView: returning adapter count: " + mAccountAdapter.getItemCount());
         Cursor cursor = null;
-//        Log.d(TAG, "onCreateView: abt to call adapter sel: " + selected_position);
+        Log.d(TAG, "onCreateView: abt to init loader: " + accountSelectedPos);
         getLoaderManager().initLoader(ACCOUNT_LOADER_ID, null, this);
 
-//        Log.d(TAG, "onCreateView: abt to call adapter sel: " + selected_position);
+        Log.d(TAG, "onCreateView: abt to call adapter sel: " + accountSelectedPos);
         mAccountAdapter = new AccountRecyclerViewAdapter(getContext(), cursor,
                 (AccountRecyclerViewAdapter.OnAccountClickListener) getActivity());
         mRecyclerView.setAdapter(mAccountAdapter);
@@ -216,9 +185,17 @@ public class AccountListActivityFragment extends Fragment
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         Log.d(TAG, "onLoadFinished: starts");
+        Log.d(TAG, "onLoadFinished: starts");
 //        this.loader = loader;
         int count = 0;
         mAccountAdapter.swapCursor(data);
+        if (accountSelectedPos != -1) {
+            Log.d(TAG, "onLoadFinished: adapter set");
+            mRecyclerView.scrollToPosition(accountSelectedPos);
+//            mRecyclerView.findViewHolderForAdapterPosition(accountSelectedPos);
+//            mRecyclerView.findViewHolderForAdapterPosition(accountSelectedPos).itemView.performClick();
+        }
+
 //        count = mAccountAdapter.getItemCount();
 //        if (count == 0) {
 //            twCurrentTitle.setText("No accounts, + to add");
@@ -226,6 +203,14 @@ public class AccountListActivityFragment extends Fragment
 //            twCurrentTitle.setText("Accounts");
 //        }
 //        Log.d(TAG, "onLoadFinished: count is " + count);
+    }
+
+
+    public void setViewerPos() {
+        if (accountSelectedPos != -1) {
+            Log.d(TAG, "setViewerPos: postioning requested");
+//            mRecyclerView.findViewHolderForAdapterPosition(accountSelectedPos).itemView.performClick();
+        }
     }
 
     @Override

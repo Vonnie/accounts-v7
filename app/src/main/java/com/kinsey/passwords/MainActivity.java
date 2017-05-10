@@ -177,9 +177,9 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         switch (id) {
-            case R.id.menumain_addAccount:
-                editAccountRequest(null);
-                break;
+//            case R.id.menumain_addAccount:
+//                editAccountRequest(null);
+//                break;
             case R.id.menumain_showAccounts:
                 accountsListRequest(AccountsContract.ACCOUNT_LIST_BY_CORP_NAME);
                 break;
