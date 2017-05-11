@@ -70,6 +70,28 @@
                 android:inputType="number" />
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:labelFor="@id/acc_ref_to"
+                android:text="@string/accedit_seq_cap" />
+
+            <EditText
+                android:id="@+id/acc_seq"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:hint="@string/accedit_seq_hint"
+                android:inputType="number" />
+        </LinearLayout>
+
         <TextView
             android:id="@+id/section_label"
             android:layout_width="wrap_content"

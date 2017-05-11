@@ -2,9 +2,12 @@ package com.kinsey.passwords;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowInsets;
+import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -15,7 +18,7 @@ import android.webkit.WebViewClient;
 public class WebViewActivityFragment extends Fragment {
     private static final String TAG = "WebViewActivityFragment";
 
-    private WebView wv = null;
+    private WebView webview = null;
     private String webAddr;
 
     public WebViewActivityFragment() {
@@ -34,34 +37,61 @@ public class WebViewActivityFragment extends Fragment {
         if (webAddr == null) {
             return view;
         }
-        wv = (WebView) view.findViewById(R.id.wv_page);
-        wv.setWebViewClient(new MyWebViewClient());
+        webview = (WebView) view.findViewById(R.id.wv_page);
+//        webview.setWebViewClient(new MyWebViewClient());
 
-        WebSettings webSettings = wv.getSettings();
+//        setContentView(webview);
+
+
+        WebSettings webSettings = webview.getSettings();
 
         webSettings.setJavaScriptEnabled(true);
 
+        webview.setWebChromeClient(new WebChromeClient() {
+            public void onProgressChanged(WebView view, int progress) {
+                getActivity().setProgress(progress * 1000);
+            }
+
+            @Override
+            public void onCloseWindow(WebView window) {
+                Log.d(TAG, "onCloseWindow: ");
+                super.onCloseWindow(window);
+            }
+
+
+        });
+
+        webview.setOnApplyWindowInsetsListener(new View.OnApplyWindowInsetsListener() {
+            @Override
+            public WindowInsets onApplyWindowInsets(View v, WindowInsets insets) {
+                return null;
+            }
+        });
+
         if (webAddr.toLowerCase().startsWith("http")) {
-            wv.loadUrl(webAddr);
+            webview.loadUrl(webAddr);
         } else {
             if (!webAddr.equals("")) {
-                wv.loadUrl(webAddr);
+                webview.loadUrl(webAddr);
             }
         }
 
+        
+        
 
         return view;
 
     }
 
     public boolean canBackOut() {
-        if (wv.canGoBack()) {
-            wv.goBack();
+        if (webview.canGoBack()) {
+            webview.goBack();
             return false;
         } else {
             return true;
         }
     }
+
 
 
     private class MyWebViewClient extends WebViewClient {

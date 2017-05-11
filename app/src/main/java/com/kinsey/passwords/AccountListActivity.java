@@ -21,6 +21,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.Toast;
 
 import com.kinsey.passwords.items.Account;
@@ -50,7 +51,6 @@ import java.util.List;
 import static com.kinsey.passwords.MainActivity.DEFAULT_APP_DIRECTORY;
 import static com.kinsey.passwords.MainActivity.SEARCH_LOADER_ID;
 import static com.kinsey.passwords.MainActivity.format_ymdtime;
-import static com.kinsey.passwords.items.AccountsContract.ACCOUNT_ACTION_WEBPAGE;
 
 public class AccountListActivity extends AppCompatActivity
         implements AccountRecyclerViewAdapter.OnAccountClickListener,
@@ -103,6 +103,7 @@ public class AccountListActivity extends AppCompatActivity
     private int frag3Pos = 2;
     private ArrayList<Fragment> fragments = new ArrayList<Fragment>();
     private boolean webpageActive = false;
+    private WebView webview = null;
 
     boolean isUserPaging = true;
     boolean isRotated = false;
@@ -120,6 +121,7 @@ public class AccountListActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        webview = (WebView) findViewById(R.id.wv_page);
 //        removeRetainedFrag();
 
         // find the retained fragment on activity restarts
@@ -140,6 +142,7 @@ public class AccountListActivity extends AppCompatActivity
             Log.d(TAG, "onCreate: retained present");
             isRotated = true;
             getRotatedData();
+            Log.d(TAG, "onCreate: accountId " + account.getId());
 //            mRetainedFragment.getData().getmSectionsPagerAdapter().setMyDataObject(mRetainedFragment.getData());
 
 //            this.account = mRetainedFragment.getData().getAccount();
@@ -150,7 +153,7 @@ public class AccountListActivity extends AppCompatActivity
 
         mViewPager = (ViewPager) findViewById(R.id.item_detail_container);
 
-        startUpFrags();
+        startUpFrags(false);
 
         isUserPaging = false;
         mViewPager.setCurrentItem(frag3Pos);
@@ -266,7 +269,7 @@ public class AccountListActivity extends AppCompatActivity
     }
 
 
-    private void startUpFrags() {
+    private void startUpFrags(boolean restart) {
 //            if (isRotated) {
 //                emptyPager();
 //            }
@@ -308,7 +311,9 @@ public class AccountListActivity extends AppCompatActivity
 
 
 //            if (fragList == null) {
-        fragList = AccountListActivityFragment.newInstance();
+        if (!restart) {
+            fragList = AccountListActivityFragment.newInstance();
+        }
 //            }
         Log.d(TAG, "onCreate: created fragList");
 //            if (frag1 == null) {
@@ -408,9 +413,10 @@ public class AccountListActivity extends AppCompatActivity
 
 //                findViewById(R.id.fragList).
 //                FragmentManager fmc = getSupportFragmentManager();
-            FragmentTransaction transaction = fm.beginTransaction();
-            transaction.replace(R.id.fragList, fragList, TAG_ACTIVITY_LIST_FRAG).commit();
-
+            if (!restart) {
+                FragmentTransaction transaction = fm.beginTransaction();
+                transaction.replace(R.id.fragList, fragList, TAG_ACTIVITY_LIST_FRAG).commit();
+            }
 
 //                fragList2 = (AccountListActivityFragment)fmc.findFragmentById(R.id.fragList);
 //                if (fragList2 != null) {
@@ -536,9 +542,9 @@ public class AccountListActivity extends AppCompatActivity
     }
 
     private void getRotatedData() {
-        account = mRetainedFragment.getData().getAccount();
-        accountSelectedPos = mRetainedFragment.getData().getSelectedPos();
-        accountSortorder = mRetainedFragment.getData().getSortOrder();
+//        account = mRetainedFragment.getData().getAccount();
+//        accountSelectedPos = mRetainedFragment.getData().getSelectedPos();
+//        accountSortorder = mRetainedFragment.getData().getSortOrder();
     }
 
 //    private MyDataObject setPlacements(MyDataObject obj) {
@@ -726,12 +732,15 @@ public class AccountListActivity extends AppCompatActivity
 
             try {
 
-                if (mSectionsPagerAdapter != null) {
-                    mSectionsPagerAdapter.clearAll();
-                    mSectionsPagerAdapter.notifyDataSetChanged();
+
+                if (!mActivityStart) {
+                    if (mSectionsPagerAdapter != null) {
+                        mSectionsPagerAdapter.clearAll();
+                        mSectionsPagerAdapter.notifyDataSetChanged();
+                    }
                 }
 
-                mRetainedFragment.setData(collectMyData());
+//                mRetainedFragment.setData(collectMyData());
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -747,8 +756,8 @@ public class AccountListActivity extends AppCompatActivity
         try {
 
             MyDataObject myDataObject = mRetainedFragment.getData();
-            myDataObject.setAccount(account);
-            myDataObject.setSelectedPos(accountSelectedPos);
+//            myDataObject.setAccount(account);
+//            myDataObject.setSelectedPos(accountSelectedPos);
 //            if (fragList == null) {
 //                myDataObject.setSelectedPos(-1);
 //            } else {
@@ -1025,16 +1034,36 @@ public class AccountListActivity extends AppCompatActivity
             Toast.makeText(AccountListActivity.this,
                     "Must select an account with a website",
                     Toast.LENGTH_LONG).show();
-        } else if (account.getCorpWebsite().equals("")){
+        } else if (account.getCorpWebsite().equals("")
+                || account.getCorpWebsite().equals("http://")){
             Toast.makeText(AccountListActivity.this,
                     "Selected account must have a website",
                     Toast.LENGTH_LONG).show();
         } else {
-            Intent detailIntent = new Intent(this, WebViewActivity.class);
-            detailIntent.putExtra(WebViewActivity.class.getSimpleName(), account.getCorpWebsite());
-//                Log.d(TAG, "onClick: website " + account.getCorpWebsite());
-//                Log.d(TAG, "onClick: wv class " + WebViewActivity.class.getSimpleName());
-            startActivityForResult(detailIntent, ACCOUNT_ACTION_WEBPAGE);
+
+            if (account.getCorpWebsite().toLowerCase().startsWith("http")) {
+                mActivityStart = true;
+                webview.loadUrl(account.getCorpWebsite());
+            } else {
+                if (!account.getCorpWebsite().equals("")) {
+                    mActivityStart = true;
+                    webview.loadUrl(account.getCorpWebsite());
+                } else {
+                    return;
+                }
+            }
+
+////            Uri uri = Uri.parse(account.getCorpWebsite());
+////            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+////            startActivity(intent);
+////            startActivityForResult(intent, AccountsContract.ACCOUNT_ACTION_WEBPAGE);
+//
+//            Intent detailIntent = new Intent(this, WebViewActivity.class);
+//            detailIntent.putExtra(WebViewActivity.class.getSimpleName(), account.getCorpWebsite());
+////                Log.d(TAG, "onClick: website " + account.getCorpWebsite());
+////                Log.d(TAG, "onClick: wv class " + WebViewActivity.class.getSimpleName());
+//            startActivityForResult(detailIntent, AccountsContract.ACCOUNT_ACTION_WEBPAGE);
+////            startActivity(detailIntent);
         }
     }
 //
@@ -1529,7 +1558,8 @@ public class AccountListActivity extends AppCompatActivity
 
     private void viewAccountsFile() {
         Intent detailIntent = new Intent(this, FileViewActivity.class);
-        startActivity(detailIntent);
+//        startActivity(detailIntent);
+        startActivityForResult(detailIntent, AccountsContract.ACCOUNT_ACTION_VIEW_EXPORT);
     }
 
 
@@ -2020,7 +2050,8 @@ public class AccountListActivity extends AppCompatActivity
 //            super.onBackPressed();
 //            return;
 //        }
-//        Log.d(TAG, "onBackPressed: " + mViewPager.getCurrentItem());
+
+        Log.d(TAG, "onBackPressed: " + mViewPager.getCurrentItem());
 
         if (mViewPager.getCurrentItem() == 0) {
             // If the user is currently looking at the first step, allow the system to handle the
@@ -2136,7 +2167,7 @@ public class AccountListActivity extends AppCompatActivity
 
     @Override
     public void onActionRequestDialogResult(int dialogId, Bundle args, int which) {
-//        Log.d(TAG, "onActionRequestDialogResult: starts");
+        Log.d(TAG, "onActionRequestDialogResult: starts " + dialogId);
 
         if (dialogId != AppDialog.DIALOG_ID_ACCOUNT_ACTIONS_LIST) {
             return;
@@ -2284,8 +2315,8 @@ public class AccountListActivity extends AppCompatActivity
     private void suggestPasswordList() {
         Intent detailIntent = new Intent(this, SuggestListActivity.class);
         detailIntent.putExtra(Suggest.class.getSimpleName(), "sortorder");
-        startActivity(detailIntent);
-
+//        startActivity(detailIntent);
+        startActivityForResult(detailIntent, AccountsContract.ACCOUNT_ACTION_SUGGESTIONS);
     }
 
     @Override
@@ -2326,10 +2357,12 @@ public class AccountListActivity extends AppCompatActivity
 
                 break;
             }
-            case AccountsContract.ACCOUNT_ACTION_WEBPAGE: {
+            case AccountsContract.ACCOUNT_ACTION_WEBPAGE:
+            case AccountsContract.ACCOUNT_ACTION_VIEW_EXPORT:
+            case AccountsContract.ACCOUNT_ACTION_SUGGESTIONS: {
                 Log.d(TAG, "onActivityResult: webpage return from startActivity");
                 mActivityStart = false;
-                startUpFrags();
+                startUpFrags(true);
 //                if (mViewPager == null) {
 //                    Log.d(TAG, "onActivityResult: mViewPager is null");
 //                } else {
@@ -2408,16 +2441,6 @@ public class AccountListActivity extends AppCompatActivity
 //        mSectionsPagerAdapter.loadPage(SectionsPagerAdapter.frag1Pos);
 //        frag1RowId = rowId;
 //        frag1.fillPage(this.account);
-    }
-
-    @Override
-    public void onWebpage() {
-        webpageActive = true;
-    }
-
-    @Override
-    public void offWebpage() {
-        webpageActive = false;
     }
 
     @Override

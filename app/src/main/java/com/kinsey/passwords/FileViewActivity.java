@@ -1,5 +1,6 @@
 package com.kinsey.passwords;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -38,6 +39,13 @@ public class FileViewActivity extends AppCompatActivity {
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+    }
+
+    @Override
+    public void onBackPressed() {
+        setResult(Activity.RESULT_OK);
+        finish();
+        super.onBackPressed();
     }
 
     private void shareExport() {

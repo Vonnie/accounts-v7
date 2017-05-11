@@ -1,5 +1,6 @@
 package com.kinsey.passwords;
 
+import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -57,6 +58,13 @@ public class SuggestListActivity extends AppCompatActivity
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
+    public void onBackPressed() {
+//        super.onBackPressed();
+        setResult(Activity.RESULT_OK);
+        finish();
     }
 
     private void generatePasswords(int passwordLen) {

@@ -3,9 +3,7 @@ package com.kinsey.passwords;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -176,25 +174,25 @@ public class AccountPlaceholderFrag2 extends Fragment {
 
     public void fillPage() {
 
-        if (!isReadyForUpdates) {
-            new CountDownTimer(10000, 1000) {
-
-                public void onTick(long millisUntilFinished) {
-//                    mTextField.setText("seconds remaining: " + millisUntilFinished / 1000);
-                }
-
-                public void onFinish() {
-//                    mTextField.setText("done!");
-                }
-            }.start();
-
-            if (!isReadyForUpdates) {
-                Log.d(TAG, "fillPage: unable to update");
-                return;
-            }
-//            mListener.onAccount2Instance();
-        }
-        Log.d(TAG, "fillPage2: corpname " + account.getCorpName());
+//        if (!isReadyForUpdates) {
+//            new CountDownTimer(10000, 1000) {
+//
+//                public void onTick(long millisUntilFinished) {
+////                    mTextField.setText("seconds remaining: " + millisUntilFinished / 1000);
+//                }
+//
+//                public void onFinish() {
+////                    mTextField.setText("done!");
+//                }
+//            }.start();
+//
+//            if (!isReadyForUpdates) {
+//                Log.d(TAG, "fillPage: unable to update");
+//                return;
+//            }
+////            mListener.onAccount2Instance();
+//        }
+//        Log.d(TAG, "fillPage2: corpname " + account.getCorpName());
         rowId = account.getId();
 //        this.account = account;
         mDtePickOpen.setMaxDate(new Date().getTime());

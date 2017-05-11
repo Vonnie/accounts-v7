@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -38,7 +37,7 @@ public class AccountPlaceholderFrag3 extends Fragment {
     private static final String ARG_ACCOUNT = "account";
     public static final String ARG_ACCOUNT_ROWID = "account_rowid";
     private int sectNumber;
-//    Account account = new Account();
+    //    Account account = new Account();
 //    private int accountId = -1;
     private int rowId = -1;
 
@@ -60,6 +59,7 @@ public class AccountPlaceholderFrag3 extends Fragment {
     private String acctNote = "";
     private int acctRefFrom = 0;
     private int acctRefTo = 0;
+    private int acctSequence = 0;
     private boolean isReadyForUpdates = false;
     private int numTries = 0;
 
@@ -68,6 +68,7 @@ public class AccountPlaceholderFrag3 extends Fragment {
             pattern_ymdtimehm, Locale.US);
 
     private OnAccountListener mListener;
+
     public interface OnAccountListener {
         void onAccount3Instance();
     }
@@ -116,10 +117,10 @@ public class AccountPlaceholderFrag3 extends Fragment {
 //                setupPage2(rootView);
 //                break;
 //            default:
-                rootView = inflater.inflate(R.layout.fragment_acct_page_3, container, false);
-                tvPage = (TextView) rootView.findViewById(R.id.section_label);
-                tvPage.setText(getPageTitle(3));
-                setupPage3(rootView);
+        rootView = inflater.inflate(R.layout.fragment_acct_page_3, container, false);
+        tvPage = (TextView) rootView.findViewById(R.id.section_label);
+        tvPage.setText(getPageTitle(3));
+        setupPage3(rootView);
         isReadyForUpdates = true;
         fillPage();
 //                break;
@@ -209,30 +210,30 @@ public class AccountPlaceholderFrag3 extends Fragment {
         mNoteTextView = (EditText) view.findViewById(R.id.acc_notes);
         mRefIdFromTextView = (EditText) view.findViewById(R.id.acc_ref_from);
         mRefIdToTextView = (EditText) view.findViewById(R.id.acc_ref_to);
-
+        mSeqTextView = (EditText) view.findViewById(R.id.acc_seq);
     }
 
     public void fillPage() {
 
-        if (!isReadyForUpdates) {
-            new CountDownTimer(10000, 1000) {
-
-                public void onTick(long millisUntilFinished) {
-//                    mTextField.setText("seconds remaining: " + millisUntilFinished / 1000);
-                }
-
-                public void onFinish() {
-//                    mTextField.setText("done!");
-                }
-            }.start();
-
-            if (!isReadyForUpdates) {
-                Log.d(TAG, "fillPage: unable to update");
-                return;
-            }
-//            mListener.onAccount3Instance();
-        }
-        Log.d(TAG, "fillPage3: corpname " + account.getCorpName());
+//        if (!isReadyForUpdates) {
+//            new CountDownTimer(10000, 1000) {
+//
+//                public void onTick(long millisUntilFinished) {
+////                    mTextField.setText("seconds remaining: " + millisUntilFinished / 1000);
+//                }
+//
+//                public void onFinish() {
+////                    mTextField.setText("done!");
+//                }
+//            }.start();
+//
+//            if (!isReadyForUpdates) {
+//                Log.d(TAG, "fillPage: unable to update");
+//                return;
+//            }
+////            mListener.onAccount3Instance();
+//        }
+//        Log.d(TAG, "fillPage3: corpname " + account.getCorpName());
         rowId = account.getId();
 //        this.account = account;
         mNoteTextView.setText(account.getNote());
@@ -247,6 +248,12 @@ public class AccountPlaceholderFrag3 extends Fragment {
             mRefIdToTextView.setText("");
         } else {
             mRefIdToTextView.setText(String.valueOf(account.getRefTo()));
+        }
+
+        if (AccountListActivity.account.getSequence() == 0) {
+            mSeqTextView.setText("");
+        } else {
+            mSeqTextView.setText(String.valueOf(AccountListActivity.account.getSequence()));
         }
 
     }
@@ -301,13 +308,15 @@ public class AccountPlaceholderFrag3 extends Fragment {
             if (!isIdOnDB(mRefIdFromTextView.getText().toString())) {
                 mRefIdFromTextView.setError("Reference back id does not exists");
                 hasErrors = true;
-            };
+            }
+            ;
         }
         if (!mRefIdToTextView.getText().toString().equals("")) {
             if (!isIdOnDB(mRefIdToTextView.getText().toString())) {
                 mRefIdToTextView.setError("Reference to id does not exists");
                 hasErrors = true;
-            };
+            }
+            ;
         }
 
         return hasErrors;
@@ -355,12 +364,19 @@ public class AccountPlaceholderFrag3 extends Fragment {
         } else {
             acctRefFrom = Integer.parseInt(mRefIdFromTextView.getText().toString());
         }
-        Log.d(TAG, "loadFromMap: refTo " + mRefIdToTextView.getText());
+//        Log.d(TAG, "loadFromMap: refTo " + mRefIdToTextView.getText());
         if (mRefIdToTextView.getText().toString().equals("")) {
             acctRefTo = 0;
         } else {
             acctRefTo = Integer.parseInt(mRefIdToTextView.getText().toString());
         }
+
+        if (mSeqTextView.getText().toString().equals("")) {
+            acctSequence = 0;
+        } else {
+            acctSequence = Integer.parseInt(mSeqTextView.getText().toString());
+        }
+
     }
 
 
@@ -374,24 +390,29 @@ public class AccountPlaceholderFrag3 extends Fragment {
 
 //        if (this.account.getId() == account.getId()) {
 
-            loadFromMap();
+        loadFromMap();
 
-            if (!acctNote.equals(account.getNote())) {
-                account.setNote(acctNote);
-                chgsMade = true;
-            }
+        if (!acctNote.equals(account.getNote())) {
+            account.setNote(acctNote);
+            chgsMade = true;
+        }
 
-            if (acctRefFrom != account.getRefFrom()) {
-                account.setRefFrom(acctRefFrom);
-                chgsMade = true;
-            }
+        if (acctRefFrom != account.getRefFrom()) {
+            account.setRefFrom(acctRefFrom);
+            chgsMade = true;
+        }
 
-            if (acctRefTo != account.getRefTo()) {
-                account.setRefTo(acctRefTo);
-                chgsMade = true;
-            }
+        if (acctRefTo != account.getRefTo()) {
+            account.setRefTo(acctRefTo);
+            chgsMade = true;
+        }
 
-            return chgsMade;
+        if (acctSequence != AccountListActivity.account.getSequence()) {
+            AccountListActivity.account.setSequence(acctSequence);
+            chgsMade = true;
+        }
+
+        return chgsMade;
 
 //            return false;
 //        }

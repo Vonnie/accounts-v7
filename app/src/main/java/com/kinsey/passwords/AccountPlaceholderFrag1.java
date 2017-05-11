@@ -2,9 +2,7 @@ package com.kinsey.passwords;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -59,7 +57,6 @@ public class AccountPlaceholderFrag1 extends Fragment {
     private String acctCorpWebsite = "";
     private String acctUserName = "";
     private String acctUserEmail = "";
-    private int acctSequence = 0;
     private boolean isReadyForUpdates = false;
     private int numTries = 0;
 
@@ -72,8 +69,6 @@ public class AccountPlaceholderFrag1 extends Fragment {
     public interface OnAccountListener {
         void onAccount1Instance();
         void onWebsiteRequest(String website);
-        void onWebpage();
-        void offWebpage();
     }
 
 
@@ -138,30 +133,29 @@ public class AccountPlaceholderFrag1 extends Fragment {
 
 
 
-        mImgWebView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                mListener.onWebsiteRequest(mCorpWebsiteTextView.getText().toString());
-
-//                Intent detailIntent = new Intent(getActivity(), WebViewActivity.class);
-//                detailIntent.putExtra(WebViewActivity.class.getSimpleName(), mCorpWebsiteTextView.getText().toString());
-////                Log.d(TAG, "onClick: website " + account.getCorpWebsite());
-////                Log.d(TAG, "onClick: wv class " + WebViewActivity.class.getSimpleName());
-//                mListener.onWebpage();
-//                startActivityForResult(detailIntent, AccountsContract.ACCOUNT_ACTION_WEBPAGE);
-
-            }
-        });
+//        mImgWebView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                mListener.onWebsiteRequest(mCorpWebsiteTextView.getText().toString());
+//
+////                Intent detailIntent = new Intent(getActivity(), WebViewActivity.class);
+////                detailIntent.putExtra(WebViewActivity.class.getSimpleName(), mCorpWebsiteTextView.getText().toString());
+//////                Log.d(TAG, "onClick: website " + account.getCorpWebsite());
+//////                Log.d(TAG, "onClick: wv class " + WebViewActivity.class.getSimpleName());
+////                mListener.onWebpage();
+////                startActivityForResult(detailIntent, AccountsContract.ACCOUNT_ACTION_WEBPAGE);
+//
+//            }
+//        });
         return rootView;
     }
 
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        mListener.offWebpage();
-    }
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//    }
 
     private void setupPage1(View view) {
 
@@ -170,7 +164,6 @@ public class AccountPlaceholderFrag1 extends Fragment {
         mImgWebView = (ImageButton) view.findViewById(R.id.acc_img_website);
         mUserNameTextView = (EditText) view.findViewById(R.id.acc_user_name);
         mUserEmailTextView = (EditText) view.findViewById(R.id.acc_user_email);
-        mSeqTextView = (EditText) view.findViewById(R.id.acc_seq);
         mAccountIdTextView = (TextView) view.findViewById(R.id.acc_account_id);
         mActvyDtTextView = (TextView) view.findViewById(R.id.acc_actvy_date);
     }
@@ -181,24 +174,24 @@ public class AccountPlaceholderFrag1 extends Fragment {
 //            Log.d(TAG, "setupPage1: account is null");
 //            return;
 //        }
-        if (!isReadyForUpdates) {
-            new CountDownTimer(10000, 1000) {
-
-                public void onTick(long millisUntilFinished) {
-//                    mTextField.setText("seconds remaining: " + millisUntilFinished / 1000);
-                }
-
-                public void onFinish() {
-//                    mTextField.setText("done!");
-                }
-            }.start();
-
-            if (!isReadyForUpdates) {
-                Log.d(TAG, "fillPage: unable to update");
-                return;
-            }
-//            mListener.onAccount1Instance();
-        }
+//        if (!isReadyForUpdates) {
+//            new CountDownTimer(10000, 1000) {
+//
+//                public void onTick(long millisUntilFinished) {
+////                    mTextField.setText("seconds remaining: " + millisUntilFinished / 1000);
+//                }
+//
+//                public void onFinish() {
+////                    mTextField.setText("done!");
+//                }
+//            }.start();
+//
+//            if (!isReadyForUpdates) {
+//                Log.d(TAG, "fillPage: unable to update");
+//                return;
+//            }
+////            mListener.onAccount1Instance();
+//        }
 
         Log.d(TAG, "fillPage1: corpname " + AccountListActivity.account.getCorpName());
         Log.d(TAG, "fillPage1: account " + AccountListActivity.account);
@@ -212,12 +205,6 @@ public class AccountPlaceholderFrag1 extends Fragment {
         mUserNameTextView.setError(null);
         mUserEmailTextView.setText(AccountListActivity.account.getUserEmail());
         mUserEmailTextView.setError(null);
-
-        if (AccountListActivity.account.getSequence() == 0) {
-            mSeqTextView.setText("");
-        } else {
-            mSeqTextView.setText(String.valueOf(AccountListActivity.account.getSequence()));
-        }
 
         mAccountIdTextView.setText("Account Id: " + String.valueOf(AccountListActivity.account.getPassportId()));
 
@@ -235,11 +222,6 @@ public class AccountPlaceholderFrag1 extends Fragment {
         acctUserName = mUserNameTextView.getText().toString();
         Log.d(TAG, "loadFromMap: username " + acctUserName);
         acctUserEmail = mUserEmailTextView.getText().toString();
-        if (mSeqTextView.getText().toString().equals("")) {
-            acctSequence = 0;
-        } else {
-            acctSequence = Integer.parseInt(mSeqTextView.getText().toString());
-        }
     }
 
 
@@ -277,11 +259,6 @@ public class AccountPlaceholderFrag1 extends Fragment {
 
         if (!acctUserEmail.equals(AccountListActivity.account.getUserEmail())) {
             AccountListActivity.account.setUserEmail(acctUserEmail);
-            chgsMade = true;
-        }
-
-        if (acctSequence != AccountListActivity.account.getSequence()) {
-            AccountListActivity.account.setSequence(acctSequence);
             chgsMade = true;
         }
 
