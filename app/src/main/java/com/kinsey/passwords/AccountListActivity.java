@@ -27,11 +27,9 @@ import android.widget.Toast;
 import com.kinsey.passwords.items.Account;
 import com.kinsey.passwords.items.AccountsContract;
 import com.kinsey.passwords.items.MyDataObject;
-import com.kinsey.passwords.items.SearchesContract;
 import com.kinsey.passwords.items.Suggest;
 import com.kinsey.passwords.items.SuggestsContract;
 import com.kinsey.passwords.provider.AccountRecyclerViewAdapter;
-import com.kinsey.passwords.provider.AccountSearchLoaderCallbacks;
 import com.kinsey.passwords.provider.RetainedFragment;
 import com.kinsey.passwords.provider.SectionsPagerAdapter;
 import com.kinsey.passwords.tools.AppDialog;
@@ -49,7 +47,6 @@ import java.util.Date;
 import java.util.List;
 
 import static com.kinsey.passwords.MainActivity.DEFAULT_APP_DIRECTORY;
-import static com.kinsey.passwords.MainActivity.SEARCH_LOADER_ID;
 import static com.kinsey.passwords.MainActivity.format_ymdtime;
 
 public class AccountListActivity extends AppCompatActivity
@@ -338,6 +335,12 @@ public class AccountListActivity extends AppCompatActivity
 //            } else {
 //                Log.d(TAG, "onCreate: has mSectionsPagerAdapter class ");
 //            }
+
+
+
+        if (accountSelectedPos != -1) {
+            accountMode = AccountsContract.ACCOUNT_ACTION_CHG;
+        }
 
 
         if (mViewPager.getTag().equals("land")) {
@@ -897,6 +900,12 @@ public class AccountListActivity extends AppCompatActivity
                     Toast.LENGTH_LONG).show();
             return;
         }
+        if (accountSelectedPos == -1) {
+            Toast.makeText(this,
+                    "Must select an account to delete",
+                    Toast.LENGTH_LONG).show();
+            return;
+        }
         FragmentManager fragmentManager = getSupportFragmentManager();
         AppDialog newFragment = AppDialog.newInstance();
         Bundle args = new Bundle();
@@ -1004,25 +1013,25 @@ public class AccountListActivity extends AppCompatActivity
             return;
         }
 
+        if (fragListPos == -1) {
+            mViewPager.setCurrentItem(frag1Pos);
+        } else {
+            mViewPager.setCurrentItem(fragListPos);
+        }
 
         if (accountMode == AccountsContract.ACCOUNT_ACTION_ADD) {
             fragList.saveAccount(getApplicationContext(), true);
+            accountSelectById = true;
+            accountSelectedId = account.getId();
+            accountMode = AccountsContract.ACCOUNT_ACTION_CHG;
             Toast.makeText(AccountListActivity.this,
                     "Account entry added to database",
                     Toast.LENGTH_LONG).show();
         } else {
             fragList.saveAccount(getApplicationContext(), false);
-            accountSelectById = true;
-            accountSelectedId = account.getId();
             Toast.makeText(AccountListActivity.this,
                     "Account entry updated to database",
                     Toast.LENGTH_LONG).show();
-        }
-        accountMode = AccountsContract.ACCOUNT_ACTION_CHG;
-        if (fragListPos == -1) {
-            mViewPager.setCurrentItem(frag1Pos);
-        } else {
-            mViewPager.setCurrentItem(fragListPos);
         }
 
         Log.d(TAG, "saveAccount: ids: " + account.getId() + ":" + account.getPassportId());
@@ -1445,16 +1454,16 @@ public class AccountListActivity extends AppCompatActivity
         Toast.makeText(AccountListActivity.this,
                 msg, Toast.LENGTH_LONG).show();
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        AppDialog newFragment = AppDialog.newInstance();
-        Bundle args = new Bundle();
-        args.putInt(AppDialog.DIALOG_ID, AppDialog.DIALOG_ID_ASK_IF_NEED_DICTIONARY_REBUILD);
-        args.putInt(AppDialog.DIALOG_TYPE, AppDialog.DIALOG_YES_NO);
-        args.putString(AppDialog.DIALOG_MESSAGE, "Ask to rebuild search dictionary");
-        args.putString(AppDialog.DIALOG_SUB_MESSAGE, "Accounts changed, rebuild dictionary to sync up?");
-
-        newFragment.setArguments(args);
-        newFragment.show(fragmentManager, "dialog");
+//        FragmentManager fragmentManager = getSupportFragmentManager();
+//        AppDialog newFragment = AppDialog.newInstance();
+//        Bundle args = new Bundle();
+//        args.putInt(AppDialog.DIALOG_ID, AppDialog.DIALOG_ID_ASK_IF_NEED_DICTIONARY_REBUILD);
+//        args.putInt(AppDialog.DIALOG_TYPE, AppDialog.DIALOG_YES_NO);
+//        args.putString(AppDialog.DIALOG_MESSAGE, "Ask to rebuild search dictionary");
+//        args.putString(AppDialog.DIALOG_SUB_MESSAGE, "Accounts changed, rebuild dictionary to sync up?");
+//
+//        newFragment.setArguments(args);
+//        newFragment.show(fragmentManager, "dialog");
 
     }
 
@@ -2028,6 +2037,7 @@ public class AccountListActivity extends AppCompatActivity
         account = new Account();
         accountMode = AccountsContract.ACCOUNT_ACTION_ADD;
         accountSelectedPos = -1;
+        updatePages();
 //        fragList.resetSelection();
 //        getLoaderManager().restartLoader(ACCOUNT_LOADER_ID, null, this);
     }
@@ -2100,10 +2110,10 @@ public class AccountListActivity extends AppCompatActivity
 //                    clearFrag();
 //                }
                 break;
-            case AppDialog.DIALOG_ID_ASK_IF_NEED_DICTIONARY_REBUILD:
-//                Log.d(TAG, "onPositiveDialogResult: rebuild req");
-                loadSearchDB();
-                break;
+//            case AppDialog.DIALOG_ID_ASK_IF_NEED_DICTIONARY_REBUILD:
+////                Log.d(TAG, "onPositiveDialogResult: rebuild req");
+//                loadSearchDB();
+//                break;
             case AppDialog.DIALOG_ID_CONFIRM_TO_IMPORT:
                 ImportAccountDB();
                 break;
@@ -2120,25 +2130,25 @@ public class AccountListActivity extends AppCompatActivity
 //        Log.d(TAG, "onNegativeDialogResult: delete cancel");
     }
 
-    private void loadSearchDB() {
-        deleteAllSearchItems();
-        AccountSearchLoaderCallbacks loaderAcctCallbacks = new AccountSearchLoaderCallbacks(this);
-        getLoaderManager().restartLoader(SEARCH_LOADER_ID, null, loaderAcctCallbacks);
-        Toast.makeText(this,
-                "Search Dictionary DB built",
-                Toast.LENGTH_LONG).show();
-
-    }
-
-    private void deleteAllSearchItems() {
-//		String selectionClause = SearchManager.SUGGEST_COLUMN_FLAGS + " = ?";
-//		String[] selectionArgs = { "account" };
-//        Log.d(TAG, "deleteAllSuggestions: delUri " + SearchesContract.CONTENT_URI_TRUNCATE);
-        getContentResolver().delete(
-                SearchesContract.CONTENT_URI_TRUNCATE,
-                null, null);
-        getLoaderManager().restartLoader(SEARCH_LOADER_ID, null, null);
-    }
+//    private void loadSearchDB() {
+//        deleteAllSearchItems();
+//        AccountSearchLoaderCallbacks loaderAcctCallbacks = new AccountSearchLoaderCallbacks(this);
+//        getLoaderManager().restartLoader(SEARCH_LOADER_ID, null, loaderAcctCallbacks);
+//        Toast.makeText(this,
+//                "Search Dictionary DB built",
+//                Toast.LENGTH_LONG).show();
+//
+//    }
+//
+//    private void deleteAllSearchItems() {
+////		String selectionClause = SearchManager.SUGGEST_COLUMN_FLAGS + " = ?";
+////		String[] selectionArgs = { "account" };
+////        Log.d(TAG, "deleteAllSuggestions: delUri " + SearchesContract.CONTENT_URI_TRUNCATE);
+//        getContentResolver().delete(
+//                SearchesContract.CONTENT_URI_TRUNCATE,
+//                null, null);
+//        getLoaderManager().restartLoader(SEARCH_LOADER_ID, null, null);
+//    }
 
     private void confirmImport() {
         FragmentManager fragmentManager = getSupportFragmentManager();

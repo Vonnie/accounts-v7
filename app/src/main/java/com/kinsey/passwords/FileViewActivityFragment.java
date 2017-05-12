@@ -40,6 +40,9 @@ public class FileViewActivityFragment extends Fragment {
         boolean retSuccess = true;
         File file = new File(MainActivity.DEFAULT_APP_DIRECTORY
                 + "/accounts.json");
+        String loc = "file://" + file.getAbsolutePath();
+        tvLocation.setText(loc);
+
         if (!file.exists()) {
 //            jsonViewListener.onSetTitle("Export from Home...");
 //			tvContent.setText("json export file not found");
@@ -47,9 +50,7 @@ public class FileViewActivityFragment extends Fragment {
         } else {
             try {
 
-                String loc = "file://" + file.getAbsolutePath();
                 webView.loadUrl(loc);
-                tvLocation.setText(loc);
 
             } catch (Exception e) {
                 Log.e(TAG, "inputStream error " + e.getMessage());

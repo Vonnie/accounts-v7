@@ -66,6 +66,9 @@
         \nTip: Use the export as the backup of your app data. If the databases is uninstalled, import of the previously exported file. Share exported file to email or Dropbox.
         \nPasswords are generated with a capital letter, a number, and all letters are either from left or right-hand keyboard keys.
         \nUse the menu to add an account, see a account list, search accounts, generate passwords.
+        \n\nImportant note:
+        Backup your data, by export to a file. This file goes to your storage. When you view this exported data, it shows where it is located. Also, it gives an option to send to email or dropbox. This accessed on Account List, then select at the bottom for a list, to request View Exported Accounts list
+        Personally, I like to send to my dropbox. Unfortunately, a few times when not under the app, the database was wiped out. Using this import, restores this data. Make sure to keep it up-to-date.
     </string>
     <string name="menu_search">Search Accounts</string>
     <string name="accedit_ref_from_label">Prior closed into this account Id</string>
@@ -88,4 +91,5 @@
     <string name="acct_show_website">Show Website</string>
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="accedit_seq_cap">Seq for custom sort</string>
+    <string name="menu_link_internet">Link to Internet</string>
 </resources>
