@@ -38,7 +38,7 @@ public class FileViewActivity extends AppCompatActivity {
                                 ).show();
             }
         });
-        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
@@ -46,6 +46,14 @@ public class FileViewActivity extends AppCompatActivity {
         setResult(Activity.RESULT_OK);
         finish();
         super.onBackPressed();
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        setResult(Activity.RESULT_OK);
+        finish();
+//        return super.onSupportNavigateUp();
+        return true;
     }
 
     private void shareExport() {

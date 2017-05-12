@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -72,12 +73,12 @@ public class AccountListActivityFragment extends Fragment
         return fragment;
     }
 
-//    @Override
-//    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-//        Log.d(TAG, "onActivityCreated: starts loader_id " + ACCOUNT_LOADER_ID);
-//        super.onActivityCreated(savedInstanceState);
-//        getLoaderManager().initLoader(ACCOUNT_LOADER_ID, null, this);
-//    }
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        Log.d(TAG, "onActivityCreated: starts loader_id " + ACCOUNT_LOADER_ID);
+        super.onActivityCreated(savedInstanceState);
+        getLoaderManager().initLoader(ACCOUNT_LOADER_ID, null, this);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -125,7 +126,7 @@ public class AccountListActivityFragment extends Fragment
 //        Log.d(TAG, "onCreateView: returning adapter count: " + mAccountAdapter.getItemCount());
         Cursor cursor = null;
         Log.d(TAG, "onCreateView: abt to init loader: " + accountSelectedPos);
-        getLoaderManager().initLoader(ACCOUNT_LOADER_ID, null, this);
+//        getLoaderManager().initLoader(ACCOUNT_LOADER_ID, null, this);
 
         Log.d(TAG, "onCreateView: abt to call adapter sel: " + accountSelectedPos);
         mAccountAdapter = new AccountRecyclerViewAdapter(getContext(), cursor,

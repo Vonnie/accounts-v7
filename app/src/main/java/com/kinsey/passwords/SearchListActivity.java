@@ -1,11 +1,11 @@
 package com.kinsey.passwords;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.SearchView;
 
-import com.kinsey.passwords.items.Account;
 import com.kinsey.passwords.provider.SearchRecyclerViewAdapter;
 
 public class SearchListActivity extends AppCompatActivity
@@ -67,6 +67,23 @@ public class SearchListActivity extends AppCompatActivity
 //        return true;
 //    }
 
+
+    @Override
+    public void onBackPressed() {
+//        super.onBackPressed();
+        setResult(Activity.RESULT_OK);
+        finish();
+    }
+
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        setResult(Activity.RESULT_OK);
+        finish();
+//        return super.onSupportNavigateUp();
+        return true;
+    }
+
     @Override
     public void onLoadSearchClicked() {
 
@@ -77,13 +94,4 @@ public class SearchListActivity extends AppCompatActivity
 
     }
 
-    @Override
-    public void onAccountEditClick(Account account) {
-
-    }
-
-    @Override
-    public void onAccountDeleteClick(Account account) {
-
-    }
 }

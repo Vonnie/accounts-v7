@@ -13,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.kinsey.passwords.items.Account;
 import com.kinsey.passwords.items.AccountsContract;
 import com.kinsey.passwords.items.SearchesContract;
 import com.kinsey.passwords.provider.SearchRecyclerViewAdapter;
@@ -128,13 +127,4 @@ public class SearchListActivityFragment extends Fragment
         mActionListener = null;
     }
 
-    @Override
-    public void onAccountEditClick(Account account) {
-
-    }
-
-    @Override
-    public void onAccountDeleteClick(Account account) {
-
-    }
 }

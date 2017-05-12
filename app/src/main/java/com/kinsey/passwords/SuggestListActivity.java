@@ -26,6 +26,7 @@ public class SuggestListActivity extends AppCompatActivity
         implements CursorRecyclerViewAdapter.OnSuggestClickListener,
         AppDialog.DialogEvents {
     private static final String TAG = "SuggestListActivity";
+    public static int suggestSelectedPos = -1;
 
     // whether or not the activity is i 2-pane mode
     // i.e. running in landscape on a tablet
@@ -65,6 +66,15 @@ public class SuggestListActivity extends AppCompatActivity
 //        super.onBackPressed();
         setResult(Activity.RESULT_OK);
         finish();
+    }
+
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        setResult(Activity.RESULT_OK);
+        finish();
+//        return super.onSupportNavigateUp();
+        return true;
     }
 
     private void generatePasswords(int passwordLen) {
@@ -209,6 +219,8 @@ public class SuggestListActivity extends AppCompatActivity
                 contentResolver.update(SuggestsContract.buildIdUri(item.getId()), values, null, null);
             }
         }
+
+        suggestSelectedPos += 1;
     }
 
     @Override
@@ -266,6 +278,8 @@ public class SuggestListActivity extends AppCompatActivity
                 contentResolver.update(SuggestsContract.buildIdUri(item.getId()), values, null, null);
             }
         }
+
+        suggestSelectedPos -= 1;
     }
 
     @Override

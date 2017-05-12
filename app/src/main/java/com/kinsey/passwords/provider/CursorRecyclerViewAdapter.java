@@ -1,6 +1,7 @@
 package com.kinsey.passwords.provider;
 
 import android.database.Cursor;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +13,10 @@ import android.widget.TextView;
 import com.kinsey.passwords.R;
 import com.kinsey.passwords.items.Suggest;
 import com.kinsey.passwords.items.SuggestsContract;
+
+import static com.kinsey.passwords.AccountListActivity.account;
+import static com.kinsey.passwords.AccountListActivity.accountSelectedPos;
+import static com.kinsey.passwords.SuggestListActivity.suggestSelectedPos;
 
 /**
  * Created by Yvonne on 2/21/2017.
@@ -47,7 +52,7 @@ public class CursorRecyclerViewAdapter extends RecyclerView.Adapter<CursorRecycl
     }
 
     @Override
-    public void onBindViewHolder(PasswordViewHolder holder, int position) {
+    public void onBindViewHolder(PasswordViewHolder holder, final int position) {
 //        Log.d(TAG, "onBindViewHolder: starts");
 
 //        if (mCursor == null) {
@@ -79,6 +84,33 @@ public class CursorRecyclerViewAdapter extends RecyclerView.Adapter<CursorRecycl
             holder.upButton.setVisibility(View.VISIBLE);  // TODO add onClick listener
             holder.downButton.setVisibility(View.VISIBLE);  // TODO add onClick listener
             holder.deleteButton.setVisibility(View.VISIBLE); // TODO add onClick listener
+
+            if (suggestSelectedPos == position) {
+                // Here I am just highlighting the background
+                holder.itemView.setBackgroundColor(Color.GREEN);
+            } else {
+                holder.itemView.setBackgroundColor(Color.TRANSPARENT);
+            }
+
+            holder.mView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mListener == null) {
+                        Log.d(TAG, "onClick: listener is null");
+                        return;
+                    }
+                    if (suggestSelectedPos != -1) {
+                        if (suggestSelectedPos < getItemCount()) {
+                            notifyItemChanged(suggestSelectedPos);
+                        }
+                    }
+                    suggestSelectedPos = position;
+                    notifyItemChanged(suggestSelectedPos);
+
+                    Log.d(TAG, "onClick: selected " + accountSelectedPos + ":" + account.getId());
+                }
+            });
+
 
             View.OnClickListener buttonListener = new View.OnClickListener() {
 
@@ -154,7 +186,7 @@ public class CursorRecyclerViewAdapter extends RecyclerView.Adapter<CursorRecycl
 
     public static class PasswordViewHolder extends RecyclerView.ViewHolder {
         private static final String TAG = "PasswordViewHolder";
-
+        public final View mView;
         TextView password = null;
         ImageButton upButton = null;
         ImageButton downButton = null;
@@ -164,7 +196,7 @@ public class CursorRecyclerViewAdapter extends RecyclerView.Adapter<CursorRecycl
         public PasswordViewHolder(View itemView) {
             super(itemView);
 //        Log.d(TAG, "TaskViewHolder: starts");
-
+            mView = itemView;
             this.password = (TextView) itemView.findViewById(R.id.tli_password);
             this.upButton = (ImageButton) itemView.findViewById(R.id.srli_acct_edit);
             this.downButton = (ImageButton) itemView.findViewById(R.id.tli_suggest_down);

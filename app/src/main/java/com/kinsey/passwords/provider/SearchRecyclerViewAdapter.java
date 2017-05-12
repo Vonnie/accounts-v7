@@ -30,8 +30,6 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
     private OnAccountClickListener mListener;
 
     public interface OnAccountClickListener {
-        void onAccountEditClick(Account account);
-        void onAccountDeleteClick(Account account);
     }
 
     private static String pattern_mdy_display = "M/d/y";
@@ -245,7 +243,7 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
 
     public static class SearchViewHolder extends RecyclerView.ViewHolder {
         private static final String TAG = "SearchViewHolder";
-
+        public final View mView;
         TextView corp_name = null;
         TextView website = null;
         TextView userName = null;
@@ -263,7 +261,7 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
         public SearchViewHolder(View itemView) {
             super(itemView);
 //        Log.d(TAG, "SearchViewHolder: starts");
-
+            mView = itemView;
             this.corp_name = (TextView) itemView.findViewById(R.id.srli_corp_name);
             this.website = (TextView) itemView.findViewById(R.id.srli_website);
             this.userName = (TextView) itemView.findViewById(R.id.srli_user_name);

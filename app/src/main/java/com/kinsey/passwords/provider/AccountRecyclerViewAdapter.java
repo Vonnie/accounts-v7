@@ -124,12 +124,16 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
 
             if (accountSelectById) {
                 if (accountSelectedId == account.getId()) {
-                    notifyItemChanged(accountSelectedPos);
+//                    if (accountSelectedPos != -1) {
+//                        if (accountSelectedPos < getItemCount()) {
+//                            notifyItemChanged(accountSelectedPos);
+//                        }
+//                    }
                     accountSelectedPos = position;
                     accountSelectById = false;
                     accountSelectedId = -1;
                     holder.itemView.setBackgroundColor(Color.GREEN);
-                    notifyItemChanged(accountSelectedPos);
+//                    notifyItemChanged(accountSelectedPos);
                 } else {
                     holder.itemView.setBackgroundColor(Color.TRANSPARENT);
                 }

@@ -740,6 +740,7 @@ public class AccountListActivity extends AppCompatActivity
                     }
                 }
 
+                mActivityStart = false;
 //                mRetainedFragment.setData(collectMyData());
 
             } catch (Exception e) {
