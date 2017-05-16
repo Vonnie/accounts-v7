@@ -236,6 +236,10 @@ public class AccountPlaceholderFrag3 extends Fragment {
 //        Log.d(TAG, "fillPage3: corpname " + account.getCorpName());
         rowId = account.getId();
 //        this.account = account;
+
+        if (mNoteTextView == null) {
+            return;
+        }
         mNoteTextView.setText(account.getNote());
         Log.d(TAG, "fillPage: note " + account.getNote());
 

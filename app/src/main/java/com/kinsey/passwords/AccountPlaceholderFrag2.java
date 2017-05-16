@@ -195,6 +195,10 @@ public class AccountPlaceholderFrag2 extends Fragment {
 //        Log.d(TAG, "fillPage2: corpname " + account.getCorpName());
         rowId = account.getId();
 //        this.account = account;
+
+        if (mDtePickOpen == null) {
+            return;
+        }
         mDtePickOpen.setMaxDate(new Date().getTime());
         mDtePickOpen.setMinDate(0);
         Date dte;

@@ -197,6 +197,9 @@ public class AccountPlaceholderFrag1 extends Fragment {
         Log.d(TAG, "fillPage1: account " + AccountListActivity.account);
         rowId = AccountListActivity.account.getId();
 
+        if (mCorpNameTextView == null) {
+            return;
+        }
         mCorpNameTextView.setText(AccountListActivity.account.getCorpName());
         mCorpNameTextView.setError(null);
         mCorpWebsiteTextView.setText(AccountListActivity.account.getCorpWebsite());
@@ -456,6 +459,10 @@ public class AccountPlaceholderFrag1 extends Fragment {
 //        this.account = account;
 //    }
 
+
+    public void setCorpNameFocus() {
+        mCorpNameTextView.requestFocus();
+    }
 
     public int getNumTries() {
         return numTries;

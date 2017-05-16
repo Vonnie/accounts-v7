@@ -5,9 +5,15 @@
     <item
         android:id="@+id/menuacct_internet"
         android:icon="@mipmap/ic_action_globe"
-        android:orderInCategory="103"
+        android:orderInCategory="104"
         android:title="@string/menu_link_internet"
         app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/menuacct_next"
+        android:icon="@mipmap/ic_action_arrow_right"
+        android:orderInCategory="101"
+        android:title="@string/menuacct_next"
+        app:showAsAction="always" />
     <item
         android:id="@+id/menuacct_delete"
         android:icon="@android:drawable/ic_menu_delete"
@@ -16,13 +22,13 @@
     <item
         android:id="@+id/menuacct_save"
         android:icon="@android:drawable/ic_menu_save"
-        android:orderInCategory="101"
+        android:orderInCategory="102"
         android:title="@string/menu_save"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/menuacct_add"
         android:icon="@mipmap/ic_action_add"
-        android:orderInCategory="102"
+        android:orderInCategory="103"
         android:title="@string/menu_add_account"
         app:showAsAction="ifRoom" />
 </menu>

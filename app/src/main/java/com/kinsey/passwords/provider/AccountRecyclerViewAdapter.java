@@ -213,6 +213,14 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
             } else {
                 holder.acctId.setText("AcctId:" + String.valueOf(account.getPassportId()));
             }
+
+            if (holder.website != null) {
+                holder.website.setText(account.getCorpWebsite());
+            }
+
+            if (holder.user_email != null) {
+                holder.user_email.setText(account.getUserEmail());
+            }
 //            holder.editButton.setVisibility(View.VISIBLE);
 //            holder.deleteButton.setVisibility(View.VISIBLE);
 
@@ -379,7 +387,9 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
         public final View mView;
         TextView corp_name = null;
         TextView user_name = null;
+        TextView user_email = null;
         TextView open_date = null;
+        TextView website = null;
         TextView seq = null;
         TextView acctId = null;
         ImageButton upAcctBtn = null;
@@ -394,7 +404,9 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
             mView = itemView;
             this.corp_name = (TextView) itemView.findViewById(R.id.srli_corp_name);
             this.user_name = (TextView) itemView.findViewById(R.id.srli_user_name);
+            this.user_email = (TextView) itemView.findViewById(R.id.srli_user_email);
             this.open_date = (TextView) itemView.findViewById(R.id.tli_open_date);
+            this.website = (TextView) itemView.findViewById(R.id.tli_website);
             this.seq = (TextView) itemView.findViewById(R.id.tli_seq);
             this.acctId = (TextView) itemView.findViewById(R.id.tli_acct_id);
             this.upAcctBtn = (ImageButton) itemView.findViewById(R.id.tli_account_up);

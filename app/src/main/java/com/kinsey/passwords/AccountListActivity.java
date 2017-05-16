@@ -218,6 +218,7 @@ public class AccountListActivity extends AppCompatActivity
 //                                        editAccountRequest(null);
 //                                        mListener.onListSuggestsClick();
 
+                                        mActivityStart = true;
                                         FragmentManager fragmentManager = getSupportFragmentManager();
                                         AppDialog newFragment = AppDialog.newInstance();
                                         Bundle args = new Bundle();
@@ -887,6 +888,9 @@ public class AccountListActivity extends AppCompatActivity
             case R.id.menuacct_internet:
                 linkToInternet();
                 break;
+            case R.id.menuacct_next:
+                nextPage();
+                break;
         }
 
         return super.onOptionsItemSelected(item);
@@ -1171,6 +1175,23 @@ public class AccountListActivity extends AppCompatActivity
 //    public void onLoaderReset(Loader<Cursor> loader) {
 //
 //    }
+
+
+    private void nextPage() {
+        if (fragListPos == -1) {
+            if (mViewPager.getCurrentItem() == 2) {
+                mViewPager.setCurrentItem(0);
+            } else {
+                mViewPager.setCurrentItem(mViewPager.getCurrentItem() + 1);
+            }
+        } else {
+            if (mViewPager.getCurrentItem() == 3) {
+                mViewPager.setCurrentItem(0);
+            } else {
+                mViewPager.setCurrentItem(mViewPager.getCurrentItem() + 1);
+            }
+        }
+    }
 
     @Override
     public void onAccountRetreived(Account account) {
@@ -1567,6 +1588,7 @@ public class AccountListActivity extends AppCompatActivity
     }
 
     private void viewAccountsFile() {
+        Log.d(TAG, "viewAccountsFile: request request view exports");
         Intent detailIntent = new Intent(this, FileViewActivity.class);
 //        startActivity(detailIntent);
         startActivityForResult(detailIntent, AccountsContract.ACCOUNT_ACTION_VIEW_EXPORT);
@@ -1762,11 +1784,13 @@ public class AccountListActivity extends AppCompatActivity
 //        if (!mTwoPane && accountSortorder == AccountsContract.ACCOUNT_LIST_BY_SEQUENCE) {
         if (fragListPos == -1) {
             mViewPager.setCurrentItem(frag1Pos);
+            frag1.setCorpNameFocus();
         } else {
 //            fragList.setViewerPos();
 //            myRecyclerView.findViewHolderForAdapterPosition(pos).itemView;
             if (accountMode == AccountsContract.ACCOUNT_ACTION_ADD) {
                 mViewPager.setCurrentItem(frag1Pos);
+                frag1.setCorpNameFocus();
             } else {
                 mViewPager.setCurrentItem(fragListPos);
             }
@@ -2223,6 +2247,7 @@ public class AccountListActivity extends AppCompatActivity
                 confirmImport();
                 break;
             case AppDialog.DIALOG_ACCT_LIST_VIEW_EXPORT_FILE:
+                Log.d(TAG, "onActionRequestDialogResult: viewAccountsFile selected");
                 viewAccountsFile();
                 break;
             case AppDialog.DIALOG_ACCT_LIST_VIEW_SUGGESTIONS:
