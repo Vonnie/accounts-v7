@@ -183,30 +183,37 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
 //            holder.corp_.setText(mCursor.getString(mCursor.getColumnIndex(AccountsContract.Columns.CORP_WEBSITE_COL)));
 
             holder.corp_name.setText(account.getCorpName());
-            if (!holder.corp_name.getTag().equals(mContext.getString(R.string.tag_xlarge)) &&
-            (accountSortorder == AccountsContract.ACCOUNT_LIST_BY_CORP_NAME ||
-                    accountSortorder == AccountsContract.ACCOUNT_LIST_BY_SEQUENCE ||
-                    accountSortorder == AccountsContract.ACCOUNT_LIST_BY_OPEN_DATE)) {
-                holder.user_name.setVisibility(View.GONE);
-            } else {
-                holder.user_name.setText(account.getUserName());
-            }
-            if (holder.corp_name.getTag().equals(mContext.getString(R.string.tag_xlarge)) ||
-                    accountSortorder == AccountsContract.ACCOUNT_LIST_BY_OPEN_DATE) {
-                if (account.getOpenLong() == 0) {
-                    holder.open_date.setText("");
+            if (holder.user_name != null) {
+                if (!holder.corp_name.getTag().equals(mContext.getString(R.string.tag_xlarge)) &&
+                        !holder.corp_name.getTag().equals(mContext.getString(R.string.tag_large)) &&
+                        (accountSortorder == AccountsContract.ACCOUNT_LIST_BY_CORP_NAME ||
+                                accountSortorder == AccountsContract.ACCOUNT_LIST_BY_SEQUENCE ||
+                                accountSortorder == AccountsContract.ACCOUNT_LIST_BY_OPEN_DATE)) {
+                    holder.user_name.setVisibility(View.GONE);
                 } else {
-                    //            Date dte = new Date(item.getActvyLong());
-                    holder.open_date.setText(format_mdy_display.format(account.getOpenLong()));
+                    holder.user_name.setText(account.getUserName());
                 }
-            } else {
-                holder.open_date.setVisibility(View.GONE);
+            }
+            if (holder.open_date != null) {
+                if (holder.corp_name.getTag().equals(mContext.getString(R.string.tag_xlarge)) ||
+                        accountSortorder == AccountsContract.ACCOUNT_LIST_BY_OPEN_DATE) {
+                    if (account.getOpenLong() == 0) {
+                        holder.open_date.setText("");
+                    } else {
+                        //            Date dte = new Date(item.getActvyLong());
+                        holder.open_date.setText(format_mdy_display.format(account.getOpenLong()));
+                    }
+                } else {
+                    holder.open_date.setVisibility(View.GONE);
+                }
             }
 //            holder.seq.setVisibility(View.GONE);
-            if (holder.corp_name.getTag().equals(mContext.getString(R.string.tag_xlarge))) {
-                holder.seq.setText("Seq:" + String.valueOf(account.getSequence()));
-            } else {
-                holder.seq.setVisibility(View.GONE);
+            if (holder.seq != null) {
+                if (holder.corp_name.getTag().equals(mContext.getString(R.string.tag_xlarge))) {
+                    holder.seq.setText("Seq:" + String.valueOf(account.getSequence()));
+                } else {
+                    holder.seq.setVisibility(View.GONE);
+                }
             }
             if (accountSortorder == AccountsContract.ACCOUNT_LIST_BY_SEQUENCE) {
                 holder.acctId.setVisibility(View.GONE);

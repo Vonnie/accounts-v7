@@ -4,13 +4,13 @@
     tools:context="com.kinsey.passwords.MainActivity">
     <item
         android:id="@+id/menumain_search"
-        android:icon="@mipmap/ic_action_search"
+        android:icon="@drawable/selector_search"
         android:orderInCategory="102"
         android:title="@string/menu_search"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/menumain_showAccounts"
-        android:icon="@mipmap/ic_action_database"
+        android:icon="@drawable/selector_database"
         android:orderInCategory="103"
         android:title="@string/menu_accounts"
         app:showAsAction="always" />

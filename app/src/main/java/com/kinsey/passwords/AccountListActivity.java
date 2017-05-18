@@ -104,6 +104,7 @@ public class AccountListActivity extends AppCompatActivity
 
     boolean isUserPaging = true;
     boolean isRotated = false;
+    Menu menu;
 
     private OnListClickListener mListener;
 
@@ -174,6 +175,7 @@ public class AccountListActivity extends AppCompatActivity
                         "Account List, swipe to an item", Toast.LENGTH_LONG).show();
             }
         }
+
 
 
 //        Log.d(TAG, "onCreate: port " + mRetainedFragment.getData().getmSectionsPagerAdapter().instantiateItem(
@@ -823,6 +825,7 @@ public class AccountListActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+        this.menu = menu;
         getMenuInflater().inflate(R.menu.menu_account, menu);
         return true;
     }
@@ -849,21 +852,41 @@ public class AccountListActivity extends AppCompatActivity
 //    }
 
 
-//    public boolean onPrepareOptionsMenu(Menu menu)
-//    {
-//        MenuItem internet = menu.findItem(R.id.menuacct_internet);
-//
+    public boolean onPrepareOptionsMenu(Menu menu)
+    {
+        this.menu = menu;
+        if(accountSelectedPos == -1) {
+            setMenuItemEnabled(R.id.menuacct_delete, false);
+            if (accountMode == AccountsContract.ACCOUNT_ACTION_ADD) {
+                setMenuItemEnabled(R.id.menuacct_save, true);
+            } else {
+                setMenuItemEnabled(R.id.menuacct_save, false);
+            }
+            setMenuItemEnabled(R.id.menuacct_internet, false);
+        } else {
+            setMenuItemEnabled(R.id.menuacct_delete, true);
+            setMenuItemEnabled(R.id.menuacct_save, true);
+            if (account.getCorpWebsite().equals("")) {
+                setMenuItemEnabled(R.id.menuacct_internet, false);
+            } else {
+                setMenuItemEnabled(R.id.menuacct_internet, true);
+            }
+        }
+//        MenuItem deleteItem = menu.findItem(R.id.menuacct_delete);
+
 //        if(accountSelectedPos == -1)
 //        {
-//            internet.setVisible(false);
+////            deleteItem.setVisible(false);
+//            deleteItem.setEnabled(false);
 //        }
 //        else
 //        {
-//            internet.setVisible(true);
+////            deleteItem.setVisible(true);
+//            deleteItem.setEnabled(true);
 //        }
-//        internet.setVisible(true);
-//        return true;
-//    }
+////        internet.setVisible(true);
+        return true;
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -894,6 +917,16 @@ public class AccountListActivity extends AppCompatActivity
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+//            if (accountSelectedPos == -1) {
+//        setMenuItemEnabled(R.id.menuacct_delete, false);
+//    } else {
+//        setMenuItemEnabled(R.id.menuacct_delete, true);
+//    }
+    private void setMenuItemEnabled(int id, boolean blnSet) {
+        MenuItem item = menu.findItem(id);
+        item.setEnabled(blnSet);
     }
 
     private void deleteAccount() {
@@ -1023,6 +1056,12 @@ public class AccountListActivity extends AppCompatActivity
             mViewPager.setCurrentItem(fragListPos);
         }
 
+        if (account.getCorpWebsite().equals("")) {
+            setMenuItemEnabled(R.id.menuacct_internet, false);
+        } else {
+            setMenuItemEnabled(R.id.menuacct_internet, true);
+        }
+
         if (accountMode == AccountsContract.ACCOUNT_ACTION_ADD) {
             fragList.saveAccount(getApplicationContext(), true);
             accountSelectById = true;
@@ -1049,23 +1088,19 @@ public class AccountListActivity extends AppCompatActivity
                     "Must select an account with a website",
                     Toast.LENGTH_LONG).show();
         } else if (account.getCorpWebsite().equals("")
-                || account.getCorpWebsite().equals("http://")){
+                || account.getCorpWebsite().toLowerCase().equals("http://")) {
             Toast.makeText(AccountListActivity.this,
                     "Selected account must have a website",
                     Toast.LENGTH_LONG).show();
         } else {
-
-            if (account.getCorpWebsite().toLowerCase().startsWith("http")) {
+            if (!account.getCorpWebsite().equals("")) {
                 mActivityStart = true;
                 webview.loadUrl(account.getCorpWebsite());
             } else {
-                if (!account.getCorpWebsite().equals("")) {
-                    mActivityStart = true;
-                    webview.loadUrl(account.getCorpWebsite());
-                } else {
-                    return;
-                }
+                return;
             }
+        }
+    }
 
 ////            Uri uri = Uri.parse(account.getCorpWebsite());
 ////            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
@@ -1078,8 +1113,8 @@ public class AccountListActivity extends AppCompatActivity
 ////                Log.d(TAG, "onClick: wv class " + WebViewActivity.class.getSimpleName());
 //            startActivityForResult(detailIntent, AccountsContract.ACCOUNT_ACTION_WEBPAGE);
 ////            startActivity(detailIntent);
-        }
-    }
+//        }
+//    }
 //
 //    private void setupAdapter() {
 ////        Cursor cursor = createCursor();
@@ -1602,6 +1637,9 @@ public class AccountListActivity extends AppCompatActivity
         accountMode = AccountsContract.ACCOUNT_ACTION_ADD;
         this.account = new Account();
         accountSelectedPos = -1;
+        setMenuItemEnabled(R.id.menuacct_delete, false);
+        setMenuItemEnabled(R.id.menuacct_save, true);
+        setMenuItemEnabled(R.id.menuacct_internet, false);
         updatePages();
 
 //        isUserPaging = false;
@@ -1681,6 +1719,13 @@ public class AccountListActivity extends AppCompatActivity
 //        Log.d(TAG, "onAccountListSelect: selected pos " + selected_position);
 //        fragList.setSelected_position(selected_position);
 //        accountSelectedPos = selected_position;
+        setMenuItemEnabled(R.id.menuacct_delete, true);
+        setMenuItemEnabled(R.id.menuacct_save, true);
+        if (account.getCorpWebsite().equals("")) {
+            setMenuItemEnabled(R.id.menuacct_internet, false);
+        } else {
+            setMenuItemEnabled(R.id.menuacct_internet, true);
+        }
         this.account = account;
         updatePages();
     }
@@ -2060,6 +2105,10 @@ public class AccountListActivity extends AppCompatActivity
     private void clearAccount() {
         account = new Account();
         accountMode = AccountsContract.ACCOUNT_ACTION_ADD;
+        setMenuItemEnabled(R.id.menuacct_delete, false);
+        setMenuItemEnabled(R.id.menuacct_save, false);
+        setMenuItemEnabled(R.id.menuacct_internet, false);
+
         accountSelectedPos = -1;
         updatePages();
 //        fragList.resetSelection();

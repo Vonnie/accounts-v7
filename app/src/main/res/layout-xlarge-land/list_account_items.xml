@@ -27,18 +27,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/srli_corp_name" />
+        app:layout_constraintTop_toBottomOf="@+id/srli_corp_name"
+        android:layout_marginLeft="16dp" />
 
 
     <TextView
         android:id="@+id/srli_user_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-
         android:layout_marginLeft="8dp"
         android:layout_marginTop="0dp"
-        app:layout_constraintLeft_toRightOf="@+id/tli_website"
-        app:layout_constraintTop_toBottomOf="@+id/srli_corp_name" />
+        app:layout_constraintRight_toLeftOf="@+id/tli_open_date"
+        app:layout_constraintTop_toBottomOf="@+id/srli_corp_name"
+        android:layout_marginRight="8dp" />
 
     <TextView
         android:id="@+id/tli_open_date"
@@ -46,20 +47,9 @@
         android:layout_height="wrap_content"
         android:layout_marginRight="8dp"
         android:layout_marginTop="0dp"
-        app:layout_constraintRight_toLeftOf="@+id/tli_seq"
+        app:layout_constraintRight_toLeftOf="@+id/tli_acct_id"
         app:layout_constraintTop_toBottomOf="@+id/srli_corp_name"
         android:layout_marginLeft="16dp" />
-
-    <TextView
-        android:id="@+id/tli_seq"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="0dp"
-        app:layout_constraintRight_toLeftOf="@+id/tli_acct_id"
-        app:layout_constraintTop_toBottomOf="@+id/srli_corp_name" />
-
 
     <TextView
         android:id="@+id/tli_acct_id"
