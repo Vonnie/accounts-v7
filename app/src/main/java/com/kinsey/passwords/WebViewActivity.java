@@ -6,16 +6,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.webkit.JsResult;
 import android.webkit.WebChromeClient;
+import android.webkit.WebResourceRequest;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
-public class WebViewActivity  
+public class WebViewActivity
 //        extends WebViewClient {
         extends AppCompatActivity {
     private static final String TAG = "WebViewActivity";
-//    WebViewActivityFragment wvFragment;
+    //    WebViewActivityFragment wvFragment;
     private WebView webview = null;
     private String webAddr;
-    
+
     private boolean blnWebLoaded = false;
 
     @Override
@@ -23,8 +26,9 @@ public class WebViewActivity
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate: ");
         Log.d(TAG, "onCreate: ");
-//        setContentView(R.layout.activity_web_view);
-        setContentView(R.layout.fragment_web_view);
+        setContentView(R.layout.activity_web_view);
+//        setContentView(R.layout.fragment_web_view);
+
 //        WebView webview = new WebView(this);
 //        setContentView(webview);
 //        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -34,25 +38,37 @@ public class WebViewActivity
         webAddr = (String) arguments.getSerializable(WebViewActivity.class.getSimpleName());
         webview = (WebView) findViewById(R.id.wv_page);
 
-        if (webAddr.toLowerCase().startsWith("http")) {
-            webview.loadUrl(webAddr);
-        } else {
-            if (!webAddr.equals("")) {
-                webview.loadUrl(webAddr);
-            } else {
-                return;
-            }
-        }
+        WebSettings webSettings = webview.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+        webSettings.setDomStorageEnabled(true);
+
         Log.d(TAG, "onCreate: loadUrl returned");
         blnWebLoaded = true;
 
-        webview.setWebChromeClient(new WebChromeClient(){
+        webview.setWebChromeClient(new WebChromeClient() {
             @Override
             public boolean onJsBeforeUnload(WebView view, String url, String message, JsResult result) {
                 Log.d(TAG, "onJsBeforeUnload: ");
                 return super.onJsBeforeUnload(view, url, message, result);
             }
         });
+
+        webview.setWebViewClient(new WebViewClient() {
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+                return false;
+            }
+        });
+
+
+        if (!webAddr.equals("")) {
+            webview.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    webview.loadUrl(webAddr);
+                }
+            }, 500);
+        }
 
 
 //        wvFragment = (WebViewActivityFragment) getSupportFragmentManager().findFragmentById(R.id.fragmentWebView);

@@ -28,6 +28,9 @@
         android:normalScreens="true"
         android:xlargeScreens="true" />
 
+    <meta-data
+        android:name="android.webkit.WebView.EnableSafeBrowsing"
+        android:value="true" />
 
     <application
         android:allowBackup="true"

@@ -207,12 +207,12 @@ public class AccountListActivityFragment extends Fragment
     }
 
 
-    public void setViewerPos() {
-        if (accountSelectedPos != -1) {
-            Log.d(TAG, "setViewerPos: postioning requested");
-//            mRecyclerView.findViewHolderForAdapterPosition(accountSelectedPos).itemView.performClick();
-        }
-    }
+//    public void setViewerPos() {
+//        if (accountSelectedPos != -1) {
+//            Log.d(TAG, "setViewerPos: postioning requested");
+////            mRecyclerView.findViewHolderForAdapterPosition(accountSelectedPos).itemView.performClick();
+//        }
+//    }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {

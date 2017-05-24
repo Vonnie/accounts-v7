@@ -6,8 +6,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowInsets;
+import android.webkit.JsResult;
 import android.webkit.WebChromeClient;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -46,34 +47,48 @@ public class WebViewActivityFragment extends Fragment {
         WebSettings webSettings = webview.getSettings();
 
         webSettings.setJavaScriptEnabled(true);
+        webSettings.setDomStorageEnabled(true);
+
+//        webview.setWebChromeClient(new WebChromeClient() {
+//            public void onProgressChanged(WebView view, int progress) {
+//                getActivity().setProgress(progress * 1000);
+//            }
+//
+//            @Override
+//            public void onCloseWindow(WebView window) {
+//                Log.d(TAG, "onCloseWindow: ");
+//                super.onCloseWindow(window);
+//            }
+//
+//
+//        });
+//
+//        webview.setOnApplyWindowInsetsListener(new View.OnApplyWindowInsetsListener() {
+//            @Override
+//            public WindowInsets onApplyWindowInsets(View v, WindowInsets insets) {
+//                return null;
+//            }
+//        });
+
 
         webview.setWebChromeClient(new WebChromeClient() {
-            public void onProgressChanged(WebView view, int progress) {
-                getActivity().setProgress(progress * 1000);
-            }
-
             @Override
-            public void onCloseWindow(WebView window) {
-                Log.d(TAG, "onCloseWindow: ");
-                super.onCloseWindow(window);
-            }
-
-
-        });
-
-        webview.setOnApplyWindowInsetsListener(new View.OnApplyWindowInsetsListener() {
-            @Override
-            public WindowInsets onApplyWindowInsets(View v, WindowInsets insets) {
-                return null;
+            public boolean onJsBeforeUnload(WebView view, String url, String message, JsResult result) {
+                Log.d(TAG, "onJsBeforeUnload: ");
+                return super.onJsBeforeUnload(view, url, message, result);
             }
         });
 
-        if (webAddr.toLowerCase().startsWith("http")) {
+        webview.setWebViewClient(new WebViewClient() {
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+                return false;
+            }
+        });
+
+
+        if (!webAddr.equals("")) {
             webview.loadUrl(webAddr);
-        } else {
-            if (!webAddr.equals("")) {
-                webview.loadUrl(webAddr);
-            }
         }
 
         

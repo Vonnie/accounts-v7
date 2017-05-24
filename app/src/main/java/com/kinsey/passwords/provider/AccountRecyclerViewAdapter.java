@@ -84,8 +84,30 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
     @Override
     public AccountViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Log.d(TAG, "onCreateViewHolder: new view requested");
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_account_items, parent, false);
+        View view;
 //        Log.d(TAG, "AccountRecyclerViewAdapter: cursor " + mCursor.getCount());
+        switch (accountSortorder) {
+            case AccountsContract.ACCOUNT_LIST_BY_CORP_NAME:
+                Log.d(TAG, "onCreateViewHolder: list by corp name");
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_account_items, parent, false);
+                break;
+            case AccountsContract.ACCOUNT_LIST_BY_OPEN_DATE:
+                Log.d(TAG, "onCreateViewHolder: list by open date");
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_account_items, parent, false);
+                break;
+            case AccountsContract.ACCOUNT_LIST_BY_PASSPORT_ID:
+                Log.d(TAG, "onCreateViewHolder: list by acct id");
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_account_items, parent, false);
+                break;
+            case AccountsContract.ACCOUNT_LIST_BY_SEQUENCE:
+                Log.d(TAG, "onCreateViewHolder: list by user seq");
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_account_items_user_seq, parent, false);
+                break;
+            default:
+                Log.d(TAG, "onCreateViewHolder: list by default");
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_account_items, parent, false);
+        }
+
         return new AccountViewHolder(view);
     }
 
@@ -98,13 +120,11 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
 //        } else {
 //            Log.d(TAG, "onBindViewHolder: mCursor count " + mCursor.getCount());
 //        }
-        if (accountSortorder != AccountsContract.ACCOUNT_LIST_BY_SEQUENCE ) {
-            holder.upAcctBtn.setVisibility(View.GONE);
-            holder.dnAcctBtn.setVisibility(View.GONE);
-        }
         if ((mCursor == null) || (mCursor.getCount() == 0)) {
             Log.d(TAG, "onBindViewHolder: no accts");
             holder.corp_name.setText(R.string.no_account_items);
+            holder.upAcctBtn.setVisibility(View.GONE);
+            holder.dnAcctBtn.setVisibility(View.GONE);
 //            if (mTwoPane) {
 //                holder.user_name.setText(R.string.no_account_items_twopane_line2);
 //            } else {
@@ -184,22 +204,31 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
 
             holder.corp_name.setText(account.getCorpName());
             if (holder.user_name != null) {
-                if (!holder.corp_name.getTag().equals(mContext.getString(R.string.tag_xlarge)) &&
+                if (accountSortorder == AccountsContract.ACCOUNT_LIST_BY_SEQUENCE ) {
+                    holder.user_name.setVisibility(View.GONE);
+                } else if (!holder.corp_name.getTag().equals(mContext.getString(R.string.tag_xlarge)) &&
                         !holder.corp_name.getTag().equals(mContext.getString(R.string.tag_large)) &&
                         (accountSortorder == AccountsContract.ACCOUNT_LIST_BY_CORP_NAME ||
                                 accountSortorder == AccountsContract.ACCOUNT_LIST_BY_SEQUENCE ||
                                 accountSortorder == AccountsContract.ACCOUNT_LIST_BY_OPEN_DATE)) {
                     holder.user_name.setVisibility(View.GONE);
                 } else {
+                    holder.user_name.setVisibility(View.VISIBLE);
                     holder.user_name.setText(account.getUserName());
                 }
             }
             if (holder.open_date != null) {
-                if (holder.corp_name.getTag().equals(mContext.getString(R.string.tag_xlarge)) ||
-                        accountSortorder == AccountsContract.ACCOUNT_LIST_BY_OPEN_DATE) {
+                if (accountSortorder == AccountsContract.ACCOUNT_LIST_BY_SEQUENCE ) {
+                    holder.open_date.setVisibility(View.GONE);
+                } else if (holder.corp_name.getTag().equals(mContext.getString(R.string.tag_portrait)) ||
+                        holder.corp_name.getTag().equals(mContext.getString(R.string.tag_portrait))) {
+                    holder.open_date.setVisibility(View.GONE);
+                } else if (accountSortorder == AccountsContract.ACCOUNT_LIST_BY_OPEN_DATE) {
                     if (account.getOpenLong() == 0) {
                         holder.open_date.setText("");
                     } else {
+//                        Log.d(TAG, "onBindViewHolder: acct/open " + account.getCorpName() + ":" + account.getOpenLong());
+                        holder.open_date.setVisibility(View.VISIBLE);
                         //            Date dte = new Date(item.getActvyLong());
                         holder.open_date.setText(format_mdy_display.format(account.getOpenLong()));
                     }
@@ -210,25 +239,42 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
 //            holder.seq.setVisibility(View.GONE);
             if (holder.seq != null) {
                 if (holder.corp_name.getTag().equals(mContext.getString(R.string.tag_xlarge))) {
+                    holder.seq.setVisibility(View.VISIBLE);
                     holder.seq.setText("Seq:" + String.valueOf(account.getSequence()));
                 } else {
                     holder.seq.setVisibility(View.GONE);
                 }
             }
-            if (accountSortorder == AccountsContract.ACCOUNT_LIST_BY_SEQUENCE) {
-                holder.acctId.setVisibility(View.GONE);
-            } else {
-                holder.acctId.setText("AcctId:" + String.valueOf(account.getPassportId()));
+            if (holder.acctId != null) {
+                if (accountSortorder == AccountsContract.ACCOUNT_LIST_BY_SEQUENCE ) {
+                    holder.acctId.setVisibility(View.GONE);
+                } else {
+                    holder.acctId.setVisibility(View.VISIBLE);
+                    holder.acctId.setText("AcctId:" + String.valueOf(account.getPassportId()));
+                }
             }
 
             if (holder.website != null) {
-                holder.website.setText(account.getCorpWebsite());
+                if (accountSortorder == AccountsContract.ACCOUNT_LIST_BY_SEQUENCE ) {
+                    holder.website.setVisibility(View.GONE);
+                } else {
+                    holder.website.setText(account.getCorpWebsite());
+                }
             }
 
             if (holder.user_email != null) {
                 holder.user_email.setText(account.getUserEmail());
             }
-//            holder.editButton.setVisibility(View.VISIBLE);
+
+            if (accountSortorder == AccountsContract.ACCOUNT_LIST_BY_SEQUENCE ) {
+                holder.upAcctBtn.setVisibility(View.VISIBLE);
+                holder.dnAcctBtn.setVisibility(View.VISIBLE);
+            } else {
+                holder.upAcctBtn.setVisibility(View.GONE);
+                holder.dnAcctBtn.setVisibility(View.GONE);
+            }
+
+            //            holder.editButton.setVisibility(View.VISIBLE);
 //            holder.deleteButton.setVisibility(View.VISIBLE);
 
 //            if (accountSortorder == AccountsContract.ACCOUNT_LIST_BY_OPEN_DATE) {
@@ -421,6 +467,7 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
 //            this.editButton = (ImageButton) itemView.findViewById(R.id.srli_acct_edit);
 //            this.deleteButton = (ImageButton) itemView.findViewById(R.id.acc_delete);
             Log.d(TAG, "AccountViewHolder: corp_name tag " + this.corp_name.getTag());
+
         }
     }
 

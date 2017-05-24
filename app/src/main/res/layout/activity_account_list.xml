@@ -33,10 +33,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <WebView
-            android:id="@+id/wv_page"
-            android:layout_width="0dp"
-            android:layout_height="0dp" />
+        <!--<FrameLayout-->
+            <!--android:id="@+id/wv_page"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="0dp" />-->
 
     </FrameLayout>
 

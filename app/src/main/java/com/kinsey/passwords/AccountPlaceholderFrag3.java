@@ -304,6 +304,13 @@ public class AccountPlaceholderFrag3 extends Fragment {
 //        return true;
 //    }
 
+    public void checkUI() {
+        if (mCorpNameTextView == null) {
+            Log.d(TAG, "checkUI: corpnameTV is null");
+        } else {
+            Log.d(TAG, "checkUI: have corpnameTV");
+        }
+    }
     public boolean validatePageErrors() {
 
         boolean hasErrors = false;
