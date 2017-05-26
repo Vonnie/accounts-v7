@@ -67,8 +67,8 @@ public class AccountPlaceholderFrag1 extends Fragment {
     private OnAccountListener mListener;
 
     public interface OnAccountListener {
-        void onAccount1Instance();
-        void onWebsiteRequest(String website);
+//        void onAccount1Instance();
+//        void onWebsiteRequest(String website);
     }
 
 

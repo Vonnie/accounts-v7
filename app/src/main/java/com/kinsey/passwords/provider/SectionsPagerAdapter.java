@@ -681,6 +681,7 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
     public void clearAll() //You can clear any specified page if you want...
     {
 
+        Log.d(TAG, "clearAll: size " + fragments.size());
         if (fragments.size() == 0) {
             return;
         }

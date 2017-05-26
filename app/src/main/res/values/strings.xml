@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">Accounts</string>
+    <string name="app_name_corpname">Accounts by Corp Name</string>
+    <string name="app_name_opendate">Accounts by Open Date, desc</string>
+    <string name="app_name_acctid">Accounts by Acct Id</string>
+    <string name="app_name_custom">Accounts by Custom Seq</string>
     <string name="action_settings">Settings</string>
     <string name="menu_accounts">Accounts List</string>
     <string name="menu_suggests">Suggestions</string>

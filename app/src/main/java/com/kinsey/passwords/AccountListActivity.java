@@ -73,6 +73,7 @@ public class AccountListActivity extends AppCompatActivity
     public static boolean accountSelectById = false;
     public static boolean mTwoPane = false;
     public static boolean mActivityStart = false;
+    public static boolean mFirstTime = true;
 
     private RetainedFragment mRetainedFragment;
     FragmentManager fm;
@@ -108,7 +109,7 @@ public class AccountListActivity extends AppCompatActivity
 
     private OnListClickListener mListener;
 
-    public interface OnListClickListener {
+     public interface OnListClickListener {
         void onListSuggestsClick();
     }
 
@@ -150,17 +151,11 @@ public class AccountListActivity extends AppCompatActivity
 //        Log.d(TAG, "onCreate: check layout");
 
         mViewPager = (ViewPager) findViewById(R.id.item_detail_container);
+        mViewPager.setAdapter(null);
 
         startUpFrags(false);
 
-//        isUserPaging = false;
-//        mViewPager.setCurrentItem(frag3Pos);
-//        mSectionsPagerAdapter.notifyDataSetChanged();
-//        mViewPager.setCurrentItem(frag2Pos);
-//        mSectionsPagerAdapter.notifyDataSetChanged();
-//        mViewPager.setCurrentItem(frag1Pos);
-//        mSectionsPagerAdapter.notifyDataSetChanged();
-//        isUserPaging = true;
+
 
         resetPager();
         Toast.makeText(AccountListActivity.this,
@@ -302,9 +297,9 @@ public class AccountListActivity extends AppCompatActivity
 
 
 //            if (fragList == null) {
-        if (!restart) {
+//        if (!restart) {
             fragList = AccountListActivityFragment.newInstance();
-        }
+//        }
 //            }
         Log.d(TAG, "onCreate: created fragList");
 
@@ -316,7 +311,7 @@ public class AccountListActivity extends AppCompatActivity
 //            Log.d(TAG, "onCreate: created frag1");
         } else {
 //            frag1.checkUI();
-            frag1.fillPage();
+//            frag1.fillPage();
 //            frag1.checkUI();
         }
 
@@ -326,7 +321,7 @@ public class AccountListActivity extends AppCompatActivity
 //            Log.d(TAG, "onCreate: created frag2");
         } else {
 //            frag2.checkUI();
-            frag2.fillPage();
+//            frag2.fillPage();
 //            frag2.checkUI();
         }
 
@@ -335,7 +330,7 @@ public class AccountListActivity extends AppCompatActivity
 //            Log.d(TAG, "onCreate: created frag3");
         } else {
 //            frag3.checkUI();
-            frag3.fillPage();
+//            frag3.fillPage();
 //            frag3.checkUI();
         }
 
@@ -392,12 +387,24 @@ public class AccountListActivity extends AppCompatActivity
             frag2Pos = 1;
             frag3Pos = 2;
 
+//            if (mSectionsPagerAdapter == null) {
+//                Log.d(TAG, "startUpFrags: mSectionsPagerAdapter null");
+//            } else {
+//                Log.d(TAG, "startUpFrags: mSectionsPagerAdapter is not null");
+////                mSectionsPagerAdapter.clearAll();
+//            }
+
             mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(),
                     fragListPos, frag1Pos, frag2Pos, frag3Pos, fragments);
 //                mRetainedFragment.setData(setPlacements(mRetainedFragment.getData()));
 
 //                mRetainedFragment.getData().getmSectionsPagerAdapter().setMyDataObject(mRetainedFragment.getData());
 
+
+//            if (!restart) {
+                FragmentTransaction transaction = fm.beginTransaction();
+                transaction.replace(R.id.fragList, fragList, TAG_ACTIVITY_LIST_FRAG).commit();
+//            }
 
 
 
@@ -427,10 +434,12 @@ public class AccountListActivity extends AppCompatActivity
 
 //                findViewById(R.id.fragList).
 //                FragmentManager fmc = getSupportFragmentManager();
-            if (!restart) {
-                FragmentTransaction transaction = fm.beginTransaction();
-                transaction.replace(R.id.fragList, fragList, TAG_ACTIVITY_LIST_FRAG).commit();
-            }
+
+
+//            if (isRotated) {
+//                mSectionsPagerAdapter.clearAll();
+//                mSectionsPagerAdapter.addList(fragments);
+//            }
 
 //                fragList2 = (AccountListActivityFragment)fmc.findFragmentById(R.id.fragList);
 //                if (fragList2 != null) {
@@ -492,8 +501,22 @@ public class AccountListActivity extends AppCompatActivity
             frag1Pos = 1;
             frag2Pos = 2;
             frag3Pos = 3;
+
+//            if (mSectionsPagerAdapter == null) {
+//                Log.d(TAG, "startUpFrags: mSectionsPagerAdapter null");
+//            } else {
+//                Log.d(TAG, "startUpFrags: mSectionsPagerAdapter is not null");
+////                mSectionsPagerAdapter.clearAll();
+//            }
+
             mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(),
                     fragListPos, frag1Pos, frag2Pos, frag3Pos, fragments);
+
+
+//            if (isRotated) {
+//                mSectionsPagerAdapter.clearAll();
+//                mSectionsPagerAdapter.addList(fragments);
+//            }
 
 //                mRetainedFragment.setData(setPlacements(mRetainedFragment.getData()));
 
@@ -506,18 +529,48 @@ public class AccountListActivity extends AppCompatActivity
 
         }
 
+
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         pagerEvents();
 
         if (isRotated) {
-//            Log.d(TAG, "startUpFrags: about to updatePages from rotate");
+            Log.d(TAG, "startUpFrags: frag1Pos " + frag1Pos);
+            isUserPaging = false;
+//            mViewPager.setCurrentItem(frag3Pos);
+//            mViewPager.setCurrentItem(frag2Pos);
+//            mViewPager.setCurrentItem(frag1Pos);
+//            if (fragListPos != -1) {
+//                mViewPager.setCurrentItem(fragListPos);
+//            }
             if (fragListPos == -1) {
                 updatePages(frag1Pos);
             } else {
                 updatePages(fragListPos);
             }
+            mSectionsPagerAdapter.notifyDataSetChanged();
+            isUserPaging = true;
         }
+
+        Log.d(TAG, "startUpFrags: isRotated " + isRotated);
+//        if (isRotated || !mFirstTime) {
+//        if (!mFirstTime) {
+//            if (mActivityStart) {
+//            Log.d(TAG, "startUpFrags: about to updatePages from rotate");
+//        if (isRotated) {
+//            if (mSectionsPagerAdapter != null) {
+//                mSectionsPagerAdapter.clearAll();
+////                mSectionsPagerAdapter.notifyDataSetChanged();
+//            }
+//            if (fragListPos == -1) {
+//                updatePages(frag1Pos);
+//            } else {
+//                updatePages(fragListPos);
+//            }
+//        }
+        mFirstTime = false;
+        isRotated = false;
+        mActivityStart = false;
 
     }
 
@@ -779,11 +832,17 @@ public class AccountListActivity extends AppCompatActivity
                 if (!mActivityStart) {
                     if (mSectionsPagerAdapter != null) {
                         mSectionsPagerAdapter.clearAll();
-                        mSectionsPagerAdapter.notifyDataSetChanged();
+                        fragList = null;
+                        frag1 = null;
+                        frag2 = null;
+                        frag3 = null;
+                        mViewPager = null;
+                        mSectionsPagerAdapter = null;
+//                        mSectionsPagerAdapter.notifyDataSetChanged();
                     }
                 }
 
-                mActivityStart = false;
+//                mActivityStart = false;
 //                mRetainedFragment.setData(collectMyData());
 
             } catch (Exception e) {
@@ -1158,6 +1217,8 @@ public class AccountListActivity extends AppCompatActivity
 ////            startActivity(intent);
 ////            startActivityForResult(intent, AccountsContract.ACCOUNT_ACTION_WEBPAGE);
 
+        Log.d(TAG, "vewInternet: link to webpage frag1Pos " + frag1Pos);
+        Log.d(TAG, "vewInternet: webpage " + account.getCorpWebsite());
             Intent detailIntent = new Intent(this, WebViewActivity.class);
             detailIntent.putExtra(WebViewActivity.class.getSimpleName(), account.getCorpWebsite());
 //                Log.d(TAG, "onClick: website " + account.getCorpWebsite());
@@ -1675,6 +1736,7 @@ public class AccountListActivity extends AppCompatActivity
 
     private void viewAccountsFile() {
         Log.d(TAG, "viewAccountsFile: request request view exports");
+        mActivityStart = true;
         Intent detailIntent = new Intent(this, FileViewActivity.class);
 //        startActivity(detailIntent);
         startActivityForResult(detailIntent, AccountsContract.ACCOUNT_ACTION_VIEW_EXPORT);
@@ -2357,25 +2419,25 @@ public class AccountListActivity extends AppCompatActivity
         switch (which) {
             case AppDialog.DIALOG_ACCT_LIST_CORP_NAME:
                 accountSortorder = AccountsContract.ACCOUNT_LIST_BY_CORP_NAME;
-                clearAccount();
+//                clearAccount();
                 sortAccountList();
 //                setupAdapter();
                 break;
             case AppDialog.DIALOG_ACCT_LIST_OPEN_DATE:
                 accountSortorder = AccountsContract.ACCOUNT_LIST_BY_OPEN_DATE;
-                clearAccount();
+//                clearAccount();
                 sortAccountList();
 //                setupAdapter();
                 break;
             case AppDialog.DIALOG_ACCT_LIST_ACCT_ID:
                 accountSortorder = AccountsContract.ACCOUNT_LIST_BY_PASSPORT_ID;
-                clearAccount();
+//                clearAccount();
                 sortAccountList();
 //                setupAdapter();
                 break;
             case AppDialog.DIALOG_ACCT_LIST_USER_SEQ:
                 accountSortorder = AccountsContract.ACCOUNT_LIST_BY_SEQUENCE;
-                clearAccount();
+//                clearAccount();
                 sortAccountList();
 //                setupAdapter();
                 break;
@@ -2418,6 +2480,8 @@ public class AccountListActivity extends AppCompatActivity
 //            fragment.setArguments(arguments);
 //        fragList.setViewerPos();
 
+        accountSelectById = true;
+        accountSelectedId = account.getId();
 
         if (mTwoPane) {
             fragList.refreshList();
@@ -2426,27 +2490,33 @@ public class AccountListActivity extends AppCompatActivity
             frag.refreshList();
         }
 
+        mActivityStart = false;
         resetPager();
-
+//        clearAccount();
 
         switch (accountSortorder) {
             case AccountsContract.ACCOUNT_LIST_BY_CORP_NAME:
+                getSupportActionBar().setTitle(getString(R.string.app_name_corpname));
                 Toast.makeText(AccountListActivity.this,
                         "Accounts sorted by corp name", Toast.LENGTH_LONG).show();
                 break;
             case AccountsContract.ACCOUNT_LIST_BY_OPEN_DATE:
+                getSupportActionBar().setTitle(getString(R.string.app_name_opendate));
                 Toast.makeText(AccountListActivity.this,
                         "Accounts sorted by open date", Toast.LENGTH_LONG).show();
                 break;
             case AccountsContract.ACCOUNT_LIST_BY_PASSPORT_ID:
+                getSupportActionBar().setTitle(getString(R.string.app_name_acctid));
                 Toast.makeText(AccountListActivity.this,
                         "Accounts sorted by acct-id", Toast.LENGTH_LONG).show();
                 break;
             case AccountsContract.ACCOUNT_LIST_BY_SEQUENCE:
+                getSupportActionBar().setTitle(getString(R.string.app_name_custom));
                 Toast.makeText(AccountListActivity.this,
                         "Accounts sorted by user custom order", Toast.LENGTH_LONG).show();
                 break;
             default:
+                getSupportActionBar().setTitle(getString(R.string.app_name));
                 Toast.makeText(AccountListActivity.this,
                         "Accounts sorted", Toast.LENGTH_LONG).show();
         }
@@ -2520,6 +2590,7 @@ public class AccountListActivity extends AppCompatActivity
     }
 
     private void suggestPasswordList() {
+        mActivityStart = true;
         Intent detailIntent = new Intent(this, SuggestListActivity.class);
         detailIntent.putExtra(Suggest.class.getSimpleName(), "sortorder");
 //        startActivity(detailIntent);
@@ -2553,20 +2624,20 @@ public class AccountListActivity extends AppCompatActivity
                         "Account added", Toast.LENGTH_LONG).show();
 
                 break;
+
             }
             case AccountsContract.ACCOUNT_ACTION_WEBPAGE:
             case AccountsContract.ACCOUNT_ACTION_VIEW_EXPORT:
             case AccountsContract.ACCOUNT_ACTION_SUGGESTIONS: {
-                Log.d(TAG, "onActivityResult: webpage return from startActivity");
+//                Log.d(TAG, "onActivityResult: webpage return frag1Pos " + frag1Pos);
+//                if (mSectionsPagerAdapter == null) {
+//                    Log.d(TAG, "onActivityResult: mSectionPagerAdapter null");
+//                } else {
+//                    Log.d(TAG, "onActivityResult: mSectionPagerAdapter is not null");
+//                }
                 mActivityStart = false;
-                startUpFrags(true);
-                isUserPaging = false;
-                if (fragListPos == -1) {
-                    mViewPager.setCurrentItem(frag1Pos);
-                } else {
-                    mViewPager.setCurrentItem(fragListPos);
-                }
-                isUserPaging = true;
+//                startUpFrags(true);
+                resetPager();
 //                if (mViewPager == null) {
 //                    Log.d(TAG, "onActivityResult: mViewPager is null");
 //                } else {
@@ -2647,25 +2718,25 @@ public class AccountListActivity extends AppCompatActivity
 //        frag3.fillPage(this.account);
     }
 
-    @Override
-    public void onAccount1Instance() {
-        Log.d(TAG, "onAccount1Instance: ");
+//    @Override
+//    public void onAccount1Instance() {
+//        Log.d(TAG, "onAccount1Instance: ");
+//
+////        mSectionsPagerAdapter.loadPage(SectionsPagerAdapter.frag1Pos);
+////        frag1RowId = rowId;
+////        frag1.fillPage(this.account);
+//    }
 
-//        mSectionsPagerAdapter.loadPage(SectionsPagerAdapter.frag1Pos);
-//        frag1RowId = rowId;
-//        frag1.fillPage(this.account);
-    }
-
-    @Override
-    public void onWebsiteRequest(String website) {
-        mActivityStart = true;
-        Log.d(TAG, "onWebsiteRequest: request webpage");
-        Intent detailIntent = new Intent(this, WebViewActivity.class);
-        detailIntent.putExtra(WebViewActivity.class.getSimpleName(), website);
-//                Log.d(TAG, "onClick: website " + account.getCorpWebsite());
-//                Log.d(TAG, "onClick: wv class " + WebViewActivity.class.getSimpleName());
-//        startActivityForResult(detailIntent, ACCOUNT_ACTION_WEBPAGE);
-        startActivity(detailIntent);
-
-    }
+//    @Override
+//    public void onWebsiteRequest(String website) {
+//        mActivityStart = true;
+//        Log.d(TAG, "onWebsiteRequest: request webpage");
+//        Intent detailIntent = new Intent(this, WebViewActivity.class);
+//        detailIntent.putExtra(WebViewActivity.class.getSimpleName(), website);
+////                Log.d(TAG, "onClick: website " + account.getCorpWebsite());
+////                Log.d(TAG, "onClick: wv class " + WebViewActivity.class.getSimpleName());
+////        startActivityForResult(detailIntent, ACCOUNT_ACTION_WEBPAGE);
+//        startActivity(detailIntent);
+//
+//    }
 }

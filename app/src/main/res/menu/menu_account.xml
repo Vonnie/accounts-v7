@@ -2,23 +2,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.kinsey.passwords.AccountActivity">
-    <item
-        android:id="@+id/menuacct_internet"
-        android:icon="@drawable/selector_globe"
-        android:orderInCategory="104"
-        android:title="@string/menu_link_internet"
-        app:showAsAction="ifRoom" />
+
     <item
         android:id="@+id/menuacct_next"
         android:icon="@drawable/selector_right"
         android:orderInCategory="101"
         android:title="@string/menuacct_next"
         app:showAsAction="always" />
-    <item
-        android:id="@+id/menuacct_delete"
-        android:icon="@drawable/selector_delete"
-        android:title="@string/delete_cap"
-        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/menuacct_save"
         android:icon="@drawable/selector_save"
@@ -31,4 +21,22 @@
         android:orderInCategory="103"
         android:title="@string/menu_add_account"
         app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/menuacct_internet"
+        android:icon="@drawable/selector_globe"
+        android:orderInCategory="104"
+        android:title="@string/menu_link_internet"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/menuacct_delete"
+        android:icon="@drawable/selector_delete"
+        android:orderInCategory="105"
+        android:title="@string/delete_cap"
+        app:showAsAction="ifRoom" />
+    <!--<item-->
+        <!--android:id="@+id/menuacct_key"-->
+        <!--android:icon="@drawable/selector_key"-->
+        <!--android:orderInCategory="106"-->
+        <!--android:title="@string/menu_suggests"-->
+        <!--app:showAsAction="ifRoom" />-->
 </menu>

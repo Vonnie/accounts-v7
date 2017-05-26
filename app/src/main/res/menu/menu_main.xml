@@ -16,7 +16,7 @@
         app:showAsAction="always" />
     <item
         android:id="@+id/menumain_showSuggests"
-        android:icon="@mipmap/ic_action_key"
+        android:icon="@drawable/selector_key"
         android:orderInCategory="104"
         android:title="@string/menu_suggests"
         app:showAsAction="ifRoom" />
