@@ -124,16 +124,23 @@ public class AccountListActivityFragment extends Fragment
 //                (AccountRecyclerViewAdapter.OnAccountClickListener) getActivity());
 //        recyclerView.setAdapter(mAccountAdapter);
 //        Log.d(TAG, "onCreateView: returning adapter count: " + mAccountAdapter.getItemCount());
+
+        createLoader();
+
+        return view;
+    }
+
+    private void createLoader() {
         Cursor cursor = null;
         Log.d(TAG, "onCreateView: abt to init loader: " + accountSelectedPos);
-//        getLoaderManager().initLoader(ACCOUNT_LOADER_ID, null, this);
+
 
         Log.d(TAG, "onCreateView: abt to call adapter sel: " + accountSelectedPos);
         mAccountAdapter = new AccountRecyclerViewAdapter(getContext(), cursor,
                 (AccountRecyclerViewAdapter.OnAccountClickListener) getActivity());
         mRecyclerView.setAdapter(mAccountAdapter);
 
-        return view;
+        getLoaderManager().initLoader(ACCOUNT_LOADER_ID, null, this);
     }
 
     public void swapOut() {
@@ -281,8 +288,15 @@ public class AccountListActivityFragment extends Fragment
     public void resortFragList() {
 //        this.mSortorder = sortorder;
 //        mAccountAdapter.setmSortorder(sortorder);
-        getLoaderManager().initLoader(ACCOUNT_LOADER_ID, null, this);
 
+        Log.d(TAG, "resortFragList: destroy Loader");
+        getLoaderManager().destroyLoader(ACCOUNT_LOADER_ID);
+
+        Log.d(TAG, "resortFragList: createLoader");
+        createLoader();
+
+//        Log.d(TAG, "resortFragList: init Loader");
+//        getLoaderManager().initLoader(ACCOUNT_LOADER_ID, null, this);
     }
 
     public void refreshList() {

@@ -2515,10 +2515,10 @@ public class AccountListActivity extends AppCompatActivity
         accountSelectedId = account.getId();
 
         if (mTwoPane) {
-            fragList.refreshList();
+            fragList.resortFragList();
         } else {
             AccountListActivityFragment frag = (AccountListActivityFragment) mSectionsPagerAdapter.getItem(fragListPos);
-            frag.refreshList();
+            frag.resortFragList();
         }
 
         mActivityStart = false;

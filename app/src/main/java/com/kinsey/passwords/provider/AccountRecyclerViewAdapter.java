@@ -93,7 +93,7 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
                 break;
             case AccountsContract.ACCOUNT_LIST_BY_OPEN_DATE:
                 Log.d(TAG, "onCreateViewHolder: list by open date");
-                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_account_items, parent, false);
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_account_items_open_date, parent, false);
                 break;
             case AccountsContract.ACCOUNT_LIST_BY_PASSPORT_ID:
                 Log.d(TAG, "onCreateViewHolder: list by acct id");
@@ -123,8 +123,12 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
         if ((mCursor == null) || (mCursor.getCount() == 0)) {
             Log.d(TAG, "onBindViewHolder: no accts");
             holder.corp_name.setText(R.string.no_account_items);
-            holder.upAcctBtn.setVisibility(View.GONE);
-            holder.dnAcctBtn.setVisibility(View.GONE);
+            if (holder.upAcctBtn == null ||
+                    holder.dnAcctBtn == null) {
+            } else {
+                holder.upAcctBtn.setVisibility(View.GONE);
+                holder.dnAcctBtn.setVisibility(View.GONE);
+            }
 //            if (mTwoPane) {
 //                holder.user_name.setText(R.string.no_account_items_twopane_line2);
 //            } else {
@@ -220,9 +224,9 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
             if (holder.open_date != null) {
                 if (accountSortorder == AccountsContract.ACCOUNT_LIST_BY_SEQUENCE ) {
                     holder.open_date.setVisibility(View.GONE);
-                } else if (holder.corp_name.getTag().equals(mContext.getString(R.string.tag_portrait)) ||
-                        holder.corp_name.getTag().equals(mContext.getString(R.string.tag_portrait))) {
-                    holder.open_date.setVisibility(View.GONE);
+//                } else if (holder.corp_name.getTag().equals(mContext.getString(R.string.tag_portrait)) ||
+//                        holder.corp_name.getTag().equals(mContext.getString(R.string.tag_portrait))) {
+//                    holder.open_date.setVisibility(View.GONE);
                 } else if (accountSortorder == AccountsContract.ACCOUNT_LIST_BY_OPEN_DATE) {
                     if (account.getOpenLong() == 0) {
                         holder.open_date.setText("");
@@ -266,12 +270,16 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
                 holder.user_email.setText(account.getUserEmail());
             }
 
-            if (accountSortorder == AccountsContract.ACCOUNT_LIST_BY_SEQUENCE ) {
-                holder.upAcctBtn.setVisibility(View.VISIBLE);
-                holder.dnAcctBtn.setVisibility(View.VISIBLE);
+            if (holder.upAcctBtn == null ||
+                    holder.dnAcctBtn == null) {
             } else {
-                holder.upAcctBtn.setVisibility(View.GONE);
-                holder.dnAcctBtn.setVisibility(View.GONE);
+                if (accountSortorder == AccountsContract.ACCOUNT_LIST_BY_SEQUENCE) {
+                    holder.upAcctBtn.setVisibility(View.VISIBLE);
+                    holder.dnAcctBtn.setVisibility(View.VISIBLE);
+                } else {
+                    holder.upAcctBtn.setVisibility(View.GONE);
+                    holder.dnAcctBtn.setVisibility(View.GONE);
+                }
             }
 
             //            holder.editButton.setVisibility(View.VISIBLE);
@@ -351,9 +359,12 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
                 }
             };
 
-            holder.upAcctBtn.setOnClickListener(buttonListener);
-            holder.dnAcctBtn.setOnClickListener(buttonListener);
-
+            if (holder.upAcctBtn == null ||
+                    holder.dnAcctBtn == null) {
+            } else {
+                holder.upAcctBtn.setOnClickListener(buttonListener);
+                holder.dnAcctBtn.setOnClickListener(buttonListener);
+            }
 //            holder.editButton.setOnClickListener(buttonListener);
 //            holder.deleteButton.setOnClickListener(buttonListener);
         }
