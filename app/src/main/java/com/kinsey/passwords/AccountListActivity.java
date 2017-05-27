@@ -74,10 +74,14 @@ public class AccountListActivity extends AppCompatActivity
     public static boolean mTwoPane = false;
     public static boolean mActivityStart = false;
     public static boolean mFirstTime = true;
+    private AccountListActivityFragment fragList;
+    private static AccountPlaceholderFrag1 frag1;
+    private static AccountPlaceholderFrag2 frag2;
+    private static AccountPlaceholderFrag3 frag3;
+    private SectionsPagerAdapter mSectionsPagerAdapter;
 
     private RetainedFragment mRetainedFragment;
     FragmentManager fm;
-    AccountListActivityFragment fragList;
 
 //    int mSortorder = AccountsContract.ACCOUNT_LIST_BY_CORP_NAME;
 //    RecyclerView mRecyclerView;
@@ -87,14 +91,10 @@ public class AccountListActivity extends AppCompatActivity
 
 //    AccountActivityFragment accountActivityFragment = new AccountActivityFragment();
 
-    private SectionsPagerAdapter mSectionsPagerAdapter;
     /**
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
-    private AccountPlaceholderFrag1 frag1;
-    private AccountPlaceholderFrag2 frag2;
-    private AccountPlaceholderFrag3 frag3;
     private int fragListPos = -1;
     private int frag1Pos = 0;
     private int frag2Pos = 1;
@@ -394,12 +394,19 @@ public class AccountListActivity extends AppCompatActivity
 ////                mSectionsPagerAdapter.clearAll();
 //            }
 
-            mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(),
-                    fragListPos, frag1Pos, frag2Pos, frag3Pos, fragments);
+//            if (isRotated) {
+//                mSectionsPagerAdapter.setFragListPos(fragListPos);
+//                mSectionsPagerAdapter.setFrag1Pos(frag1Pos);
+//                mSectionsPagerAdapter.setFrag2Pos(frag2Pos);
+//                mSectionsPagerAdapter.setFrag3Pos(frag3Pos);
+//                mSectionsPagerAdapter.setFragments(fragments);
+//            } else {
+                mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(),
+                        fragListPos, frag1Pos, frag2Pos, frag3Pos, fragments);
 //                mRetainedFragment.setData(setPlacements(mRetainedFragment.getData()));
 
 //                mRetainedFragment.getData().getmSectionsPagerAdapter().setMyDataObject(mRetainedFragment.getData());
-
+//            }
 
 //            if (!restart) {
                 FragmentTransaction transaction = fm.beginTransaction();
@@ -509,10 +516,18 @@ public class AccountListActivity extends AppCompatActivity
 ////                mSectionsPagerAdapter.clearAll();
 //            }
 
-            mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(),
-                    fragListPos, frag1Pos, frag2Pos, frag3Pos, fragments);
+//            if (isRotated) {
+//                mSectionsPagerAdapter.setFragListPos(fragListPos);
+//                mSectionsPagerAdapter.setFrag1Pos(frag1Pos);
+//                mSectionsPagerAdapter.setFrag2Pos(frag2Pos);
+//                mSectionsPagerAdapter.setFrag3Pos(frag3Pos);
+//                mSectionsPagerAdapter.setFragments(fragments);
+//            } else {
 
+                mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(),
+                        fragListPos, frag1Pos, frag2Pos, frag3Pos, fragments);
 
+//            }
 //            if (isRotated) {
 //                mSectionsPagerAdapter.clearAll();
 //                mSectionsPagerAdapter.addList(fragments);
@@ -530,6 +545,15 @@ public class AccountListActivity extends AppCompatActivity
         }
 
 
+//        if (isRotated) {
+//            if (fragListPos != -1) {
+//                mSectionsPagerAdapter.destroyItem(mViewPager, fragListPos, fragList);
+//            }
+//            mSectionsPagerAdapter.destroyItem(mViewPager, frag1Pos, frag1);
+//            mSectionsPagerAdapter.destroyItem(mViewPager, frag2Pos, frag2);
+//            mSectionsPagerAdapter.destroyItem(mViewPager, frag3Pos, frag3);
+//        }
+
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         pagerEvents();
@@ -545,10 +569,12 @@ public class AccountListActivity extends AppCompatActivity
 //            }
             if (fragListPos == -1) {
                 updatePages(frag1Pos);
+                mViewPager.setCurrentItem(frag1Pos);
             } else {
                 updatePages(fragListPos);
+                mViewPager.setCurrentItem(fragListPos);
             }
-            mSectionsPagerAdapter.notifyDataSetChanged();
+//            mSectionsPagerAdapter.notifyDataSetChanged();
             isUserPaging = true;
         }
 
@@ -831,18 +857,22 @@ public class AccountListActivity extends AppCompatActivity
 
                 if (!mActivityStart) {
                     if (mSectionsPagerAdapter != null) {
+
+                        if (fragListPos != -1) {
+                            mSectionsPagerAdapter.destroyItem(mViewPager, fragListPos, fragList);
+                        }
+                        mSectionsPagerAdapter.destroyItem(mViewPager, frag1Pos, frag1);
+                        mSectionsPagerAdapter.destroyItem(mViewPager, frag2Pos, frag2);
+                        mSectionsPagerAdapter.destroyItem(mViewPager, frag3Pos, frag3);
+
+                        fragList.swapOut();
                         mSectionsPagerAdapter.clearAll();
-                        fragList = null;
-                        frag1 = null;
-                        frag2 = null;
-                        frag3 = null;
-                        mViewPager = null;
-                        mSectionsPagerAdapter = null;
+
 //                        mSectionsPagerAdapter.notifyDataSetChanged();
                     }
                 }
 
-//                mActivityStart = false;
+////                mActivityStart = false;
 //                mRetainedFragment.setData(collectMyData());
 
             } catch (Exception e) {
@@ -879,6 +909,7 @@ public class AccountListActivity extends AppCompatActivity
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
 
+        Log.d(TAG, "onConfigurationChanged: ");
         // Checks the orientation of the screen
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             Log.d(TAG, "onConfigurationChanged: landscape");

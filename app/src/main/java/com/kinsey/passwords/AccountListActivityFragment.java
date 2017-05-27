@@ -136,6 +136,10 @@ public class AccountListActivityFragment extends Fragment
         return view;
     }
 
+    public void swapOut() {
+        mAccountAdapter.swapCursor(null);
+    }
+
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         Log.d(TAG, "onCreateLoader: starts");
@@ -219,6 +223,7 @@ public class AccountListActivityFragment extends Fragment
 //        Log.d(TAG, "onLoaderReset: starts");
         mAccountAdapter.swapCursor(null);
     }
+
 
     public void deleteAccount(Context context, int accountId) {
         context.getContentResolver().delete(AccountsContract.buildIdUri((long)accountId), null, null);

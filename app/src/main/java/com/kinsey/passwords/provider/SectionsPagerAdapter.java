@@ -3,7 +3,6 @@ package com.kinsey.passwords.provider;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.ViewGroup;
@@ -19,7 +18,7 @@ import java.util.List;
  * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
  * one of the sections/tabs/pages.
  */
-public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
+public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
     private static final String TAG = "SectionsPagerAdapter";
     private static final boolean DEBUG = false;
@@ -36,7 +35,7 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
     //    private MyDataObject myDataObject;
     //    private ArrayList<Fragment> mFragments = new ArrayList<Fragment>();
 //    private Fragment mCurrentFragment = null;
-    private List<Fragment> mFragments;
+//    private List<Fragment> mFragments;
     //    private Map<Integer, Fragment> fragments = new HashMap<Integer, Fragment>();
 //    private AccountPlaceholderFrag1 frag1 = new AccountPlaceholderFrag1();
 //    private AccountPlaceholderFrag2 frag2 = new AccountPlaceholderFrag2();
@@ -701,6 +700,28 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
     {
 //        listFrag=new ListFragment();
 //        fragments.add(list);
+        this.fragments = fragments;
+    }
+
+    public void setFragListPos(int fragListPos) {
+        this.fragListPos = fragListPos;
+    }
+
+    public void setFrag1Pos(int frag1Pos) {
+        this.frag1Pos = frag1Pos;
+    }
+
+    public void setFrag2Pos(int frag2Pos) {
+        this.frag2Pos = frag2Pos;
+    }
+
+    public void setFrag3Pos(int frag3Pos) {
+        this.frag3Pos = frag3Pos;
+    }
+
+    public void setFragments(List<Fragment> fragments) {
+        fragments.clear();
+        fragments = new ArrayList<Fragment>();
         this.fragments = fragments;
     }
 }
