@@ -240,15 +240,10 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
                     holder.open_date.setVisibility(View.GONE);
                 }
             }
-//            holder.seq.setVisibility(View.GONE);
-            if (holder.seq != null) {
-                if (holder.corp_name.getTag().equals(mContext.getString(R.string.tag_xlarge))) {
-                    holder.seq.setVisibility(View.VISIBLE);
-                    holder.seq.setText("Seq:" + String.valueOf(account.getSequence()));
-                } else {
-                    holder.seq.setVisibility(View.GONE);
-                }
-            }
+
+
+
+
             if (holder.acctId != null) {
                 if (accountSortorder == AccountsContract.ACCOUNT_LIST_BY_SEQUENCE ) {
                     holder.acctId.setVisibility(View.GONE);
@@ -311,7 +306,9 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
                         Log.d(TAG, "onClick: listener is null");
                         return;
                     }
-                    notifyItemChanged(accountSelectedPos);
+                    if (accountSelectedPos != -1) {
+                        notifyItemChanged(accountSelectedPos);
+                    }
                     accountSelectedPos = position;
                     notifyItemChanged(accountSelectedPos);
 
@@ -454,7 +451,7 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
         TextView user_email = null;
         TextView open_date = null;
         TextView website = null;
-        TextView seq = null;
+//        TextView seq = null;
         TextView acctId = null;
         ImageButton upAcctBtn = null;
         ImageButton dnAcctBtn = null;
@@ -471,7 +468,7 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
             this.user_email = (TextView) itemView.findViewById(R.id.srli_user_email);
             this.open_date = (TextView) itemView.findViewById(R.id.tli_open_date);
             this.website = (TextView) itemView.findViewById(R.id.tli_website);
-            this.seq = (TextView) itemView.findViewById(R.id.tli_seq);
+//            this.seq = (TextView) itemView.findViewById(R.id.tli_seq);
             this.acctId = (TextView) itemView.findViewById(R.id.tli_acct_id);
             this.upAcctBtn = (ImageButton) itemView.findViewById(R.id.tli_account_up);
             this.dnAcctBtn = (ImageButton) itemView.findViewById(R.id.tli_account_down);

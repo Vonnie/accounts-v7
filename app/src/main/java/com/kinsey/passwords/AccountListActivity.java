@@ -157,7 +157,7 @@ public class AccountListActivity extends AppCompatActivity
 
 
 
-        resetPager();
+//        resetPager();
         Toast.makeText(AccountListActivity.this,
                 "Account List, swipe to an item", Toast.LENGTH_LONG).show();
 
@@ -256,6 +256,9 @@ public class AccountListActivity extends AppCompatActivity
 
 
     private void startUpFrags(boolean restart) {
+
+        Log.d(TAG, "startUpFrags: isRotated " + isRotated);
+
 //            if (isRotated) {
 //                emptyPager();
 //            }
@@ -560,6 +563,7 @@ public class AccountListActivity extends AppCompatActivity
 
         if (isRotated) {
             Log.d(TAG, "startUpFrags: frag1Pos " + frag1Pos);
+            Log.d(TAG, "startUpFrags: fragListPos " + fragListPos);
             isUserPaging = false;
 //            mViewPager.setCurrentItem(frag3Pos);
 //            mViewPager.setCurrentItem(frag2Pos);
@@ -569,16 +573,32 @@ public class AccountListActivity extends AppCompatActivity
 //            }
             if (fragListPos == -1) {
                 updatePages(frag1Pos);
-                mViewPager.setCurrentItem(frag1Pos);
+//                mViewPager.setCurrentItem(frag1Pos);
             } else {
                 updatePages(fragListPos);
-                mViewPager.setCurrentItem(fragListPos);
+//                mViewPager.setCurrentItem(fragListPos);
             }
 //            mSectionsPagerAdapter.notifyDataSetChanged();
             isUserPaging = true;
         }
+        switch (accountSortorder) {
+            case AccountsContract.ACCOUNT_LIST_BY_CORP_NAME:
+                getSupportActionBar().setTitle(getString(R.string.app_name_corpname));
+                break;
+            case AccountsContract.ACCOUNT_LIST_BY_OPEN_DATE:
+                getSupportActionBar().setTitle(getString(R.string.app_name_opendate));
+                break;
+            case AccountsContract.ACCOUNT_LIST_BY_PASSPORT_ID:
+                getSupportActionBar().setTitle(getString(R.string.app_name_acctid));
+                break;
+            case AccountsContract.ACCOUNT_LIST_BY_SEQUENCE:
+                getSupportActionBar().setTitle(getString(R.string.app_name_custom));
+                break;
+            default:
+                getSupportActionBar().setTitle(getString(R.string.app_name));
+        }
 
-        Log.d(TAG, "startUpFrags: isRotated " + isRotated);
+
 //        if (isRotated || !mFirstTime) {
 //        if (!mFirstTime) {
 //            if (mActivityStart) {
@@ -1193,8 +1213,6 @@ public class AccountListActivity extends AppCompatActivity
 
         if (accountMode == AccountsContract.ACCOUNT_ACTION_ADD) {
             fragList.saveAccount(getApplicationContext(), true);
-            accountSelectById = true;
-            accountSelectedId = account.getId();
             accountMode = AccountsContract.ACCOUNT_ACTION_CHG;
             Toast.makeText(AccountListActivity.this,
                     "Account entry added to database",
@@ -1205,6 +1223,9 @@ public class AccountListActivity extends AppCompatActivity
                     "Account entry updated to database",
                     Toast.LENGTH_LONG).show();
         }
+
+        accountSelectById = true;
+        accountSelectedId = account.getId();
 
         Log.d(TAG, "saveAccount: ids: " + account.getId() + ":" + account.getPassportId());
 
@@ -1871,8 +1892,17 @@ public class AccountListActivity extends AppCompatActivity
             setMenuItemEnabled(R.id.menuacct_internet, true);
         }
         this.account = account;
+//        mSectionsPagerAdapter.destroyItem(mViewPager, frag1Pos, frag1);
+//        mSectionsPagerAdapter.destroyItem(mViewPager, frag2Pos, frag2);
+//        mSectionsPagerAdapter.destroyItem(mViewPager, frag3Pos, frag3);
         int currPage = mViewPager.getCurrentItem();
+        if (fragListPos == -1) {
+            mViewPager.setOffscreenPageLimit(2);
+        } else {
+            mViewPager.setOffscreenPageLimit(3);
+        }
         updatePages(currPage);
+//        updatePages(frag1Pos);
     }
 
     private void updatePages(int currPage) {
@@ -1881,11 +1911,12 @@ public class AccountListActivity extends AppCompatActivity
 //        int currPage = mViewPager.getCurrentItem();
 
         mViewPager.setCurrentItem(frag2Pos);
+
         frag1.fillPage();
         Log.d(TAG, "updatePages: page1 filled, setPrimary");
-        mSectionsPagerAdapter.setPrimaryItem(mViewPager, frag1Pos, frag1);
-//        mViewPager.setCurrentItem(frag1Pos);
-        mSectionsPagerAdapter.notifyDataSetChanged();
+//        mSectionsPagerAdapter.setPrimaryItem(mViewPager, frag1Pos, frag1);
+////        mViewPager.setCurrentItem(frag1Pos);
+//        mSectionsPagerAdapter.notifyDataSetChanged();
 
 //        new CountDownTimer(10000, 1000) {
 //
@@ -1901,8 +1932,8 @@ public class AccountListActivity extends AppCompatActivity
         frag2.fillPage();
 //        mViewPager.setCurrentItem(frag2Pos);
         Log.d(TAG, "updatePages: page2 filled, setPrimary");
-        mSectionsPagerAdapter.setPrimaryItem(mViewPager, frag2Pos, frag2);
-        mSectionsPagerAdapter.notifyDataSetChanged();
+//        mSectionsPagerAdapter.setPrimaryItem(mViewPager, frag2Pos, frag2);
+//        mSectionsPagerAdapter.notifyDataSetChanged();
 
 //        new CountDownTimer(10000, 1000) {
 //
@@ -1917,8 +1948,8 @@ public class AccountListActivity extends AppCompatActivity
         frag3.fillPage();
         Log.d(TAG, "updatePages: page3 filled, setPrimary");
 //        mViewPager.setCurrentItem(frag3Pos);
-        mSectionsPagerAdapter.setPrimaryItem(mViewPager, frag3Pos, frag3);
-        mSectionsPagerAdapter.notifyDataSetChanged();
+//        mSectionsPagerAdapter.setPrimaryItem(mViewPager, frag3Pos, frag3);
+//        mSectionsPagerAdapter.notifyDataSetChanged();
 
 //        new CountDownTimer(10000, 1000) {
 //
@@ -1979,41 +2010,46 @@ public class AccountListActivity extends AppCompatActivity
 //        mSectionsPagerAdapter.setFrag2(frag2);
 //        mSectionsPagerAdapter.setFrag3(frag3);
 //        if (!mTwoPane && accountSortorder == AccountsContract.ACCOUNT_LIST_BY_SEQUENCE) {
-        if (fragListPos == -1) {
-            if (accountMode == AccountsContract.ACCOUNT_ACTION_ADD) {
-                mViewPager.setCurrentItem(frag1Pos);
-                if (!isRotated) {
-                    frag1.setCorpNameFocus();
-                }
-            } else {
-                Log.d(TAG, "updatePages: currPage " + currPage);
-                mViewPager.setCurrentItem(currPage);
-                if (!isRotated) {
-                    if (currPage == frag1Pos) {
-                        frag1.setCorpNameFocus();
-                    }
-                }
-            }
-        } else {
-//            fragList.setViewerPos();
-//            myRecyclerView.findViewHolderForAdapterPosition(pos).itemView;
-            if (accountMode == AccountsContract.ACCOUNT_ACTION_ADD) {
-                mViewPager.setCurrentItem(frag1Pos);
-                if (!isRotated) {
-                    frag1.setCorpNameFocus();
-                }
-            } else {
+
+//        if (fragListPos == -1) {
+//            if (accountMode == AccountsContract.ACCOUNT_ACTION_ADD) {
+//                mViewPager.setCurrentItem(frag1Pos);
+//                if (!isRotated) {
+//                    frag1.setCorpNameFocus();
+//                }
+//            } else {
+//                Log.d(TAG, "updatePages: currPage " + currPage);
+//                mViewPager.setCurrentItem(currPage);
+//                if (!isRotated) {
+//                    if (currPage == frag1Pos) {
+//                        frag1.setCorpNameFocus();
+//                    }
+//                }
+//            }
+//        } else {
+////            fragList.setViewerPos();
+////            myRecyclerView.findViewHolderForAdapterPosition(pos).itemView;
+//            if (accountMode == AccountsContract.ACCOUNT_ACTION_ADD) {
+//                mViewPager.setCurrentItem(frag1Pos);
+//                if (!isRotated) {
+//                    frag1.setCorpNameFocus();
+//                }
+//            } else {
 //                mViewPager.setCurrentItem(fragListPos);
-                mViewPager.setCurrentItem(currPage);
-                if (!isRotated) {
-                    if (currPage == frag1Pos) {
-                        frag1.setCorpNameFocus();
-                    }
-                }
-            }
+//            }
+//        }
+
+        Log.d(TAG, "updatePages: currentItem " + mViewPager.getCurrentItem());
+
+        if (fragListPos == -1) {
+//            mSectionsPagerAdapter.setPrimaryItem(mViewPager, frag1Pos, frag1);
+            mViewPager.setCurrentItem(frag1Pos);
+        } else {
+//            mSectionsPagerAdapter.setPrimaryItem(mViewPager, fragListPos, fragList);
+            mViewPager.setCurrentItem(fragListPos);
         }
 
-
+        Log.d(TAG, "updatePages: currentItem " + mViewPager.getCurrentItem());
 
         isUserPaging = true;
 
@@ -2514,12 +2550,14 @@ public class AccountListActivity extends AppCompatActivity
         accountSelectById = true;
         accountSelectedId = account.getId();
 
-        if (mTwoPane) {
-            fragList.resortFragList();
-        } else {
-            AccountListActivityFragment frag = (AccountListActivityFragment) mSectionsPagerAdapter.getItem(fragListPos);
-            frag.resortFragList();
-        }
+        fragList.resortFragList();
+
+//        if (mTwoPane) {
+//            fragList.resortFragList();
+//        } else {
+//            AccountListActivityFragment frag = (AccountListActivityFragment) mSectionsPagerAdapter.getItem(fragListPos);
+//            frag.resortFragList();
+//        }
 
         mActivityStart = false;
         resetPager();

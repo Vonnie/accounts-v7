@@ -77,7 +77,7 @@ public class AccountListActivityFragment extends Fragment
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         Log.d(TAG, "onActivityCreated: starts loader_id " + ACCOUNT_LOADER_ID);
         super.onActivityCreated(savedInstanceState);
-        getLoaderManager().initLoader(ACCOUNT_LOADER_ID, null, this);
+//        getLoaderManager().initLoader(ACCOUNT_LOADER_ID, null, this);
     }
 
     @Override
