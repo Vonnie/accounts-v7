@@ -29,6 +29,14 @@ public class WebViewActivity
         setContentView(R.layout.activity_web_view);
 //        setContentView(R.layout.fragment_web_view);
 
+//        View fragView = findViewById(R.id.fragmentWebView);
+//
+//        if (fragView == null) {
+//            Log.d(TAG, "onCreate: fragView null");
+//        } else {
+//            Log.d(TAG, "onCreate: fragView not null");
+//        }
+
 //        WebView webview = new WebView(this);
 //        setContentView(webview);
 //        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -96,10 +104,15 @@ public class WebViewActivity
     public void onBackPressed() {
 
         Log.d(TAG, "onBackPressed: ");
+        Log.d(TAG, "onBackPressed: " + webview.canGoBack());
 
-        setResult(Activity.RESULT_OK);
-        finish();
-        super.onBackPressed();
+        if (webview.canGoBack()) {
+            webview.goBack();
+        } else {
+            setResult(Activity.RESULT_OK);
+            finish();
+            super.onBackPressed();
+        }
 
 //        if (wvFragment.canBackOut()) {
 //            Log.d(TAG, "onBackPressed: canbackout");
