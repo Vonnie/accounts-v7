@@ -1896,11 +1896,7 @@ public class AccountListActivity extends AppCompatActivity
 //        mSectionsPagerAdapter.destroyItem(mViewPager, frag2Pos, frag2);
 //        mSectionsPagerAdapter.destroyItem(mViewPager, frag3Pos, frag3);
         int currPage = mViewPager.getCurrentItem();
-        if (fragListPos == -1) {
-            mViewPager.setOffscreenPageLimit(2);
-        } else {
-            mViewPager.setOffscreenPageLimit(3);
-        }
+
         updatePages(currPage);
 //        updatePages(frag1Pos);
     }
@@ -1909,6 +1905,12 @@ public class AccountListActivity extends AppCompatActivity
         isUserPaging = false;
 
 //        int currPage = mViewPager.getCurrentItem();
+
+        if (fragListPos == -1) {
+            mViewPager.setOffscreenPageLimit(2);
+        } else {
+            mViewPager.setOffscreenPageLimit(3);
+        }
 
         mViewPager.setCurrentItem(frag2Pos);
 
@@ -2046,7 +2048,11 @@ public class AccountListActivity extends AppCompatActivity
             mViewPager.setCurrentItem(frag1Pos);
         } else {
 //            mSectionsPagerAdapter.setPrimaryItem(mViewPager, fragListPos, fragList);
-            mViewPager.setCurrentItem(fragListPos);
+            if (accountMode == AccountsContract.ACCOUNT_ACTION_ADD) {
+                mViewPager.setCurrentItem(frag1Pos);
+            } else {
+                mViewPager.setCurrentItem(fragListPos);
+            }
         }
 
         Log.d(TAG, "updatePages: currentItem " + mViewPager.getCurrentItem());
@@ -2330,11 +2336,11 @@ public class AccountListActivity extends AppCompatActivity
         setMenuItemEnabled(R.id.menuacct_internet, false);
 
         accountSelectedPos = -1;
-//        if (fragListPos == -1) {
-//            updatePages(frag1Pos);
-//        } else {
-//            updatePages(fragListPos);
-//        }
+        if (fragListPos == -1) {
+            updatePages(frag1Pos);
+        } else {
+            updatePages(fragListPos);
+        }
 
 //        fragList.resetSelection();
 //        getLoaderManager().restartLoader(ACCOUNT_LOADER_ID, null, this);
@@ -2686,7 +2692,7 @@ public class AccountListActivity extends AppCompatActivity
             case AccountsContract.ACCOUNT_ACTION_ADD: {
                 Log.d(TAG, "onActivityResult: returned from edit add");
                 accountMode = AccountsContract.ACCOUNT_ACTION_CHG;
-                clearAccount();
+//                clearAccount();
                 resetPager();
 //                setupAdapter();
                 Toast.makeText(AccountListActivity.this,
