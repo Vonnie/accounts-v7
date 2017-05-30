@@ -257,7 +257,11 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
                 if (accountSortorder == AccountsContract.ACCOUNT_LIST_BY_SEQUENCE ) {
                     holder.website.setVisibility(View.GONE);
                 } else {
-                    holder.website.setText(account.getCorpWebsite());
+                    if (account.getCorpWebsite().length() > 40) {
+                        holder.website.setText(account.getCorpWebsite().toString().substring(0,40) + "...");
+                    } else {
+                        holder.website.setText(account.getCorpWebsite());
+                    }
                 }
             }
 
