@@ -47,7 +47,7 @@ public class CursorRecyclerViewAdapter extends RecyclerView.Adapter<CursorRecycl
     @Override
     public PasswordViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 //        Log.d(TAG, "onCreateViewHolder: new view requested");
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_items, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_suggest_items, parent, false);
         return new PasswordViewHolder(view);
     }
 
@@ -198,9 +198,10 @@ public class CursorRecyclerViewAdapter extends RecyclerView.Adapter<CursorRecycl
 //        Log.d(TAG, "TaskViewHolder: starts");
             mView = itemView;
             this.password = (TextView) itemView.findViewById(R.id.tli_password);
-            this.upButton = (ImageButton) itemView.findViewById(R.id.srli_acct_edit);
+            this.upButton = (ImageButton) itemView.findViewById(R.id.tli_suggest_up);
             this.downButton = (ImageButton) itemView.findViewById(R.id.tli_suggest_down);
             this.deleteButton = (ImageButton) itemView.findViewById(R.id.acc_delete);
+            Log.d(TAG, "PasswordViewHolder: password tag " + this.password.getTag());
         }
     }
 }

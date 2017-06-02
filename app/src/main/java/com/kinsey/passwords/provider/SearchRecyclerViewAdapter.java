@@ -134,7 +134,7 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
                     Log.d(TAG, "onBindViewHolder: email " + account.getUserEmail());
                     holder.userEmail.setText(account.getUserEmail());
                 }
-                holder.acctseq.setText("Seq:" + String.valueOf(account.getSequence()));
+//                holder.acctseq.setText("Seq:" + String.valueOf(account.getSequence()));
 
                 Log.d(TAG, "onBindViewHolder: Id " + account.getId());
                 Log.d(TAG, "onBindViewHolder: passportId " + String.valueOf(account.getPassportId()));
@@ -249,7 +249,7 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
         TextView userName = null;
         TextView userEmail = null;
         TextView acctId = null;
-        TextView acctseq = null;
+//        TextView acctseq = null;
         TextView open_date = null;
         TextView notes = null;
 //        TextView note = null;
@@ -267,7 +267,7 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
             this.userName = (TextView) itemView.findViewById(R.id.srli_user_name);
             this.userEmail = (TextView) itemView.findViewById(R.id.srli_user_email);
             this.acctId = (TextView) itemView.findViewById(R.id.srli_acct_id);
-            this.acctseq = (TextView) itemView.findViewById(R.id.srli_acct_seq);
+//            this.acctseq = (TextView) itemView.findViewById(R.id.srli_acct_seq);
             this.open_date = (TextView) itemView.findViewById(R.id.srli_open_date);
             this.notes = (TextView) itemView.findViewById(R.id.srli_notes);
 //            this.editButton = (ImageButton) itemView.findViewById(R.id.srli_acct_edit);

@@ -32,30 +32,6 @@
         tools:layout_editor_absoluteY="173dp" />
 
     <TextView
-        android:id="@+id/srli_user_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="0dp"
-        app:layout_constraintLeft_toLeftOf="@+id/srli_corp_name"
-        app:layout_constraintStart_toStartOf="@+id/srli_corp_name"
-        app:layout_constraintTop_toBottomOf="@+id/srli_website"
-        tools:layout_editor_absoluteX="12dp"
-        tools:layout_editor_absoluteY="30dp" />
-
-    <TextView
-        android:id="@+id/srli_user_email"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="0dp"
-        android:gravity="right"
-        app:layout_constraintLeft_toLeftOf="@+id/srli_corp_name"
-        app:layout_constraintTop_toBottomOf="@+id/srli_user_name"
-        tools:layout_editor_absoluteX="12dp"
-        tools:layout_editor_absoluteY="4dp" />
-
-    <TextView
         android:id="@+id/srli_acct_id"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -67,14 +43,36 @@
         tools:layout_editor_absoluteY="30dp" />
 
     <TextView
-        android:id="@+id/srli_acct_seq"
-        android:layout_width="0dp"
+        android:id="@+id/srli_user_name"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="0dp"
+        app:layout_constraintStart_toStartOf="@+id/srli_corp_name"
+        app:layout_constraintTop_toBottomOf="@+id/srli_website"
+        tools:layout_editor_absoluteX="12dp"
+        tools:layout_editor_absoluteY="30dp" />
+
+    <TextView
+        android:id="@+id/srli_user_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="0dp"
         android:gravity="right"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/srli_acct_id"
-        tools:layout_editor_absoluteX="384dp"
-        tools:layout_editor_absoluteY="25dp" />
+        app:layout_constraintRight_toLeftOf="@+id/srli_open_date"
+        tools:layout_editor_absoluteX="12dp"
+        tools:layout_editor_absoluteY="4dp" />
+
+    <!--<TextView-->
+        <!--android:id="@+id/srli_acct_seq"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:gravity="right"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/srli_acct_id"-->
+        <!--tools:layout_editor_absoluteX="384dp"-->
+        <!--tools:layout_editor_absoluteY="25dp" />-->
 
     <TextView
         android:id="@+id/srli_open_date"
@@ -82,15 +80,15 @@
         android:layout_height="wrap_content"
         android:gravity="right"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/srli_acct_seq" />
+        app:layout_constraintTop_toBottomOf="@+id/srli_acct_id" />
 
     <TextView
         android:id="@+id/srli_notes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="0dp"
-        app:layout_constraintLeft_toLeftOf="@+id/srli_user_email"
-        app:layout_constraintTop_toBottomOf="@+id/srli_user_email"
+        app:layout_constraintLeft_toLeftOf="@+id/srli_user_name"
+        app:layout_constraintTop_toBottomOf="@+id/srli_user_name"
         tools:layout_editor_absoluteY="108dp" />
 
 </android.support.constraint.ConstraintLayout>
