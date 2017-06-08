@@ -7,8 +7,8 @@ android {
         applicationId "com.kinsey.passwords"
         minSdkVersion 21
             targetSdkVersion 25
-            versionCode 42
-            versionName "9.65"
+            versionCode 43
+            versionName "9.7"
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         }
         buildTypes {
