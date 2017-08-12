@@ -249,6 +249,8 @@ public class SuggestListActivity extends AppCompatActivity
             }
         }
 
+//        Log.d(TAG, "onSuggestDownClick: reseq " + reseq);
+
         boolean found = false;
         for (int i = 0; i < iLimit; i++) {
             Suggest item = listSuggests.get(i);

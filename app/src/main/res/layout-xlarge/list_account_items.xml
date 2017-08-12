@@ -10,35 +10,47 @@
 
     <TextView
         android:id="@+id/srli_corp_name"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="0dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="8dp"
         android:tag="@string/tag_xlarge"
         android:textColor="?android:attr/textColorPrimary"
-        android:textSize="30sp"
+        android:textSize="20sp"
         android:textStyle="normal|bold"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/tli_acct_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="4dp"
+        android:textColor="?android:attr/textColorPrimary"
+        android:textSize="18sp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/srli_corp_name" />
 
     <TextView
         android:id="@+id/tli_website"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:textSize="24sp"
+        android:textSize="18sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/srli_corp_name" />
 
     <TextView
         android:id="@+id/srli_user_name"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginTop="0dp"
-        android:textSize="24sp"
-        app:layout_constraintRight_toLeftOf="@+id/tli_acct_id"
-        app:layout_constraintTop_toBottomOf="@+id/srli_corp_name" />
+        android:textSize="16sp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tli_website" />
 
     <!--<TextView-->
         <!--android:id="@+id/srli_user_email"-->
@@ -69,16 +81,6 @@
     <!--app:layout_constraintRight_toLeftOf="@+id/tli_acct_id"-->
     <!--app:layout_constraintTop_toBottomOf="@+id/srli_corp_name" />-->
 
-
-    <TextView
-        android:id="@+id/tli_acct_id"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginTop="0dp"
-        android:textSize="24sp"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/srli_corp_name" />
 
 
     <!--<ImageButton-->

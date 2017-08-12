@@ -2425,6 +2425,13 @@ public class AccountListActivity extends AppCompatActivity
             case AppDialog.DIALOG_ID_CONFIRM_TO_EXPORT:
                 ExportAccountDB();
                 break;
+            case AppDialog.DIALOG_ID_ASK_REFRESH_SEARCHDB:
+
+                Log.d(TAG, "onPositiveDialogResult: request to rebuild search");
+                Intent detailIntent = new Intent(this, SearchActivity.class);
+                detailIntent.putExtra(SearchActivity.class.getSimpleName(), true);
+                startActivity(detailIntent);
+                break;
             default:
                 break;
         }
@@ -2433,6 +2440,18 @@ public class AccountListActivity extends AppCompatActivity
     @Override
     public void onNegativeDialogResult(int dialogId, Bundle args) {
 //        Log.d(TAG, "onNegativeDialogResult: delete cancel");
+
+
+        switch (dialogId) {
+
+            case AppDialog.DIALOG_ID_ASK_REFRESH_SEARCHDB:
+                Intent detailIntent = new Intent(this, SearchActivity.class);
+                detailIntent.putExtra(SearchActivity.class.getSimpleName(), false);
+                startActivity(detailIntent);
+                break;
+
+        }
+
     }
 
 //    private void loadSearchDB() {
@@ -2538,6 +2557,10 @@ public class AccountListActivity extends AppCompatActivity
 //                Log.d(TAG, "onActionRequestDialogResult: which " + which);
 //                setResult(Activity.RESULT_OK, returnIntent);
 //                finish();
+                break;
+
+            case AppDialog.DIALOG_ACCT_SEARCH_REQUEST:
+                searchAccounts();
                 break;
             default:
                 Log.d(TAG, "onActionRequestDialogResult: default " + which);
@@ -2672,6 +2695,22 @@ public class AccountListActivity extends AppCompatActivity
         startActivityForResult(detailIntent, AccountsContract.ACCOUNT_ACTION_SUGGESTIONS);
     }
 
+
+    private void searchAccounts() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+
+        AppDialog newFragment = AppDialog.newInstance();
+        Bundle args = new Bundle();
+        args.putInt(AppDialog.DIALOG_ID, AppDialog.DIALOG_ID_ASK_REFRESH_SEARCHDB);
+        args.putInt(AppDialog.DIALOG_TYPE, AppDialog.DIALOG_YES_NO);
+        args.putString(AppDialog.DIALOG_MESSAGE, getString(R.string.searchdiag_message));
+        args.putString(AppDialog.DIALOG_SUB_MESSAGE, getString(R.string.searchdiag_sub_message));
+        args.putInt(AppDialog.DIALOG_NEGATIVE_RID, R.string.searchdiag_negative_caption);
+        args.putInt(AppDialog.DIALOG_POSITIVE_RID, R.string.searchdiag_positive_caption);
+
+        newFragment.setArguments(args);
+        newFragment.show(fragmentManager, "dialog");
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 //        Log.d(TAG, "onActivityResult: starts");

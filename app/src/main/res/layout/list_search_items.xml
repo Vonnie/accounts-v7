@@ -21,6 +21,19 @@
         tools:layout_editor_absoluteY="4dp" />
 
     <TextView
+        android:id="@+id/srli_acct_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="0dp"
+        android:gravity="right"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/srli_corp_name"
+        tools:layout_editor_absoluteX="384dp"
+        tools:layout_editor_absoluteY="30dp" />
+
+    <TextView
         android:id="@+id/srli_website"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -32,17 +45,14 @@
         tools:layout_editor_absoluteY="173dp" />
 
     <TextView
-        android:id="@+id/srli_acct_id"
+        android:id="@+id/srli_open_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginTop="0dp"
         android:gravity="right"
-        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/srli_corp_name"
-        tools:layout_editor_absoluteX="384dp"
-        tools:layout_editor_absoluteY="30dp" />
+        app:layout_constraintBottom_toBottomOf="@+id/srli_website" />
 
     <TextView
         android:id="@+id/srli_user_name"
@@ -63,7 +73,7 @@
         android:layout_marginTop="0dp"
         android:gravity="right"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/srli_acct_id"
+        app:layout_constraintTop_toBottomOf="@+id/srli_open_date"
         tools:layout_editor_absoluteX="12dp"
         tools:layout_editor_absoluteY="4dp" />
 
@@ -76,16 +86,6 @@
     <!--app:layout_constraintTop_toBottomOf="@+id/srli_acct_id"-->
     <!--tools:layout_editor_absoluteX="384dp"-->
     <!--tools:layout_editor_absoluteY="25dp" />-->
-
-    <TextView
-        android:id="@+id/srli_open_date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginTop="0dp"
-        android:gravity="right"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/srli_user_email" />
 
     <TextView
         android:id="@+id/srli_notes"

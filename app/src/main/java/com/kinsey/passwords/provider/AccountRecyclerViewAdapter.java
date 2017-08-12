@@ -215,7 +215,9 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
                         (accountSortorder == AccountsContract.ACCOUNT_LIST_BY_CORP_NAME ||
                                 accountSortorder == AccountsContract.ACCOUNT_LIST_BY_SEQUENCE ||
                                 accountSortorder == AccountsContract.ACCOUNT_LIST_BY_OPEN_DATE)) {
-                    holder.user_name.setVisibility(View.GONE);
+//                    holder.user_name.setVisibility(View.GONE);
+                    holder.user_name.setVisibility(View.VISIBLE);
+                    holder.user_name.setText(account.getUserName());
                 } else {
                     holder.user_name.setVisibility(View.VISIBLE);
                     holder.user_name.setText(account.getUserName());
@@ -249,7 +251,7 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
                     holder.acctId.setVisibility(View.GONE);
                 } else {
                     holder.acctId.setVisibility(View.VISIBLE);
-                    holder.acctId.setText("AcctId:" + String.valueOf(account.getPassportId()));
+                    holder.acctId.setText("Id:" + String.valueOf(account.getPassportId()));
                 }
             }
 

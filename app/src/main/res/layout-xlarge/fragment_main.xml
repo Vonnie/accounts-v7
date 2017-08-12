@@ -20,7 +20,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="@string/home_message_title"
-        android:textSize="30sp"
+        android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -56,7 +56,7 @@
                 android:layout_marginTop="8dp"
                 android:scrollbars="vertical"
                 android:text="@string/home_message_text"
-                android:textSize="24sp" />
+                android:textSize="20sp" />
         </LinearLayout>
     </ScrollView>
 </android.support.constraint.ConstraintLayout>

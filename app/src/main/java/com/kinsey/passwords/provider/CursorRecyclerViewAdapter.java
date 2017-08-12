@@ -118,7 +118,12 @@ public class CursorRecyclerViewAdapter extends RecyclerView.Adapter<CursorRecycl
                 public void onClick(View view) {
 //                    Log.d(TAG, "onClick: starts");
                     switch (view.getId()) {
-                        case R.id.srli_acct_edit:
+//                        case R.id.srli_acct_edit:
+//                            if (mListener != null) {
+//                                mListener.onSuggestUpClick(suggest);
+//                            }
+//                            break;
+                        case R.id.tli_suggest_up:
                             if (mListener != null) {
                                 mListener.onSuggestUpClick(suggest);
                             }

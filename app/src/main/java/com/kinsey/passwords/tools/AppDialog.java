@@ -47,6 +47,7 @@ public class AppDialog extends DialogFragment {
     public static final int DIALOG_ACCT_LIST_IMPORT = 5;
     public static final int DIALOG_ACCT_LIST_VIEW_EXPORT_FILE = 6;
     public static final int DIALOG_ACCT_LIST_VIEW_SUGGESTIONS = 7;
+    public static final int DIALOG_ACCT_SEARCH_REQUEST = 8;
 
     private EditText mEditText;
 

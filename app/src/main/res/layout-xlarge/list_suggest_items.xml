@@ -16,7 +16,7 @@
         android:text="@string/sugg_add_msg"
         android:textAppearance="@android:style/TextAppearance.Large"
         android:textColor="@color/colorPrimaryDark"
-        android:textSize="30sp"
+        android:textSize="20sp"
         app:layout_constraintLeft_toLeftOf="parent" />
 
     <ImageButton
