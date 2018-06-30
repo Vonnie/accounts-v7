@@ -1,30 +1,64 @@
 package com.kinsey.passwords;
 
+import android.annotation.SuppressLint;
+import android.content.ActivityNotFoundException;
+import android.content.ContentResolver;
+import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kinsey.passwords.items.Account;
 import com.kinsey.passwords.items.AccountsContract;
 import com.kinsey.passwords.items.Suggest;
+import com.kinsey.passwords.items.SuggestsContract;
+import com.kinsey.passwords.provider.AccountRecyclerViewAdapter;
+import com.kinsey.passwords.provider.FeedAdapter;
+import com.kinsey.passwords.provider.ParseApplications;
 import com.kinsey.passwords.tools.AppDialog;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity
-        implements
+        implements AccountRecyclerViewAdapter.OnAccountClickListener,
+        AddEditActivityFragment.OnSaveClicked,
+        AccountActivityFragment.OnActionListener,
+        AccountPlaceholderFrag1.OnAccountListener,
+        AccountPlaceholderFrag2.OnAccountListener,
+        AccountPlaceholderFrag3.OnAccountListener,
+        ViewPager.OnPageChangeListener,
+        AppDialog.DialogEvents {
+
 //        AccountRecyclerViewAdapter.OnAccountClickListener,
 //        MainActivityFragment.OnActionListener,
-        AppDialog.DialogEvents {
+
     public static final String TAG = "MainActivity";
 
     // whether or not the activity is i 2-pane mode
@@ -34,6 +68,17 @@ public class MainActivity extends AppCompatActivity
     private static final String ACCOUNT_FRAGMENT = "AccountFragment";
     public static String DEFAULT_APP_DIRECTORY = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath()
             + "/Passport";
+    private String feedUrl = "http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topTvEpisodes/xml";
+    private int feedLimit = 10;
+    private String feedCachedUrl = "INVALIDATED";
+    public static final String STATE_URL = "feedUrl";
+    public static final String STATE_LIMIT = "feedLimit";
+    private ListView listApps;
+    private ViewPager mViewPager;
+    private int fragListPos = -1;
+    private int frag1Pos = 0;
+    private int frag2Pos = 1;
+    private int frag3Pos = 2;
 
     public static final int ACCOUNT_LOADER_ID = 1;
     public static final int SEARCH_LOADER_ID = 2;
@@ -44,6 +89,28 @@ public class MainActivity extends AppCompatActivity
     public static final int REQUEST_ACCOUNT_EDIT = 3;
     public static final int REQUEST_ACCOUNT_SEARCH = 4;
 
+    public static int accountSelectedPos = -1;
+
+    Menu menu;
+    boolean isUserPaging = true;
+    public static Account account = new Account();
+    private AlertDialog mDialog = null;
+
+    private int accountMode = AccountsContract.ACCOUNT_ACTION_ADD;
+    private AccountListActivityFragment fragList;
+    private static AccountPlaceholderFrag1 frag1;
+    private static AccountPlaceholderFrag2 frag2;
+    private static AccountPlaceholderFrag3 frag3;
+
+
+    private enum ListHomeType {
+        TOP10FREEAPP,
+        TOP25FREEAPP,
+        TOPTVEPISODE,
+        TOPTVSEASONS;
+    }
+    ListHomeType currList = ListHomeType.TOP10FREEAPP;
+
     private static String pattern_ymdtime = "yyyy-MM-dd HH:mm:ss.0";
     public static SimpleDateFormat format_ymdtime = new SimpleDateFormat(
             pattern_ymdtime, Locale.US);
@@ -51,11 +118,58 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+//        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_account_list);
+//        setContentView(R.layout.activity_main_rss_list);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         Log.d(TAG, "onCreate: layout activity_main");
+
+        mTwoPane = (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE);
+        Log.d(TAG, "onCreate: twoPane is " + mTwoPane);
+
+
+        listApps = (ListView) findViewById(R.id.xmlListView);
+
+
+        if (savedInstanceState != null) {
+            feedUrl = savedInstanceState.getString(STATE_URL);
+            feedLimit = savedInstanceState.getInt(STATE_LIMIT);
+        }
+
+
+        feedUrl = String.format("http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topfreeapplications/limit=%d/xml", feedLimit);
+
+//        downloadUrl("http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topfreeapplications/limit=10/xml");
+//        downloadUrl(feedUrl);
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        // If the AddEditActivity fragment exists, we're editing
+        Boolean editing = fragmentManager.findFragmentById(R.id.task_details_container) != null;
+        Log.d(TAG, "onCreate: editing is " + editing);
+
+        // We need references to the containers, so we can show or hide them as necessary.
+        // No need to cast them, as we're only calling a method that's available for all views.
+        View addEditLayout = findViewById(R.id.task_details_container);
+        View mainFragment = findViewById(R.id.fragment);
+
+        if(mTwoPane) {
+            Log.d(TAG, "onCreate: twoPane mode");
+            mainFragment.setVisibility(View.VISIBLE);
+            addEditLayout.setVisibility(View.VISIBLE);
+        } else if (editing) {
+            Log.d(TAG, "onCreate: single pane, editing");
+            // hide the left hand fragment, to make room for editing
+            mainFragment.setVisibility(View.GONE);
+        } else {
+            Log.d(TAG, "onCreate: single pane, not editing");
+            // Show left hand fragment
+            mainFragment.setVisibility(View.VISIBLE);
+            // Hide the editing frame
+            addEditLayout.setVisibility(View.GONE);
+        }
+
 
 //        resetPreferences();
 
@@ -164,7 +278,16 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+        this.menu = menu;
         getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        if (currList == ListHomeType.TOP10FREEAPP) {
+            menu.findItem(R.id.menumain_rss_top_free_apps).setChecked(true);
+        } else if (currList == ListHomeType.TOPTVEPISODE) {
+            menu.findItem(R.id.menumain_rss_top_tv_episodes).setChecked(true);
+        } else if (currList == ListHomeType.TOPTVSEASONS) {
+            menu.findItem(R.id.menumain_rss_top_tv_seasons).setChecked(true);
+        }
         return true;
     }
 
@@ -173,13 +296,16 @@ public class MainActivity extends AppCompatActivity
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
+        feedUrl = "http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topTvEpisodes/xml";
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
         switch (id) {
-//            case R.id.menumain_addAccount:
+            case R.id.menumain_add:
 //                editAccountRequest(null);
-//                break;
+//                addAccountRequest();
+                acctEditRequest(null);
+                break;
             case R.id.menumain_showAccounts:
                 accountsListRequest(AccountsContract.ACCOUNT_LIST_BY_CORP_NAME);
                 break;
@@ -191,10 +317,474 @@ public class MainActivity extends AppCompatActivity
                 searchListRequest();
 
                 break;
+            case R.id.menumain_rss_top_free_apps:
+
+                currList = ListHomeType.TOP10FREEAPP;
+                if (!item.isChecked()) {
+                    item.setChecked(true);
+                }
+
+                feedUrl = "http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topfreeapplications/limit=10/xml";
+                downloadUrl(feedUrl);
+
+                break;
+            case R.id.menumain_rss_top_tv_episodes:
+
+                currList = ListHomeType.TOPTVEPISODE;
+                if (!item.isChecked()) {
+                    item.setChecked(true);
+                }
+
+                feedUrl = "http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topTvEpisodes/xml";
+                downloadUrl(feedUrl);
+
+                break;
+            case R.id.menumain_rss_top_tv_seasons:
+
+                currList = ListHomeType.TOPTVSEASONS;
+                if (!item.isChecked()) {
+                    item.setChecked(true);
+                }
+
+//                feedUrl = "https://www.nasa.gov/rss/dyn/Houston-We-Have-a-Podcast.rss";
+//                feedUrl = "https://www.cnet.com/rss/news/";
+                feedUrl = "http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topTvSeasons/xml";
+                downloadUrl(feedUrl);
+
+                break;
+
+            case R.id.menumain_about:
+
+                showAboutDialog();
+
+                break;
+
+            case R.id.menumain_refresh:
+
+                feedCachedUrl = "INVALIDATED";
+
+                break;
+
+            case android.R.id.home:
+                Log.d(TAG, "onOptionsItemSelected: home button pressed");
+                AddEditActivityFragment fragment = (AddEditActivityFragment)
+                        getSupportFragmentManager().findFragmentById(R.id.task_details_container);
+                if(fragment.canClose()) {
+                    return super.onOptionsItemSelected(item);
+                } else {
+                    showConfirmationDialog(AppDialog.DIALOG_ID_CANCEL_EDIT_UP);
+                    return true;  // indicate we are handling this
+                }
+
         }
 
         return super.onOptionsItemSelected(item);
     }
+
+    private void setMenuItemEnabled(int id, boolean blnSet) {
+        MenuItem item = menu.findItem(id);
+        item.setEnabled(blnSet);
+    }
+
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        Log.d(TAG, "onPageSelected: " + position);
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+        Log.d(TAG, "onPageScrollStateChanged: " + state);
+    }
+
+    @Override
+    public void onAccountRetreived(Account account) {
+
+    }
+
+    @Override
+    public void onAccount2Instance() {
+        Log.d(TAG, "onAccount2Instance: ");
+    }
+
+    @Override
+    public void onAccount3Instance() {
+        Log.d(TAG, "onAccount3Instance: ");
+    }
+
+    @Override
+    public void onAccountListSelect(Account account) {
+        Log.d(TAG, "onAccountListSelect: ");
+        accountMode = AccountsContract.ACCOUNT_ACTION_CHG;
+//        Log.d(TAG, "onAccountListSelect: selected pos " + selected_position);
+//        fragList.setSelected_position(selected_position);
+//        accountSelectedPos = selected_position;
+        setMenuItemEnabled(R.id.menuacct_delete, true);
+        setMenuItemEnabled(R.id.menuacct_save, true);
+        if (account.getCorpWebsite().equals("")) {
+            setMenuItemEnabled(R.id.menuacct_internet, false);
+        } else {
+            setMenuItemEnabled(R.id.menuacct_internet, true);
+        }
+        this.account = account;
+
+        acctEditRequest(this.account);
+//        mSectionsPagerAdapter.destroyItem(mViewPager, frag1Pos, frag1);
+//        mSectionsPagerAdapter.destroyItem(mViewPager, frag2Pos, frag2);
+//        mSectionsPagerAdapter.destroyItem(mViewPager, frag3Pos, frag3);
+//        int currPage = mViewPager.getCurrentItem();
+
+//        updatePages(currPage);
+//        updatePages(frag1Pos);
+
+    }
+
+    private void updatePages(int currPage) {
+        isUserPaging = false;
+
+//        int currPage = mViewPager.getCurrentItem();
+
+        if (fragListPos == -1) {
+            mViewPager.setOffscreenPageLimit(2);
+        } else {
+            mViewPager.setOffscreenPageLimit(3);
+        }
+
+        mViewPager.setCurrentItem(frag2Pos);
+
+        frag1.fillPage();
+        Log.d(TAG, "updatePages: page1 filled, setPrimary");
+//        mSectionsPagerAdapter.setPrimaryItem(mViewPager, frag1Pos, frag1);
+////        mViewPager.setCurrentItem(frag1Pos);
+//        mSectionsPagerAdapter.notifyDataSetChanged();
+
+//        new CountDownTimer(10000, 1000) {
+//
+//            public void onTick(long millisUntilFinished) {
+////                    mTextField.setText("seconds remaining: " + millisUntilFinished / 1000);
+//            }
+//
+//            public void onFinish() {
+////                    mTextField.setText("done!");
+//            }
+//        }.start();
+
+        frag2.fillPage();
+//        mViewPager.setCurrentItem(frag2Pos);
+        Log.d(TAG, "updatePages: page2 filled, setPrimary");
+//        mSectionsPagerAdapter.setPrimaryItem(mViewPager, frag2Pos, frag2);
+//        mSectionsPagerAdapter.notifyDataSetChanged();
+
+//        new CountDownTimer(10000, 1000) {
+//
+//            public void onTick(long millisUntilFinished) {
+////                    mTextField.setText("seconds remaining: " + millisUntilFinished / 1000);
+//            }
+//
+//            public void onFinish() {
+////                    mTextField.setText("done!");
+//            }
+//        }.start();
+        frag3.fillPage();
+        Log.d(TAG, "updatePages: page3 filled, setPrimary");
+//        mViewPager.setCurrentItem(frag3Pos);
+//        mSectionsPagerAdapter.setPrimaryItem(mViewPager, frag3Pos, frag3);
+//        mSectionsPagerAdapter.notifyDataSetChanged();
+
+//        new CountDownTimer(10000, 1000) {
+//
+//            public void onTick(long millisUntilFinished) {
+////                    mTextField.setText("seconds remaining: " + millisUntilFinished / 1000);
+//            }
+//
+//            public void onFinish() {
+////                    mTextField.setText("done!");
+//            }
+//        }.start();
+
+
+//        mSectionsPagerAdapter.fillPages();
+
+//        isUserPaging = false;
+
+//        frag1 = (AccountPlaceholderFrag1)mSectionsPagerAdapter.instantiateItem(mViewPager, frag1Pos);
+//        frag2 = (AccountPlaceholderFrag2)mSectionsPagerAdapter.instantiateItem(mViewPager, frag2Pos);
+//        frag3 = (AccountPlaceholderFrag3)mSectionsPagerAdapter.instantiateItem(mViewPager, frag3Pos);
+
+//        if (frag1 != null) {
+//
+//            mViewPager.setCurrentItem(frag3Pos);
+//            frag1.fillPage();
+//            mSectionsPagerAdapter.notifyDataSetChanged();
+//            mViewPager.setCurrentItem(frag3Pos);
+//            mSectionsPagerAdapter.notifyDataSetChanged();
+//            mSectionsPagerAdapter.getItem(frag1Pos);
+//        }
+//        if (frag2 != null) {
+//            mViewPager.setCurrentItem(frag2Pos);
+//            frag2.fillPage();
+//            mSectionsPagerAdapter.notifyDataSetChanged();
+//            mSectionsPagerAdapter.getItem(frag2Pos);
+//            mViewPager.setCurrentItem(frag2Pos);
+//            mSectionsPagerAdapter.notifyDataSetChanged();
+//        }
+//        if (frag3 != null) {
+//            mViewPager.setCurrentItem(frag1Pos);
+//            frag3.fillPage();
+//            mSectionsPagerAdapter.notifyDataSetChanged();
+//            mSectionsPagerAdapter.getItem(frag3Pos);
+//            mViewPager.setCurrentItem(frag1Pos);
+//            mSectionsPagerAdapter.notifyDataSetChanged();
+//        }
+
+//        isUserPaging = true;
+
+        //        mRetainedFragment.getData().setAccount(account);
+//        mSectionsPagerAdapter.setAccount(account);
+//        isUserPaging = false;
+//        int currPage = mViewPager.getCurrentItem();
+//        frag1 = AccountPlaceholderFrag1.newInstance();
+//        frag2 = AccountPlaceholderFrag2.newInstance();
+//        frag3 = AccountPlaceholderFrag3.newInstance();
+//        mSectionsPagerAdapter.setFrag1(frag1);
+//        mSectionsPagerAdapter.setFrag2(frag2);
+//        mSectionsPagerAdapter.setFrag3(frag3);
+//        if (!mTwoPane && accountSortorder == AccountsContract.ACCOUNT_LIST_BY_SEQUENCE) {
+
+//        if (fragListPos == -1) {
+//            if (accountMode == AccountsContract.ACCOUNT_ACTION_ADD) {
+//                mViewPager.setCurrentItem(frag1Pos);
+//                if (!isRotated) {
+//                    frag1.setCorpNameFocus();
+//                }
+//            } else {
+//                Log.d(TAG, "updatePages: currPage " + currPage);
+//                mViewPager.setCurrentItem(currPage);
+//                if (!isRotated) {
+//                    if (currPage == frag1Pos) {
+//                        frag1.setCorpNameFocus();
+//                    }
+//                }
+//            }
+//        } else {
+////            fragList.setViewerPos();
+////            myRecyclerView.findViewHolderForAdapterPosition(pos).itemView;
+//            if (accountMode == AccountsContract.ACCOUNT_ACTION_ADD) {
+//                mViewPager.setCurrentItem(frag1Pos);
+//                if (!isRotated) {
+//                    frag1.setCorpNameFocus();
+//                }
+//            } else {
+//                mViewPager.setCurrentItem(fragListPos);
+//            }
+//        }
+
+        Log.d(TAG, "updatePages: currentItem " + mViewPager.getCurrentItem());
+
+        if (fragListPos == -1) {
+//            mSectionsPagerAdapter.setPrimaryItem(mViewPager, frag1Pos, frag1);
+            mViewPager.setCurrentItem(frag1Pos);
+        } else {
+//            mSectionsPagerAdapter.setPrimaryItem(mViewPager, fragListPos, fragList);
+            if (accountMode == AccountsContract.ACCOUNT_ACTION_ADD) {
+                mViewPager.setCurrentItem(frag1Pos);
+            } else {
+                mViewPager.setCurrentItem(fragListPos);
+            }
+        }
+
+        Log.d(TAG, "updatePages: currentItem " + mViewPager.getCurrentItem());
+
+        isUserPaging = true;
+
+//        mViewPager.setCurrentItem(frag3Pos);
+//        mRetainedFragment.getData().getmSectionsPagerAdapter().loadPage(mRetainedFragment.getData().getFrag3Pos());
+//        mViewPager.setCurrentItem(mRetainedFragment.getData().getFrag2Pos());
+//        mRetainedFragment.getData().getmSectionsPagerAdapter().loadPage(mRetainedFragment.getData().getFrag2Pos());
+//        mViewPager.setCurrentItem(mRetainedFragment.getData().getFrag1Pos());
+//        mRetainedFragment.getData().getmSectionsPagerAdapter().loadPage(mRetainedFragment.getData().getFrag1Pos());
+//        Log.d(TAG, "onAccountListSelect: currPage " + currPage);
+//        if (currPage != 0) {
+//            mRetainedFragment.getData().getmSectionsPagerAdapter().loadPage(currPage);
+//        }
+//        isUserPaging = true;
+
+
+////        Context context = getContext();
+//        accountMode = AccountsContract.ACCOUNT_ACTION_CHG;
+//        Intent intent = new Intent(this, AccountActivity.class);
+//        intent.putExtra(Account.class.getSimpleName(), account.getId());
+//
+//        startActivityForResult(intent, AccountsContract.ACCOUNT_ACTION_CHG);
+
+    }
+
+
+    @Override
+    public void onAccountUpClick(Account account) {
+        Log.d(TAG, "onAccountUpClick: " + account.getId());
+        List<Account> listAccounts = loadAccountsBySeq();
+        int priorId = -1;
+        int iLimit = listAccounts.size();
+        for (int i = 0; i < iLimit; i++) {
+            Account item = listAccounts.get(i);
+            if (account.getId() == item.getId()) {
+                break;
+            }
+            priorId = item.getId();
+        }
+//        Log.d(TAG, "onSuggestDownClick: priorId " + priorId);
+
+        int reseq = 0;
+        for (int i = 0; i < iLimit; i++) {
+            Account item = listAccounts.get(i);
+            if (priorId != item.getId()) {
+                reseq++;
+                item.setNewSequence(reseq);
+                if (account.getId() == item.getId()) {
+                    break;
+                }
+            }
+        }
+
+        boolean found = false;
+        for (int i = 0; i < iLimit; i++) {
+            Account item = listAccounts.get(i);
+            if (priorId == item.getId()) {
+                reseq++;
+                item.setNewSequence(reseq);
+            } else {
+                if (account.getId() == item.getId()) {
+                    found = true;
+                } else {
+                    if (found) {
+                        reseq++;
+                        item.setNewSequence(reseq);
+                    }
+                }
+            }
+        }
+
+        ContentResolver contentResolver = getContentResolver();
+
+        for (int i = 0; i < iLimit; i++) {
+            Account item = listAccounts.get(i);
+            if (item.getSequence() != item.getNewSequence()) {
+//                Log.d(TAG, "onSuggestDownClick: " + item.getSequence() + ":" + item.getNewSequence());
+                ContentValues values = new ContentValues();
+                values.put(AccountsContract.Columns.SEQUENCE_COL, item.getNewSequence());
+                contentResolver.update(AccountsContract.buildIdUri(item.getId()), values, null, null);
+            }
+        }
+
+        if (accountSelectedPos == -1) {
+        } else if (accountSelectedPos > 0) {
+            accountSelectedPos -= 1;
+        }
+
+    }
+
+    @Override
+    public void onAccountDownClick(Account account) {
+//        Log.d(TAG, "onAccountDownClick: " + account.getId());
+        List<Account> listAccounts = loadAccountsBySeq();
+        int nextId = -1;
+        int iLimit = listAccounts.size();
+        for (int i = 0; i < iLimit; i++) {
+            Account item = listAccounts.get(i);
+            if (nextId != -1) {
+                nextId = item.getId();
+                break;
+            }
+            if (account.getId() == item.getId()) {
+                nextId = item.getId();
+            }
+        }
+//        Log.d(TAG, "onSuggestDownClick: nextId " + nextId);
+
+        int reseq = 0;
+        for (int i = 0; i < iLimit; i++) {
+            Account item = listAccounts.get(i);
+            if (account.getId() != item.getId()) {
+                reseq++;
+                item.setNewSequence(reseq);
+                if (nextId == item.getId()) {
+                    break;
+                }
+            }
+        }
+
+        boolean found = false;
+        for (int i = 0; i < iLimit; i++) {
+            Account item = listAccounts.get(i);
+            if (account.getId() == item.getId()) {
+                reseq++;
+                item.setNewSequence(reseq);
+            } else {
+                if (nextId == item.getId()) {
+                    found = true;
+                } else {
+                    if (found) {
+                        reseq++;
+                        item.setNewSequence(reseq);
+                    }
+                }
+            }
+        }
+
+        ContentResolver contentResolver = getContentResolver();
+
+        for (int i = 0; i < iLimit; i++) {
+            Account item = listAccounts.get(i);
+            if (item.getSequence() != item.getNewSequence()) {
+//                Log.d(TAG, "onSuggestDownClick: " + item.getSequence() + ":" + item.getNewSequence());
+                ContentValues values = new ContentValues();
+                values.put(AccountsContract.Columns.SEQUENCE_COL, item.getNewSequence());
+                contentResolver.update(AccountsContract.buildIdUri(item.getId()), values, null, null);
+            }
+        }
+
+        if (accountSelectedPos == -1) {
+        } else if (accountSelectedPos < iLimit) {
+            accountSelectedPos += 1;
+        }
+
+    }
+
+
+    List<Account> loadAccountsBySeq() {
+//        Log.d(TAG, "loadAccountsBySeq: starts ");
+        String sortOrder = AccountsContract.Columns.SEQUENCE_COL + "," + AccountsContract.Columns.CORP_NAME_COL + " COLLATE NOCASE ASC";
+        Cursor cursor = getContentResolver().query(
+                AccountsContract.CONTENT_URI, null, null, null, sortOrder);
+
+        List<Account> listAccounts = new ArrayList<Account>();
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+//                Log.d(TAG, "loadPasswords: seq " + cursor.getInt(cursor.getColumnIndex(SuggestsContract.Columns.SEQUENCE_COL))
+//                        + ":" + cursor.getString(cursor.getColumnIndex(SuggestsContract.Columns.PASSWORD_COL)));
+                Account item = new Account(
+                        cursor.getInt(cursor.getColumnIndex(AccountsContract.Columns._ID_COL)),
+                        cursor.getString(cursor.getColumnIndex(AccountsContract.Columns.CORP_NAME_COL)),
+                        cursor.getString(cursor.getColumnIndex(AccountsContract.Columns.USER_NAME_COL)),
+                        cursor.getString(cursor.getColumnIndex(AccountsContract.Columns.USER_EMAIL_COL)),
+                        cursor.getString(cursor.getColumnIndex(AccountsContract.Columns.CORP_WEBSITE_COL)),
+                        cursor.getInt(cursor.getColumnIndex(AccountsContract.Columns.SEQUENCE_COL)));
+                item.setNewSequence(cursor.getInt(cursor.getColumnIndex(SuggestsContract.Columns.SEQUENCE_COL)));
+                listAccounts.add(item);
+            }
+            cursor.close();
+        }
+
+        return listAccounts;
+    }
+
+
 
     private void searchListRequest() {
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -211,6 +801,49 @@ public class MainActivity extends AppCompatActivity
         newFragment.setArguments(args);
         newFragment.show(fragmentManager, "dialog");
     }
+
+
+    private void acctEditRequest(Account acct) {
+        Log.d(TAG, "taskEditRequest: starts");
+        Log.d(TAG, "taskEditRequest: in two-pane mode (tablet) " + mTwoPane);
+
+        AddEditActivityFragment fragment = new AddEditActivityFragment();
+
+        Bundle arguments = new Bundle();
+        arguments.putSerializable(Account.class.getSimpleName(), acct);
+        fragment.setArguments(arguments);
+
+        Log.d(TAG, "taskEditRequest: twoPaneMode " + mTwoPane);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.task_details_container, fragment)
+                .commit();
+
+
+        if(!mTwoPane) {
+            Log.d(TAG, "taskEditRequest: in single-pane mode (phone)");
+            // Hide the left hand fragment and show the right hand frame
+            View mainFragment = findViewById(R.id.fragment);
+            View addEditLayout = findViewById(R.id.task_details_container);
+            mainFragment.setVisibility(View.GONE);
+            addEditLayout.setVisibility(View.VISIBLE);
+        }
+        Log.d(TAG, "Exiting taskEditRequest");
+    }
+
+
+    private void addAccountRequest() {
+//        Log.d(TAG, "addAccountRequest: starts");
+//        if (mTwoPane) {
+//            mAccountAdapter.resetSelection();
+        accountMode = AccountsContract.ACCOUNT_ACTION_ADD;
+        this.account = new Account();
+        accountSelectedPos = -1;
+        setMenuItemEnabled(R.id.menuacct_delete, false);
+        setMenuItemEnabled(R.id.menuacct_save, true);
+        setMenuItemEnabled(R.id.menuacct_internet, false);
+        updatePages(frag1Pos);
+    }
+
 
     private void editAccountRequest(Account account) {
 //        Log.d(TAG, "addAccountRequest: starts");
@@ -275,6 +908,69 @@ public class MainActivity extends AppCompatActivity
 //                .replace(R.id.fragmentMain, fragment)
 //                .commit();
 
+    }
+
+    private void downloadUrl(String feedUrl) {
+        if (!feedUrl.equalsIgnoreCase(feedCachedUrl)) {
+            Log.d(TAG, "downloadURL: " + feedUrl);
+            DownloadData downloadData = new DownloadData();
+            downloadData.execute(feedUrl);
+            feedCachedUrl = feedUrl;
+            Log.d(TAG, "downloadURL: done");
+        } else {
+            Log.d(TAG, "downloadUrl: URL not changed");
+        }
+    }
+
+    public void showAboutDialog() {
+        @SuppressLint("InflateParams") View messageView = getLayoutInflater().inflate(R.layout.activity_about, null, false);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.app_name);
+        builder.setIcon(R.mipmap.ic_launcher);
+
+        builder.setView(messageView);
+
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+//                Log.d(TAG, "onClick: Entering messageView.onClick, showing = " + mDialog.isShowing());
+                if(mDialog != null && mDialog.isShowing()) {
+                    mDialog.dismiss();
+                }
+            }
+        });
+
+        mDialog = builder.create();
+        mDialog.setCanceledOnTouchOutside(true);
+
+        TextView tv = (TextView) messageView.findViewById(R.id.about_version);
+        tv.setText("v" + BuildConfig.VERSION_NAME);
+
+        TextView about_url = (TextView) messageView.findViewById(R.id.about_url);
+        if(about_url != null) {
+            about_url.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    String s = ((TextView) v).getText().toString();
+                    intent.setData(Uri.parse(s));
+                    try {
+                        startActivity(intent);
+                    } catch(ActivityNotFoundException e) {
+                        Toast.makeText(MainActivity.this, "No browser application found, cannot visit world-wide web", Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
+        }
+
+        mDialog.show();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putString(STATE_URL, feedUrl);
+        outState.putInt(STATE_LIMIT, feedLimit);
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -462,6 +1158,48 @@ public class MainActivity extends AppCompatActivity
                 detailIntent.putExtra(SearchActivity.class.getSimpleName(), true);
                 startActivity(detailIntent);
                 break;
+            case AppDialog.DIALOG_ID_LEAVE_APP:
+                finish();
+                break;
+            case AppDialog.DIALOG_ID_CANCEL_EDIT:
+            case AppDialog.DIALOG_ID_CANCEL_EDIT_UP:
+                // If we're editing, remove the fragment. Otherwise, close the app
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                Fragment fragment = fragmentManager.findFragmentById(R.id.task_details_container);
+                if(fragment != null) {
+                    // we were editing
+                    getSupportFragmentManager().beginTransaction()
+                            .remove(fragment)
+                            .commit();
+                    if(mTwoPane) {
+                        // in Landscape, so quit only if the back button was used
+                        if(dialogId == AppDialog.DIALOG_ID_LEAVE_APP) {
+                            finish();
+                        } else {
+                            Log.d(TAG, "onPositiveDialogResult: get list");
+                            AccountListActivityFragment listFragment = (AccountListActivityFragment)
+                                    getSupportFragmentManager().findFragmentById(R.id.fragment);
+                            listFragment.resetSelectItem();
+                        }
+                    } else {
+                        // hide the edit container in single pane mode
+                        // and make sure the left-hand container is visible
+                        View addEditLayout = findViewById(R.id.task_details_container);
+                        View mainFragment = findViewById(R.id.fragment);
+                        // We're just removed the editing fragment, so hide the frame
+                        addEditLayout.setVisibility(View.GONE);
+
+
+                        // and make sure the MainActivityFragment is visible
+                        mainFragment.setVisibility(View.VISIBLE);
+
+
+                    }
+                } else {
+                    // not editing, so quit regardless of orientation
+                    finish();
+                }
+                break;
         }
     }
 
@@ -474,13 +1212,155 @@ public class MainActivity extends AppCompatActivity
         detailIntent.putExtra(SearchActivity.class.getSimpleName(), false);
                 startActivity(detailIntent);
                 break;
+            case AppDialog.DIALOG_ID_LEAVE_APP:
+                case AppDialog.DIALOG_ID_CANCEL_EDIT:
+            case AppDialog.DIALOG_ID_CANCEL_EDIT_UP:
 
+                break;
         }
 
     }
 
     @Override
     public void onDialogCancelled(int dialogId) {
+
+    }
+
+
+    private class DownloadData extends AsyncTask<String, Void, String> {
+        private static final String TAG = "DownloadData";
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+//            Log.d(TAG, "onPostExecute: parameter is " + s);
+            ParseApplications parseApplications = new ParseApplications();
+            parseApplications.parse(s);
+
+//            ArrayAdapter<FeedEntry> arrayAdapter = new ArrayAdapter<FeedEntry>(
+//                    MainActivity.this, R.layout.list_item, parseApplications.getApplications());
+//            listApps.setAdapter(arrayAdapter);
+            FeedAdapter feedAdapter = new FeedAdapter(MainActivity.this, R.layout.list_record,
+                    parseApplications.getApplications());
+            listApps.setAdapter(feedAdapter);
+
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            Log.d(TAG, "doInBackground: starts with " + strings[0]);
+            String rssFeed = downloadXML(strings[0]);
+            if (rssFeed == null) {
+                Log.e(TAG, "doInBackground: Error downloading");
+            }
+            return rssFeed;
+        }
+
+        private String downloadXML(String urlPath) {
+            StringBuilder xmlResult = new StringBuilder();
+
+            try {
+                URL url = new URL(urlPath);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                int response = connection.getResponseCode();
+                Log.d(TAG, "downloadXML: The response code was " + response);
+//                InputStream inputStream = connection.getInputStream();
+//                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+//                BufferedReader reader = new BufferedReader(inputStreamReader);
+                BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+
+                int charsRead;
+                char[] inputBuffer = new char[500];
+                while (true) {
+                    charsRead = reader.read(inputBuffer);
+                    if (charsRead < 0) {
+                        break;
+                    }
+                    if (charsRead > 0) {
+                        xmlResult.append(String.copyValueOf(inputBuffer, 0, charsRead));
+                    }
+                }
+                reader.close();
+
+                return xmlResult.toString();
+            } catch (MalformedURLException e) {
+                Log.e(TAG, "downloadXML: Invalid URL " + e.getMessage());
+            } catch (IOException e) {
+                Log.e(TAG, "downloadXML: IO Exception reading data: " + e.getMessage());
+            } catch (SecurityException e) {
+                Log.e(TAG, "downloadXML: Security Exception.  Needs permisson? " + e.getMessage());
+//                e.printStackTrace();
+            }
+
+            return null;
+        }
+    }
+
+    @Override
+    public void onSaveClicked() {
+        Log.d(TAG, "onSaveClicked: starts");
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        Fragment fragment = fragmentManager.findFragmentById(R.id.task_details_container);
+        if (fragment != null) {
+            getSupportFragmentManager().beginTransaction()
+                    .remove(fragment)
+                    .commit();
+        }
+
+        View addEditLayout = findViewById(R.id.task_details_container);
+        View mainFragment = findViewById(R.id.fragment);
+
+        if(!mTwoPane) {
+            // We've just removed the editing fragment, so hide the frame
+            addEditLayout.setVisibility(View.GONE);
+
+            // and make sure the MainActivityFragment is visible.
+            mainFragment.setVisibility(View.VISIBLE);
+        }
+
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        Log.d(TAG, "onBackPressed: ");
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        AddEditActivityFragment fragment = (AddEditActivityFragment) fragmentManager.findFragmentById(R.id.task_details_container);
+        if ((fragment == null) || fragment.canClose()) {
+//            super.onBackPressed();
+            showConfirmationLeaveApp();
+        } else {
+            showConfirmationDialog(AppDialog.DIALOG_ID_CANCEL_EDIT);
+        }
+    }
+
+    private void showConfirmationLeaveApp() {
+        AppDialog dialog = new AppDialog();
+        Bundle args = new Bundle();
+        args.putInt(AppDialog.DIALOG_ID, AppDialog.DIALOG_ID_LEAVE_APP);
+        args.putInt(AppDialog.DIALOG_TYPE, AppDialog.DIALOG_YES_NO);
+        args.putString(AppDialog.DIALOG_MESSAGE, getString(R.string.confirmdiag_leave_warning));
+        args.putString(AppDialog.DIALOG_SUB_MESSAGE, getString(R.string.confirmdiag_leave_app_warning_sub_message));
+        args.putInt(AppDialog.DIALOG_NEGATIVE_RID, R.string.confirmdiag_leave_negative_caption);
+        args.putInt(AppDialog.DIALOG_POSITIVE_RID, R.string.confirmdiag_leave_positive_caption);
+
+        dialog.setArguments(args);
+        dialog.show(getSupportFragmentManager(), null);
+
+    }
+
+    private void showConfirmationDialog(int dialogId) {
+        AppDialog dialog = new AppDialog();
+        Bundle args = new Bundle();
+        args.putInt(AppDialog.DIALOG_ID, dialogId);
+        args.putInt(AppDialog.DIALOG_TYPE, AppDialog.DIALOG_YES_NO);
+        args.putString(AppDialog.DIALOG_MESSAGE, getString(R.string.confirmdiag_leave_warning));
+        args.putString(AppDialog.DIALOG_SUB_MESSAGE, getString(R.string.confirmdiag_leave_warning_sub_message));
+        args.putInt(AppDialog.DIALOG_NEGATIVE_RID, R.string.confirmdiag_ask_abandon_negative_caption);
+        args.putInt(AppDialog.DIALOG_POSITIVE_RID, R.string.confirmdiag_ask_abandon_positive_caption);
+
+        dialog.setArguments(args);
+        dialog.show(getSupportFragmentManager(), null);
 
     }
 }

@@ -53,7 +53,9 @@ public class MainActivityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 //        Log.d(TAG, "onCreateView: starts");
-        View view = inflater.inflate(R.layout.fragment_main, container, false);
+//        View view = inflater.inflate(R.layout.fragment_main, container, false);
+        View view = inflater.inflate(R.layout.fragment_account_list, container, false);
+
 //        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.items_list);
 //        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 //        return inflater.inflate(R.layout.fragment_main, container, false);

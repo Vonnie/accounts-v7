@@ -1,5 +1,6 @@
 package com.kinsey.passwords;
 
+import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -18,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.kinsey.passwords.items.Account;
 import com.kinsey.passwords.items.AccountsContract;
 import com.kinsey.passwords.provider.AccountRecyclerViewAdapter;
 
@@ -30,8 +32,8 @@ import static com.kinsey.passwords.MainActivity.ACCOUNT_LOADER_ID;
  * A placeholder fragment containing a simple view.
  */
 public class AccountListActivityFragment extends Fragment
-        implements LoaderManager.LoaderCallbacks<Cursor> {
-//        AccountRecyclerViewAdapter.OnAccountClickListener,
+        implements LoaderManager.LoaderCallbacks<Cursor>,
+        AccountRecyclerViewAdapter.OnAccountClickListener {
 //        ViewPager.OnPageChangeListener {
 
     private static final String TAG = "AccountListActivityFrag";
@@ -77,7 +79,34 @@ public class AccountListActivityFragment extends Fragment
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         Log.d(TAG, "onActivityCreated: starts loader_id " + ACCOUNT_LOADER_ID);
         super.onActivityCreated(savedInstanceState);
-//        getLoaderManager().initLoader(ACCOUNT_LOADER_ID, null, this);
+
+        // Activities containing this fragment must implement its callbacks.
+        Activity activity = getActivity();
+        if(!(activity instanceof AccountRecyclerViewAdapter.OnAccountClickListener)) {
+            throw new ClassCastException(activity.getClass().getSimpleName()
+                    + " must implement AccountRecyclerViewAdapter.OnAccountClickListener interface");
+        }
+
+        getLoaderManager().initLoader(ACCOUNT_LOADER_ID, null, this);
+    }
+
+    @Override
+    public void onAccountListSelect(Account account) {
+        Log.d(TAG, "onAccountListSelect: ");
+        AccountRecyclerViewAdapter.OnAccountClickListener listener = (AccountRecyclerViewAdapter.OnAccountClickListener) getActivity();
+        if (listener !=  null) {
+            listener.onAccountListSelect(account);
+        }
+    }
+
+    @Override
+    public void onAccountUpClick(Account account) {
+
+    }
+
+    @Override
+    public void onAccountDownClick(Account account) {
+
     }
 
     @Override
@@ -130,14 +159,26 @@ public class AccountListActivityFragment extends Fragment
         return view;
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+    }
+
     private void createLoader() {
         Cursor cursor = null;
         Log.d(TAG, "onCreateView: abt to init loader: " + accountSelectedPos);
 
 
         Log.d(TAG, "onCreateView: abt to call adapter sel: " + accountSelectedPos);
-        mAccountAdapter = new AccountRecyclerViewAdapter(getContext(), cursor,
-                (AccountRecyclerViewAdapter.OnAccountClickListener) getActivity());
+        if (mAccountAdapter == null) {
+            mAccountAdapter = new AccountRecyclerViewAdapter(getContext(),null, this);
+        }
+//            mAccountAdapter = new AccountRecyclerViewAdapter(getContext(), cursor,
+//                    (AccountRecyclerViewAdapter.OnAccountClickListener) getActivity());
+//        } else {
+//            mAccountAdapter.setListener((AccountRecyclerViewAdapter.OnAccountClickListener) getActivity());
+//        }
         mRecyclerView.setAdapter(mAccountAdapter);
 
         getLoaderManager().initLoader(ACCOUNT_LOADER_ID, null, this);
@@ -183,6 +224,8 @@ public class AccountListActivityFragment extends Fragment
                 }
             }
         }
+
+        Log.d(TAG, "onCreateLoader: sortorder " + sortOrder);
 //        String sortOrder = AccountsContract.Columns.TASKS_SORTORDER + "," + TasksContract.Columns.TASKS_NAME;
         Loader<Cursor> cursor = new CursorLoader(getActivity(),
                 AccountsContract.CONTENT_URI,
@@ -235,6 +278,18 @@ public class AccountListActivityFragment extends Fragment
     public void deleteAccount(Context context, int accountId) {
         context.getContentResolver().delete(AccountsContract.buildIdUri((long)accountId), null, null);
 //        getLoaderManager().restartLoader(ACCOUNT_LOADER_ID, null, this);
+        resetSelectItem();
+    }
+
+    public void resetSelectItem() {
+        Log.d(TAG, "resetSelectItem: ");
+        accountSelectedPos = -1;
+        getLoaderManager().restartLoader(ACCOUNT_LOADER_ID, null, this);
+
+
+//        int savePos = accountSelectedPos;
+//        mAccountAdapter.resetSelectItem();
+//        mRecyclerView.scrollToPosition(savePos);
     }
 
     public void saveAccount(Context context, boolean isForAdd) {

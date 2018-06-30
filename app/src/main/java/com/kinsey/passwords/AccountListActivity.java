@@ -6,8 +6,6 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -20,7 +18,6 @@ import android.util.JsonWriter;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.webkit.WebView;
 import android.widget.Toast;
 
@@ -191,49 +188,49 @@ public class AccountListActivity extends AppCompatActivity
 //        }
 
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Request an action", Snackbar.LENGTH_LONG)
-                        .setAction("See list",
-                                new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-//                                        Toast.makeText(AccountListActivity.this,
-//                                                "Snackbar action clicked",
-//                                                Toast.LENGTH_SHORT).show();
-//                                        editAccountRequest(null);
-//                                        mListener.onListSuggestsClick();
-
-                                        mActivityStart = true;
-                                        FragmentManager fragmentManager = getSupportFragmentManager();
-                                        AppDialog newFragment = AppDialog.newInstance();
-                                        Bundle args = new Bundle();
-                                        args.putInt(AppDialog.DIALOG_ID, AppDialog.DIALOG_ID_ACCOUNT_ACTIONS_LIST);
-                                        args.putInt(AppDialog.DIALOG_TYPE, AppDialog.DIALOG_ACCOUNT_LIST_OPTIONS);
-                                        args.putString(AppDialog.DIALOG_MESSAGE, getString(R.string.listdiag_acc_message));
-                                        args.putString(AppDialog.DIALOG_SUB_MESSAGE, getString(R.string.listdiag_acc_sub_message));
-
-                                        newFragment.setArguments(args);
-
-                                        newFragment.show(fragmentManager, "dialog");
-
-//                                        Intent returnIntent = new Intent();
-//                                        returnIntent.putExtra("result", "open_date");
-//                                        setResult(Activity.RESULT_OK, returnIntent);
-//                                        finish();
-                                    }
-                                }
-                        ).show();
-            }
-        });
-
-//        if (mTwoPane) {
-//            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-//        } else {
-//            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//        }
+//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Snackbar.make(view, "Request an action", Snackbar.LENGTH_LONG)
+//                        .setAction("See list",
+//                                new View.OnClickListener() {
+//                                    @Override
+//                                    public void onClick(View view) {
+////                                        Toast.makeText(AccountListActivity.this,
+////                                                "Snackbar action clicked",
+////                                                Toast.LENGTH_SHORT).show();
+////                                        editAccountRequest(null);
+////                                        mListener.onListSuggestsClick();
+//
+//                                        mActivityStart = true;
+//                                        FragmentManager fragmentManager = getSupportFragmentManager();
+//                                        AppDialog newFragment = AppDialog.newInstance();
+//                                        Bundle args = new Bundle();
+//                                        args.putInt(AppDialog.DIALOG_ID, AppDialog.DIALOG_ID_ACCOUNT_ACTIONS_LIST);
+//                                        args.putInt(AppDialog.DIALOG_TYPE, AppDialog.DIALOG_ACCOUNT_LIST_OPTIONS);
+//                                        args.putString(AppDialog.DIALOG_MESSAGE, getString(R.string.listdiag_acc_message));
+//                                        args.putString(AppDialog.DIALOG_SUB_MESSAGE, getString(R.string.listdiag_acc_sub_message));
+//
+//                                        newFragment.setArguments(args);
+//
+//                                        newFragment.show(fragmentManager, "dialog");
+//
+////                                        Intent returnIntent = new Intent();
+////                                        returnIntent.putExtra("result", "open_date");
+////                                        setResult(Activity.RESULT_OK, returnIntent);
+////                                        finish();
+//                                    }
+//                                }
+//                        ).show();
+//            }
+//        });
+//
+////        if (mTwoPane) {
+////            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+////        } else {
+////            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+////        }
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 

@@ -38,7 +38,12 @@ public class FileViewActivity extends AppCompatActivity {
                                 ).show();
             }
         });
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//
+//        FragmentManager fragmentManager = getFragmentManager();
+//        if (fragmentManager.findFragmentById(R.id.fragment) == null) {
+//
+//        }
     }
 
     @Override

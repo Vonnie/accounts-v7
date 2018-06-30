@@ -97,7 +97,7 @@ public class AccountProvider extends ContentProvider {
                 queryBuilder.setTables(AccountsContract.TABLE_NAME);
 //                queryBuilder.appendWhere(AccountsContract.Columns.CORP_NAME_COL + " like %a% ");
                 if (sortOrder == null || sortOrder == "")
-                    sortOrder = SEQUENCE_COL + " ASC";
+                    sortOrder = SEQUENCE_COL + " COLLATE NOCASE ASC";
 
 //                c = queryBuilder.query(passwordDB, projection, selection,
 //                        selectionArgs, null, null, sortOrder);

@@ -38,16 +38,20 @@ public class WebViewActivityFragment extends Fragment {
         if (webAddr == null) {
             return view;
         }
-        webview = (WebView) view.findViewById(R.id.wv_page);
+        webview = (WebView) view.findViewById(R.id.webview);
 //        webview.setWebViewClient(new MyWebViewClient());
 
 //        setContentView(webview);
+
 
 
         WebSettings webSettings = webview.getSettings();
 
         webSettings.setJavaScriptEnabled(true);
         webSettings.setDomStorageEnabled(true);
+
+
+        WebView.setWebContentsDebuggingEnabled(true);
 
 //        webview.setWebChromeClient(new WebChromeClient() {
 //            public void onProgressChanged(WebView view, int progress) {

@@ -37,6 +37,8 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
     //    private int mSortorder;
     private Cursor mCursor;
     private Context mContext;
+    private boolean resetRow = false;
+
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
      * device.
@@ -80,6 +82,12 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
         mCursor = cursor;
         mListener = listener;
     }
+
+
+    public void setListener(OnAccountClickListener listener) {
+        this.mListener = listener;
+    }
+
 
     @Override
     public AccountViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -155,15 +163,23 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
 //                    }
                     accountSelectedPos = position;
                     accountSelectById = false;
-                    accountSelectedId = -1;
-                    holder.itemView.setBackgroundColor(Color.GREEN);
+
+                    Log.d(TAG, "onBindViewHolder: accountSelectById");
+
+//                    if (resetRow) {
+//                        holder.itemView.setBackgroundColor(Color.TRANSPARENT);
+//                        resetRow = false;
+//                    } else {
+                        holder.itemView.setBackgroundColor(Color.GREEN);
 //                    notifyItemChanged(accountSelectedPos);
+//                    }
                 } else {
                     holder.itemView.setBackgroundColor(Color.TRANSPARENT);
                 }
             } else {
                 if (accountSelectedPos == position) {
                     // Here I am just highlighting the background
+//                    Log.d(TAG, "onBindViewHolder: " + position);
                     holder.itemView.setBackgroundColor(Color.GREEN);
                 } else {
                     holder.itemView.setBackgroundColor(Color.TRANSPARENT);
@@ -374,6 +390,14 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
 
     }
 
+    public void resetSelectItem() {
+        Log.d(TAG, "resetSelectItem: ");
+        accountSelectById = true;
+        resetRow = true;
+        notifyItemChanged(accountSelectedPos);
+
+        accountSelectedPos = -1;
+    }
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         return null;

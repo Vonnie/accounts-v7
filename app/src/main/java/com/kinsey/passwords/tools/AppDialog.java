@@ -37,6 +37,9 @@ public class AppDialog extends DialogFragment {
     public static final int DIALOG_ID_CONFIRM_TO_IMPORT = 6;
     public static final int DIALOG_ID_CONFIRM_TO_EXPORT = 7;
     public static final int DIALOG_ID_ASK_REFRESH_SEARCHDB = 8;
+    public static final int DIALOG_ID_CANCEL_EDIT = 9;
+    public static final int DIALOG_ID_CANCEL_EDIT_UP = 10;
+    public static final int DIALOG_ID_LEAVE_APP = 11;
 
 
     public static final int DIALOG_ACCT_LIST_CORP_NAME = 0;
