@@ -36,6 +36,7 @@ public class AddEditActivityFragment extends Fragment {
     private EditText mCorpWebsiteTextView;
     private EditText mUserNameTextView;
     private EditText mUserEmailTextView;
+    private EditText mNoteTextView;
     private OnSaveClicked mSaveListener = null;
     private Account account;
 
@@ -97,28 +98,30 @@ public class AddEditActivityFragment extends Fragment {
         mCorpWebsiteTextView = view.findViewById(R.id.addedit_corp_website);
         mUserNameTextView = view.findViewById(R.id.addedit_user_name);
         mUserEmailTextView = view.findViewById(R.id.addedit_user_email);
+        mNoteTextView = (EditText) view.findViewById(R.id.addedit_notes);
         Button saveButton = view.findViewById(R.id.addedit_save);
 
         Bundle arguments = getArguments();
 
-        final Account acct;
         if(arguments != null) {
             Log.d(TAG, "onCreateView: retrieving task details.");
 
-            acct = (Account) arguments.getSerializable(Account.class.getSimpleName());
-            if(acct != null) {
+            account = (Account) arguments.getSerializable(Account.class.getSimpleName());
+            Log.d(TAG, "onCreateView: " + account);
+            if(account != null) {
                 Log.d(TAG, "onCreateView: Task details found, editing...");
-                mCorpNameTextView.setText(acct.getCorpName());
-                mCorpWebsiteTextView.setText(acct.getCorpWebsite());
-                mUserNameTextView.setText(acct.getUserName());
-                mUserEmailTextView.setText(acct.getUserEmail());
+                mCorpNameTextView.setText(account.getCorpName());
+                mCorpWebsiteTextView.setText(account.getCorpWebsite());
+                mUserNameTextView.setText(account.getUserName());
+                mUserEmailTextView.setText(account.getUserEmail());
+                mNoteTextView.setText(account.getNote());
                 mMode = FragmentEditMode.EDIT;
             } else {
                 // No task, so we must be adding a new task, and not editing an  existing one
                 mMode = FragmentEditMode.ADD;
             }
         } else {
-            acct = null;
+            account = null;
             Log.d(TAG, "onCreateView: No arguments, adding new record");
             mMode = FragmentEditMode.ADD;
         }
@@ -146,21 +149,25 @@ public class AddEditActivityFragment extends Fragment {
 
                 switch (mMode) {
                     case EDIT:
-                        if(acct == null) {
+                        if(account == null) {
                             // remove lint warnings, will never execute
                             break;
                         }
-                        if(!mCorpNameTextView.getText().toString().equals(acct.getCorpName())) {
+                        Log.d(TAG, "onClick: " + account);
+                        if(!mCorpNameTextView.getText().toString().equals(account.getCorpName())) {
                             values.put(AccountsContract.Columns.CORP_NAME_COL, mCorpNameTextView.getText().toString());
                         }
-                        if(!mCorpWebsiteTextView.getText().toString().equals(acct.getCorpWebsite())) {
+                        if(!mCorpWebsiteTextView.getText().toString().equals(account.getCorpWebsite())) {
                             values.put(AccountsContract.Columns.CORP_WEBSITE_COL, mCorpWebsiteTextView.getText().toString());
                         }
-                        if(!mUserNameTextView.getText().toString().equals(acct.getUserName())) {
+                        if(!mUserNameTextView.getText().toString().equals(account.getUserName())) {
                             values.put(AccountsContract.Columns.USER_NAME_COL, mUserNameTextView.getText().toString());
                         }
-                        if(!mUserEmailTextView.getText().toString().equals(acct.getUserEmail())) {
+                        if(!mUserEmailTextView.getText().toString().equals(account.getUserEmail())) {
                             values.put(AccountsContract.Columns.USER_EMAIL_COL, mUserEmailTextView.getText().toString());
+                        }
+                        if(!mNoteTextView.getText().toString().equals(account.getNote())) {
+                            values.put(AccountsContract.Columns.NOTE_COL, mNoteTextView.getText().toString());
                         }
 //                        if(so != task.getSortOrder()) {
 //                            values.put(TasksContract.Columns.TASKS_SORTORDER, so);
@@ -171,6 +178,7 @@ public class AddEditActivityFragment extends Fragment {
 //                        }
 
                         if (values.size() != 0) {
+                            values.put(AccountsContract.Columns.ACTVY_DATE_COL, System.currentTimeMillis());
                             contentResolver.update(AccountsContract.buildIdUri(account.getId()), values, null, null);
                             account = getAccount(account.getId());
                             Toast.makeText(getActivity(),
@@ -190,7 +198,7 @@ public class AddEditActivityFragment extends Fragment {
                             values.put(AccountsContract.Columns.CORP_WEBSITE_COL, mCorpWebsiteTextView.getText().toString());
                             values.put(AccountsContract.Columns.USER_NAME_COL, mUserNameTextView.getText().toString());
                             values.put(AccountsContract.Columns.USER_EMAIL_COL, mUserEmailTextView.getText().toString());
-                            values.put(AccountsContract.Columns.NOTE_COL, "");
+                            values.put(AccountsContract.Columns.NOTE_COL, mNoteTextView.getText().toString());
                             Uri uri = contentResolver.insert(AccountsContract.CONTENT_URI, values);
                             long id = AccountsContract.getId(uri);
                             Log.d(TAG, "onClick: " + id);

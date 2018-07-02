@@ -207,7 +207,7 @@ public class AccountPlaceholderFrag3 extends Fragment {
 
     private void setupPage3(View view) {
 
-        mNoteTextView = (EditText) view.findViewById(R.id.acc_notes);
+        mNoteTextView = (EditText) view.findViewById(R.id.addedit_notes);
         mRefIdFromTextView = (EditText) view.findViewById(R.id.acc_ref_from);
         mRefIdToTextView = (EditText) view.findViewById(R.id.acc_ref_to);
         mSeqTextView = (EditText) view.findViewById(R.id.acc_seq);

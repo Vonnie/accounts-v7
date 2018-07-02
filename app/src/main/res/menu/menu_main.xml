@@ -32,38 +32,37 @@
         android:enabled="true"
         android:visible="true">
         <item
-            android:id="@+id/menumain_rss_top_free_apps"
+            android:id="@+id/menumain_showAccounts"
             android:checked="true"
             android:orderInCategory="107"
+            android:title="@string/menu_accounts"
+            app:showAsAction="ifRoom" />
+        <item
+            android:id="@+id/menumain_rss_top_free_apps"
+            android:orderInCategory="108"
             android:title="@string/menuacct_rss_top_free_apps"
             app:showAsAction="ifRoom" />
         <item
             android:id="@+id/menumain_rss_top_tv_episodes"
-            android:orderInCategory="108"
+            android:orderInCategory="109"
             android:title="@string/menuacct_rss_tv_episodes"
             app:showAsAction="ifRoom" />
         <item
             android:id="@+id/menumain_rss_top_tv_seasons"
-            android:orderInCategory="109"
+            android:orderInCategory="110"
             android:title="@string/menuacct_rss_tv_season"
             app:showAsAction="ifRoom" />
     </group>
     <item
         android:id="@+id/menumain_refresh"
-        android:orderInCategory="110"
-        android:title="@string/menuacct_refresh" />
-    <item
-        android:id="@+id/menumain_showAccounts"
-        android:icon="@drawable/selector_database"
         android:orderInCategory="111"
-        android:title="@string/menu_accounts"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/menuacct_save"
-        android:icon="@drawable/selector_save"
-        android:orderInCategory="112"
-        android:title="@string/menu_save"
-        app:showAsAction="ifRoom" />
+        android:title="@string/menuacct_refresh" />
+    <!--<item-->
+        <!--android:id="@+id/menuacct_save"-->
+        <!--android:icon="@drawable/selector_save"-->
+        <!--android:orderInCategory="112"-->
+        <!--android:title="@string/menu_save"-->
+        <!--app:showAsAction="ifRoom" />-->
     <item
         android:id="@+id/menuacct_internet"
         android:icon="@drawable/selector_globe"

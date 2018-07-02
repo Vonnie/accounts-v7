@@ -79,7 +79,7 @@ public class AccountActivityFragment extends Fragment {
         mUserNameTextView = (EditText) view.findViewById(R.id.acc_user_name);
         mUserEmailTextView = (EditText) view.findViewById(R.id.acc_user_email);
         mCorpWebsiteTextView = (EditText) view.findViewById(R.id.acc_corp_website);
-        mNoteTextView = (EditText) view.findViewById(R.id.acc_notes);
+        mNoteTextView = (EditText) view.findViewById(R.id.addedit_notes);
         mSeqTextView = (EditText) view.findViewById(R.id.acc_seq);
 //        mOpenDateTextView = (TextView) view.findViewById(R.id.acc_open_date);
         mDtePickOpen = (DatePicker) view.findViewById(R.id.acc_datePicker);

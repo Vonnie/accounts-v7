@@ -104,12 +104,13 @@ public class MainActivity extends AppCompatActivity
 
 
     private enum ListHomeType {
+        LISTACCOUNTS,
         TOP10FREEAPP,
         TOP25FREEAPP,
         TOPTVEPISODE,
         TOPTVSEASONS;
     }
-    ListHomeType currList = ListHomeType.TOP10FREEAPP;
+    ListHomeType currList = ListHomeType.LISTACCOUNTS;
 
     private static String pattern_ymdtime = "yyyy-MM-dd HH:mm:ss.0";
     public static SimpleDateFormat format_ymdtime = new SimpleDateFormat(
@@ -281,7 +282,9 @@ public class MainActivity extends AppCompatActivity
         this.menu = menu;
         getMenuInflater().inflate(R.menu.menu_main, menu);
 
-        if (currList == ListHomeType.TOP10FREEAPP) {
+        if (currList == ListHomeType.LISTACCOUNTS) {
+            menu.findItem(R.id.menumain_showAccounts).setChecked(true);
+        } else if (currList == ListHomeType.TOP10FREEAPP) {
             menu.findItem(R.id.menumain_rss_top_free_apps).setChecked(true);
         } else if (currList == ListHomeType.TOPTVEPISODE) {
             menu.findItem(R.id.menumain_rss_top_tv_episodes).setChecked(true);
@@ -307,6 +310,10 @@ public class MainActivity extends AppCompatActivity
                 acctEditRequest(null);
                 break;
             case R.id.menumain_showAccounts:
+                currList = ListHomeType.LISTACCOUNTS;
+                if (!item.isChecked()) {
+                    item.setChecked(true);
+                }
                 accountsListRequest(AccountsContract.ACCOUNT_LIST_BY_CORP_NAME);
                 break;
             case R.id.menumain_showSuggests:
@@ -425,7 +432,7 @@ public class MainActivity extends AppCompatActivity
 //        fragList.setSelected_position(selected_position);
 //        accountSelectedPos = selected_position;
         setMenuItemEnabled(R.id.menuacct_delete, true);
-        setMenuItemEnabled(R.id.menuacct_save, true);
+//        setMenuItemEnabled(R.id.menuacct_save, true);
         if (account.getCorpWebsite().equals("")) {
             setMenuItemEnabled(R.id.menuacct_internet, false);
         } else {
@@ -756,6 +763,68 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    @Override
+    public void onAccountLong(Account account) {
+        Log.d(TAG, "onAccountLong: ");
+//        showAboutDialog();
+
+            @SuppressLint("InflateParams") View messageView = getLayoutInflater().inflate(R.layout.activity_itemview, null, false);
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle(R.string.app_name);
+            builder.setIcon(R.mipmap.ic_launcher);
+
+            builder.setView(messageView);
+
+//            builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+//                @Override
+//                public void onClick(DialogInterface dialog, int which) {
+////                Log.d(TAG, "onClick: Entering messageView.onClick, showing = " + mDialog.isShowing());
+//                    if(mDialog != null && mDialog.isShowing()) {
+//                        mDialog.dismiss();
+//                    }
+//                }
+//            });
+
+            mDialog = builder.create();
+            mDialog.setCanceledOnTouchOutside(true);
+
+            TextView tv = (TextView) messageView.findViewById(R.id.txt_corp_name);
+            tv.setText(account.getCorpName());
+
+//            TextView about_url = (TextView) messageView.findViewById(R.id.about_url);
+//            if(about_url != null) {
+//                about_url.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        Intent intent = new Intent(Intent.ACTION_VIEW);
+//                        String s = ((TextView) v).getText().toString();
+//                        intent.setData(Uri.parse(s));
+//                        try {
+//                            startActivity(intent);
+//                        } catch(ActivityNotFoundException e) {
+//                            Toast.makeText(MainActivity.this, "No browser application found, cannot visit world-wide web", Toast.LENGTH_LONG).show();
+//                        }
+//                    }
+//                });
+//            }
+
+            mDialog.show();
+
+//        fragAppDialog = new AppItem();
+////        currentFragClass = fragCurrencyCountry.getClass().toString();
+//
+//        Bundle bundle = new Bundle();
+////            mBundle.putLong(DrawerItem.EXTRA_DRAWER_ID, idSelected);
+////			Log.v(TAG, "bundle set");
+////            getActivity().getActionBar().setTitle(drawerItem.getDescription());
+//        setTitle(getResources().getString(R.string.frag_title_feed));
+//        mBundle.putString(DrawerItem.EXTRA_RSS_VIEW, getResources().getString(R.string.dailyFxRss));
+//        fragDailyFxRss = new DailyFxRssFrag();
+//        addFragment(fragDailyFxRss);
+
+
+    }
+
 
     List<Account> loadAccountsBySeq() {
 //        Log.d(TAG, "loadAccountsBySeq: starts ");
@@ -839,7 +908,7 @@ public class MainActivity extends AppCompatActivity
         this.account = new Account();
         accountSelectedPos = -1;
         setMenuItemEnabled(R.id.menuacct_delete, false);
-        setMenuItemEnabled(R.id.menuacct_save, true);
+//        setMenuItemEnabled(R.id.menuacct_save, true);
         setMenuItemEnabled(R.id.menuacct_internet, false);
         updatePages(frag1Pos);
     }

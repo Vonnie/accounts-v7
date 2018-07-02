@@ -2284,6 +2284,11 @@ public class AccountListActivity extends AppCompatActivity
         }
     }
 
+    @Override
+    public void onAccountLong(Account account) {
+        Log.d(TAG, "onAccountLong: ");
+    }
+
 
     List<Account> loadAccountsBySeq() {
 //        Log.d(TAG, "loadAccountsBySeq: starts ");

@@ -61,6 +61,8 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
         void onAccountUpClick(Account account);
 
         void onAccountDownClick(Account account);
+
+        void onAccountLong(Account account);
     }
 
     private static String pattern_mdy_display = "M/d/y";
@@ -81,11 +83,6 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
         mContext = context;
         mCursor = cursor;
         mListener = listener;
-    }
-
-
-    public void setListener(OnAccountClickListener listener) {
-        this.mListener = listener;
     }
 
 
@@ -378,6 +375,18 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
                 }
             };
 
+            View.OnLongClickListener buttonLongListener = new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    Log.d(TAG, "onLongClick: ");
+                    if (mListener != null) {
+                        mListener.onAccountLong(account);
+                    }
+                    return false;
+                }
+            };
+
+
             if (holder.upAcctBtn == null ||
                     holder.dnAcctBtn == null) {
             } else {
@@ -386,6 +395,7 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
             }
 //            holder.editButton.setOnClickListener(buttonListener);
 //            holder.deleteButton.setOnClickListener(buttonListener);
+            holder.itemView.setOnLongClickListener(buttonLongListener);
         }
 
     }
@@ -476,18 +486,19 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
     public static class AccountViewHolder extends RecyclerView.ViewHolder {
         private static final String TAG = "AccountViewHolder";
         public final View mView;
-        TextView corp_name = null;
-        TextView user_name = null;
-        TextView user_email = null;
-        TextView open_date = null;
-        TextView website = null;
+        TextView corp_name;
+        TextView user_name;
+        TextView user_email;
+        TextView open_date;
+        TextView website;
 //        TextView seq = null;
         TextView acctId = null;
-        ImageButton upAcctBtn = null;
-        ImageButton dnAcctBtn = null;
+        ImageButton upAcctBtn;
+        ImageButton dnAcctBtn;
 //        ImageButton editButton = null;
 //        ImageButton deleteButton = null;
 
+        View itemView;
 
         public AccountViewHolder(View itemView) {
             super(itemView);
@@ -504,6 +515,7 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
             this.dnAcctBtn = (ImageButton) itemView.findViewById(R.id.tli_account_down);
 //            this.editButton = (ImageButton) itemView.findViewById(R.id.srli_acct_edit);
 //            this.deleteButton = (ImageButton) itemView.findViewById(R.id.acc_delete);
+            this.itemView = itemView;
             Log.d(TAG, "AccountViewHolder: corp_name tag " + this.corp_name.getTag());
 
         }

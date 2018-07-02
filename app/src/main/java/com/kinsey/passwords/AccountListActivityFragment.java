@@ -22,6 +22,7 @@ import android.widget.TextView;
 import com.kinsey.passwords.items.Account;
 import com.kinsey.passwords.items.AccountsContract;
 import com.kinsey.passwords.provider.AccountRecyclerViewAdapter;
+import com.kinsey.passwords.tools.AppItem;
 
 import static com.kinsey.passwords.AccountListActivity.account;
 import static com.kinsey.passwords.AccountListActivity.accountSelectedPos;
@@ -106,6 +107,17 @@ public class AccountListActivityFragment extends Fragment
 
     @Override
     public void onAccountDownClick(Account account) {
+
+    }
+
+    @Override
+    public void onAccountLong(Account account) {
+
+        Log.d(TAG, "onAccountLong: ");
+        AccountRecyclerViewAdapter.OnAccountClickListener listener = (AccountRecyclerViewAdapter.OnAccountClickListener) getActivity();
+        if(listener != null) {
+            listener.onAccountLong(account);
+        }
 
     }
 

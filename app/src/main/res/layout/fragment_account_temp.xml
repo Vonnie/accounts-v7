@@ -66,7 +66,7 @@
         android:inputType="textNoSuggestions"
         tools:layout_constraintRight_creator="1"
         tools:layout_constraintBottom_creator="1"
-        app:layout_constraintBottom_toTopOf="@+id/acc_notes"
+        app:layout_constraintBottom_toTopOf="@+id/addedit_notes"
         app:layout_constraintRight_toRightOf="@+id/acc_user_email"
         tools:layout_constraintLeft_creator="1"
         android:layout_marginBottom="53dp"
@@ -78,13 +78,13 @@
         android:layout_height="wrap_content"
         app:srcCompat="@android:drawable/ic_menu_view"
         tools:layout_constraintBottom_creator="1"
-        app:layout_constraintBottom_toTopOf="@+id/acc_notes"
+        app:layout_constraintBottom_toTopOf="@+id/addedit_notes"
         tools:layout_constraintLeft_creator="1"
         app:layout_constraintLeft_toLeftOf="parent"
         android:contentDescription="" />
 
     <EditText
-        android:id="@+id/acc_notes"
+        android:id="@+id/addedit_notes"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -107,10 +107,10 @@
         tools:layout_constraintRight_creator="1"
         tools:layout_constraintBottom_creator="1"
         app:layout_constraintBottom_toTopOf="@+id/acc_ref_from"
-        app:layout_constraintRight_toRightOf="@+id/acc_notes"
+        app:layout_constraintRight_toRightOf="@+id/addedit_notes"
         tools:layout_constraintLeft_creator="1"
         android:layout_marginBottom="1dp"
-        app:layout_constraintLeft_toLeftOf="@+id/acc_notes" />
+        app:layout_constraintLeft_toLeftOf="@+id/addedit_notes" />
 
     <EditText
         android:id="@+id/acc_ref_from"
