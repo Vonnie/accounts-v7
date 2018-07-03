@@ -1209,13 +1209,13 @@ public class AccountListActivity extends AppCompatActivity
         }
 
         if (accountMode == AccountsContract.ACCOUNT_ACTION_ADD) {
-            fragList.saveAccount(getApplicationContext(), true);
+//            fragList.saveAccount(getApplicationContext(), true);
             accountMode = AccountsContract.ACCOUNT_ACTION_CHG;
             Toast.makeText(AccountListActivity.this,
                     "Account entry added to database",
                     Toast.LENGTH_LONG).show();
         } else {
-            fragList.saveAccount(getApplicationContext(), false);
+//            fragList.saveAccount(getApplicationContext(), false);
             Toast.makeText(AccountListActivity.this,
                     "Account entry updated to database",
                     Toast.LENGTH_LONG).show();

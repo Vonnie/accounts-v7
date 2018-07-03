@@ -69,11 +69,11 @@
         android:orderInCategory="113"
         android:title="@string/menu_link_internet"
         app:showAsAction="ifRoom" />
-    <item
-        android:id="@+id/menuacct_delete"
-        android:icon="@drawable/selector_delete"
-        android:orderInCategory="114"
-        android:title="@string/delete_cap"
-        app:showAsAction="ifRoom" />
+    <!--<item-->
+        <!--android:id="@+id/menuacct_delete"-->
+        <!--android:icon="@drawable/selector_delete"-->
+        <!--android:orderInCategory="114"-->
+        <!--android:title="@string/delete_cap"-->
+        <!--app:showAsAction="ifRoom" />-->
 
 </menu>

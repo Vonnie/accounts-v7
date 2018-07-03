@@ -41,7 +41,7 @@ public class AddEditActivityFragment extends Fragment {
     private Account account;
 
     interface OnSaveClicked {
-        void onSaveClicked();
+        void onSaveClicked(int acctId);
     }
 
     public AddEditActivityFragment() {
@@ -182,7 +182,7 @@ public class AddEditActivityFragment extends Fragment {
                             contentResolver.update(AccountsContract.buildIdUri(account.getId()), values, null, null);
                             account = getAccount(account.getId());
                             Toast.makeText(getActivity(),
-                                    values.size() - 1 + " changed columns",
+                                    values.size() - 1 + " changed columns for account " + account.getCorpName(),
                                     Toast.LENGTH_SHORT).show();
                         } else {
                             Toast.makeText(getActivity(), "no changes detected",
@@ -205,7 +205,7 @@ public class AddEditActivityFragment extends Fragment {
                             account = getAccount((int)id);
                             Log.d(TAG, "onClick: " + account);
                             Toast.makeText(getActivity(),
-                                    "New account added",
+                                    "New account " + account.getCorpName() + " added",
                                     Toast.LENGTH_SHORT).show();
                         }
                         break;
@@ -213,7 +213,7 @@ public class AddEditActivityFragment extends Fragment {
                 Log.d(TAG, "onClick: Done editing");
 
                 if(mSaveListener != null) {
-                    mSaveListener.onSaveClicked();
+                    mSaveListener.onSaveClicked(account.getId());
                 }
             }
         });

@@ -1,10 +1,8 @@
 package com.kinsey.passwords;
 
 import android.app.Activity;
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -22,12 +20,12 @@ import android.widget.TextView;
 import com.kinsey.passwords.items.Account;
 import com.kinsey.passwords.items.AccountsContract;
 import com.kinsey.passwords.provider.AccountRecyclerViewAdapter;
-import com.kinsey.passwords.tools.AppItem;
 
-import static com.kinsey.passwords.AccountListActivity.account;
-import static com.kinsey.passwords.AccountListActivity.accountSelectedPos;
-import static com.kinsey.passwords.AccountListActivity.accountSortorder;
 import static com.kinsey.passwords.MainActivity.ACCOUNT_LOADER_ID;
+
+//import static com.kinsey.passwords.AccountListActivity.account;
+//import static com.kinsey.passwords.AccountListActivity.accountSelectedPos;
+//import static com.kinsey.passwords.AccountListActivity.accountSortorder;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -179,10 +177,8 @@ public class AccountListActivityFragment extends Fragment
 
     private void createLoader() {
         Cursor cursor = null;
-        Log.d(TAG, "onCreateView: abt to init loader: " + accountSelectedPos);
+        Log.d(TAG, "onCreateView: abt to init loader: ");
 
-
-        Log.d(TAG, "onCreateView: abt to call adapter sel: " + accountSelectedPos);
         if (mAccountAdapter == null) {
             mAccountAdapter = new AccountRecyclerViewAdapter(getContext(),null, this);
         }
@@ -223,6 +219,7 @@ public class AccountListActivityFragment extends Fragment
         // <order by> Tasks.SortOrder, Tasks.Name COLLATE NOCASE
 //        String sortOrder = AccountsContract.Columns.CORP_NAME_COL + "," + AccountsContract.Columns.SEQUENCE_COL + " COLLATE NOCASE";
         String sortOrder;
+        int accountSortorder = AccountsContract.ACCOUNT_LIST_BY_CORP_NAME;
         if (accountSortorder == AccountsContract.ACCOUNT_LIST_BY_OPEN_DATE) {
             sortOrder = AccountsContract.Columns.OPEN_DATE_COL + " DESC," + AccountsContract.Columns.CORP_NAME_COL + " COLLATE NOCASE ASC";
         } else {
@@ -256,9 +253,9 @@ public class AccountListActivityFragment extends Fragment
 //        this.loader = loader;
         int count = 0;
         mAccountAdapter.swapCursor(data);
-        if (accountSelectedPos != -1) {
+        if (mAccountAdapter.getAccountSelectedPos() != -1) {
             Log.d(TAG, "onLoadFinished: adapter set");
-            mRecyclerView.scrollToPosition(accountSelectedPos);
+            mRecyclerView.scrollToPosition(mAccountAdapter.getAccountSelectedPos());
 //            mRecyclerView.findViewHolderForAdapterPosition(accountSelectedPos);
 //            mRecyclerView.findViewHolderForAdapterPosition(accountSelectedPos).itemView.performClick();
         }
@@ -293,9 +290,17 @@ public class AccountListActivityFragment extends Fragment
         resetSelectItem();
     }
 
+
+    public void setAcctId(int acctId) {
+        mAccountAdapter.setAccountSelectedId(acctId);
+        mAccountAdapter.setAccountSelectById(true);
+        mAccountAdapter.setPosById(acctId);
+    }
+
+
     public void resetSelectItem() {
         Log.d(TAG, "resetSelectItem: ");
-        accountSelectedPos = -1;
+        mAccountAdapter.setAccountSelectedPos(-1);
         getLoaderManager().restartLoader(ACCOUNT_LOADER_ID, null, this);
 
 
@@ -304,36 +309,36 @@ public class AccountListActivityFragment extends Fragment
 //        mRecyclerView.scrollToPosition(savePos);
     }
 
-    public void saveAccount(Context context, boolean isForAdd) {
-//        ContentResolver contentResolver = getActivity().getContentResolver();
-        ContentValues values = new ContentValues();
-
-        values.put(AccountsContract.Columns.CORP_NAME_COL, account.getCorpName());
-        values.put(AccountsContract.Columns.CORP_WEBSITE_COL, account.getCorpWebsite());
-        values.put(AccountsContract.Columns.USER_NAME_COL, account.getUserName());
-        values.put(AccountsContract.Columns.USER_EMAIL_COL, account.getUserEmail());
-        values.put(AccountsContract.Columns.SEQUENCE_COL, account.getSequence());
-        values.put(AccountsContract.Columns.OPEN_DATE_COL, account.getOpenLong());
-        values.put(AccountsContract.Columns.NOTE_COL, account.getNote());
-        values.put(AccountsContract.Columns.REF_FROM_COL, account.getRefFrom());
-        values.put(AccountsContract.Columns.REF_TO_COL, account.getRefTo());
-        long actvylong = System.currentTimeMillis();
-        values.put(AccountsContract.Columns.ACTVY_DATE_COL, actvylong);
-        account.setActvyLong(actvylong);
-
-        if (isForAdd) {
-            account.setPassportId(getMaxValue(context, AccountsContract.Columns.PASSPORT_ID_COL));
-            values.put(AccountsContract.Columns.PASSPORT_ID_COL,
-                    String.valueOf(account.getPassportId()));
-            Uri uri = context.getContentResolver().insert(AccountsContract.CONTENT_URI, values);
-
-            long id = AccountsContract.getId(uri);
-            account.setId((int) id);
-        } else {
-            context.getContentResolver().update(AccountsContract.buildIdUri(account.getId()), values, null, null);
-        }
-
-    }
+//    public void saveAccount(Context context, boolean isForAdd) {
+////        ContentResolver contentResolver = getActivity().getContentResolver();
+//        ContentValues values = new ContentValues();
+//
+//        values.put(AccountsContract.Columns.CORP_NAME_COL, account.getCorpName());
+//        values.put(AccountsContract.Columns.CORP_WEBSITE_COL, account.getCorpWebsite());
+//        values.put(AccountsContract.Columns.USER_NAME_COL, account.getUserName());
+//        values.put(AccountsContract.Columns.USER_EMAIL_COL, account.getUserEmail());
+//        values.put(AccountsContract.Columns.SEQUENCE_COL, account.getSequence());
+//        values.put(AccountsContract.Columns.OPEN_DATE_COL, account.getOpenLong());
+//        values.put(AccountsContract.Columns.NOTE_COL, account.getNote());
+//        values.put(AccountsContract.Columns.REF_FROM_COL, account.getRefFrom());
+//        values.put(AccountsContract.Columns.REF_TO_COL, account.getRefTo());
+//        long actvylong = System.currentTimeMillis();
+//        values.put(AccountsContract.Columns.ACTVY_DATE_COL, actvylong);
+//        account.setActvyLong(actvylong);
+//
+//        if (isForAdd) {
+//            account.setPassportId(getMaxValue(context, AccountsContract.Columns.PASSPORT_ID_COL));
+//            values.put(AccountsContract.Columns.PASSPORT_ID_COL,
+//                    String.valueOf(account.getPassportId()));
+//            Uri uri = context.getContentResolver().insert(AccountsContract.CONTENT_URI, values);
+//
+//            long id = AccountsContract.getId(uri);
+//            account.setId((int) id);
+//        } else {
+//            context.getContentResolver().update(AccountsContract.buildIdUri(account.getId()), values, null, null);
+//        }
+//
+//    }
 
     private int getMaxValue(Context context, String col) {
         int iId = 1;
@@ -351,6 +356,31 @@ public class AccountListActivityFragment extends Fragment
 //        Log.d(TAG, "getMaxValue: " + iId);
         return iId;
     }
+
+
+
+//    private int getById(Context context, String col, int acctId) {
+//        int iId = 1;
+//        Cursor cursor = context.getContentResolver().query(
+//                AccountsContract.CONTENT_MAX_VALUE_URI, null, null, null, col);
+//        if (cursor != null) {
+//            if (cursor.moveToNext()) {
+//                int iIndex = cursor.getColumnIndex(col);
+//                iId = cursor.getInt(iIndex) + 1;
+//                if (acctId == iId) {
+//                    Log.d(TAG, "getById: " + iId);
+//                    mAccountAdapter.resetSelectItem();
+//                }
+////                Log.d(TAG, "getMaxValue: " + iId);
+//            }
+//            cursor.close();
+//        }
+//
+////        Log.d(TAG, "getMaxValue: " + iId);
+//        return iId;
+//    }
+
+
 
     public void resortFragList() {
 //        this.mSortorder = sortorder;

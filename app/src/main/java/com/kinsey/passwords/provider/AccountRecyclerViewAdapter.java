@@ -21,10 +21,10 @@ import com.kinsey.passwords.items.AccountsContract;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
-import static com.kinsey.passwords.AccountListActivity.accountSelectById;
-import static com.kinsey.passwords.AccountListActivity.accountSelectedId;
-import static com.kinsey.passwords.AccountListActivity.accountSelectedPos;
-import static com.kinsey.passwords.AccountListActivity.accountSortorder;
+//import static com.kinsey.passwords.AccountListActivity.accountSelectById;
+//import static com.kinsey.passwords.AccountListActivity.accountSelectedId;
+//import static com.kinsey.passwords.AccountListActivity.accountSelectedPos;
+//import static com.kinsey.passwords.AccountListActivity.accountSortorder;
 
 /**
  * Created by Yvonne on 2/21/2017.
@@ -38,6 +38,11 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
     private Cursor mCursor;
     private Context mContext;
     private boolean resetRow = false;
+
+    private int accountSortorder = AccountsContract.ACCOUNT_LIST_BY_CORP_NAME;
+    private int accountSelectedPos = -1;
+    private int accountSelectedId = -1;
+    private boolean accountSelectById = false;
 
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
@@ -160,6 +165,7 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
 //                    }
                     accountSelectedPos = position;
                     accountSelectById = false;
+                    accountSelectedId = -1;
 
                     Log.d(TAG, "onBindViewHolder: accountSelectById");
 
@@ -380,6 +386,13 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
                 public boolean onLongClick(View view) {
                     Log.d(TAG, "onLongClick: ");
                     if (mListener != null) {
+
+                        if (accountSelectedPos != -1) {
+                            notifyItemChanged(accountSelectedPos);
+                        }
+                        accountSelectedPos = position;
+                        notifyItemChanged(accountSelectedPos);
+
                         mListener.onAccountLong(account);
                     }
                     return false;
@@ -398,6 +411,23 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
             holder.itemView.setOnLongClickListener(buttonLongListener);
         }
 
+    }
+
+    public void setPosById(int acctId) {
+        Log.d(TAG, "setPosById: " + acctId);
+        int pos = 0;
+        mCursor.moveToFirst();
+        do {
+            int iIndex = mCursor.getColumnIndex(AccountsContract.Columns._ID_COL);
+            int iId = mCursor.getInt(iIndex);
+            if (acctId == iId) {
+                break;
+            }
+            pos++;
+        } while (mCursor.moveToNext());
+        accountSelectedPos = pos;
+        mCursor.moveToPosition(accountSelectedPos);
+        Log.d(TAG, "setPosById: move to " + accountSelectedPos);
     }
 
     public void resetSelectItem() {
@@ -482,6 +512,27 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
 //    public void setmSortorder(int mSortorder) {
 //        this.mSortorder = mSortorder;
 //    }
+
+
+    public void setAccountSortorder(int accountSortorder) {
+        this.accountSortorder = accountSortorder;
+    }
+
+    public int getAccountSelectedPos() {
+        return accountSelectedPos;
+    }
+
+    public void setAccountSelectedPos(int accountSelectedPos) {
+        this.accountSelectedPos = accountSelectedPos;
+    }
+
+    public void setAccountSelectedId(int accountSelectedId) {
+        this.accountSelectedId = accountSelectedId;
+    }
+
+    public void setAccountSelectById(boolean accountSelectById) {
+        this.accountSelectById = accountSelectById;
+    }
 
     public static class AccountViewHolder extends RecyclerView.ViewHolder {
         private static final String TAG = "AccountViewHolder";

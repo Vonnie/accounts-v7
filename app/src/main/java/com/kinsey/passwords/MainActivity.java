@@ -22,6 +22,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -431,7 +432,7 @@ public class MainActivity extends AppCompatActivity
 //        Log.d(TAG, "onAccountListSelect: selected pos " + selected_position);
 //        fragList.setSelected_position(selected_position);
 //        accountSelectedPos = selected_position;
-        setMenuItemEnabled(R.id.menuacct_delete, true);
+//        setMenuItemEnabled(R.id.menuacct_delete, true);
 //        setMenuItemEnabled(R.id.menuacct_save, true);
         if (account.getCorpWebsite().equals("")) {
             setMenuItemEnabled(R.id.menuacct_internet, false);
@@ -440,7 +441,10 @@ public class MainActivity extends AppCompatActivity
         }
         this.account = account;
 
-        acctEditRequest(this.account);
+        if (mTwoPane) {
+            acctEditRequest(this.account);
+        }
+
 //        mSectionsPagerAdapter.destroyItem(mViewPager, frag1Pos, frag1);
 //        mSectionsPagerAdapter.destroyItem(mViewPager, frag2Pos, frag2);
 //        mSectionsPagerAdapter.destroyItem(mViewPager, frag3Pos, frag3);
@@ -764,12 +768,12 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onAccountLong(Account account) {
-        Log.d(TAG, "onAccountLong: ");
+    public void onAccountLong(final Account account) {
+        Log.d(TAG, "onAccountLong: " + account);
 //        showAboutDialog();
 
             @SuppressLint("InflateParams") View messageView = getLayoutInflater().inflate(R.layout.activity_itemview, null, false);
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            final AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle(R.string.app_name);
             builder.setIcon(R.mipmap.ic_launcher);
 
@@ -788,9 +792,41 @@ public class MainActivity extends AppCompatActivity
             mDialog = builder.create();
             mDialog.setCanceledOnTouchOutside(true);
 
-            TextView tv = (TextView) messageView.findViewById(R.id.txt_corp_name);
-            tv.setText(account.getCorpName());
+            final TextView tvName = (TextView) messageView.findViewById(R.id.txt_corp_name);
+            tvName.setText(account.getCorpName());
+            TextView tvId = (TextView) messageView.findViewById(R.id.txt_id);
+            tvId.setText(String.valueOf("AcctId " + account.getId()));
 
+            ImageButton btnEdit = messageView.findViewById(R.id.imgbtn_edit);
+            btnEdit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d(TAG, "onClick: for edit");
+                    acctEditRequest(account);
+                    mDialog.dismiss();
+                }
+            });
+
+            ImageButton btnSave = messageView.findViewById(R.id.imgbtn_save);
+            btnSave.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d(TAG, "onClick: for edit");
+                    account.setCorpName(tvName.getText().toString());
+                    updateCorp(account);
+                    mDialog.dismiss();
+                }
+            });
+
+        ImageButton btnDelete = messageView.findViewById(R.id.imgbtn_delete);
+        btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "onClick: for edit");
+                confirmDeleteAccount(account);
+                mDialog.dismiss();
+            }
+        });
 //            TextView about_url = (TextView) messageView.findViewById(R.id.about_url);
 //            if(about_url != null) {
 //                about_url.setOnClickListener(new View.OnClickListener() {
@@ -826,9 +862,45 @@ public class MainActivity extends AppCompatActivity
     }
 
 
+    private void updateCorp(Account account) {
+        ContentValues values = new ContentValues();
+
+        values.put(AccountsContract.Columns.CORP_NAME_COL, account.getCorpName());
+        getContentResolver().update(AccountsContract.buildIdUri(account.getId()), values, null, null);
+    }
+
+    private void confirmDeleteAccount(Account account) {
+//        Log.d(TAG, "deleteAccount: ");
+//        if (account == null) {
+//            Toast.makeText(this,
+//                    "No Account selected to delete",
+//                    Toast.LENGTH_LONG).show();
+//            return;
+//        }
+//        if (accountSelectedPos == -1) {
+//            Toast.makeText(this,
+//                    "Must select an account to delete",
+//                    Toast.LENGTH_LONG).show();
+//            return;
+//        }
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        AppDialog newFragment = AppDialog.newInstance();
+        Bundle args = new Bundle();
+        args.putInt(AppDialog.DIALOG_ID, AppDialog.DIALOG_ID_CONFIRM_DELETE_ACCOUNT);
+        args.putInt(AppDialog.DIALOG_TYPE, AppDialog.DIALOG_YES_NO);
+        args.putString(AppDialog.DIALOG_MESSAGE, getString(R.string.deldiag_message));
+        args.putString(AppDialog.DIALOG_SUB_MESSAGE, getString(R.string.deldiag_sub_message, account.getCorpName(), account.getPassportId()));
+        args.putInt(AppDialog.DIALOG_ACCOUNT_ID, account.getId());
+        args.putInt(AppDialog.DIALOG_POSITIVE_RID, R.string.deldiag_positive_caption);
+
+        newFragment.setArguments(args);
+        newFragment.show(fragmentManager, "dialog");
+    }
+
+
     List<Account> loadAccountsBySeq() {
 //        Log.d(TAG, "loadAccountsBySeq: starts ");
-        String sortOrder = AccountsContract.Columns.SEQUENCE_COL + "," + AccountsContract.Columns.CORP_NAME_COL + " COLLATE NOCASE ASC";
+        String sortOrder = AccountsContract.Columns.SEQUENCE_COL + "," + AccountsContract.Columns.CORP_NAME_COL.toLowerCase() + " COLLATE NOCASE ASC";
         Cursor cursor = getContentResolver().query(
                 AccountsContract.CONTENT_URI, null, null, null, sortOrder);
 
@@ -1269,6 +1341,11 @@ public class MainActivity extends AppCompatActivity
                     finish();
                 }
                 break;
+            case AppDialog.DIALOG_ID_CONFIRM_DELETE_ACCOUNT:
+                int acctId = args.getInt(AppDialog.DIALOG_ACCOUNT_ID);
+                Log.d(TAG, "onPositiveDialogResult: ready to delete " + acctId);
+                deleteAccount(acctId);
+                break;
         }
     }
 
@@ -1288,6 +1365,19 @@ public class MainActivity extends AppCompatActivity
                 break;
         }
 
+    }
+
+    private void deleteAccount(int acctId) {
+        getContentResolver().delete(AccountsContract.buildIdUri((long)acctId), null, null);
+        if (!mTwoPane) {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            Fragment fragment = fragmentManager.findFragmentById(R.id.task_details_container);
+            if (fragment != null) {
+                getSupportFragmentManager().beginTransaction()
+                        .remove(fragment)
+                        .commit();
+            }
+        }
     }
 
     @Override
@@ -1366,26 +1456,31 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onSaveClicked() {
+    public void onSaveClicked(int acctId) {
         Log.d(TAG, "onSaveClicked: starts");
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        Fragment fragment = fragmentManager.findFragmentById(R.id.task_details_container);
-        if (fragment != null) {
-            getSupportFragmentManager().beginTransaction()
-                    .remove(fragment)
-                    .commit();
-        }
 
         View addEditLayout = findViewById(R.id.task_details_container);
         View mainFragment = findViewById(R.id.fragment);
 
         if(!mTwoPane) {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            Fragment fragment = fragmentManager.findFragmentById(R.id.task_details_container);
+            if (fragment != null) {
+                getSupportFragmentManager().beginTransaction()
+                        .remove(fragment)
+                        .commit();
+            }
+
             // We've just removed the editing fragment, so hide the frame
             addEditLayout.setVisibility(View.GONE);
 
             // and make sure the MainActivityFragment is visible.
             mainFragment.setVisibility(View.VISIBLE);
         }
+
+        AccountListActivityFragment listFragment = (AccountListActivityFragment)
+                getSupportFragmentManager().findFragmentById(R.id.fragment);
+        listFragment.setAcctId(acctId);
 
 
     }
