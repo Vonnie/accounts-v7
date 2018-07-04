@@ -58,37 +58,54 @@
         android:orderInCategory="111"
         android:title="@string/menuacct_refresh" />
     <!--<item-->
-        <!--android:id="@+id/menuacct_save"-->
-        <!--android:icon="@drawable/selector_save"-->
-        <!--android:orderInCategory="112"-->
-        <!--android:title="@string/menu_save"-->
-        <!--app:showAsAction="ifRoom" />-->
+    <!--android:id="@+id/menuacct_save"-->
+    <!--android:icon="@drawable/selector_save"-->
+    <!--android:orderInCategory="112"-->
+    <!--android:title="@string/menu_save"-->
+    <!--app:showAsAction="ifRoom" />-->
     <!--<item-->
-        <!--android:id="@+id/menuacct_internet"-->
-        <!--android:icon="@drawable/selector_globe"-->
-        <!--android:orderInCategory="113"-->
-        <!--android:title="@string/menu_link_internet"-->
-        <!--app:showAsAction="ifRoom" />-->
+    <!--android:id="@+id/menuacct_internet"-->
+    <!--android:icon="@drawable/selector_globe"-->
+    <!--android:orderInCategory="113"-->
+    <!--android:title="@string/menu_link_internet"-->
+    <!--app:showAsAction="ifRoom" />-->
     <!--<item-->
-        <!--android:id="@+id/menuacct_delete"-->
-        <!--android:icon="@drawable/selector_delete"-->
-        <!--android:orderInCategory="114"-->
-        <!--android:title="@string/delete_cap"-->
-        <!--app:showAsAction="ifRoom" />-->
-    <item
-        android:id="@+id/menuacct_sort"
-        android:orderInCategory="113"
-        android:title="@string/menuacct_sort"
-        app:showAsAction="ifRoom" />
+    <!--android:id="@+id/menuacct_delete"-->
+    <!--android:icon="@drawable/selector_delete"-->
+    <!--android:orderInCategory="114"-->
+    <!--android:title="@string/delete_cap"-->
+    <!--app:showAsAction="ifRoom" />-->
+    <group
+        android:id="@+id/group_sort"
+        android:checkableBehavior="single"
+        android:enabled="true"
+        android:visible="true">
+        <item
+            android:id="@+id/menuacct_sort_corpname"
+            android:checked="true"
+            android:orderInCategory="113"
+            android:title="@string/menuacct_sort_corpname"
+            app:showAsAction="ifRoom" />
+        <item
+            android:id="@+id/menuacct_sort_opendate"
+            android:orderInCategory="113"
+            android:title="@string/menuacct_sort_opendate"
+            app:showAsAction="ifRoom" />
+        <item
+            android:id="@+id/menuacct_sort_passport"
+            android:orderInCategory="113"
+            android:title="@string/menuacct_sort_passport"
+            app:showAsAction="ifRoom" />
+        <item
+            android:id="@+id/menuacct_sort_custom"
+            android:orderInCategory="113"
+            android:title="@string/menuacct_sort_custom"
+            app:showAsAction="ifRoom" />
+    </group>
     <item
         android:id="@+id/menuacct_external_accts"
         android:orderInCategory="113"
         android:title="@string/menuacct_external_accts"
-        app:showAsAction="ifRoom" />
-    <item
-        android:id="@+id/menuacct_search"
-        android:orderInCategory="113"
-        android:title="@string/menuacct_search"
         app:showAsAction="ifRoom" />
 
 </menu>

@@ -120,6 +120,10 @@
     <string name="menuacct_rss_nasa">RSS NASA</string>
     <string name="menuacct_refresh">RSS Refresh</string>
     <string name="menuacct_sort">Sort by</string>
+    <string name="menuacct_sort_corpname">Sort by Corp Name</string>
+    <string name="menuacct_sort_opendate">Sort by Open Date</string>
+    <string name="menuacct_sort_passport">Sort by Passport Id</string>
+    <string name="menuacct_sort_custom">Custom Sort</string>
     <string name="menuacct_external_accts">External accts</string>
     <string name="menuacct_search">Search</string>
     <string name="sugg_add_msg">No suggested passwords. Request Add fro list below.</string>

@@ -943,7 +943,7 @@ public class MainActivity extends AppCompatActivity
                 vewInternet(account.getCorpWebsite());
 //                webview.loadUrl(account.getCorpWebsite());
             } else {
-                return;
+                Log.d(TAG, "linkToInternet: none");;
             }
         }
     }
@@ -964,14 +964,19 @@ public class MainActivity extends AppCompatActivity
 ////            startActivity(intent);
 ////            startActivityForResult(intent, AccountsContract.ACCOUNT_ACTION_WEBPAGE);
 
-        Log.d(TAG, "vewInternet: link to webpage frag1Pos " + frag1Pos);
-        Log.d(TAG, "vewInternet: webpage " + account.getCorpWebsite());
-        Intent detailIntent = new Intent(this, WebViewActivity.class);
-        detailIntent.putExtra(WebViewActivity.class.getSimpleName(), account.getCorpWebsite());
-//                Log.d(TAG, "onClick: website " + account.getCorpWebsite());
-//                Log.d(TAG, "onClick: wv class " + WebViewActivity.class.getSimpleName());
-        startActivityForResult(detailIntent, AccountsContract.ACCOUNT_ACTION_WEBPAGE);
-//            startActivity(detailIntent);
+        Log.d(TAG, "vewInternet: webpage " + webpage);
+        Uri uri = Uri.parse(webpage);
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent);
+        }
+
+//        Intent detailIntent = new Intent(this, WebViewActivity.class);
+//        detailIntent.putExtra(WebViewActivity.class.getSimpleName(), account.getCorpWebsite());
+////                Log.d(TAG, "onClick: website " + account.getCorpWebsite());
+////                Log.d(TAG, "onClick: wv class " + WebViewActivity.class.getSimpleName());
+//        startActivityForResult(detailIntent, AccountsContract.ACCOUNT_ACTION_WEBPAGE);
+////            startActivity(detailIntent);
     }
 //    }
 //
