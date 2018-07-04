@@ -14,9 +14,9 @@ import com.kinsey.passwords.R;
 import com.kinsey.passwords.items.Suggest;
 import com.kinsey.passwords.items.SuggestsContract;
 
-import static com.kinsey.passwords.AccountListActivity.account;
-import static com.kinsey.passwords.AccountListActivity.accountSelectedPos;
-import static com.kinsey.passwords.SuggestListActivity.suggestSelectedPos;
+//import static com.kinsey.passwords.AccountListActivity.account;
+//import static com.kinsey.passwords.AccountListActivity.accountSelectedPos;
+//import static com.kinsey.passwords.SuggestListActivity.suggestSelectedPos;
 
 /**
  * Created by Yvonne on 2/21/2017.
@@ -37,23 +37,25 @@ public class CursorRecyclerViewAdapter extends RecyclerView.Adapter<CursorRecycl
         void onSuggestDeleteClick(Suggest suggest);
     }
 
+    private int suggestSelectedPos = -1;
 
     public CursorRecyclerViewAdapter(Cursor cursor, OnSuggestClickListener listener) {
-//        Log.d(TAG, "CursorRecyclerViewAdapter: Constructor called");
+        Log.d(TAG, "CursorRecyclerViewAdapter: Constructor called");
         mCursor = cursor;
         mListener = listener;
     }
 
     @Override
     public PasswordViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-//        Log.d(TAG, "onCreateViewHolder: new view requested");
+        Log.d(TAG, "onCreateViewHolder: new view requested " + viewType);
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_suggest_items, parent, false);
         return new PasswordViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(PasswordViewHolder holder, final int position) {
-//        Log.d(TAG, "onBindViewHolder: starts");
+        Log.d(TAG, "onBindViewHolder: starts " + position);
+
 
 //        if (mCursor == null) {
 //            Log.d(TAG, "onBindViewHolder: mCursor null");
@@ -61,7 +63,7 @@ public class CursorRecyclerViewAdapter extends RecyclerView.Adapter<CursorRecycl
 //            Log.d(TAG, "onBindViewHolder: mCursor count " + mCursor.getCount());
 //        }
         if ((mCursor == null) || (mCursor.getCount() == 0)) {
-//            Log.d(TAG, "onBindViewHolder: providing instructions");
+            Log.d(TAG, "onBindViewHolder: providing instructions");
             holder.password.setText(R.string.generate_passwords_instruction);
             holder.upButton.setVisibility(View.GONE);
             holder.downButton.setVisibility(View.GONE);
@@ -75,6 +77,7 @@ public class CursorRecyclerViewAdapter extends RecyclerView.Adapter<CursorRecycl
                     mCursor.getString(mCursor.getColumnIndex(SuggestsContract.Columns.PASSWORD_COL)),
                     mCursor.getInt(mCursor.getColumnIndex(SuggestsContract.Columns.SEQUENCE_COL)));
 
+            Log.d(TAG, "onBindViewHolder: " + mCursor.getString(mCursor.getColumnIndex(SuggestsContract.Columns.PASSWORD_COL)));
             holder.password.setText(mCursor.getString(mCursor.getColumnIndex(SuggestsContract.Columns.PASSWORD_COL)));
             holder.upButton.setVisibility(View.VISIBLE);  // TODO add onClick listener
             holder.downButton.setVisibility(View.VISIBLE);  // TODO add onClick listener
@@ -107,7 +110,7 @@ public class CursorRecyclerViewAdapter extends RecyclerView.Adapter<CursorRecycl
                     suggestSelectedPos = position;
                     notifyItemChanged(suggestSelectedPos);
 
-                    Log.d(TAG, "onClick: selected " + accountSelectedPos + ":" + account.getId());
+                    Log.d(TAG, "onClick: selected " + suggestSelectedPos);
                 }
             });
 
@@ -155,12 +158,23 @@ public class CursorRecyclerViewAdapter extends RecyclerView.Adapter<CursorRecycl
 
     @Override
     public int getItemCount() {
-//        Log.d(TAG, "getItemCount: starts");
+        Log.d(TAG, "getItemCount: starts");
         if (mCursor == null || (mCursor.getCount()) == 0) {
+            Log.d(TAG, "getItemCount: no cursor, no rows");
             return 1; // fib, becuase we populate a single view Holder with instructions
+
         } else {
+            Log.d(TAG, "getItemCount: " + mCursor.getCount());
             return mCursor.getCount();
         }
+    }
+
+    public void setSuggestSelectedPos(int suggestSelectedPos) {
+        this.suggestSelectedPos = suggestSelectedPos;
+    }
+
+    public int getSuggestSelectedPos() {
+        return suggestSelectedPos;
     }
 
     /**

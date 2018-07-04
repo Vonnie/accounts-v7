@@ -93,7 +93,7 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
 
     @Override
     public AccountViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        Log.d(TAG, "onCreateViewHolder: new view requested");
+        Log.d(TAG, "onCreateViewHolder: new view requested " + viewType);
         View view;
 //        Log.d(TAG, "AccountRecyclerViewAdapter: cursor " + mCursor.getCount());
         switch (accountSortorder) {
@@ -438,8 +438,10 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
 
         accountSelectedPos = -1;
     }
+
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        Log.d(TAG, "onCreateLoader: " + id);
         return null;
     }
 
@@ -513,6 +515,12 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
 //        this.mSortorder = mSortorder;
 //    }
 
+
+    @Override
+    public int getItemViewType(int position) {
+        Log.d(TAG, "getItemViewType: " + position);
+        return super.getItemViewType(position);
+    }
 
     public void setAccountSortorder(int accountSortorder) {
         this.accountSortorder = accountSortorder;

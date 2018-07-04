@@ -63,17 +63,32 @@
         <!--android:orderInCategory="112"-->
         <!--android:title="@string/menu_save"-->
         <!--app:showAsAction="ifRoom" />-->
-    <item
-        android:id="@+id/menuacct_internet"
-        android:icon="@drawable/selector_globe"
-        android:orderInCategory="113"
-        android:title="@string/menu_link_internet"
-        app:showAsAction="ifRoom" />
+    <!--<item-->
+        <!--android:id="@+id/menuacct_internet"-->
+        <!--android:icon="@drawable/selector_globe"-->
+        <!--android:orderInCategory="113"-->
+        <!--android:title="@string/menu_link_internet"-->
+        <!--app:showAsAction="ifRoom" />-->
     <!--<item-->
         <!--android:id="@+id/menuacct_delete"-->
         <!--android:icon="@drawable/selector_delete"-->
         <!--android:orderInCategory="114"-->
         <!--android:title="@string/delete_cap"-->
         <!--app:showAsAction="ifRoom" />-->
+    <item
+        android:id="@+id/menuacct_sort"
+        android:orderInCategory="113"
+        android:title="@string/menuacct_sort"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/menuacct_external_accts"
+        android:orderInCategory="113"
+        android:title="@string/menuacct_external_accts"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/menuacct_search"
+        android:orderInCategory="113"
+        android:title="@string/menuacct_search"
+        app:showAsAction="ifRoom" />
 
 </menu>

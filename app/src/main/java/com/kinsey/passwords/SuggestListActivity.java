@@ -10,12 +10,12 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import com.kinsey.passwords.items.Suggest;
 import com.kinsey.passwords.items.SuggestsContract;
-import com.kinsey.passwords.provider.CursorRecyclerViewAdapter;
 import com.kinsey.passwords.tools.AppDialog;
 import com.kinsey.passwords.tools.PasswordFormula;
 
@@ -23,8 +23,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SuggestListActivity extends AppCompatActivity
-        implements CursorRecyclerViewAdapter.OnSuggestClickListener,
+        implements
         AppDialog.DialogEvents {
+//    CursorRecyclerViewAdapter.OnSuggestClickListener,
     private static final String TAG = "SuggestListActivity";
     public static int suggestSelectedPos = -1;
 
@@ -133,7 +134,7 @@ public class SuggestListActivity extends AppCompatActivity
     }
 
     List<Suggest> loadPasswords() {
-//        Log.d(TAG, "loadPasswords: starts ");
+        Log.d(TAG, "loadPasswords: starts ");
         Cursor cursor = getContentResolver().query(
                 SuggestsContract.CONTENT_URI, null, null, null, SuggestsContract.Columns.SEQUENCE_COL);
 
@@ -156,133 +157,133 @@ public class SuggestListActivity extends AppCompatActivity
     }
 
 
-    @Override
-    public void onSuggestDeleteClick(Suggest suggest) {
-        getContentResolver().delete(SuggestsContract.buildIdUri(suggest.getId()), null, null);
-    }
+//    @Override
+//    public void onSuggestDeleteClick(Suggest suggest) {
+//        getContentResolver().delete(SuggestsContract.buildIdUri(suggest.getId()), null, null);
+//    }
 
-    @Override
-    public void onSuggestDownClick(Suggest suggest) {
-        List<Suggest> listSuggests = loadPasswords();
-        int nextId = -1;
-        int iLimit = listSuggests.size();
-        for (int i = 0; i < iLimit; i++) {
-            Suggest item = listSuggests.get(i);
-            if (nextId != -1) {
-                nextId = item.getId();
-                break;
-            }
-            if (suggest.getId() == item.getId()) {
-                nextId = item.getId();
-            }
-        }
-//        Log.d(TAG, "onSuggestDownClick: nextId " + nextId);
+//    @Override
+//    public void onSuggestDownClick(Suggest suggest) {
+//        List<Suggest> listSuggests = loadPasswords();
+//        int nextId = -1;
+//        int iLimit = listSuggests.size();
+//        for (int i = 0; i < iLimit; i++) {
+//            Suggest item = listSuggests.get(i);
+//            if (nextId != -1) {
+//                nextId = item.getId();
+//                break;
+//            }
+//            if (suggest.getId() == item.getId()) {
+//                nextId = item.getId();
+//            }
+//        }
+////        Log.d(TAG, "onSuggestDownClick: nextId " + nextId);
+//
+//        int reseq = 0;
+//        for (int i = 0; i < iLimit; i++) {
+//            Suggest item = listSuggests.get(i);
+//            if (suggest.getId() != item.getId()) {
+//                reseq++;
+//                item.setNewSequence(reseq);
+//                if (nextId == item.getId()) {
+//                    break;
+//                }
+//            }
+//        }
+//
+//        boolean found = false;
+//        for (int i = 0; i < iLimit; i++) {
+//            Suggest item = listSuggests.get(i);
+//            if (suggest.getId() == item.getId()) {
+//                reseq++;
+//                item.setNewSequence(reseq);
+//            } else {
+//                if (nextId == item.getId()) {
+//                    found = true;
+//                } else {
+//                    if (found) {
+//                        reseq++;
+//                        item.setNewSequence(reseq);
+//                    }
+//                }
+//            }
+//        }
+//
+//        ContentResolver contentResolver = getContentResolver();
+//
+//        for (int i = 0; i < iLimit; i++) {
+//            Suggest item = listSuggests.get(i);
+//            if (item.getSequence() != item.getNewSequence()) {
+////                Log.d(TAG, "onSuggestDownClick: " + item.getSequence() + ":" + item.getNewSequence());
+//                ContentValues values = new ContentValues();
+//                values.put(SuggestsContract.Columns.SEQUENCE_COL, item.getNewSequence());
+//                contentResolver.update(SuggestsContract.buildIdUri(item.getId()), values, null, null);
+//            }
+//        }
+//
+//        suggestSelectedPos += 1;
+//    }
 
-        int reseq = 0;
-        for (int i = 0; i < iLimit; i++) {
-            Suggest item = listSuggests.get(i);
-            if (suggest.getId() != item.getId()) {
-                reseq++;
-                item.setNewSequence(reseq);
-                if (nextId == item.getId()) {
-                    break;
-                }
-            }
-        }
-
-        boolean found = false;
-        for (int i = 0; i < iLimit; i++) {
-            Suggest item = listSuggests.get(i);
-            if (suggest.getId() == item.getId()) {
-                reseq++;
-                item.setNewSequence(reseq);
-            } else {
-                if (nextId == item.getId()) {
-                    found = true;
-                } else {
-                    if (found) {
-                        reseq++;
-                        item.setNewSequence(reseq);
-                    }
-                }
-            }
-        }
-
-        ContentResolver contentResolver = getContentResolver();
-
-        for (int i = 0; i < iLimit; i++) {
-            Suggest item = listSuggests.get(i);
-            if (item.getSequence() != item.getNewSequence()) {
-//                Log.d(TAG, "onSuggestDownClick: " + item.getSequence() + ":" + item.getNewSequence());
-                ContentValues values = new ContentValues();
-                values.put(SuggestsContract.Columns.SEQUENCE_COL, item.getNewSequence());
-                contentResolver.update(SuggestsContract.buildIdUri(item.getId()), values, null, null);
-            }
-        }
-
-        suggestSelectedPos += 1;
-    }
-
-    @Override
-    public void onSuggestUpClick(Suggest suggest) {
-        List<Suggest> listSuggests = loadPasswords();
-        int priorId = -1;
-        int iLimit = listSuggests.size();
-        for (int i = 0; i < iLimit; i++) {
-            Suggest item = listSuggests.get(i);
-            if (suggest.getId() == item.getId()) {
-                break;
-            }
-            priorId = item.getId();
-        }
-//        Log.d(TAG, "onSuggestDownClick: priorId " + priorId);
-
-        int reseq = 0;
-        for (int i = 0; i < iLimit; i++) {
-            Suggest item = listSuggests.get(i);
-            if (priorId != item.getId()) {
-                reseq++;
-                item.setNewSequence(reseq);
-                if (suggest.getId() == item.getId()) {
-                    break;
-                }
-            }
-        }
-
-//        Log.d(TAG, "onSuggestDownClick: reseq " + reseq);
-
-        boolean found = false;
-        for (int i = 0; i < iLimit; i++) {
-            Suggest item = listSuggests.get(i);
-            if (priorId == item.getId()) {
-                reseq++;
-                item.setNewSequence(reseq);
-            } else {
-                if (suggest.getId() == item.getId()) {
-                    found = true;
-                } else {
-                    if (found) {
-                        reseq++;
-                        item.setNewSequence(reseq);
-                    }
-                }
-            }
-        }
-
-        ContentResolver contentResolver = getContentResolver();
-
-        for (int i = 0; i < iLimit; i++) {
-            Suggest item = listSuggests.get(i);
-            if (item.getSequence() != item.getNewSequence()) {
-//                Log.d(TAG, "onSuggestDownClick: " + item.getSequence() + ":" + item.getNewSequence());
-                ContentValues values = new ContentValues();
-                values.put(SuggestsContract.Columns.SEQUENCE_COL, item.getNewSequence());
-                contentResolver.update(SuggestsContract.buildIdUri(item.getId()), values, null, null);
-            }
-        }
-
-        suggestSelectedPos -= 1;
-    }
+//    @Override
+//    public void onSuggestUpClick(Suggest suggest) {
+//        List<Suggest> listSuggests = loadPasswords();
+//        int priorId = -1;
+//        int iLimit = listSuggests.size();
+//        for (int i = 0; i < iLimit; i++) {
+//            Suggest item = listSuggests.get(i);
+//            if (suggest.getId() == item.getId()) {
+//                break;
+//            }
+//            priorId = item.getId();
+//        }
+////        Log.d(TAG, "onSuggestDownClick: priorId " + priorId);
+//
+//        int reseq = 0;
+//        for (int i = 0; i < iLimit; i++) {
+//            Suggest item = listSuggests.get(i);
+//            if (priorId != item.getId()) {
+//                reseq++;
+//                item.setNewSequence(reseq);
+//                if (suggest.getId() == item.getId()) {
+//                    break;
+//                }
+//            }
+//        }
+//
+////        Log.d(TAG, "onSuggestDownClick: reseq " + reseq);
+//
+//        boolean found = false;
+//        for (int i = 0; i < iLimit; i++) {
+//            Suggest item = listSuggests.get(i);
+//            if (priorId == item.getId()) {
+//                reseq++;
+//                item.setNewSequence(reseq);
+//            } else {
+//                if (suggest.getId() == item.getId()) {
+//                    found = true;
+//                } else {
+//                    if (found) {
+//                        reseq++;
+//                        item.setNewSequence(reseq);
+//                    }
+//                }
+//            }
+//        }
+//
+//        ContentResolver contentResolver = getContentResolver();
+//
+//        for (int i = 0; i < iLimit; i++) {
+//            Suggest item = listSuggests.get(i);
+//            if (item.getSequence() != item.getNewSequence()) {
+////                Log.d(TAG, "onSuggestDownClick: " + item.getSequence() + ":" + item.getNewSequence());
+//                ContentValues values = new ContentValues();
+//                values.put(SuggestsContract.Columns.SEQUENCE_COL, item.getNewSequence());
+//                contentResolver.update(SuggestsContract.buildIdUri(item.getId()), values, null, null);
+//            }
+//        }
+//
+//        suggestSelectedPos -= 1;
+//    }
 
     @Override
     public void onPositiveDialogResult(int dialogId, Bundle args) {

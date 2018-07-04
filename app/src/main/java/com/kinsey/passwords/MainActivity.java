@@ -32,6 +32,7 @@ import com.kinsey.passwords.items.AccountsContract;
 import com.kinsey.passwords.items.Suggest;
 import com.kinsey.passwords.items.SuggestsContract;
 import com.kinsey.passwords.provider.AccountRecyclerViewAdapter;
+import com.kinsey.passwords.provider.CursorRecyclerViewAdapter;
 import com.kinsey.passwords.provider.FeedAdapter;
 import com.kinsey.passwords.provider.ParseApplications;
 import com.kinsey.passwords.tools.AppDialog;
@@ -49,6 +50,7 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity
         implements AccountRecyclerViewAdapter.OnAccountClickListener,
+        CursorRecyclerViewAdapter.OnSuggestClickListener,
         AddEditActivityFragment.OnSaveClicked,
         AccountActivityFragment.OnActionListener,
         AccountPlaceholderFrag1.OnAccountListener,
@@ -112,6 +114,12 @@ public class MainActivity extends AppCompatActivity
         TOPTVSEASONS;
     }
     ListHomeType currList = ListHomeType.LISTACCOUNTS;
+
+    private enum AppFragType {
+        ACCOUNTEDIT,
+        PASSWORDS;
+    }
+    AppFragType currFrag = AppFragType.ACCOUNTEDIT;
 
     private static String pattern_ymdtime = "yyyy-MM-dd HH:mm:ss.0";
     public static SimpleDateFormat format_ymdtime = new SimpleDateFormat(
@@ -317,9 +325,11 @@ public class MainActivity extends AppCompatActivity
                 }
                 accountsListRequest(AccountsContract.ACCOUNT_LIST_BY_CORP_NAME);
                 break;
+
             case R.id.menumain_showSuggests:
-                suggestsListRequest();
+                suggestsListRequest2();
                 break;
+
             case R.id.menumain_search:
 
                 searchListRequest();
@@ -375,13 +385,24 @@ public class MainActivity extends AppCompatActivity
 
             case android.R.id.home:
                 Log.d(TAG, "onOptionsItemSelected: home button pressed");
-                AddEditActivityFragment fragment = (AddEditActivityFragment)
-                        getSupportFragmentManager().findFragmentById(R.id.task_details_container);
-                if(fragment.canClose()) {
-                    return super.onOptionsItemSelected(item);
+                if (currFrag == AppFragType.ACCOUNTEDIT) {
+                    AddEditActivityFragment fragment = (AddEditActivityFragment)
+                            getSupportFragmentManager().findFragmentById(R.id.task_details_container);
+                    if(fragment == null || fragment.canClose()) {
+                        return super.onOptionsItemSelected(item);
+                    } else {
+                        showConfirmationDialog(AppDialog.DIALOG_ID_CANCEL_EDIT_UP);
+                        return true;  // indicate we are handling this
+                    }
                 } else {
-                    showConfirmationDialog(AppDialog.DIALOG_ID_CANCEL_EDIT_UP);
-                    return true;  // indicate we are handling this
+                    SuggestListActivityFragment fragment = (SuggestListActivityFragment)
+                            getSupportFragmentManager().findFragmentById(R.id.task_details_container);
+                    if (fragment == null) {
+                        return super.onOptionsItemSelected(item);
+                    } else {
+                        showConfirmationDialog(AppDialog.DIALOG_ID_CANCEL_EDIT_UP);
+                        return true;  // indicate we are handling this
+                    }
                 }
 
         }
@@ -434,11 +455,11 @@ public class MainActivity extends AppCompatActivity
 //        accountSelectedPos = selected_position;
 //        setMenuItemEnabled(R.id.menuacct_delete, true);
 //        setMenuItemEnabled(R.id.menuacct_save, true);
-        if (account.getCorpWebsite().equals("")) {
-            setMenuItemEnabled(R.id.menuacct_internet, false);
-        } else {
-            setMenuItemEnabled(R.id.menuacct_internet, true);
-        }
+//        if (account.getCorpWebsite().equals("")) {
+//            setMenuItemEnabled(R.id.menuacct_internet, false);
+//        } else {
+//            setMenuItemEnabled(R.id.menuacct_internet, true);
+//        }
         this.account = account;
 
         if (mTwoPane) {
@@ -948,6 +969,7 @@ public class MainActivity extends AppCompatActivity
         Log.d(TAG, "taskEditRequest: starts");
         Log.d(TAG, "taskEditRequest: in two-pane mode (tablet) " + mTwoPane);
 
+        currFrag = AppFragType.ACCOUNTEDIT;
         AddEditActivityFragment fragment = new AddEditActivityFragment();
 
         Bundle arguments = new Bundle();
@@ -1028,8 +1050,9 @@ public class MainActivity extends AppCompatActivity
 //                .commit();
     }
 
-    private void suggestsListRequest() {
-//        Log.d(TAG, "suggestsListRequest: starts");
+    private void suggestsListRequest2() {
+        Log.d(TAG, "suggestsListRequest2: starts");
+        currFrag = AppFragType.PASSWORDS;
         if (mTwoPane) {
         } else {
         }
@@ -1051,7 +1074,25 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    private void downloadUrl(String feedUrl) {
+    private void suggestsListRequest() {
+        Log.d(TAG, "suggestsListRequest: ");
+        currFrag = AppFragType.PASSWORDS;
+        SuggestListActivityFragment fragment = new SuggestListActivityFragment();
+
+//        Bundle arguments = new Bundle();
+//        arguments.putSerializable(Account.class.getSimpleName(), acct);
+//        fragment.setArguments(arguments);
+
+        Log.d(TAG, "suggestsListRequest: twoPaneMode " + mTwoPane);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.task_details_container, fragment)
+                .commit();
+
+    }
+
+
+
+        private void downloadUrl(String feedUrl) {
         if (!feedUrl.equalsIgnoreCase(feedCachedUrl)) {
             Log.d(TAG, "downloadURL: " + feedUrl);
             DownloadData downloadData = new DownloadData();
@@ -1489,12 +1530,22 @@ public class MainActivity extends AppCompatActivity
     public void onBackPressed() {
         Log.d(TAG, "onBackPressed: ");
         FragmentManager fragmentManager = getSupportFragmentManager();
-        AddEditActivityFragment fragment = (AddEditActivityFragment) fragmentManager.findFragmentById(R.id.task_details_container);
-        if ((fragment == null) || fragment.canClose()) {
+        if (currFrag == AppFragType.ACCOUNTEDIT) {
+            AddEditActivityFragment fragment = (AddEditActivityFragment) fragmentManager.findFragmentById(R.id.task_details_container);
+            if ((fragment == null) || fragment.canClose()) {
 //            super.onBackPressed();
-            showConfirmationLeaveApp();
+                showConfirmationLeaveApp();
+            } else {
+                showConfirmationDialog(AppDialog.DIALOG_ID_CANCEL_EDIT);
+            }
         } else {
-            showConfirmationDialog(AppDialog.DIALOG_ID_CANCEL_EDIT);
+            SuggestListActivityFragment fragment = (SuggestListActivityFragment) fragmentManager.findFragmentById(R.id.task_details_container);
+            if (fragment == null) {
+//            super.onBackPressed();
+                showConfirmationLeaveApp();
+            } else {
+                showConfirmationDialog(AppDialog.DIALOG_ID_CANCEL_EDIT);
+            }
         }
     }
 
@@ -1527,4 +1578,21 @@ public class MainActivity extends AppCompatActivity
         dialog.show(getSupportFragmentManager(), null);
 
     }
+
+
+    @Override
+    public void onSuggestUpClick(Suggest suggest) {
+
+    }
+
+    @Override
+    public void onSuggestDownClick(Suggest suggest) {
+
+    }
+
+    @Override
+    public void onSuggestDeleteClick(Suggest suggest) {
+
+    }
+
 }

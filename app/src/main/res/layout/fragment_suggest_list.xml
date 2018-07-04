@@ -5,8 +5,8 @@
     android:id="@+id/content_suggest_list"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    tools:context="com.kinsey.passwords.SuggestListActivityFragment"
-    tools:showIn="@layout/activity_suggest_list">
+    tools:context="com.kinsey.passwords.SuggestListActivityFragment" >
+    <!--tools:showIn="@layout/activity_suggest_list">-->
 
     <TextView
         android:id="@+id/current_title"
