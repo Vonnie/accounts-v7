@@ -268,7 +268,9 @@ public class AddEditActivityFragment extends Fragment {
             return false;
         }
         if (!mCorpWebsiteTextView.getText().toString().equals("")) {
-            if (!mCorpWebsiteTextView.getText().toString().toLowerCase().startsWith("http://")) {
+            if (mCorpWebsiteTextView.getText().toString().toLowerCase().startsWith("http://")
+                    || mCorpWebsiteTextView.getText().toString().toLowerCase().startsWith("https://")) {
+            } else {
                 mCorpWebsiteTextView.setText("http://" + mCorpWebsiteTextView.getText().toString());
             }
         }

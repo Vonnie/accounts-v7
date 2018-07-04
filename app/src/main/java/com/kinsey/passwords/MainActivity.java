@@ -32,7 +32,6 @@ import com.kinsey.passwords.items.AccountsContract;
 import com.kinsey.passwords.items.Suggest;
 import com.kinsey.passwords.items.SuggestsContract;
 import com.kinsey.passwords.provider.AccountRecyclerViewAdapter;
-import com.kinsey.passwords.provider.CursorRecyclerViewAdapter;
 import com.kinsey.passwords.provider.FeedAdapter;
 import com.kinsey.passwords.provider.ParseApplications;
 import com.kinsey.passwords.tools.AppDialog;
@@ -50,7 +49,6 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity
         implements AccountRecyclerViewAdapter.OnAccountClickListener,
-        CursorRecyclerViewAdapter.OnSuggestClickListener,
         AddEditActivityFragment.OnSaveClicked,
         AccountActivityFragment.OnActionListener,
         AccountPlaceholderFrag1.OnAccountListener,
@@ -59,6 +57,7 @@ public class MainActivity extends AppCompatActivity
         ViewPager.OnPageChangeListener,
         AppDialog.DialogEvents {
 
+//    CursorRecyclerViewAdapter.OnSuggestClickListener,
 //        AccountRecyclerViewAdapter.OnAccountClickListener,
 //        MainActivityFragment.OnActionListener,
 
@@ -848,6 +847,16 @@ public class MainActivity extends AppCompatActivity
                 mDialog.dismiss();
             }
         });
+
+        ImageButton btnWebsite = messageView.findViewById(R.id.imgbtn_globe);
+        btnWebsite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "onClick: for edit");
+                linkToInternet(account);
+                mDialog.dismiss();
+            }
+        });
 //            TextView about_url = (TextView) messageView.findViewById(R.id.about_url);
 //            if(about_url != null) {
 //                about_url.setOnClickListener(new View.OnClickListener() {
@@ -917,6 +926,55 @@ public class MainActivity extends AppCompatActivity
         newFragment.setArguments(args);
         newFragment.show(fragmentManager, "dialog");
     }
+
+
+    private void linkToInternet(Account account) {
+        Log.d(TAG, "linkToInternet: " + account);
+        if (account.getCorpWebsite().equals("")
+                || account.getCorpWebsite().toLowerCase().equals("http://")
+                || account.getCorpWebsite().toLowerCase().equals("https://")) {
+            Toast.makeText(this,
+                    "Selected account must have a corp website",
+                    Toast.LENGTH_LONG).show();
+        } else {
+            if (!account.getCorpWebsite().equals("")) {
+//                mActivityStart = true;
+                Log.d(TAG, "linkToInternet: " + account.getCorpWebsite());
+                vewInternet(account.getCorpWebsite());
+//                webview.loadUrl(account.getCorpWebsite());
+            } else {
+                return;
+            }
+        }
+    }
+
+    private void vewInternet(String webpage) {
+//        Bundle arguments = new Bundle();
+//        arguments.putString(WebViewActivity.class.getSimpleName(),
+//                webpage);
+//        WebViewActivityFragment fragment = new WebViewActivityFragment();
+//        fragment.setArguments(arguments);
+//        getSupportFragmentManager().beginTransaction()
+//                .add(R.id.content_account_list, fragment)
+//                .commit();
+//    }
+
+////            Uri uri = Uri.parse(account.getCorpWebsite());
+////            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+////            startActivity(intent);
+////            startActivityForResult(intent, AccountsContract.ACCOUNT_ACTION_WEBPAGE);
+
+        Log.d(TAG, "vewInternet: link to webpage frag1Pos " + frag1Pos);
+        Log.d(TAG, "vewInternet: webpage " + account.getCorpWebsite());
+        Intent detailIntent = new Intent(this, WebViewActivity.class);
+        detailIntent.putExtra(WebViewActivity.class.getSimpleName(), account.getCorpWebsite());
+//                Log.d(TAG, "onClick: website " + account.getCorpWebsite());
+//                Log.d(TAG, "onClick: wv class " + WebViewActivity.class.getSimpleName());
+        startActivityForResult(detailIntent, AccountsContract.ACCOUNT_ACTION_WEBPAGE);
+//            startActivity(detailIntent);
+    }
+//    }
+//
 
 
     List<Account> loadAccountsBySeq() {
@@ -1579,20 +1637,5 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-
-    @Override
-    public void onSuggestUpClick(Suggest suggest) {
-
-    }
-
-    @Override
-    public void onSuggestDownClick(Suggest suggest) {
-
-    }
-
-    @Override
-    public void onSuggestDeleteClick(Suggest suggest) {
-
-    }
 
 }

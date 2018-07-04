@@ -415,7 +415,13 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
 
     public void setPosById(int acctId) {
         Log.d(TAG, "setPosById: " + acctId);
-        int pos = 0;
+        int pos = -1;
+        if (mCursor == null) {
+            return;
+        }
+        if (mCursor.getCount() <= 0) {
+            return;
+        }
         mCursor.moveToFirst();
         do {
             int iIndex = mCursor.getColumnIndex(AccountsContract.Columns._ID_COL);
