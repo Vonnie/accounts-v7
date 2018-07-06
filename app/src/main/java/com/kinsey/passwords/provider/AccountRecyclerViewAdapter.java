@@ -1,6 +1,5 @@
 package com.kinsey.passwords.provider;
 
-import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -36,7 +35,7 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
 
     //    private int mSortorder;
     private Cursor mCursor;
-    private Context mContext;
+//    private Context mContext;
     private boolean resetRow = false;
 
     private int accountSortorder = AccountsContract.ACCOUNT_LIST_BY_CORP_NAME;
@@ -75,7 +74,7 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
             pattern_mdy_display, Locale.US);
 
 
-    public AccountRecyclerViewAdapter(Context context, Cursor cursor, OnAccountClickListener listener) {
+    public AccountRecyclerViewAdapter(Cursor cursor, OnAccountClickListener listener) {
 //        Log.d(TAG, "CursorRecyclerViewAdapter: Constructor called");
 
 //        Log.d(TAG, "AccountRecyclerViewAdapter: twopane " + twoPane);
@@ -85,7 +84,7 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
 //        mTwoPane = twoPane;
 //        mSortorder = sortorder;
 //        this.selected_position = selected_position;
-        mContext = context;
+//        mContext = context;
         mCursor = cursor;
         mListener = listener;
     }
@@ -231,14 +230,14 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
                     holder.user_name.setVisibility(View.GONE);
                 } else if (accountSortorder == AccountsContract.ACCOUNT_LIST_BY_CORP_NAME ){
                     holder.user_name.setVisibility(View.GONE);
-                } else if (!holder.corp_name.getTag().equals(mContext.getString(R.string.tag_xlarge)) &&
-                        !holder.corp_name.getTag().equals(mContext.getString(R.string.tag_large)) &&
-                        (accountSortorder == AccountsContract.ACCOUNT_LIST_BY_CORP_NAME ||
-                                accountSortorder == AccountsContract.ACCOUNT_LIST_BY_SEQUENCE ||
-                                accountSortorder == AccountsContract.ACCOUNT_LIST_BY_OPEN_DATE)) {
-//                    holder.user_name.setVisibility(View.GONE);
-                    holder.user_name.setVisibility(View.VISIBLE);
-                    holder.user_name.setText(account.getUserName());
+//                } else if (!holder.corp_name.getTag().equals(mContext.getString(R.string.tag_xlarge)) &&
+//                        !holder.corp_name.getTag().equals(mContext.getString(R.string.tag_large)) &&
+//                        (accountSortorder == AccountsContract.ACCOUNT_LIST_BY_CORP_NAME ||
+//                                accountSortorder == AccountsContract.ACCOUNT_LIST_BY_SEQUENCE ||
+//                                accountSortorder == AccountsContract.ACCOUNT_LIST_BY_OPEN_DATE)) {
+////                    holder.user_name.setVisibility(View.GONE);
+//                    holder.user_name.setVisibility(View.VISIBLE);
+//                    holder.user_name.setText(account.getUserName());
                 } else {
                     holder.user_name.setVisibility(View.VISIBLE);
                     holder.user_name.setText(account.getUserName());
@@ -345,7 +344,7 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
 //                    } else {
 //                        mListener.onAccountListSelect(account);
 //                    }
-                    Log.d(TAG, "onClick: selected " + accountSelectedPos + ":" + account.getId());
+                    Log.d(TAG, "onClick: selected " + accountSelectedPos + ":" + account.getId() + account);
                     mListener.onAccountListSelect(account);
 //                    Log.d(TAG, "onClick: selected " + selected_position + ":" + account.getId());
                 }

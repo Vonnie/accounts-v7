@@ -1,6 +1,8 @@
 package com.kinsey.passwords;
 
 import android.app.Activity;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -19,7 +21,11 @@ import android.widget.TextView;
 
 import com.kinsey.passwords.items.Account;
 import com.kinsey.passwords.items.AccountsContract;
+import com.kinsey.passwords.items.SuggestsContract;
 import com.kinsey.passwords.provider.AccountRecyclerViewAdapter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.kinsey.passwords.MainActivity.ACCOUNT_LOADER_ID;
 
@@ -41,6 +47,7 @@ public class AccountListActivityFragment extends Fragment
     RecyclerView mRecyclerView;
     private AccountRecyclerViewAdapter mAccountAdapter; // add adapter reference
     TextView twCurrentTitle;
+
 //    Loader<Cursor> loader;
 
     // whether or not the activity is i 2-pane mode
@@ -49,6 +56,14 @@ public class AccountListActivityFragment extends Fragment
 
 //    private int mSortorder = AccountsContract.ACCOUNT_LIST_BY_CORP_NAME;
 //    private int accountSortorder = AccountsContract.ACCOUNT_LIST_BY_CORP_NAME;
+
+    private OnAccountListClickListener mListener;
+
+    public interface OnAccountListClickListener {
+
+        void onAccountListSelect(Account account);
+        void onAccountLong(Account account);
+    }
 
 
     public enum FragmentListMode {CORP_NAME, OPEN_DATE}
@@ -80,45 +95,45 @@ public class AccountListActivityFragment extends Fragment
         Log.d(TAG, "onActivityCreated: starts loader_id " + ACCOUNT_LOADER_ID);
         super.onActivityCreated(savedInstanceState);
 
-        // Activities containing this fragment must implement its callbacks.
-        Activity activity = getActivity();
-        if(!(activity instanceof AccountRecyclerViewAdapter.OnAccountClickListener)) {
-            throw new ClassCastException(activity.getClass().getSimpleName()
-                    + " must implement AccountRecyclerViewAdapter.OnAccountClickListener interface");
-        }
+//        // Activities containing this fragment must implement its callbacks.
+//        Activity activity = getActivity();
+//        if(!(activity instanceof AccountRecyclerViewAdapter.OnAccountClickListener)) {
+//            throw new ClassCastException(activity.getClass().getSimpleName()
+//                    + " must implement AccountRecyclerViewAdapter.OnAccountClickListener interface");
+//        }
 
         getLoaderManager().initLoader(ACCOUNT_LOADER_ID, null, this);
     }
 
-    @Override
-    public void onAccountListSelect(Account account) {
-        Log.d(TAG, "onAccountListSelect: ");
-        AccountRecyclerViewAdapter.OnAccountClickListener listener = (AccountRecyclerViewAdapter.OnAccountClickListener) getActivity();
-        if (listener !=  null) {
-            listener.onAccountListSelect(account);
-        }
-    }
+//    @Override
+//    public void onAccountListSelect(Account account) {
+//        Log.d(TAG, "onAccountListSelect: ");
+//        AccountRecyclerViewAdapter.OnAccountClickListener listener = (AccountRecyclerViewAdapter.OnAccountClickListener) getActivity();
+//        if (listener !=  null) {
+//            listener.onAccountListSelect(account);
+//        }
+//    }
 
-    @Override
-    public void onAccountUpClick(Account account) {
+//    @Override
+//    public void onAccountUpClick(Account account) {
+//
+//    }
 
-    }
+//    @Override
+//    public void onAccountDownClick(Account account) {
+//
+//    }
 
-    @Override
-    public void onAccountDownClick(Account account) {
-
-    }
-
-    @Override
-    public void onAccountLong(Account account) {
-
-        Log.d(TAG, "onAccountLong: ");
-        AccountRecyclerViewAdapter.OnAccountClickListener listener = (AccountRecyclerViewAdapter.OnAccountClickListener) getActivity();
-        if(listener != null) {
-            listener.onAccountLong(account);
-        }
-
-    }
+//    @Override
+//    public void onAccountLong(Account account) {
+//
+//        Log.d(TAG, "onAccountLong: ");
+//        AccountRecyclerViewAdapter.OnAccountClickListener listener = (AccountRecyclerViewAdapter.OnAccountClickListener) getActivity();
+//        if(listener != null) {
+//            listener.onAccountLong(account);
+//        }
+//
+//    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -182,7 +197,8 @@ public class AccountListActivityFragment extends Fragment
         Log.d(TAG, "onCreateView: abt to init loader: ");
 
         if (mAccountAdapter == null) {
-            mAccountAdapter = new AccountRecyclerViewAdapter(getContext(),null, this);
+//            AccountRecyclerViewAdapter.OnAccountClickListener listener = (AccountRecyclerViewAdapter.OnAccountClickListener) getActivity();
+            mAccountAdapter = new AccountRecyclerViewAdapter(null, this);
         }
 //            mAccountAdapter = new AccountRecyclerViewAdapter(getContext(), cursor,
 //                    (AccountRecyclerViewAdapter.OnAccountClickListener) getActivity());
@@ -430,4 +446,203 @@ public class AccountListActivityFragment extends Fragment
 //    public void resetSelection() {
 //        mAccountAdapter.setSelected_position(-1);
 //    }
+
+    @Override
+    public void onAccountListSelect(Account account) {
+        Log.d(TAG, "onAccountListSelect: " + account);
+        mListener.onAccountListSelect(account);
+    }
+
+    @Override
+    public void onAccountUpClick(Account account) {
+        Log.d(TAG, "onAccountUpClick: " + account.getId() + " " + account.getCorpWebsite());
+        List<Account> listAccounts = loadAccountsBySeq();
+        int priorId = -1;
+        int iLimit = listAccounts.size();
+        for (int i = 0; i < iLimit; i++) {
+            Account item = listAccounts.get(i);
+            if (account.getId() == item.getId()) {
+                break;
+            }
+            priorId = item.getId();
+        }
+//        Log.d(TAG, "onSuggestDownClick: priorId " + priorId);
+
+        int reseq = 0;
+        for (int i = 0; i < iLimit; i++) {
+            Account item = listAccounts.get(i);
+            if (priorId != item.getId()) {
+                reseq++;
+                item.setNewSequence(reseq);
+                if (account.getId() == item.getId()) {
+                    break;
+                }
+            }
+        }
+
+        boolean found = false;
+        for (int i = 0; i < iLimit; i++) {
+            Account item = listAccounts.get(i);
+            if (priorId == item.getId()) {
+                reseq++;
+                item.setNewSequence(reseq);
+            } else {
+                if (account.getId() == item.getId()) {
+                    found = true;
+                } else {
+                    if (found) {
+                        reseq++;
+                        item.setNewSequence(reseq);
+                    }
+                }
+            }
+        }
+
+        ContentResolver contentResolver = getActivity().getContentResolver();
+
+        for (int i = 0; i < iLimit; i++) {
+            Account item = listAccounts.get(i);
+            if (item.getSequence() != item.getNewSequence()) {
+//                Log.d(TAG, "onSuggestDownClick: " + item.getSequence() + ":" + item.getNewSequence());
+                ContentValues values = new ContentValues();
+                values.put(AccountsContract.Columns.SEQUENCE_COL, item.getNewSequence());
+                contentResolver.update(AccountsContract.buildIdUri(item.getId()), values, null, null);
+            }
+        }
+
+        if (mAccountAdapter.getAccountSelectedPos() == -1) {
+        } else if (mAccountAdapter.getAccountSelectedPos() > 0) {
+            mAccountAdapter.setAccountSelectedPos(mAccountAdapter.getAccountSelectedPos() - 1);
+        }
+
+
+    }
+
+    @Override
+    public void onAccountDownClick(Account account) {
+//        Log.d(TAG, "onAccountDownClick: " + account.getId());
+        List<Account> listAccounts = loadAccountsBySeq();
+        int nextId = -1;
+        int iLimit = listAccounts.size();
+        for (int i = 0; i < iLimit; i++) {
+            Account item = listAccounts.get(i);
+            if (nextId != -1) {
+                nextId = item.getId();
+                break;
+            }
+            if (account.getId() == item.getId()) {
+                nextId = item.getId();
+            }
+        }
+//        Log.d(TAG, "onSuggestDownClick: nextId " + nextId);
+
+        int reseq = 0;
+        for (int i = 0; i < iLimit; i++) {
+            Account item = listAccounts.get(i);
+            if (account.getId() != item.getId()) {
+                reseq++;
+                item.setNewSequence(reseq);
+                if (nextId == item.getId()) {
+                    break;
+                }
+            }
+        }
+
+        boolean found = false;
+        for (int i = 0; i < iLimit; i++) {
+            Account item = listAccounts.get(i);
+            if (account.getId() == item.getId()) {
+                reseq++;
+                item.setNewSequence(reseq);
+            } else {
+                if (nextId == item.getId()) {
+                    found = true;
+                } else {
+                    if (found) {
+                        reseq++;
+                        item.setNewSequence(reseq);
+                    }
+                }
+            }
+        }
+
+        ContentResolver contentResolver = getActivity().getContentResolver();
+
+        for (int i = 0; i < iLimit; i++) {
+            Account item = listAccounts.get(i);
+            if (item.getSequence() != item.getNewSequence()) {
+//                Log.d(TAG, "onSuggestDownClick: " + item.getSequence() + ":" + item.getNewSequence());
+                ContentValues values = new ContentValues();
+                values.put(AccountsContract.Columns.SEQUENCE_COL, item.getNewSequence());
+                contentResolver.update(AccountsContract.buildIdUri(item.getId()), values, null, null);
+            }
+        }
+
+        if (mAccountAdapter.getAccountSelectedPos() == -1) {
+        } else if (mAccountAdapter.getAccountSelectedPos() < iLimit) {
+            mAccountAdapter.setAccountSelectedPos(mAccountAdapter.getAccountSelectedPos() + 1);
+        }
+
+
+    }
+
+
+    List<Account> loadAccountsBySeq() {
+//        Log.d(TAG, "loadAccountsBySeq: starts ");
+        String sortOrder = AccountsContract.Columns.SEQUENCE_COL + "," + AccountsContract.Columns.CORP_NAME_COL.toLowerCase() + " COLLATE NOCASE ASC";
+        Cursor cursor = getActivity().getContentResolver().query(
+                AccountsContract.CONTENT_URI, null, null, null, sortOrder);
+
+        List<Account> listAccounts = new ArrayList<Account>();
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+//                Log.d(TAG, "loadPasswords: seq " + cursor.getInt(cursor.getColumnIndex(SuggestsContract.Columns.SEQUENCE_COL))
+//                        + ":" + cursor.getString(cursor.getColumnIndex(SuggestsContract.Columns.PASSWORD_COL)));
+                Account item = new Account(
+                        cursor.getInt(cursor.getColumnIndex(AccountsContract.Columns._ID_COL)),
+                        cursor.getString(cursor.getColumnIndex(AccountsContract.Columns.CORP_NAME_COL)),
+                        cursor.getString(cursor.getColumnIndex(AccountsContract.Columns.USER_NAME_COL)),
+                        cursor.getString(cursor.getColumnIndex(AccountsContract.Columns.USER_EMAIL_COL)),
+                        cursor.getString(cursor.getColumnIndex(AccountsContract.Columns.CORP_WEBSITE_COL)),
+                        cursor.getInt(cursor.getColumnIndex(AccountsContract.Columns.SEQUENCE_COL)));
+                item.setNewSequence(cursor.getInt(cursor.getColumnIndex(SuggestsContract.Columns.SEQUENCE_COL)));
+                listAccounts.add(item);
+            }
+            cursor.close();
+        }
+
+        return listAccounts;
+    }
+
+
+    @Override
+    public void onAccountLong(Account account) {
+        Log.d(TAG, "onAccountLong: " + account);
+//        showAboutDialog();
+
+        mListener.onAccountLong(account);
+
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        // Activities containing this fragment must implement it's callbacks
+        Activity activity = getActivity();
+        if (!(activity instanceof AccountListActivityFragment.OnAccountListClickListener)) {
+            throw new ClassCastException(activity.getClass().getSimpleName()
+                    + " must implement AccountListActivityFragment interface");
+        }
+        mListener = (AccountListActivityFragment.OnAccountListClickListener) activity;
+
+    }
+
+    @Override
+    public void onDetach() {
+//        Log.d(TAG, "onDetach: starts");
+        super.onDetach();
+        mListener = null;
+    }
+
 }

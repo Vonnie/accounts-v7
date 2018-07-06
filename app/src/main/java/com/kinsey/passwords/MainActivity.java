@@ -3,12 +3,10 @@ package com.kinsey.passwords;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.ActivityNotFoundException;
-import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -32,8 +30,6 @@ import android.widget.Toast;
 import com.kinsey.passwords.items.Account;
 import com.kinsey.passwords.items.AccountsContract;
 import com.kinsey.passwords.items.Suggest;
-import com.kinsey.passwords.items.SuggestsContract;
-import com.kinsey.passwords.provider.AccountRecyclerViewAdapter;
 import com.kinsey.passwords.provider.DatePickerFragment;
 import com.kinsey.passwords.provider.FeedAdapter;
 import com.kinsey.passwords.provider.ParseApplications;
@@ -46,22 +42,23 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.List;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity
-        implements AccountRecyclerViewAdapter.OnAccountClickListener,
+        implements
+        AccountListActivityFragment.OnAccountListClickListener,
         AddEditActivityFragment.OnListenerClicked,
-        AccountActivityFragment.OnActionListener,
-        AccountPlaceholderFrag1.OnAccountListener,
-        AccountPlaceholderFrag2.OnAccountListener,
-        AccountPlaceholderFrag3.OnAccountListener,
         AppDialog.DialogEvents,
         DatePickerDialog.OnDateSetListener{
+
+//    AccountRecyclerViewAdapter.OnAccountClickListener,
+//    AccountActivityFragment.OnActionListener,
+//    AccountPlaceholderFrag1.OnAccountListener,
+//    AccountPlaceholderFrag2.OnAccountListener,
+//    AccountPlaceholderFrag3.OnAccountListener,
 
 //    ViewPager.OnPageChangeListener,
 //    CursorRecyclerViewAdapter.OnSuggestClickListener,
@@ -470,24 +467,24 @@ public class MainActivity extends AppCompatActivity
 //        Log.d(TAG, "onPageScrollStateChanged: " + state);
 //    }
 
-    @Override
-    public void onAccountRetreived(Account account) {
-
-    }
-
-    @Override
-    public void onAccount2Instance() {
-        Log.d(TAG, "onAccount2Instance: ");
-    }
-
-    @Override
-    public void onAccount3Instance() {
-        Log.d(TAG, "onAccount3Instance: ");
-    }
+//    @Override
+//    public void onAccountRetreived(Account account) {
+//
+//    }
+//
+//    @Override
+//    public void onAccount2Instance() {
+//        Log.d(TAG, "onAccount2Instance: ");
+//    }
+//
+//    @Override
+//    public void onAccount3Instance() {
+//        Log.d(TAG, "onAccount3Instance: ");
+//    }
 
     @Override
     public void onAccountListSelect(Account account) {
-        Log.d(TAG, "onAccountListSelect: ");
+        Log.d(TAG, "onAccountListSelect: " + account.getCorpName());
         accountMode = AccountsContract.ACCOUNT_ACTION_CHG;
 //        Log.d(TAG, "onAccountListSelect: selected pos " + selected_position);
 //        fragList.setSelected_position(selected_position);
@@ -696,136 +693,136 @@ public class MainActivity extends AppCompatActivity
 //    }
 
 
-    @Override
-    public void onAccountUpClick(Account account) {
-        Log.d(TAG, "onAccountUpClick: " + account.getId());
-        List<Account> listAccounts = loadAccountsBySeq();
-        int priorId = -1;
-        int iLimit = listAccounts.size();
-        for (int i = 0; i < iLimit; i++) {
-            Account item = listAccounts.get(i);
-            if (account.getId() == item.getId()) {
-                break;
-            }
-            priorId = item.getId();
-        }
-//        Log.d(TAG, "onSuggestDownClick: priorId " + priorId);
+//    @Override
+//    public void onAccountUpClick(Account account) {
+//        Log.d(TAG, "onAccountUpClick: " + account.getId() + " " + account.getCorpWebsite());
+//        List<Account> listAccounts = loadAccountsBySeq();
+//        int priorId = -1;
+//        int iLimit = listAccounts.size();
+//        for (int i = 0; i < iLimit; i++) {
+//            Account item = listAccounts.get(i);
+//            if (account.getId() == item.getId()) {
+//                break;
+//            }
+//            priorId = item.getId();
+//        }
+////        Log.d(TAG, "onSuggestDownClick: priorId " + priorId);
+//
+//        int reseq = 0;
+//        for (int i = 0; i < iLimit; i++) {
+//            Account item = listAccounts.get(i);
+//            if (priorId != item.getId()) {
+//                reseq++;
+//                item.setNewSequence(reseq);
+//                if (account.getId() == item.getId()) {
+//                    break;
+//                }
+//            }
+//        }
+//
+//        boolean found = false;
+//        for (int i = 0; i < iLimit; i++) {
+//            Account item = listAccounts.get(i);
+//            if (priorId == item.getId()) {
+//                reseq++;
+//                item.setNewSequence(reseq);
+//            } else {
+//                if (account.getId() == item.getId()) {
+//                    found = true;
+//                } else {
+//                    if (found) {
+//                        reseq++;
+//                        item.setNewSequence(reseq);
+//                    }
+//                }
+//            }
+//        }
+//
+//        ContentResolver contentResolver = getContentResolver();
+//
+//        for (int i = 0; i < iLimit; i++) {
+//            Account item = listAccounts.get(i);
+//            if (item.getSequence() != item.getNewSequence()) {
+////                Log.d(TAG, "onSuggestDownClick: " + item.getSequence() + ":" + item.getNewSequence());
+//                ContentValues values = new ContentValues();
+//                values.put(AccountsContract.Columns.SEQUENCE_COL, item.getNewSequence());
+//                contentResolver.update(AccountsContract.buildIdUri(item.getId()), values, null, null);
+//            }
+//        }
+//
+//        if (accountSelectedPos == -1) {
+//        } else if (accountSelectedPos > 0) {
+//            accountSelectedPos -= 1;
+//        }
+//
+//    }
 
-        int reseq = 0;
-        for (int i = 0; i < iLimit; i++) {
-            Account item = listAccounts.get(i);
-            if (priorId != item.getId()) {
-                reseq++;
-                item.setNewSequence(reseq);
-                if (account.getId() == item.getId()) {
-                    break;
-                }
-            }
-        }
-
-        boolean found = false;
-        for (int i = 0; i < iLimit; i++) {
-            Account item = listAccounts.get(i);
-            if (priorId == item.getId()) {
-                reseq++;
-                item.setNewSequence(reseq);
-            } else {
-                if (account.getId() == item.getId()) {
-                    found = true;
-                } else {
-                    if (found) {
-                        reseq++;
-                        item.setNewSequence(reseq);
-                    }
-                }
-            }
-        }
-
-        ContentResolver contentResolver = getContentResolver();
-
-        for (int i = 0; i < iLimit; i++) {
-            Account item = listAccounts.get(i);
-            if (item.getSequence() != item.getNewSequence()) {
-//                Log.d(TAG, "onSuggestDownClick: " + item.getSequence() + ":" + item.getNewSequence());
-                ContentValues values = new ContentValues();
-                values.put(AccountsContract.Columns.SEQUENCE_COL, item.getNewSequence());
-                contentResolver.update(AccountsContract.buildIdUri(item.getId()), values, null, null);
-            }
-        }
-
-        if (accountSelectedPos == -1) {
-        } else if (accountSelectedPos > 0) {
-            accountSelectedPos -= 1;
-        }
-
-    }
-
-    @Override
-    public void onAccountDownClick(Account account) {
-//        Log.d(TAG, "onAccountDownClick: " + account.getId());
-        List<Account> listAccounts = loadAccountsBySeq();
-        int nextId = -1;
-        int iLimit = listAccounts.size();
-        for (int i = 0; i < iLimit; i++) {
-            Account item = listAccounts.get(i);
-            if (nextId != -1) {
-                nextId = item.getId();
-                break;
-            }
-            if (account.getId() == item.getId()) {
-                nextId = item.getId();
-            }
-        }
-//        Log.d(TAG, "onSuggestDownClick: nextId " + nextId);
-
-        int reseq = 0;
-        for (int i = 0; i < iLimit; i++) {
-            Account item = listAccounts.get(i);
-            if (account.getId() != item.getId()) {
-                reseq++;
-                item.setNewSequence(reseq);
-                if (nextId == item.getId()) {
-                    break;
-                }
-            }
-        }
-
-        boolean found = false;
-        for (int i = 0; i < iLimit; i++) {
-            Account item = listAccounts.get(i);
-            if (account.getId() == item.getId()) {
-                reseq++;
-                item.setNewSequence(reseq);
-            } else {
-                if (nextId == item.getId()) {
-                    found = true;
-                } else {
-                    if (found) {
-                        reseq++;
-                        item.setNewSequence(reseq);
-                    }
-                }
-            }
-        }
-
-        ContentResolver contentResolver = getContentResolver();
-
-        for (int i = 0; i < iLimit; i++) {
-            Account item = listAccounts.get(i);
-            if (item.getSequence() != item.getNewSequence()) {
-//                Log.d(TAG, "onSuggestDownClick: " + item.getSequence() + ":" + item.getNewSequence());
-                ContentValues values = new ContentValues();
-                values.put(AccountsContract.Columns.SEQUENCE_COL, item.getNewSequence());
-                contentResolver.update(AccountsContract.buildIdUri(item.getId()), values, null, null);
-            }
-        }
-
-        if (accountSelectedPos == -1) {
-        } else if (accountSelectedPos < iLimit) {
-            accountSelectedPos += 1;
-        }
-
-    }
+//    @Override
+//    public void onAccountDownClick(Account account) {
+////        Log.d(TAG, "onAccountDownClick: " + account.getId());
+//        List<Account> listAccounts = loadAccountsBySeq();
+//        int nextId = -1;
+//        int iLimit = listAccounts.size();
+//        for (int i = 0; i < iLimit; i++) {
+//            Account item = listAccounts.get(i);
+//            if (nextId != -1) {
+//                nextId = item.getId();
+//                break;
+//            }
+//            if (account.getId() == item.getId()) {
+//                nextId = item.getId();
+//            }
+//        }
+////        Log.d(TAG, "onSuggestDownClick: nextId " + nextId);
+//
+//        int reseq = 0;
+//        for (int i = 0; i < iLimit; i++) {
+//            Account item = listAccounts.get(i);
+//            if (account.getId() != item.getId()) {
+//                reseq++;
+//                item.setNewSequence(reseq);
+//                if (nextId == item.getId()) {
+//                    break;
+//                }
+//            }
+//        }
+//
+//        boolean found = false;
+//        for (int i = 0; i < iLimit; i++) {
+//            Account item = listAccounts.get(i);
+//            if (account.getId() == item.getId()) {
+//                reseq++;
+//                item.setNewSequence(reseq);
+//            } else {
+//                if (nextId == item.getId()) {
+//                    found = true;
+//                } else {
+//                    if (found) {
+//                        reseq++;
+//                        item.setNewSequence(reseq);
+//                    }
+//                }
+//            }
+//        }
+//
+//        ContentResolver contentResolver = getContentResolver();
+//
+//        for (int i = 0; i < iLimit; i++) {
+//            Account item = listAccounts.get(i);
+//            if (item.getSequence() != item.getNewSequence()) {
+////                Log.d(TAG, "onSuggestDownClick: " + item.getSequence() + ":" + item.getNewSequence());
+//                ContentValues values = new ContentValues();
+//                values.put(AccountsContract.Columns.SEQUENCE_COL, item.getNewSequence());
+//                contentResolver.update(AccountsContract.buildIdUri(item.getId()), values, null, null);
+//            }
+//        }
+//
+//        if (accountSelectedPos == -1) {
+//        } else if (accountSelectedPos < iLimit) {
+//            accountSelectedPos += 1;
+//        }
+//
+//    }
 
     @Override
     public void onAccountLong(final Account account) {
@@ -1021,33 +1018,33 @@ public class MainActivity extends AppCompatActivity
 //    }
 //
 
-
-    List<Account> loadAccountsBySeq() {
-//        Log.d(TAG, "loadAccountsBySeq: starts ");
-        String sortOrder = AccountsContract.Columns.SEQUENCE_COL + "," + AccountsContract.Columns.CORP_NAME_COL.toLowerCase() + " COLLATE NOCASE ASC";
-        Cursor cursor = getContentResolver().query(
-                AccountsContract.CONTENT_URI, null, null, null, sortOrder);
-
-        List<Account> listAccounts = new ArrayList<Account>();
-        if (cursor != null) {
-            while (cursor.moveToNext()) {
-//                Log.d(TAG, "loadPasswords: seq " + cursor.getInt(cursor.getColumnIndex(SuggestsContract.Columns.SEQUENCE_COL))
-//                        + ":" + cursor.getString(cursor.getColumnIndex(SuggestsContract.Columns.PASSWORD_COL)));
-                Account item = new Account(
-                        cursor.getInt(cursor.getColumnIndex(AccountsContract.Columns._ID_COL)),
-                        cursor.getString(cursor.getColumnIndex(AccountsContract.Columns.CORP_NAME_COL)),
-                        cursor.getString(cursor.getColumnIndex(AccountsContract.Columns.USER_NAME_COL)),
-                        cursor.getString(cursor.getColumnIndex(AccountsContract.Columns.USER_EMAIL_COL)),
-                        cursor.getString(cursor.getColumnIndex(AccountsContract.Columns.CORP_WEBSITE_COL)),
-                        cursor.getInt(cursor.getColumnIndex(AccountsContract.Columns.SEQUENCE_COL)));
-                item.setNewSequence(cursor.getInt(cursor.getColumnIndex(SuggestsContract.Columns.SEQUENCE_COL)));
-                listAccounts.add(item);
-            }
-            cursor.close();
-        }
-
-        return listAccounts;
-    }
+//
+//    List<Account> loadAccountsBySeq() {
+////        Log.d(TAG, "loadAccountsBySeq: starts ");
+//        String sortOrder = AccountsContract.Columns.SEQUENCE_COL + "," + AccountsContract.Columns.CORP_NAME_COL.toLowerCase() + " COLLATE NOCASE ASC";
+//        Cursor cursor = getContentResolver().query(
+//                AccountsContract.CONTENT_URI, null, null, null, sortOrder);
+//
+//        List<Account> listAccounts = new ArrayList<Account>();
+//        if (cursor != null) {
+//            while (cursor.moveToNext()) {
+////                Log.d(TAG, "loadPasswords: seq " + cursor.getInt(cursor.getColumnIndex(SuggestsContract.Columns.SEQUENCE_COL))
+////                        + ":" + cursor.getString(cursor.getColumnIndex(SuggestsContract.Columns.PASSWORD_COL)));
+//                Account item = new Account(
+//                        cursor.getInt(cursor.getColumnIndex(AccountsContract.Columns._ID_COL)),
+//                        cursor.getString(cursor.getColumnIndex(AccountsContract.Columns.CORP_NAME_COL)),
+//                        cursor.getString(cursor.getColumnIndex(AccountsContract.Columns.USER_NAME_COL)),
+//                        cursor.getString(cursor.getColumnIndex(AccountsContract.Columns.USER_EMAIL_COL)),
+//                        cursor.getString(cursor.getColumnIndex(AccountsContract.Columns.CORP_WEBSITE_COL)),
+//                        cursor.getInt(cursor.getColumnIndex(AccountsContract.Columns.SEQUENCE_COL)));
+//                item.setNewSequence(cursor.getInt(cursor.getColumnIndex(SuggestsContract.Columns.SEQUENCE_COL)));
+//                listAccounts.add(item);
+//            }
+//            cursor.close();
+//        }
+//
+//        return listAccounts;
+//    }
 
 
 
