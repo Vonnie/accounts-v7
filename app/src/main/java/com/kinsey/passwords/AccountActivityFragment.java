@@ -84,7 +84,7 @@ public class AccountActivityFragment extends Fragment {
 //        mOpenDateTextView = (TextView) view.findViewById(R.id.acc_open_date);
         mDtePickOpen = (DatePicker) view.findViewById(R.id.acc_datePicker);
         mAccountIdTextView = (TextView) view.findViewById(R.id.acc_account_id);
-        mActvyDtTextView = (TextView) view.findViewById(R.id.acc_actvy_date);
+        mActvyDtTextView = (TextView) view.findViewById(R.id.addedit_actvy_date);
         mRefIdFromTextView = (EditText) view.findViewById(R.id.acc_ref_from);
         mRefIdToTextView = (EditText) view.findViewById(R.id.acc_ref_to);
         mImgWebView = (ImageButton) view.findViewById(R.id.acc_img_website);

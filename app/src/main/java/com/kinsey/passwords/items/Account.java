@@ -181,6 +181,7 @@ public class Account implements Serializable {
                 ", userName='" + userName + '\'' +
                 ", userEmail='" + userEmail + '\'' +
                 ", sequence=" + sequence +
+                ", openDate=" + openLong +
                 ", corpWebsite=" + corpWebsite +
                 ", note=" + note +
                 '}';

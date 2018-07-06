@@ -171,13 +171,13 @@
         android:layout_height="wrap_content"
         tools:layout_constraintRight_creator="1"
         tools:layout_constraintBottom_creator="1"
-        app:layout_constraintBottom_toTopOf="@+id/acc_actvy_date"
+        app:layout_constraintBottom_toTopOf="@+id/addedit_actvy_date"
         app:layout_constraintRight_toRightOf="@+id/acc_datePicker"
         tools:layout_constraintLeft_creator="1"
         app:layout_constraintLeft_toLeftOf="@+id/acc_datePicker" />
 
     <TextView
-        android:id="@+id/acc_actvy_date"
+        android:id="@+id/addedit_actvy_date"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         tools:layout_constraintTop_creator="1"

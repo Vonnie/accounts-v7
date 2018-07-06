@@ -9,54 +9,34 @@
         android:title="@string/menu_add_account"
         app:showAsAction="always" />
     <item
+        android:id="@+id/menuacct_showdate"
+        android:icon="@android:drawable/ic_menu_view"
+        android:orderInCategory="103"
+        android:title="Item"
+        app:showAsAction="always" />
+    <item
         android:id="@+id/menumain_search"
         android:icon="@drawable/selector_search"
-        android:orderInCategory="102"
+        android:orderInCategory="104"
         android:title="@string/menu_search"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/menumain_showSuggests"
         android:icon="@drawable/selector_key"
-        android:orderInCategory="103"
+        android:orderInCategory="105"
         android:title="@string/menu_suggests"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/menumain_about"
-        android:icon="@drawable/ic_action_document"
-        android:orderInCategory="104"
+        android:icon="@android:drawable/ic_menu_info_details"
+        android:orderInCategory="105"
         android:title="@string/menuacct_about"
         app:showAsAction="always" />
-    <group
-        android:id="@+id/group_rss"
-        android:checkableBehavior="single"
-        android:enabled="true"
-        android:visible="true">
-        <item
-            android:id="@+id/menumain_showAccounts"
-            android:checked="true"
-            android:orderInCategory="107"
-            android:title="@string/menu_accounts"
-            app:showAsAction="ifRoom" />
-        <item
-            android:id="@+id/menumain_rss_top_free_apps"
-            android:orderInCategory="108"
-            android:title="@string/menuacct_rss_top_free_apps"
-            app:showAsAction="ifRoom" />
-        <item
-            android:id="@+id/menumain_rss_top_tv_episodes"
-            android:orderInCategory="109"
-            android:title="@string/menuacct_rss_tv_episodes"
-            app:showAsAction="ifRoom" />
-        <item
-            android:id="@+id/menumain_rss_top_tv_seasons"
-            android:orderInCategory="110"
-            android:title="@string/menuacct_rss_tv_season"
-            app:showAsAction="ifRoom" />
-    </group>
-    <item
-        android:id="@+id/menumain_refresh"
-        android:orderInCategory="111"
-        android:title="@string/menuacct_refresh" />
+    <!--android:icon="@drawable/ic_action_document"-->
+    <!--<item-->
+        <!--android:id="@+id/menumain_refresh"-->
+        <!--android:orderInCategory="111"-->
+        <!--android:title="@string/menuacct_refresh" />-->
     <!--<item-->
     <!--android:id="@+id/menuacct_save"-->
     <!--android:icon="@drawable/selector_save"-->
@@ -81,31 +61,57 @@
         android:enabled="true"
         android:visible="true">
         <item
-            android:id="@+id/menuacct_sort_corpname"
-            android:checked="true"
-            android:orderInCategory="113"
-            android:title="@string/menuacct_sort_corpname"
-            app:showAsAction="ifRoom" />
-        <item
-            android:id="@+id/menuacct_sort_opendate"
-            android:orderInCategory="113"
-            android:title="@string/menuacct_sort_opendate"
-            app:showAsAction="ifRoom" />
-        <item
             android:id="@+id/menuacct_sort_passport"
-            android:orderInCategory="113"
+            android:orderInCategory="115"
             android:title="@string/menuacct_sort_passport"
             app:showAsAction="ifRoom" />
         <item
+            android:id="@+id/menuacct_sort_opendate"
+            android:orderInCategory="114"
+            android:title="@string/menuacct_sort_opendate"
+            app:showAsAction="ifRoom" />
+        <item
+            android:id="@+id/menuacct_sort_corpname"
+            android:checked="true"
+            android:orderInCategory="112"
+            android:title="@string/menuacct_sort_corpname" />
+        <item
             android:id="@+id/menuacct_sort_custom"
-            android:orderInCategory="113"
+            android:orderInCategory="116"
             android:title="@string/menuacct_sort_custom"
             app:showAsAction="ifRoom" />
     </group>
     <item
         android:id="@+id/menuacct_external_accts"
-        android:orderInCategory="113"
+        android:orderInCategory="117"
         android:title="@string/menuacct_external_accts"
         app:showAsAction="ifRoom" />
+    <!--<group-->
+        <!--android:id="@+id/group_rss"-->
+        <!--android:checkableBehavior="single"-->
+        <!--android:enabled="true"-->
+        <!--android:visible="true">-->
+        <!--<item-->
+            <!--android:id="@+id/menumain_showAccounts"-->
+            <!--android:checked="true"-->
+            <!--android:orderInCategory="107"-->
+            <!--android:title="@string/menu_accounts"-->
+            <!--app:showAsAction="ifRoom" />-->
+        <!--<item-->
+            <!--android:id="@+id/menumain_rss_top_free_apps"-->
+            <!--android:orderInCategory="108"-->
+            <!--android:title="@string/menuacct_rss_top_free_apps"-->
+            <!--app:showAsAction="ifRoom" />-->
+        <!--<item-->
+            <!--android:id="@+id/menumain_rss_top_tv_episodes"-->
+            <!--android:orderInCategory="109"-->
+            <!--android:title="@string/menuacct_rss_tv_episodes"-->
+            <!--app:showAsAction="ifRoom" />-->
+        <!--<item-->
+            <!--android:id="@+id/menumain_rss_top_tv_seasons"-->
+            <!--android:orderInCategory="110"-->
+            <!--android:title="@string/menuacct_rss_tv_season"-->
+            <!--app:showAsAction="ifRoom" />-->
+    <!--</group>-->
 
 </menu>

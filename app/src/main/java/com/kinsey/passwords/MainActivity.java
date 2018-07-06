@@ -1,6 +1,7 @@
 package com.kinsey.passwords;
 
 import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
 import android.content.ActivityNotFoundException;
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -12,9 +13,9 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -22,6 +23,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -32,6 +34,7 @@ import com.kinsey.passwords.items.AccountsContract;
 import com.kinsey.passwords.items.Suggest;
 import com.kinsey.passwords.items.SuggestsContract;
 import com.kinsey.passwords.provider.AccountRecyclerViewAdapter;
+import com.kinsey.passwords.provider.DatePickerFragment;
 import com.kinsey.passwords.provider.FeedAdapter;
 import com.kinsey.passwords.provider.ParseApplications;
 import com.kinsey.passwords.tools.AppDialog;
@@ -44,19 +47,23 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity
         implements AccountRecyclerViewAdapter.OnAccountClickListener,
-        AddEditActivityFragment.OnSaveClicked,
+        AddEditActivityFragment.OnListenerClicked,
         AccountActivityFragment.OnActionListener,
         AccountPlaceholderFrag1.OnAccountListener,
         AccountPlaceholderFrag2.OnAccountListener,
         AccountPlaceholderFrag3.OnAccountListener,
-        ViewPager.OnPageChangeListener,
-        AppDialog.DialogEvents {
+        AppDialog.DialogEvents,
+        DatePickerDialog.OnDateSetListener{
 
+//    ViewPager.OnPageChangeListener,
 //    CursorRecyclerViewAdapter.OnSuggestClickListener,
 //        AccountRecyclerViewAdapter.OnAccountClickListener,
 //        MainActivityFragment.OnActionListener,
@@ -76,7 +83,7 @@ public class MainActivity extends AppCompatActivity
     public static final String STATE_URL = "feedUrl";
     public static final String STATE_LIMIT = "feedLimit";
     private ListView listApps;
-    private ViewPager mViewPager;
+//    private ViewPager mViewPager;
     private int fragListPos = -1;
     private int frag1Pos = 0;
     private int frag2Pos = 1;
@@ -97,12 +104,14 @@ public class MainActivity extends AppCompatActivity
     boolean isUserPaging = true;
     public static Account account = new Account();
     private AlertDialog mDialog = null;
+    private GregorianCalendar mCalendar;
 
     private int accountMode = AccountsContract.ACCOUNT_ACTION_ADD;
-    private AccountListActivityFragment fragList;
-    private static AccountPlaceholderFrag1 frag1;
-    private static AccountPlaceholderFrag2 frag2;
-    private static AccountPlaceholderFrag3 frag3;
+//    private AccountListActivityFragment fragList;
+//    private static AccountPlaceholderFrag1 frag1;
+//    private static AccountPlaceholderFrag2 frag2;
+//    private static AccountPlaceholderFrag3 frag3;
+
 
 
     private enum ListHomeType {
@@ -290,15 +299,15 @@ public class MainActivity extends AppCompatActivity
         this.menu = menu;
         getMenuInflater().inflate(R.menu.menu_main, menu);
 
-        if (currList == ListHomeType.LISTACCOUNTS) {
-            menu.findItem(R.id.menumain_showAccounts).setChecked(true);
-        } else if (currList == ListHomeType.TOP10FREEAPP) {
-            menu.findItem(R.id.menumain_rss_top_free_apps).setChecked(true);
-        } else if (currList == ListHomeType.TOPTVEPISODE) {
-            menu.findItem(R.id.menumain_rss_top_tv_episodes).setChecked(true);
-        } else if (currList == ListHomeType.TOPTVSEASONS) {
-            menu.findItem(R.id.menumain_rss_top_tv_seasons).setChecked(true);
-        }
+//        if (currList == ListHomeType.LISTACCOUNTS) {
+//            menu.findItem(R.id.menumain_showAccounts).setChecked(true);
+//        } else if (currList == ListHomeType.TOP10FREEAPP) {
+//            menu.findItem(R.id.menumain_rss_top_free_apps).setChecked(true);
+//        } else if (currList == ListHomeType.TOPTVEPISODE) {
+//            menu.findItem(R.id.menumain_rss_top_tv_episodes).setChecked(true);
+//        } else if (currList == ListHomeType.TOPTVSEASONS) {
+//            menu.findItem(R.id.menumain_rss_top_tv_seasons).setChecked(true);
+//        }
         return true;
     }
 
@@ -317,58 +326,89 @@ public class MainActivity extends AppCompatActivity
 //                addAccountRequest();
                 acctEditRequest(null);
                 break;
-            case R.id.menumain_showAccounts:
-                currList = ListHomeType.LISTACCOUNTS;
+//            case R.id.menumain_showAccounts:
+//                currList = ListHomeType.LISTACCOUNTS;
+//                if (!item.isChecked()) {
+//                    item.setChecked(true);
+//                }
+//                accountsListRequest(AccountsContract.ACCOUNT_LIST_BY_CORP_NAME);
+//                break;
+
+            case R.id.menuacct_sort_corpname:
                 if (!item.isChecked()) {
                     item.setChecked(true);
                 }
-                accountsListRequest(AccountsContract.ACCOUNT_LIST_BY_CORP_NAME);
+                resortList(AccountsContract.ACCOUNT_LIST_BY_CORP_NAME);
+                break;
+
+            case R.id.menuacct_sort_opendate:
+                if (!item.isChecked()) {
+                    item.setChecked(true);
+                }
+                resortList(AccountsContract.ACCOUNT_LIST_BY_OPEN_DATE);
+                break;
+
+            case R.id.menuacct_sort_passport:
+                if (!item.isChecked()) {
+                    item.setChecked(true);
+                }
+                resortList(AccountsContract.ACCOUNT_LIST_BY_PASSPORT_ID);
+                break;
+
+            case R.id.menuacct_sort_custom:
+                if (!item.isChecked()) {
+                    item.setChecked(true);
+                }
+                resortList(AccountsContract.ACCOUNT_LIST_BY_SEQUENCE);
+                break;
+
+            case R.id.menuacct_showdate:
+                suggestsListRequest3();
                 break;
 
             case R.id.menumain_showSuggests:
                 suggestsListRequest2();
                 break;
-
             case R.id.menumain_search:
 
                 searchListRequest();
 
                 break;
-            case R.id.menumain_rss_top_free_apps:
-
-                currList = ListHomeType.TOP10FREEAPP;
-                if (!item.isChecked()) {
-                    item.setChecked(true);
-                }
-
-                feedUrl = "http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topfreeapplications/limit=10/xml";
-                downloadUrl(feedUrl);
-
-                break;
-            case R.id.menumain_rss_top_tv_episodes:
-
-                currList = ListHomeType.TOPTVEPISODE;
-                if (!item.isChecked()) {
-                    item.setChecked(true);
-                }
-
-                feedUrl = "http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topTvEpisodes/xml";
-                downloadUrl(feedUrl);
-
-                break;
-            case R.id.menumain_rss_top_tv_seasons:
-
-                currList = ListHomeType.TOPTVSEASONS;
-                if (!item.isChecked()) {
-                    item.setChecked(true);
-                }
-
-//                feedUrl = "https://www.nasa.gov/rss/dyn/Houston-We-Have-a-Podcast.rss";
-//                feedUrl = "https://www.cnet.com/rss/news/";
-                feedUrl = "http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topTvSeasons/xml";
-                downloadUrl(feedUrl);
-
-                break;
+//            case R.id.menumain_rss_top_free_apps:
+//
+//                currList = ListHomeType.TOP10FREEAPP;
+//                if (!item.isChecked()) {
+//                    item.setChecked(true);
+//                }
+//
+//                feedUrl = "http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topfreeapplications/limit=10/xml";
+//                downloadUrl(feedUrl);
+//
+//                break;
+//            case R.id.menumain_rss_top_tv_episodes:
+//
+//                currList = ListHomeType.TOPTVEPISODE;
+//                if (!item.isChecked()) {
+//                    item.setChecked(true);
+//                }
+//
+//                feedUrl = "http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topTvEpisodes/xml";
+//                downloadUrl(feedUrl);
+//
+//                break;
+//            case R.id.menumain_rss_top_tv_seasons:
+//
+//                currList = ListHomeType.TOPTVSEASONS;
+//                if (!item.isChecked()) {
+//                    item.setChecked(true);
+//                }
+//
+////                feedUrl = "https://www.nasa.gov/rss/dyn/Houston-We-Have-a-Podcast.rss";
+////                feedUrl = "https://www.cnet.com/rss/news/";
+//                feedUrl = "http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topTvSeasons/xml";
+//                downloadUrl(feedUrl);
+//
+//                break;
 
             case R.id.menumain_about:
 
@@ -376,11 +416,11 @@ public class MainActivity extends AppCompatActivity
 
                 break;
 
-            case R.id.menumain_refresh:
-
-                feedCachedUrl = "INVALIDATED";
-
-                break;
+//            case R.id.menumain_refresh:
+//
+//                feedCachedUrl = "INVALIDATED";
+//
+//                break;
 
             case android.R.id.home:
                 Log.d(TAG, "onOptionsItemSelected: home button pressed");
@@ -415,20 +455,20 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    @Override
-    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-    }
-
-    @Override
-    public void onPageSelected(int position) {
-        Log.d(TAG, "onPageSelected: " + position);
-    }
-
-    @Override
-    public void onPageScrollStateChanged(int state) {
-        Log.d(TAG, "onPageScrollStateChanged: " + state);
-    }
+//    @Override
+//    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+//
+//    }
+//
+//    @Override
+//    public void onPageSelected(int position) {
+//        Log.d(TAG, "onPageSelected: " + position);
+//    }
+//
+//    @Override
+//    public void onPageScrollStateChanged(int state) {
+//        Log.d(TAG, "onPageScrollStateChanged: " + state);
+//    }
 
     @Override
     public void onAccountRetreived(Account account) {
@@ -475,185 +515,185 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    private void updatePages(int currPage) {
-        isUserPaging = false;
-
-//        int currPage = mViewPager.getCurrentItem();
-
-        if (fragListPos == -1) {
-            mViewPager.setOffscreenPageLimit(2);
-        } else {
-            mViewPager.setOffscreenPageLimit(3);
-        }
-
-        mViewPager.setCurrentItem(frag2Pos);
-
-        frag1.fillPage();
-        Log.d(TAG, "updatePages: page1 filled, setPrimary");
-//        mSectionsPagerAdapter.setPrimaryItem(mViewPager, frag1Pos, frag1);
-////        mViewPager.setCurrentItem(frag1Pos);
-//        mSectionsPagerAdapter.notifyDataSetChanged();
-
-//        new CountDownTimer(10000, 1000) {
-//
-//            public void onTick(long millisUntilFinished) {
-////                    mTextField.setText("seconds remaining: " + millisUntilFinished / 1000);
-//            }
-//
-//            public void onFinish() {
-////                    mTextField.setText("done!");
-//            }
-//        }.start();
-
-        frag2.fillPage();
-//        mViewPager.setCurrentItem(frag2Pos);
-        Log.d(TAG, "updatePages: page2 filled, setPrimary");
-//        mSectionsPagerAdapter.setPrimaryItem(mViewPager, frag2Pos, frag2);
-//        mSectionsPagerAdapter.notifyDataSetChanged();
-
-//        new CountDownTimer(10000, 1000) {
-//
-//            public void onTick(long millisUntilFinished) {
-////                    mTextField.setText("seconds remaining: " + millisUntilFinished / 1000);
-//            }
-//
-//            public void onFinish() {
-////                    mTextField.setText("done!");
-//            }
-//        }.start();
-        frag3.fillPage();
-        Log.d(TAG, "updatePages: page3 filled, setPrimary");
-//        mViewPager.setCurrentItem(frag3Pos);
-//        mSectionsPagerAdapter.setPrimaryItem(mViewPager, frag3Pos, frag3);
-//        mSectionsPagerAdapter.notifyDataSetChanged();
-
-//        new CountDownTimer(10000, 1000) {
-//
-//            public void onTick(long millisUntilFinished) {
-////                    mTextField.setText("seconds remaining: " + millisUntilFinished / 1000);
-//            }
-//
-//            public void onFinish() {
-////                    mTextField.setText("done!");
-//            }
-//        }.start();
-
-
-//        mSectionsPagerAdapter.fillPages();
-
+//    private void updatePages(int currPage) {
 //        isUserPaging = false;
-
-//        frag1 = (AccountPlaceholderFrag1)mSectionsPagerAdapter.instantiateItem(mViewPager, frag1Pos);
-//        frag2 = (AccountPlaceholderFrag2)mSectionsPagerAdapter.instantiateItem(mViewPager, frag2Pos);
-//        frag3 = (AccountPlaceholderFrag3)mSectionsPagerAdapter.instantiateItem(mViewPager, frag3Pos);
-
-//        if (frag1 != null) {
 //
-//            mViewPager.setCurrentItem(frag3Pos);
-//            frag1.fillPage();
-//            mSectionsPagerAdapter.notifyDataSetChanged();
-//            mViewPager.setCurrentItem(frag3Pos);
-//            mSectionsPagerAdapter.notifyDataSetChanged();
-//            mSectionsPagerAdapter.getItem(frag1Pos);
-//        }
-//        if (frag2 != null) {
-//            mViewPager.setCurrentItem(frag2Pos);
-//            frag2.fillPage();
-//            mSectionsPagerAdapter.notifyDataSetChanged();
-//            mSectionsPagerAdapter.getItem(frag2Pos);
-//            mViewPager.setCurrentItem(frag2Pos);
-//            mSectionsPagerAdapter.notifyDataSetChanged();
-//        }
-//        if (frag3 != null) {
-//            mViewPager.setCurrentItem(frag1Pos);
-//            frag3.fillPage();
-//            mSectionsPagerAdapter.notifyDataSetChanged();
-//            mSectionsPagerAdapter.getItem(frag3Pos);
-//            mViewPager.setCurrentItem(frag1Pos);
-//            mSectionsPagerAdapter.notifyDataSetChanged();
-//        }
-
-//        isUserPaging = true;
-
-        //        mRetainedFragment.getData().setAccount(account);
-//        mSectionsPagerAdapter.setAccount(account);
-//        isUserPaging = false;
-//        int currPage = mViewPager.getCurrentItem();
-//        frag1 = AccountPlaceholderFrag1.newInstance();
-//        frag2 = AccountPlaceholderFrag2.newInstance();
-//        frag3 = AccountPlaceholderFrag3.newInstance();
-//        mSectionsPagerAdapter.setFrag1(frag1);
-//        mSectionsPagerAdapter.setFrag2(frag2);
-//        mSectionsPagerAdapter.setFrag3(frag3);
-//        if (!mTwoPane && accountSortorder == AccountsContract.ACCOUNT_LIST_BY_SEQUENCE) {
-
+////        int currPage = mViewPager.getCurrentItem();
+//
 //        if (fragListPos == -1) {
-//            if (accountMode == AccountsContract.ACCOUNT_ACTION_ADD) {
-//                mViewPager.setCurrentItem(frag1Pos);
-//                if (!isRotated) {
-//                    frag1.setCorpNameFocus();
-//                }
-//            } else {
-//                Log.d(TAG, "updatePages: currPage " + currPage);
-//                mViewPager.setCurrentItem(currPage);
-//                if (!isRotated) {
-//                    if (currPage == frag1Pos) {
-//                        frag1.setCorpNameFocus();
-//                    }
-//                }
-//            }
+//            mViewPager.setOffscreenPageLimit(2);
 //        } else {
-////            fragList.setViewerPos();
-////            myRecyclerView.findViewHolderForAdapterPosition(pos).itemView;
+//            mViewPager.setOffscreenPageLimit(3);
+//        }
+//
+//        mViewPager.setCurrentItem(frag2Pos);
+//
+//        frag1.fillPage();
+//        Log.d(TAG, "updatePages: page1 filled, setPrimary");
+////        mSectionsPagerAdapter.setPrimaryItem(mViewPager, frag1Pos, frag1);
+//////        mViewPager.setCurrentItem(frag1Pos);
+////        mSectionsPagerAdapter.notifyDataSetChanged();
+//
+////        new CountDownTimer(10000, 1000) {
+////
+////            public void onTick(long millisUntilFinished) {
+//////                    mTextField.setText("seconds remaining: " + millisUntilFinished / 1000);
+////            }
+////
+////            public void onFinish() {
+//////                    mTextField.setText("done!");
+////            }
+////        }.start();
+//
+//        frag2.fillPage();
+////        mViewPager.setCurrentItem(frag2Pos);
+//        Log.d(TAG, "updatePages: page2 filled, setPrimary");
+////        mSectionsPagerAdapter.setPrimaryItem(mViewPager, frag2Pos, frag2);
+////        mSectionsPagerAdapter.notifyDataSetChanged();
+//
+////        new CountDownTimer(10000, 1000) {
+////
+////            public void onTick(long millisUntilFinished) {
+//////                    mTextField.setText("seconds remaining: " + millisUntilFinished / 1000);
+////            }
+////
+////            public void onFinish() {
+//////                    mTextField.setText("done!");
+////            }
+////        }.start();
+//        frag3.fillPage();
+//        Log.d(TAG, "updatePages: page3 filled, setPrimary");
+////        mViewPager.setCurrentItem(frag3Pos);
+////        mSectionsPagerAdapter.setPrimaryItem(mViewPager, frag3Pos, frag3);
+////        mSectionsPagerAdapter.notifyDataSetChanged();
+//
+////        new CountDownTimer(10000, 1000) {
+////
+////            public void onTick(long millisUntilFinished) {
+//////                    mTextField.setText("seconds remaining: " + millisUntilFinished / 1000);
+////            }
+////
+////            public void onFinish() {
+//////                    mTextField.setText("done!");
+////            }
+////        }.start();
+//
+//
+////        mSectionsPagerAdapter.fillPages();
+//
+////        isUserPaging = false;
+//
+////        frag1 = (AccountPlaceholderFrag1)mSectionsPagerAdapter.instantiateItem(mViewPager, frag1Pos);
+////        frag2 = (AccountPlaceholderFrag2)mSectionsPagerAdapter.instantiateItem(mViewPager, frag2Pos);
+////        frag3 = (AccountPlaceholderFrag3)mSectionsPagerAdapter.instantiateItem(mViewPager, frag3Pos);
+//
+////        if (frag1 != null) {
+////
+////            mViewPager.setCurrentItem(frag3Pos);
+////            frag1.fillPage();
+////            mSectionsPagerAdapter.notifyDataSetChanged();
+////            mViewPager.setCurrentItem(frag3Pos);
+////            mSectionsPagerAdapter.notifyDataSetChanged();
+////            mSectionsPagerAdapter.getItem(frag1Pos);
+////        }
+////        if (frag2 != null) {
+////            mViewPager.setCurrentItem(frag2Pos);
+////            frag2.fillPage();
+////            mSectionsPagerAdapter.notifyDataSetChanged();
+////            mSectionsPagerAdapter.getItem(frag2Pos);
+////            mViewPager.setCurrentItem(frag2Pos);
+////            mSectionsPagerAdapter.notifyDataSetChanged();
+////        }
+////        if (frag3 != null) {
+////            mViewPager.setCurrentItem(frag1Pos);
+////            frag3.fillPage();
+////            mSectionsPagerAdapter.notifyDataSetChanged();
+////            mSectionsPagerAdapter.getItem(frag3Pos);
+////            mViewPager.setCurrentItem(frag1Pos);
+////            mSectionsPagerAdapter.notifyDataSetChanged();
+////        }
+//
+////        isUserPaging = true;
+//
+//        //        mRetainedFragment.getData().setAccount(account);
+////        mSectionsPagerAdapter.setAccount(account);
+////        isUserPaging = false;
+////        int currPage = mViewPager.getCurrentItem();
+////        frag1 = AccountPlaceholderFrag1.newInstance();
+////        frag2 = AccountPlaceholderFrag2.newInstance();
+////        frag3 = AccountPlaceholderFrag3.newInstance();
+////        mSectionsPagerAdapter.setFrag1(frag1);
+////        mSectionsPagerAdapter.setFrag2(frag2);
+////        mSectionsPagerAdapter.setFrag3(frag3);
+////        if (!mTwoPane && accountSortorder == AccountsContract.ACCOUNT_LIST_BY_SEQUENCE) {
+//
+////        if (fragListPos == -1) {
+////            if (accountMode == AccountsContract.ACCOUNT_ACTION_ADD) {
+////                mViewPager.setCurrentItem(frag1Pos);
+////                if (!isRotated) {
+////                    frag1.setCorpNameFocus();
+////                }
+////            } else {
+////                Log.d(TAG, "updatePages: currPage " + currPage);
+////                mViewPager.setCurrentItem(currPage);
+////                if (!isRotated) {
+////                    if (currPage == frag1Pos) {
+////                        frag1.setCorpNameFocus();
+////                    }
+////                }
+////            }
+////        } else {
+//////            fragList.setViewerPos();
+//////            myRecyclerView.findViewHolderForAdapterPosition(pos).itemView;
+////            if (accountMode == AccountsContract.ACCOUNT_ACTION_ADD) {
+////                mViewPager.setCurrentItem(frag1Pos);
+////                if (!isRotated) {
+////                    frag1.setCorpNameFocus();
+////                }
+////            } else {
+////                mViewPager.setCurrentItem(fragListPos);
+////            }
+////        }
+//
+//        Log.d(TAG, "updatePages: currentItem " + mViewPager.getCurrentItem());
+//
+//        if (fragListPos == -1) {
+////            mSectionsPagerAdapter.setPrimaryItem(mViewPager, frag1Pos, frag1);
+//            mViewPager.setCurrentItem(frag1Pos);
+//        } else {
+////            mSectionsPagerAdapter.setPrimaryItem(mViewPager, fragListPos, fragList);
 //            if (accountMode == AccountsContract.ACCOUNT_ACTION_ADD) {
 //                mViewPager.setCurrentItem(frag1Pos);
-//                if (!isRotated) {
-//                    frag1.setCorpNameFocus();
-//                }
 //            } else {
 //                mViewPager.setCurrentItem(fragListPos);
 //            }
 //        }
-
-        Log.d(TAG, "updatePages: currentItem " + mViewPager.getCurrentItem());
-
-        if (fragListPos == -1) {
-//            mSectionsPagerAdapter.setPrimaryItem(mViewPager, frag1Pos, frag1);
-            mViewPager.setCurrentItem(frag1Pos);
-        } else {
-//            mSectionsPagerAdapter.setPrimaryItem(mViewPager, fragListPos, fragList);
-            if (accountMode == AccountsContract.ACCOUNT_ACTION_ADD) {
-                mViewPager.setCurrentItem(frag1Pos);
-            } else {
-                mViewPager.setCurrentItem(fragListPos);
-            }
-        }
-
-        Log.d(TAG, "updatePages: currentItem " + mViewPager.getCurrentItem());
-
-        isUserPaging = true;
-
-//        mViewPager.setCurrentItem(frag3Pos);
-//        mRetainedFragment.getData().getmSectionsPagerAdapter().loadPage(mRetainedFragment.getData().getFrag3Pos());
-//        mViewPager.setCurrentItem(mRetainedFragment.getData().getFrag2Pos());
-//        mRetainedFragment.getData().getmSectionsPagerAdapter().loadPage(mRetainedFragment.getData().getFrag2Pos());
-//        mViewPager.setCurrentItem(mRetainedFragment.getData().getFrag1Pos());
-//        mRetainedFragment.getData().getmSectionsPagerAdapter().loadPage(mRetainedFragment.getData().getFrag1Pos());
-//        Log.d(TAG, "onAccountListSelect: currPage " + currPage);
-//        if (currPage != 0) {
-//            mRetainedFragment.getData().getmSectionsPagerAdapter().loadPage(currPage);
-//        }
-//        isUserPaging = true;
-
-
-////        Context context = getContext();
-//        accountMode = AccountsContract.ACCOUNT_ACTION_CHG;
-//        Intent intent = new Intent(this, AccountActivity.class);
-//        intent.putExtra(Account.class.getSimpleName(), account.getId());
 //
-//        startActivityForResult(intent, AccountsContract.ACCOUNT_ACTION_CHG);
-
-    }
+//        Log.d(TAG, "updatePages: currentItem " + mViewPager.getCurrentItem());
+//
+//        isUserPaging = true;
+//
+////        mViewPager.setCurrentItem(frag3Pos);
+////        mRetainedFragment.getData().getmSectionsPagerAdapter().loadPage(mRetainedFragment.getData().getFrag3Pos());
+////        mViewPager.setCurrentItem(mRetainedFragment.getData().getFrag2Pos());
+////        mRetainedFragment.getData().getmSectionsPagerAdapter().loadPage(mRetainedFragment.getData().getFrag2Pos());
+////        mViewPager.setCurrentItem(mRetainedFragment.getData().getFrag1Pos());
+////        mRetainedFragment.getData().getmSectionsPagerAdapter().loadPage(mRetainedFragment.getData().getFrag1Pos());
+////        Log.d(TAG, "onAccountListSelect: currPage " + currPage);
+////        if (currPage != 0) {
+////            mRetainedFragment.getData().getmSectionsPagerAdapter().loadPage(currPage);
+////        }
+////        isUserPaging = true;
+//
+//
+//////        Context context = getContext();
+////        accountMode = AccountsContract.ACCOUNT_ACTION_CHG;
+////        Intent intent = new Intent(this, AccountActivity.class);
+////        intent.putExtra(Account.class.getSimpleName(), account.getId());
+////
+////        startActivityForResult(intent, AccountsContract.ACCOUNT_ACTION_CHG);
+//
+//    }
 
 
     @Override
@@ -1057,38 +1097,65 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    private void addAccountRequest() {
-//        Log.d(TAG, "addAccountRequest: starts");
+//    private void addAccountRequest() {
+////        Log.d(TAG, "addAccountRequest: starts");
+////        if (mTwoPane) {
+////            mAccountAdapter.resetSelection();
+//        accountMode = AccountsContract.ACCOUNT_ACTION_ADD;
+//        this.account = new Account();
+//        accountSelectedPos = -1;
+//        setMenuItemEnabled(R.id.menuacct_delete, false);
+////        setMenuItemEnabled(R.id.menuacct_save, true);
+//        setMenuItemEnabled(R.id.menuacct_internet, false);
+//        updatePages(frag1Pos);
+//    }
+
+
+//    private void editAccountRequest(Account account) {
+////        Log.d(TAG, "addAccountRequest: starts");
 //        if (mTwoPane) {
-//            mAccountAdapter.resetSelection();
-        accountMode = AccountsContract.ACCOUNT_ACTION_ADD;
-        this.account = new Account();
-        accountSelectedPos = -1;
-        setMenuItemEnabled(R.id.menuacct_delete, false);
-//        setMenuItemEnabled(R.id.menuacct_save, true);
-        setMenuItemEnabled(R.id.menuacct_internet, false);
-        updatePages(frag1Pos);
-    }
+////            Log.d(TAG, "addAccountRequest: in two-pane mode (tablet)");
+//        } else {
+////            Log.d(TAG, "addAccountRequest: in single-pan mode (phone)");
+//            // in single-pane mode, start the detail activity for the selected item Id.
+//            Intent detailIntent = new Intent(this, AccountActivity.class);
+//
+//            if (account != null) { // editing an account
+//                detailIntent.putExtra(Account.class.getSimpleName(), account);
+////                detailIntent.putExtra(Account.class.getSimpleName(), AccountsContract.ACCOUNT_ACTION_CHG);
+//                startActivityForResult(detailIntent, REQUEST_ACCOUNT_EDIT);
+//            } else { // adding an account
+////                detailIntent.putExtra(Account.class.getSimpleName(), AccountsContract.ACCOUNT_ACTION_ADD);
+//                startActivityForResult(detailIntent, REQUEST_ACCOUNT_EDIT);
+//            }
+//        }
+//    }
 
 
-    private void editAccountRequest(Account account) {
-//        Log.d(TAG, "addAccountRequest: starts");
-        if (mTwoPane) {
-//            Log.d(TAG, "addAccountRequest: in two-pane mode (tablet)");
-        } else {
-//            Log.d(TAG, "addAccountRequest: in single-pan mode (phone)");
-            // in single-pane mode, start the detail activity for the selected item Id.
-            Intent detailIntent = new Intent(this, AccountActivity.class);
+    private void resortList(int sortorder) {
 
-            if (account != null) { // editing an account
-                detailIntent.putExtra(Account.class.getSimpleName(), account);
-//                detailIntent.putExtra(Account.class.getSimpleName(), AccountsContract.ACCOUNT_ACTION_CHG);
-                startActivityForResult(detailIntent, REQUEST_ACCOUNT_EDIT);
-            } else { // adding an account
-//                detailIntent.putExtra(Account.class.getSimpleName(), AccountsContract.ACCOUNT_ACTION_ADD);
-                startActivityForResult(detailIntent, REQUEST_ACCOUNT_EDIT);
-            }
+        switch (sortorder) {
+            case AccountsContract.ACCOUNT_LIST_BY_CORP_NAME:
+                getSupportActionBar().setTitle(getString(R.string.app_name_corpname));
+                break;
+            case AccountsContract.ACCOUNT_LIST_BY_OPEN_DATE:
+                getSupportActionBar().setTitle(getString(R.string.app_name_opendate));
+                break;
+            case AccountsContract.ACCOUNT_LIST_BY_PASSPORT_ID:
+                getSupportActionBar().setTitle(getString(R.string.app_name_acctid));
+                break;
+            case AccountsContract.ACCOUNT_LIST_BY_SEQUENCE:
+                getSupportActionBar().setTitle(getString(R.string.app_name_custom));
+                break;
+            default:
+                getSupportActionBar().setTitle(getString(R.string.app_name));
         }
+
+        AccountListActivityFragment listFragment = (AccountListActivityFragment)
+                getSupportFragmentManager().findFragmentById(R.id.fragment);
+        listFragment.resortList(sortorder);
+
+
     }
 
     private void accountsListRequest(int sortorder) {
@@ -1096,6 +1163,8 @@ public class MainActivity extends AppCompatActivity
         if (mTwoPane) {
         } else {
         }
+
+
 
         Intent detailIntent = new Intent(this, AccountListActivity.class);
         detailIntent.putExtra(Account.class.getSimpleName(), sortorder);
@@ -1154,8 +1223,18 @@ public class MainActivity extends AppCompatActivity
     }
 
 
+    private void suggestsListRequest3() {
+//        onDateClicked(0);
+        GregorianCalendar mCalendar = new GregorianCalendar();
+//        Date dte = new Date(account.getActvyLong());
+        Date dte = new Date();
+        mCalendar.setTime(dte);
+        Log.d(TAG, "onDateClicked: " + mCalendar.toString());
 
-        private void downloadUrl(String feedUrl) {
+        showDatePickerDialog("Activity Date", 0, mCalendar);
+    }
+
+    private void downloadUrl(String feedUrl) {
         if (!feedUrl.equalsIgnoreCase(feedCachedUrl)) {
             Log.d(TAG, "downloadURL: " + feedUrl);
             DownloadData downloadData = new DownloadData();
@@ -1586,6 +1665,56 @@ public class MainActivity extends AppCompatActivity
                 getSupportFragmentManager().findFragmentById(R.id.fragment);
         listFragment.setAcctId(acctId);
 
+
+    }
+
+    @Override
+    public void onDateClicked(long acctActvyLong) {
+        Calendar mCalendar = Calendar.getInstance();
+//        Date dte = new Date(account.getActvyLong());
+        Date dte = new Date();
+        mCalendar.setTime(dte);
+        Log.d(TAG, "onDateClicked: " + acctActvyLong);
+
+
+//        showDatePickerDialog("Activity Date", 0, mCalendar);
+    }
+
+
+    private void showDatePickerDialog(String title, int dialogId, GregorianCalendar mCalendar) {
+        Log.d(TAG, "showDatePickerDialog: " + mCalendar.toString());
+        DialogFragment dialogFragment = new DialogFragment();
+
+        Bundle arguments = new Bundle();
+        arguments.putInt(DatePickerFragment.DATE_PICKER_ID, dialogId);
+        arguments.putString(DatePickerFragment.DATE_PICKER_TITLE, title);
+        arguments.putSerializable(DatePickerFragment.DATE_PICKER_DATE, mCalendar.getTime());
+
+
+        dialogFragment.setArguments(arguments);
+        dialogFragment.show(getSupportFragmentManager(), "datePicker");
+        Log.d(TAG, "Exiting showDatePickerDialog");
+
+    }
+
+    @Override
+    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+        Log.d(TAG, "onDateSet: ");
+
+        // Check the id, so we know what to di wht the result
+        int dialogId = (int) view.getTag();
+        Log.d(TAG, "onDateSet: " + dialogId);
+//        switch(dialogId) {
+//            case DIALOG_FILTER:
+//                mCalendar.set(year, month, dayOfMonth, 0, 0, 0);
+//                applyFilter();
+//                getSupportLoaderManager().restartLoader(LOADER_ID, mArgs, this);
+//                break;
+//            case DIALOG_DELETE:
+//                break;
+//            default:
+//                throw new IllegalArgumentException("Invalid mode when receiving DatePickerDialog result");
+//        }
 
     }
 

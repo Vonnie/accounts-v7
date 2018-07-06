@@ -229,6 +229,8 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
             if (holder.user_name != null) {
                 if (accountSortorder == AccountsContract.ACCOUNT_LIST_BY_SEQUENCE ) {
                     holder.user_name.setVisibility(View.GONE);
+                } else if (accountSortorder == AccountsContract.ACCOUNT_LIST_BY_CORP_NAME ){
+                    holder.user_name.setVisibility(View.GONE);
                 } else if (!holder.corp_name.getTag().equals(mContext.getString(R.string.tag_xlarge)) &&
                         !holder.corp_name.getTag().equals(mContext.getString(R.string.tag_large)) &&
                         (accountSortorder == AccountsContract.ACCOUNT_LIST_BY_CORP_NAME ||
@@ -266,7 +268,8 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
 
 
             if (holder.acctId != null) {
-                if (accountSortorder == AccountsContract.ACCOUNT_LIST_BY_SEQUENCE ) {
+                if (accountSortorder == AccountsContract.ACCOUNT_LIST_BY_SEQUENCE
+                        || accountSortorder == AccountsContract.ACCOUNT_LIST_BY_CORP_NAME) {
                     holder.acctId.setVisibility(View.GONE);
                 } else {
                     holder.acctId.setVisibility(View.VISIBLE);
@@ -530,6 +533,10 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
 
     public void setAccountSortorder(int accountSortorder) {
         this.accountSortorder = accountSortorder;
+    }
+
+    public int getAccountSortorder() {
+        return accountSortorder;
     }
 
     public int getAccountSelectedPos() {

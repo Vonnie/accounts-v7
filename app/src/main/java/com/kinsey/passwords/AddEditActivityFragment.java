@@ -2,6 +2,7 @@ package com.kinsey.passwords;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -17,12 +18,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kinsey.passwords.items.Account;
 import com.kinsey.passwords.items.AccountsContract;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -37,12 +45,29 @@ public class AddEditActivityFragment extends Fragment {
     private EditText mUserNameTextView;
     private EditText mUserEmailTextView;
     private EditText mNoteTextView;
-    private OnSaveClicked mSaveListener = null;
+    private EditText mSeqTextView;
+    private EditText mOpenDate;
+    private TextView mtvOpenDate;
+    private TextView mtvActvyDate;
+    private TextView mAccountIdTextView;
+    DatePickerDialog picker;
+    private OnListenerClicked mListener = null;
     private Account account;
+    private Calendar mCalendar;
+    private final Calendar cldrOpened = Calendar.getInstance();
+    private long lngOpenDate;
 
-    interface OnSaveClicked {
+    interface OnListenerClicked {
         void onSaveClicked(int acctId);
+        void onDateClicked(long acctActvyLong);
     }
+
+    private static String pattern_ymd = "yyyy-MM-dd";
+    public static SimpleDateFormat format_ymd = new SimpleDateFormat(
+            pattern_ymd, Locale.US);
+    private static String pattern_ymdtimehm = "yyyy-MM-dd kk:mm";
+    public static SimpleDateFormat format_ymdtimehm = new SimpleDateFormat(
+            pattern_ymdtimehm, Locale.US);
 
     public AddEditActivityFragment() {
         Log.d(TAG, "AddEditActivityFragment: constructor called");
@@ -59,11 +84,11 @@ public class AddEditActivityFragment extends Fragment {
 
         // Activities containing this fragment must implement it's callbacks.
         Activity activity = getActivity();
-        if(!(activity instanceof OnSaveClicked)) {
+        if(!(activity instanceof OnListenerClicked)) {
             throw new ClassCastException(activity.getClass().getSimpleName()
                     + " must implement AddEditActivityFragment.OnSaveClicked interface");
         }
-        mSaveListener = (OnSaveClicked) activity;
+        mListener = (OnListenerClicked) activity;
     }
 
     @Override
@@ -79,7 +104,7 @@ public class AddEditActivityFragment extends Fragment {
     public void onDetach() {
         Log.d(TAG, "onDetach: starts");
         super.onDetach();
-        mSaveListener = null;
+        mListener = null;
         ActionBar actionBar = ((AppCompatActivity)getActivity()).getSupportActionBar();
         if(actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(false);
@@ -99,9 +124,16 @@ public class AddEditActivityFragment extends Fragment {
         mUserNameTextView = view.findViewById(R.id.addedit_user_name);
         mUserEmailTextView = view.findViewById(R.id.addedit_user_email);
         mNoteTextView = (EditText) view.findViewById(R.id.addedit_notes);
+        mSeqTextView = (EditText) view.findViewById(R.id.acc_seq);
+        mOpenDate = view.findViewById(R.id.acc_open_date);
+        mtvOpenDate = view.findViewById(R.id.addedit_open_date);
+        mtvActvyDate = view.findViewById(R.id.addedit_actvy_date);
+        mAccountIdTextView = view.findViewById(R.id.acc_account_id);
         Button saveButton = view.findViewById(R.id.addedit_save);
+//        Button dateButton = view.findViewById(R.id.addedit_btn_date);
 
         Bundle arguments = getArguments();
+        mCalendar = new GregorianCalendar();
 
         if(arguments != null) {
             Log.d(TAG, "onCreateView: retrieving task details.");
@@ -115,15 +147,35 @@ public class AddEditActivityFragment extends Fragment {
                 mUserNameTextView.setText(account.getUserName());
                 mUserEmailTextView.setText(account.getUserEmail());
                 mNoteTextView.setText(account.getNote());
+                mSeqTextView.setText(String.valueOf(account.getSequence()));
+//                Date dte = new Date(account.getActvyLong());
+//                mCalendar.setTime(dte);
+//                Date openDte = new Date(account.getOpenLong());
+//                mOpenDate.setText(openDte.toString());
+                if (account.getOpenLong() == 0) {
+                    mtvOpenDate.setText("Click here for OpenDate");
+                    lngOpenDate = 0;
+                } else {
+                    mtvOpenDate.setText("OpenDate: " + format_ymd.format(account.getOpenLong()));
+                    Date dteOpen = new Date(account.getOpenLong());
+                    cldrOpened.setTime(dteOpen);
+                    lngOpenDate = account.getOpenLong();
+                }
+                mAccountIdTextView.setText("Account Id: " + String.valueOf(account.getPassportId()));
+                mtvActvyDate.setText("ActvyDate: " + format_ymdtimehm.format(account.getActvyLong()));
                 mMode = FragmentEditMode.EDIT;
             } else {
                 // No task, so we must be adding a new task, and not editing an  existing one
                 mMode = FragmentEditMode.ADD;
+                Date dte = new Date();
+                mCalendar.setTime(dte);
             }
         } else {
             account = null;
             Log.d(TAG, "onCreateView: No arguments, adding new record");
             mMode = FragmentEditMode.ADD;
+            Date dte = new Date();
+            mCalendar.setTime(dte);
         }
 
         saveButton.setOnClickListener(new View.OnClickListener() {
@@ -169,6 +221,14 @@ public class AddEditActivityFragment extends Fragment {
                         if(!mNoteTextView.getText().toString().equals(account.getNote())) {
                             values.put(AccountsContract.Columns.NOTE_COL, mNoteTextView.getText().toString());
                         }
+                        if(!mSeqTextView.getText().toString().equals(account.getSequence())) {
+                            values.put(AccountsContract.Columns.SEQUENCE_COL, mSeqTextView.getText().toString());
+                        }
+
+                        if (lngOpenDate != account.getOpenLong()) {
+                            Log.d(TAG, "onClick: " + lngOpenDate + ":" + account.getOpenLong());
+                            values.put(AccountsContract.Columns.OPEN_DATE_COL, lngOpenDate);
+                        }
 //                        if(so != task.getSortOrder()) {
 //                            values.put(TasksContract.Columns.TASKS_SORTORDER, so);
 //                        }
@@ -179,8 +239,12 @@ public class AddEditActivityFragment extends Fragment {
 
                         if (values.size() != 0) {
                             values.put(AccountsContract.Columns.ACTVY_DATE_COL, System.currentTimeMillis());
+                            Log.d(TAG, "onClick: " + account);
+                            Log.d(TAG, "onClick: " + account.getOpenLong());
                             contentResolver.update(AccountsContract.buildIdUri(account.getId()), values, null, null);
                             account = getAccount(account.getId());
+                            Log.d(TAG, "onClick: " + account);
+                            Log.d(TAG, "onClick: " + account.getOpenLong());
                             Toast.makeText(getActivity(),
                                     values.size() - 1 + " changed columns for account " + account.getCorpName(),
                                     Toast.LENGTH_SHORT).show();
@@ -201,26 +265,69 @@ public class AddEditActivityFragment extends Fragment {
                             values.put(AccountsContract.Columns.NOTE_COL, mNoteTextView.getText().toString());
                             Uri uri = contentResolver.insert(AccountsContract.CONTENT_URI, values);
                             long id = AccountsContract.getId(uri);
-                            Log.d(TAG, "onClick: " + id);
                             account = getAccount((int)id);
                             Log.d(TAG, "onClick: " + account);
+                            Log.d(TAG, "onClick: " + account.getOpenLong());
                             Toast.makeText(getActivity(),
                                     "New account " + account.getCorpName() + " added",
                                     Toast.LENGTH_SHORT).show();
+                            if(mListener != null) {
+                                mListener.onSaveClicked(account.getId());
+                            }
+
                         }
+
                         break;
                 }
                 Log.d(TAG, "onClick: Done editing");
 
-                if(mSaveListener != null) {
-                    mSaveListener.onSaveClicked(account.getId());
-                }
+//                if(mListener != null) {
+//                    mListener.onSaveClicked(account.getId());
+//                }
             }
         });
         Log.d(TAG, "onCreateView: Exiting...");
 
+//        mOpenDate.setInputType(InputType.TYPE_NULL);
+        mtvOpenDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                showDatePickerDialog(account.getCorpName(), 1);
+
+//                if(mListener != null) {
+//                    mListener.onDateClicked(account.getActvyLong());
+//                }
+
+                int day = cldrOpened.get(Calendar.DAY_OF_MONTH);
+                int month = cldrOpened.get(Calendar.MONTH);
+                int year = cldrOpened.get(Calendar.YEAR);
+                // date picker dialog
+                picker = new DatePickerDialog(getContext(),
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                                mtvOpenDate.setText("Opened " + (monthOfYear + 1) + "/" + dayOfMonth + "/" + year);
+                                mCalendar.set(year, monthOfYear, dayOfMonth, 0, 0, 0);
+                                lngOpenDate = mCalendar.getTimeInMillis();
+                                Log.d(TAG, "onDateSet: " + lngOpenDate);
+                            }
+                        }, year, month, day);
+                picker.show();
+            }
+        });
+
+//        dateButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//                mtvOpenDate.setText("Selected Date: "+ mOpenDate.getText());
+//
+//            }
+//        });
+
         return view;
     }
+
 
     private Account getAccount(int id) {
 //        int iId = 0;

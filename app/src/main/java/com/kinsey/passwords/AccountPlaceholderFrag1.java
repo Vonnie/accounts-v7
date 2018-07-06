@@ -165,7 +165,7 @@ public class AccountPlaceholderFrag1 extends Fragment {
         mUserNameTextView = (EditText) view.findViewById(R.id.acc_user_name);
         mUserEmailTextView = (EditText) view.findViewById(R.id.acc_user_email);
         mAccountIdTextView = (TextView) view.findViewById(R.id.acc_account_id);
-        mActvyDtTextView = (TextView) view.findViewById(R.id.acc_actvy_date);
+        mActvyDtTextView = (TextView) view.findViewById(R.id.addedit_actvy_date);
     }
 
     public void fillPage() {

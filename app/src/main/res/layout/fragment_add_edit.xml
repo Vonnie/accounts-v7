@@ -5,7 +5,10 @@
     android:id="@+id/content_add_edit"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.kinsey.passwords.AddEditActivityFragment">
+    android:scrollbarStyle="insideOverlay"
+    android:scrollbars="vertical"
+    tools:context="com.kinsey.passwords.AddEditActivityFragment"
+    tools:scrollbarStyle="insideOverlay">
 
     <EditText
         android:id="@+id/addedit_corp_name"
@@ -88,13 +91,80 @@
         app:layout_constraintVertical_bias="0.0"
         app:layout_constraintVertical_chainStyle="spread_inside" />
 
+    <TextView
+        android:id="@+id/addedit_open_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Select Date"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/addedit_notes" />
+
     <Button
         android:id="@+id/addedit_save"
         android:layout_width="50dp"
         android:layout_height="0dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:drawableStart="@android:drawable/ic_menu_save"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/addedit_notes" />
+
+
+    <EditText
+        android:id="@+id/acc_seq"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="68dp"
+        android:ems="10"
+        android:hint="@string/accedit_seq_hint"
+        android:inputType="number"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/addedit_notes" />
+
+    <EditText
+        android:id="@+id/acc_ref_from"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:hint="@string/accedit_ref_from_hint"
+        android:inputType="number"
+        android:labelFor="@id/acc_ref_from_label"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/addedit_actvy_date" />
+
+    <EditText
+        android:id="@+id/acc_ref_to"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:hint="@string/accedit_ref_to_hint"
+        android:inputType="number"
+        app:layout_constraintStart_toStartOf="@+id/acc_ref_from"
+        app:layout_constraintTop_toBottomOf="@+id/acc_ref_from" />
+
+    <TextView
+        android:id="@+id/acc_account_id"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:textAlignment="viewEnd"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/addedit_open_date" />
+
+    <TextView
+        android:id="@+id/addedit_actvy_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Last Actvy Date"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/acc_account_id" />
+
 </android.support.constraint.ConstraintLayout>

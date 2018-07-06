@@ -47,7 +47,8 @@ public class AccountListActivityFragment extends Fragment
     // i.e. running in landscape on a tablet
 //    private boolean mTwoPane = false;
 
-    private int mSortorder = AccountsContract.ACCOUNT_LIST_BY_CORP_NAME;
+//    private int mSortorder = AccountsContract.ACCOUNT_LIST_BY_CORP_NAME;
+//    private int accountSortorder = AccountsContract.ACCOUNT_LIST_BY_CORP_NAME;
 
 
     public enum FragmentListMode {CORP_NAME, OPEN_DATE}
@@ -139,6 +140,7 @@ public class AccountListActivityFragment extends Fragment
 
 //        Log.d(TAG, "onCreateView: arg() " + getArguments().get(AccountsContract.ACCOUNT_TWO_PANE));
 
+//        accountSortorder = (int) getArguments().get(Account.class.getSimpleName());
 //        mSortorder = (int) getArguments().get(Account.class.getSimpleName());
 //        Log.d(TAG, "onCreateView: sortorder " + mSortorder);
 //        Log.d(TAG, "onCreateView: twopane "
@@ -219,20 +221,23 @@ public class AccountListActivityFragment extends Fragment
         // <order by> Tasks.SortOrder, Tasks.Name COLLATE NOCASE
 //        String sortOrder = AccountsContract.Columns.CORP_NAME_COL + "," + AccountsContract.Columns.SEQUENCE_COL + " COLLATE NOCASE";
         String sortOrder;
-        int accountSortorder = AccountsContract.ACCOUNT_LIST_BY_CORP_NAME;
-        if (accountSortorder == AccountsContract.ACCOUNT_LIST_BY_OPEN_DATE) {
+        int sortorderType = mAccountAdapter.getAccountSortorder();
+
+        if (sortorderType == AccountsContract.ACCOUNT_LIST_BY_OPEN_DATE) {
             sortOrder = AccountsContract.Columns.OPEN_DATE_COL + " DESC," + AccountsContract.Columns.CORP_NAME_COL + " COLLATE NOCASE ASC";
         } else {
-            if (accountSortorder == AccountsContract.ACCOUNT_LIST_BY_SEQUENCE) {
+            if (sortorderType == AccountsContract.ACCOUNT_LIST_BY_SEQUENCE) {
                 sortOrder = AccountsContract.Columns.SEQUENCE_COL + "," + AccountsContract.Columns.CORP_NAME_COL + " COLLATE NOCASE ASC";
             } else {
-                if (accountSortorder == AccountsContract.ACCOUNT_LIST_BY_PASSPORT_ID) {
+                if (sortorderType == AccountsContract.ACCOUNT_LIST_BY_PASSPORT_ID) {
                     sortOrder = AccountsContract.Columns.PASSPORT_ID_COL + "," + AccountsContract.Columns.CORP_NAME_COL + " COLLATE NOCASE ASC";
                 } else {
                     sortOrder = AccountsContract.Columns.CORP_NAME_COL + "," + AccountsContract.Columns.SEQUENCE_COL + " COLLATE NOCASE ASC";
                 }
             }
         }
+
+
 
         Log.d(TAG, "onCreateLoader: sortorder " + sortOrder);
 //        String sortOrder = AccountsContract.Columns.TASKS_SORTORDER + "," + TasksContract.Columns.TASKS_NAME;
@@ -244,6 +249,19 @@ public class AccountListActivityFragment extends Fragment
                 sortOrder);
 //        Log.d(TAG, "onCreateLoader: cursor " + cursor.toString());
         return cursor;
+    }
+
+
+    public void resortList(int sortorder) {
+        Log.d(TAG, "resortList: " + sortorder);
+        mAccountAdapter.setAccountSortorder(sortorder);
+//        mRecyclerView.swapAdapter(mAccountAdapter, false);
+        Log.d(TAG, "resortFragList: destroy Loader");
+        getLoaderManager().destroyLoader(ACCOUNT_LOADER_ID);
+
+        Log.d(TAG, "resortFragList: createLoader");
+        createLoader();
+
     }
 
     @Override
@@ -279,9 +297,10 @@ public class AccountListActivityFragment extends Fragment
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-//        Log.d(TAG, "onLoaderReset: starts");
+        Log.d(TAG, "onLoaderReset: starts");
         mAccountAdapter.swapCursor(null);
     }
+
 
 
     public void deleteAccount(Context context, int accountId) {
