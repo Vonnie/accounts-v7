@@ -44,7 +44,7 @@ public class WebViewActivity
 
         Bundle arguments = getIntent().getExtras();
         webAddr = (String) arguments.getSerializable(WebViewActivity.class.getSimpleName());
-        webview = (WebView) findViewById(R.id.wv_page);
+        webview = (WebView) findViewById(R.id.webview);
 
         WebSettings webSettings = webview.getSettings();
         webSettings.setJavaScriptEnabled(true);

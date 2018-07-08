@@ -94,6 +94,7 @@ public class MainActivity extends AppCompatActivity
     public static final int REQUEST_SUGGESTS_LIST = 2;
     public static final int REQUEST_ACCOUNT_EDIT = 3;
     public static final int REQUEST_ACCOUNT_SEARCH = 4;
+    public static final int REQUEST_VIEW_EXPORT = 5;
 
     public static int accountSelectedPos = -1;
 
@@ -359,13 +360,18 @@ public class MainActivity extends AppCompatActivity
                 resortList(AccountsContract.ACCOUNT_LIST_BY_SEQUENCE);
                 break;
 
-            case R.id.menuacct_showdate:
-                suggestsListRequest3();
-                break;
+//            case R.id.menuacct_showdate:
+//                suggestsListRequest3();
+//                break;
 
             case R.id.menumain_showSuggests:
                 suggestsListRequest2();
                 break;
+
+            case R.id.menuacct_external_accts:
+                viewAccountsFile();
+                break;
+
             case R.id.menumain_search:
 
                 searchListRequest();
@@ -481,6 +487,15 @@ public class MainActivity extends AppCompatActivity
 //    public void onAccount3Instance() {
 //        Log.d(TAG, "onAccount3Instance: ");
 //    }
+
+
+    private void viewAccountsFile() {
+        Log.d(TAG, "viewAccountsFile: request request view exports");
+//        mActivityStart = true;
+        Intent detailIntent = new Intent(this, FileViewActivity.class);
+        startActivity(detailIntent);
+//        startActivityForResult(detailIntent, REQUEST_VIEW_EXPORT);
+    }
 
     @Override
     public void onAccountListSelect(Account account) {
@@ -1350,6 +1365,10 @@ public class MainActivity extends AppCompatActivity
 //            case REQUEST_ACCOUNT_SEARCH:
 //                Log.d(TAG, "onActivityResult: return from search");
 //                break;
+            case REQUEST_VIEW_EXPORT:
+                break;
+
+
             default:
                 break;
         }

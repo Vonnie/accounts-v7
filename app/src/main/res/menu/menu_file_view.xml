@@ -3,8 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.kinsey.passwords.FileViewActivity">
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/vw_import"
         android:orderInCategory="100"
-        android:title="@string/action_settings"
+        android:title="@string/menuvw_import"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/vw_export"
+        android:orderInCategory="101"
+        android:title="@string/menuvw_export"
+        app:showAsAction="never" />
+
 </menu>

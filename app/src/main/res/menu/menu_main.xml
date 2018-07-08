@@ -8,12 +8,12 @@
         android:orderInCategory="101"
         android:title="@string/menu_add_account"
         app:showAsAction="always" />
-    <item
-        android:id="@+id/menuacct_showdate"
-        android:icon="@android:drawable/ic_menu_view"
-        android:orderInCategory="103"
-        android:title="Item"
-        app:showAsAction="always" />
+    <!--<item-->
+        <!--android:id="@+id/menuacct_showdate"-->
+        <!--android:icon="@android:drawable/ic_menu_view"-->
+        <!--android:orderInCategory="103"-->
+        <!--android:title="Item"-->
+        <!--app:showAsAction="always" />-->
     <item
         android:id="@+id/menumain_search"
         android:icon="@drawable/selector_search"

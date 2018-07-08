@@ -7,19 +7,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
-import android.widget.TextView;
 
 import java.io.File;
-
-import static android.content.ContentValues.TAG;
 
 /**
  * A placeholder fragment containing a simple view.
  */
 public class FileViewActivityFragment extends Fragment {
+    private static final String TAG = "FileViewActivityFrag";
 
     WebView webView;
-    TextView tvLocation;
+//    TextView tvLocation;
 
     public FileViewActivityFragment() {
     }
@@ -30,32 +28,82 @@ public class FileViewActivityFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_file_view, container, false);
 
         webView = (WebView) view.findViewById(R.id.wv_page);
-        tvLocation = (TextView) view.findViewById(R.id.wv_location);
+//        tvLocation = (TextView) view.findViewById(R.id.wv_location);
+        Log.d(TAG, "onCreateView: ");
+//        tvLocation.setText("see it");
+//        Log.d(TAG, "onCreateView: tvLocation set");
         reportJson();
+
+
+//        String unencodedHtml =
+//                "<html><body>'%28' is the code for '('</body></html>";
+//        String encodedHtml = Base64.encodeToString(unencodedHtml.getBytes(), Base64.NO_PADDING);
+//        webView.loadData(encodedHtml, "text/html", "base64");
 
         return view;
     }
 
+
+    public void setInfoMessage(String str) {
+//        tvLocation.setText(str);
+    }
+
     private void reportJson() {
+        Log.d(TAG, "reportJson: " + MainActivity.DEFAULT_APP_DIRECTORY);
         boolean retSuccess = true;
+
         File file = new File(MainActivity.DEFAULT_APP_DIRECTORY
                 + "/accounts.json");
         String loc = "file://" + file.getAbsolutePath();
-        tvLocation.setText(loc);
+        Log.d(TAG, "reportJson: " + loc);
+//        webView.setVisibility(View.GONE);
+//        tvLocation.setText(loc);
 
-        if (!file.exists()) {
+        try {
+            if (!file.exists()) {
 //            jsonViewListener.onSetTitle("Export from Home...");
 //			tvContent.setText("json export file not found");
-            retSuccess = false;
-        } else {
-            try {
-
-                webView.loadUrl(loc);
-
-            } catch (Exception e) {
-                Log.e(TAG, "inputStream error " + e.getMessage());
                 retSuccess = false;
+//            String myHtmlString = "<h1>File not found</h1>";
+//            webView.loadData(myHtmlString, "text/html; charset=UTF-8", null);
+
+//                String unencodedHtml =
+//                        "<html><body>'%28' is the code for '('</body></html>";
+//                String encodedHtml = Base64.encodeToString(unencodedHtml.getBytes(), Base64.NO_PADDING);
+//                webView.loadData(encodedHtml, "text/html", "base64");
+
+
+                webView.getSettings().setJavaScriptEnabled(true);
+                String htmlString = "<br><br><h1>Warning</h1>\n" +
+                        "<h2>Unable to acquire Exported Accounts</h2>\n" +
+                        "<h3>Either not previously exported or</h3>" +
+                        "<h3>Not located on " + loc + "</h3>";
+                webView.loadData(htmlString, "text/html", null);
+
+//            webView.setVisibility(View.GONE);
+//            tvLocation.setText("file not found");
+
+            } else {
+                try {
+
+
+                    webView.getSettings().setJavaScriptEnabled(true);
+                    String htmlString = "<h1>This is header one.</h1>\n" +
+                            "<h2>..waiting for data..</h2>\n" +
+                            "<h3>This is header three.</h3>";
+                    webView.loadData(htmlString, "text/html", null);
+
+                    //                webView.setVisibility(View.VISIBLE);
+                    Log.d(TAG, "reportJson: about to load " + loc);
+                    webView.loadUrl(loc);
+
+                } catch (Exception e) {
+                    Log.e(TAG, "inputStream error " + e.getMessage());
+                    retSuccess = false;
+                }
             }
+        } catch (Exception ex) {
+            Log.d(TAG, "reportJson: " + ex.getMessage());
         }
     }
 }
