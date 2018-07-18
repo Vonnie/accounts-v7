@@ -372,11 +372,13 @@ public class MainActivity extends AppCompatActivity
                 viewAccountsFile();
                 break;
 
-            case R.id.menumain_search:
+//            case R.id.menumain_search:
+//
+//                searchListRequest();
+//
+//                break;
 
-                searchListRequest();
 
-                break;
 //            case R.id.menumain_rss_top_free_apps:
 //
 //                currList = ListHomeType.TOP10FREEAPP;
@@ -431,7 +433,25 @@ public class MainActivity extends AppCompatActivity
                     AddEditActivityFragment fragment = (AddEditActivityFragment)
                             getSupportFragmentManager().findFragmentById(R.id.task_details_container);
                     if(fragment == null || fragment.canClose()) {
-                        return super.onOptionsItemSelected(item);
+                        if(mTwoPane) {
+                            // in Landscape, so quit only if the back button was used
+                                Log.d(TAG, "onPositiveDialogResult: get list");
+                                AccountListActivityFragment listFragment = (AccountListActivityFragment)
+                                        getSupportFragmentManager().findFragmentById(R.id.fragment);
+                                listFragment.resetSelectItem();
+                        } else {
+                            // hide the edit container in single pane mode
+                            // and make sure the left-hand container is visible
+                            View addEditLayout = findViewById(R.id.task_details_container);
+                            View mainFragment = findViewById(R.id.fragment);
+                            // We're just removed the editing fragment, so hide the frame
+                            addEditLayout.setVisibility(View.GONE);
+
+
+                            // and make sure the MainActivityFragment is visible
+                            mainFragment.setVisibility(View.VISIBLE);
+                        }
+
                     } else {
                         showConfirmationDialog(AppDialog.DIALOG_ID_CANCEL_EDIT_UP);
                         return true;  // indicate we are handling this
@@ -457,12 +477,20 @@ public class MainActivity extends AppCompatActivity
         item.setEnabled(blnSet);
     }
 
+    private void setMenuItemVisible(int id, boolean blnSet) {
+        MenuItem item = menu.findItem(id);
+        if (blnSet) {
+            item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        } else {
+            item.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+        }
+    }
+
 
 //    @Override
 //    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 //
-//    }
-//
+ //
 //    @Override
 //    public void onPageSelected(int position) {
 //        Log.d(TAG, "onPageSelected: " + position);
@@ -505,7 +533,8 @@ public class MainActivity extends AppCompatActivity
 //        fragList.setSelected_position(selected_position);
 //        accountSelectedPos = selected_position;
 //        setMenuItemEnabled(R.id.menuacct_delete, true);
-//        setMenuItemEnabled(R.id.menuacct_save, true);
+        setMenuItemEnabled(R.id.menuacct_save, false);
+        setMenuItemVisible(R.id.menuacct_save, false);
 //        if (account.getCorpWebsite().equals("")) {
 //            setMenuItemEnabled(R.id.menuacct_internet, false);
 //        } else {

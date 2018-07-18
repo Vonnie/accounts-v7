@@ -51,8 +51,8 @@
     <string name="searchdiag_sub_message">For efficient reasons, Search DB is a small copy of Accounts DB</string>
     <string name="searchdiag_negative_caption">Continue</string>
     <string name="searchdiag_positive_caption">Copy</string>
-    <string name="confirmdiag_ask_abandon_positive_caption">Yes, abandon changes</string>
-    <string name="confirmdiag_ask_abandon_negative_caption">No, continue editing</string>
+    <string name="confirmdiag_ask_abandon_positive_caption">Yes, abandon chgs</string>
+    <string name="confirmdiag_ask_abandon_negative_caption">No, continue edit</string>
     <string name="confirmdiag_leave_warning">Leave Warning</string>
     <string name="confirmdiag_leave_warning_sub_message">Do you want to leave without applying changes.</string>
     <string name="confirmdiag_leave_app_warning_sub_message">Do you want to leave app.</string>

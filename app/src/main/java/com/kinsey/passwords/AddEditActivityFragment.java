@@ -74,7 +74,35 @@ public class AddEditActivityFragment extends Fragment {
     }
 
     public boolean canClose() {
-        return false;
+
+        Log.d(TAG, "canClose: " + mCorpNameTextView.getText().toString());
+        Log.d(TAG, "canClose: " + account.getCorpName());
+        if (!mCorpNameTextView.getText().toString().equals(account.getCorpName()) ) {
+            Log.d(TAG, "canClose: chgs on Corp Name");
+            return false;
+        }
+        if (!mCorpWebsiteTextView.getText().toString().equals(account.getCorpWebsite()) ) {
+            Log.d(TAG, "canClose: chgs on Corp Website");
+            return false;
+        }
+        if (!mUserNameTextView.getText().toString().equals(account.getUserName()) ) {
+            Log.d(TAG, "canClose: chgs on User Name");
+            return false;
+        }
+        if (!mUserEmailTextView.getText().toString().equals(account.getUserEmail()) ) {
+            Log.d(TAG, "canClose: chgs on User Email");
+            return false;
+        }
+        if (!mNoteTextView.getText().toString().equals(account.getNote()) ) {
+            Log.d(TAG, "canClose: chgs on Notes");
+            return false;
+        }
+        if (!mSeqTextView.getText().toString().equals(String.valueOf(account.getSequence())) ) {
+            Log.d(TAG, "canClose: chgs on sequence");
+            return false;
+        }
+
+        return true;
     }
 
     @Override

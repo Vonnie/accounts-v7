@@ -135,7 +135,7 @@
         android:inputType="number"
         android:labelFor="@id/acc_ref_from_label"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addedit_actvy_date" />
+        app:layout_constraintTop_toBottomOf="@+id/acc_account_id" />
 
     <EditText
         android:id="@+id/acc_ref_to"
@@ -152,10 +152,11 @@
         android:id="@+id/acc_account_id"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="8dp"
         android:textAlignment="viewEnd"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addedit_open_date" />
+        app:layout_constraintTop_toBottomOf="@+id/addedit_actvy_date" />
 
     <TextView
         android:id="@+id/addedit_actvy_date"
@@ -165,6 +166,6 @@
         android:layout_marginTop="8dp"
         android:text="Last Actvy Date"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/acc_account_id" />
+        app:layout_constraintTop_toBottomOf="@+id/addedit_open_date" />
 
 </android.support.constraint.ConstraintLayout>

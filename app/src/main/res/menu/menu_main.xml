@@ -14,18 +14,12 @@
         <!--android:orderInCategory="103"-->
         <!--android:title="Item"-->
         <!--app:showAsAction="always" />-->
-    <item
-        android:id="@+id/menumain_search"
-        android:icon="@drawable/selector_search"
-        android:orderInCategory="104"
-        android:title="@string/menu_search"
-        app:showAsAction="ifRoom" />
-    <item
-        android:id="@+id/menumain_showSuggests"
-        android:icon="@drawable/selector_key"
-        android:orderInCategory="105"
-        android:title="@string/menu_suggests"
-        app:showAsAction="ifRoom" />
+    <!--<item-->
+        <!--android:id="@+id/menumain_search"-->
+        <!--android:icon="@drawable/selector_search"-->
+        <!--android:orderInCategory="104"-->
+        <!--android:title="@string/menu_search"-->
+        <!--app:showAsAction="ifRoom" />-->
     <item
         android:id="@+id/menumain_about"
         android:icon="@android:drawable/ic_menu_info_details"
@@ -37,12 +31,20 @@
         <!--android:id="@+id/menumain_refresh"-->
         <!--android:orderInCategory="111"-->
         <!--android:title="@string/menuacct_refresh" />-->
-    <!--<item-->
-    <!--android:id="@+id/menuacct_save"-->
-    <!--android:icon="@drawable/selector_save"-->
-    <!--android:orderInCategory="112"-->
-    <!--android:title="@string/menu_save"-->
-    <!--app:showAsAction="ifRoom" />-->
+    <item
+    android:id="@+id/menuacct_save"
+    android:icon="@drawable/selector_save"
+    android:orderInCategory="112"
+    android:title="@string/menu_save"
+    app:showAsAction="always" />
+
+    <item
+        android:id="@+id/menumain_showSuggests"
+        android:icon="@drawable/selector_key"
+        android:orderInCategory="113"
+        android:title="@string/menu_suggests"
+        app:showAsAction="ifRoom" />
+
     <!--<item-->
     <!--android:id="@+id/menuacct_internet"-->
     <!--android:icon="@drawable/selector_globe"-->
