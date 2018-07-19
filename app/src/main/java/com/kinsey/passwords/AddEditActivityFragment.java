@@ -206,114 +206,13 @@ public class AddEditActivityFragment extends Fragment {
             mCalendar.setTime(dte);
         }
 
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Update the database if at least one field has changed.
-                // - There's no need to hit the database unless this has happened.
-//                int so;     // to save repeated conversions to int.
-//                if(mSortOrderTextView.length()>0) {
-//                    so = Integer.parseInt(mSortOrderTextView.getText().toString());
-//                } else {
-//                    so = 0;
-//                }
-
-                Log.d(TAG, "onClick: ");
-
-                if (!verifiedAccount()) {
-                    return;
-                }
-
-                ContentResolver contentResolver = getActivity().getContentResolver();
-                ContentValues values = new ContentValues();
-
-                switch (mMode) {
-                    case EDIT:
-                        if(account == null) {
-                            // remove lint warnings, will never execute
-                            break;
-                        }
-                        Log.d(TAG, "onClick: " + account);
-                        if(!mCorpNameTextView.getText().toString().equals(account.getCorpName())) {
-                            values.put(AccountsContract.Columns.CORP_NAME_COL, mCorpNameTextView.getText().toString());
-                        }
-                        if(!mCorpWebsiteTextView.getText().toString().equals(account.getCorpWebsite())) {
-                            values.put(AccountsContract.Columns.CORP_WEBSITE_COL, mCorpWebsiteTextView.getText().toString());
-                        }
-                        if(!mUserNameTextView.getText().toString().equals(account.getUserName())) {
-                            values.put(AccountsContract.Columns.USER_NAME_COL, mUserNameTextView.getText().toString());
-                        }
-                        if(!mUserEmailTextView.getText().toString().equals(account.getUserEmail())) {
-                            values.put(AccountsContract.Columns.USER_EMAIL_COL, mUserEmailTextView.getText().toString());
-                        }
-                        if(!mNoteTextView.getText().toString().equals(account.getNote())) {
-                            values.put(AccountsContract.Columns.NOTE_COL, mNoteTextView.getText().toString());
-                        }
-                        if(!mSeqTextView.getText().toString().equals(account.getSequence())) {
-                            values.put(AccountsContract.Columns.SEQUENCE_COL, mSeqTextView.getText().toString());
-                        }
-
-                        if (lngOpenDate != account.getOpenLong()) {
-                            Log.d(TAG, "onClick: " + lngOpenDate + ":" + account.getOpenLong());
-                            values.put(AccountsContract.Columns.OPEN_DATE_COL, lngOpenDate);
-                        }
-//                        if(so != task.getSortOrder()) {
-//                            values.put(TasksContract.Columns.TASKS_SORTORDER, so);
-//                        }
-//                        if(values.size() != 0) {
-//                            Log.d(TAG, "onClick: updating task");
-//                            contentResolver.update(TasksContract.buildTaskUri(task.getId()), values, null, null);
-//                        }
-
-                        if (values.size() != 0) {
-                            values.put(AccountsContract.Columns.ACTVY_DATE_COL, System.currentTimeMillis());
-                            Log.d(TAG, "onClick: " + account);
-                            Log.d(TAG, "onClick: " + account.getOpenLong());
-                            contentResolver.update(AccountsContract.buildIdUri(account.getId()), values, null, null);
-                            account = getAccount(account.getId());
-                            Log.d(TAG, "onClick: " + account);
-                            Log.d(TAG, "onClick: " + account.getOpenLong());
-                            Toast.makeText(getActivity(),
-                                    values.size() - 1 + " changed columns for account " + account.getCorpName(),
-                                    Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(getActivity(), "no changes detected",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                        break;
-                    case ADD:
-                        if(mCorpNameTextView.length()>0) {
-                            Log.d(TAG, "onClick: adding new task");
-                            values.put(AccountsContract.Columns.PASSPORT_ID_COL,
-                                    String.valueOf(getMaxValue(AccountsContract.Columns.PASSPORT_ID_COL)));
-                            values.put(AccountsContract.Columns.CORP_NAME_COL, mCorpNameTextView.getText().toString());
-                            values.put(AccountsContract.Columns.CORP_WEBSITE_COL, mCorpWebsiteTextView.getText().toString());
-                            values.put(AccountsContract.Columns.USER_NAME_COL, mUserNameTextView.getText().toString());
-                            values.put(AccountsContract.Columns.USER_EMAIL_COL, mUserEmailTextView.getText().toString());
-                            values.put(AccountsContract.Columns.NOTE_COL, mNoteTextView.getText().toString());
-                            Uri uri = contentResolver.insert(AccountsContract.CONTENT_URI, values);
-                            long id = AccountsContract.getId(uri);
-                            account = getAccount((int)id);
-                            Log.d(TAG, "onClick: " + account);
-                            Log.d(TAG, "onClick: " + account.getOpenLong());
-                            Toast.makeText(getActivity(),
-                                    "New account " + account.getCorpName() + " added",
-                                    Toast.LENGTH_SHORT).show();
-                            if(mListener != null) {
-                                mListener.onSaveClicked(account.getId());
-                            }
-
-                        }
-
-                        break;
-                }
-                Log.d(TAG, "onClick: Done editing");
-
-//                if(mListener != null) {
-//                    mListener.onSaveClicked(account.getId());
-//                }
-            }
-        });
+//        saveButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//                saveEdits();
+//            }
+//        });
         Log.d(TAG, "onCreateView: Exiting...");
 
 //        mOpenDate.setInputType(InputType.TYPE_NULL);
@@ -356,6 +255,115 @@ public class AddEditActivityFragment extends Fragment {
         return view;
     }
 
+    public int getAcctId() {
+        return account.getId();
+    }
+    public void saveEdits() {
+        // Update the database if at least one field has changed.
+        // - There's no need to hit the database unless this has happened.
+//                int so;     // to save repeated conversions to int.
+//                if(mSortOrderTextView.length()>0) {
+//                    so = Integer.parseInt(mSortOrderTextView.getText().toString());
+//                } else {
+//                    so = 0;
+//                }
+
+        Log.d(TAG, "onClick: ");
+
+        if (!verifiedAccount()) {
+            return;
+        }
+
+        ContentResolver contentResolver = getActivity().getContentResolver();
+        ContentValues values = new ContentValues();
+
+        switch (mMode) {
+            case EDIT:
+                if(account == null) {
+                    // remove lint warnings, will never execute
+                    break;
+                }
+                Log.d(TAG, "onClick: " + account);
+                if(!mCorpNameTextView.getText().toString().equals(account.getCorpName())) {
+                    values.put(AccountsContract.Columns.CORP_NAME_COL, mCorpNameTextView.getText().toString());
+                }
+                if(!mCorpWebsiteTextView.getText().toString().equals(account.getCorpWebsite())) {
+                    values.put(AccountsContract.Columns.CORP_WEBSITE_COL, mCorpWebsiteTextView.getText().toString());
+                }
+                if(!mUserNameTextView.getText().toString().equals(account.getUserName())) {
+                    values.put(AccountsContract.Columns.USER_NAME_COL, mUserNameTextView.getText().toString());
+                }
+                if(!mUserEmailTextView.getText().toString().equals(account.getUserEmail())) {
+                    values.put(AccountsContract.Columns.USER_EMAIL_COL, mUserEmailTextView.getText().toString());
+                }
+                if(!mNoteTextView.getText().toString().equals(account.getNote())) {
+                    values.put(AccountsContract.Columns.NOTE_COL, mNoteTextView.getText().toString());
+                }
+                if(!mSeqTextView.getText().toString().equals(account.getSequence())) {
+                    values.put(AccountsContract.Columns.SEQUENCE_COL, mSeqTextView.getText().toString());
+                }
+
+                if (lngOpenDate != account.getOpenLong()) {
+                    Log.d(TAG, "onClick: " + lngOpenDate + ":" + account.getOpenLong());
+                    values.put(AccountsContract.Columns.OPEN_DATE_COL, lngOpenDate);
+                }
+//                        if(so != task.getSortOrder()) {
+//                            values.put(TasksContract.Columns.TASKS_SORTORDER, so);
+//                        }
+//                        if(values.size() != 0) {
+//                            Log.d(TAG, "onClick: updating task");
+//                            contentResolver.update(TasksContract.buildTaskUri(task.getId()), values, null, null);
+//                        }
+
+                if (values.size() != 0) {
+                    values.put(AccountsContract.Columns.ACTVY_DATE_COL, System.currentTimeMillis());
+                    Log.d(TAG, "onClick: " + account);
+                    Log.d(TAG, "onClick: " + account.getOpenLong());
+                    contentResolver.update(AccountsContract.buildIdUri(account.getId()), values, null, null);
+                    account = getAccount(account.getId());
+                    Log.d(TAG, "onClick: " + account);
+                    Log.d(TAG, "onClick: " + account.getOpenLong());
+                    Toast.makeText(getActivity(),
+                            values.size() - 1 + " changed columns for account " + account.getCorpName(),
+                            Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getActivity(), "no changes detected",
+                            Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case ADD:
+                if(mCorpNameTextView.length()>0) {
+                    Log.d(TAG, "onClick: adding new task");
+                    values.put(AccountsContract.Columns.PASSPORT_ID_COL,
+                            String.valueOf(getMaxValue(AccountsContract.Columns.PASSPORT_ID_COL)));
+                    values.put(AccountsContract.Columns.CORP_NAME_COL, mCorpNameTextView.getText().toString());
+                    values.put(AccountsContract.Columns.CORP_WEBSITE_COL, mCorpWebsiteTextView.getText().toString());
+                    values.put(AccountsContract.Columns.USER_NAME_COL, mUserNameTextView.getText().toString());
+                    values.put(AccountsContract.Columns.USER_EMAIL_COL, mUserEmailTextView.getText().toString());
+                    values.put(AccountsContract.Columns.NOTE_COL, mNoteTextView.getText().toString());
+                    Uri uri = contentResolver.insert(AccountsContract.CONTENT_URI, values);
+                    long id = AccountsContract.getId(uri);
+                    account = getAccount((int)id);
+                    Log.d(TAG, "onClick: " + account);
+                    Log.d(TAG, "onClick: " + account.getOpenLong());
+                    Toast.makeText(getActivity(),
+                            "New account " + account.getCorpName() + " added",
+                            Toast.LENGTH_SHORT).show();
+//                    if(mListener != null) {
+//                        mListener.onSaveClicked(account.getId());
+//                    }
+
+                }
+
+                break;
+        }
+        Log.d(TAG, "onClick: Done editing");
+
+//                if(mListener != null) {
+//                    mListener.onSaveClicked(account.getId());
+//                }
+
+    }
 
     private Account getAccount(int id) {
 //        int iId = 0;

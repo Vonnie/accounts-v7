@@ -31,19 +31,6 @@
         <!--android:id="@+id/menumain_refresh"-->
         <!--android:orderInCategory="111"-->
         <!--android:title="@string/menuacct_refresh" />-->
-    <item
-    android:id="@+id/menuacct_save"
-    android:icon="@drawable/selector_save"
-    android:orderInCategory="112"
-    android:title="@string/menu_save"
-    app:showAsAction="always" />
-
-    <item
-        android:id="@+id/menumain_showSuggests"
-        android:icon="@drawable/selector_key"
-        android:orderInCategory="113"
-        android:title="@string/menu_suggests"
-        app:showAsAction="ifRoom" />
 
     <!--<item-->
     <!--android:id="@+id/menuacct_internet"-->
@@ -63,8 +50,13 @@
         android:enabled="true"
         android:visible="true">
         <item
+            android:id="@+id/menuacct_sort_corpname"
+            android:checked="true"
+            android:orderInCategory="112"
+            android:title="@string/menuacct_sort_corpname" />
+        <item
             android:id="@+id/menuacct_sort_passport"
-            android:orderInCategory="115"
+            android:orderInCategory="113"
             android:title="@string/menuacct_sort_passport"
             app:showAsAction="ifRoom" />
         <item
@@ -73,13 +65,8 @@
             android:title="@string/menuacct_sort_opendate"
             app:showAsAction="ifRoom" />
         <item
-            android:id="@+id/menuacct_sort_corpname"
-            android:checked="true"
-            android:orderInCategory="112"
-            android:title="@string/menuacct_sort_corpname" />
-        <item
             android:id="@+id/menuacct_sort_custom"
-            android:orderInCategory="116"
+            android:orderInCategory="115"
             android:title="@string/menuacct_sort_custom"
             app:showAsAction="ifRoom" />
     </group>
@@ -87,6 +74,19 @@
         android:id="@+id/menuacct_external_accts"
         android:orderInCategory="117"
         android:title="@string/menuacct_external_accts"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/menuacct_save"
+        android:icon="@drawable/selector_save"
+        android:orderInCategory="118"
+        android:title="@string/menu_save"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/menumain_showSuggests"
+        android:icon="@drawable/selector_key"
+        android:orderInCategory="119"
+        android:title="@string/menu_suggests"
         app:showAsAction="ifRoom" />
     <!--<group-->
         <!--android:id="@+id/group_rss"-->

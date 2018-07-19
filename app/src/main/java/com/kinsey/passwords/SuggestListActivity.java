@@ -5,13 +5,12 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.kinsey.passwords.items.Suggest;
@@ -42,23 +41,23 @@ public class SuggestListActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Add a generated password", Snackbar.LENGTH_LONG)
-                        .setAction("Add",
-                                new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        requestPassword();
-//                                        generatePasswords();
-                                    }
-                                }
-
-                        ).show();
-            }
-        });
+//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Snackbar.make(view, "Add a generated password", Snackbar.LENGTH_LONG)
+//                        .setAction("Add",
+//                                new View.OnClickListener() {
+//                                    @Override
+//                                    public void onClick(View view) {
+//                                        requestPassword();
+////                                        generatePasswords();
+//                                    }
+//                                }
+//
+//                        ).show();
+//            }
+//        });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
@@ -69,7 +68,6 @@ public class SuggestListActivity extends AppCompatActivity
         finish();
     }
 
-
     @Override
     public boolean onSupportNavigateUp() {
         setResult(Activity.RESULT_OK);
@@ -78,7 +76,28 @@ public class SuggestListActivity extends AppCompatActivity
         return true;
     }
 
-    private void generatePasswords(int passwordLen) {
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_suggest_list, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        switch (id) {
+            case R.id.menu_generate:
+                requestPassword();
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+            private void generatePasswords(int passwordLen) {
         ContentResolver contentResolver = getContentResolver();
         ContentValues values = new ContentValues();
 

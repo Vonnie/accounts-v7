@@ -194,6 +194,7 @@ public class SuggestListActivityFragment extends Fragment
         for (int i = 0; i < iLimit; i++) {
             Suggest item = listSuggests.get(i);
             if (suggest.getId() == item.getId()) {
+                mSuggestAdapter.setSuggestSelectedPos(i);
                 break;
             }
             priorId = item.getId();
@@ -262,6 +263,7 @@ public class SuggestListActivityFragment extends Fragment
                 break;
             }
             if (suggest.getId() == item.getId()) {
+                mSuggestAdapter.setSuggestSelectedPos(i);
                 nextId = item.getId();
             }
         }

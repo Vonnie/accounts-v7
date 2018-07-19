@@ -168,12 +168,14 @@ public class MainActivity extends AppCompatActivity
         // We need references to the containers, so we can show or hide them as necessary.
         // No need to cast them, as we're only calling a method that's available for all views.
         View addEditLayout = findViewById(R.id.task_details_container);
+        View addEditLayoutScroll = findViewById(R.id.task_details_container_scroll);
         View mainFragment = findViewById(R.id.fragment);
 
         if(mTwoPane) {
             Log.d(TAG, "onCreate: twoPane mode");
             mainFragment.setVisibility(View.VISIBLE);
             addEditLayout.setVisibility(View.VISIBLE);
+            addEditLayoutScroll.setVisibility(View.VISIBLE);
         } else if (editing) {
             Log.d(TAG, "onCreate: single pane, editing");
             // hide the left hand fragment, to make room for editing
@@ -184,8 +186,12 @@ public class MainActivity extends AppCompatActivity
             mainFragment.setVisibility(View.VISIBLE);
             // Hide the editing frame
             addEditLayout.setVisibility(View.GONE);
+            addEditLayoutScroll.setVisibility(View.GONE);
         }
 
+//        mainFragment
+
+        Toast.makeText(this, "Long click on item for more options", Toast.LENGTH_LONG).show();
 
 //        resetPreferences();
 
@@ -364,6 +370,10 @@ public class MainActivity extends AppCompatActivity
 //                suggestsListRequest3();
 //                break;
 
+            case R.id.menuacct_save:
+                saveAccountEdits();
+                break;
+
             case R.id.menumain_showSuggests:
                 suggestsListRequest2();
                 break;
@@ -443,13 +453,15 @@ public class MainActivity extends AppCompatActivity
                             // hide the edit container in single pane mode
                             // and make sure the left-hand container is visible
                             View addEditLayout = findViewById(R.id.task_details_container);
+                            View addEditLayoutScroll = findViewById(R.id.task_details_container_scroll);
                             View mainFragment = findViewById(R.id.fragment);
                             // We're just removed the editing fragment, so hide the frame
                             addEditLayout.setVisibility(View.GONE);
-
+                            addEditLayoutScroll.setVisibility(View.GONE);
 
                             // and make sure the MainActivityFragment is visible
                             mainFragment.setVisibility(View.VISIBLE);
+                            setMenuItemVisible(R.id.menuacct_save, false);
                         }
 
                     } else {
@@ -457,6 +469,7 @@ public class MainActivity extends AppCompatActivity
                         return true;  // indicate we are handling this
                     }
                 } else {
+                    setMenuItemVisible(R.id.menuacct_save, false);
                     SuggestListActivityFragment fragment = (SuggestListActivityFragment)
                             getSupportFragmentManager().findFragmentById(R.id.task_details_container);
                     if (fragment == null) {
@@ -480,11 +493,14 @@ public class MainActivity extends AppCompatActivity
     private void setMenuItemVisible(int id, boolean blnSet) {
         MenuItem item = menu.findItem(id);
         if (blnSet) {
+            item.setVisible(true);
             item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
         } else {
+            item.setVisible(false);
             item.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
         }
     }
+
 
 
 //    @Override
@@ -533,7 +549,7 @@ public class MainActivity extends AppCompatActivity
 //        fragList.setSelected_position(selected_position);
 //        accountSelectedPos = selected_position;
 //        setMenuItemEnabled(R.id.menuacct_delete, true);
-        setMenuItemEnabled(R.id.menuacct_save, false);
+//        setMenuItemEnabled(R.id.menuacct_save, false);
         setMenuItemVisible(R.id.menuacct_save, false);
 //        if (account.getCorpWebsite().equals("")) {
 //            setMenuItemEnabled(R.id.menuacct_internet, false);
@@ -1131,12 +1147,48 @@ public class MainActivity extends AppCompatActivity
             // Hide the left hand fragment and show the right hand frame
             View mainFragment = findViewById(R.id.fragment);
             View addEditLayout = findViewById(R.id.task_details_container);
+            View addEditLayoutScroll = findViewById(R.id.task_details_container_scroll);
             mainFragment.setVisibility(View.GONE);
             addEditLayout.setVisibility(View.VISIBLE);
+            addEditLayoutScroll.setVisibility(View.VISIBLE);
         }
+
+        setMenuItemVisible(R.id.menuacct_save, true);
         Log.d(TAG, "Exiting taskEditRequest");
     }
 
+
+    private void saveAccountEdits() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        AddEditActivityFragment editFragment = (AddEditActivityFragment)fragmentManager.findFragmentById(R.id.task_details_container);
+        editFragment.saveEdits();
+
+        View addEditLayout = findViewById(R.id.task_details_container);
+        View addEditLayoutScroll = findViewById(R.id.task_details_container_scroll);
+        View mainFragment = findViewById(R.id.fragment);
+
+        if(!mTwoPane) {
+            if (editFragment != null) {
+                getSupportFragmentManager().beginTransaction()
+                        .remove(editFragment)
+                        .commit();
+            }
+
+            // We've just removed the editing fragment, so hide the frame
+            addEditLayout.setVisibility(View.GONE);
+            addEditLayoutScroll.setVisibility(View.GONE);
+
+            // and make sure the MainActivityFragment is visible.
+            mainFragment.setVisibility(View.VISIBLE);
+        }
+
+        AccountListActivityFragment listFragment = (AccountListActivityFragment)
+                getSupportFragmentManager().findFragmentById(R.id.fragment);
+        listFragment.setAcctId(editFragment.getAcctId());
+
+        setMenuItemVisible(R.id.menuacct_save, false);
+
+    }
 
 //    private void addAccountRequest() {
 ////        Log.d(TAG, "addAccountRequest: starts");
@@ -1554,10 +1606,12 @@ public class MainActivity extends AppCompatActivity
                         // hide the edit container in single pane mode
                         // and make sure the left-hand container is visible
                         View addEditLayout = findViewById(R.id.task_details_container);
+                        View addEditLayoutScroll = findViewById(R.id.task_details_container_scroll);
                         View mainFragment = findViewById(R.id.fragment);
                         // We're just removed the editing fragment, so hide the frame
                         addEditLayout.setVisibility(View.GONE);
-
+                        addEditLayoutScroll.setVisibility(View.GONE);
+                        setMenuItemVisible(R.id.menuacct_save, false);
 
                         // and make sure the MainActivityFragment is visible
                         mainFragment.setVisibility(View.VISIBLE);

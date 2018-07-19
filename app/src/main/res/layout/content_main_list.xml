@@ -17,14 +17,15 @@
         tools:layout="@layout/fragment_main" />
 
     <ScrollView
+        android:id="@+id/task_details_container_scroll"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_weight="1">
 
         <FrameLayout
             android:id="@+id/task_details_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
             android:scrollbarStyle="insideOverlay"
             android:scrollbars="vertical">
 

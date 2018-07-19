@@ -3,6 +3,7 @@ package com.kinsey.passwords.provider;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.RecyclerView;
@@ -129,9 +130,25 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
 //        } else {
 //            Log.d(TAG, "onBindViewHolder: mCursor count " + mCursor.getCount());
 //        }
+
+        if ((mCursor == null) || (mCursor.getCount() == 0)) {
+            new CountDownTimer(10000, 5000) {
+
+                public void onTick(long millisUntilFinished) {
+//                    holder.corp_name.setText("checking db, seconds remaining: " + millisUntilFinished / 1000);
+                }
+
+                public void onFinish() {
+                    if ((mCursor == null) || (mCursor.getCount() == 0)) {
+                        holder.corp_name.setText(R.string.no_account_items);
+                    }
+                }
+            }.start();
+        }
+
         if ((mCursor == null) || (mCursor.getCount() == 0)) {
             Log.d(TAG, "onBindViewHolder: no accts");
-            holder.corp_name.setText(R.string.no_account_items);
+
             if (holder.upAcctBtn == null ||
                     holder.dnAcctBtn == null) {
             } else {
