@@ -239,6 +239,8 @@ public class AccountListActivityFragment extends Fragment
         String sortOrder;
         int sortorderType = mAccountAdapter.getAccountSortorder();
 
+//        String.format("%s ASC", EnergyUseLogEntry._ID
+
         if (sortorderType == AccountsContract.ACCOUNT_LIST_BY_OPEN_DATE) {
             sortOrder = AccountsContract.Columns.OPEN_DATE_COL + " DESC," + AccountsContract.Columns.CORP_NAME_COL + " COLLATE NOCASE ASC";
         } else {
@@ -248,7 +250,8 @@ public class AccountListActivityFragment extends Fragment
                 if (sortorderType == AccountsContract.ACCOUNT_LIST_BY_PASSPORT_ID) {
                     sortOrder = AccountsContract.Columns.PASSPORT_ID_COL + "," + AccountsContract.Columns.CORP_NAME_COL + " COLLATE NOCASE ASC";
                 } else {
-                    sortOrder = AccountsContract.Columns.CORP_NAME_COL + "," + AccountsContract.Columns.SEQUENCE_COL + " COLLATE NOCASE ASC";
+//                    sortOrder = AccountsContract.Columns.CORP_NAME_COL + "," + AccountsContract.Columns.SEQUENCE_COL + " COLLATE NOCASE ASC";
+                    sortOrder = String.format("%s COLLATE NOCASE ASC, %s COLLATE NOCASE ASC", AccountsContract.Columns.CORP_NAME_COL, AccountsContract.Columns.SEQUENCE_COL);
                 }
             }
         }
@@ -257,11 +260,13 @@ public class AccountListActivityFragment extends Fragment
 
         Log.d(TAG, "onCreateLoader: sortorder " + sortOrder);
 //        String sortOrder = AccountsContract.Columns.TASKS_SORTORDER + "," + TasksContract.Columns.TASKS_NAME;
+        String strSelect = AccountsContract.Columns.CORP_NAME_COL + " like ?";
+        String[] strSelectArg = {"%corp%"};
         Loader<Cursor> cursor = new CursorLoader(getActivity(),
                 AccountsContract.CONTENT_URI,
                 projectionAcct,
-                null,
-                null,
+                strSelect,
+                strSelectArg,
                 sortOrder);
 //        Log.d(TAG, "onCreateLoader: cursor " + cursor.toString());
         return cursor;

@@ -26,6 +26,7 @@ public class SearchListActivityFragment extends Fragment
         SearchRecyclerViewAdapter.OnAccountClickListener {
     private static final String TAG = "SearchListActivityFragm";
 
+    RecyclerView mRecyclerView;
     private SearchRecyclerViewAdapter mSearchListAdapter; // add adapter reference
 
     private OnActionListener mActionListener = null;
@@ -50,8 +51,8 @@ public class SearchListActivityFragment extends Fragment
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search_list, container, false);
 
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.srchlst_items_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.srchlst_items_view);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
 
         Bundle arguments = getActivity().getIntent().getExtras();
@@ -63,8 +64,8 @@ public class SearchListActivityFragment extends Fragment
 //        if (dbId == -1) {
             mSearchListAdapter = new SearchRecyclerViewAdapter(this.getContext(),
                     dbId,
-                    SearchesContract.cursorSearch,
-                    (SearchRecyclerViewAdapter.OnAccountClickListener) getActivity());
+                    SearchesContract.cursorSearch, this);
+//                    (SearchRecyclerViewAdapter.OnAccountClickListener) getActivity());
 //        } else {
 //            Cursor cursor = getAccountById(dbId);
 //            Log.d(TAG, "onCreateView: cursor count " + cursor.getCount());
@@ -73,7 +74,7 @@ public class SearchListActivityFragment extends Fragment
 //                    cursor,
 //                    (SearchRecyclerViewAdapter.OnAccountClickListener) getActivity());
 //        }
-        recyclerView.setAdapter(mSearchListAdapter);
+        mRecyclerView.setAdapter(mSearchListAdapter);
         return view;
     }
 

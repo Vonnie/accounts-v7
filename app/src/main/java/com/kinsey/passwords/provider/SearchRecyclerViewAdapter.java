@@ -1,6 +1,5 @@
 package com.kinsey.passwords.provider;
 
-import android.app.SearchManager;
 import android.content.Context;
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
@@ -40,7 +39,7 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
     public SearchRecyclerViewAdapter(Context context,
                                      int id,
                                      Cursor cursor, OnAccountClickListener listener) {
-        Log.d(TAG, "CursorRecyclerViewAdapter: Constructor called");
+        Log.d(TAG, "SearchRecyclerViewAdapter: Constructor called");
         mContext = context;
         mId = id;
 //        Log.d(TAG, "SearchRecyclerViewAdapter: accountId " + mAccountId);
@@ -99,14 +98,15 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
 //
 //
             Cursor cursorAccount;
-            if (mId == -1) {
-                int dbId = mCursor.getInt(mCursor.getColumnIndex(SearchManager.SUGGEST_COLUMN_INTENT_DATA));
-                Log.d(TAG, "onBindViewHolder: dbId " + dbId);
-                cursorAccount = mContext.getContentResolver().query(
-                        AccountsContract.buildIdUri(dbId), null, null, null, null);
-            } else {
-                cursorAccount = mCursor;
-            }
+//            if (mId == -1) {
+//                int dbId = mCursor.getInt(mCursor.getColumnIndex(SearchManager.SUGGEST_COLUMN_INTENT_DATA));
+//                Log.d(TAG, "onBindViewHolder: dbId " + dbId);
+//                cursorAccount = mContext.getContentResolver().query(
+//                        AccountsContract.buildIdUri(dbId), null, null, null, null);
+//            } else {
+//                cursorAccount = mCursor;
+//            }
+            cursorAccount = mCursor;
             Log.d(TAG, "onBindViewHolder: acct count " + cursorAccount.getCount());
             if (cursorAccount.moveToFirst()) {
 //                Log.d(TAG, "onBindViewHolder: account found ");

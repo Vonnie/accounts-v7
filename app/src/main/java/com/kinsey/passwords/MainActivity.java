@@ -6,11 +6,13 @@ import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -46,6 +48,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
+
+import static com.kinsey.passwords.SearchActivity.SEARCH_ACCOUNT;
+import static com.kinsey.passwords.SearchActivity.SEARCH_QUERY;
 
 public class MainActivity extends AppCompatActivity
         implements
@@ -189,7 +194,6 @@ public class MainActivity extends AppCompatActivity
             addEditLayoutScroll.setVisibility(View.GONE);
         }
 
-//        mainFragment
 
         Toast.makeText(this, "Long click on item for more options", Toast.LENGTH_LONG).show();
 
@@ -382,11 +386,12 @@ public class MainActivity extends AppCompatActivity
                 viewAccountsFile();
                 break;
 
-//            case R.id.menumain_search:
-//
-//                searchListRequest();
-//
-//                break;
+            case R.id.menumain_search:
+
+                searchListRequest();
+                requestSearch();
+
+                break;
 
 
 //            case R.id.menumain_rss_top_free_apps:
@@ -1107,6 +1112,13 @@ public class MainActivity extends AppCompatActivity
 //    }
 
 
+    private void requestSearch() {
+        Log.d(TAG, "onPositiveDialogResult: request to rebuild search");
+        Intent detailIntent = new Intent(this, SearchActivity.class);
+        detailIntent.putExtra(SearchActivity.class.getSimpleName(), true);
+        startActivity(detailIntent);
+    }
+
 
     private void searchListRequest() {
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -1120,6 +1132,8 @@ public class MainActivity extends AppCompatActivity
         args.putInt(AppDialog.DIALOG_NEGATIVE_RID, R.string.searchdiag_negative_caption);
         args.putInt(AppDialog.DIALOG_POSITIVE_RID, R.string.searchdiag_positive_caption);
 
+
+        Log.d(TAG, "searchListRequest: ask for db copy");
         newFragment.setArguments(args);
         newFragment.show(fragmentManager, "dialog");
     }
@@ -1440,9 +1454,9 @@ public class MainActivity extends AppCompatActivity
                     suggestsListRequest();
                 }
                 break;
-            case REQUEST_ACCOUNT_EDIT:
-                accountsListRequest(AccountsContract.ACCOUNT_LIST_BY_CORP_NAME);
-                break;
+//            case REQUEST_ACCOUNT_EDIT:
+//                accountsListRequest(AccountsContract.ACCOUNT_LIST_BY_CORP_NAME);
+//                break;
 //            case REQUEST_ACCOUNT_SEARCH:
 //                Log.d(TAG, "onActivityResult: return from search");
 //                break;
@@ -1455,21 +1469,23 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-//    @Override
-//    protected void onResume() {
-//        Log.d(TAG, "onResume: starts");
-//        super.onResume();
-//
-//        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-//        String queryResult = sharedPreferences.getString(SEARCH_QUERY, "");
-//
-//        if (queryResult.length() > 0) {
-//            Log.d(TAG, "onResume: return a value " + queryResult);
-//
-//            int queryResultId = sharedPreferences.getInt(SearchActivity.SEARCH_ACCOUNT, -1);
-//            Log.d(TAG, "onResume: queryResultsId " + queryResultId);
+    @Override
+    protected void onResume() {
+        Log.d(TAG, "onResume: starts");
+        super.onResume();
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        String queryResult = sharedPreferences.getString(SEARCH_QUERY, "");
+
+        if (queryResult.length() > 0) {
+            Log.d(TAG, "onResume: return a value " + queryResult);
+
+            int queryResultId = sharedPreferences.getInt(SEARCH_ACCOUNT, -1);
+            Log.d(TAG, "onResume: queryResultsId " + queryResultId);
+            sharedPreferences.edit().putString(SEARCH_QUERY, "").apply();;
 //            if (queryResultId == -1) {
 //                Intent detailIntent = new Intent(this, SearchListActivity.class);
+//                detailIntent.putExtra(SearchListActivity.class.getSimpleName(), (int)-1);
 //                startActivity(detailIntent);
 //            } else {
 //                resetPreferences();
@@ -1482,30 +1498,31 @@ public class MainActivity extends AppCompatActivity
 //                    Log.d(TAG, "showAccount: account " + account.toString());
 //                }
 //            }
-//
-//
-//
-//
-////            Intent detailIntent = new Intent(this, AccountActivity.class);
-//
-////            detailIntent.putExtra(Account.class.getSimpleName(), account);
-//////            startActivityForResult(detailIntent, AccountsContract.ACCOUNT_ACTION_CHG);
-////            startActivity(detailIntent);
-//
-//
-//        }
-//
-//
-////        onSearchRequested();
-//    }
 
 
-//    private void resetPreferences() {
-//        Log.d(TAG, "resetPreferences: starts");
-//        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-//        sharedPreferences.edit().putString(SEARCH_QUERY, "").apply();
-//        sharedPreferences.edit().putInt(SEARCH_ACCOUNT, -1).apply();
-//    }
+
+
+//            Intent detailIntent = new Intent(this, AccountActivity.class);
+
+//            detailIntent.putExtra(Account.class.getSimpleName(), account);
+////            startActivityForResult(detailIntent, AccountsContract.ACCOUNT_ACTION_CHG);
+//            startActivity(detailIntent);
+
+
+        }
+
+
+//        onSearchRequested();
+    }
+
+
+    private void resetPreferences() {
+        Log.d(TAG, "resetPreferences: starts");
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        sharedPreferences.edit().putString(SEARCH_QUERY, "").apply();
+        sharedPreferences.edit().putInt(SEARCH_ACCOUNT, -1).apply();
+    }
+
     @Override
     public boolean onSearchRequested() {
 //        Log.d(TAG, "onSearchRequested: started");

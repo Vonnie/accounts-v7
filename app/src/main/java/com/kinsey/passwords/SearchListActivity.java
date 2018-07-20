@@ -6,11 +6,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.SearchView;
 
-import com.kinsey.passwords.provider.SearchRecyclerViewAdapter;
-
 public class SearchListActivity extends AppCompatActivity
-        implements SearchListActivityFragment.OnActionListener,
-        SearchRecyclerViewAdapter.OnAccountClickListener {
+        implements SearchListActivityFragment.OnActionListener {
+//        SearchRecyclerViewAdapter.OnAccountClickListener {
     private static final String TAG = "SearchListActivity";
 
     private SearchView mSearchView;
