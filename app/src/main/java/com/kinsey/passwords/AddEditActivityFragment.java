@@ -50,6 +50,8 @@ public class AddEditActivityFragment extends Fragment {
     private TextView mtvOpenDate;
     private TextView mtvActvyDate;
     private TextView mAccountIdTextView;
+    private TextView mAccRefFrom;
+    private TextView mAccRefTo;
     DatePickerDialog picker;
     private OnListenerClicked mListener = null;
     private Account account;
@@ -97,9 +99,32 @@ public class AddEditActivityFragment extends Fragment {
             Log.d(TAG, "canClose: chgs on Notes");
             return false;
         }
+        if (lngOpenDate != account.getOpenLong()) {
+            return false;
+        }
         if (!mSeqTextView.getText().toString().equals(String.valueOf(account.getSequence())) ) {
             Log.d(TAG, "canClose: chgs on sequence");
             return false;
+        }
+        if (mAccRefFrom.getText().toString().equals("") ) {
+            if (account.getRefFrom() != 0) {
+                return false;
+            }
+        } else {
+            if (!mAccRefFrom.getText().toString().equals(String.valueOf(account.getRefFrom()))) {
+                Log.d(TAG, "canClose: chgs on from seq");
+                return false;
+            }
+        }
+        if (mAccRefTo.getText().toString().equals("") ) {
+            if (account.getRefTo() != 0) {
+                return false;
+            }
+        } else {
+            if (!mAccRefTo.getText().toString().equals(String.valueOf(account.getRefTo()))) {
+                Log.d(TAG, "canClose: chgs on from seq");
+                return false;
+            }
         }
 
         return true;
@@ -157,7 +182,10 @@ public class AddEditActivityFragment extends Fragment {
         mtvOpenDate = view.findViewById(R.id.addedit_open_date);
         mtvActvyDate = view.findViewById(R.id.addedit_actvy_date);
         mAccountIdTextView = view.findViewById(R.id.acc_account_id);
+        mAccRefFrom = view.findViewById(R.id.acc_ref_from);
+        mAccRefTo = view.findViewById(R.id.acc_ref_to);
         Button saveButton = view.findViewById(R.id.addedit_save);
+
 //        Button dateButton = view.findViewById(R.id.addedit_btn_date);
 
         Bundle arguments = getArguments();
@@ -166,9 +194,12 @@ public class AddEditActivityFragment extends Fragment {
         if(arguments != null) {
             Log.d(TAG, "onCreateView: retrieving task details.");
 
-            account = (Account) arguments.getSerializable(Account.class.getSimpleName());
-            Log.d(TAG, "onCreateView: " + account);
-            if(account != null) {
+//            int accountId = (int) arguments.getSerializable(Account.class.getSimpleName());
+            int accountId = (int) arguments.getInt(Account.class.getSimpleName(), -1);
+            Log.d(TAG, "onCreateView: " + accountId);
+
+            if(accountId != -1) {
+                account = getAccount(accountId);
                 Log.d(TAG, "onCreateView: Task details found, editing...");
                 mCorpNameTextView.setText(account.getCorpName());
                 mCorpWebsiteTextView.setText(account.getCorpWebsite());
@@ -176,6 +207,16 @@ public class AddEditActivityFragment extends Fragment {
                 mUserEmailTextView.setText(account.getUserEmail());
                 mNoteTextView.setText(account.getNote());
                 mSeqTextView.setText(String.valueOf(account.getSequence()));
+                if (account.getRefFrom() == 0) {
+                    mAccRefFrom.setText("");
+                } else {
+                    mAccRefFrom.setText(String.valueOf(account.getRefFrom()));
+                }
+                if (account.getRefTo() == 0) {
+                    mAccRefTo.setText("");
+                } else {
+                    mAccRefTo.setText(String.valueOf(account.getRefTo()));
+                }
 //                Date dte = new Date(account.getActvyLong());
 //                mCalendar.setTime(dte);
 //                Date openDte = new Date(account.getOpenLong());
@@ -197,6 +238,7 @@ public class AddEditActivityFragment extends Fragment {
                 mMode = FragmentEditMode.ADD;
                 Date dte = new Date();
                 mCalendar.setTime(dte);
+                account = new Account();
             }
         } else {
             account = null;
@@ -204,6 +246,7 @@ public class AddEditActivityFragment extends Fragment {
             mMode = FragmentEditMode.ADD;
             Date dte = new Date();
             mCalendar.setTime(dte);
+            account = new Account();
         }
 
 //        saveButton.setOnClickListener(new View.OnClickListener() {
@@ -302,6 +345,27 @@ public class AddEditActivityFragment extends Fragment {
                 if(!mSeqTextView.getText().toString().equals(account.getSequence())) {
                     values.put(AccountsContract.Columns.SEQUENCE_COL, mSeqTextView.getText().toString());
                 }
+                if(mAccRefFrom.getText().toString().equals("")) {
+                    if (account.getRefFrom() != 0) {
+                        values.put(AccountsContract.Columns.REF_FROM_COL, 0);
+                    }
+                } else {
+//                    Log.d(TAG, "saveEdits: " + mAccRefFrom.getText().toString());
+//                    Log.d(TAG, "saveEdits: " + account.getRefFrom());
+                    if (!mAccRefFrom.getText().toString().equals(account.getRefFrom())) {
+                        values.put(AccountsContract.Columns.REF_FROM_COL, mAccRefFrom.getText().toString());
+                    }
+                }
+                if(mAccRefTo.getText().toString().equals("")) {
+                    if (account.getRefTo() != 0) {
+                        values.put(AccountsContract.Columns.REF_TO_COL, 0);
+                    }
+                } else {
+                    if (!mAccRefTo.getText().toString().equals(account.getRefTo())) {
+                        values.put(AccountsContract.Columns.REF_TO_COL, mAccRefTo.getText().toString());
+                    }
+                }
+
 
                 if (lngOpenDate != account.getOpenLong()) {
                     Log.d(TAG, "onClick: " + lngOpenDate + ":" + account.getOpenLong());
@@ -340,6 +404,16 @@ public class AddEditActivityFragment extends Fragment {
                     values.put(AccountsContract.Columns.CORP_WEBSITE_COL, mCorpWebsiteTextView.getText().toString());
                     values.put(AccountsContract.Columns.USER_NAME_COL, mUserNameTextView.getText().toString());
                     values.put(AccountsContract.Columns.USER_EMAIL_COL, mUserEmailTextView.getText().toString());
+                    if (mAccRefFrom.getText().toString().equals("")) {
+                        values.put(AccountsContract.Columns.REF_FROM_COL, 0);
+                    } else {
+                        values.put(AccountsContract.Columns.REF_FROM_COL, mAccRefFrom.getText().toString());
+                    }
+                    if (mAccRefTo.getText().toString().equals("")) {
+                        values.put(AccountsContract.Columns.REF_TO_COL, 0);
+                    } else {
+                        values.put(AccountsContract.Columns.REF_TO_COL, mAccRefTo.getText().toString());
+                    }
                     values.put(AccountsContract.Columns.NOTE_COL, mNoteTextView.getText().toString());
                     Uri uri = contentResolver.insert(AccountsContract.CONTENT_URI, values);
                     long id = AccountsContract.getId(uri);
@@ -365,7 +439,7 @@ public class AddEditActivityFragment extends Fragment {
 
     }
 
-    private Account getAccount(int id) {
+    public Account getAccount(int id) {
 //        int iId = 0;
         Cursor cursor = getActivity().getContentResolver()
                 .query(AccountsContract.buildIdUri(id), null, null, null, null);
@@ -429,6 +503,20 @@ public class AddEditActivityFragment extends Fragment {
             mUserEmailTextView.setError("User email is invalid format");
             return false;
         }
+
+        if (!mAccRefFrom.getText().toString().equals("") ) {
+            if (!isNumeric(mAccRefFrom)) {
+                mAccRefFrom.setError("If From-Ref is given, must have a numeric value");
+                return false;
+            }
+        }
+
+        if (!mAccRefTo.getText().toString().equals("") ) {
+            if (!isNumeric(mAccRefTo)) {
+                mAccRefTo.setError("If To-Ref is given, must have a numeric value");
+                return false;
+            }
+        }
 //        if (!mRefIdFromTextView.getText().toString().equals("")) {
 //            if (!isIdOnDB(mRefIdFromTextView.getText().toString())) {
 //                mRefIdFromTextView.setError("Reference back id does not exists");
@@ -464,4 +552,19 @@ public class AddEditActivityFragment extends Fragment {
         else
             return false;
     }
+
+    private boolean isNumeric(TextView tv) {
+        String regexStr = "^[0-9]*$";
+
+        if(tv.getText().toString().trim().matches(regexStr))
+        {
+            //write code here for success
+            return true;
+        }
+        else{
+            // write code for failure
+            return false;
+        }
+    }
+
 }

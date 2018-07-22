@@ -2,12 +2,16 @@ package com.kinsey.passwords;
 
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
+import android.app.SearchManager;
+import android.app.SearchableInfo;
 import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -24,8 +28,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -115,6 +121,7 @@ public class MainActivity extends AppCompatActivity
 //    private static AccountPlaceholderFrag2 frag2;
 //    private static AccountPlaceholderFrag3 frag3;
 
+    private SearchView mSearchView;
 
 
     private enum ListHomeType {
@@ -193,6 +200,16 @@ public class MainActivity extends AppCompatActivity
             addEditLayout.setVisibility(View.GONE);
             addEditLayoutScroll.setVisibility(View.GONE);
         }
+
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        String queryResult = sharedPreferences.getString(SEARCH_QUERY, "");
+
+        Log.d(TAG, "sharedPreferences: return a value " + queryResult);
+
+        AccountListActivityFragment listFragment = (AccountListActivityFragment)
+                getSupportFragmentManager().findFragmentById(R.id.fragment);
+        listFragment.setQuery(queryResult);
 
 
         Toast.makeText(this, "Long click on item for more options", Toast.LENGTH_LONG).show();
@@ -316,7 +333,131 @@ public class MainActivity extends AppCompatActivity
 //        } else if (currList == ListHomeType.TOPTVSEASONS) {
 //            menu.findItem(R.id.menumain_rss_top_tv_seasons).setChecked(true);
 //        }
+
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        mSearchView = (SearchView) menu.findItem(R.id.menumain_search).getActionView();
+        SearchableInfo searchableInfo = searchManager.getSearchableInfo(getComponentName());
+        mSearchView.setSearchableInfo(searchableInfo);
+
+        mSearchView.setIconified(false);
+
+        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener(){
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Log.d(TAG, "onQueryTextSubmit: called " + query);
+                mSearchView.clearFocus();
+                Cursor cursor = mSearchView.getSuggestionsAdapter().getCursor();
+                if (cursor.getCount() == 1) {
+                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                    sharedPreferences.edit().putString(SEARCH_QUERY, "").apply();
+                    int accountId = getSearchAccountId(0);
+                    sharedPreferences.edit().putInt(SEARCH_ACCOUNT, accountId).apply();
+                    Log.d(TAG, "onSuggestionClick: finish");
+                    acctEditRequest(accountId);
+                    return true;
+                }
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                sharedPreferences.edit().putString(SEARCH_QUERY, query).apply();
+//                showSuggestions();
+
+//                SearchesContract.cursorSearch = mSearchView.getSuggestionsAdapter().getCursor();
+
+//                Log.d(TAG, "onQueryTextSubmit: #searches " + mSearchView.getSuggestionsAdapter().getCursor().getCount());
+
+                Log.d(TAG, "onQueryTextSubmit: showSearches");
+
+//                showSearches();
+//                finish();
+                AccountListActivityFragment listFragment = (AccountListActivityFragment)
+                        getSupportFragmentManager().findFragmentById(R.id.fragment);
+                listFragment.setQuery(query);
+
+
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+//                Log.d(TAG, "onQueryTextChange: adt " + mSearchView.getSuggestionsAdapter().getCount());
+//                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+//                sharedPreferences.edit().putString(SEARCH_QUERY, newText).apply();
+                return false;
+            }
+
+
+        });
+
+        mSearchView.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+//                Log.d(TAG, "SearchView onClose: starts");
+//                showSuggestions();
+//                finish();
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                sharedPreferences.edit().putString(SEARCH_QUERY, "").apply();
+
+                AccountListActivityFragment listFragment = (AccountListActivityFragment)
+                        getSupportFragmentManager().findFragmentById(R.id.fragment);
+                listFragment.setQuery("");
+
+//                Intent detailIntent = new Intent(this, AccountListActivity.class);
+//                detailIntent.putExtra(Account.class.getSimpleName(), sortorder);
+//                startActivityForResult(detailIntent, REQUEST_ACCOUNTS_LIST);
+
+                return false;
+            }
+        });
+
+
+        mSearchView.setOnSuggestionListener(new SearchView.OnSuggestionListener() {
+            @Override
+            public boolean onSuggestionSelect(int position) {
+                Log.d(TAG, "onSuggestionSelect: position " + position);
+//                showSuggestions();
+                return false;
+            }
+
+            @Override
+            public boolean onSuggestionClick(int position) {
+//                Log.d(TAG, "onSuggestionClick: position " + position);
+//                showSuggestions();
+                int accountId = getSearchAccountId(position);
+                Log.d(TAG, "onSuggestionClick: accountId " + accountId);
+//                showOneSearches(accountId, position);
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                sharedPreferences.edit().putString(SEARCH_QUERY, "").apply();
+                sharedPreferences.edit().putInt(SEARCH_ACCOUNT, accountId).apply();
+                Log.d(TAG, "onSuggestionClick: finish");
+                acctEditRequest(accountId);
+                //                finish();
+
+                return true;
+            }
+        });
+
+        Log.d(TAG, "onCreateOptionsMenu: returned " + true);
+
+
         return true;
+    }
+
+
+    private int getSearchAccountId(int position) {
+//        Log.d(TAG, "showAccount: pos " + position);
+        mSearchView.getSuggestionsAdapter().getCursor().moveToFirst();
+        mSearchView.getSuggestionsAdapter().getCursor().move(position);
+//        Log.d(TAG, "showAccount: " + mSearchView.getSuggestionsAdapter().getCursor().getColumnName(3));
+//        Log.d(TAG, "showAccount: " + mSearchView.getSuggestionsAdapter().getCursor().getString(3));
+//        Log.d(TAG, "showAccount: " + mSearchView.getSuggestionsAdapter().getCursor().getColumnName(5));
+        int dbId = Integer.valueOf(mSearchView.getSuggestionsAdapter().getCursor()
+                .getString(mSearchView.getSuggestionsAdapter().getCursor().getColumnIndex(SearchManager.SUGGEST_COLUMN_INTENT_DATA)));
+//        Log.d(TAG, "showAccount: " + dbId);
+//        String corpName = mSearchView.getSuggestionsAdapter().getCursor()
+//                .getString(mSearchView.getSuggestionsAdapter().getCursor().getColumnIndex(SearchManager.SUGGEST_COLUMN_TEXT_1));
+//        Log.d(TAG, "showAccount: corpName " + corpName);
+
+        return dbId;
+
     }
 
     @Override
@@ -332,7 +473,7 @@ public class MainActivity extends AppCompatActivity
             case R.id.menumain_add:
 //                editAccountRequest(null);
 //                addAccountRequest();
-                acctEditRequest(null);
+                acctEditRequest(-1);
                 break;
 //            case R.id.menumain_showAccounts:
 //                currList = ListHomeType.LISTACCOUNTS;
@@ -386,12 +527,12 @@ public class MainActivity extends AppCompatActivity
                 viewAccountsFile();
                 break;
 
-            case R.id.menumain_search:
-
-                searchListRequest();
-                requestSearch();
-
-                break;
+//            case R.id.menumain_search:
+//
+////                searchListRequest();
+//                requestSearch();
+//
+//                break;
 
 
 //            case R.id.menumain_rss_top_free_apps:
@@ -549,13 +690,13 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onAccountListSelect(Account account) {
         Log.d(TAG, "onAccountListSelect: " + account.getCorpName());
-        accountMode = AccountsContract.ACCOUNT_ACTION_CHG;
+//        accountMode = AccountsContract.ACCOUNT_ACTION_CHG;
 //        Log.d(TAG, "onAccountListSelect: selected pos " + selected_position);
 //        fragList.setSelected_position(selected_position);
 //        accountSelectedPos = selected_position;
 //        setMenuItemEnabled(R.id.menuacct_delete, true);
 //        setMenuItemEnabled(R.id.menuacct_save, false);
-        setMenuItemVisible(R.id.menuacct_save, false);
+//        setMenuItemVisible(R.id.menuacct_save, false);
 //        if (account.getCorpWebsite().equals("")) {
 //            setMenuItemEnabled(R.id.menuacct_internet, false);
 //        } else {
@@ -564,7 +705,7 @@ public class MainActivity extends AppCompatActivity
         this.account = account;
 
         if (mTwoPane) {
-            acctEditRequest(this.account);
+            acctEditRequest(this.account.getId());
         }
 
 //        mSectionsPagerAdapter.destroyItem(mViewPager, frag1Pos, frag1);
@@ -914,17 +1055,19 @@ public class MainActivity extends AppCompatActivity
             mDialog = builder.create();
             mDialog.setCanceledOnTouchOutside(true);
 
-            final TextView tvName = (TextView) messageView.findViewById(R.id.txt_corp_name);
+            final EditText tvName = messageView.findViewById(R.id.txt_corp_name);
             tvName.setText(account.getCorpName());
             TextView tvId = (TextView) messageView.findViewById(R.id.txt_id);
             tvId.setText(String.valueOf("AcctId " + account.getId()));
+            final EditText tvWebsite = messageView.findViewById(R.id.addedit_corp_website);
+            tvWebsite.setText(account.getCorpWebsite());
 
             ImageButton btnEdit = messageView.findViewById(R.id.imgbtn_edit);
             btnEdit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Log.d(TAG, "onClick: for edit");
-                    acctEditRequest(account);
+                    acctEditRequest(account.getId());
                     mDialog.dismiss();
                 }
             });
@@ -935,6 +1078,7 @@ public class MainActivity extends AppCompatActivity
                 public void onClick(View v) {
                     Log.d(TAG, "onClick: for edit");
                     account.setCorpName(tvName.getText().toString());
+                    account.setCorpWebsite(tvWebsite.getText().toString());
                     updateCorp(account);
                     mDialog.dismiss();
                 }
@@ -998,6 +1142,7 @@ public class MainActivity extends AppCompatActivity
         ContentValues values = new ContentValues();
 
         values.put(AccountsContract.Columns.CORP_NAME_COL, account.getCorpName());
+        values.put(AccountsContract.Columns.CORP_WEBSITE_COL, account.getCorpWebsite());
         getContentResolver().update(AccountsContract.buildIdUri(account.getId()), values, null, null);
     }
 
@@ -1139,20 +1284,29 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    private void acctEditRequest(Account acct) {
+    private void acctEditRequest(int accountId) {
         Log.d(TAG, "taskEditRequest: starts");
         Log.d(TAG, "taskEditRequest: in two-pane mode (tablet) " + mTwoPane);
 
+        accountMode = AccountsContract.ACCOUNT_ACTION_CHG;
+        setMenuItemVisible(R.id.menuacct_save, true);
         currFrag = AppFragType.ACCOUNTEDIT;
-        AddEditActivityFragment fragment = new AddEditActivityFragment();
+        AddEditActivityFragment editFragment = new AddEditActivityFragment();
+//        FragmentManager fragmentManager = getSupportFragmentManager();
+//        AddEditActivityFragment editFragment = (AddEditActivityFragment)fragmentManager.findFragmentById(R.id.task_details_container);
 
+//        if (editFragment == null) {
+//            Log.d(TAG, "acctEditRequest: create add/edit");
+//            editFragment = new AddEditActivityFragment();
+//        }
         Bundle arguments = new Bundle();
-        arguments.putSerializable(Account.class.getSimpleName(), acct);
-        fragment.setArguments(arguments);
+//        arguments.putSerializable(Account.class.getSimpleName(), accountId);
+        arguments.putInt(Account.class.getSimpleName(), accountId);
+        editFragment.setArguments(arguments);
 
         Log.d(TAG, "taskEditRequest: twoPaneMode " + mTwoPane);
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.task_details_container, fragment)
+                .replace(R.id.task_details_container, editFragment)
                 .commit();
 
 
@@ -1167,7 +1321,6 @@ public class MainActivity extends AppCompatActivity
             addEditLayoutScroll.setVisibility(View.VISIBLE);
         }
 
-        setMenuItemVisible(R.id.menuacct_save, true);
         Log.d(TAG, "Exiting taskEditRequest");
     }
 
@@ -1472,17 +1625,23 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         Log.d(TAG, "onResume: starts");
-        super.onResume();
 
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        String queryResult = sharedPreferences.getString(SEARCH_QUERY, "");
 
-        if (queryResult.length() > 0) {
-            Log.d(TAG, "onResume: return a value " + queryResult);
+//        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+//        String queryResult = sharedPreferences.getString(SEARCH_QUERY, "");
+//
+//        Log.d(TAG, "onResume: return a value " + queryResult);
 
-            int queryResultId = sharedPreferences.getInt(SEARCH_ACCOUNT, -1);
-            Log.d(TAG, "onResume: queryResultsId " + queryResultId);
-            sharedPreferences.edit().putString(SEARCH_QUERY, "").apply();;
+//        AccountListActivityFragment listFragment = (AccountListActivityFragment)
+//                getSupportFragmentManager().findFragmentById(R.id.fragment);
+//        listFragment.setQuery(queryResult);
+
+
+//        if (queryResult.length() > 0) {
+//
+//            int queryResultId = sharedPreferences.getInt(SEARCH_ACCOUNT, -1);
+//            Log.d(TAG, "onResume: queryResultsId " + queryResultId);
+//            sharedPreferences.edit().putString(SEARCH_QUERY, "").apply();;
 //            if (queryResultId == -1) {
 //                Intent detailIntent = new Intent(this, SearchListActivity.class);
 //                detailIntent.putExtra(SearchListActivity.class.getSimpleName(), (int)-1);
@@ -1509,10 +1668,12 @@ public class MainActivity extends AppCompatActivity
 //            startActivity(detailIntent);
 
 
-        }
+//        }
 
 
 //        onSearchRequested();
+
+        super.onResume();
     }
 
 

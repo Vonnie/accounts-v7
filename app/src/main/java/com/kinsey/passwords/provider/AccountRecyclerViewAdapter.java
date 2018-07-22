@@ -43,6 +43,7 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
     private int accountSelectedPos = -1;
     private int accountSelectedId = -1;
     private boolean accountSelectById = false;
+    private String queryCorp = "";
 
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
@@ -569,6 +570,10 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
 
     public void setAccountSelectById(boolean accountSelectById) {
         this.accountSelectById = accountSelectById;
+    }
+
+    public void setQueryCorp(String queryCorp) {
+        this.queryCorp = queryCorp;
     }
 
     public static class AccountViewHolder extends RecyclerView.ViewHolder {

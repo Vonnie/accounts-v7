@@ -43,14 +43,14 @@ public class SearchActivity extends AppCompatActivity {
 
         Bundle arguments = getIntent().getExtras();
 
-        boolean blnRefresh = (boolean) arguments.getSerializable(SearchActivity.class.getSimpleName());
-
-        if (blnRefresh) {
-            Log.d(TAG, "onCreate: request to refresh search db");
-            loadSearchDB();
-        } else {
-            Log.d(TAG, "onCreate: request to continue");
-        }
+//        boolean blnRefresh = (boolean) arguments.getSerializable(SearchActivity.class.getSimpleName());
+//
+//        if (blnRefresh) {
+//            Log.d(TAG, "onCreate: request to refresh search db");
+//            loadSearchDB();
+//        } else {
+//            Log.d(TAG, "onCreate: request to continue");
+//        }
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -154,28 +154,30 @@ public class SearchActivity extends AppCompatActivity {
             }
         });
 
-//
-//        mSearchView.setOnSuggestionListener(new SearchView.OnSuggestionListener() {
-//            @Override
-//            public boolean onSuggestionSelect(int position) {
-//                Log.d(TAG, "onSuggestionSelect: position " + position);
+
+        mSearchView.setOnSuggestionListener(new SearchView.OnSuggestionListener() {
+            @Override
+            public boolean onSuggestionSelect(int position) {
+                Log.d(TAG, "onSuggestionSelect: position " + position);
+                showSuggestions();
+                return false;
+            }
+
+            @Override
+            public boolean onSuggestionClick(int position) {
+//                Log.d(TAG, "onSuggestionClick: position " + position);
 //                showSuggestions();
-//                return false;
-//            }
-//
-//            @Override
-//            public boolean onSuggestionClick(int position) {
-////                Log.d(TAG, "onSuggestionClick: position " + position);
-////                showSuggestions();
-//                int accountId = showAccount(position);
-//                Log.d(TAG, "onSuggestionClick: accountId " + accountId);
+                int accountId = showAccount(position);
+                Log.d(TAG, "onSuggestionClick: accountId " + accountId);
 //                showOneSearches(accountId, position);
-////                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-////                sharedPreferences.edit().putInt(SEARCH_ACCOUNT, accountId).apply();
-////                finish();
-//                return true;
-//            }
-//        });
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                sharedPreferences.edit().putString(SEARCH_QUERY, "").apply();
+                sharedPreferences.edit().putInt(SEARCH_ACCOUNT, accountId).apply();
+                Log.d(TAG, "onSuggestionClick: finish");
+                finish();
+                return false;
+            }
+        });
 
         Log.d(TAG, "onCreateOptionsMenu: returned " + true);
 

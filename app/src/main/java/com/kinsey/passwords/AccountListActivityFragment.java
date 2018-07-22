@@ -47,6 +47,7 @@ public class AccountListActivityFragment extends Fragment
     RecyclerView mRecyclerView;
     private AccountRecyclerViewAdapter mAccountAdapter; // add adapter reference
     TextView twCurrentTitle;
+    private String queryCorp = "";
 
 //    Loader<Cursor> loader;
 
@@ -239,8 +240,6 @@ public class AccountListActivityFragment extends Fragment
         String sortOrder;
         int sortorderType = mAccountAdapter.getAccountSortorder();
 
-//        String.format("%s ASC", EnergyUseLogEntry._ID
-
         if (sortorderType == AccountsContract.ACCOUNT_LIST_BY_OPEN_DATE) {
             sortOrder = AccountsContract.Columns.OPEN_DATE_COL + " DESC," + AccountsContract.Columns.CORP_NAME_COL + " COLLATE NOCASE ASC";
         } else {
@@ -261,7 +260,8 @@ public class AccountListActivityFragment extends Fragment
         Log.d(TAG, "onCreateLoader: sortorder " + sortOrder);
 //        String sortOrder = AccountsContract.Columns.TASKS_SORTORDER + "," + TasksContract.Columns.TASKS_NAME;
         String strSelect = AccountsContract.Columns.CORP_NAME_COL + " like ?";
-        String[] strSelectArg = {"%corp%"};
+        String[] strSelectArg = {"%" + queryCorp + "%"};
+        Log.d(TAG, "onCreateLoader: " + queryCorp);
         Loader<Cursor> cursor = new CursorLoader(getActivity(),
                 AccountsContract.CONTENT_URI,
                 projectionAcct,
@@ -284,6 +284,17 @@ public class AccountListActivityFragment extends Fragment
         createLoader();
 
     }
+
+    public void setQuery(String query) {
+        mAccountAdapter.setQueryCorp(query);
+        queryCorp = query;
+        Log.d(TAG, "resortFragList: destroy Loader");
+        getLoaderManager().destroyLoader(ACCOUNT_LOADER_ID);
+
+        Log.d(TAG, "resortFragList: createLoader");
+        createLoader();
+    }
+
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
