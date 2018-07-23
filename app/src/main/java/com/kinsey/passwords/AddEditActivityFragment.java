@@ -37,7 +37,8 @@ import java.util.regex.Pattern;
 public class AddEditActivityFragment extends Fragment {
     private static final String TAG = "AddEditActivityFragment";
 
-    private enum FragmentEditMode { EDIT, ADD }
+    private enum FragmentEditMode {EDIT, ADD}
+
     private FragmentEditMode mMode;
 
     private EditText mCorpNameTextView;
@@ -53,15 +54,21 @@ public class AddEditActivityFragment extends Fragment {
     private TextView mAccRefFrom;
     private TextView mAccRefTo;
     DatePickerDialog picker;
-    private OnListenerClicked mListener = null;
     private Account account;
     private Calendar mCalendar;
     private final Calendar cldrOpened = Calendar.getInstance();
-    private long lngOpenDate;
+    private long lngOpenDate = 0l;
+    private boolean blnCorpNameChg = false;
 
+    private OnListenerClicked mListener = null;
     interface OnListenerClicked {
-        void onSaveClicked(int acctId);
-        void onDateClicked(long acctActvyLong);
+        //        void onSaveClicked(int acctId);
+//        void onDateClicked(long acctActvyLong);
+//        void setSaveIcon(boolean setting);
+        void saveComplete();
+        void updateAccount(Account account);
+        void updateNewAccount(Account account);
+        void updateDictCorpName();
     }
 
     private static String pattern_ymd = "yyyy-MM-dd";
@@ -79,35 +86,44 @@ public class AddEditActivityFragment extends Fragment {
 
         Log.d(TAG, "canClose: " + mCorpNameTextView.getText().toString());
         Log.d(TAG, "canClose: " + account.getCorpName());
-        if (!mCorpNameTextView.getText().toString().equals(account.getCorpName()) ) {
+        if (!mCorpNameTextView.getText().toString().equals(account.getCorpName())) {
             Log.d(TAG, "canClose: chgs on Corp Name");
             return false;
         }
-        if (!mCorpWebsiteTextView.getText().toString().equals(account.getCorpWebsite()) ) {
+        if (!mCorpWebsiteTextView.getText().toString().equals(account.getCorpWebsite())) {
             Log.d(TAG, "canClose: chgs on Corp Website");
             return false;
         }
-        if (!mUserNameTextView.getText().toString().equals(account.getUserName()) ) {
+        if (!mUserNameTextView.getText().toString().equals(account.getUserName())) {
             Log.d(TAG, "canClose: chgs on User Name");
             return false;
         }
-        if (!mUserEmailTextView.getText().toString().equals(account.getUserEmail()) ) {
+        if (!mUserEmailTextView.getText().toString().equals(account.getUserEmail())) {
             Log.d(TAG, "canClose: chgs on User Email");
             return false;
         }
-        if (!mNoteTextView.getText().toString().equals(account.getNote()) ) {
+        if (!mNoteTextView.getText().toString().equals(account.getNote())) {
             Log.d(TAG, "canClose: chgs on Notes");
             return false;
         }
         if (lngOpenDate != account.getOpenLong()) {
+            Log.d(TAG, "canClose: open Date " + lngOpenDate + ":" + account.getOpenLong());
             return false;
         }
-        if (!mSeqTextView.getText().toString().equals(String.valueOf(account.getSequence())) ) {
-            Log.d(TAG, "canClose: chgs on sequence");
-            return false;
+        if (mSeqTextView.getText().toString().equals("")) {
+            if (account.getSequence() != 0) {
+                Log.d(TAG, "canClose: " + account.getSequence());
+                return false;
+            }
+        } else {
+            if (!mSeqTextView.getText().toString().equals(String.valueOf(account.getSequence()))) {
+                Log.d(TAG, "canClose: chgs on sequence " + account.getSequence());
+                return false;
+            }
         }
-        if (mAccRefFrom.getText().toString().equals("") ) {
+        if (mAccRefFrom.getText().toString().equals("")) {
             if (account.getRefFrom() != 0) {
+                Log.d(TAG, "canClose: " + account.getRefFrom());
                 return false;
             }
         } else {
@@ -116,8 +132,9 @@ public class AddEditActivityFragment extends Fragment {
                 return false;
             }
         }
-        if (mAccRefTo.getText().toString().equals("") ) {
+        if (mAccRefTo.getText().toString().equals("")) {
             if (account.getRefTo() != 0) {
+                Log.d(TAG, "canClose: " + account.getRefTo());
                 return false;
             }
         } else {
@@ -127,6 +144,7 @@ public class AddEditActivityFragment extends Fragment {
             }
         }
 
+        Log.d(TAG, "canClose: can close, no unapplied changes");
         return true;
     }
 
@@ -137,9 +155,9 @@ public class AddEditActivityFragment extends Fragment {
 
         // Activities containing this fragment must implement it's callbacks.
         Activity activity = getActivity();
-        if(!(activity instanceof OnListenerClicked)) {
+        if (!(activity instanceof OnListenerClicked)) {
             throw new ClassCastException(activity.getClass().getSimpleName()
-                    + " must implement AddEditActivityFragment.OnSaveClicked interface");
+                    + " must implement AddEditActivityFragment.OnListenerClicked interface");
         }
         mListener = (OnListenerClicked) activity;
     }
@@ -147,19 +165,25 @@ public class AddEditActivityFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        ActionBar actionBar = ((AppCompatActivity)getActivity()).getSupportActionBar();
-        if(actionBar != null) {
+        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
     }
+
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+//        mListener.setSaveIcon(true);
+//    }
 
     @Override
     public void onDetach() {
         Log.d(TAG, "onDetach: starts");
         super.onDetach();
         mListener = null;
-        ActionBar actionBar = ((AppCompatActivity)getActivity()).getSupportActionBar();
-        if(actionBar != null) {
+        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(false);
         }
 
@@ -191,14 +215,14 @@ public class AddEditActivityFragment extends Fragment {
         Bundle arguments = getArguments();
         mCalendar = new GregorianCalendar();
 
-        if(arguments != null) {
+        if (arguments != null) {
             Log.d(TAG, "onCreateView: retrieving task details.");
 
 //            int accountId = (int) arguments.getSerializable(Account.class.getSimpleName());
             int accountId = (int) arguments.getInt(Account.class.getSimpleName(), -1);
             Log.d(TAG, "onCreateView: " + accountId);
 
-            if(accountId != -1) {
+            if (accountId != -1) {
                 account = getAccount(accountId);
                 if (account == null) {
                     Toast.makeText(getActivity(), "edit account not aligned with account database",
@@ -261,6 +285,11 @@ public class AddEditActivityFragment extends Fragment {
 //                saveEdits();
 //            }
 //        });
+        if (mMode == FragmentEditMode.ADD) {
+            Log.d(TAG, "onCreateView: to Add");
+        } else {
+            Log.d(TAG, "onCreateView: to Chg");
+        }
         Log.d(TAG, "onCreateView: Exiting...");
 
 //        mOpenDate.setInputType(InputType.TYPE_NULL);
@@ -291,6 +320,7 @@ public class AddEditActivityFragment extends Fragment {
             }
         });
 
+
 //        dateButton.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
@@ -303,9 +333,16 @@ public class AddEditActivityFragment extends Fragment {
         return view;
     }
 
+//    @Override
+//    public void onDestroyView() {
+//        mListener.setSaveIcon(false);
+//        super.onDestroyView();
+//    }
+
     public int getAcctId() {
         return account.getId();
     }
+
     public void saveEdits() {
         // Update the database if at least one field has changed.
         // - There's no need to hit the database unless this has happened.
@@ -327,30 +364,31 @@ public class AddEditActivityFragment extends Fragment {
 
         switch (mMode) {
             case EDIT:
-                if(account == null) {
+                if (account == null) {
                     // remove lint warnings, will never execute
                     break;
                 }
                 Log.d(TAG, "onClick: " + account);
-                if(!mCorpNameTextView.getText().toString().equals(account.getCorpName())) {
+                if (!mCorpNameTextView.getText().toString().equals(account.getCorpName())) {
+                    blnCorpNameChg = true;
                     values.put(AccountsContract.Columns.CORP_NAME_COL, mCorpNameTextView.getText().toString());
                 }
-                if(!mCorpWebsiteTextView.getText().toString().equals(account.getCorpWebsite())) {
+                if (!mCorpWebsiteTextView.getText().toString().equals(account.getCorpWebsite())) {
                     values.put(AccountsContract.Columns.CORP_WEBSITE_COL, mCorpWebsiteTextView.getText().toString());
                 }
-                if(!mUserNameTextView.getText().toString().equals(account.getUserName())) {
+                if (!mUserNameTextView.getText().toString().equals(account.getUserName())) {
                     values.put(AccountsContract.Columns.USER_NAME_COL, mUserNameTextView.getText().toString());
                 }
-                if(!mUserEmailTextView.getText().toString().equals(account.getUserEmail())) {
+                if (!mUserEmailTextView.getText().toString().equals(account.getUserEmail())) {
                     values.put(AccountsContract.Columns.USER_EMAIL_COL, mUserEmailTextView.getText().toString());
                 }
-                if(!mNoteTextView.getText().toString().equals(account.getNote())) {
+                if (!mNoteTextView.getText().toString().equals(account.getNote())) {
                     values.put(AccountsContract.Columns.NOTE_COL, mNoteTextView.getText().toString());
                 }
-                if(!mSeqTextView.getText().toString().equals(account.getSequence())) {
+                if (!mSeqTextView.getText().toString().equals(account.getSequence())) {
                     values.put(AccountsContract.Columns.SEQUENCE_COL, mSeqTextView.getText().toString());
                 }
-                if(mAccRefFrom.getText().toString().equals("")) {
+                if (mAccRefFrom.getText().toString().equals("")) {
                     if (account.getRefFrom() != 0) {
                         values.put(AccountsContract.Columns.REF_FROM_COL, 0);
                     }
@@ -361,7 +399,7 @@ public class AddEditActivityFragment extends Fragment {
                         values.put(AccountsContract.Columns.REF_FROM_COL, mAccRefFrom.getText().toString());
                     }
                 }
-                if(mAccRefTo.getText().toString().equals("")) {
+                if (mAccRefTo.getText().toString().equals("")) {
                     if (account.getRefTo() != 0) {
                         values.put(AccountsContract.Columns.REF_TO_COL, 0);
                     }
@@ -392,16 +430,21 @@ public class AddEditActivityFragment extends Fragment {
                     account = getAccount(account.getId());
                     Log.d(TAG, "onClick: " + account);
                     Log.d(TAG, "onClick: " + account.getOpenLong());
+                    mListener.updateAccount(account);
+                    if (blnCorpNameChg) {
+                        mListener.updateDictCorpName();
+                        blnCorpNameChg = false;
+                    }
                     Toast.makeText(getActivity(),
                             values.size() - 1 + " changed columns for account " + account.getCorpName(),
-                            Toast.LENGTH_SHORT).show();
+                            Toast.LENGTH_LONG).show();
                 } else {
                     Toast.makeText(getActivity(), "no changes detected",
                             Toast.LENGTH_SHORT).show();
                 }
                 break;
             case ADD:
-                if(mCorpNameTextView.length()>0) {
+                if (mCorpNameTextView.length() > 0) {
                     Log.d(TAG, "onClick: adding new task");
                     values.put(AccountsContract.Columns.PASSPORT_ID_COL,
                             String.valueOf(getMaxValue(AccountsContract.Columns.PASSPORT_ID_COL)));
@@ -409,6 +452,9 @@ public class AddEditActivityFragment extends Fragment {
                     values.put(AccountsContract.Columns.CORP_WEBSITE_COL, mCorpWebsiteTextView.getText().toString());
                     values.put(AccountsContract.Columns.USER_NAME_COL, mUserNameTextView.getText().toString());
                     values.put(AccountsContract.Columns.USER_EMAIL_COL, mUserEmailTextView.getText().toString());
+                    if (!mSeqTextView.getText().toString().equals("")) {
+                        values.put(AccountsContract.Columns.SEQUENCE_COL, mSeqTextView.getText().toString());
+                    }
                     if (mAccRefFrom.getText().toString().equals("")) {
                         values.put(AccountsContract.Columns.REF_FROM_COL, 0);
                     } else {
@@ -420,14 +466,21 @@ public class AddEditActivityFragment extends Fragment {
                         values.put(AccountsContract.Columns.REF_TO_COL, mAccRefTo.getText().toString());
                     }
                     values.put(AccountsContract.Columns.NOTE_COL, mNoteTextView.getText().toString());
+
+                    if (lngOpenDate != 0) {
+                        values.put(AccountsContract.Columns.OPEN_DATE_COL, lngOpenDate);
+                    }
+                    values.put(AccountsContract.Columns.ACTVY_DATE_COL, System.currentTimeMillis());
+
                     Uri uri = contentResolver.insert(AccountsContract.CONTENT_URI, values);
                     long id = AccountsContract.getId(uri);
-                    account = getAccount((int)id);
+                    account = getAccount((int) id);
                     Log.d(TAG, "onClick: " + account);
                     Log.d(TAG, "onClick: " + account.getOpenLong());
+                    mListener.updateNewAccount(account);
                     Toast.makeText(getActivity(),
                             "New account " + account.getCorpName() + " added",
-                            Toast.LENGTH_SHORT).show();
+                            Toast.LENGTH_LONG).show();
 //                    if(mListener != null) {
 //                        mListener.onSaveClicked(account.getId());
 //                    }
@@ -436,6 +489,7 @@ public class AddEditActivityFragment extends Fragment {
 
                 break;
         }
+        mListener.saveComplete();
         Log.d(TAG, "onClick: Done editing");
 
 //                if(mListener != null) {
@@ -480,10 +534,10 @@ public class AddEditActivityFragment extends Fragment {
     }
 
 
-
     private boolean verifiedAccount() {
         if (mCorpNameTextView.getText().toString().equals("")) {
             mCorpNameTextView.setError("Corporation name is required");
+            mCorpNameTextView.requestFocus();
 //            Toast.makeText(getActivity(),
 //                    "Corporation name is required",
 //                    Toast.LENGTH_LONG).show();
@@ -498,27 +552,40 @@ public class AddEditActivityFragment extends Fragment {
         }
         if (mUserNameTextView.getText().toString().equals("")) {
             mUserNameTextView.setError("User name is required");
+            mUserNameTextView.requestFocus();
             return false;
         }
         if (mUserEmailTextView.getText().toString().equals("")) {
             mUserEmailTextView.setError("User email is required");
+            mUserEmailTextView.requestFocus();
             return false;
         }
         if (!isEmailValid(mUserEmailTextView.getText().toString())) {
             mUserEmailTextView.setError("User email is invalid format");
+            mUserEmailTextView.requestFocus();
             return false;
         }
 
-        if (!mAccRefFrom.getText().toString().equals("") ) {
+        if (!mAccRefFrom.getText().toString().equals("")) {
             if (!isNumeric(mAccRefFrom)) {
                 mAccRefFrom.setError("If From-Ref is given, must have a numeric value");
+                mAccRefFrom.requestFocus();
+                return false;
+            } else if (!isOnDB(mAccRefFrom.getText().toString())) {
+                mAccRefFrom.requestFocus();
+                mAccRefFrom.setError("From-Ref not an ID with Accounts Database");
                 return false;
             }
         }
 
-        if (!mAccRefTo.getText().toString().equals("") ) {
+        if (!mAccRefTo.getText().toString().equals("")) {
             if (!isNumeric(mAccRefTo)) {
                 mAccRefTo.setError("If To-Ref is given, must have a numeric value");
+                mAccRefTo.requestFocus();
+                return false;
+            } else if (!isOnDB(mAccRefTo.getText().toString())) {
+                mAccRefTo.requestFocus();
+                mAccRefTo.setError("To-Ref not an ID with Accounts Database");
                 return false;
             }
         }
@@ -561,15 +628,30 @@ public class AddEditActivityFragment extends Fragment {
     private boolean isNumeric(TextView tv) {
         String regexStr = "^[0-9]*$";
 
-        if(tv.getText().toString().trim().matches(regexStr))
-        {
+        if (tv.getText().toString().trim().matches(regexStr)) {
             //write code here for success
             return true;
-        }
-        else{
+        } else {
             // write code for failure
             return false;
         }
     }
 
+    private boolean isOnDB(String strId) {
+        Log.d(TAG, "isOnDB: strId " + strId);
+        int id = Integer.parseInt(strId);
+        Cursor cursorSearch = getActivity().getContentResolver().query(
+                AccountsContract.buildIdUri(id), null, null, null, null);
+
+
+        if (cursorSearch.getCount() == 0) {
+
+            return false;
+        }
+
+        return true;
+
+    }
+
 }
+

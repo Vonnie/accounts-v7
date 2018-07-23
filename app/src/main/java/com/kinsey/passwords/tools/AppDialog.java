@@ -29,6 +29,7 @@ public class AppDialog extends DialogFragment {
     public static final int DIALOG_YES_NO = 1;
     public static final int DIALOG_ACCOUNT_LIST_OPTIONS = 2;
     public static final int DIALOG_ACCOUNT_FILE_OPTIONS = 3;
+    public static final int DIALOG_OK = 4;
 
     public static final int DIALOG_ID_CONFIRM_DELETE_ACCOUNT = 1;
     public static final int DIALOG_ID_REQUEST_GEN_PASSWORD_LENGTH = 2;
@@ -40,6 +41,8 @@ public class AppDialog extends DialogFragment {
     public static final int DIALOG_ID_CANCEL_EDIT = 9;
     public static final int DIALOG_ID_CANCEL_EDIT_UP = 10;
     public static final int DIALOG_ID_LEAVE_APP = 11;
+    public static final int DIALOG_ID_EDITS_APPLIED = 12;
+    public static final int DIALOG_ID_EXPORT_FILENAME = 13;
 
 
     public static final int DIALOG_ACCT_LIST_CORP_NAME = 0;
@@ -224,6 +227,25 @@ public class AppDialog extends DialogFragment {
                                         mDialogEvents.onActionRequestDialogResult(dialogId, arguments, which);
                                     }
                                 });
+                break;
+            }
+            case DIALOG_OK: {
+                builder.setTitle(messageString);
+                positiveStringId = arguments.getInt(DIALOG_POSITIVE_RID);
+                if (positiveStringId == 0) {
+                    positiveStringId = R.string.ok;
+                }
+
+                builder.setMessage(subMessageString)
+                        .setPositiveButton(positiveStringId, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int which) {
+                                // callback positive result method
+                                if (mDialogEvents != null) {
+                                    mDialogEvents.onPositiveDialogResult(dialogId, arguments);
+                                }
+                            }
+                        });
                 break;
             }
             default:

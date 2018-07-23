@@ -17,12 +17,6 @@
         app:showAsAction="ifRoom" />
     <!--android:icon="@drawable/selector_search"-->
     <item
-        android:id="@+id/menumain_about"
-        android:icon="@android:drawable/ic_menu_info_details"
-        android:orderInCategory="101"
-        android:title="@string/menuacct_about"
-        app:showAsAction="ifRoom" />
-    <item
         android:id="@+id/menumain_add"
         android:icon="@drawable/selector_add"
         android:orderInCategory="102"
@@ -53,6 +47,12 @@
         android:title="@string/menu_save"
         app:showAsAction="ifRoom" />
     <item
+        android:id="@+id/menumain_about"
+        android:icon="@android:drawable/ic_menu_info_details"
+        android:orderInCategory="104"
+        android:title="@string/menuacct_about"
+        app:showAsAction="ifRoom" />
+    <item
         android:id="@+id/menumain_search_setting"
         android:orderInCategory="105"
         android:title="Search Setting"
@@ -61,7 +61,7 @@
     <item
         android:id="@+id/menumain_ifSearch"
         android:orderInCategory="118"
-        android:title="Search Selected"
+        android:title="List by Search"
         app:actionViewClass="android.widget.CheckBox"
         android:checkable="true"
         app:showAsAction="never" />

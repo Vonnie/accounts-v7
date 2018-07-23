@@ -20,6 +20,9 @@ import android.widget.Toast;
 
 import com.kinsey.passwords.items.Account;
 import com.kinsey.passwords.items.AccountsContract;
+import com.kinsey.passwords.items.SearchesContract;
+import com.kinsey.passwords.provider.AccountSearchLoaderCallbacks;
+import com.kinsey.passwords.tools.AppDialog;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -34,10 +37,13 @@ import java.util.List;
 import static com.kinsey.passwords.MainActivity.DEFAULT_APP_DIRECTORY;
 import static com.kinsey.passwords.MainActivity.format_ymdtime;
 
-public class FileViewActivity extends AppCompatActivity {
+public class FileViewActivity extends AppCompatActivity
+    implements  AppDialog.DialogEvents {
+
     private static final String TAG = "FileViewActivity";
 
     FileViewActivityFragment fvFragment;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,6 +131,11 @@ public class FileViewActivity extends AppCompatActivity {
                 ImportAccountDB();
                 break;
 
+            case R.id.vw_filename:
+                Log.d(TAG, "onOptionsItemSelected: Export");
+                showFilename();
+                break;
+
             case android.R.id.home:
                 Log.d(TAG, "onOptionsItemSelected: home button pressed");
 
@@ -133,6 +144,20 @@ public class FileViewActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private void showFilename() {
+        Log.d(TAG, "showFilename: " + MainActivity.DEFAULT_APP_DIRECTORY + "/accounts.json");
+        AppDialog dialog = new AppDialog();
+        Bundle args = new Bundle();
+        args.putInt(AppDialog.DIALOG_ID, AppDialog.DIALOG_ID_EXPORT_FILENAME);
+        args.putInt(AppDialog.DIALOG_TYPE, AppDialog.DIALOG_OK);
+        args.putString(AppDialog.DIALOG_MESSAGE, getString(R.string.confirmdiag_export_filename));
+        args.putString(AppDialog.DIALOG_SUB_MESSAGE, MainActivity.DEFAULT_APP_DIRECTORY + "/accounts.json");
+        args.putInt(AppDialog.DIALOG_POSITIVE_RID, R.string.ok);
+
+        dialog.setArguments(args);
+        dialog.show(getSupportFragmentManager(), null);
+
+    }
     private void shareExport() {
 
         Intent emailintent = new Intent(Intent.ACTION_SEND);
@@ -366,8 +391,12 @@ public class FileViewActivity extends AppCompatActivity {
             e.printStackTrace();
             msg = "import exception";
         }
+
+
         Toast.makeText(this,
                 msg, Toast.LENGTH_LONG).show();
+
+        loadSearchDB();
 
 //        FragmentManager fragmentManager = getSupportFragmentManager();
 //        AppDialog newFragment = AppDialog.newInstance();
@@ -592,4 +621,47 @@ public class FileViewActivity extends AppCompatActivity {
     }
 
 
+
+
+    private void loadSearchDB() {
+        deleteAllSearchItems();
+        AccountSearchLoaderCallbacks loaderAcctCallbacks = new AccountSearchLoaderCallbacks(this);
+        getLoaderManager().restartLoader(MainActivity.SEARCH_LOADER_ID, null, loaderAcctCallbacks);
+        Toast.makeText(this,
+                "Search Dictionary DB built",
+                Toast.LENGTH_LONG).show();
+
+    }
+
+
+    private void deleteAllSearchItems() {
+//		String selectionClause = SearchManager.SUGGEST_COLUMN_FLAGS + " = ?";
+//		String[] selectionArgs = { "account" };
+//        Log.d(TAG, "deleteAllSuggestions: delUri " + SearchesContract.CONTENT_URI_TRUNCATE);
+        getContentResolver().delete(
+                SearchesContract.CONTENT_URI_TRUNCATE,
+                null, null);
+
+    }
+
+
+    @Override
+    public void onPositiveDialogResult(int dialogId, Bundle args) {
+
+    }
+
+    @Override
+    public void onNegativeDialogResult(int dialogId, Bundle args) {
+
+    }
+
+    @Override
+    public void onActionRequestDialogResult(int dialogId, Bundle args, int which) {
+
+    }
+
+    @Override
+    public void onDialogCancelled(int dialogId) {
+
+    }
 }

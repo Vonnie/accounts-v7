@@ -56,7 +56,10 @@
     <string name="confirmdiag_ask_abandon_negative_caption">No, continue edit</string>
     <string name="confirmdiag_leave_warning">Leave Warning</string>
     <string name="confirmdiag_leave_warning_sub_message">Do you want to leave editing without applying changes.</string>
+    <string name="confirmdiag_edits">Edit Apply Complete</string>
+    <string name="confirmdiag_edits_sub_message">Edits are applied to the account</string>
     <string name="confirmdiag_leave_app_warning_sub_message">Do you want to leave app.</string>
+    <string name="confirmdiag_export_filename">Export Filename</string>
     <string name="confirmdiag_leave_positive_caption">Yes, leave app</string>
     <string name="confirmdiag_leave_negative_caption">No, continue with app</string>
     <string name="confirmdiag_leave_edit_warning_sub_message">Do you want to leave editing without applying changes.</string>
@@ -81,10 +84,14 @@
         \n\nThis app tracks your accounts, has sorted lists, search of accounts, suggests 8 or 10 character passwords.
         \n\nKeeping passwords electronically, even if encrypted, may leave you open to have your credentials stolen.
         <em>Important:</em> Having an electronic copy (from a file or the app&quot;s database) with the credentials of company, user name, and password would highly exposed your accounts to hackers.
+    </string>
+    <string name="home_message_text2">
         \nFor this security reason, the passwords are not saved on a file or database. This app keeps account information excluding passwords. Your action is to manually tie together using the account id from this app to the written list of account id and password value.
-        \nTip: Use the export as the backup of your app data. If the databases is uninstalled, import of the previously exported file. Share exported file to email or Dropbox.
+        \nTip: Use the export as the backup of your app data. If app is uninstalled, import exported file.
         \nPasswords are generated with a capital letter, a number, and all letters are either from left or right-hand keyboard keys.
         \nUse the menu to add an account, see a account list, search accounts, generate passwords.
+    </string>
+    <string name="home_message_text3">
         \n\nImportant note:
         Backup your data, by export to a file. This file goes to your storage. When you view this exported data, it shows where it is located. Also, it gives an option to send to email or dropbox. This accessed on Account List, then select at the bottom for a list, to request View Exported Accounts list
         Personally, I like to send to my dropbox. Just in case database was wiped out, Use this import to restore data. Make sure to keep it up-to-date.
@@ -147,7 +154,7 @@
     <string name="accedit_username_label">User Name</string>
     <string name="accedit_user_email_label">User Email</string>
     <string name="accedit_open_date_label">Open Date, click to chg</string>
-    <string name="btn_open_date_label">Select Date</string>
+    <string name="btn_open_date_label">Select Open Date</string>
     <string name="accedit_sort_seq_label">Custom Sort Seq</string>
     <string name="accedit_from_seq_label">Id from another acct</string>
     <string name="accedit_to_seq">Id to another acct</string>

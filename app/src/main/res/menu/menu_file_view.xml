@@ -12,5 +12,9 @@
         android:orderInCategory="101"
         android:title="@string/menuvw_export"
         app:showAsAction="never" />
-
+    <item
+        android:id="@+id/vw_filename"
+        android:orderInCategory="101"
+        android:title="Filename"
+        app:showAsAction="never" />
 </menu>

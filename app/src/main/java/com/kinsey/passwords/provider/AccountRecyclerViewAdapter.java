@@ -94,28 +94,28 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
 
     @Override
     public AccountViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        Log.d(TAG, "onCreateViewHolder: new view requested " + viewType);
+//        Log.d(TAG, "onCreateViewHolder: new view requested " + viewType);
         View view;
 //        Log.d(TAG, "AccountRecyclerViewAdapter: cursor " + mCursor.getCount());
         switch (accountSortorder) {
             case AccountsContract.ACCOUNT_LIST_BY_CORP_NAME:
-                Log.d(TAG, "onCreateViewHolder: list by corp name");
+//                Log.d(TAG, "onCreateViewHolder: list by corp name");
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_account_items, parent, false);
                 break;
             case AccountsContract.ACCOUNT_LIST_BY_OPEN_DATE:
-                Log.d(TAG, "onCreateViewHolder: list by open date");
+//                Log.d(TAG, "onCreateViewHolder: list by open date");
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_account_items_open_date, parent, false);
                 break;
             case AccountsContract.ACCOUNT_LIST_BY_PASSPORT_ID:
-                Log.d(TAG, "onCreateViewHolder: list by acct id");
+//                Log.d(TAG, "onCreateViewHolder: list by acct id");
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_account_items, parent, false);
                 break;
             case AccountsContract.ACCOUNT_LIST_BY_SEQUENCE:
-                Log.d(TAG, "onCreateViewHolder: list by user seq");
+//                Log.d(TAG, "onCreateViewHolder: list by user seq");
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_account_items_user_seq, parent, false);
                 break;
             default:
-                Log.d(TAG, "onCreateViewHolder: list by default");
+//                Log.d(TAG, "onCreateViewHolder: list by default");
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_account_items, parent, false);
         }
 
@@ -171,7 +171,7 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
             }
 
             final Account account = AccountsContract.getAccountFromCursor(mCursor);
-            Log.d(TAG, "onBindViewHolder: " + account.getPassportId());
+//            Log.d(TAG, "onBindViewHolder: " + account.getPassportId());
 
             if (accountSelectById) {
                 if (accountSelectedId == account.getId()) {
@@ -184,7 +184,7 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
                     accountSelectById = false;
                     accountSelectedId = -1;
 
-                    Log.d(TAG, "onBindViewHolder: accountSelectById");
+                    Log.d(TAG, "onBindViewHolder: accountSelectById " + accountSelectedId);
 
 //                    if (resetRow) {
 //                        holder.itemView.setBackgroundColor(Color.TRANSPARENT);

@@ -304,6 +304,18 @@ public class AccountListActivityFragment extends Fragment
     }
 
 
+
+    public void setAcctId(int acctId) {
+
+        mAccountAdapter.setAccountSelectedId(acctId);
+        mAccountAdapter.setAccountSelectById(true);
+//        mAccountAdapter.setPosById(acctId);
+    }
+
+//    public int getAccountSelectedPos() {
+//        return mAccountAdapter.getAccountSelectedPos();
+//    }
+
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         Log.d(TAG, "onLoadFinished: starts");
@@ -347,18 +359,6 @@ public class AccountListActivityFragment extends Fragment
         context.getContentResolver().delete(AccountsContract.buildIdUri((long)accountId), null, null);
 //        getLoaderManager().restartLoader(ACCOUNT_LOADER_ID, null, this);
         resetSelectItem();
-    }
-
-
-    public void setAcctId(int acctId) {
-
-            mAccountAdapter.setAccountSelectedId(acctId);
-            mAccountAdapter.setAccountSelectById(true);
-            mAccountAdapter.setPosById(acctId);
-    }
-
-    public int getAccountSelectedPos() {
-        return mAccountAdapter.getAccountSelectedPos();
     }
 
     public void resetSelectItem() {
