@@ -200,6 +200,11 @@ public class AddEditActivityFragment extends Fragment {
 
             if(accountId != -1) {
                 account = getAccount(accountId);
+                if (account == null) {
+                    Toast.makeText(getActivity(), "edit account not aligned with account database",
+                            Toast.LENGTH_SHORT).show();
+                    return view;
+                }
                 Log.d(TAG, "onCreateView: Task details found, editing...");
                 mCorpNameTextView.setText(account.getCorpName());
                 mCorpWebsiteTextView.setText(account.getCorpWebsite());

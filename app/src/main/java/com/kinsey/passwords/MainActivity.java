@@ -37,7 +37,9 @@ import android.widget.Toast;
 
 import com.kinsey.passwords.items.Account;
 import com.kinsey.passwords.items.AccountsContract;
+import com.kinsey.passwords.items.SearchesContract;
 import com.kinsey.passwords.items.Suggest;
+import com.kinsey.passwords.provider.AccountSearchLoaderCallbacks;
 import com.kinsey.passwords.provider.DatePickerFragment;
 import com.kinsey.passwords.provider.FeedAdapter;
 import com.kinsey.passwords.provider.ParseApplications;
@@ -55,8 +57,8 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
-import static com.kinsey.passwords.SearchActivity.SEARCH_ACCOUNT;
-import static com.kinsey.passwords.SearchActivity.SEARCH_QUERY;
+//import static com.kinsey.passwords.SearchActivity.SEARCH_ACCOUNT;
+//import static com.kinsey.passwords.SearchActivity.SEARCH_QUERY;
 
 public class MainActivity extends AppCompatActivity
         implements
@@ -109,11 +111,17 @@ public class MainActivity extends AppCompatActivity
 
     public static int accountSelectedPos = -1;
 
+    private final String APP_RESUMED = "Resumed";
+    private final String SEARCH_QUERY = "Query";
+    private final String SEARCH_ONE_ITEM = "SearchedOneItem";
+
     Menu menu;
     boolean isUserPaging = true;
     public static Account account = new Account();
     private AlertDialog mDialog = null;
     private GregorianCalendar mCalendar;
+    private boolean appMsgSent = false;
+    private boolean isResumed = false;
 
     private int accountMode = AccountsContract.ACCOUNT_ACTION_ADD;
 //    private AccountListActivityFragment fragList;
@@ -202,6 +210,12 @@ public class MainActivity extends AppCompatActivity
         }
 
 
+        Log.d(TAG, "onCreate: isResumed " + isResumed);
+        if (mSearchView != null) {
+            Log.d(TAG, "onCreate: activated " + mSearchView.isActivated());
+        }
+
+
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         String queryResult = sharedPreferences.getString(SEARCH_QUERY, "");
 
@@ -212,7 +226,19 @@ public class MainActivity extends AppCompatActivity
         listFragment.setQuery(queryResult);
 
 
-        Toast.makeText(this, "Long click on item for more options", Toast.LENGTH_LONG).show();
+        if (queryResult.equals("")) {
+            Toast.makeText(this, "Long click on item for more options", Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(this, "List from search on " + queryResult, Toast.LENGTH_LONG).show();
+        }
+
+//        if (appMsgSent) {
+//
+//        } else {
+//            Log.d(TAG, "onCreate: send a msg");
+//            appMsgSent = true;
+//            searchListRequest();
+//        }
 
 //        resetPreferences();
 
@@ -334,26 +360,50 @@ public class MainActivity extends AppCompatActivity
 //            menu.findItem(R.id.menumain_rss_top_tv_seasons).setChecked(true);
 //        }
 
+        Log.d(TAG, "onCreateOptionsMenu: search starting");
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         mSearchView = (SearchView) menu.findItem(R.id.menumain_search).getActionView();
         SearchableInfo searchableInfo = searchManager.getSearchableInfo(getComponentName());
         mSearchView.setSearchableInfo(searchableInfo);
 
-        mSearchView.setIconified(false);
+        mSearchView.setIconified(true);
+//        mSearchView.clearFocus();
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        String queryResult = sharedPreferences.getString(SEARCH_QUERY, "");
+
+        if (queryResult.equals("")) {
+            setMenuItemChecked(R.id.menumain_ifSearch, false);
+        } else {
+            setMenuItemChecked(R.id.menumain_ifSearch, true);
+        }
+
+
+//        Log.d(TAG, "onCreateOptionsMenu: activated " + mSearchView.isActivated());
 
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener(){
             @Override
             public boolean onQueryTextSubmit(String query) {
                 Log.d(TAG, "onQueryTextSubmit: called " + query);
                 mSearchView.clearFocus();
+                AccountListActivityFragment listFragment = (AccountListActivityFragment)
+                        getSupportFragmentManager().findFragmentById(R.id.fragment);
                 Cursor cursor = mSearchView.getSuggestionsAdapter().getCursor();
                 if (cursor.getCount() == 1) {
                     SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                     sharedPreferences.edit().putString(SEARCH_QUERY, "").apply();
                     int accountId = getSearchAccountId(0);
-                    sharedPreferences.edit().putInt(SEARCH_ACCOUNT, accountId).apply();
-                    Log.d(TAG, "onSuggestionClick: finish");
-                    acctEditRequest(accountId);
+                    Log.d(TAG, "onQueryTextSubmit: accountId " + accountId);
+                    sharedPreferences.edit().putInt(SEARCH_ONE_ITEM, accountId).apply();
+                    Log.d(TAG, "onQueryTextSubmit: search select id " + accountId);
+                    listFragment.setQuery("");
+                    listFragment.setAcctId(accountId);
+                    int pos = listFragment.getAccountSelectedPos();
+                    Log.d(TAG, ": pos " + pos);
+                    if (pos == -1) {
+                        searchListRequest();
+                    } else {
+                        acctEditRequest(accountId);
+                    }
                     return true;
                 }
                 SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -368,9 +418,7 @@ public class MainActivity extends AppCompatActivity
 
 //                showSearches();
 //                finish();
-                AccountListActivityFragment listFragment = (AccountListActivityFragment)
-                        getSupportFragmentManager().findFragmentById(R.id.fragment);
-                listFragment.setQuery(query);
+//                listFragment.setQuery(query);
 
 
                 return false;
@@ -381,6 +429,10 @@ public class MainActivity extends AppCompatActivity
 //                Log.d(TAG, "onQueryTextChange: adt " + mSearchView.getSuggestionsAdapter().getCount());
 //                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 //                sharedPreferences.edit().putString(SEARCH_QUERY, newText).apply();
+
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                sharedPreferences.edit().putString(SEARCH_QUERY, "").apply();
+
                 return false;
             }
 
@@ -390,7 +442,7 @@ public class MainActivity extends AppCompatActivity
         mSearchView.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
-//                Log.d(TAG, "SearchView onClose: starts");
+                Log.d(TAG, "SearchView onClose: starts");
 //                showSuggestions();
 //                finish();
                 SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -400,6 +452,7 @@ public class MainActivity extends AppCompatActivity
                         getSupportFragmentManager().findFragmentById(R.id.fragment);
                 listFragment.setQuery("");
 
+
 //                Intent detailIntent = new Intent(this, AccountListActivity.class);
 //                detailIntent.putExtra(Account.class.getSimpleName(), sortorder);
 //                startActivityForResult(detailIntent, REQUEST_ACCOUNTS_LIST);
@@ -407,7 +460,6 @@ public class MainActivity extends AppCompatActivity
                 return false;
             }
         });
-
 
         mSearchView.setOnSuggestionListener(new SearchView.OnSuggestionListener() {
             @Override
@@ -419,16 +471,27 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public boolean onSuggestionClick(int position) {
-//                Log.d(TAG, "onSuggestionClick: position " + position);
+                Log.d(TAG, "onSuggestionClick: position " + position);
 //                showSuggestions();
+                mSearchView.clearFocus();
                 int accountId = getSearchAccountId(position);
                 Log.d(TAG, "onSuggestionClick: accountId " + accountId);
 //                showOneSearches(accountId, position);
                 SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                 sharedPreferences.edit().putString(SEARCH_QUERY, "").apply();
-                sharedPreferences.edit().putInt(SEARCH_ACCOUNT, accountId).apply();
+                sharedPreferences.edit().putInt(SEARCH_ONE_ITEM, accountId).apply();
                 Log.d(TAG, "onSuggestionClick: finish");
-                acctEditRequest(accountId);
+                AccountListActivityFragment listFragment = (AccountListActivityFragment)
+                        getSupportFragmentManager().findFragmentById(R.id.fragment);
+                listFragment.setQuery("");
+                listFragment.setAcctId(accountId);
+                int pos = listFragment.getAccountSelectedPos();
+                Log.d(TAG, "onSuggestionClick: pos " + pos);
+                if (pos == -1) {
+                    searchListRequest();
+                } else {
+                    acctEditRequest(accountId);
+                }
                 //                finish();
 
                 return true;
@@ -527,8 +590,37 @@ public class MainActivity extends AppCompatActivity
                 viewAccountsFile();
                 break;
 
+            case R.id.menumain_ifSearch:
+                Log.d(TAG, "onOptionsItemSelected: ifSearch " + item.isChecked());
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                if (item.isChecked()) {
+                    item.setChecked(false);
+                    sharedPreferences.edit().putString(SEARCH_QUERY, "").apply();
+                    AccountListActivityFragment listFragment = (AccountListActivityFragment)
+                            getSupportFragmentManager().findFragmentById(R.id.fragment);
+                    listFragment.setQuery("");
+                    Toast.makeText(this, "Search selection cleared", Toast.LENGTH_LONG).show();
+                    break;
+                }
+                String queryResult = sharedPreferences.getString(SEARCH_QUERY, "");
+                if (queryResult.equals("")) {
+                    item.setChecked(false);
+                    AccountListActivityFragment listFragment = (AccountListActivityFragment)
+                            getSupportFragmentManager().findFragmentById(R.id.fragment);
+                    listFragment.setQuery("");
+                } else {
+                    item.setChecked(true);
+                }
+                break;
+
+
+            case R.id.menumain_search_setting:
+                searchListRequest();
+                break;
+
+
 //            case R.id.menumain_search:
-//
+//                Log.d(TAG, "onOptionsItemSelected: search request");
 ////                searchListRequest();
 //                requestSearch();
 //
@@ -647,6 +739,15 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+
+    private void setMenuItemChecked(int id, boolean blnSet) {
+        MenuItem item = menu.findItem(id);
+        if (blnSet) {
+            item.setChecked(true);
+        } else {
+            item.setChecked(false);
+        }
+    }
 
 
 //    @Override
@@ -1328,6 +1429,10 @@ public class MainActivity extends AppCompatActivity
     private void saveAccountEdits() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         AddEditActivityFragment editFragment = (AddEditActivityFragment)fragmentManager.findFragmentById(R.id.task_details_container);
+        if (editFragment == null) {
+            Log.d(TAG, "saveAccountEdits: no edit frame to save");
+            return;
+        }
         editFragment.saveEdits();
 
         View addEditLayout = findViewById(R.id.task_details_container);
@@ -1622,12 +1727,24 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+
+    @Override
+    protected void onStart() {
+        Log.d(TAG, "onStart: isResumed " + isResumed);
+        super.onStart();
+        Log.d(TAG, "onStart: isResumed " + isResumed);
+    }
+
     @Override
     protected void onResume() {
         Log.d(TAG, "onResume: starts");
 
 
-//        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        isResumed = true;
+        Log.d(TAG, "onResume: isResumed " + isResumed);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        sharedPreferences.edit().putBoolean(APP_RESUMED, true).apply();
+
 //        String queryResult = sharedPreferences.getString(SEARCH_QUERY, "");
 //
 //        Log.d(TAG, "onResume: return a value " + queryResult);
@@ -1681,8 +1798,31 @@ public class MainActivity extends AppCompatActivity
         Log.d(TAG, "resetPreferences: starts");
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         sharedPreferences.edit().putString(SEARCH_QUERY, "").apply();
-        sharedPreferences.edit().putInt(SEARCH_ACCOUNT, -1).apply();
+        sharedPreferences.edit().putInt(SEARCH_ONE_ITEM, -1).apply();
     }
+
+
+    private void loadSearchDB() {
+        deleteAllSearchItems();
+        AccountSearchLoaderCallbacks loaderAcctCallbacks = new AccountSearchLoaderCallbacks(this);
+        getLoaderManager().restartLoader(SEARCH_LOADER_ID, null, loaderAcctCallbacks);
+        Toast.makeText(this,
+                "Search Dictionary DB built",
+                Toast.LENGTH_LONG).show();
+
+    }
+
+
+    private void deleteAllSearchItems() {
+//		String selectionClause = SearchManager.SUGGEST_COLUMN_FLAGS + " = ?";
+//		String[] selectionArgs = { "account" };
+//        Log.d(TAG, "deleteAllSuggestions: delUri " + SearchesContract.CONTENT_URI_TRUNCATE);
+        getContentResolver().delete(
+                SearchesContract.CONTENT_URI_TRUNCATE,
+                null, null);
+
+    }
+
 
     @Override
     public boolean onSearchRequested() {
@@ -1748,14 +1888,28 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onPositiveDialogResult(int dialogId, Bundle args) {
+        AccountListActivityFragment listFragment;
+
         switch (dialogId) {
 
             case AppDialog.DIALOG_ID_ASK_REFRESH_SEARCHDB:
 
                 Log.d(TAG, "onPositiveDialogResult: request to rebuild search");
-                Intent detailIntent = new Intent(this, SearchActivity.class);
-                detailIntent.putExtra(SearchActivity.class.getSimpleName(), true);
-                startActivity(detailIntent);
+                loadSearchDB();
+
+
+//                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+//                sharedPreferences.edit().putString(SEARCH_QUERY, "").apply();
+//
+//                listFragment = (AccountListActivityFragment)
+//                        getSupportFragmentManager().findFragmentById(R.id.fragment);
+//                listFragment.setQuery("");
+//
+//                Toast.makeText(this, "Long click on item for more options", Toast.LENGTH_LONG).show();
+
+                    //                Intent detailIntent = new Intent(this, SearchActivity.class);
+//                detailIntent.putExtra(SearchActivity.class.getSimpleName(), true);
+//                startActivity(detailIntent);
                 break;
             case AppDialog.DIALOG_ID_LEAVE_APP:
                 finish();
@@ -1776,7 +1930,7 @@ public class MainActivity extends AppCompatActivity
                             finish();
                         } else {
                             Log.d(TAG, "onPositiveDialogResult: get list");
-                            AccountListActivityFragment listFragment = (AccountListActivityFragment)
+                            listFragment = (AccountListActivityFragment)
                                     getSupportFragmentManager().findFragmentById(R.id.fragment);
                             listFragment.resetSelectItem();
                         }
@@ -1814,9 +1968,26 @@ public class MainActivity extends AppCompatActivity
         switch (dialogId) {
 
             case AppDialog.DIALOG_ID_ASK_REFRESH_SEARCHDB:
-                Intent detailIntent = new Intent(this, SearchActivity.class);
-        detailIntent.putExtra(SearchActivity.class.getSimpleName(), false);
-                startActivity(detailIntent);
+
+//                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+//                String queryResult = sharedPreferences.getString(SEARCH_QUERY, "");
+//
+//                Log.d(TAG, "sharedPreferences: return a value " + queryResult);
+//
+//                AccountListActivityFragment listFragment = (AccountListActivityFragment)
+//                        getSupportFragmentManager().findFragmentById(R.id.fragment);
+//                listFragment.setQuery(queryResult);
+//
+//
+//                if (queryResult.equals("")) {
+//                    Toast.makeText(this, "Long click on item for more options", Toast.LENGTH_LONG).show();
+//                } else {
+//                    Toast.makeText(this, "List from search on " + queryResult, Toast.LENGTH_LONG).show();
+//                }
+
+                //                Intent detailIntent = new Intent(this, SearchActivity.class);
+//        detailIntent.putExtra(SearchActivity.class.getSimpleName(), false);
+//                startActivity(detailIntent);
                 break;
             case AppDialog.DIALOG_ID_LEAVE_APP:
                 case AppDialog.DIALOG_ID_CANCEL_EDIT:
@@ -1999,23 +2170,29 @@ public class MainActivity extends AppCompatActivity
     public void onBackPressed() {
         Log.d(TAG, "onBackPressed: ");
         FragmentManager fragmentManager = getSupportFragmentManager();
-        if (currFrag == AppFragType.ACCOUNTEDIT) {
-            AddEditActivityFragment fragment = (AddEditActivityFragment) fragmentManager.findFragmentById(R.id.task_details_container);
-            if ((fragment == null) || fragment.canClose()) {
+//        Fragment fragment = fragmentManager.findFragmentById(R.id.task_details_container);
+//        if (fragment != null) {
+//        if (currFrag == AppFragType.ACCOUNTEDIT) {
+            AddEditActivityFragment editFragment = (AddEditActivityFragment) fragmentManager.findFragmentById(R.id.task_details_container);
+            if (editFragment == null) {
+                showConfirmationLeaveApp();
+            } else if (editFragment.canClose()) {
 //            super.onBackPressed();
                 showConfirmationLeaveApp();
+                return;
             } else {
                 showConfirmationDialog(AppDialog.DIALOG_ID_CANCEL_EDIT);
+                return;
             }
-        } else {
-            SuggestListActivityFragment fragment = (SuggestListActivityFragment) fragmentManager.findFragmentById(R.id.task_details_container);
-            if (fragment == null) {
-//            super.onBackPressed();
-                showConfirmationLeaveApp();
-            } else {
-                showConfirmationDialog(AppDialog.DIALOG_ID_CANCEL_EDIT);
-            }
-        }
+
+//            SuggestListActivityFragment suggestFragment = (SuggestListActivityFragment) fragmentManager.findFragmentById(R.id.task_details_container);
+//            if (suggestFragment == null) {
+////            super.onBackPressed();
+//                showConfirmationLeaveApp();
+//            } else {
+//                showConfirmationDialog(AppDialog.DIALOG_ID_CANCEL_EDIT);
+//            }
+
     }
 
     private void showConfirmationLeaveApp() {

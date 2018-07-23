@@ -202,7 +202,12 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
 //                    Log.d(TAG, "onBindViewHolder: " + position);
                     holder.itemView.setBackgroundColor(Color.GREEN);
                 } else {
-                    holder.itemView.setBackgroundColor(Color.TRANSPARENT);
+
+                    if (!queryCorp.equals("")) {
+                        holder.itemView.setBackgroundColor(Color.MAGENTA);
+                    } else {
+                        holder.itemView.setBackgroundColor(Color.TRANSPARENT);
+                    }
                 }
             }
 
@@ -435,13 +440,18 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
 
     public void setPosById(int acctId) {
         Log.d(TAG, "setPosById: " + acctId);
-        int pos = -1;
         if (mCursor == null) {
+            Log.d(TAG, "setPosById: no cursor");
+            accountSelectedPos = -1;
             return;
         }
         if (mCursor.getCount() <= 0) {
+            Log.d(TAG, "setPosById: no cursor rows");
+            accountSelectedPos = -1;
             return;
         }
+        Log.d(TAG, "setPosById: cursor count " + mCursor.getCount());
+        int pos = 0;
         mCursor.moveToFirst();
         do {
             int iIndex = mCursor.getColumnIndex(AccountsContract.Columns._ID_COL);
@@ -451,14 +461,19 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
             }
             pos++;
         } while (mCursor.moveToNext());
-        accountSelectedPos = pos;
-        mCursor.moveToPosition(accountSelectedPos);
+        Log.d(TAG, "setPosById: pos " + pos);
+        if (pos >= mCursor.getCount()) {
+            accountSelectedPos = -1;
+        } else {
+            accountSelectedPos = pos;
+            mCursor.moveToPosition(accountSelectedPos);
+        }
         Log.d(TAG, "setPosById: move to " + accountSelectedPos);
     }
 
     public void resetSelectItem() {
         Log.d(TAG, "resetSelectItem: ");
-        accountSelectById = true;
+        accountSelectById = false;
         resetRow = true;
         notifyItemChanged(accountSelectedPos);
 
@@ -544,7 +559,7 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
 
     @Override
     public int getItemViewType(int position) {
-        Log.d(TAG, "getItemViewType: " + position);
+//        Log.d(TAG, "getItemViewType: " + position);
         return super.getItemViewType(position);
     }
 

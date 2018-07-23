@@ -48,10 +48,10 @@
     <string name="deldiag_sub_message">%1$s.\nAcctId:%2$d</string>
     <string name="suggdiag_negative_caption">8</string>
     <string name="suggdiag_positive_caption">10</string>
-    <string name="searchdiag_message">Refresh Search DB from Accounts DB</string>
-    <string name="searchdiag_sub_message">For efficient reasons, Search DB is a small copy of Accounts DB</string>
-    <string name="searchdiag_negative_caption">Continue</string>
-    <string name="searchdiag_positive_caption">Copy</string>
+    <string name="searchdiag_message">Search Setting for Search DB?</string>
+    <string name="searchdiag_sub_message">Accounts are searched from a Search DB, which is copied from Accounts DB</string>
+    <string name="searchdiag_negative_caption">No, not now</string>
+    <string name="searchdiag_positive_caption">Yes, do copy</string>
     <string name="confirmdiag_ask_abandon_positive_caption">Yes, abandon chgs</string>
     <string name="confirmdiag_ask_abandon_negative_caption">No, continue edit</string>
     <string name="confirmdiag_leave_warning">Leave Warning</string>
@@ -72,7 +72,13 @@
     <string name="searchable_hint">Enter corporation name</string>
     <string name="home_message_title">Organize Accounts, Search Accounts, Suggested Passwords</string>
     <string name="home_message_text">
-        This app tracks your accounts, has sorted lists, search of accounts, suggests 8 or 10 character passwords.
+        IMPORTANT SEARCH MESSAGE
+        \nSearch Setting is needed before using the search. It makes a copy of accounts into search database.
+        Will need to re-align again if any corp name changes, add of an account,
+        or a delete of an account.
+        \n\nIMPORTANT TO EDIT AN ACCOUNT
+        \nDo a long click on an account in the list. This will give option to edit, link to website, delete account, or save corp name or website on the dialog.
+        \n\nThis app tracks your accounts, has sorted lists, search of accounts, suggests 8 or 10 character passwords.
         \n\nKeeping passwords electronically, even if encrypted, may leave you open to have your credentials stolen.
         <em>Important:</em> Having an electronic copy (from a file or the app&quot;s database) with the credentials of company, user name, and password would highly exposed your accounts to hackers.
         \nFor this security reason, the passwords are not saved on a file or database. This app keeps account information excluding passwords. Your action is to manually tie together using the account id from this app to the written list of account id and password value.
@@ -137,5 +143,16 @@
     <string name="about_weblink_21">Instructions available at www.learnprogramming.academy</string>
     <string name="about_email">For support, email vonnikinsey@gmail.com</string>
     <string name="about_credits">Icon derived from <b>analog clock</b> at openclipart.org by <b>Anonymous</b></string>
+    <string name="accedit_website_label">Website</string>
+    <string name="accedit_username_label">User Name</string>
+    <string name="accedit_user_email_label">User Email</string>
+    <string name="accedit_open_date_label">Open Date, click to chg</string>
+    <string name="btn_open_date_label">Select Date</string>
+    <string name="accedit_sort_seq_label">Custom Sort Seq</string>
+    <string name="accedit_from_seq_label">Id from another acct</string>
+    <string name="accedit_to_seq">Id to another acct</string>
+    <string name="accedit_actvy_date_label">Activity Date</string>
+    <string name="accedit_corp_name_label">Corp Name</string>
+    <string name="accedit_notes_label">Notes</string>
 
 </resources>

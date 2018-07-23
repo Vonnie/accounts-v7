@@ -17,17 +17,17 @@
         app:showAsAction="ifRoom" />
     <!--android:icon="@drawable/selector_search"-->
     <item
-        android:id="@+id/menumain_add"
-        android:icon="@drawable/selector_add"
-        android:orderInCategory="101"
-        android:title="@string/menu_add_account"
-        app:showAsAction="always" />
-    <item
         android:id="@+id/menumain_about"
         android:icon="@android:drawable/ic_menu_info_details"
-        android:orderInCategory="105"
+        android:orderInCategory="101"
         android:title="@string/menuacct_about"
         app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/menumain_add"
+        android:icon="@drawable/selector_add"
+        android:orderInCategory="102"
+        android:title="@string/menu_add_account"
+        app:showAsAction="always" />
     <!--android:icon="@drawable/ic_action_document"-->
     <!--<item-->
         <!--android:id="@+id/menumain_refresh"-->
@@ -46,48 +46,34 @@
     <!--android:orderInCategory="114"-->
     <!--android:title="@string/delete_cap"-->
     <!--app:showAsAction="ifRoom" />-->
-    <group
-        android:id="@+id/group_sort"
-        android:checkableBehavior="single"
-        android:enabled="true"
-        android:visible="true">
-        <item
-            android:id="@+id/menuacct_sort_corpname"
-            android:checked="true"
-            android:orderInCategory="112"
-            android:title="@string/menuacct_sort_corpname" />
-        <item
-            android:id="@+id/menuacct_sort_passport"
-            android:orderInCategory="113"
-            android:title="@string/menuacct_sort_passport"
-            app:showAsAction="ifRoom" />
-        <item
-            android:id="@+id/menuacct_sort_opendate"
-            android:orderInCategory="114"
-            android:title="@string/menuacct_sort_opendate"
-            app:showAsAction="ifRoom" />
-        <item
-            android:id="@+id/menuacct_sort_custom"
-            android:orderInCategory="115"
-            android:title="@string/menuacct_sort_custom"
-            app:showAsAction="ifRoom" />
-    </group>
-    <item
-        android:id="@+id/menuacct_external_accts"
-        android:orderInCategory="117"
-        android:title="@string/menuacct_external_accts"
-        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/menuacct_save"
         android:icon="@drawable/selector_save"
-        android:orderInCategory="118"
+        android:orderInCategory="103"
         android:title="@string/menu_save"
         app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/menumain_search_setting"
+        android:orderInCategory="105"
+        android:title="Search Setting"
+        app:showAsAction="never" />
 
+    <item
+        android:id="@+id/menumain_ifSearch"
+        android:orderInCategory="118"
+        android:title="Search Selected"
+        app:actionViewClass="android.widget.CheckBox"
+        android:checkable="true"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/menuacct_external_accts"
+        android:orderInCategory="119"
+        android:title="@string/menuacct_external_accts"
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/menumain_showSuggests"
         android:icon="@drawable/selector_key"
-        android:orderInCategory="119"
+        android:orderInCategory="120"
         android:title="@string/menu_suggests"
         app:showAsAction="ifRoom" />
     <!--<group-->
@@ -117,5 +103,31 @@
             <!--android:title="@string/menuacct_rss_tv_season"-->
             <!--app:showAsAction="ifRoom" />-->
     <!--</group>-->
+    <group
+        android:id="@+id/group_sort"
+        android:checkableBehavior="single"
+        android:enabled="true"
+        android:visible="true">
+        <item
+            android:id="@+id/menuacct_sort_corpname"
+            android:checked="true"
+            android:orderInCategory="212"
+            android:title="@string/menuacct_sort_corpname" />
+        <item
+            android:id="@+id/menuacct_sort_passport"
+            android:orderInCategory="213"
+            android:title="@string/menuacct_sort_passport"
+            app:showAsAction="ifRoom" />
+        <item
+            android:id="@+id/menuacct_sort_opendate"
+            android:orderInCategory="214"
+            android:title="@string/menuacct_sort_opendate"
+            app:showAsAction="ifRoom" />
+        <item
+            android:id="@+id/menuacct_sort_custom"
+            android:orderInCategory="215"
+            android:title="@string/menuacct_sort_custom"
+            app:showAsAction="ifRoom" />
+    </group>
 
 </menu>

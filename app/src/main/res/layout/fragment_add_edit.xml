@@ -14,9 +14,9 @@
         android:id="@+id/lbl_corp_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="16dp"
         android:labelFor="@+id/addedit_corp_name"
-        android:text="Corp Name"
+        android:text="@string/accedit_corp_name_label"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -42,7 +42,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:labelFor="@+id/addedit_corp_website"
-        android:text="Website"
+        android:text="@string/accedit_website_label"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/addedit_corp_name" />
 
@@ -69,7 +69,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:labelFor="@+id/addedit_user_name"
-        android:text="User Name"
+        android:text="@string/accedit_username_label"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/addedit_corp_website" />
 
@@ -96,7 +96,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:labelFor="@+id/addedit_user_email"
-        android:text="User Email"
+        android:text="@string/accedit_user_email_label"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/addedit_user_name" />
 
@@ -122,33 +122,28 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:labelFor="@+id/addedit_notes"
-        android:text="Notes"
+        android:text="@string/accedit_notes_label"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/addedit_user_email" />
 
     <EditText
         android:id="@+id/addedit_notes"
-        android:layout_width="0dp"
+        android:layout_width="368dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:ems="10"
         android:hint="@string/accedit_notes_hint"
         android:inputType="textAutoComplete|textMultiLine"
-        app:layout_constraintBottom_toTopOf="@+id/addedit_save"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lbl_notes"
-        app:layout_constraintVertical_chainStyle="spread_inside" />
+        app:layout_constraintTop_toBottomOf="@+id/lbl_notes" />
 
     <TextView
         android:id="@+id/lbl_open_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:labelFor="@+id/addedit_open_date"
-        android:text="Open Date, click to chg"
+        android:text="@string/accedit_open_date_label"
         app:layout_constraintStart_toStartOf="@+id/addedit_open_date"
         app:layout_constraintTop_toBottomOf="@+id/addedit_notes" />
 
@@ -157,7 +152,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:text="Select Date"
+        android:text="@string/btn_open_date_label"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lbl_open_date" />
 
@@ -178,7 +173,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:labelFor="@+id/acc_seq"
-        android:text="Custom Sort Seq"
+        android:text="@string/accedit_sort_seq_label"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/addedit_notes" />
 
@@ -199,7 +194,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:labelFor="@+id/acc_ref_from"
-        android:text="Id From an Acct"
+        android:text="@string/accedit_from_seq_label"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/acc_seq" />
 
@@ -222,7 +217,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:labelFor="@+id/acc_ref_to"
-        android:text="Id to an Acct"
+        android:text="@string/accedit_to_seq"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/acc_ref_from" />
 
@@ -253,7 +248,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginTop="8dp"
-        android:text="Last Actvy Date"
+        android:text="@string/accedit_actvy_date_label"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/addedit_open_date" />
 

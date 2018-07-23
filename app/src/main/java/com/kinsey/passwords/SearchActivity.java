@@ -30,6 +30,7 @@ public class SearchActivity extends AppCompatActivity {
 
     public static final String SEARCH_QUERY = "SearchActivity";
     public static final String SEARCH_ACCOUNT = "SearchActivityAccount";
+    public static final String SEARCH_STARTED = "Started";
 
 
     private SearchView mSearchView;

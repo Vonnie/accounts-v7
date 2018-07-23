@@ -275,6 +275,9 @@ public class AccountListActivityFragment extends Fragment
 
     public void resortList(int sortorder) {
         Log.d(TAG, "resortList: " + sortorder);
+        mAccountAdapter.setAccountSelectedPos(-1);
+        mAccountAdapter.setAccountSelectById(false);
+        mAccountAdapter.setQueryCorp("");
         mAccountAdapter.setAccountSortorder(sortorder);
 //        mRecyclerView.swapAdapter(mAccountAdapter, false);
         Log.d(TAG, "resortFragList: destroy Loader");
@@ -286,8 +289,13 @@ public class AccountListActivityFragment extends Fragment
     }
 
     public void setQuery(String query) {
+        Log.d(TAG, "setQuery: " + query);
         mAccountAdapter.setQueryCorp(query);
         queryCorp = query;
+        if (query.equals("")) {
+            mAccountAdapter.setAccountSelectedPos(-1);
+            mAccountAdapter.setAccountSelectById(false);
+        }
         Log.d(TAG, "resortFragList: destroy Loader");
         getLoaderManager().destroyLoader(ACCOUNT_LOADER_ID);
 
@@ -343,11 +351,15 @@ public class AccountListActivityFragment extends Fragment
 
 
     public void setAcctId(int acctId) {
-        mAccountAdapter.setAccountSelectedId(acctId);
-        mAccountAdapter.setAccountSelectById(true);
-        mAccountAdapter.setPosById(acctId);
+
+            mAccountAdapter.setAccountSelectedId(acctId);
+            mAccountAdapter.setAccountSelectById(true);
+            mAccountAdapter.setPosById(acctId);
     }
 
+    public int getAccountSelectedPos() {
+        return mAccountAdapter.getAccountSelectedPos();
+    }
 
     public void resetSelectItem() {
         Log.d(TAG, "resetSelectItem: ");
@@ -359,6 +371,7 @@ public class AccountListActivityFragment extends Fragment
 //        mAccountAdapter.resetSelectItem();
 //        mRecyclerView.scrollToPosition(savePos);
     }
+
 
 //    public void saveAccount(Context context, boolean isForAdd) {
 ////        ContentResolver contentResolver = getActivity().getContentResolver();
