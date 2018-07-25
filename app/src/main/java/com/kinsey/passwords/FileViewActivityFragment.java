@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 import java.io.File;
 
@@ -19,6 +20,7 @@ public class FileViewActivityFragment extends Fragment {
     WebView webView;
 //    TextView tvLocation;
 
+    boolean importRefreshReq = false;
 
     public FileViewActivityFragment() {
     }
@@ -33,6 +35,13 @@ public class FileViewActivityFragment extends Fragment {
         Log.d(TAG, "onCreateView: ");
 //        tvLocation.setText("see it");
 //        Log.d(TAG, "onCreateView: tvLocation set");
+
+        webView.setWebViewClient(new WebViewClient() {
+            @Override
+            public void onPageFinished(WebView web, String url) {
+                web.loadUrl("javascript:(function(){ document.body.style.paddingTop = '30px'})();");
+            }
+        });
         reportJson();
 
 
@@ -49,7 +58,7 @@ public class FileViewActivityFragment extends Fragment {
 //        tvLocation.setText(str);
     }
 
-    private void reportJson() {
+    public void reportJson() {
         Log.d(TAG, "reportJson: " + MainActivity.DEFAULT_APP_DIRECTORY);
         boolean retSuccess = true;
 
@@ -78,7 +87,7 @@ public class FileViewActivityFragment extends Fragment {
                 String htmlString = "<br><br><h1>Warning</h1>\n" +
                         "<h2>Unable to acquire Exported Accounts</h2>\n" +
                         "<h3>Either not previously exported or</h3>" +
-                        "<h3>Not located on " + loc + "</h3>";
+                        "<h3>Not located on storage. See menu for intended filename.</h3>";
                 webView.loadData(htmlString, "text/html", null);
 
 //            webView.setVisibility(View.GONE);
@@ -89,14 +98,15 @@ public class FileViewActivityFragment extends Fragment {
 
 
                     webView.getSettings().setJavaScriptEnabled(true);
-                    String htmlString = "<h1>This is header one.</h1>\n" +
-                            "<h2>..waiting for data..</h2>\n" +
-                            "<h3>This is header three.</h3>";
-                    webView.loadData(htmlString, "text/html", null);
+//                    String htmlString = "<h1>This is header one.</h1>\n" +
+//                            "<h2>..waiting for data..</h2>\n" +
+//                            "<h3>This is header three.</h3>";
+//                    webView.loadData(htmlString, "text/html", null);
 
                     //                webView.setVisibility(View.VISIBLE);
                     Log.d(TAG, "reportJson: about to load " + loc);
                     webView.loadUrl(loc);
+
 
                 } catch (Exception e) {
                     Log.e(TAG, "inputStream error " + e.getMessage());
@@ -106,5 +116,13 @@ public class FileViewActivityFragment extends Fragment {
         } catch (Exception ex) {
             Log.d(TAG, "reportJson: " + ex.getMessage());
         }
+    }
+
+    public boolean isImportRefreshReq() {
+        return importRefreshReq;
+    }
+
+    public void setImportRefreshReq(boolean importRefreshReq) {
+        this.importRefreshReq = importRefreshReq;
     }
 }

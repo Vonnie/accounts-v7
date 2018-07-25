@@ -21,16 +21,16 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/srli_user_name"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+    <!--<TextView-->
+        <!--android:id="@+id/srli_user_name"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content"-->
 
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="0dp"
-        app:layout_constraintLeft_toLeftOf="@+id/srli_corp_name"
-        app:layout_constraintTop_toBottomOf="@+id/srli_corp_name"
-        android:layout_marginLeft="16dp" />
+        <!--android:layout_marginStart="8dp"-->
+        <!--android:layout_marginTop="0dp"-->
+        <!--app:layout_constraintLeft_toLeftOf="@+id/srli_corp_name"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/srli_corp_name"-->
+        <!--android:layout_marginLeft="16dp" />-->
 
     <TextView
         android:id="@+id/tli_open_date"

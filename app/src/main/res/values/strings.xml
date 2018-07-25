@@ -58,6 +58,10 @@
     <string name="confirmdiag_leave_warning_sub_message">Do you want to leave editing without applying changes.</string>
     <string name="confirmdiag_edits">Edit Apply Complete</string>
     <string name="confirmdiag_edits_sub_message">Edits are applied to the account</string>
+    <string name="confirmdiag_add">Add Confirmation</string>
+    <string name="confirmdiag_add_sub_message">Are you sure you want to setup new to add an account.</string>
+    <string name="confirmdiag_add_negative_caption">No, not now</string>
+    <string name="confirmdiag_add_positive_caption">Yes, add setup</string>
     <string name="confirmdiag_leave_app_warning_sub_message">Do you want to leave app.</string>
     <string name="confirmdiag_export_filename">Export Filename</string>
     <string name="confirmdiag_leave_positive_caption">Yes, leave app</string>

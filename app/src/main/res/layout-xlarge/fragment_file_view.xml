@@ -8,14 +8,19 @@
     tools:context="com.kinsey.passwords.FileViewActivityFragment">
     <!--tools:showIn="@layout/activity_file_view">-->
 
-
-    <WebView
-        android:id="@+id/wv_page"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="32dp"
-        android:paddingTop="@dimen/activity_vertical_margin" />
+        android:layout_weight="1.0"
+        android:padding="8dp">
 
+        <WebView
+            android:id="@+id/wv_page"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:paddingTop="@dimen/activity_vertical_margin" />
+    </LinearLayout>
 </LinearLayout>

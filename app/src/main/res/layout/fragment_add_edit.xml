@@ -26,6 +26,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
         android:ems="10"
         android:hint="@string/addedit_corp_name_hint"
         android:inputType="textNoSuggestions"
@@ -52,6 +53,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
         android:ems="10"
         android:hint="@string/accedit_corp_website_hint"
         android:inputType="textMultiLine"
@@ -131,7 +133,6 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:ems="10"
         android:hint="@string/accedit_notes_hint"
         android:inputType="textAutoComplete|textMultiLine"
@@ -144,19 +145,12 @@
         android:id="@+id/lbl_open_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="16dp"
         android:labelFor="@+id/addedit_open_date"
         android:text="@string/accedit_open_date_label"
-        app:layout_constraintStart_toStartOf="@+id/addedit_open_date"
-        app:layout_constraintTop_toBottomOf="@+id/addedit_notes" />
-
-    <Button
-        android:id="@+id/addedit_open_date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:text="@string/btn_open_date_label"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lbl_open_date" />
+        app:layout_constraintTop_toBottomOf="@+id/acc_account_id" />
 
     <!--<Button-->
         <!--android:id="@+id/addedit_save"-->
@@ -168,6 +162,15 @@
         <!--app:layout_constraintBottom_toBottomOf="parent"-->
         <!--app:layout_constraintStart_toStartOf="parent" />-->
 
+
+    <Button
+        android:id="@+id/addedit_open_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:text="@string/btn_open_date_label"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lbl_open_date" />
 
     <TextView
         android:id="@+id/lbl_seq"
@@ -189,6 +192,16 @@
         android:inputType="number"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lbl_seq" />
+
+    <TextView
+        android:id="@+id/acc_account_id"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp"
+        android:textAlignment="viewEnd"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/addedit_notes" />
 
     <TextView
         android:id="@+id/lbl_ref_from"
@@ -235,21 +248,10 @@
         app:layout_constraintTop_toBottomOf="@+id/lbl_ref_to" />
 
     <TextView
-        android:id="@+id/acc_account_id"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginTop="8dp"
-        android:textAlignment="viewEnd"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addedit_actvy_date" />
-
-    <TextView
         android:id="@+id/addedit_actvy_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:layout_marginTop="8dp"
         android:text="@string/accedit_actvy_date_label"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/addedit_open_date" />

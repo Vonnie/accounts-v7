@@ -43,6 +43,7 @@ public class AppDialog extends DialogFragment {
     public static final int DIALOG_ID_LEAVE_APP = 11;
     public static final int DIALOG_ID_EDITS_APPLIED = 12;
     public static final int DIALOG_ID_EXPORT_FILENAME = 13;
+    public static final int DIALOG_ID_CONFIRM_ADD_ACCOUNT = 14;
 
 
     public static final int DIALOG_ACCT_LIST_CORP_NAME = 0;

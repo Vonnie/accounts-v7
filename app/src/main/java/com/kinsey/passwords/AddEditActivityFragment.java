@@ -467,9 +467,14 @@ public class AddEditActivityFragment extends Fragment {
                     }
                     values.put(AccountsContract.Columns.NOTE_COL, mNoteTextView.getText().toString());
 
-                    if (lngOpenDate != 0) {
-                        values.put(AccountsContract.Columns.OPEN_DATE_COL, lngOpenDate);
+                    if (lngOpenDate == 0) {
+                        lngOpenDate = System.currentTimeMillis();
+                        mtvOpenDate.setText("OpenDate: " + format_ymd.format(lngOpenDate));
+                        Date dteOpen = new Date(lngOpenDate);
+                        cldrOpened.setTime(dteOpen);
                     }
+                    values.put(AccountsContract.Columns.OPEN_DATE_COL, lngOpenDate);
+
                     values.put(AccountsContract.Columns.ACTVY_DATE_COL, System.currentTimeMillis());
 
                     Uri uri = contentResolver.insert(AccountsContract.CONTENT_URI, values);

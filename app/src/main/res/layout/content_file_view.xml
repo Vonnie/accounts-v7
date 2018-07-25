@@ -5,5 +5,6 @@
     android:name="com.kinsey.passwords.FileViewActivityFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:tag="fileview"
     tools:layout="@layout/fragment_file_view" />
     <!--app:layout_behavior="@string/appbar_scrolling_view_behavior"-->

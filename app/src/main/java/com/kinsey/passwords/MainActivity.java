@@ -16,6 +16,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -31,6 +32,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,7 +41,6 @@ import com.kinsey.passwords.items.Account;
 import com.kinsey.passwords.items.AccountsContract;
 import com.kinsey.passwords.items.SearchesContract;
 import com.kinsey.passwords.items.Suggest;
-import com.kinsey.passwords.provider.AccountSearchLoaderCallbacks;
 import com.kinsey.passwords.provider.DatePickerFragment;
 import com.kinsey.passwords.provider.FeedAdapter;
 import com.kinsey.passwords.provider.ParseApplications;
@@ -115,6 +116,10 @@ public class MainActivity extends AppCompatActivity
     private final String SEARCH_ONE_ITEM = "SearchedOneItem";
 
     Menu menu;
+    MenuItem miActionProgressItem;
+    ProgressBar progressBar;
+    private Handler mHandler = new Handler();
+    Runnable mRunnable;
     boolean isUserPaging = true;
     public static Account account = new Account();
     private AlertDialog mDialog = null;
@@ -189,6 +194,8 @@ public class MainActivity extends AppCompatActivity
         View addEditLayout = findViewById(R.id.task_details_container);
         View addEditLayoutScroll = findViewById(R.id.task_details_container_scroll);
         View mainFragment = findViewById(R.id.fragment);
+        progressBar  = findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.GONE);
 
         if(mTwoPane) {
             Log.d(TAG, "onCreate: twoPane mode");
@@ -343,6 +350,16 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+//    @Override
+//    public boolean onPrepareOptionsMenu(Menu menu) {
+//        // Store instance of the menu item containing progress
+//        miActionProgressItem = menu.findItem(R.id.miActionProgress);
+//        // Extract the action-view from the menu item
+//        ProgressBar v =  (ProgressBar) MenuItemCompat.getActionView(miActionProgressItem);
+//        // Return to finish
+//        return super.onPrepareOptionsMenu(menu);
+//    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -447,6 +464,7 @@ public class MainActivity extends AppCompatActivity
 //                showSuggestions();
 //                finish();
                 mSearchView.clearFocus();
+                setMenuItemChecked(R.id.menumain_ifSearch, false);
                 SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                 sharedPreferences.edit().putString(SEARCH_QUERY, "").apply();
                 sharedPreferences.edit().putInt(SEARCH_ONE_ITEM, -1).apply();
@@ -539,7 +557,7 @@ public class MainActivity extends AppCompatActivity
             case R.id.menumain_add:
 //                editAccountRequest(null);
 //                addAccountRequest();
-                acctEditRequest(-1);
+                showAddConfirmationDialog(AppDialog.DIALOG_ID_CONFIRM_ADD_ACCOUNT);
                 break;
 //            case R.id.menumain_showAccounts:
 //                currList = ListHomeType.LISTACCOUNTS;
@@ -680,16 +698,18 @@ public class MainActivity extends AppCompatActivity
 
             case android.R.id.home:
                 Log.d(TAG, "onOptionsItemSelected: home button pressed");
-                if (currFrag == AppFragType.ACCOUNTEDIT) {
-                    AddEditActivityFragment fragment = (AddEditActivityFragment)
-                            getSupportFragmentManager().findFragmentById(R.id.task_details_container);
-                    if(fragment == null || fragment.canClose()) {
-                        if(mTwoPane) {
+
+                AddEditActivityFragment fragment = (AddEditActivityFragment)
+                        getSupportFragmentManager().findFragmentById(R.id.task_details_container);
+                if(fragment != null) {
+                    Log.d(TAG, "onOptionsItemSelected: addeditFragment found");
+                    if (fragment.canClose()) {
+                        if (mTwoPane) {
                             // in Landscape, so quit only if the back button was used
-                                Log.d(TAG, "onPositiveDialogResult: get list");
-                                AccountListActivityFragment listFragment = (AccountListActivityFragment)
-                                        getSupportFragmentManager().findFragmentById(R.id.fragment);
-                                listFragment.resetSelectItem();
+                            Log.d(TAG, "onPositiveDialogResult: get list");
+                            AccountListActivityFragment listFragment = (AccountListActivityFragment)
+                                    getSupportFragmentManager().findFragmentById(R.id.fragment);
+                            listFragment.resetSelectItem();
                         } else {
                             // hide the edit container in single pane mode
                             // and make sure the left-hand container is visible
@@ -707,19 +727,29 @@ public class MainActivity extends AppCompatActivity
 
                     } else {
                         showConfirmationDialog(AppDialog.DIALOG_ID_CANCEL_EDIT_UP);
-                        return true;  // indicate we are handling this
                     }
-                } else {
-//                    setMenuItemVisible(R.id.menuacct_save, false);
-                    SuggestListActivityFragment fragment = (SuggestListActivityFragment)
-                            getSupportFragmentManager().findFragmentById(R.id.task_details_container);
-                    if (fragment == null) {
-                        return super.onOptionsItemSelected(item);
-                    } else {
-                        showConfirmationDialog(AppDialog.DIALOG_ID_CANCEL_EDIT_UP);
-                        return true;  // indicate we are handling this
-                    }
+                    return true;  // indicate we are handling this
                 }
+//                    setMenuItemVisible(R.id.menuacct_save, false);
+//                FileViewActivityFragment fvFragment = (FileViewActivityFragment)
+//                        getSupportFragmentManager().findFragmentByTag("fileview");
+////                        getSu1pportFragmentManager().findFragmentById(R.id.task_details_container);
+//                if (fvFragment != null) {
+//                    Log.d(TAG, "onOptionsItemSelected: fileview fragment found");
+//                    if (fvFragment.isImportRefreshReq()) {
+//                        resortList(AccountsContract.ACCOUNT_LIST_BY_CORP_NAME);
+//                    }
+//                    return true;
+//                }
+//                SuggestListActivityFragment suggestFragment = (SuggestListActivityFragment)
+//                        getSupportFragmentManager().findFragmentById(R.id.task_details_container);
+//                if (suggestFragment == null) {
+//                    return super.onOptionsItemSelected(item);
+//                } else {
+//                    showConfirmationDialog(AppDialog.DIALOG_ID_CANCEL_EDIT_UP);
+//                    return true;  // indicate we are handling this
+//                }
+                return true;
 
         }
 
@@ -792,8 +822,8 @@ public class MainActivity extends AppCompatActivity
         Log.d(TAG, "viewAccountsFile: request request view exports");
 //        mActivityStart = true;
         Intent detailIntent = new Intent(this, FileViewActivity.class);
-        startActivity(detailIntent);
-//        startActivityForResult(detailIntent, REQUEST_VIEW_EXPORT);
+//        startActivity(detailIntent);
+        startActivityForResult(detailIntent, REQUEST_VIEW_EXPORT);
     }
 
     @Override
@@ -1139,6 +1169,12 @@ public class MainActivity extends AppCompatActivity
 //
 //    }
 
+
+    @Override
+    public void onListComplete() {
+        progressBar.setVisibility(View.GONE);
+    }
+
     @Override
     public void onAccountLong(final Account account) {
         Log.d(TAG, "onAccountLong: " + account);
@@ -1186,10 +1222,15 @@ public class MainActivity extends AppCompatActivity
                 @Override
                 public void onClick(View v) {
                     Log.d(TAG, "onClick: for edit");
+                    String prevCorpName = account.getCorpName();
                     account.setCorpName(tvName.getText().toString());
                     account.setCorpWebsite(tvWebsite.getText().toString());
                     updateCorp(account);
                     mDialog.dismiss();
+                    if (!prevCorpName.equals(account.getCorpName())) {
+                        Log.d(TAG, "onClick: corpname chg to refresh search");
+                        searchListRequest();
+                    }
                 }
             });
 
@@ -1248,11 +1289,13 @@ public class MainActivity extends AppCompatActivity
 
 
     private void updateCorp(Account account) {
+
         ContentValues values = new ContentValues();
 
         values.put(AccountsContract.Columns.CORP_NAME_COL, account.getCorpName());
         values.put(AccountsContract.Columns.CORP_WEBSITE_COL, account.getCorpWebsite());
         getContentResolver().update(AccountsContract.buildIdUri(account.getId()), values, null, null);
+
     }
 
     private void confirmDeleteAccount(Account account) {
@@ -1537,7 +1580,9 @@ public class MainActivity extends AppCompatActivity
 //    }
 
 
-    private void resortList(int sortorder) {
+    private void resortList(final int sortorder) {
+
+        progressBar.setVisibility(View.VISIBLE);
 
         switch (sortorder) {
             case AccountsContract.ACCOUNT_LIST_BY_CORP_NAME:
@@ -1556,10 +1601,25 @@ public class MainActivity extends AppCompatActivity
                 getSupportActionBar().setTitle(getString(R.string.app_name));
         }
 
-        AccountListActivityFragment listFragment = (AccountListActivityFragment)
-                getSupportFragmentManager().findFragmentById(R.id.fragment);
-        listFragment.resortList(sortorder);
 
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        AccountListActivityFragment listFragment = (AccountListActivityFragment)
+                                getSupportFragmentManager().findFragmentById(R.id.fragment);
+                        listFragment.resortList(sortorder);
+
+                        progressBar.setVisibility(View.GONE);
+                    }
+                });
+            }
+        }).start();
 
     }
 
@@ -1759,6 +1819,14 @@ public class MainActivity extends AppCompatActivity
 //                Log.d(TAG, "onActivityResult: return from search");
 //                break;
             case REQUEST_VIEW_EXPORT:
+                if (resultCode == RESULT_OK) {
+                    boolean blnImported = data.getBooleanExtra("IMPORT", false);
+                    Log.d(TAG, "onActivityResult: fileview imported? "  + blnImported);
+                    if (blnImported) {
+                        resortList(AccountsContract.ACCOUNT_LIST_BY_CORP_NAME);
+                        Log.d(TAG, "onActivityResult: refreshed");
+                    }
+                }
                 break;
 
 
@@ -1769,15 +1837,8 @@ public class MainActivity extends AppCompatActivity
 
 
     @Override
-    protected void onStart() {
-        Log.d(TAG, "onStart: isResumed " + isResumed);
-        super.onStart();
-        Log.d(TAG, "onStart: isResumed " + isResumed);
-    }
-
-    @Override
     protected void onResume() {
-        Log.d(TAG, "onResume: starts");
+//        Log.d(TAG, "onResume: starts");
 
 
         isResumed = true;
@@ -1869,13 +1930,48 @@ public class MainActivity extends AppCompatActivity
 
 
     private void loadSearchDB() {
-        deleteAllSearchItems();
-        AccountSearchLoaderCallbacks loaderAcctCallbacks = new AccountSearchLoaderCallbacks(this);
-        getLoaderManager().restartLoader(SEARCH_LOADER_ID, null, loaderAcctCallbacks);
-        Toast.makeText(this,
-                "Search Dictionary DB built",
-                Toast.LENGTH_LONG).show();
 
+        progressBar.setVisibility(View.VISIBLE);
+
+//        mHandler = new Handler();
+//        mRunnable = new Runnable() {
+//
+//            @Override
+//            public void run() {
+//                progressBar.setVisibility(View.GONE);
+//                Toast.makeText(MainActivity.this,
+//                        "Search Dictionary DB built",
+//                        Toast.LENGTH_LONG).show();
+//            }
+//        };
+
+
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                deleteAllSearchItems();
+                AccountListActivityFragment listFragment = (AccountListActivityFragment)
+                        getSupportFragmentManager().findFragmentById(R.id.fragment);
+                listFragment.rebuildDict();
+
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+//                        AccountSearchLoaderCallbacks loaderAcctCallbacks = new AccountSearchLoaderCallbacks(MainActivity.this);
+//                        getLoaderManager().restartLoader(SEARCH_LOADER_ID, null, loaderAcctCallbacks);
+//                        loaderAcctCallbacks.loadAccountDictionary();
+
+
+                        Toast.makeText(MainActivity.this,
+                                "Search Dictionary DB built",
+                                Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+        }).start();
+//        progressBar.setVisibility(View.GONE);
+//        mHandler.post(mRunnable);
     }
 
 
@@ -2026,6 +2122,9 @@ public class MainActivity extends AppCompatActivity
                 Log.d(TAG, "onPositiveDialogResult: ready to delete " + acctId);
                 deleteAccount(acctId);
                 break;
+            case AppDialog.DIALOG_ID_CONFIRM_ADD_ACCOUNT:
+                acctEditRequest(-1);
+                break;
             case AppDialog.DIALOG_ID_EDITS_APPLIED:
                 break;
         }
@@ -2060,7 +2159,7 @@ public class MainActivity extends AppCompatActivity
             case AppDialog.DIALOG_ID_LEAVE_APP:
                 case AppDialog.DIALOG_ID_CANCEL_EDIT:
             case AppDialog.DIALOG_ID_CANCEL_EDIT_UP:
-
+            case AppDialog.DIALOG_ID_CONFIRM_ADD_ACCOUNT:
                 break;
         }
 
@@ -2299,6 +2398,21 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+
+    private void showAddConfirmationDialog(int dialogId) {
+        AppDialog dialog = new AppDialog();
+        Bundle args = new Bundle();
+        args.putInt(AppDialog.DIALOG_ID, dialogId);
+        args.putInt(AppDialog.DIALOG_TYPE, AppDialog.DIALOG_YES_NO);
+        args.putString(AppDialog.DIALOG_MESSAGE, getString(R.string.confirmdiag_add));
+        args.putString(AppDialog.DIALOG_SUB_MESSAGE, getString(R.string.confirmdiag_add_sub_message));
+        args.putInt(AppDialog.DIALOG_NEGATIVE_RID, R.string.confirmdiag_add_negative_caption);
+        args.putInt(AppDialog.DIALOG_POSITIVE_RID, R.string.confirmdiag_add_positive_caption);
+
+        dialog.setArguments(args);
+        dialog.show(getSupportFragmentManager(), null);
+
+    }
 
 
     private void showConfirmationDialogOk(int dialogId) {

@@ -1,6 +1,5 @@
 package com.kinsey.passwords;
 
-import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Intent;
@@ -43,6 +42,7 @@ public class FileViewActivity extends AppCompatActivity
     private static final String TAG = "FileViewActivity";
 
     FileViewActivityFragment fvFragment;
+    boolean importRefreshReq = false;
 
 
     @Override
@@ -87,14 +87,18 @@ public class FileViewActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        setResult(Activity.RESULT_OK);
+        Intent intent = new Intent();
+        intent.putExtra("IMPORT", importRefreshReq);
+        setResult(RESULT_OK, intent);
         finish();
         super.onBackPressed();
     }
 
     @Override
     public boolean onSupportNavigateUp() {
-        setResult(Activity.RESULT_OK);
+        Intent intent = new Intent();
+        intent.putExtra("IMPORT", importRefreshReq);
+        setResult(RESULT_OK, intent);
         finish();
 //        return super.onSupportNavigateUp();
         return true;
@@ -137,7 +141,19 @@ public class FileViewActivity extends AppCompatActivity
                 break;
 
             case android.R.id.home:
+//                AccountListActivityFragment listFragment = (AccountListActivityFragment)
+//                        getSupportFragmentManager().findFragmentByTag("acctlistfrag");
+//
+//                if (listFragment != null) {
+//                    Log.d(TAG, "onOptionsItemSelected: found account list fragment");
+//                }
+                
                 Log.d(TAG, "onOptionsItemSelected: home button pressed");
+
+                Intent intent = new Intent();
+                intent.putExtra("IMPORT", importRefreshReq);
+                setResult(RESULT_OK, intent);
+                finish();
 
         }
 
@@ -292,6 +308,21 @@ public class FileViewActivity extends AppCompatActivity
                     if (file.createNewFile()) {
                         Log.d(TAG, "ExportAccountDB: file created " + file.getAbsoluteFile());
                     }
+                } catch (IOException e1) {
+                    msgError = e1.getMessage();
+                    Log.e(TAG, "ExportAccountDB error: " + e1.getMessage());
+                    Toast.makeText(this,
+                            " Exported directory not exists",
+                            Toast.LENGTH_LONG).show();
+                    fvFragment.setInfoMessage("Exported directory not exists");
+                } catch (Exception e2) {
+                    e2.printStackTrace();
+                    System.out.println(e2.getMessage());
+                    msgError = "jsonError: " + e2.getMessage();
+                    Log.v(TAG, msgError);
+                }
+
+            }
                     ;
 //                Log.d(TAG, "ExportAccountDB: file created");
 
@@ -308,6 +339,7 @@ public class FileViewActivity extends AppCompatActivity
 //            fos.write(response);
 
 
+        try {
 //			JsonWriter writer = new JsonWriter(fileWriter);
 //            JsonWriter writer = new JsonWriter(out);
                     JsonWriter writer = new JsonWriter(new FileWriter(file));
@@ -328,9 +360,10 @@ public class FileViewActivity extends AppCompatActivity
                     msgError = "jsonError: " + e2.getMessage();
                     Log.v(TAG, msgError);
                 }
-            }
+
 //        Log.d(TAG, "ExportAccountDB: return msg " + msgError);
         if (count != -1) {
+            fvFragment.reportJson();
             Toast.makeText(this,
                     count + " Exported accounts",
                     Toast.LENGTH_LONG).show();
@@ -398,7 +431,10 @@ public class FileViewActivity extends AppCompatActivity
 
         loadSearchDB();
 
-//        FragmentManager fragmentManager = getSupportFragmentManager();
+        fvFragment.setImportRefreshReq(true);
+        importRefreshReq = true;
+
+        //        FragmentManager fragmentManager = getSupportFragmentManager();
 //        AppDialog newFragment = AppDialog.newInstance();
 //        Bundle args = new Bundle();
 //        args.putInt(AppDialog.DIALOG_ID, AppDialog.DIALOG_ID_ASK_IF_NEED_DICTIONARY_REBUILD);
@@ -513,7 +549,7 @@ public class FileViewActivity extends AppCompatActivity
 
 
     public int writeMessagesArray(JsonWriter writer) throws IOException {
-        int count = -1;
+        int count = 0;
         try {
 
             List<Account> listAccounts = loadAccounts();

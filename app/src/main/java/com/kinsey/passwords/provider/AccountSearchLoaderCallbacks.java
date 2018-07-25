@@ -64,7 +64,7 @@ public class AccountSearchLoaderCallbacks implements LoaderManager.LoaderCallbac
         }
     }
 
-    private void loadAccountDictionary(Cursor data) {
+    public void loadAccountDictionary(Cursor data) {
 //        String myUrlStr = "android.resource://com.kinsey.passwords/drawable/ic_action_user";
         ContentValues cvs = new ContentValues();
         cvs.put(SearchManager.SUGGEST_COLUMN_FORMAT, "account");

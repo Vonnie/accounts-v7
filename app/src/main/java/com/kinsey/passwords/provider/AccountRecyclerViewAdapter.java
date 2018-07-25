@@ -173,16 +173,17 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
             final Account account = AccountsContract.getAccountFromCursor(mCursor);
 //            Log.d(TAG, "onBindViewHolder: " + account.getPassportId());
 
-            if (accountSelectById) {
+//            if (accountSelectById) {
                 if (accountSelectedId == account.getId()) {
 //                    if (accountSelectedPos != -1) {
 //                        if (accountSelectedPos < getItemCount()) {
 //                            notifyItemChanged(accountSelectedPos);
 //                        }
 //                    }
+
                     accountSelectedPos = position;
-                    accountSelectById = false;
-                    accountSelectedId = -1;
+//                    accountSelectById = false;
+//                    accountSelectedId = -1;
 
                     Log.d(TAG, "onBindViewHolder: accountSelectById " + accountSelectedId);
 
@@ -190,25 +191,25 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
 //                        holder.itemView.setBackgroundColor(Color.TRANSPARENT);
 //                        resetRow = false;
 //                    } else {
-                        holder.itemView.setBackgroundColor(Color.GREEN);
+                    holder.itemView.setBackgroundColor(Color.GREEN);
 //                    notifyItemChanged(accountSelectedPos);
 //                    }
                 } else {
-                    holder.itemView.setBackgroundColor(Color.TRANSPARENT);
-                }
-            } else {
-                if (accountSelectedPos == position) {
-                    // Here I am just highlighting the background
-//                    Log.d(TAG, "onBindViewHolder: " + position);
-                    holder.itemView.setBackgroundColor(Color.GREEN);
-                } else {
+//                    holder.itemView.setBackgroundColor(Color.TRANSPARENT);
+//                }
+//            } else {
+//                if (accountSelectedPos == position) {
+//                    // Here I am just highlighting the background
+////                    Log.d(TAG, "onBindViewHolder: " + position);
+//                    holder.itemView.setBackgroundColor(Color.GREEN);
+//                } else {
 
                     if (!queryCorp.equals("")) {
                         holder.itemView.setBackgroundColor(Color.MAGENTA);
                     } else {
                         holder.itemView.setBackgroundColor(Color.TRANSPARENT);
                     }
-                }
+//                }
             }
 
 //            final Account account = new Account(mCursor.getInt(mCursor.getColumnIndex(AccountsContract.Columns._ID_COL)),
@@ -249,9 +250,9 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
 
             holder.corp_name.setText(account.getCorpName());
             if (holder.user_name != null) {
-                if (accountSortorder == AccountsContract.ACCOUNT_LIST_BY_SEQUENCE ) {
+                if (accountSortorder == AccountsContract.ACCOUNT_LIST_BY_SEQUENCE) {
                     holder.user_name.setVisibility(View.GONE);
-                } else if (accountSortorder == AccountsContract.ACCOUNT_LIST_BY_CORP_NAME ){
+                } else if (accountSortorder == AccountsContract.ACCOUNT_LIST_BY_CORP_NAME) {
                     holder.user_name.setVisibility(View.GONE);
 //                } else if (!holder.corp_name.getTag().equals(mContext.getString(R.string.tag_xlarge)) &&
 //                        !holder.corp_name.getTag().equals(mContext.getString(R.string.tag_large)) &&
@@ -267,7 +268,7 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
                 }
             }
             if (holder.open_date != null) {
-                if (accountSortorder == AccountsContract.ACCOUNT_LIST_BY_SEQUENCE ) {
+                if (accountSortorder == AccountsContract.ACCOUNT_LIST_BY_SEQUENCE) {
                     holder.open_date.setVisibility(View.GONE);
 //                } else if (holder.corp_name.getTag().equals(mContext.getString(R.string.tag_portrait)) ||
 //                        holder.corp_name.getTag().equals(mContext.getString(R.string.tag_portrait))) {
@@ -287,8 +288,6 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
             }
 
 
-
-
             if (holder.acctId != null) {
                 if (accountSortorder == AccountsContract.ACCOUNT_LIST_BY_SEQUENCE
                         || accountSortorder == AccountsContract.ACCOUNT_LIST_BY_CORP_NAME) {
@@ -299,21 +298,26 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
                 }
             }
 
+//            if (holder.website != null) {
+//                if (accountSortorder == AccountsContract.ACCOUNT_LIST_BY_SEQUENCE ) {
+//                    holder.website.setVisibility(View.GONE);
+//                } else {
+//                    if (account.getCorpWebsite().length() > 40) {
+//                        holder.website.setText(account.getCorpWebsite().toString().substring(0,40) + "...");
+//                    } else {
+//                        holder.website.setText(account.getCorpWebsite());
+//                    }
+//                }
+//            }
             if (holder.website != null) {
-                if (accountSortorder == AccountsContract.ACCOUNT_LIST_BY_SEQUENCE ) {
-                    holder.website.setVisibility(View.GONE);
-                } else {
-                    if (account.getCorpWebsite().length() > 40) {
-                        holder.website.setText(account.getCorpWebsite().toString().substring(0,40) + "...");
-                    } else {
-                        holder.website.setText(account.getCorpWebsite());
-                    }
-                }
+                holder.website.setVisibility(View.GONE);
             }
 
-            if (holder.user_email != null) {
-                holder.user_email.setText(account.getUserEmail());
-            }
+//            if (holder.user_email != null) {
+////                holder.user_email.setText(account.getUserEmail());
+//                holder.user_email.setVisibility(View.GONE);
+//                Log.d(TAG, "onBindViewHolder: user email gone");
+//            }
 
             if (holder.upAcctBtn == null ||
                     holder.dnAcctBtn == null) {
@@ -367,7 +371,13 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
 //                    } else {
 //                        mListener.onAccountListSelect(account);
 //                    }
-                    Log.d(TAG, "onClick: selected " + accountSelectedPos + ":" + account.getId() + account);
+                    Log.d(TAG, "onClick: position " + position);
+//                    Account accountClick = AccountsContract.getAccountFromCursor(mCursor);
+//                    Log.d(TAG, "onClick: accountClick " + accountClick);
+                    Log.d(TAG, "onClick: account " + account);
+                    accountSelectedId = account.getId();
+
+                    Log.d(TAG, "onClick: selected " + accountSelectedPos + ": " + account.getId() + ": " + account.getPassportId() + " " + account);
                     mListener.onAccountListSelect(account);
 //                    Log.d(TAG, "onClick: selected " + selected_position + ":" + account.getId());
                 }
@@ -579,6 +589,10 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
         this.accountSelectedPos = accountSelectedPos;
     }
 
+    public int getAccountSelectedId() {
+        return accountSelectedId;
+    }
+
     public void setAccountSelectedId(int accountSelectedId) {
         this.accountSelectedId = accountSelectedId;
     }
@@ -596,7 +610,7 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
         public final View mView;
         TextView corp_name;
         TextView user_name;
-        TextView user_email;
+//        TextView user_email;
         TextView open_date;
         TextView website;
 //        TextView seq = null;
@@ -614,7 +628,7 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
             mView = itemView;
             this.corp_name = (TextView) itemView.findViewById(R.id.srli_corp_name);
             this.user_name = (TextView) itemView.findViewById(R.id.srli_user_name);
-            this.user_email = (TextView) itemView.findViewById(R.id.srli_user_email);
+//            this.user_email = (TextView) itemView.findViewById(R.id.srli_user_email);
             this.open_date = (TextView) itemView.findViewById(R.id.tli_open_date);
             this.website = (TextView) itemView.findViewById(R.id.tli_website);
 //            this.seq = (TextView) itemView.findViewById(R.id.tli_seq);

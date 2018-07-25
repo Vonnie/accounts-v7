@@ -23,6 +23,7 @@ import com.kinsey.passwords.items.Account;
 import com.kinsey.passwords.items.AccountsContract;
 import com.kinsey.passwords.items.SuggestsContract;
 import com.kinsey.passwords.provider.AccountRecyclerViewAdapter;
+import com.kinsey.passwords.provider.AccountSearchLoaderCallbacks;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,6 +65,7 @@ public class AccountListActivityFragment extends Fragment
 
         void onAccountListSelect(Account account);
         void onAccountLong(Account account);
+        void onListComplete();
     }
 
 
@@ -275,8 +277,9 @@ public class AccountListActivityFragment extends Fragment
 
     public void resortList(int sortorder) {
         Log.d(TAG, "resortList: " + sortorder);
+//        int acctId = mAccountAdapter.getAccountSelectedPos();
         mAccountAdapter.setAccountSelectedPos(-1);
-        mAccountAdapter.setAccountSelectById(false);
+//        mAccountAdapter.setAccountSelectById(false);
         mAccountAdapter.setQueryCorp("");
         mAccountAdapter.setAccountSortorder(sortorder);
 //        mRecyclerView.swapAdapter(mAccountAdapter, false);
@@ -285,6 +288,13 @@ public class AccountListActivityFragment extends Fragment
 
         Log.d(TAG, "resortFragList: createLoader");
         createLoader();
+
+//        if (acctId != -1) {
+//            Log.d(TAG, "resortList: acctId " + acctId);
+//            setAcctId(acctId);
+//            setScrollPos();
+//        }
+
 
     }
 
@@ -319,13 +329,16 @@ public class AccountListActivityFragment extends Fragment
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         Log.d(TAG, "onLoadFinished: starts");
-        Log.d(TAG, "onLoadFinished: starts");
+        Log.d(TAG, "onLoadFinished: starts " + mAccountAdapter.getAccountSelectedId());
 //        this.loader = loader;
         int count = 0;
         mAccountAdapter.swapCursor(data);
-        if (mAccountAdapter.getAccountSelectedPos() != -1) {
+        if (mAccountAdapter.getAccountSelectedId() != -1) {
+            mAccountAdapter.setPosById(mAccountAdapter.getAccountSelectedId());
+//        if (mAccountAdapter.getAccountSelectedPos() != -1) {
             Log.d(TAG, "onLoadFinished: adapter set");
             mRecyclerView.scrollToPosition(mAccountAdapter.getAccountSelectedPos());
+            mListener.onListComplete();
 //            mRecyclerView.findViewHolderForAdapterPosition(accountSelectedPos);
 //            mRecyclerView.findViewHolderForAdapterPosition(accountSelectedPos).itemView.performClick();
         }
@@ -346,6 +359,13 @@ public class AccountListActivityFragment extends Fragment
 ////            mRecyclerView.findViewHolderForAdapterPosition(accountSelectedPos).itemView.performClick();
 //        }
 //    }
+
+    public void setScrollPos() {
+        if (mAccountAdapter.getAccountSelectedPos() != -1) {
+            Log.d(TAG, "setScrollPos: adapter set");
+            mRecyclerView.scrollToPosition(mAccountAdapter.getAccountSelectedPos());
+        }
+    }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
@@ -643,6 +663,28 @@ public class AccountListActivityFragment extends Fragment
         return listAccounts;
     }
 
+
+    public void rebuildDict() {
+        String sortOrder = AccountsContract.Columns.SEQUENCE_COL + "," + AccountsContract.Columns.CORP_NAME_COL.toLowerCase() + " COLLATE NOCASE ASC";
+        Cursor cursor = getActivity().getContentResolver().query(
+                AccountsContract.CONTENT_URI, null, null, null, sortOrder);
+
+        AccountSearchLoaderCallbacks loaderAcctCallbacks = new AccountSearchLoaderCallbacks(getActivity());
+//                        getLoaderManager().restartLoader(SEARCH_LOADER_ID, null, loaderAcctCallbacks);
+
+        try {
+            cursor.moveToFirst();
+            do {
+                loaderAcctCallbacks.loadAccountDictionary(cursor);
+            } while (cursor.moveToNext());
+            cursor.close();
+
+        } catch (Exception e) {
+            Log.e(TAG, "onLoadFinished() error: " + e.getMessage());
+        }
+
+
+    }
 
     @Override
     public void onAccountLong(Account account) {
