@@ -160,8 +160,8 @@
     <string name="accedit_open_date_label">Open Date, click to chg</string>
     <string name="btn_open_date_label">Select Open Date</string>
     <string name="accedit_sort_seq_label">Custom Sort Seq</string>
-    <string name="accedit_from_seq_label">Id from another acct</string>
-    <string name="accedit_to_seq">Id to another acct</string>
+    <string name="accedit_from_seq_label">Id from acct</string>
+    <string name="accedit_to_seq">Id to acct</string>
     <string name="accedit_actvy_date_label">Activity Date</string>
     <string name="accedit_corp_name_label">Corp Name</string>
     <string name="accedit_notes_label">Notes</string>

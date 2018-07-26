@@ -11,10 +11,20 @@
     tools:scrollbarStyle="insideOverlay">
 
     <TextView
+        android:id="@+id/acc_account_id"
+        android:layout_width="150dp"
+        android:layout_height="36dp"
+        android:layout_marginEnd="8dp"
+        android:textAlignment="viewEnd"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
         android:id="@+id/lbl_corp_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="8dp"
         android:labelFor="@+id/addedit_corp_name"
         android:text="@string/accedit_corp_name_label"
         app:layout_constraintStart_toStartOf="parent"
@@ -29,7 +39,7 @@
         android:layout_marginTop="4dp"
         android:ems="10"
         android:hint="@string/addedit_corp_name_hint"
-        android:inputType="textNoSuggestions"
+        android:inputType="textMultiLine|textNoSuggestions"
         android:maxLength="64"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -83,7 +93,7 @@
         android:layout_marginStart="8dp"
         android:ems="10"
         android:hint="@string/addedit_user_name_hint"
-        android:inputType="textNoSuggestions"
+        android:inputType="textMultiLine|textNoSuggestions"
         android:maxLength="64"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -146,11 +156,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:layout_marginTop="16dp"
         android:labelFor="@+id/addedit_open_date"
         android:text="@string/accedit_open_date_label"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/acc_account_id" />
+        app:layout_constraintBaseline_toBaselineOf="@+id/addedit_actvy_date"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <!--<Button-->
         <!--android:id="@+id/addedit_save"-->
@@ -167,7 +176,7 @@
         android:id="@+id/addedit_open_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="8dp"
         android:text="@string/btn_open_date_label"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lbl_open_date" />
@@ -177,16 +186,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:labelFor="@+id/acc_seq"
         android:text="@string/accedit_sort_seq_label"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addedit_notes" />
+        app:layout_constraintTop_toBottomOf="@+id/acc_ref_from" />
 
     <EditText
         android:id="@+id/acc_seq"
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="16dp"
         android:ems="10"
         android:hint="@string/accedit_seq_hint"
         android:inputType="number"
@@ -194,31 +204,21 @@
         app:layout_constraintTop_toBottomOf="@+id/lbl_seq" />
 
     <TextView
-        android:id="@+id/acc_account_id"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="16dp"
-        android:textAlignment="viewEnd"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addedit_notes" />
-
-    <TextView
         android:id="@+id/lbl_ref_from"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
         android:labelFor="@+id/acc_ref_from"
         android:text="@string/accedit_from_seq_label"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/acc_seq" />
+        app:layout_constraintTop_toBottomOf="@+id/addedit_open_date" />
 
     <EditText
         android:id="@+id/acc_ref_from"
-        android:layout_width="150dp"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:ems="10"
         android:hint="@string/accedit_ref_from_hint"
         android:inputType="number"
@@ -230,30 +230,32 @@
         android:id="@+id/lbl_ref_to"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginEnd="16dp"
         android:labelFor="@+id/acc_ref_to"
         android:text="@string/accedit_to_seq"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/acc_ref_from" />
+        app:layout_constraintBaseline_toBaselineOf="@+id/lbl_ref_from"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <EditText
         android:id="@+id/acc_ref_to"
-        android:layout_width="150dp"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         android:ems="10"
         android:hint="@string/accedit_ref_to_hint"
         android:inputType="number"
-        app:layout_constraintStart_toStartOf="@+id/acc_ref_from"
+        android:textAlignment="viewEnd"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lbl_ref_to" />
 
     <TextView
         android:id="@+id/addedit_actvy_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:text="@string/accedit_actvy_date_label"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addedit_open_date" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/addedit_notes" />
 
 </android.support.constraint.ConstraintLayout>

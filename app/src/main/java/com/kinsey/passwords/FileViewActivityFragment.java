@@ -1,5 +1,7 @@
 package com.kinsey.passwords;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -20,7 +22,16 @@ public class FileViewActivityFragment extends Fragment {
     WebView webView;
 //    TextView tvLocation;
 
-    boolean importRefreshReq = false;
+//    boolean importRefreshReq = false;
+
+
+    private OnFileViewClickListener mListener;
+
+    public interface OnFileViewClickListener {
+
+        void onFileViewShown();
+    }
+
 
     public FileViewActivityFragment() {
     }
@@ -39,8 +50,11 @@ public class FileViewActivityFragment extends Fragment {
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageFinished(WebView web, String url) {
-                web.loadUrl("javascript:(function(){ document.body.style.paddingTop = '30px'})();");
+                web.loadUrl("javascript:(function(){ document.body.style.paddingTop = '5px'})();");
+                Log.d(TAG, "onPageFinished: ");
+                mListener.onFileViewShown();
             }
+
         });
         reportJson();
 
@@ -118,11 +132,34 @@ public class FileViewActivityFragment extends Fragment {
         }
     }
 
-    public boolean isImportRefreshReq() {
-        return importRefreshReq;
+//    public boolean isImportRefreshReq() {
+//        return importRefreshReq;
+//    }
+//
+//    public void setImportRefreshReq(boolean importRefreshReq) {
+//        this.importRefreshReq = importRefreshReq;
+//    }
+
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        // Activities containing this fragment must implement it's callbacks
+        Activity activity = getActivity();
+        if (!(activity instanceof FileViewActivityFragment.OnFileViewClickListener)) {
+            throw new ClassCastException(activity.getClass().getSimpleName()
+                    + " must implement FileViewActivityFragment interface");
+        }
+        mListener = (FileViewActivityFragment.OnFileViewClickListener) activity;
+
     }
 
-    public void setImportRefreshReq(boolean importRefreshReq) {
-        this.importRefreshReq = importRefreshReq;
+    @Override
+    public void onDetach() {
+//        Log.d(TAG, "onDetach: starts");
+        super.onDetach();
+        mListener = null;
     }
+
 }

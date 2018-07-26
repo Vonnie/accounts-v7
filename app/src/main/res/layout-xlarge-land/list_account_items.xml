@@ -22,13 +22,13 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/tli_website"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/srli_corp_name"
-        android:layout_marginLeft="16dp" />
+    <!--<TextView-->
+        <!--android:id="@+id/tli_website"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--app:layout_constraintLeft_toLeftOf="parent"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/srli_corp_name"-->
+        <!--android:layout_marginLeft="16dp" />-->
 
 
     <!--<TextView-->

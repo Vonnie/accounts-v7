@@ -10,8 +10,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="@string/addedit_corp_name_hint"
-        android:inputType="textNoSuggestions"
-        android:maxLength="64"/>
+        android:inputType="textNoSuggestions" />
 
     <EditText
         android:id="@+id/addedit_corp_website"

@@ -108,7 +108,7 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
                 break;
             case AccountsContract.ACCOUNT_LIST_BY_PASSPORT_ID:
 //                Log.d(TAG, "onCreateViewHolder: list by acct id");
-                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_account_items, parent, false);
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_account_items_id, parent, false);
                 break;
             case AccountsContract.ACCOUNT_LIST_BY_SEQUENCE:
 //                Log.d(TAG, "onCreateViewHolder: list by user seq");
@@ -309,9 +309,9 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
 //                    }
 //                }
 //            }
-            if (holder.website != null) {
-                holder.website.setVisibility(View.GONE);
-            }
+//            if (holder.website != null) {
+//                holder.website.setVisibility(View.GONE);
+//            }
 
 //            if (holder.user_email != null) {
 ////                holder.user_email.setText(account.getUserEmail());
@@ -612,7 +612,7 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
         TextView user_name;
 //        TextView user_email;
         TextView open_date;
-        TextView website;
+//        TextView website;
 //        TextView seq = null;
         TextView acctId = null;
         ImageButton upAcctBtn;
@@ -630,7 +630,7 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
             this.user_name = (TextView) itemView.findViewById(R.id.srli_user_name);
 //            this.user_email = (TextView) itemView.findViewById(R.id.srli_user_email);
             this.open_date = (TextView) itemView.findViewById(R.id.tli_open_date);
-            this.website = (TextView) itemView.findViewById(R.id.tli_website);
+//            this.website = (TextView) itemView.findViewById(R.id.tli_website);
 //            this.seq = (TextView) itemView.findViewById(R.id.tli_seq);
             this.acctId = (TextView) itemView.findViewById(R.id.tli_acct_id);
             this.upAcctBtn = (ImageButton) itemView.findViewById(R.id.tli_account_up);

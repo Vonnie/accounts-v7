@@ -17,7 +17,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -208,7 +207,7 @@ public class AddEditActivityFragment extends Fragment {
         mAccountIdTextView = view.findViewById(R.id.acc_account_id);
         mAccRefFrom = view.findViewById(R.id.acc_ref_from);
         mAccRefTo = view.findViewById(R.id.acc_ref_to);
-        Button saveButton = view.findViewById(R.id.addedit_save);
+//        Button saveButton = view.findViewById(R.id.addedit_save);
 
 //        Button dateButton = view.findViewById(R.id.addedit_btn_date);
 
@@ -254,13 +253,13 @@ public class AddEditActivityFragment extends Fragment {
                     mtvOpenDate.setText("Click here for OpenDate");
                     lngOpenDate = 0;
                 } else {
-                    mtvOpenDate.setText("OpenDate: " + format_ymd.format(account.getOpenLong()));
+                    mtvOpenDate.setText(format_ymd.format(account.getOpenLong()));
                     Date dteOpen = new Date(account.getOpenLong());
                     cldrOpened.setTime(dteOpen);
                     lngOpenDate = account.getOpenLong();
                 }
                 mAccountIdTextView.setText("Account Id: " + String.valueOf(account.getPassportId()));
-                mtvActvyDate.setText("ActvyDate: " + format_ymdtimehm.format(account.getActvyLong()));
+                mtvActvyDate.setText("ActvyDate:\n" + format_ymdtimehm.format(account.getActvyLong()));
                 mMode = FragmentEditMode.EDIT;
             } else {
                 // No task, so we must be adding a new task, and not editing an  existing one

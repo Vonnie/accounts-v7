@@ -1823,6 +1823,7 @@ public class MainActivity extends AppCompatActivity
                     boolean blnImported = data.getBooleanExtra("IMPORT", false);
                     Log.d(TAG, "onActivityResult: fileview imported? "  + blnImported);
                     if (blnImported) {
+                        loadSearchDB();
                         resortList(AccountsContract.ACCOUNT_LIST_BY_CORP_NAME);
                         Log.d(TAG, "onActivityResult: refreshed");
                     }
@@ -1966,11 +1967,12 @@ public class MainActivity extends AppCompatActivity
                         Toast.makeText(MainActivity.this,
                                 "Search Dictionary DB built",
                                 Toast.LENGTH_LONG).show();
+                        progressBar.setVisibility(View.GONE);
+
                     }
                 });
             }
         }).start();
-//        progressBar.setVisibility(View.GONE);
 //        mHandler.post(mRunnable);
     }
 

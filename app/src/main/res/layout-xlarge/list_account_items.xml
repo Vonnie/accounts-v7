@@ -33,14 +33,14 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="@+id/srli_corp_name" />
 
-    <TextView
-        android:id="@+id/tli_website"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:textSize="18sp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/srli_corp_name" />
+    <!--<TextView-->
+        <!--android:id="@+id/tli_website"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginStart="16dp"-->
+        <!--android:textSize="18sp"-->
+        <!--app:layout_constraintLeft_toLeftOf="parent"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/srli_corp_name" />-->
 
     <!--<TextView-->
         <!--android:id="@+id/srli_user_name"-->

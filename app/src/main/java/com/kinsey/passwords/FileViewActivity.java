@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -15,12 +16,12 @@ import android.util.JsonWriter;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.kinsey.passwords.items.Account;
 import com.kinsey.passwords.items.AccountsContract;
-import com.kinsey.passwords.items.SearchesContract;
-import com.kinsey.passwords.provider.AccountSearchLoaderCallbacks;
 import com.kinsey.passwords.tools.AppDialog;
 
 import java.io.File;
@@ -37,13 +38,15 @@ import static com.kinsey.passwords.MainActivity.DEFAULT_APP_DIRECTORY;
 import static com.kinsey.passwords.MainActivity.format_ymdtime;
 
 public class FileViewActivity extends AppCompatActivity
-    implements  AppDialog.DialogEvents {
+    implements FileViewActivityFragment.OnFileViewClickListener {
+//        implements AppDialog.DialogEvents {
 
     private static final String TAG = "FileViewActivity";
 
     FileViewActivityFragment fvFragment;
     boolean importRefreshReq = false;
-
+    ProgressBar progressBar;
+    private Handler mHandler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,17 +75,32 @@ public class FileViewActivity extends AppCompatActivity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
-        fvFragment = (FileViewActivityFragment)fragmentManager.findFragmentById(R.id.json_fragment);
-        if (fvFragment != null) {
-            Log.d(TAG, "onCreate: found the fragment");
-            fvFragment.setInfoMessage("Able to connect");
-        }
+        fvFragment = (FileViewActivityFragment) fragmentManager.findFragmentById(R.id.json_fragment);
+//        if (fvFragment != null) {
+//            Log.d(TAG, "onCreate: found the fragment");
+//            fvFragment.setInfoMessage("Able to connect");
+//        }
 
         //
 //        FragmentManager fragmentManager = getFragmentManager();
 //        if (fragmentManager.findFragmentById(R.id.fragment) == null) {
 //
 //        }
+
+
+//        new CountDownTimer(3000, 3000) {
+//
+//            public void onTick(long millisUntilFinished) {
+////                    holder.corp_name.setText("checking db, seconds remaining: " + millisUntilFinished / 1000);
+//            }
+//
+//            public void onFinish() {
+//                progressBar  = findViewById(R.id.progressBar);
+//                progressBar.setVisibility(View.GONE);
+//            }
+//        }.start();
+
+
     }
 
     @Override
@@ -131,12 +149,12 @@ public class FileViewActivity extends AppCompatActivity
                 break;
 
             case R.id.vw_import:
-                Log.d(TAG, "onOptionsItemSelected: Export");
+                Log.d(TAG, "onOptionsItemSelected: Import");
                 ImportAccountDB();
                 break;
 
             case R.id.vw_filename:
-                Log.d(TAG, "onOptionsItemSelected: Export");
+                Log.d(TAG, "onOptionsItemSelected: View filename");
                 showFilename();
                 break;
 
@@ -147,7 +165,7 @@ public class FileViewActivity extends AppCompatActivity
 //                if (listFragment != null) {
 //                    Log.d(TAG, "onOptionsItemSelected: found account list fragment");
 //                }
-                
+
                 Log.d(TAG, "onOptionsItemSelected: home button pressed");
 
                 Intent intent = new Intent();
@@ -174,6 +192,7 @@ public class FileViewActivity extends AppCompatActivity
         dialog.show(getSupportFragmentManager(), null);
 
     }
+
     private void shareExport() {
 
         Intent emailintent = new Intent(Intent.ACTION_SEND);
@@ -212,8 +231,6 @@ public class FileViewActivity extends AppCompatActivity
     public String ExportAccountDB() {
         String msgError = "";
         int count = -1;
-
-
 
 
 ////            File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath(), filename);
@@ -266,64 +283,64 @@ public class FileViewActivity extends AppCompatActivity
 //                }
 //            }
 
-            File file = new File(DEFAULT_APP_DIRECTORY, "accounts.json");
+        File file = new File(DEFAULT_APP_DIRECTORY, "accounts.json");
 
-            if (file.exists()) {
+        if (file.exists()) {
 //                Log.d(TAG, "ExportAccountDB: file exists");
+        } else {
+
+            Log.d(TAG, "ExportAccountDB: got file " + file.getAbsoluteFile());
+            Log.d(TAG, "ExportAccountDB: got dir " + file.getParentFile().getParentFile().getParentFile().getAbsoluteFile());
+            if (file.getParentFile().getParentFile().getParentFile().exists()) {
+                Log.d(TAG, "ExportAccountDB: parent dir found " + file.getParentFile().getParentFile().getParentFile().getAbsoluteFile());
             } else {
-
-                Log.d(TAG, "ExportAccountDB: got file " + file.getAbsoluteFile());
-                Log.d(TAG, "ExportAccountDB: got dir " + file.getParentFile().getParentFile().getParentFile().getAbsoluteFile());
-                if (file.getParentFile().getParentFile().getParentFile().exists()) {
-                    Log.d(TAG, "ExportAccountDB: parent dir found " + file.getParentFile().getParentFile().getParentFile().getAbsoluteFile());
-                } else {
-                    if (file.getParentFile().getParentFile().getParentFile().mkdirs()) {
-                        Log.d(TAG, "ExportAccountDB: dirs made " + file.getParentFile().getParentFile().getParentFile().getAbsoluteFile());
-                    }
+                if (file.getParentFile().getParentFile().getParentFile().mkdirs()) {
+                    Log.d(TAG, "ExportAccountDB: dirs made " + file.getParentFile().getParentFile().getParentFile().getAbsoluteFile());
                 }
+            }
 
-                if (file.getParentFile().getParentFile().exists()) {
-                    Log.d(TAG, "ExportAccountDB: parent dir found " + file.getParentFile().getParentFile().getAbsoluteFile());
-                } else {
-                    if (file.getParentFile().getParentFile().mkdirs()) {
-                        Log.d(TAG, "ExportAccountDB: dirs made " + file.getParentFile().getParentFile().getAbsoluteFile());
-                    }
+            if (file.getParentFile().getParentFile().exists()) {
+                Log.d(TAG, "ExportAccountDB: parent dir found " + file.getParentFile().getParentFile().getAbsoluteFile());
+            } else {
+                if (file.getParentFile().getParentFile().mkdirs()) {
+                    Log.d(TAG, "ExportAccountDB: dirs made " + file.getParentFile().getParentFile().getAbsoluteFile());
                 }
+            }
 
-                if (file.getParentFile().exists()) {
-                    Log.d(TAG, "ExportAccountDB: parent dir found " + file.getParentFile().getAbsoluteFile());
-                } else {
-                    if (file.getParentFile().mkdirs()) {
-                        Log.d(TAG, "ExportAccountDB: dirs made " + file.getParentFile().getAbsoluteFile());
-                    }
+            if (file.getParentFile().exists()) {
+                Log.d(TAG, "ExportAccountDB: parent dir found " + file.getParentFile().getAbsoluteFile());
+            } else {
+                if (file.getParentFile().mkdirs()) {
+                    Log.d(TAG, "ExportAccountDB: dirs made " + file.getParentFile().getAbsoluteFile());
                 }
+            }
 
-                //                Log.d(TAG, "ExportAccountDB: file does not exists");
+            //                Log.d(TAG, "ExportAccountDB: file does not exists");
 //                if (file.isDirectory()) {
 //                    Log.d(TAG, "ExportAccountDB: file is dir");
 //                }
-                Log.d(TAG, "ExportAccountDB: file " + file.getAbsoluteFile());
+            Log.d(TAG, "ExportAccountDB: file " + file.getAbsoluteFile());
 
-                try {
-                    if (file.createNewFile()) {
-                        Log.d(TAG, "ExportAccountDB: file created " + file.getAbsoluteFile());
-                    }
-                } catch (IOException e1) {
-                    msgError = e1.getMessage();
-                    Log.e(TAG, "ExportAccountDB error: " + e1.getMessage());
-                    Toast.makeText(this,
-                            " Exported directory not exists",
-                            Toast.LENGTH_LONG).show();
-                    fvFragment.setInfoMessage("Exported directory not exists");
-                } catch (Exception e2) {
-                    e2.printStackTrace();
-                    System.out.println(e2.getMessage());
-                    msgError = "jsonError: " + e2.getMessage();
-                    Log.v(TAG, msgError);
+            try {
+                if (file.createNewFile()) {
+                    Log.d(TAG, "ExportAccountDB: file created " + file.getAbsoluteFile());
                 }
-
+            } catch (IOException e1) {
+                msgError = e1.getMessage();
+                Log.e(TAG, "ExportAccountDB error: " + e1.getMessage());
+                Toast.makeText(this,
+                        " Exported directory not exists",
+                        Toast.LENGTH_LONG).show();
+//                    fvFragment.setInfoMessage("Exported directory not exists");
+            } catch (Exception e2) {
+                e2.printStackTrace();
+                System.out.println(e2.getMessage());
+                msgError = "jsonError: " + e2.getMessage();
+                Log.v(TAG, msgError);
             }
-                    ;
+
+        }
+        ;
 //                Log.d(TAG, "ExportAccountDB: file created");
 
 //                OutputStream fos = new BufferedOutputStream(new FileOutputStream(file));
@@ -342,28 +359,29 @@ public class FileViewActivity extends AppCompatActivity
         try {
 //			JsonWriter writer = new JsonWriter(fileWriter);
 //            JsonWriter writer = new JsonWriter(out);
-                    JsonWriter writer = new JsonWriter(new FileWriter(file));
-                    writer.setIndent("  ");
-                    count = writeMessagesArray(writer);
-                    writer.flush();
-                    writer.close();
-                } catch (IOException e1) {
-                    msgError = e1.getMessage();
-                    Log.e(TAG, "ExportAccountDB error: " + e1.getMessage());
-                    Toast.makeText(this,
-                            " Exported directory not exists",
-                            Toast.LENGTH_LONG).show();
-                    fvFragment.setInfoMessage("Exported directory not exists");
-                } catch (Exception e2) {
-                    e2.printStackTrace();
-                    System.out.println(e2.getMessage());
-                    msgError = "jsonError: " + e2.getMessage();
-                    Log.v(TAG, msgError);
-                }
+            JsonWriter writer = new JsonWriter(new FileWriter(file));
+            writer.setIndent("  ");
+            count = writeMessagesArray(writer);
+            writer.flush();
+            writer.close();
+            fvFragment.reportJson();
+        } catch (IOException e1) {
+            msgError = e1.getMessage();
+            Log.e(TAG, "ExportAccountDB error: " + e1.getMessage());
+            Toast.makeText(this,
+                    " Exported directory not exists",
+                    Toast.LENGTH_LONG).show();
+//                    fvFragment.setInfoMessage("Exported directory not exists");
+        } catch (Exception e2) {
+            e2.printStackTrace();
+            System.out.println(e2.getMessage());
+            msgError = "jsonError: " + e2.getMessage();
+            Log.v(TAG, msgError);
+        }
 
 //        Log.d(TAG, "ExportAccountDB: return msg " + msgError);
         if (count != -1) {
-            fvFragment.reportJson();
+
             Toast.makeText(this,
                     count + " Exported accounts",
                     Toast.LENGTH_LONG).show();
@@ -374,67 +392,97 @@ public class FileViewActivity extends AppCompatActivity
 
     private void ImportAccountDB() {
 //        Log.d(TAG, "ImportAccountDB: starts");
-        String msg = "";
-        try {
-            List<Account> listAccounts = new ArrayList<Account>();
-            JsonReader reader;
-            try {
-                reader = new JsonReader(new FileReader(
-                        MainActivity.DEFAULT_APP_DIRECTORY + "/accounts.json"));
-                // reader.beginObject();
+        progressBar = findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.VISIBLE);
 
-            } catch (IOException ex) {
-                Toast.makeText(this,
-                        " File of exported accounts not found",
-                        Toast.LENGTH_LONG).show();
-                fvFragment.setInfoMessage("Not able to find external file of exported accounts");
-                return;
-            }
-            reader.beginArray();
-            while (reader.hasNext()) {
-                Account account = readMessage(reader);
-                if (account == null) {
-                    break;
-                } else {
-                    listAccounts.add(account);
-                }
-            }
-            reader.endArray();
-            reader.close();
 
-            ContentResolver contentResolver = getContentResolver();
-            getContentResolver().delete(AccountsContract.CONTENT_URI, null, null);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
 
-            for (Account item : listAccounts) {
+                String msg = "";
+                boolean error = false;
+                try {
+                    List<Account> listAccounts = new ArrayList<Account>();
+                    final JsonReader reader = new JsonReader(new FileReader(
+                            MainActivity.DEFAULT_APP_DIRECTORY + "/accounts.json"));
+                    // reader.beginObject();
+
+
+                    //                Toast.makeText(this,
+//                        " File of exported accounts not found",
+//                        Toast.LENGTH_LONG).show();
+//                fvFragment.setInfoMessage("Not able to find external file of exported accounts");
+//                return;
+
+
+                    reader.beginArray();
+                    while (reader.hasNext()) {
+                        Account account = readMessage(reader);
+                        if (account == null) {
+                            break;
+                        } else {
+                            listAccounts.add(account);
+                        }
+                    }
+                    reader.endArray();
+                    reader.close();
+
+                    ContentResolver contentResolver = getContentResolver();
+                    getContentResolver().delete(AccountsContract.CONTENT_URI, null, null);
+
+                    for (Account item : listAccounts) {
 //                Log.d(TAG, "ImportAccountDB: acc " + item.getPassportId()
 //                        + " " + item.getCorpName());
-                addAccountToDB(contentResolver, item);
-            }
+                        addAccountToDB(contentResolver, item);
+                    }
 
-            msg = listAccounts.size() + " Accounts Imported";
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            msg = "import file not found";
-        } catch (IOException e) {
-            e.printStackTrace();
-            msg = "import file error " + e.getMessage();
+                    msg = listAccounts.size() + " Accounts Imported";
+
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                    msg = "import file not found";
+                    error = true;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    msg = "import file error " + e.getMessage();
+                    error = true;
 //			savePassports();
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            msg = "import exception";
-        }
+                } catch (Exception e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                    msg = "import exception";
+                    error = true;
+                }
+
+                final String notifyMsg = msg;
+                final boolean notifyError = error;
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        if (notifyError) {
+
+                            Toast.makeText(getApplicationContext(),
+                                    notifyMsg, Toast.LENGTH_LONG).show();
+                        } else {
+                            importRefreshReq = true;
+                            Intent intent = new Intent();
+                            intent.putExtra("IMPORT", importRefreshReq);
+                            setResult(RESULT_OK, intent);
+                            finish();
+                        }
+
+                    }
+                });
+            }
+        });
+//        loadSearchDB();
+
+//        fvFragment.setImportRefreshReq(true);
 
 
-        Toast.makeText(this,
-                msg, Toast.LENGTH_LONG).show();
-
-        loadSearchDB();
-
-        fvFragment.setImportRefreshReq(true);
-        importRefreshReq = true;
-
-        //        FragmentManager fragmentManager = getSupportFragmentManager();
+                //        FragmentManager fragmentManager = getSupportFragmentManager();
 //        AppDialog newFragment = AppDialog.newInstance();
 //        Bundle args = new Bundle();
 //        args.putInt(AppDialog.DIALOG_ID, AppDialog.DIALOG_ID_ASK_IF_NEED_DICTIONARY_REBUILD);
@@ -445,259 +493,263 @@ public class FileViewActivity extends AppCompatActivity
 //        newFragment.setArguments(args);
 //        newFragment.show(fragmentManager, "dialog");
 
-    }
+            }
 
 
-    private void addAccountToDB(ContentResolver contentResolver, Account account) {
+            final private void addAccountToDB(ContentResolver contentResolver, Account account) {
 
-        ContentValues values = new ContentValues();
-        values.put(AccountsContract.Columns.PASSPORT_ID_COL, account.getPassportId());
-        values.put(AccountsContract.Columns.CORP_NAME_COL, account.getCorpName());
-        values.put(AccountsContract.Columns.USER_NAME_COL, account.getUserName());
-        values.put(AccountsContract.Columns.USER_EMAIL_COL, account.getUserEmail());
-        values.put(AccountsContract.Columns.CORP_WEBSITE_COL, account.getCorpWebsite());
-        values.put(AccountsContract.Columns.NOTE_COL, account.getNote());
-        values.put(AccountsContract.Columns.OPEN_DATE_COL, account.getOpenLong());
-        values.put(AccountsContract.Columns.ACTVY_DATE_COL, account.getActvyLong());
-        values.put(AccountsContract.Columns.REF_FROM_COL, account.getRefFrom());
-        values.put(AccountsContract.Columns.REF_TO_COL, account.getRefTo());
-        values.put(AccountsContract.Columns.SEQUENCE_COL, account.getSequence());
-        contentResolver.insert(AccountsContract.CONTENT_URI, values);
+                ContentValues values = new ContentValues();
+                values.put(AccountsContract.Columns.PASSPORT_ID_COL, account.getPassportId());
+                values.put(AccountsContract.Columns.CORP_NAME_COL, account.getCorpName());
+                values.put(AccountsContract.Columns.USER_NAME_COL, account.getUserName());
+                values.put(AccountsContract.Columns.USER_EMAIL_COL, account.getUserEmail());
+                values.put(AccountsContract.Columns.CORP_WEBSITE_COL, account.getCorpWebsite());
+                values.put(AccountsContract.Columns.NOTE_COL, account.getNote());
+                values.put(AccountsContract.Columns.OPEN_DATE_COL, account.getOpenLong());
+                values.put(AccountsContract.Columns.ACTVY_DATE_COL, account.getActvyLong());
+                values.put(AccountsContract.Columns.REF_FROM_COL, account.getRefFrom());
+                values.put(AccountsContract.Columns.REF_TO_COL, account.getRefTo());
+                values.put(AccountsContract.Columns.SEQUENCE_COL, account.getSequence());
+                contentResolver.insert(AccountsContract.CONTENT_URI, values);
 
-    }
+            }
 
-    private Account readMessage(JsonReader reader) {
-        Account item = new Account();
-        boolean retSuccess = true;
-        try {
-            reader.beginObject();
-            Calendar c1 = Calendar.getInstance();
-            while (reader.hasNext()) {
-                String name = reader.nextName();
-                String value = "";
-                int iValue = 0;
-                if (name.equals("corpName")) {
-                    // System.out.println(reader.nextString());
-                    value = reader.nextString();
+            final private Account readMessage(JsonReader reader) {
+                Account item = new Account();
+                boolean retSuccess = true;
+                try {
+                    reader.beginObject();
+                    Calendar c1 = Calendar.getInstance();
+                    while (reader.hasNext()) {
+                        String name = reader.nextName();
+                        String value = "";
+                        int iValue = 0;
+                        if (name.equals("corpName")) {
+                            // System.out.println(reader.nextString());
+                            value = reader.nextString();
 //					Log.v(TAG, "json corpName " + value);
-                    item.setCorpName(value);
-                } else if (name.equals("accountId")) {
-                    // System.out.println(reader.nextInt());
-                    iValue = reader.nextInt();
-                    Log.v(TAG, "json id " + iValue);
-                    item.setPassportId(iValue);
-                } else if (name.equals("seq")) {
-                    // System.out.println(reader.nextInt());
-                    iValue = reader.nextInt();
+                            item.setCorpName(value);
+                        } else if (name.equals("accountId")) {
+                            // System.out.println(reader.nextInt());
+                            iValue = reader.nextInt();
+                            Log.v(TAG, "json id " + iValue);
+                            item.setPassportId(iValue);
+                        } else if (name.equals("seq")) {
+                            // System.out.println(reader.nextInt());
+                            iValue = reader.nextInt();
 //					Log.v(TAG, "json seq " + iValue);
-                    item.setSequence(iValue);
-                } else if (name.equals("userName")) {
-                    value = reader.nextString();
+                            item.setSequence(iValue);
+                        } else if (name.equals("userName")) {
+                            value = reader.nextString();
 //					Log.v(TAG, "json userName " + value);
-                    item.setUserName(value);
-                } else if (name.equals("userEmail")) {
-                    value = reader.nextString();
+                            item.setUserName(value);
+                        } else if (name.equals("userEmail")) {
+                            value = reader.nextString();
 //					Log.v(TAG, "json userEmail " + value);
-                    item.setUserEmail(value);
-                } else if (name.equals("refFrom")) {
-                    iValue = reader.nextInt();
+                            item.setUserEmail(value);
+                        } else if (name.equals("refFrom")) {
+                            iValue = reader.nextInt();
 //					Log.v(TAG, "json refFrom " + iValue);
-                    item.setRefFrom(iValue);
-                } else if (name.equals("refTo")) {
-                    iValue = reader.nextInt();
+                            item.setRefFrom(iValue);
+                        } else if (name.equals("refTo")) {
+                            iValue = reader.nextInt();
 //					Log.v(TAG, "json refTo " + iValue);
-                    item.setRefTo(iValue);
-                } else if (name.equals("website")) {
-                    value = reader.nextString();
+                            item.setRefTo(iValue);
+                        } else if (name.equals("website")) {
+                            value = reader.nextString();
 //					Log.v(TAG, "json website " + value);
 //                    URL urlValue = new URL(value);
 //                    item.setCorpWebsite(urlValue);
-                    item.setCorpWebsite(value);
-                } else if (name.equals("openDt")) {
-                    value = reader.nextString();
+                            item.setCorpWebsite(value);
+                        } else if (name.equals("openDt")) {
+                            value = reader.nextString();
 //					Log.v(TAG, "json openDt " + value);
-                    Date dte = format_ymdtime.parse(value);
-                    c1.setTime(dte);
-                    item.setOpenLong(c1.getTimeInMillis());
-                } else if (name.equals("actvyDt")) {
+                            Date dte = format_ymdtime.parse(value);
+                            c1.setTime(dte);
+                            item.setOpenLong(c1.getTimeInMillis());
+                        } else if (name.equals("actvyDt")) {
 //					Log.v(TAG, "actvyDt reader " + reader);
-                    Date dte;
-                    if (reader.peek() == JsonToken.NULL) {
-                        reader.nextNull();
-                        dte = new Date();
-                    } else {
-                        value = reader.nextString();
+                            Date dte;
+                            if (reader.peek() == JsonToken.NULL) {
+                                reader.nextNull();
+                                dte = new Date();
+                            } else {
+                                value = reader.nextString();
 //						Log.v(TAG, "json actvyDt " + value);
-                        dte = format_ymdtime.parse(value);
+                                dte = format_ymdtime.parse(value);
+                            }
+                            c1.setTime(dte);
+                            item.setActvyLong(c1.getTimeInMillis());
+                        } else {
+                            reader.skipValue(); // avoid some unhandle events
+                        }
                     }
-                    c1.setTime(dte);
-                    item.setActvyLong(c1.getTimeInMillis());
-                } else {
-                    reader.skipValue(); // avoid some unhandle events
+
+                    reader.endObject();
+
+                } catch (Exception e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                    item = null;
+                }
+                return item;
+            }
+
+
+            public int writeMessagesArray(JsonWriter writer) throws IOException {
+                int count = 0;
+                try {
+
+                    List<Account> listAccounts = loadAccounts();
+
+                    writer.beginArray();
+                    for (Account item : listAccounts) {
+                        writeMessage(writer, item);
+                        count++;
+                    }
+                    writer.endArray();
+                } catch (Exception e2) {
+                    e2.printStackTrace();
+                    System.out.println(e2.getMessage());
+                    Log.v(TAG, "writeMessageArrayError: " + e2.getMessage());
+                }
+                return count;
+            }
+
+
+            public void writeMessage(JsonWriter writer, Account item)
+                    throws IOException {
+                try {
+                    writer.beginObject();
+                    writer.name("corpName").value(item.getCorpName());
+                    writer.name("accountId").value(item.getPassportId());
+                    writer.name("seq").value(item.getSequence());
+                    writer.name("userName").value(item.getUserName());
+                    writer.name("userEmail").value(item.getUserEmail());
+                    writer.name("refFrom").value(item.getRefFrom());
+                    writer.name("refTo").value(item.getRefTo());
+                    if (item.getCorpWebsite() == null) {
+                        writer.name("website").nullValue();
+                    } else {
+                        writer.name("website").value(item.getCorpWebsite().toString());
+                    }
+                    if (item.getOpenLong() == 0) {
+                        writer.name("openDt").nullValue();
+                    } else {
+                        writer.name("openDt").value(
+                                format_ymdtime.format(item.getOpenLong()));
+                    }
+                    if (item.getActvyLong() == 0) {
+                        writer.name("actvyDt").nullValue();
+                    } else {
+                        writer.name("actvyDt").value(
+                                format_ymdtime.format(item.getActvyLong()));
+                    }
+                    writer.name("note").value(item.getNote());
+                    writer.endObject();
+                } catch (Exception e2) {
+                    e2.printStackTrace();
+                    System.out.println(e2.getMessage());
+                    Log.v(TAG, "writeMessageError: " + e2.getMessage());
                 }
             }
 
-            reader.endObject();
 
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            item = null;
-        }
-        return item;
-    }
-
-
-    public int writeMessagesArray(JsonWriter writer) throws IOException {
-        int count = 0;
-        try {
-
-            List<Account> listAccounts = loadAccounts();
-
-            writer.beginArray();
-            for (Account item : listAccounts) {
-                writeMessage(writer, item);
-                count++;
-            }
-            writer.endArray();
-        } catch (Exception e2) {
-            e2.printStackTrace();
-            System.out.println(e2.getMessage());
-            Log.v(TAG, "writeMessageArrayError: " + e2.getMessage());
-        }
-        return count;
-    }
-
-
-    public void writeMessage(JsonWriter writer, Account item)
-            throws IOException {
-        try {
-            writer.beginObject();
-            writer.name("corpName").value(item.getCorpName());
-            writer.name("accountId").value(item.getPassportId());
-            writer.name("seq").value(item.getSequence());
-            writer.name("userName").value(item.getUserName());
-            writer.name("userEmail").value(item.getUserEmail());
-            writer.name("refFrom").value(item.getRefFrom());
-            writer.name("refTo").value(item.getRefTo());
-            if (item.getCorpWebsite() == null) {
-                writer.name("website").nullValue();
-            } else {
-                writer.name("website").value(item.getCorpWebsite().toString());
-            }
-            if (item.getOpenLong() == 0) {
-                writer.name("openDt").nullValue();
-            } else {
-                writer.name("openDt").value(
-                        format_ymdtime.format(item.getOpenLong()));
-            }
-            if (item.getActvyLong() == 0) {
-                writer.name("actvyDt").nullValue();
-            } else {
-                writer.name("actvyDt").value(
-                        format_ymdtime.format(item.getActvyLong()));
-            }
-            writer.name("note").value(item.getNote());
-            writer.endObject();
-        } catch (Exception e2) {
-            e2.printStackTrace();
-            System.out.println(e2.getMessage());
-            Log.v(TAG, "writeMessageError: " + e2.getMessage());
-        }
-    }
-
-
-    List<Account> loadAccounts() {
+            List<Account> loadAccounts() {
 //        Log.d(TAG, "loadAccounts: starts ");
-        Cursor cursor = getContentResolver().query(
-                AccountsContract.CONTENT_URI, null, null, null, AccountsContract.Columns.CORP_NAME_COL);
+                Cursor cursor = getContentResolver().query(
+                        AccountsContract.CONTENT_URI, null, null, null, AccountsContract.Columns.CORP_NAME_COL);
 
-        List<Account> listAccounts = new ArrayList<Account>();
-        if (cursor != null) {
-            while (cursor.moveToNext()) {
-                Account item = new Account(
-                        cursor.getInt(cursor.getColumnIndex(AccountsContract.Columns._ID_COL)),
-                        cursor.getString(cursor.getColumnIndex(AccountsContract.Columns.CORP_NAME_COL)),
-                        cursor.getString(cursor.getColumnIndex(AccountsContract.Columns.USER_NAME_COL)),
-                        cursor.getString(cursor.getColumnIndex(AccountsContract.Columns.USER_EMAIL_COL)),
-                        cursor.getString(cursor.getColumnIndex(AccountsContract.Columns.CORP_WEBSITE_COL)),
-                        cursor.getInt(cursor.getColumnIndex(AccountsContract.Columns.SEQUENCE_COL)));
+                List<Account> listAccounts = new ArrayList<Account>();
+                if (cursor != null) {
+                    while (cursor.moveToNext()) {
+                        Account item = new Account(
+                                cursor.getInt(cursor.getColumnIndex(AccountsContract.Columns._ID_COL)),
+                                cursor.getString(cursor.getColumnIndex(AccountsContract.Columns.CORP_NAME_COL)),
+                                cursor.getString(cursor.getColumnIndex(AccountsContract.Columns.USER_NAME_COL)),
+                                cursor.getString(cursor.getColumnIndex(AccountsContract.Columns.USER_EMAIL_COL)),
+                                cursor.getString(cursor.getColumnIndex(AccountsContract.Columns.CORP_WEBSITE_COL)),
+                                cursor.getInt(cursor.getColumnIndex(AccountsContract.Columns.SEQUENCE_COL)));
 
-                if (cursor.getColumnIndex(AccountsContract.Columns.PASSPORT_ID_COL) != -1) {
-                    if (!cursor.isNull(cursor.getColumnIndex(AccountsContract.Columns.PASSPORT_ID_COL))) {
-                        item.setPassportId(cursor.getInt(cursor.getColumnIndex(AccountsContract.Columns.PASSPORT_ID_COL)));
+                        if (cursor.getColumnIndex(AccountsContract.Columns.PASSPORT_ID_COL) != -1) {
+                            if (!cursor.isNull(cursor.getColumnIndex(AccountsContract.Columns.PASSPORT_ID_COL))) {
+                                item.setPassportId(cursor.getInt(cursor.getColumnIndex(AccountsContract.Columns.PASSPORT_ID_COL)));
+                            }
+                        }
+                        if (cursor.getColumnIndex(AccountsContract.Columns.OPEN_DATE_COL) != -1) {
+                            if (!cursor.isNull(cursor.getColumnIndex(AccountsContract.Columns.OPEN_DATE_COL))) {
+                                item.setOpenLong(cursor.getLong(cursor.getColumnIndex(AccountsContract.Columns.OPEN_DATE_COL)));
+                            }
+                        }
+                        if (cursor.getColumnIndex(AccountsContract.Columns.ACTVY_DATE_COL) != -1) {
+                            if (!cursor.isNull(cursor.getColumnIndex(AccountsContract.Columns.ACTVY_DATE_COL))) {
+                                item.setActvyLong(cursor.getLong(cursor.getColumnIndex(AccountsContract.Columns.ACTVY_DATE_COL)));
+                            }
+                        }
+                        if (cursor.getColumnIndex(AccountsContract.Columns.REF_FROM_COL) != -1) {
+                            if (!cursor.isNull(cursor.getColumnIndex(AccountsContract.Columns.REF_FROM_COL))) {
+                                item.setRefFrom(cursor.getInt(cursor.getColumnIndex(AccountsContract.Columns.REF_FROM_COL)));
+                            }
+                        }
+                        if (cursor.getColumnIndex(AccountsContract.Columns.REF_TO_COL) != -1) {
+                            if (!cursor.isNull(cursor.getColumnIndex(AccountsContract.Columns.REF_TO_COL))) {
+                                item.setRefFrom(cursor.getInt(cursor.getColumnIndex(AccountsContract.Columns.REF_TO_COL)));
+                            }
+                        }
+                        listAccounts.add(item);
                     }
+                    cursor.close();
                 }
-                if (cursor.getColumnIndex(AccountsContract.Columns.OPEN_DATE_COL) != -1) {
-                    if (!cursor.isNull(cursor.getColumnIndex(AccountsContract.Columns.OPEN_DATE_COL))) {
-                        item.setOpenLong(cursor.getLong(cursor.getColumnIndex(AccountsContract.Columns.OPEN_DATE_COL)));
-                    }
-                }
-                if (cursor.getColumnIndex(AccountsContract.Columns.ACTVY_DATE_COL) != -1) {
-                    if (!cursor.isNull(cursor.getColumnIndex(AccountsContract.Columns.ACTVY_DATE_COL))) {
-                        item.setActvyLong(cursor.getLong(cursor.getColumnIndex(AccountsContract.Columns.ACTVY_DATE_COL)));
-                    }
-                }
-                if (cursor.getColumnIndex(AccountsContract.Columns.REF_FROM_COL) != -1) {
-                    if (!cursor.isNull(cursor.getColumnIndex(AccountsContract.Columns.REF_FROM_COL))) {
-                        item.setRefFrom(cursor.getInt(cursor.getColumnIndex(AccountsContract.Columns.REF_FROM_COL)));
-                    }
-                }
-                if (cursor.getColumnIndex(AccountsContract.Columns.REF_TO_COL) != -1) {
-                    if (!cursor.isNull(cursor.getColumnIndex(AccountsContract.Columns.REF_TO_COL))) {
-                        item.setRefFrom(cursor.getInt(cursor.getColumnIndex(AccountsContract.Columns.REF_TO_COL)));
-                    }
-                }
-                listAccounts.add(item);
+
+                return listAccounts;
             }
-            cursor.close();
+
+
+//    private void loadSearchDB() {
+//        deleteAllSearchItems();
+//        AccountSearchLoaderCallbacks loaderAcctCallbacks = new AccountSearchLoaderCallbacks(this);
+//        getLoaderManager().restartLoader(MainActivity.SEARCH_LOADER_ID, null, loaderAcctCallbacks);
+//        Toast.makeText(this,
+//                "Search Dictionary DB built",
+//                Toast.LENGTH_LONG).show();
+//
+//    }
+//
+//
+//    private void deleteAllSearchItems() {
+////		String selectionClause = SearchManager.SUGGEST_COLUMN_FLAGS + " = ?";
+////		String[] selectionArgs = { "account" };
+////        Log.d(TAG, "deleteAllSuggestions: delUri " + SearchesContract.CONTENT_URI_TRUNCATE);
+//        getContentResolver().delete(
+//                SearchesContract.CONTENT_URI_TRUNCATE,
+//                null, null);
+//
+//    }
+
+
+//    @Override
+//    public void onPositiveDialogResult(int dialogId, Bundle args) {
+//
+//    }
+//
+//    @Override
+//    public void onNegativeDialogResult(int dialogId, Bundle args) {
+//
+//    }
+//
+//    @Override
+//    public void onActionRequestDialogResult(int dialogId, Bundle args, int which) {
+//
+//    }
+//
+//    @Override
+//    public void onDialogCancelled(int dialogId) {
+//
+//    }
+
+    @Override
+    public void onFileViewShown() {
+        progressBar  = findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.GONE);
+    }
         }
-
-        return listAccounts;
-    }
-
-
-
-
-    private void loadSearchDB() {
-        deleteAllSearchItems();
-        AccountSearchLoaderCallbacks loaderAcctCallbacks = new AccountSearchLoaderCallbacks(this);
-        getLoaderManager().restartLoader(MainActivity.SEARCH_LOADER_ID, null, loaderAcctCallbacks);
-        Toast.makeText(this,
-                "Search Dictionary DB built",
-                Toast.LENGTH_LONG).show();
-
-    }
-
-
-    private void deleteAllSearchItems() {
-//		String selectionClause = SearchManager.SUGGEST_COLUMN_FLAGS + " = ?";
-//		String[] selectionArgs = { "account" };
-//        Log.d(TAG, "deleteAllSuggestions: delUri " + SearchesContract.CONTENT_URI_TRUNCATE);
-        getContentResolver().delete(
-                SearchesContract.CONTENT_URI_TRUNCATE,
-                null, null);
-
-    }
-
-
-    @Override
-    public void onPositiveDialogResult(int dialogId, Bundle args) {
-
-    }
-
-    @Override
-    public void onNegativeDialogResult(int dialogId, Bundle args) {
-
-    }
-
-    @Override
-    public void onActionRequestDialogResult(int dialogId, Bundle args, int which) {
-
-    }
-
-    @Override
-    public void onDialogCancelled(int dialogId) {
-
-    }
-}
