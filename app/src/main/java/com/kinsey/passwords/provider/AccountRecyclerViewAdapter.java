@@ -191,7 +191,10 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
 //                        holder.itemView.setBackgroundColor(Color.TRANSPARENT);
 //                        resetRow = false;
 //                    } else {
-                    holder.itemView.setBackgroundColor(Color.GREEN);
+//                    holder.itemView.setBackgroundColor(Color.rgb(199, 91, 57));
+
+
+                    holder.itemView.setBackgroundColor(Color.parseColor("#f4511e"));
 //                    notifyItemChanged(accountSelectedPos);
 //                    }
                 } else {

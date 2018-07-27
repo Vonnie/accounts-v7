@@ -164,10 +164,10 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        Log.d(TAG, "onCreate: layout activity_main");
+//        Log.d(TAG, "onCreate: layout activity_main");
 
         mTwoPane = (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE);
-        Log.d(TAG, "onCreate: twoPane is " + mTwoPane);
+//        Log.d(TAG, "onCreate: twoPane is " + mTwoPane);
 
 
         listApps = (ListView) findViewById(R.id.xmlListView);
@@ -187,7 +187,7 @@ public class MainActivity extends AppCompatActivity
         FragmentManager fragmentManager = getSupportFragmentManager();
         // If the AddEditActivity fragment exists, we're editing
         Boolean editing = fragmentManager.findFragmentById(R.id.task_details_container) != null;
-        Log.d(TAG, "onCreate: editing is " + editing);
+//        Log.d(TAG, "onCreate: editing is " + editing);
 
         // We need references to the containers, so we can show or hide them as necessary.
         // No need to cast them, as we're only calling a method that's available for all views.
@@ -1841,14 +1841,13 @@ public class MainActivity extends AppCompatActivity
     protected void onResume() {
 //        Log.d(TAG, "onResume: starts");
 
-
         isResumed = true;
-        Log.d(TAG, "onResume: isResumed " + isResumed);
+//        Log.d(TAG, "onResume: isResumed " + isResumed);
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         String queryResult = sharedPreferences.getString(SEARCH_QUERY, "");
         int accountId = sharedPreferences.getInt(SEARCH_ONE_ITEM, -1);
 
-        Log.d(TAG, "onResume: qry/id " + queryResult + "/" + accountId);
+//        Log.d(TAG, "onResume: qry/id " + queryResult + "/" + accountId);
 
         AccountListActivityFragment listFragment = (AccountListActivityFragment)
                 getSupportFragmentManager().findFragmentById(R.id.fragment);

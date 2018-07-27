@@ -4,8 +4,8 @@ android {
     compileSdkVersion 26
     defaultConfig {
         applicationId "com.kinsey.passwords"
-        minSdkVersion 21
-        targetSdkVersion 26
+        minSdkVersion 22
+        targetSdkVersion 27
         versionCode 45
         versionName "9.9"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"

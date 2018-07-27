@@ -90,7 +90,8 @@ public class CursorRecyclerViewAdapter extends RecyclerView.Adapter<CursorRecycl
 
             if (suggestSelectedPos == position) {
                 // Here I am just highlighting the background
-                holder.itemView.setBackgroundColor(Color.GREEN);
+//                holder.itemView.setBackgroundColor(Color.GREEN);
+                holder.itemView.setBackgroundColor(Color.parseColor("#f4511e"));
             } else {
                 holder.itemView.setBackgroundColor(Color.TRANSPARENT);
             }

@@ -38,8 +38,8 @@ import static com.kinsey.passwords.MainActivity.DEFAULT_APP_DIRECTORY;
 import static com.kinsey.passwords.MainActivity.format_ymdtime;
 
 public class FileViewActivity extends AppCompatActivity
-    implements FileViewActivityFragment.OnFileViewClickListener {
-//        implements AppDialog.DialogEvents {
+    implements FileViewActivityFragment.OnFileViewClickListener,
+        AppDialog.DialogEvents {
 
     private static final String TAG = "FileViewActivity";
 
@@ -391,9 +391,25 @@ public class FileViewActivity extends AppCompatActivity
 
 
     private void ImportAccountDB() {
-//        Log.d(TAG, "ImportAccountDB: starts");
+        Log.d(TAG, "ImportAccountDB: starts");
         progressBar = findViewById(R.id.progressBar);
         progressBar.setVisibility(View.VISIBLE);
+
+
+//        final String msg = "";
+//        new Thread(new Runnable() {
+//
+//            @Override
+//            public void run() {
+//                List<Account> listAccounts = new ArrayList<Account>();
+//
+//                mHandler.post(new Runnable() {
+//                @Override
+//                public void run() {
+//                    Log.d(TAG, "Runnable: post");
+//                }
+//            });
+//        };
 
 
         new Thread(new Runnable() {
@@ -416,6 +432,7 @@ public class FileViewActivity extends AppCompatActivity
 //                return;
 
 
+//                    Log.d(TAG, "run: begin to read from file");
                     reader.beginArray();
                     while (reader.hasNext()) {
                         Account account = readMessage(reader);
@@ -423,19 +440,46 @@ public class FileViewActivity extends AppCompatActivity
                             break;
                         } else {
                             listAccounts.add(account);
+                            int listCount = listAccounts.size();
                         }
                     }
+//                    Log.d(TAG, "run: count " + listAccounts.size());
                     reader.endArray();
                     reader.close();
 
                     ContentResolver contentResolver = getContentResolver();
-                    getContentResolver().delete(AccountsContract.CONTENT_URI, null, null);
+                    int deleteCount = getContentResolver().delete(AccountsContract.CONTENT_URI, null, null);
+                    Log.d(TAG, "run: delete count " + deleteCount);
 
+                    int itemCount = 0;
                     for (Account item : listAccounts) {
 //                Log.d(TAG, "ImportAccountDB: acc " + item.getPassportId()
 //                        + " " + item.getCorpName());
                         addAccountToDB(contentResolver, item);
+                        itemCount++;
+                        int remCount = itemCount % 80;
+                        if (remCount == 0 || itemCount == 1) {
+                            Log.d(TAG, "run: count " + itemCount);
+                            final int runCount = itemCount;
+                            mHandler.post(new Runnable() {
+                                @Override
+                                public void run() {
+
+                                    String notifyMsg;
+                                    if (runCount == 1) {
+                                        notifyMsg = "progress: db replace begins";
+                                    } else {
+                                        notifyMsg = String.format("progress: %s rows replaced", runCount);
+                                    }
+                                    Toast.makeText(getApplicationContext(),
+                                            notifyMsg, Toast.LENGTH_LONG).show();
+
+                                }
+                            });
+                        }
                     }
+
+                    Log.d(TAG, "run: import count " + itemCount);
 
                     msg = listAccounts.size() + " Accounts Imported";
 
@@ -476,7 +520,8 @@ public class FileViewActivity extends AppCompatActivity
                     }
                 });
             }
-        });
+        }).start();
+
 //        loadSearchDB();
 
 //        fvFragment.setImportRefreshReq(true);
@@ -658,7 +703,9 @@ public class FileViewActivity extends AppCompatActivity
             List<Account> loadAccounts() {
 //        Log.d(TAG, "loadAccounts: starts ");
                 Cursor cursor = getContentResolver().query(
-                        AccountsContract.CONTENT_URI, null, null, null, AccountsContract.Columns.CORP_NAME_COL);
+                        AccountsContract.CONTENT_URI, null, null, null,
+                        String.format("%s COLLATE NOCASE ASC, %s COLLATE NOCASE ASC", AccountsContract.Columns.CORP_NAME_COL, AccountsContract.Columns.SEQUENCE_COL));
+//                        AccountsContract.Columns.CORP_NAME_COL);
 
                 List<Account> listAccounts = new ArrayList<Account>();
                 if (cursor != null) {
@@ -727,25 +774,25 @@ public class FileViewActivity extends AppCompatActivity
 //    }
 
 
-//    @Override
-//    public void onPositiveDialogResult(int dialogId, Bundle args) {
-//
-//    }
-//
-//    @Override
-//    public void onNegativeDialogResult(int dialogId, Bundle args) {
-//
-//    }
-//
-//    @Override
-//    public void onActionRequestDialogResult(int dialogId, Bundle args, int which) {
-//
-//    }
-//
-//    @Override
-//    public void onDialogCancelled(int dialogId) {
-//
-//    }
+    @Override
+    public void onPositiveDialogResult(int dialogId, Bundle args) {
+
+    }
+
+    @Override
+    public void onNegativeDialogResult(int dialogId, Bundle args) {
+
+    }
+
+    @Override
+    public void onActionRequestDialogResult(int dialogId, Bundle args, int which) {
+
+    }
+
+    @Override
+    public void onDialogCancelled(int dialogId) {
+
+    }
 
     @Override
     public void onFileViewShown() {

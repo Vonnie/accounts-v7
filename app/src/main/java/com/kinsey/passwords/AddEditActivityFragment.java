@@ -352,8 +352,11 @@ public class AddEditActivityFragment extends Fragment {
 //                    so = 0;
 //                }
 
-        Log.d(TAG, "onClick: ");
+//        Log.d(TAG, "onClick: ");
 
+        if (canClose()) {
+            return;
+        }
         if (!verifiedAccount()) {
             return;
         }
@@ -493,7 +496,9 @@ public class AddEditActivityFragment extends Fragment {
 
                 break;
         }
-        mListener.saveComplete();
+        if (mListener != null) {
+            mListener.saveComplete();
+        }
         Log.d(TAG, "onClick: Done editing");
 
 //                if(mListener != null) {

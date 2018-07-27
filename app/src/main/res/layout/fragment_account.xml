@@ -92,8 +92,7 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:hint="@string/accedit_ref_from_hint"
-                android:inputType="number"
-                android:labelFor="@id/acc_ref_from_label" />
+                android:inputType="number" />
 
             <EditText
                 android:id="@+id/acc_ref_to"

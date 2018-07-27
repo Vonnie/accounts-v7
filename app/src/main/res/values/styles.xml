@@ -3,11 +3,24 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:textColorTertiary">@color/colorAccent</item>
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorPrimaryDark">@color/primaryDarkColor</item>
+        <item name="colorAccent">@color/secondaryColor</item>
+        <item name="android:textColorTertiary">@color/secondaryDarkColor</item>
+        <item name="android:textColorPrimary">@color/secondaryDarkColor</item>
+        <item name="android:textColorSecondary">@color/secondaryTextColor</item>
+        <item name="android:windowBackground">@color/primaryLightColor</item>
     </style>
+    <!--<item name="cardBackgroundColor">@color/primaryColor</item>-->
+    <!--<item name="android:icon">@color/icons</item>-->
+    <!--<item name="colorPrimary">@color/colorPrimary</item>-->
+    <!--<item name="colorPrimaryDark">@color/colorPrimaryDark</item>-->
+    <!--<item name="colorAccent">@color/colorAccent</item>-->
+    <!--<item name="android:textColorTertiary">@color/colorAccent</item>-->
+
+    <!--<color name="colorPrimary">#3F51B5</color>-->
+    <!--<color name="colorPrimaryDark">#303f9f</color>-->
+    <!--<color name="colorAccent">#FF4081</color>-->
 
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
