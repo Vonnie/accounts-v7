@@ -143,7 +143,7 @@
     <string name="menuacct_sort_opendate">Sort by Open Date</string>
     <string name="menuacct_sort_passport">Sort by Passport Id</string>
     <string name="menuacct_sort_custom">Custom Sort</string>
-    <string name="menuacct_external_accts">External accts</string>
+    <string name="menuacct_external_accts">External accounts</string>
     <string name="menuacct_search">Search</string>
     <string name="menuvw_import">Import</string>
     <string name="menuvw_export">Export</string>

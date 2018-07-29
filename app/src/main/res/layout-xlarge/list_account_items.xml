@@ -15,7 +15,7 @@
         android:layout_marginTop="8dp"
         android:tag="@string/tag_xlarge"
         android:textColor="?android:attr/textColorPrimary"
-        android:textSize="18sp"
+        android:textSize="24sp"
         android:textStyle="normal"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

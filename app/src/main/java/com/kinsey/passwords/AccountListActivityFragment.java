@@ -6,6 +6,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -68,6 +69,7 @@ public class AccountListActivityFragment extends Fragment
         void onListComplete();
     }
 
+    private Handler mHandler = new Handler();
 
     public enum FragmentListMode {CORP_NAME, OPEN_DATE}
 
@@ -334,14 +336,31 @@ public class AccountListActivityFragment extends Fragment
         int count = 0;
         mAccountAdapter.swapCursor(data);
         if (mAccountAdapter.getAccountSelectedId() != -1) {
-            mAccountAdapter.setPosById(mAccountAdapter.getAccountSelectedId());
+
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+
+                    mAccountAdapter.setPosById(mAccountAdapter.getAccountSelectedId());
 //        if (mAccountAdapter.getAccountSelectedPos() != -1) {
-            Log.d(TAG, "onLoadFinished: adapter set");
-            mRecyclerView.scrollToPosition(mAccountAdapter.getAccountSelectedPos());
-            mListener.onListComplete();
+                    Log.d(TAG, "onLoadFinished: adapter set");
+                    mRecyclerView.scrollToPosition(mAccountAdapter.getAccountSelectedPos());
+
 //            mRecyclerView.findViewHolderForAdapterPosition(accountSelectedPos);
 //            mRecyclerView.findViewHolderForAdapterPosition(accountSelectedPos).itemView.performClick();
-        }
+
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            mListener.onListComplete();
+                        }
+                    });
+                }
+            }).start();
+        } else {
+              mListener.onListComplete();
+          }
 
 //        count = mAccountAdapter.getItemCount();
 //        if (count == 0) {

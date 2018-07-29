@@ -2,19 +2,25 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.kinsey.passwords.FileViewActivity">
+    <!--<item-->
+        <!--android:id="@+id/menu_item_share"-->
+        <!--android:orderInCategory="100"-->
+        <!--android:title="Share"-->
+        <!--app:showAsAction="ifRoom"-->
+        <!--app:actionProviderClass="android.support.v7.widget.ShareActionProvider" />-->
     <item
         android:id="@+id/vw_import"
-        android:orderInCategory="100"
+        android:orderInCategory="101"
         android:title="@string/menuvw_import"
         app:showAsAction="never" />
     <item
         android:id="@+id/vw_export"
-        android:orderInCategory="101"
+        android:orderInCategory="102"
         android:title="@string/menuvw_export"
         app:showAsAction="never" />
     <item
         android:id="@+id/vw_filename"
-        android:orderInCategory="101"
+        android:orderInCategory="103"
         android:title="Filename"
         app:showAsAction="never" />
 </menu>

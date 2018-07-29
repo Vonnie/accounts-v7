@@ -6,6 +6,7 @@
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:colorBackgroundFloating">@color/primaryColor</item>
+        <item name="android:navigationBarColor">@color/primaryColor</item>
     </style>
 
 </resources>

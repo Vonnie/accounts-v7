@@ -17,7 +17,7 @@
         android:layout_marginTop="8dp"
         android:tag="@string/tag_portrait"
         android:textColor="?android:attr/textColorPrimary"
-        android:textSize="18sp"
+        android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/tli_suggest_up"
         app:layout_constraintHorizontal_bias="0.0"

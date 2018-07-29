@@ -194,7 +194,7 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
 //                    holder.itemView.setBackgroundColor(Color.rgb(199, 91, 57));
 
 
-                    holder.itemView.setBackgroundColor(Color.parseColor("#f4511e"));
+                    holder.itemView.setBackgroundColor(Color.parseColor("#ff6730"));
 //                    notifyItemChanged(accountSelectedPos);
 //                    }
                 } else {
@@ -208,7 +208,7 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
 //                } else {
 
                     if (!queryCorp.equals("")) {
-                        holder.itemView.setBackgroundColor(Color.MAGENTA);
+                        holder.itemView.setBackgroundColor(Color.parseColor("#004b66"));
                     } else {
                         holder.itemView.setBackgroundColor(Color.TRANSPARENT);
                     }

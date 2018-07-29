@@ -151,110 +151,230 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lbl_notes" />
 
-    <TextView
-        android:id="@+id/lbl_open_date"
-        android:layout_width="wrap_content"
+
+    <android.support.v7.widget.CardView
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
-        android:labelFor="@+id/addedit_open_date"
-        android:text="@string/accedit_open_date_label"
-        app:layout_constraintBaseline_toBaselineOf="@+id/addedit_actvy_date"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <!--<Button-->
-        <!--android:id="@+id/addedit_save"-->
-        <!--android:layout_width="50dp"-->
-        <!--android:layout_height="0dp"-->
-        <!--android:layout_marginBottom="16dp"-->
-        <!--android:layout_marginStart="16dp"-->
-        <!--android:drawableStart="@android:drawable/ic_menu_save"-->
-        <!--app:layout_constraintBottom_toBottomOf="parent"-->
-        <!--app:layout_constraintStart_toStartOf="parent" />-->
-
-
-    <Button
-        android:id="@+id/addedit_open_date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:text="@string/btn_open_date_label"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lbl_open_date" />
-
-    <TextView
-        android:id="@+id/lbl_seq"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:labelFor="@+id/acc_seq"
-        android:text="@string/accedit_sort_seq_label"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/acc_ref_from" />
+        app:layout_constraintTop_toBottomOf="@+id/addedit_notes">
 
-    <EditText
-        android:id="@+id/acc_seq"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:ems="10"
-        android:hint="@string/accedit_seq_hint"
-        android:inputType="number"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lbl_seq" />
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/lbl_ref_from"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:labelFor="@+id/acc_ref_from"
-        android:text="@string/accedit_from_seq_label"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addedit_open_date" />
+            <TextView
+                android:id="@+id/addedit_actvy_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/accedit_actvy_date_label"
+                app:layout_constraintStart_toStartOf="parent" />
+            <!--app:layout_constraintTop_toBottomOf="@+id/addedit_notes" />-->
 
-    <EditText
-        android:id="@+id/acc_ref_from"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:ems="10"
-        android:hint="@string/accedit_ref_from_hint"
-        android:inputType="number"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lbl_ref_from" />
+            <TextView
+                android:id="@+id/lbl_open_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:labelFor="@+id/addedit_open_date"
+                android:text="@string/accedit_open_date_label"
+                app:layout_constraintBaseline_toBaselineOf="@+id/addedit_actvy_date"
+                app:layout_constraintEnd_toEndOf="parent" />
 
-    <TextView
-        android:id="@+id/lbl_ref_to"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:labelFor="@+id/acc_ref_to"
-        android:text="@string/accedit_to_seq"
-        app:layout_constraintBaseline_toBaselineOf="@+id/lbl_ref_from"
-        app:layout_constraintEnd_toEndOf="parent" />
 
-    <EditText
-        android:id="@+id/acc_ref_to"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:ems="10"
-        android:hint="@string/accedit_ref_to_hint"
-        android:inputType="number"
-        android:textAlignment="viewEnd"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lbl_ref_to" />
+            <Button
+                android:id="@+id/addedit_open_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="@string/btn_open_date_label"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/lbl_open_date" />
 
-    <TextView
-        android:id="@+id/addedit_actvy_date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="@string/accedit_actvy_date_label"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addedit_notes" />
+            <TextView
+                android:id="@+id/lbl_ref_from"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:labelFor="@+id/acc_ref_from"
+                android:text="@string/accedit_from_seq_label"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/addedit_open_date" />
+
+            <EditText
+                android:id="@+id/acc_ref_from"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:ems="10"
+                android:hint="@string/accedit_ref_from_hint"
+                android:inputType="number"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/lbl_ref_from" />
+
+            <TextView
+                android:id="@+id/lbl_ref_to"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:labelFor="@+id/acc_ref_to"
+                android:text="@string/accedit_to_seq"
+                app:layout_constraintBaseline_toBaselineOf="@+id/lbl_ref_from"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <EditText
+                android:id="@+id/acc_ref_to"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:ems="10"
+                android:hint="@string/accedit_ref_to_hint"
+                android:inputType="number"
+                android:textAlignment="viewEnd"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/lbl_ref_to" />
+
+            <TextView
+                android:id="@+id/lbl_seq"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:labelFor="@+id/acc_seq"
+                android:text="@string/accedit_sort_seq_label"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/acc_ref_from" />
+
+            <EditText
+                android:id="@+id/acc_seq"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:ems="10"
+                android:hint="@string/accedit_seq_hint"
+                android:inputType="number"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/lbl_seq" />
+
+        </android.support.constraint.ConstraintLayout>
+
+    </android.support.v7.widget.CardView>
 
 </android.support.constraint.ConstraintLayout>
+
+
+    <!--<Button-->
+    <!--android:id="@+id/addedit_save"-->
+    <!--android:layout_width="50dp"-->
+    <!--android:layout_height="0dp"-->
+    <!--android:layout_marginBottom="16dp"-->
+    <!--android:layout_marginStart="16dp"-->
+    <!--android:drawableStart="@android:drawable/ic_menu_save"-->
+    <!--app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--app:layout_constraintStart_toStartOf="parent" />-->
+
+
+
+<!--<TextView-->
+<!--android:id="@+id/addedit_actvy_date2"-->
+<!--android:layout_width="wrap_content"-->
+<!--android:layout_height="wrap_content"-->
+<!--android:layout_marginStart="8dp"-->
+<!--android:layout_marginTop="8dp"-->
+<!--android:text="@string/accedit_actvy_date_label"-->
+<!--app:layout_constraintStart_toStartOf="parent"-->
+<!--app:layout_constraintTop_toBottomOf="@+id/addedit_notes" />-->
+
+<!--<TextView-->
+<!--android:id="@+id/lbl_open_date2"-->
+<!--android:layout_width="wrap_content"-->
+<!--android:layout_height="wrap_content"-->
+<!--android:layout_marginEnd="8dp"-->
+<!--android:labelFor="@+id/addedit_open_date2"-->
+<!--android:text="@string/accedit_open_date_label"-->
+<!--app:layout_constraintBaseline_toBaselineOf="@+id/addedit_actvy_date2"-->
+<!--app:layout_constraintEnd_toEndOf="parent" />-->
+
+
+<!--<Button-->
+<!--android:id="@+id/addedit_open_date2"-->
+<!--android:layout_width="wrap_content"-->
+<!--android:layout_height="wrap_content"-->
+<!--android:layout_marginEnd="8dp"-->
+<!--android:text="@string/btn_open_date_label"-->
+<!--app:layout_constraintEnd_toEndOf="parent"-->
+<!--app:layout_constraintTop_toBottomOf="@+id/lbl_open_date2" />-->
+
+<!--<TextView-->
+<!--android:id="@+id/lbl_seq2"-->
+<!--android:layout_width="wrap_content"-->
+<!--android:layout_height="wrap_content"-->
+<!--android:layout_marginStart="8dp"-->
+<!--android:layout_marginTop="8dp"-->
+<!--android:labelFor="@+id/acc_seq"-->
+<!--android:text="@string/accedit_sort_seq_label"-->
+<!--app:layout_constraintStart_toStartOf="parent"-->
+<!--app:layout_constraintTop_toBottomOf="@+id/acc_ref_from2" />-->
+
+<!--<EditText-->
+<!--android:id="@+id/acc_seq2"-->
+<!--android:layout_width="100dp"-->
+<!--android:layout_height="wrap_content"-->
+<!--android:layout_marginStart="16dp"-->
+<!--android:ems="10"-->
+<!--android:hint="@string/accedit_seq_hint"-->
+<!--android:inputType="number"-->
+<!--app:layout_constraintStart_toStartOf="parent"-->
+<!--app:layout_constraintTop_toBottomOf="@+id/lbl_seq2" />-->
+
+<!--<TextView-->
+<!--android:id="@+id/lbl_ref_from2"-->
+<!--android:layout_width="wrap_content"-->
+<!--android:layout_height="wrap_content"-->
+<!--android:layout_marginStart="16dp"-->
+<!--android:layout_marginTop="8dp"-->
+<!--android:labelFor="@+id/acc_ref_from"-->
+<!--android:text="@string/accedit_from_seq_label"-->
+<!--app:layout_constraintStart_toStartOf="parent"-->
+<!--app:layout_constraintTop_toBottomOf="@+id/addedit_open_date2" />-->
+
+<!--<EditText-->
+<!--android:id="@+id/acc_ref_from2"-->
+<!--android:layout_width="100dp"-->
+<!--android:layout_height="wrap_content"-->
+<!--android:layout_marginStart="8dp"-->
+<!--android:ems="10"-->
+<!--android:hint="@string/accedit_ref_from_hint"-->
+<!--android:inputType="number"-->
+<!--app:layout_constraintStart_toStartOf="parent"-->
+<!--app:layout_constraintTop_toBottomOf="@+id/lbl_ref_from2" />-->
+
+<!--<TextView-->
+<!--android:id="@+id/lbl_ref_to2"-->
+<!--android:layout_width="wrap_content"-->
+<!--android:layout_height="wrap_content"-->
+<!--android:layout_marginEnd="16dp"-->
+<!--android:labelFor="@+id/acc_ref_to"-->
+<!--android:text="@string/accedit_to_seq"-->
+<!--app:layout_constraintBaseline_toBaselineOf="@+id/lbl_ref_from2"-->
+<!--app:layout_constraintEnd_toEndOf="parent" />-->
+
+<!--<EditText-->
+<!--android:id="@+id/acc_ref_to2"-->
+<!--android:layout_width="100dp"-->
+<!--android:layout_height="wrap_content"-->
+<!--android:layout_marginEnd="8dp"-->
+<!--android:ems="10"-->
+<!--android:hint="@string/accedit_ref_to_hint"-->
+<!--android:inputType="number"-->
+<!--android:textAlignment="viewEnd"-->
+<!--app:layout_constraintEnd_toEndOf="parent"-->
+<!--app:layout_constraintTop_toBottomOf="@+id/lbl_ref_to2" />-->

@@ -195,7 +195,8 @@ public class MainActivity extends AppCompatActivity
         View addEditLayoutScroll = findViewById(R.id.task_details_container_scroll);
         View mainFragment = findViewById(R.id.fragment);
         progressBar  = findViewById(R.id.progressBar);
-        progressBar.setVisibility(View.GONE);
+        progressBar.setVisibility(View.VISIBLE);
+//        progressBar.setVisibility(View.GONE);
 
         if(mTwoPane) {
             Log.d(TAG, "onCreate: twoPane mode");
@@ -842,6 +843,11 @@ public class MainActivity extends AppCompatActivity
 //            setMenuItemEnabled(R.id.menuacct_internet, true);
 //        }
         this.account = account;
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        sharedPreferences.edit().putString(SEARCH_QUERY, "").apply();
+        sharedPreferences.edit().putInt(SEARCH_ONE_ITEM, this.account.getId()).apply();
+
 
         if (mTwoPane) {
             acctEditRequest(this.account.getId());
@@ -1841,6 +1847,7 @@ public class MainActivity extends AppCompatActivity
     protected void onResume() {
 //        Log.d(TAG, "onResume: starts");
 
+        progressBar.setVisibility(View.VISIBLE);
         isResumed = true;
 //        Log.d(TAG, "onResume: isResumed " + isResumed);
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());

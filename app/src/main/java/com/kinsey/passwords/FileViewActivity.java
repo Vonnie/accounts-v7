@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
 import android.util.JsonReader;
 import android.util.JsonToken;
@@ -47,6 +48,7 @@ public class FileViewActivity extends AppCompatActivity
     boolean importRefreshReq = false;
     ProgressBar progressBar;
     private Handler mHandler = new Handler();
+    private ShareActionProvider myShareActionProvider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,6 +129,19 @@ public class FileViewActivity extends AppCompatActivity
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_file_view, menu);
 
+
+//        getMenuInflater().inflate(R.menu.share_menu, menu);
+
+//        // Locate MenuItem with ShareActionProvider
+//        MenuItem item = menu.findItem(R.id.menu_item_share);
+//
+//        // Fetch and store ShareActionProvider
+//        mShareActionProvider = (ShareActionProvider) item.getActionProvider();
+
+//        MenuItem shareItem = menu.findItem(R.id.menu_item_share);
+//        myShareActionProvider =
+//                (ShareActionProvider) MenuItemCompat.getActionProvider(shareItem);
+
         return true;
     }
 
@@ -158,6 +173,10 @@ public class FileViewActivity extends AppCompatActivity
                 showFilename();
                 break;
 
+            case R.id.menu_item_share:
+                Log.d(TAG, "onOptionsItemSelected: View share");
+                break;
+
             case android.R.id.home:
 //                AccountListActivityFragment listFragment = (AccountListActivityFragment)
 //                        getSupportFragmentManager().findFragmentByTag("acctlistfrag");
@@ -176,6 +195,13 @@ public class FileViewActivity extends AppCompatActivity
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    // Call to update the share intent
+    private void setShareIntent(Intent shareIntent) {
+        if (myShareActionProvider != null) {
+            myShareActionProvider.setShareIntent(shareIntent);
+        }
     }
 
     private void showFilename() {
