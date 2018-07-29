@@ -128,7 +128,12 @@ public class MainActivity extends AppCompatActivity
     private boolean isResumed = false;
 
     private int accountMode = AccountsContract.ACCOUNT_ACTION_ADD;
-//    private AccountListActivityFragment fragList;
+    View addEditLayout;
+    View addEditLayoutScroll;
+    View mainFragment;
+
+
+    //    private AccountListActivityFragment fragList;
 //    private static AccountPlaceholderFrag1 frag1;
 //    private static AccountPlaceholderFrag2 frag2;
 //    private static AccountPlaceholderFrag3 frag3;
@@ -191,11 +196,11 @@ public class MainActivity extends AppCompatActivity
 
         // We need references to the containers, so we can show or hide them as necessary.
         // No need to cast them, as we're only calling a method that's available for all views.
-        View addEditLayout = findViewById(R.id.task_details_container);
-        View addEditLayoutScroll = findViewById(R.id.task_details_container_scroll);
-        View mainFragment = findViewById(R.id.fragment);
+        addEditLayout = findViewById(R.id.task_details_container);
+        addEditLayoutScroll = findViewById(R.id.task_details_container_scroll);
+        mainFragment = findViewById(R.id.fragment);
         progressBar  = findViewById(R.id.progressBar);
-        progressBar.setVisibility(View.VISIBLE);
+//        progressBar.setVisibility(View.VISIBLE);
 //        progressBar.setVisibility(View.GONE);
 
         if(mTwoPane) {
@@ -405,6 +410,12 @@ public class MainActivity extends AppCompatActivity
 //                AccountListActivityFragment listFragment = (AccountListActivityFragment)
 //                        getSupportFragmentManager().findFragmentById(R.id.fragment);
                 Cursor cursor = mSearchView.getSuggestionsAdapter().getCursor();
+                if (cursor == null) {
+                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                    sharedPreferences.edit().putString(SEARCH_QUERY, "").apply();
+                    sharedPreferences.edit().putInt(SEARCH_ONE_ITEM, -1).apply();
+                    return false;
+                }
                 if (cursor.getCount() == 1) {
                     SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                     sharedPreferences.edit().putString(SEARCH_QUERY, "").apply();
@@ -551,8 +562,8 @@ public class MainActivity extends AppCompatActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         feedUrl = "http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topTvEpisodes/xml";
+        AddEditActivityFragment addEditActivityFragment;
         int id = item.getItemId();
-
         //noinspection SimplifiableIfStatement
         switch (id) {
             case R.id.menumain_add:
@@ -609,6 +620,34 @@ public class MainActivity extends AppCompatActivity
                 break;
 
             case R.id.menuacct_external_accts:
+                addEditActivityFragment = (AddEditActivityFragment)
+                        getSupportFragmentManager().findFragmentById(R.id.task_details_container);
+                if(addEditActivityFragment != null) {
+                    Log.d(TAG, "onOptionsItemSelected: addeditFragment found");
+                    if (addEditActivityFragment.canClose()) {
+                        FragmentManager fragmentManager = getSupportFragmentManager();
+                        Fragment editFragment = fragmentManager.findFragmentById(R.id.task_details_container);
+                        if(editFragment != null) {
+                            // we were editing
+                            getSupportFragmentManager().beginTransaction()
+                                    .remove(editFragment)
+                                    .commit();
+                            addEditLayout.setVisibility(View.GONE);
+                            addEditLayoutScroll.setVisibility(View.GONE);
+                            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                            sharedPreferences.edit().putString(SEARCH_QUERY, "").apply();
+                            sharedPreferences.edit().putInt(SEARCH_ONE_ITEM, -1).apply();
+
+                            AccountListActivityFragment listFragment = (AccountListActivityFragment)
+                                    getSupportFragmentManager().findFragmentById(R.id.fragment);
+                            listFragment.setQuery("");
+
+                        }
+                    } else {
+                        showConfirmationDialog(AppDialog.DIALOG_ID_CANCEL_EDIT_UP);
+                        break;
+                    }
+                }
                 viewAccountsFile();
                 break;
 
@@ -691,12 +730,6 @@ public class MainActivity extends AppCompatActivity
 
                 break;
 
-//            case R.id.menumain_refresh:
-//
-//                feedCachedUrl = "INVALIDATED";
-//
-//                break;
-
             case android.R.id.home:
                 Log.d(TAG, "onOptionsItemSelected: home button pressed");
 
@@ -707,29 +740,22 @@ public class MainActivity extends AppCompatActivity
                     if (fragment.canClose()) {
                         if (mTwoPane) {
                             // in Landscape, so quit only if the back button was used
-                            Log.d(TAG, "onPositiveDialogResult: get list");
-                            AccountListActivityFragment listFragment = (AccountListActivityFragment)
-                                    getSupportFragmentManager().findFragmentById(R.id.fragment);
-                            listFragment.resetSelectItem();
+//                            Log.d(TAG, "onPositiveDialogResult: get list");
+//                            AccountListActivityFragment listFragment = (AccountListActivityFragment)
+//                                    getSupportFragmentManager().findFragmentById(R.id.fragment);
+//                            listFragment.resetSelectItem();
                         } else {
                             // hide the edit container in single pane mode
                             // and make sure the left-hand container is visible
-                            View addEditLayout = findViewById(R.id.task_details_container);
-                            View addEditLayoutScroll = findViewById(R.id.task_details_container_scroll);
-                            View mainFragment = findViewById(R.id.fragment);
-                            // We're just removed the editing fragment, so hide the frame
-                            addEditLayout.setVisibility(View.GONE);
-                            addEditLayoutScroll.setVisibility(View.GONE);
-
-                            // and make sure the MainActivityFragment is visible
-                            mainFragment.setVisibility(View.VISIBLE);
-//                            setMenuItemVisible(R.id.menuacct_save, false);
+                            returnToMain();
                         }
 
                     } else {
                         showConfirmationDialog(AppDialog.DIALOG_ID_CANCEL_EDIT_UP);
                     }
                     return true;  // indicate we are handling this
+                } else {
+                    returnToMain();
                 }
 //                    setMenuItemVisible(R.id.menuacct_save, false);
 //                FileViewActivityFragment fvFragment = (FileViewActivityFragment)
@@ -755,6 +781,36 @@ public class MainActivity extends AppCompatActivity
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+
+    private void returnToMain() {
+
+        mainFragment.setVisibility(View.VISIBLE);
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        Fragment editFragment = fragmentManager.findFragmentById(R.id.task_details_container);
+        if(editFragment != null) {
+            // we were editing
+            getSupportFragmentManager().beginTransaction()
+                    .remove(editFragment)
+                    .commit();
+        }
+
+        // Hide the editing frame
+        addEditLayout.setVisibility(View.GONE);
+        addEditLayoutScroll.setVisibility(View.GONE);
+
+//        View addEditLayout = findViewById(R.id.task_details_container);
+//        View addEditLayoutScroll = findViewById(R.id.task_details_container_scroll);
+//        View mainFragment = findViewById(R.id.fragment);
+//        // We're just removed the editing fragment, so hide the frame
+//        addEditLayout.setVisibility(View.GONE);
+//        addEditLayoutScroll.setVisibility(View.GONE);
+//
+//        // and make sure the MainActivityFragment is visible
+//        mainFragment.setVisibility(View.VISIBLE);
+////                            setMenuItemVisible(R.id.menuacct_save, false);
     }
 
     private void setMenuItemEnabled(int id, boolean blnSet) {
@@ -1209,7 +1265,8 @@ public class MainActivity extends AppCompatActivity
             final EditText tvName = messageView.findViewById(R.id.txt_corp_name);
             tvName.setText(account.getCorpName());
             TextView tvId = (TextView) messageView.findViewById(R.id.txt_id);
-            tvId.setText(String.valueOf("AcctId " + account.getId()));
+//            tvId.setText(String.valueOf("AcctId " + account.getId()));
+        tvId.setText(String.valueOf("AcctId " + account.getPassportId()));
             final EditText tvWebsite = messageView.findViewById(R.id.addedit_corp_website);
             tvWebsite.setText(account.getCorpWebsite());
 
@@ -1828,6 +1885,7 @@ public class MainActivity extends AppCompatActivity
                 if (resultCode == RESULT_OK) {
                     boolean blnImported = data.getBooleanExtra("IMPORT", false);
                     Log.d(TAG, "onActivityResult: fileview imported? "  + blnImported);
+                    returnToMain();
                     if (blnImported) {
                         loadSearchDB();
                         resortList(AccountsContract.ACCOUNT_LIST_BY_CORP_NAME);
@@ -1850,34 +1908,54 @@ public class MainActivity extends AppCompatActivity
         progressBar.setVisibility(View.VISIBLE);
         isResumed = true;
 //        Log.d(TAG, "onResume: isResumed " + isResumed);
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        String queryResult = sharedPreferences.getString(SEARCH_QUERY, "");
-        int accountId = sharedPreferences.getInt(SEARCH_ONE_ITEM, -1);
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                String queryResult = sharedPreferences.getString(SEARCH_QUERY, "");
+                int accountId = sharedPreferences.getInt(SEARCH_ONE_ITEM, -1);
 
 //        Log.d(TAG, "onResume: qry/id " + queryResult + "/" + accountId);
 
-        AccountListActivityFragment listFragment = (AccountListActivityFragment)
-                getSupportFragmentManager().findFragmentById(R.id.fragment);
+                final AccountListActivityFragment listFragment = (AccountListActivityFragment)
+                        getSupportFragmentManager().findFragmentById(R.id.fragment);
 
-        if (!queryResult.equals("")) {
-            listFragment.setQuery(queryResult);
-        }
-        if (accountId != -1) {
-            listFragment.setAcctId(accountId);
+                if (!queryResult.equals("")) {
+                    listFragment.setQuery(queryResult);
+                }
+                if (accountId != -1) {
+                    listFragment.setAcctId(accountId);
 
-            Cursor cursorSearch = getContentResolver().query(
-                    AccountsContract.buildIdUri(accountId), null, null, null, null);
+                    Cursor cursorSearch = getContentResolver().query(
+                            AccountsContract.buildIdUri(accountId), null, null, null, null);
 
 
-            if (cursorSearch.getCount() == 0) {
-                searchListRequest();
-            } else {
-                acctEditRequest(accountId);
+                    if (cursorSearch.getCount() == 0) {
+                        searchListRequest();
+                    } else {
+                        acctEditRequest(accountId);
+                    }
+                }
+                //        sharedPreferences.edit().putBoolean(APP_RESUMED, true).apply();
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        View mainFragment = findViewById(R.id.fragment);
+                        if (mainFragment.getVisibility() == View.VISIBLE) {
+
+                            Toast.makeText(MainActivity.this,
+                                    "Long click on item for more options",
+                                    Toast.LENGTH_LONG).show();
+                        }
+
+                        progressBar.setVisibility(View.GONE);
+
+                    }
+                });
             }
-        }
-//        sharedPreferences.edit().putBoolean(APP_RESUMED, true).apply();
-
-        Toast.makeText(this, "Long click on item for more options", Toast.LENGTH_LONG).show();
+        }).start();;
 
 //        String queryResult = sharedPreferences.getString(SEARCH_QUERY, "");
 //
@@ -2350,21 +2428,40 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onBackPressed() {
         Log.d(TAG, "onBackPressed: ");
+
         FragmentManager fragmentManager = getSupportFragmentManager();
-//        Fragment fragment = fragmentManager.findFragmentById(R.id.task_details_container);
-//        if (fragment != null) {
-//        if (currFrag == AppFragType.ACCOUNTEDIT) {
-            AddEditActivityFragment editFragment = (AddEditActivityFragment) fragmentManager.findFragmentById(R.id.task_details_container);
+        AddEditActivityFragment editFragment = (AddEditActivityFragment) fragmentManager.findFragmentById(R.id.task_details_container);
+
+        View mainFragment = findViewById(R.id.fragment);
+        if (mainFragment.getVisibility() == View.GONE) {
+//                    Log.d(TAG, "onBackPressed: mainFragment gone");
+//                    super.onBackPressed();
             if (editFragment == null) {
-                showConfirmationLeaveApp();
             } else if (editFragment.canClose()) {
-//            super.onBackPressed();
-                showConfirmationLeaveApp();
-                return;
-            } else {
-                showConfirmationDialog(AppDialog.DIALOG_ID_CANCEL_EDIT);
+                returnToMain();
                 return;
             }
+        }
+
+        if (editFragment == null) {
+            showConfirmationLeaveApp();
+        } else if (editFragment.canClose()) {
+
+        } else {
+            showConfirmationLeaveApp();
+//                    showConfirmationLeaveApp();
+            return;
+        }
+
+//            super.onBackPressed();
+//                showConfirmationLeaveApp();
+            return;
+//        } else {
+//            showConfirmationDialog(AppDialog.DIALOG_ID_CANCEL_EDIT);
+//            return;
+
+
+
 
 //            SuggestListActivityFragment suggestFragment = (SuggestListActivityFragment) fragmentManager.findFragmentById(R.id.task_details_container);
 //            if (suggestFragment == null) {

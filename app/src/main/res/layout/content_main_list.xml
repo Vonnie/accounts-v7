@@ -27,23 +27,23 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/progressBar">
+        app:layout_constraintTop_toBottomOf="@+id/progressBar"
+        android:baselineAligned="false">
 
         <fragment
             android:id="@+id/fragment"
             android:name="com.kinsey.passwords.AccountListActivityFragment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
-            android:layout_weight="1"
             android:layout_marginTop="8dp"
+            android:layout_weight="1"
             android:tag="acctlistfrag"
             tools:layout="@layout/fragment_account_list" />
 
@@ -57,9 +57,10 @@
             <FrameLayout
                 android:id="@+id/task_details_container"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:scrollbarStyle="insideOverlay"
-                android:scrollbars="vertical">
+                android:scrollbars="vertical"
+                android:layout_weight="1">
 
             </FrameLayout>
         </ScrollView>

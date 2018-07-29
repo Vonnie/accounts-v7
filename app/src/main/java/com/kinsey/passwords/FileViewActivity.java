@@ -58,6 +58,9 @@ public class FileViewActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        progressBar  = findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.VISIBLE);
+
 //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 //        fab.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -825,4 +828,5 @@ public class FileViewActivity extends AppCompatActivity
         progressBar  = findViewById(R.id.progressBar);
         progressBar.setVisibility(View.GONE);
     }
-        }
+
+}
