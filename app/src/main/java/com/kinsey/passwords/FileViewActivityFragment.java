@@ -52,7 +52,9 @@ public class FileViewActivityFragment extends Fragment {
             public void onPageFinished(WebView web, String url) {
                 web.loadUrl("javascript:(function(){ document.body.style.paddingTop = '5px'})();");
                 Log.d(TAG, "onPageFinished: ");
-                mListener.onFileViewShown();
+                if (mListener != null) {
+                    mListener.onFileViewShown();
+                }
             }
 
         });

@@ -16,12 +16,6 @@
         app:actionViewClass="android.widget.SearchView"
         app:showAsAction="always" />
     <!--android:icon="@drawable/selector_search"-->
-    <item
-        android:id="@+id/menumain_add"
-        android:icon="@drawable/selector_add"
-        android:orderInCategory="102"
-        android:title="@string/menu_add_account"
-        app:showAsAction="ifRoom" />
     <!--android:icon="@drawable/ic_action_document"-->
     <!--<item-->
         <!--android:id="@+id/menumain_refresh"-->
@@ -43,8 +37,14 @@
     <item
         android:id="@+id/menuacct_save"
         android:icon="@drawable/selector_save"
-        android:orderInCategory="103"
+        android:orderInCategory="102"
         android:title="@string/menu_save"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/menumain_add"
+        android:icon="@drawable/selector_add"
+        android:orderInCategory="103"
+        android:title="@string/menu_add_account"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/menumain_about"
@@ -52,19 +52,7 @@
         android:orderInCategory="104"
         android:title="@string/menuacct_about"
         app:showAsAction="ifRoom" />
-    <item
-        android:id="@+id/menumain_search_setting"
-        android:orderInCategory="105"
-        android:title="Search Setting"
-        app:showAsAction="never" />
 
-    <item
-        android:id="@+id/menumain_ifSearch"
-        android:orderInCategory="118"
-        android:title="List by Search"
-        app:actionViewClass="android.widget.CheckBox"
-        android:checkable="true"
-        app:showAsAction="never" />
     <item
         android:id="@+id/menuacct_external_accts"
         android:orderInCategory="119"
@@ -131,10 +119,22 @@
     </group>
 
     <item
+        android:id="@+id/menumain_clearSearch"
+        android:checkable="false"
+        android:orderInCategory="250"
+        android:title="Close Search List"
+        app:showAsAction="never" />
+    <!--app:actionViewClass="android.widget.CheckBox"-->
+    <item
+        android:id="@+id/menumain_search_setting"
+        android:orderInCategory="251"
+        android:title="Refresh Search DB"
+        app:showAsAction="never" />
+    <item
         android:id="@+id/miActionProgress"
+        android:orderInCategory="300"
         android:title="Loading..."
         android:visible="false"
-        android:orderInCategory="300"
-        app:showAsAction="always"
-        app:actionLayout="@layout/action_view_progress" />
+        app:actionLayout="@layout/action_view_progress"
+        app:showAsAction="always" />
 </menu>

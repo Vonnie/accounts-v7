@@ -325,7 +325,11 @@ public class AccountListActivityFragment extends Fragment
     }
 
     public void setAccountSelectedPos(int pos) {
+
         mAccountAdapter.setAccountSelectedPos(pos);
+        if (pos == -1) {
+            mAccountAdapter.setAccountSelectById(false);
+        }
     }
 
 //    public int getAccountSelectedPos() {
