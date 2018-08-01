@@ -13,7 +13,6 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -42,23 +41,15 @@ import com.kinsey.passwords.items.AccountsContract;
 import com.kinsey.passwords.items.SearchesContract;
 import com.kinsey.passwords.items.Suggest;
 import com.kinsey.passwords.provider.DatePickerFragment;
-import com.kinsey.passwords.provider.FeedAdapter;
-import com.kinsey.passwords.provider.ParseApplications;
 import com.kinsey.passwords.tools.AppDialog;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
 //import static com.kinsey.passwords.SearchActivity.SEARCH_ACCOUNT;
-//import static com.kinsey.passwords.SearchActivity.SEARCH_QUERY;
+//import static com.kinsey.passwords.SearchActivity.SELECTION_QUERY;
 
 public class MainActivity extends AppCompatActivity
         implements
@@ -112,8 +103,9 @@ public class MainActivity extends AppCompatActivity
     public static int accountSelectedPos = -1;
 
     private final String APP_RESUMED = "Resumed";
-    private final String SEARCH_QUERY = "Query";
-    private final String SEARCH_ONE_ITEM = "SearchedOneItem";
+    private final String SELECTION_QUERY = "Query";
+    private final String SELECTION_ONE_ITEM = "SeLectionOneItem";
+    private final String SORTED_LIST_ORDER = "SortedListOrder";
 
     Menu menu;
     MenuItem miActionProgressItem;
@@ -224,7 +216,7 @@ public class MainActivity extends AppCompatActivity
 
 
 //        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-//        String queryResult = sharedPreferences.getString(SEARCH_QUERY, "");
+//        String queryResult = sharedPreferences.getString(SELECTION_QUERY, "");
 //
 //        Log.d(TAG, "sharedPreferences: return a value " + queryResult);
 //
@@ -363,6 +355,9 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        Log.d(TAG, "onCreateOptionsMenu: starts");
+        Log.d(TAG, "onCreateOptionsMenu: starts");
+        Log.d(TAG, "onCreateOptionsMenu: starts");
         // Inflate the menu; this adds items to the action bar if it is present.
         this.menu = menu;
         getMenuInflater().inflate(R.menu.menu_main, menu);
@@ -385,8 +380,8 @@ public class MainActivity extends AppCompatActivity
 
         mSearchView.setIconified(true);
 //        mSearchView.clearFocus();
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        String queryResult = sharedPreferences.getString(SEARCH_QUERY, "");
+//        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+//        String queryResult = sharedPreferences.getString(SELECTION_QUERY, "");
 
 //        if (queryResult.equals("")) {
 //            setMenuItemChecked(R.id.menumain_ifSearch, false);
@@ -407,16 +402,16 @@ public class MainActivity extends AppCompatActivity
                 Cursor cursor = mSearchView.getSuggestionsAdapter().getCursor();
                 if (cursor == null) {
                     SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                    sharedPreferences.edit().putString(SEARCH_QUERY, "").apply();
-                    sharedPreferences.edit().putInt(SEARCH_ONE_ITEM, -1).apply();
+                    sharedPreferences.edit().putString(SELECTION_QUERY, "").apply();
+                    sharedPreferences.edit().putInt(SELECTION_ONE_ITEM, -1).apply();
                     return false;
                 }
                 if (cursor.getCount() == 1) {
                     SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                    sharedPreferences.edit().putString(SEARCH_QUERY, "").apply();
+                    sharedPreferences.edit().putString(SELECTION_QUERY, "").apply();
                     int accountId = getSearchAccountId(0);
                     Log.d(TAG, "onQueryTextSubmit: accountId " + accountId);
-                    sharedPreferences.edit().putInt(SEARCH_ONE_ITEM, accountId).apply();
+                    sharedPreferences.edit().putInt(SELECTION_ONE_ITEM, accountId).apply();
 //                    listFragment.setQuery("");
 //                    listFragment.setAcctId(accountId);
 //                    int pos = listFragment.getAccountSelectedPos();
@@ -429,8 +424,8 @@ public class MainActivity extends AppCompatActivity
                     return false;
                 }
                 SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                sharedPreferences.edit().putString(SEARCH_QUERY, query).apply();
-                sharedPreferences.edit().putInt(SEARCH_ONE_ITEM, -1).apply();
+                sharedPreferences.edit().putString(SELECTION_QUERY, query).apply();
+                sharedPreferences.edit().putInt(SELECTION_ONE_ITEM, -1).apply();
 
                 //                showSuggestions();
 
@@ -452,11 +447,11 @@ public class MainActivity extends AppCompatActivity
             public boolean onQueryTextChange(String newText) {
 //                Log.d(TAG, "onQueryTextChange: adt " + mSearchView.getSuggestionsAdapter().getCount());
 //                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-//                sharedPreferences.edit().putString(SEARCH_QUERY, newText).apply();
+//                sharedPreferences.edit().putString(SELECTION_QUERY, newText).apply();
 
                 SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                sharedPreferences.edit().putString(SEARCH_QUERY, "").apply();
-                sharedPreferences.edit().putInt(SEARCH_ONE_ITEM, -1).apply();
+                sharedPreferences.edit().putString(SELECTION_QUERY, "").apply();
+                sharedPreferences.edit().putInt(SELECTION_ONE_ITEM, -1).apply();
 
                 return false;
             }
@@ -473,8 +468,8 @@ public class MainActivity extends AppCompatActivity
                 mSearchView.clearFocus();
 //                setMenuItemChecked(R.id.menumain_ifSearch, false);
                 SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                sharedPreferences.edit().putString(SEARCH_QUERY, "").apply();
-                sharedPreferences.edit().putInt(SEARCH_ONE_ITEM, -1).apply();
+                sharedPreferences.edit().putString(SELECTION_QUERY, "").apply();
+                sharedPreferences.edit().putInt(SELECTION_ONE_ITEM, -1).apply();
 
                 AccountListActivityFragment listFragment = (AccountListActivityFragment)
                         getSupportFragmentManager().findFragmentById(R.id.fragment);
@@ -506,8 +501,8 @@ public class MainActivity extends AppCompatActivity
                 Log.d(TAG, "onSuggestionClick: accountId " + accountId);
 //                showOneSearches(accountId, position);
                 SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                sharedPreferences.edit().putString(SEARCH_QUERY, "").apply();
-                sharedPreferences.edit().putInt(SEARCH_ONE_ITEM, accountId).apply();
+                sharedPreferences.edit().putString(SELECTION_QUERY, "").apply();
+                sharedPreferences.edit().putInt(SELECTION_ONE_ITEM, accountId).apply();
                 Log.d(TAG, "onSuggestionClick: finish");
                 AccountListActivityFragment listFragment = (AccountListActivityFragment)
                         getSupportFragmentManager().findFragmentById(R.id.fragment);
@@ -630,8 +625,8 @@ public class MainActivity extends AppCompatActivity
 ////                            addEditLayout.setVisibility(View.GONE);
 ////                            addEditLayoutScroll.setVisibility(View.GONE);
 //                            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-//                            sharedPreferences.edit().putString(SEARCH_QUERY, "").apply();
-//                            sharedPreferences.edit().putInt(SEARCH_ONE_ITEM, -1).apply();
+//                            sharedPreferences.edit().putString(SELECTION_QUERY, "").apply();
+//                            sharedPreferences.edit().putInt(SELECTION_ONE_ITEM, -1).apply();
 //
 ////                            AccountListActivityFragment listFragment = (AccountListActivityFragment)
 ////                                    getSupportFragmentManager().findFragmentById(R.id.fragment);
@@ -648,7 +643,7 @@ public class MainActivity extends AppCompatActivity
 
             case R.id.menumain_clearSearch:
                 SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                sharedPreferences.edit().putString(SEARCH_QUERY, "").apply();
+                sharedPreferences.edit().putString(SELECTION_QUERY, "").apply();
                 AccountListActivityFragment listFragment = (AccountListActivityFragment)
                         getSupportFragmentManager().findFragmentById(R.id.fragment);
                 listFragment.setQuery("");
@@ -659,14 +654,14 @@ public class MainActivity extends AppCompatActivity
 //                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 //                if (item.isChecked()) {
 //                    item.setChecked(false);
-//                    sharedPreferences.edit().putString(SEARCH_QUERY, "").apply();
+//                    sharedPreferences.edit().putString(SELECTION_QUERY, "").apply();
 //                    AccountListActivityFragment listFragment = (AccountListActivityFragment)
 //                            getSupportFragmentManager().findFragmentById(R.id.fragment);
 //                    listFragment.setQuery("");
 //                    Toast.makeText(this, "Search selection cleared", Toast.LENGTH_LONG).show();
 //                    break;
 //                }
-//                String queryResult = sharedPreferences.getString(SEARCH_QUERY, "");
+//                String queryResult = sharedPreferences.getString(SELECTION_QUERY, "");
 //                if (queryResult.equals("")) {
 //                    item.setChecked(false);
 //                    AccountListActivityFragment listFragment = (AccountListActivityFragment)
@@ -936,8 +931,8 @@ public class MainActivity extends AppCompatActivity
         this.account = account;
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        sharedPreferences.edit().putString(SEARCH_QUERY, "").apply();
-        sharedPreferences.edit().putInt(SEARCH_ONE_ITEM, this.account.getId()).apply();
+        sharedPreferences.edit().putString(SELECTION_QUERY, "").apply();
+        sharedPreferences.edit().putInt(SELECTION_ONE_ITEM, this.account.getId()).apply();
 
 
         if (mTwoPane) {
@@ -1822,17 +1817,17 @@ public class MainActivity extends AppCompatActivity
         showDatePickerDialog("Activity Date", 0, mCalendar);
     }
 
-    private void downloadUrl(String feedUrl) {
-        if (!feedUrl.equalsIgnoreCase(feedCachedUrl)) {
-            Log.d(TAG, "downloadURL: " + feedUrl);
-            DownloadData downloadData = new DownloadData();
-            downloadData.execute(feedUrl);
-            feedCachedUrl = feedUrl;
-            Log.d(TAG, "downloadURL: done");
-        } else {
-            Log.d(TAG, "downloadUrl: URL not changed");
-        }
-    }
+//    private void downloadUrl(String feedUrl) {
+//        if (!feedUrl.equalsIgnoreCase(feedCachedUrl)) {
+//            Log.d(TAG, "downloadURL: " + feedUrl);
+//            DownloadData downloadData = new DownloadData();
+//            downloadData.execute(feedUrl);
+//            feedCachedUrl = feedUrl;
+//            Log.d(TAG, "downloadURL: done");
+//        } else {
+//            Log.d(TAG, "downloadUrl: URL not changed");
+//        }
+//    }
 
     public void showAboutDialog() {
         @SuppressLint("InflateParams") View messageView = getLayoutInflater().inflate(R.layout.activity_about, null, false);
@@ -1947,6 +1942,8 @@ public class MainActivity extends AppCompatActivity
                     Log.d(TAG, "onActivityResult: fileview imported? "  + blnImported);
 //                    returnToMain();
                     if (blnImported) {
+                        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                        sharedPreferences.edit().putInt(SELECTION_ONE_ITEM, -1).apply();
                         loadSearchDB();
                         setMenuItemChecked(R.id.menuacct_sort_corpname, true
                         );
@@ -1965,7 +1962,15 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onResume() {
-//        Log.d(TAG, "onResume: starts");
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        editing = fragmentManager.findFragmentById(R.id.task_details_container) != null;
+        Log.d(TAG, "onResume: starts " + editing);
+
+
+        if (editing) {
+            super.onResume();
+            return;
+        }
 
         progressBar.setVisibility(View.VISIBLE);
 //        mainFragment.setVisibility(View.GONE);
@@ -1977,8 +1982,8 @@ public class MainActivity extends AppCompatActivity
             public void run() {
 
                 SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                final String queryResult = sharedPreferences.getString(SEARCH_QUERY, "");
-                final int accountId = sharedPreferences.getInt(SEARCH_ONE_ITEM, -1);
+                final String queryResult = sharedPreferences.getString(SELECTION_QUERY, "");
+                final int accountId = sharedPreferences.getInt(SELECTION_ONE_ITEM, -1);
 
 //        Log.d(TAG, "onResume: qry/id " + queryResult + "/" + accountId);
 
@@ -1997,7 +2002,7 @@ public class MainActivity extends AppCompatActivity
                     if (accountId == -1) {
                         listFragment.setAccountSelectedPos(-1);
                     } else {
-                        listFragment.setAcctId(accountId);
+                        if (listFragment.setAcctId(accountId)) {
 
 //                            Cursor cursorSearch = getContentResolver().query(
 //                                    AccountsContract.buildIdUri(accountId), null, null, null, null);
@@ -2006,7 +2011,12 @@ public class MainActivity extends AppCompatActivity
 //                            if (cursorSearch.getCount() == 0) {
 //                                searchListRequest();
 //                            } else {
-                        acctEditRequest(accountId);
+                            acctEditRequest(accountId);
+                        } else {
+                            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                            sharedPreferences.edit().putString(SELECTION_QUERY, "").apply();
+                            sharedPreferences.edit().putInt(SELECTION_ONE_ITEM, -1).apply();
+                        }
 //                            }
                     }
                     //        sharedPreferences.edit().putBoolean(APP_RESUMED, true).apply();
@@ -2026,7 +2036,7 @@ public class MainActivity extends AppCompatActivity
             }
         }).start();;
 
-//        String queryResult = sharedPreferences.getString(SEARCH_QUERY, "");
+//        String queryResult = sharedPreferences.getString(SELECTION_QUERY, "");
 //
 //        Log.d(TAG, "onResume: return a value " + queryResult);
 
@@ -2039,7 +2049,7 @@ public class MainActivity extends AppCompatActivity
 //
 //            int queryResultId = sharedPreferences.getInt(SEARCH_ACCOUNT, -1);
 //            Log.d(TAG, "onResume: queryResultsId " + queryResultId);
-//            sharedPreferences.edit().putString(SEARCH_QUERY, "").apply();;
+//            sharedPreferences.edit().putString(SELECTION_QUERY, "").apply();;
 //            if (queryResultId == -1) {
 //                Intent detailIntent = new Intent(this, SearchListActivity.class);
 //                detailIntent.putExtra(SearchListActivity.class.getSimpleName(), (int)-1);
@@ -2078,8 +2088,8 @@ public class MainActivity extends AppCompatActivity
     private void resetPreferences() {
         Log.d(TAG, "resetPreferences: starts");
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        sharedPreferences.edit().putString(SEARCH_QUERY, "").apply();
-        sharedPreferences.edit().putInt(SEARCH_ONE_ITEM, -1).apply();
+        sharedPreferences.edit().putString(SELECTION_QUERY, "").apply();
+        sharedPreferences.edit().putInt(SELECTION_ONE_ITEM, -1).apply();
     }
 
 
@@ -2216,7 +2226,7 @@ public class MainActivity extends AppCompatActivity
 
 
 //                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-//                sharedPreferences.edit().putString(SEARCH_QUERY, "").apply();
+//                sharedPreferences.edit().putString(SELECTION_QUERY, "").apply();
 //
 //                listFragment = (AccountListActivityFragment)
 //                        getSupportFragmentManager().findFragmentById(R.id.fragment);
@@ -2241,27 +2251,27 @@ public class MainActivity extends AppCompatActivity
                     getSupportFragmentManager().beginTransaction()
                             .remove(editFragment)
                             .commit();
-//                    if(mTwoPane) {
-////                        Log.d(TAG, "onPositiveDialogResult: get list");
-////                        listFragment = (AccountListActivityFragment)
-////                                getSupportFragmentManager().findFragmentById(R.id.fragment);
-////                        listFragment.resetSelectItem();
-//                    } else {
-//                        // hide the edit container in single pane mode
-//                        // and make sure the left-hand container is visible
-//                        View addEditLayout = findViewById(R.id.task_details_container);
-//                        View addEditLayoutScroll = findViewById(R.id.task_details_container_scroll);
-//                        View mainFragment = findViewById(R.id.fragment);
-//                        // We're just removed the editing fragment, so hide the frame
-//                        addEditLayout.setVisibility(View.GONE);
-//                        addEditLayoutScroll.setVisibility(View.GONE);
-////                        setMenuItemVisible(R.id.menuacct_save, false);
-//
-//                        // and make sure the MainActivityFragment is visible
-//                        mainFragment.setVisibility(View.VISIBLE);
-//
-//
-//                    }
+                    if(mTwoPane) {
+//                        Log.d(TAG, "onPositiveDialogResult: get list");
+//                        listFragment = (AccountListActivityFragment)
+//                                getSupportFragmentManager().findFragmentById(R.id.fragment);
+//                        listFragment.resetSelectItem();
+                    } else {
+                        // hide the edit container in single pane mode
+                        // and make sure the left-hand container is visible
+                        View addEditLayout = findViewById(R.id.task_details_container);
+                        View addEditLayoutScroll = findViewById(R.id.task_details_container_scroll);
+                        View mainFragment = findViewById(R.id.fragment);
+                        // We're just removed the editing fragment, so hide the frame
+                        addEditLayout.setVisibility(View.GONE);
+                        addEditLayoutScroll.setVisibility(View.GONE);
+//                        setMenuItemVisible(R.id.menuacct_save, false);
+
+                        // and make sure the MainActivityFragment is visible
+                        mainFragment.setVisibility(View.VISIBLE);
+
+
+                    }
                 } else {
                     // not editing, so quit regardless of orientation
                     finish();
@@ -2287,7 +2297,7 @@ public class MainActivity extends AppCompatActivity
             case AppDialog.DIALOG_ID_ASK_REFRESH_SEARCHDB:
 
 //                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-//                String queryResult = sharedPreferences.getString(SEARCH_QUERY, "");
+//                String queryResult = sharedPreferences.getString(SELECTION_QUERY, "");
 //
 //                Log.d(TAG, "sharedPreferences: return a value " + queryResult);
 //
@@ -2327,9 +2337,12 @@ public class MainActivity extends AppCompatActivity
             }
         }
 
-        AccountListActivityFragment listFragment = (AccountListActivityFragment)
-                getSupportFragmentManager().findFragmentById(R.id.fragment);
-        listFragment.setAcctId(-1);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        sharedPreferences.edit().putInt(SELECTION_ONE_ITEM, -1).apply();
+
+//        AccountListActivityFragment listFragment = (AccountListActivityFragment)
+//                getSupportFragmentManager().findFragmentById(R.id.fragment);
+//        listFragment.setAcctId(-1);
 
 
         if (mTwoPane) {
@@ -2346,74 +2359,76 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    private class DownloadData extends AsyncTask<String, Void, String> {
-        private static final String TAG = "DownloadData";
+//    private class DownloadData extends AsyncTask<String, Void, String> {
+//        private static final String TAG = "DownloadData";
+//
+//        @Override
+//        protected void onPostExecute(String s) {
+//            super.onPostExecute(s);
+////            Log.d(TAG, "onPostExecute: parameter is " + s);
+//            ParseApplications parseApplications = new ParseApplications();
+//            parseApplications.parse(s);
+//
+////            ArrayAdapter<FeedEntry> arrayAdapter = new ArrayAdapter<FeedEntry>(
+////                    MainActivity.this, R.layout.list_item, parseApplications.getApplications());
+////            listApps.setAdapter(arrayAdapter);
+//            FeedAdapter feedAdapter = new FeedAdapter(MainActivity.this, R.layout.list_record,
+//                    parseApplications.getApplications());
+//            listApps.setAdapter(feedAdapter);
+//
+//        }
+//
+//        @Override
+//        protected String doInBackground(String... strings) {
+//            Log.d(TAG, "doInBackground: starts with " + strings[0]);
+//            String rssFeed = downloadXML(strings[0]);
+//            if (rssFeed == null) {
+//                Log.e(TAG, "doInBackground: Error downloading");
+//            }
+//            return rssFeed;
+//        }
+//
+//        @Nullable
+//        private String downloadXML(String urlPath) {
+//            StringBuilder xmlResult = new StringBuilder();
+//
+//            try {
+//                URL url = new URL(urlPath);
+//                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+//                int response = connection.getResponseCode();
+//                Log.d(TAG, "downloadXML: The response code was " + response);
+////                InputStream inputStream = connection.getInputStream();
+////                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+////                BufferedReader reader = new BufferedReader(inputStreamReader);
+//                BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+//
+//                int charsRead;
+//                char[] inputBuffer = new char[500];
+//                while (true) {
+//                    charsRead = reader.read(inputBuffer);
+//                    if (charsRead < 0) {
+//                        break;
+//                    }
+//                    if (charsRead > 0) {
+//                        xmlResult.append(String.copyValueOf(inputBuffer, 0, charsRead));
+//                    }
+//                }
+//                reader.close();
+//
+//                return xmlResult.toString();
+//            } catch (MalformedURLException e) {
+//                Log.e(TAG, "downloadXML: Invalid URL " + e.getMessage());
+//            } catch (IOException e) {
+//                Log.e(TAG, "downloadXML: IO Exception reading data: " + e.getMessage());
+//            } catch (SecurityException e) {
+//                Log.e(TAG, "downloadXML: Security Exception.  Needs permisson? " + e.getMessage());
+////                e.printStackTrace();
+//            }
+//
+//            return null;
+//        }
+//    }
 
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-//            Log.d(TAG, "onPostExecute: parameter is " + s);
-            ParseApplications parseApplications = new ParseApplications();
-            parseApplications.parse(s);
-
-//            ArrayAdapter<FeedEntry> arrayAdapter = new ArrayAdapter<FeedEntry>(
-//                    MainActivity.this, R.layout.list_item, parseApplications.getApplications());
-//            listApps.setAdapter(arrayAdapter);
-            FeedAdapter feedAdapter = new FeedAdapter(MainActivity.this, R.layout.list_record,
-                    parseApplications.getApplications());
-            listApps.setAdapter(feedAdapter);
-
-        }
-
-        @Override
-        protected String doInBackground(String... strings) {
-            Log.d(TAG, "doInBackground: starts with " + strings[0]);
-            String rssFeed = downloadXML(strings[0]);
-            if (rssFeed == null) {
-                Log.e(TAG, "doInBackground: Error downloading");
-            }
-            return rssFeed;
-        }
-
-        private String downloadXML(String urlPath) {
-            StringBuilder xmlResult = new StringBuilder();
-
-            try {
-                URL url = new URL(urlPath);
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                int response = connection.getResponseCode();
-                Log.d(TAG, "downloadXML: The response code was " + response);
-//                InputStream inputStream = connection.getInputStream();
-//                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-//                BufferedReader reader = new BufferedReader(inputStreamReader);
-                BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-
-                int charsRead;
-                char[] inputBuffer = new char[500];
-                while (true) {
-                    charsRead = reader.read(inputBuffer);
-                    if (charsRead < 0) {
-                        break;
-                    }
-                    if (charsRead > 0) {
-                        xmlResult.append(String.copyValueOf(inputBuffer, 0, charsRead));
-                    }
-                }
-                reader.close();
-
-                return xmlResult.toString();
-            } catch (MalformedURLException e) {
-                Log.e(TAG, "downloadXML: Invalid URL " + e.getMessage());
-            } catch (IOException e) {
-                Log.e(TAG, "downloadXML: IO Exception reading data: " + e.getMessage());
-            } catch (SecurityException e) {
-                Log.e(TAG, "downloadXML: Security Exception.  Needs permisson? " + e.getMessage());
-//                e.printStackTrace();
-            }
-
-            return null;
-        }
-    }
 
 //    @Override
 //    public void setSaveIcon(boolean setting) {

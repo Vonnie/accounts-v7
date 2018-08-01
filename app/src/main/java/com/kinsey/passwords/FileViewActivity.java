@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
@@ -35,7 +36,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import static com.kinsey.passwords.MainActivity.DEFAULT_APP_DIRECTORY;
 import static com.kinsey.passwords.MainActivity.format_ymdtime;
 
 public class FileViewActivity extends AppCompatActivity
@@ -262,6 +262,31 @@ public class FileViewActivity extends AppCompatActivity
         int count = -1;
 
 
+        Log.d(TAG, "ExportAccountDB: " + android.os.Environment.getExternalStorageDirectory());
+
+        File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+        try {
+            Log.d(TAG, "ExportAccountDB: path " + path.getPath());
+            // Make sure the Pictures directory exists.
+            path.mkdirs();
+        } catch (Exception e) {
+            // Unable to create file, likely because external storage is
+            // not currently mounted.
+            Log.w("ExternalStorage", "Error writing path ", e);
+        }
+
+        File path2 = new File(path, "passport");
+        try {
+            Log.d(TAG, "ExportAccountDB: path " + path2.getPath());
+            // Make sure the Pictures directory exists.
+            path2.mkdirs();
+        } catch (Exception e) {
+            // Unable to create file, likely because external storage is
+            // not currently mounted.
+            Log.w("ExternalStorage", "Error writing path ", e);
+        }
+
+
 ////            File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath(), filename);
 //
 //            String jsonDownload = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath();
@@ -312,37 +337,105 @@ public class FileViewActivity extends AppCompatActivity
 //                }
 //            }
 
-        File file = new File(DEFAULT_APP_DIRECTORY, "accounts.json");
+//        File file = new File(DEFAULT_APP_DIRECTORY, "accounts.json");
+        File file = new File(path2, "accounts.json");
 
         if (file.exists()) {
-//                Log.d(TAG, "ExportAccountDB: file exists");
+                Log.d(TAG, "ExportAccountDB: file exists " + file.getAbsoluteFile());
         } else {
 
-            Log.d(TAG, "ExportAccountDB: got file " + file.getAbsoluteFile());
+            Log.d(TAG, "ExportAccountDB: file " + file.getAbsoluteFile());
+            Log.d(TAG, "ExportAccountDB: got dir " + file.getParentFile().getAbsoluteFile());
+            Log.d(TAG, "ExportAccountDB: got dir " + file.getParentFile().getParentFile().getAbsoluteFile());
             Log.d(TAG, "ExportAccountDB: got dir " + file.getParentFile().getParentFile().getParentFile().getAbsoluteFile());
-            if (file.getParentFile().getParentFile().getParentFile().exists()) {
-                Log.d(TAG, "ExportAccountDB: parent dir found " + file.getParentFile().getParentFile().getParentFile().getAbsoluteFile());
-            } else {
-                if (file.getParentFile().getParentFile().getParentFile().mkdirs()) {
-                    Log.d(TAG, "ExportAccountDB: dirs made " + file.getParentFile().getParentFile().getParentFile().getAbsoluteFile());
-                }
-            }
+            Log.d(TAG, "ExportAccountDB: got path " + file.getParentFile().getPath());
+            Log.d(TAG, "ExportAccountDB: got path " + file.getParentFile().getParentFile().getPath());
+            Log.d(TAG, "ExportAccountDB: got path " + file.getParentFile().getParentFile().getParentFile().getPath());
 
-            if (file.getParentFile().getParentFile().exists()) {
-                Log.d(TAG, "ExportAccountDB: parent dir found " + file.getParentFile().getParentFile().getAbsoluteFile());
-            } else {
-                if (file.getParentFile().getParentFile().mkdirs()) {
-                    Log.d(TAG, "ExportAccountDB: dirs made " + file.getParentFile().getParentFile().getAbsoluteFile());
-                }
-            }
 
-            if (file.getParentFile().exists()) {
-                Log.d(TAG, "ExportAccountDB: parent dir found " + file.getParentFile().getAbsoluteFile());
-            } else {
-                if (file.getParentFile().mkdirs()) {
-                    Log.d(TAG, "ExportAccountDB: dirs made " + file.getParentFile().getAbsoluteFile());
-                }
-            }
+//            String pathname = "/storage/emulated";
+//            File testFile = new File(pathname);
+//            if (testFile.exists()) {
+//                Log.d(TAG, "ExportAccountDB: storage dir exists " + pathname);
+//            } else {
+//                Log.d(TAG, "ExportAccountDB: no storage dir " + pathname);
+//            }
+//
+//            pathname = "/storage/emulated/0";
+//            testFile = new File(pathname);
+//            if (testFile.exists()) {
+//                Log.d(TAG, "ExportAccountDB: storage dir exists " + pathname);
+//            } else {
+//                Log.d(TAG, "ExportAccountDB: no storage dir " + pathname);
+//            }
+//
+//            pathname = "/storage/emulated/0/Download";
+//            testFile = new File(pathname);
+//            if (testFile.exists()) {
+//                Log.d(TAG, "ExportAccountDB: storage dir exists " + pathname);
+//            } else {
+//                Log.d(TAG, "ExportAccountDB: no storage dir " + pathname);
+//            }
+//
+//            pathname = "/storage/emulated/0/Download/passport";
+//            testFile = new File(pathname);
+//            if (testFile.exists()) {
+//                Log.d(TAG, "ExportAccountDB: storage dir exists " + pathname);
+//            } else {
+//                Log.d(TAG, "ExportAccountDB: no storage dir " + pathname);
+//                if (testFile.mkdirs()) {
+//                    Log.d(TAG, "ExportAccountDB: dirs made " + testFile.getPath());
+//                } else {
+//                    Log.d(TAG, "ExportAccountDB: unable to mkdir " + testFile.getPath());
+//                }
+//            }
+
+//            try {
+//                if (file.getParentFile().getParentFile().getParentFile().exists()) {
+//                    Log.d(TAG, "ExportAccountDB: parent dir found " + file.getParentFile().getParentFile().getParentFile().getAbsoluteFile());
+//                } else {
+//                    File dirFile = file.getParentFile().getParentFile().getParentFile();
+//                    if (dirFile.mkdirs()) {
+//                        Log.d(TAG, "ExportAccountDB: dirs made " + dirFile.getPath());
+//                    } else {
+//                        Log.d(TAG, "ExportAccountDB: unable to mkdir " + dirFile.getPath());
+//                    }
+//                }
+//            } catch (Exception ex) {
+//                Log.e(TAG, String.format("ExportAccountDB error: %s Msg: %s", file.getParentFile().getParentFile().getParentFile(), ex.getMessage()));
+//                return ex.getMessage();
+//            }
+
+//            try {
+//                if (file.getParentFile().getParentFile().exists()) {
+//                    Log.d(TAG, "ExportAccountDB: parent dir found " + file.getParentFile().getParentFile().getAbsoluteFile());
+//                } else {
+//                    if (file.getParentFile().getParentFile().mkdir()) {
+//                        Log.d(TAG, "ExportAccountDB: dirs made " + file.getParentFile().getParentFile().getAbsoluteFile());
+//                    } else {
+//                        Log.d(TAG, "ExportAccountDB: unable to mkdirs " + file.getParentFile().getParentFile().getAbsoluteFile());
+//                    }
+//                }
+//            } catch (Exception ex) {
+//                Log.e(TAG, String.format("ExportAccountDB: %s Msg: %s", file.getParentFile().getParentFile(), ex.getMessage()));
+//                return ex.getMessage();
+//            }
+
+//            try {
+//                if (file.getParentFile().exists()) {
+//                    Log.d(TAG, "ExportAccountDB: parent dir found " + file.getParentFile().getAbsoluteFile());
+//                } else {
+//                    if (file.getParentFile().mkdir()) {
+//                        Log.d(TAG, "ExportAccountDB: dirs made " + file.getParentFile().getAbsoluteFile());
+//                    } else {
+//                        Log.d(TAG, "ExportAccountDB: unable to mkdirs " + file.getParentFile().getAbsoluteFile());
+//                    }
+//                }
+//            } catch (Exception ex) {
+//                Log.e(TAG, String.format("ExportAccountDB: %s Msg: %s", file.getParentFile(), ex.getMessage()));
+//                return ex.getMessage();
+//            }
+
 
             //                Log.d(TAG, "ExportAccountDB: file does not exists");
 //                if (file.isDirectory()) {
@@ -368,8 +461,7 @@ public class FileViewActivity extends AppCompatActivity
                 Log.v(TAG, msgError);
             }
 
-        }
-        ;
+        };
 //                Log.d(TAG, "ExportAccountDB: file created");
 
 //                OutputStream fos = new BufferedOutputStream(new FileOutputStream(file));
@@ -417,6 +509,16 @@ public class FileViewActivity extends AppCompatActivity
         }
         return msgError;
     }
+
+//    private void grantPermission(String permission) {
+//        Context context = InstrumentationRegistry.getTargetContext();
+//        TestButler.grantPermission(context, permission);
+//
+//        long checkPermission = ContextCompat.checkSelfPermission(context, permission);
+//        if (checkPermission != PERMISSION_GRANTED) {
+//            throw new RuntimeException("Failed to grant " + permission);
+//        }
+//    }
 
 
     private void ImportAccountDB() {

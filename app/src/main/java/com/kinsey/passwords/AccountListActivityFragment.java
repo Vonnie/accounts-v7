@@ -186,6 +186,12 @@ public class AccountListActivityFragment extends Fragment
 //        recyclerView.setAdapter(mAccountAdapter);
 //        Log.d(TAG, "onCreateView: returning adapter count: " + mAccountAdapter.getItemCount());
 
+
+        if (savedInstanceState == null) {
+            Log.d(TAG, "onCreateView: no savedInstanceState");
+        } else {
+            Log.d(TAG, "onCreateView: YES savedInstanceState");
+        }
         createLoader();
 
         return view;
@@ -317,11 +323,17 @@ public class AccountListActivityFragment extends Fragment
 
 
 
-    public void setAcctId(int acctId) {
+    public boolean setAcctId(int acctId) {
 
-        mAccountAdapter.setAccountSelectedId(acctId);
-        mAccountAdapter.setAccountSelectById(true);
+        if (isOnDBByAcctId(String.valueOf(acctId))) {
+            mAccountAdapter.setAccountSelectedId(acctId);
+            mAccountAdapter.setAccountSelectById(true);
 //        mAccountAdapter.setPosById(acctId);
+            return true;
+        } else {
+            setAccountSelectedPos(-1);
+            return false;
+        }
     }
 
     public void setAccountSelectedPos(int pos) {
@@ -330,6 +342,23 @@ public class AccountListActivityFragment extends Fragment
         if (pos == -1) {
             mAccountAdapter.setAccountSelectById(false);
         }
+    }
+
+
+    private boolean isOnDBByAcctId(String strId) {
+        Log.d(TAG, "isOnDB: strId " + strId);
+        int id = Integer.parseInt(strId);
+        Cursor cursorSearch = getActivity().getContentResolver().query(
+                AccountsContract.buildAcctIdUri(id), null, null, null, null);
+
+
+        if (cursorSearch.getCount() == 0) {
+
+            return false;
+        }
+
+        return true;
+
     }
 
 //    public int getAccountSelectedPos() {
@@ -349,11 +378,13 @@ public class AccountListActivityFragment extends Fragment
                 @Override
                 public void run() {
 
-                    mAccountAdapter.setPosById(mAccountAdapter.getAccountSelectedId());
-//        if (mAccountAdapter.getAccountSelectedPos() != -1) {
-                    Log.d(TAG, "onLoadFinished: adapter set");
-                    mRecyclerView.scrollToPosition(mAccountAdapter.getAccountSelectedPos());
+                    if (mAccountAdapter.getAccountSelectedId() != -1) {
 
+                        mAccountAdapter.setPosById(mAccountAdapter.getAccountSelectedId());
+//        if (mAccountAdapter.getAccountSelectedPos() != -1) {
+                        Log.d(TAG, "onLoadFinished: adapter set");
+                        mRecyclerView.scrollToPosition(mAccountAdapter.getAccountSelectedPos());
+                    }
 //            mRecyclerView.findViewHolderForAdapterPosition(accountSelectedPos);
 //            mRecyclerView.findViewHolderForAdapterPosition(accountSelectedPos).itemView.performClick();
 

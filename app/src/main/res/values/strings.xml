@@ -77,17 +77,21 @@
     <string name="settings_description">MyAccounts</string>
     <string name="title_activity_search_list">SearchListActivity</string>
     <string name="searchable_hint">Enter corporation name</string>
-    <string name="home_message_title">Organize Accounts, Search Accounts, Suggested Passwords</string>
+    <string name="home_message_title">List Accounts, Search Accounts, Suggest Passwords</string>
     <string name="home_message_text">
-        IMPORTANT SEARCH MESSAGE
-        \nSearch Setting is needed before using the search. It makes a copy of accounts into search database.
+        This app tracks your accounts with sorted lists, search of accounts, edits, exported data, and gives suggestions of 8 or 10 character passwords.
+        \nDo a long click on an account item in the list. This will give option to edit, link to website, delete account, or save corp name or website on the dialog.
+        \nIMPORTANT MESSAGE
+        \nA data db, a file storage, paper file are used with the accounts db. The data db is a abbreviated copy for search functions.
+        The data file is a json file exported from accounts db. Use this for backup or restore data.
+        The paper file has the password id and its password. Keep it separate. From the app, take the account id to look up on the paper file for its password.
+        \nIMPORTANT SEARCH MESSAGE
+        \nMenu Search Setting is to rebuild the Search DB.
         Will need to re-align again if any corp name changes, add of an account,
-        or a delete of an account.
-        \n\nIMPORTANT TO EDIT AN ACCOUNT
-        \nDo a long click on an account in the list. This will give option to edit, link to website, delete account, or save corp name or website on the dialog.
-        \n\nThis app tracks your accounts, has sorted lists, search of accounts, suggests 8 or 10 character passwords.
+        or a delete of an account. If the app see changes that will affect the search db, it will ask if want to rebuild.
         \n\nKeeping passwords electronically, even if encrypted, may leave you open to have your credentials stolen.
-        <em>Important:</em> Having an electronic copy (from a file or the app&quot;s database) with the credentials of company, user name, and password would highly exposed your accounts to hackers.
+        Having an electronic copy (from a file or the app&quot;s database) with the credentials of company, user name, and password would highly exposed your accounts to hackers.
+        \nRecommend to copy exported file to Dropbox.
     </string>
     <string name="home_message_text2">
         \nFor this security reason, the passwords are not saved on a file or database. This app keeps account information excluding passwords. Your action is to manually tie together using the account id from this app to the written list of account id and password value.
@@ -141,7 +145,7 @@
     <string name="menuacct_sort">Sort by</string>
     <string name="menuacct_sort_corpname">Sort by Corp Name</string>
     <string name="menuacct_sort_opendate">Sort by Open Date</string>
-    <string name="menuacct_sort_passport">Sort by Passport Id</string>
+    <string name="menuacct_sort_passport">Sort by Account Id</string>
     <string name="menuacct_sort_custom">Custom Sort</string>
     <string name="menuacct_external_accts">External accounts</string>
     <string name="menuacct_search">Search</string>

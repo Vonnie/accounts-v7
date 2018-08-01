@@ -70,6 +70,9 @@ public class AddEditActivityFragment extends Fragment {
         void updateDictCorpName();
     }
 
+    private static String pattern_mdy = "MM/dd/yyyy";
+    public static SimpleDateFormat format_mdy = new SimpleDateFormat(
+            pattern_mdy, Locale.US);
     private static String pattern_ymd = "yyyy-MM-dd";
     public static SimpleDateFormat format_ymd = new SimpleDateFormat(
             pattern_ymd, Locale.US);
@@ -253,7 +256,7 @@ public class AddEditActivityFragment extends Fragment {
                     mtvOpenDate.setText("Click here for OpenDate");
                     lngOpenDate = 0;
                 } else {
-                    mtvOpenDate.setText(format_ymd.format(account.getOpenLong()));
+                    mtvOpenDate.setText("OPENED " + format_mdy.format(account.getOpenLong()));
                     Date dteOpen = new Date(account.getOpenLong());
                     cldrOpened.setTime(dteOpen);
                     lngOpenDate = account.getOpenLong();
@@ -329,7 +332,71 @@ public class AddEditActivityFragment extends Fragment {
 //            }
 //        });
 
+        if (savedInstanceState != null) {
+            Log.d(TAG, "onCreateView: corp restore");
+            mCorpNameTextView.setText(
+                    savedInstanceState.getString(AccountsContract.Columns.CORP_NAME_COL));
+            Log.d(TAG, "onCreateView: " + mCorpNameTextView.getText().toString());
+
+            mCorpWebsiteTextView.setText(
+                    savedInstanceState.getString(AccountsContract.Columns.CORP_WEBSITE_COL));
+
+            mUserNameTextView.setText(
+                    savedInstanceState.getString(AccountsContract.Columns.USER_NAME_COL));
+
+            mUserEmailTextView.setText(
+                    savedInstanceState.getString(AccountsContract.Columns.USER_EMAIL_COL));
+
+            mNoteTextView.setText(
+                    savedInstanceState.getString(AccountsContract.Columns.NOTE_COL));
+
+            mSeqTextView.setText(
+                    savedInstanceState.getString(AccountsContract.Columns.SEQUENCE_COL));
+
+            mAccRefFrom.setText(
+                    savedInstanceState.getString(AccountsContract.Columns.REF_FROM_COL));
+
+            mAccRefTo.setText(
+                    savedInstanceState.getString(AccountsContract.Columns.REF_TO_COL));
+
+
+            lngOpenDate =
+                    savedInstanceState.getLong(AccountsContract.Columns.OPEN_DATE_COL);
+            if (lngOpenDate == 0) {
+                mtvOpenDate.setText("Click here for OpenDate");
+            } else {
+                Date dteOpen = new Date(lngOpenDate);
+                cldrOpened.setTime(dteOpen);
+                mtvOpenDate.setText("OPENED " + format_mdy.format(lngOpenDate));
+            }
+        }
+
         return view;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Log.d(TAG, "onSaveInstanceState: save b4 switch");
+        outState.putString(AccountsContract.Columns.CORP_NAME_COL,
+                mCorpNameTextView.getText().toString());
+        outState.putString(AccountsContract.Columns.CORP_WEBSITE_COL,
+                mCorpWebsiteTextView.getText().toString());
+        outState.putString(AccountsContract.Columns.USER_NAME_COL,
+                mUserNameTextView.getText().toString());
+        outState.putString(AccountsContract.Columns.USER_EMAIL_COL,
+                mUserEmailTextView.getText().toString());
+        outState.putString(AccountsContract.Columns.NOTE_COL,
+                mNoteTextView.getText().toString());
+        outState.putString(AccountsContract.Columns.SEQUENCE_COL,
+                mSeqTextView.getText().toString());
+        outState.putString(AccountsContract.Columns.REF_FROM_COL,
+                mAccRefFrom.getText().toString());
+        outState.putString(AccountsContract.Columns.REF_TO_COL,
+                mAccRefTo.getText().toString());
+        outState.putLong(AccountsContract.Columns.OPEN_DATE_COL,
+                lngOpenDate);
+
     }
 
 //    @Override
@@ -471,7 +538,7 @@ public class AddEditActivityFragment extends Fragment {
 
                     if (lngOpenDate == 0) {
                         lngOpenDate = System.currentTimeMillis();
-                        mtvOpenDate.setText("OpenDate: " + format_ymd.format(lngOpenDate));
+                        mtvOpenDate.setText("Opened " + format_mdy.format(lngOpenDate));
                         Date dteOpen = new Date(lngOpenDate);
                         cldrOpened.setTime(dteOpen);
                     }
@@ -580,7 +647,7 @@ public class AddEditActivityFragment extends Fragment {
                 mAccRefFrom.setError("If From-Ref is given, must have a numeric value");
                 mAccRefFrom.requestFocus();
                 return false;
-            } else if (!isOnDB(mAccRefFrom.getText().toString())) {
+            } else if (!isOnDBByAcctId(mAccRefFrom.getText().toString())) {
                 mAccRefFrom.requestFocus();
                 mAccRefFrom.setError("From-Ref not an ID with Accounts Database");
                 return false;
@@ -592,9 +659,9 @@ public class AddEditActivityFragment extends Fragment {
                 mAccRefTo.setError("If To-Ref is given, must have a numeric value");
                 mAccRefTo.requestFocus();
                 return false;
-            } else if (!isOnDB(mAccRefTo.getText().toString())) {
+            } else if (!isOnDBByAcctId(mAccRefTo.getText().toString())) {
                 mAccRefTo.requestFocus();
-                mAccRefTo.setError("To-Ref not an ID with Accounts Database");
+                mAccRefTo.setError("To-Ref not an ID with Accounts Database for " + mAccRefTo.getText().toString());
                 return false;
             }
         }
@@ -646,6 +713,22 @@ public class AddEditActivityFragment extends Fragment {
         }
     }
 
+    private boolean isOnDBByAcctId(String strId) {
+        Log.d(TAG, "isOnDB: strId " + strId);
+        int id = Integer.parseInt(strId);
+        Cursor cursorSearch = getActivity().getContentResolver().query(
+                AccountsContract.buildAcctIdUri(id), null, null, null, null);
+
+
+        if (cursorSearch.getCount() == 0) {
+
+            return false;
+        }
+
+        return true;
+
+    }
+
     private boolean isOnDB(String strId) {
         Log.d(TAG, "isOnDB: strId " + strId);
         int id = Integer.parseInt(strId);
@@ -661,6 +744,5 @@ public class AddEditActivityFragment extends Fragment {
         return true;
 
     }
-
 }
 
