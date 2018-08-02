@@ -214,6 +214,7 @@ public class MainActivity extends AppCompatActivity
             Log.d(TAG, "onCreate: activated " + mSearchView.isActivated());
         }
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 //        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 //        String queryResult = sharedPreferences.getString(SELECTION_QUERY, "");
@@ -355,9 +356,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        Log.d(TAG, "onCreateOptionsMenu: starts");
-        Log.d(TAG, "onCreateOptionsMenu: starts");
-        Log.d(TAG, "onCreateOptionsMenu: starts");
+//        Log.d(TAG, "onCreateOptionsMenu: starts");
         // Inflate the menu; this adds items to the action bar if it is present.
         this.menu = menu;
         getMenuInflater().inflate(R.menu.menu_main, menu);
@@ -551,8 +550,9 @@ public class MainActivity extends AppCompatActivity
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        feedUrl = "http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topTvEpisodes/xml";
-        AddEditActivityFragment addEditActivityFragment;
+//        feedUrl = "http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topTvEpisodes/xml";
+
+        AddEditActivityFragment editFragment;
         int id = item.getItemId();
         //noinspection SimplifiableIfStatement
         switch (id) {
@@ -641,13 +641,39 @@ public class MainActivity extends AppCompatActivity
                 viewAccountsFile();
                 break;
 
-            case R.id.menumain_clearSearch:
+            case R.id.menumain_refresh:
                 SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                 sharedPreferences.edit().putString(SELECTION_QUERY, "").apply();
+                sharedPreferences.edit().putInt(SELECTION_ONE_ITEM, -1).apply();
                 AccountListActivityFragment listFragment = (AccountListActivityFragment)
                         getSupportFragmentManager().findFragmentById(R.id.fragment);
-                listFragment.setQuery("");
-                Toast.makeText(this, "Search selection cleared", Toast.LENGTH_LONG).show();
+                if (listFragment.getQueryCorp().equals("")) {
+                    listFragment.unselectItem();
+                } else {
+                    listFragment.setQuery("");
+                }
+
+                editFragment = (AddEditActivityFragment)
+                        getSupportFragmentManager().findFragmentById(R.id.task_details_container);
+
+                if(editFragment != null) {
+
+                    getSupportFragmentManager().beginTransaction()
+                            .remove(editFragment)
+                            .commit();
+
+                    mainFragment.setVisibility(View.VISIBLE);
+
+                    if (!mTwoPane) {
+                        View addEditLayout = findViewById(R.id.task_details_container);
+                        View addEditLayoutScroll = findViewById(R.id.task_details_container_scroll);
+                        addEditLayout.setVisibility(View.GONE);
+                        addEditLayoutScroll.setVisibility(View.GONE);
+                    }
+
+                }
+
+                Toast.makeText(this, "Refreshed", Toast.LENGTH_LONG).show();
                 break;
 
 //                Log.d(TAG, "onOptionsItemSelected: ifSearch " + item.isChecked());
@@ -732,7 +758,7 @@ public class MainActivity extends AppCompatActivity
                 Log.d(TAG, "onOptionsItemSelected: home button pressed");
 
 
-                AddEditActivityFragment editFragment = (AddEditActivityFragment)
+                editFragment = (AddEditActivityFragment)
                         getSupportFragmentManager().findFragmentById(R.id.task_details_container);
 
                 if(editFragment == null) {
@@ -1655,11 +1681,22 @@ public class MainActivity extends AppCompatActivity
 
         listFragment.setAcctId(account.getId());
 
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        sharedPreferences.edit().putString(SELECTION_QUERY, "").apply();
+        sharedPreferences.edit().putInt(SELECTION_ONE_ITEM, account.getId()).apply();
+
+        listFragment.notifyItemChanged();
+
         searchListRequest();
     }
 
     @Override
     public void updateDictCorpName() {
+//        AccountListActivityFragment listFragment = (AccountListActivityFragment)
+//                getSupportFragmentManager().findFragmentById(R.id.fragment);
+
+//        listFragment.unselectItem();
+
         searchListRequest();
     }
 
@@ -1995,30 +2032,36 @@ public class MainActivity extends AppCompatActivity
                     @Override
                     public void run() {
 
-                    if (!queryResult.equals("")) {
-                        listFragment.setQuery(queryResult);
-                    }
-
-                    if (accountId == -1) {
-                        listFragment.setAccountSelectedPos(-1);
-                    } else {
-                        if (listFragment.setAcctId(accountId)) {
-
-//                            Cursor cursorSearch = getContentResolver().query(
-//                                    AccountsContract.buildIdUri(accountId), null, null, null, null);
-
-
-//                            if (cursorSearch.getCount() == 0) {
-//                                searchListRequest();
-//                            } else {
-                            acctEditRequest(accountId);
-                        } else {
-                            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                            sharedPreferences.edit().putString(SELECTION_QUERY, "").apply();
-                            sharedPreferences.edit().putInt(SELECTION_ONE_ITEM, -1).apply();
+                        if (!queryResult.equals("")) {
+                            listFragment.setQuery(queryResult);
                         }
-//                            }
-                    }
+
+
+                        Log.d(TAG, "run: the acctId " + accountId);
+
+                        if (accountId == -1) {
+                            listFragment.setAccountSelectedPos(-1);
+                        } else {
+                            if (listFragment.isOnDBById(accountId)) {
+
+
+                                Log.d(TAG, "run: on selectAccount " + accountId);
+                                listFragment.setAcctId(accountId);
+    //                            Cursor cursorSearch = getContentResolver().query(
+    //                                    AccountsContract.buildIdUri(accountId), null, null, null, null);
+
+
+    //                            if (cursorSearch.getCount() == 0) {
+    //                                searchListRequest();
+    //                            } else {
+                                acctEditRequest(accountId);
+                            } else {
+                                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                                sharedPreferences.edit().putString(SELECTION_QUERY, "").apply();
+                                sharedPreferences.edit().putInt(SELECTION_ONE_ITEM, -1).apply();
+                            }
+    //                            }
+                        }
                     //        sharedPreferences.edit().putBoolean(APP_RESUMED, true).apply();
                         View mainFragment = findViewById(R.id.fragment);
                         if (mainFragment.getVisibility() == View.VISIBLE) {

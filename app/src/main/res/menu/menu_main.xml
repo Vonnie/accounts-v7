@@ -119,10 +119,9 @@
     </group>
 
     <item
-        android:id="@+id/menumain_clearSearch"
-        android:checkable="false"
+        android:id="@+id/menumain_refresh"
         android:orderInCategory="250"
-        android:title="Close Search List"
+        android:title="Refresh List"
         app:showAsAction="never" />
     <!--app:actionViewClass="android.widget.CheckBox"-->
     <item
@@ -130,11 +129,11 @@
         android:orderInCategory="251"
         android:title="Refresh Search DB"
         app:showAsAction="never" />
-    <item
-        android:id="@+id/miActionProgress"
-        android:orderInCategory="300"
-        android:title="Loading..."
-        android:visible="false"
-        app:actionLayout="@layout/action_view_progress"
-        app:showAsAction="always" />
+    <!--<item-->
+        <!--android:id="@+id/miActionProgress"-->
+        <!--android:orderInCategory="300"-->
+        <!--android:title="Loading..."-->
+        <!--android:visible="false"-->
+        <!--app:actionLayout="@layout/action_view_progress"-->
+        <!--app:showAsAction="always" />-->
 </menu>

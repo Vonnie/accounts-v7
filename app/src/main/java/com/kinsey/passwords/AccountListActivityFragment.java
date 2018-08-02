@@ -291,6 +291,9 @@ public class AccountListActivityFragment extends Fragment
         mAccountAdapter.setQueryCorp("");
         mAccountAdapter.setAccountSortorder(sortorder);
 //        mRecyclerView.swapAdapter(mAccountAdapter, false);
+
+
+//        mAccountAdapter.notifyDataSetChanged();
         Log.d(TAG, "resortFragList: destroy Loader");
         getLoaderManager().destroyLoader(ACCOUNT_LOADER_ID);
 
@@ -304,6 +307,10 @@ public class AccountListActivityFragment extends Fragment
 //        }
 
 
+    }
+
+    public String getQueryCorp() {
+        return queryCorp;
     }
 
     public void setQuery(String query) {
@@ -323,17 +330,35 @@ public class AccountListActivityFragment extends Fragment
 
 
 
-    public boolean setAcctId(int acctId) {
+    public void setAcctId(int acctId) {
 
-        if (isOnDBByAcctId(String.valueOf(acctId))) {
+        if (acctId == -1) {
+            mAccountAdapter.setAccountSelectedId(-1);
+            mAccountAdapter.setAccountSelectById(false);
+        } else {
             mAccountAdapter.setAccountSelectedId(acctId);
             mAccountAdapter.setAccountSelectById(true);
 //        mAccountAdapter.setPosById(acctId);
-            return true;
-        } else {
-            setAccountSelectedPos(-1);
-            return false;
+
         }
+    }
+
+    public void unselectItem() {
+        int selectItem = mAccountAdapter.getAccountSelectedPos();
+        mAccountAdapter.setAccountSelectedId(-1);
+        mAccountAdapter.setAccountSelectById(false);
+        if (selectItem != -1) {
+            mAccountAdapter.setAccountSelectedPos(-1);
+            mAccountAdapter.notifyItemChanged(selectItem);
+        }
+    }
+
+    public void notifyItemChanged() {
+        mAccountAdapter.notifyItemChanged(mAccountAdapter.getAccountSelectedPos());
+    }
+
+    public void notifyOfChanges() {
+        mAccountAdapter.notifyDataSetChanged();
     }
 
     public void setAccountSelectedPos(int pos) {
@@ -344,12 +369,35 @@ public class AccountListActivityFragment extends Fragment
         }
     }
 
+    @Override
+    public void onAccountListSelect(Account account) {
+        Log.d(TAG, "onAccountListSelect: " + account);
+        mListener.onAccountListSelect(account);
+    }
 
-    private boolean isOnDBByAcctId(String strId) {
-        Log.d(TAG, "isOnDB: strId " + strId);
-        int id = Integer.parseInt(strId);
+
+    public boolean isOnDBByAcctId(int acctId) {
+//        Log.d(TAG, "isOnDB: strId " + strId);
+//        int id = Integer.parseInt(strId);
         Cursor cursorSearch = getActivity().getContentResolver().query(
-                AccountsContract.buildAcctIdUri(id), null, null, null, null);
+                AccountsContract.buildAcctIdUri(acctId), null, null, null, null);
+
+
+        if (cursorSearch.getCount() == 0) {
+
+            return false;
+        }
+
+        return true;
+
+    }
+
+
+    public boolean isOnDBById(int id) {
+//        Log.d(TAG, "isOnDB: strId " + strId);
+//        int id = Integer.parseInt(strId);
+        Cursor cursorSearch = getActivity().getContentResolver().query(
+                AccountsContract.buildIdUri(id), null, null, null, null);
 
 
         if (cursorSearch.getCount() == 0) {
@@ -374,29 +422,38 @@ public class AccountListActivityFragment extends Fragment
         mAccountAdapter.swapCursor(data);
         if (mAccountAdapter.getAccountSelectedId() != -1) {
 
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
+            if (mAccountAdapter.getAccountSelectedId() != -1) {
 
-                    if (mAccountAdapter.getAccountSelectedId() != -1) {
-
-                        mAccountAdapter.setPosById(mAccountAdapter.getAccountSelectedId());
+                mAccountAdapter.setPosById(mAccountAdapter.getAccountSelectedId());
 //        if (mAccountAdapter.getAccountSelectedPos() != -1) {
-                        Log.d(TAG, "onLoadFinished: adapter set");
-                        mRecyclerView.scrollToPosition(mAccountAdapter.getAccountSelectedPos());
-                    }
-//            mRecyclerView.findViewHolderForAdapterPosition(accountSelectedPos);
-//            mRecyclerView.findViewHolderForAdapterPosition(accountSelectedPos).itemView.performClick();
+                Log.d(TAG, "onLoadFinished: adapter set");
+                mRecyclerView.scrollToPosition(mAccountAdapter.getAccountSelectedPos());
+            }
+            mListener.onListComplete();
 
-                    mHandler.post(new Runnable() {
-                        @Override
-                        public void run() {
-
-                            mListener.onListComplete();
-                        }
-                    });
-                }
-            }).start();
+//            new Thread(new Runnable() {
+//                @Override
+//                public void run() {
+//
+//                    if (mAccountAdapter.getAccountSelectedId() != -1) {
+//
+//                        mAccountAdapter.setPosById(mAccountAdapter.getAccountSelectedId());
+////        if (mAccountAdapter.getAccountSelectedPos() != -1) {
+//                        Log.d(TAG, "onLoadFinished: adapter set");
+//                        mRecyclerView.scrollToPosition(mAccountAdapter.getAccountSelectedPos());
+//                    }
+////            mRecyclerView.findViewHolderForAdapterPosition(accountSelectedPos);
+////            mRecyclerView.findViewHolderForAdapterPosition(accountSelectedPos).itemView.performClick();
+//
+//                    mHandler.post(new Runnable() {
+//                        @Override
+//                        public void run() {
+//
+//                            mListener.onListComplete();
+//                        }
+//                    });
+//                }
+//            }).start();
         } else {
               mListener.onListComplete();
           }
@@ -553,12 +610,6 @@ public class AccountListActivityFragment extends Fragment
 //    public void resetSelection() {
 //        mAccountAdapter.setSelected_position(-1);
 //    }
-
-    @Override
-    public void onAccountListSelect(Account account) {
-        Log.d(TAG, "onAccountListSelect: " + account);
-        mListener.onAccountListSelect(account);
-    }
 
     @Override
     public void onAccountUpClick(Account account) {

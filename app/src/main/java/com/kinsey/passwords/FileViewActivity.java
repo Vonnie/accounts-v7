@@ -58,7 +58,7 @@ public class FileViewActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        progressBar  = findViewById(R.id.progressBar);
+        progressBar = findViewById(R.id.progressBar);
         progressBar.setVisibility(View.VISIBLE);
 
 //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -341,7 +341,7 @@ public class FileViewActivity extends AppCompatActivity
         File file = new File(path2, "accounts.json");
 
         if (file.exists()) {
-                Log.d(TAG, "ExportAccountDB: file exists " + file.getAbsoluteFile());
+            Log.d(TAG, "ExportAccountDB: file exists " + file.getAbsoluteFile());
         } else {
 
             Log.d(TAG, "ExportAccountDB: file " + file.getAbsoluteFile());
@@ -461,7 +461,8 @@ public class FileViewActivity extends AppCompatActivity
                 Log.v(TAG, msgError);
             }
 
-        };
+        }
+        ;
 //                Log.d(TAG, "ExportAccountDB: file created");
 
 //                OutputStream fos = new BufferedOutputStream(new FileOutputStream(file));
@@ -551,8 +552,14 @@ public class FileViewActivity extends AppCompatActivity
                 boolean error = false;
                 try {
                     List<Account> listAccounts = new ArrayList<Account>();
+
+                    File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+                    File path2 = new File(path, "passport");
+
+                    Log.d(TAG, "run: path2 " + path2.getAbsoluteFile());
+
                     final JsonReader reader = new JsonReader(new FileReader(
-                            MainActivity.DEFAULT_APP_DIRECTORY + "/accounts.json"));
+                            path2.getAbsoluteFile() + "/accounts.json"));
                     // reader.beginObject();
 
 
@@ -588,7 +595,7 @@ public class FileViewActivity extends AppCompatActivity
 //                        + " " + item.getCorpName());
                         addAccountToDB(contentResolver, item);
                         itemCount++;
-                        int remCount = itemCount % 80;
+                        int remCount = itemCount % 100;
                         if (remCount == 0 || itemCount == 1) {
                             Log.d(TAG, "run: count " + itemCount);
                             final int runCount = itemCount;
@@ -631,22 +638,18 @@ public class FileViewActivity extends AppCompatActivity
                 }
 
                 final String notifyMsg = msg;
-                final boolean notifyError = error;
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
 
-                        if (notifyError) {
+                        Toast.makeText(getApplicationContext(),
+                                notifyMsg, Toast.LENGTH_LONG).show();
 
-                            Toast.makeText(getApplicationContext(),
-                                    notifyMsg, Toast.LENGTH_LONG).show();
-                        } else {
-                            importRefreshReq = true;
-                            Intent intent = new Intent();
-                            intent.putExtra("IMPORT", importRefreshReq);
-                            setResult(RESULT_OK, intent);
-                            finish();
-                        }
+                        importRefreshReq = true;
+                        Intent intent = new Intent();
+                        intent.putExtra("IMPORT", importRefreshReq);
+                        setResult(RESULT_OK, intent);
+                        finish();
 
                     }
                 });
@@ -658,7 +661,7 @@ public class FileViewActivity extends AppCompatActivity
 //        fvFragment.setImportRefreshReq(true);
 
 
-                //        FragmentManager fragmentManager = getSupportFragmentManager();
+        //        FragmentManager fragmentManager = getSupportFragmentManager();
 //        AppDialog newFragment = AppDialog.newInstance();
 //        Bundle args = new Bundle();
 //        args.putInt(AppDialog.DIALOG_ID, AppDialog.DIALOG_ID_ASK_IF_NEED_DICTIONARY_REBUILD);
@@ -669,10 +672,10 @@ public class FileViewActivity extends AppCompatActivity
 //        newFragment.setArguments(args);
 //        newFragment.show(fragmentManager, "dialog");
 
-            }
+    }
 
 
-            final private void addAccountToDB(ContentResolver contentResolver, Account account) {
+    final private void addAccountToDB(ContentResolver contentResolver, Account account) {
 
                 ContentValues values = new ContentValues();
                 values.put(AccountsContract.Columns.PASSPORT_ID_COL, account.getPassportId());
