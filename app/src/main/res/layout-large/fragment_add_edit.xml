@@ -42,7 +42,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:textAlignment="viewEnd"
-                android:textSize="18sp"
+                android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -54,7 +54,7 @@
                 android:layout_marginTop="8dp"
                 android:labelFor="@+id/addedit_corp_name"
                 android:text="@string/accedit_corp_name_label"
-                android:textSize="18sp"
+                android:textSize="24sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -68,7 +68,7 @@
                 android:ems="10"
                 android:inputType="textMultiLine|textNoSuggestions"
                 android:maxLength="64"
-                android:textSize="18sp"
+                android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
@@ -82,7 +82,7 @@
                 android:layout_marginStart="8dp"
                 android:labelFor="@+id/addedit_corp_website"
                 android:text="@string/accedit_website_label"
-                android:textSize="18sp"
+                android:textSize="24sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/addedit_corp_name" />
 
@@ -96,7 +96,7 @@
                 android:ems="10"
                 android:inputType="textMultiLine"
                 android:maxLength="64"
-                android:textSize="18sp"
+                android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintHorizontal_chainStyle="packed"
@@ -111,7 +111,7 @@
                 android:layout_marginStart="8dp"
                 android:labelFor="@+id/addedit_user_name"
                 android:text="@string/accedit_username_label"
-                android:textSize="18sp"
+                android:textSize="24sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/addedit_corp_website" />
 
@@ -124,7 +124,7 @@
                 android:ems="10"
                 android:inputType="textMultiLine|textNoSuggestions"
                 android:maxLength="64"
-                android:textSize="18sp"
+                android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
@@ -137,7 +137,7 @@
                 android:layout_marginStart="8dp"
                 android:labelFor="@+id/addedit_user_email"
                 android:text="@string/accedit_user_email_label"
-                android:textSize="18sp"
+                android:textSize="24sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/addedit_user_name" />
 
@@ -149,7 +149,7 @@
                 android:layout_marginStart="8dp"
                 android:ems="10"
                 android:inputType="textEmailAddress"
-                android:textSize="18sp"
+                android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
@@ -162,7 +162,7 @@
                 android:layout_marginStart="8dp"
                 android:labelFor="@+id/addedit_notes"
                 android:text="@string/accedit_notes_label"
-                android:textSize="18sp"
+                android:textSize="24sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/addedit_user_email" />
 
@@ -173,7 +173,7 @@
                 android:layout_marginStart="8dp"
                 android:ems="10"
                 android:inputType="textAutoComplete|textMultiLine"
-                android:textSize="18sp"
+                android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
@@ -186,7 +186,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:text="@string/accedit_actvy_date_label"
-                android:textSize="18sp"
+                android:textSize="24sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/addedit_notes" />
 
@@ -197,7 +197,7 @@
                 android:layout_marginEnd="8dp"
                 android:labelFor="@+id/addedit_open_date"
                 android:text="@string/accedit_open_date_label"
-                android:textSize="18sp"
+                android:textSize="24sp"
                 app:layout_constraintBaseline_toBaselineOf="@+id/addedit_actvy_date"
                 app:layout_constraintEnd_toEndOf="parent" />
 
@@ -219,7 +219,7 @@
                 android:layout_marginTop="8dp"
                 android:labelFor="@+id/acc_ref_from"
                 android:text="@string/accedit_from_seq_label"
-                android:textSize="18sp"
+                android:textSize="24sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/addedit_open_date" />
 
@@ -231,7 +231,7 @@
                 android:ems="10"
                 android:inputType="number"
                 android:textAlignment="textEnd"
-                android:textSize="18sp"
+                android:textSize="24sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/lbl_ref_from" />
             <!--android:hint="@string/accedit_ref_from_hint"-->
@@ -243,7 +243,7 @@
                 android:layout_marginEnd="16dp"
                 android:labelFor="@+id/acc_ref_to"
                 android:text="@string/accedit_to_seq"
-                android:textSize="18sp"
+                android:textSize="24sp"
                 app:layout_constraintBaseline_toBaselineOf="@+id/lbl_ref_from"
                 app:layout_constraintEnd_toEndOf="parent" />
 
@@ -255,7 +255,7 @@
                 android:ems="10"
                 android:inputType="number"
                 android:textAlignment="viewEnd"
-                android:textSize="18sp"
+                android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/lbl_ref_to" />
             <!--android:hint="@string/accedit_ref_to_hint"-->
@@ -268,7 +268,7 @@
                 android:layout_marginTop="8dp"
                 android:labelFor="@+id/acc_seq"
                 android:text="@string/accedit_sort_seq_label"
-                android:textSize="18sp"
+                android:textSize="24sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/acc_ref_from" />
 
@@ -280,7 +280,7 @@
                 android:ems="10"
                 android:inputType="number"
                 android:textAlignment="textEnd"
-                android:textSize="18sp"
+                android:textSize="24sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/lbl_seq" />
             <!--android:hint="@string/accedit_seq_hint"-->

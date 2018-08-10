@@ -16,7 +16,7 @@
         android:layout_marginTop="8dp"
         android:tag="@string/tag_portrait"
         android:textColor="?android:attr/textColorPrimary"
-        android:textSize="20sp"
+        android:textSize="30sp"
         android:textStyle="normal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -25,11 +25,10 @@
         android:id="@+id/tli_account_up"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="4dp"
-        android:layout_marginBottom="0dp"
+        android:layout_marginEnd="8dp"
         android:contentDescription="@string/up_button_description"
-        app:layout_constraintRight_toLeftOf="@+id/tli_account_down"
         app:layout_constraintBottom_toBottomOf="@+id/srli_corp_name"
+        app:layout_constraintRight_toLeftOf="@+id/tli_account_down"
         app:srcCompat="@android:drawable/arrow_up_float" />
 
     <ImageButton

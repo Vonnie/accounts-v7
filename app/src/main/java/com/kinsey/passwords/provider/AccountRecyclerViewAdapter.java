@@ -124,7 +124,7 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
 
     @Override
     public void onBindViewHolder(final AccountViewHolder holder, final int position) {
-//        Log.d(TAG, "onBindViewHolder: starts");
+        Log.d(TAG, "onBindViewHolder: starts");
 
 //        if (mCursor == null) {
 //            Log.d(TAG, "onBindViewHolder: mCursor null");
@@ -194,7 +194,7 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
 //                    holder.itemView.setBackgroundColor(Color.rgb(199, 91, 57));
 
 
-                    holder.itemView.setBackgroundColor(Color.parseColor("#ff6730"));
+                    holder.itemView.setBackgroundColor(Color.parseColor("#E0892F"));
 //                    notifyItemChanged(accountSelectedPos);
 //                    }
                 } else {
@@ -208,7 +208,7 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
 //                } else {
 
                     if (!queryCorp.equals("")) {
-                        holder.itemView.setBackgroundColor(Color.parseColor("#004b66"));
+                        holder.itemView.setBackgroundColor(Color.parseColor("#E0892F"));
                     } else {
                         holder.itemView.setBackgroundColor(Color.TRANSPARENT);
                     }
@@ -519,31 +519,7 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
         }
     }
 
-    /**
-     * Swap in a new Cursor, returning the old Cursor,
-     * The returned old Cursor is <em>not</em> closed.
-     *
-     * @param newCursor The new cursor to be used
-     * @return Returns the previousely set Cursor, or null if there wasn't one.
-     * If the given new Cursor is the same instance as the previousel set
-     * Cursor, null is also returned.
-     */
-    public Cursor swapCursor(Cursor newCursor) {
-        if (newCursor == mCursor) {
-            return null;
-        }
 
-        final Cursor oldCursor = mCursor;
-        mCursor = newCursor;
-        if (newCursor != null) {
-            // notify the observers about the new cursor
-            notifyDataSetChanged();
-        } else {
-            // notify the observers about the lack of a data set
-            notifyItemRangeRemoved(0, getItemCount());
-        }
-        return oldCursor;
-    }
 
 //    public void resetSelection() {
 //        selected_position = -1;
@@ -569,6 +545,32 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
 //        this.mSortorder = mSortorder;
 //    }
 
+
+    /**
+     * Swap in a new Cursor, returning the old Cursor,
+     * The returned old Cursor is <em>not</em> closed.
+     *
+     * @param newCursor The new cursor to be used
+     * @return Returns the previousely set Cursor, or null if there wasn't one.
+     * If the given new Cursor is the same instance as the previousel set
+     * Cursor, null is also returned.
+     */
+    public Cursor swapCursor(Cursor newCursor) {
+        if (newCursor == mCursor) {
+            return null;
+        }
+
+        final Cursor oldCursor = mCursor;
+        mCursor = newCursor;
+        if (newCursor != null) {
+            // notify the observers about the new cursor
+            notifyDataSetChanged();
+        } else {
+            // notify the observers about the lack of a data set
+            notifyItemRangeRemoved(0, getItemCount());
+        }
+        return oldCursor;
+    }
 
     @Override
     public int getItemViewType(int position) {

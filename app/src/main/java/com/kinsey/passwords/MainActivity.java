@@ -653,25 +653,7 @@ public class MainActivity extends AppCompatActivity
                     listFragment.setQuery("");
                 }
 
-                editFragment = (AddEditActivityFragment)
-                        getSupportFragmentManager().findFragmentById(R.id.task_details_container);
-
-                if(editFragment != null) {
-
-                    getSupportFragmentManager().beginTransaction()
-                            .remove(editFragment)
-                            .commit();
-
-                    mainFragment.setVisibility(View.VISIBLE);
-
-                    if (!mTwoPane) {
-                        View addEditLayout = findViewById(R.id.task_details_container);
-                        View addEditLayoutScroll = findViewById(R.id.task_details_container_scroll);
-                        addEditLayout.setVisibility(View.GONE);
-                        addEditLayoutScroll.setVisibility(View.GONE);
-                    }
-
-                }
+                removeEditFrag();
 
                 Toast.makeText(this, "Refreshed", Toast.LENGTH_LONG).show();
                 break;
@@ -784,6 +766,10 @@ public class MainActivity extends AppCompatActivity
                     View addEditLayoutScroll = findViewById(R.id.task_details_container_scroll);
                     addEditLayout.setVisibility(View.GONE);
                     addEditLayoutScroll.setVisibility(View.GONE);
+                    Toast.makeText(this,
+                            "Long click select for more details",
+                            Toast.LENGTH_SHORT).show();
+
                     return true;
                 }
 
@@ -839,6 +825,29 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+
+    private void removeEditFrag() {
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        Fragment editFragment = fragmentManager.findFragmentById(R.id.task_details_container);
+
+        if (editFragment != null) {
+
+            getSupportFragmentManager().beginTransaction()
+                    .remove(editFragment)
+                    .commit();
+
+            mainFragment.setVisibility(View.VISIBLE);
+
+            if (!mTwoPane) {
+                View addEditLayout = findViewById(R.id.task_details_container);
+                View addEditLayoutScroll = findViewById(R.id.task_details_container_scroll);
+                addEditLayout.setVisibility(View.GONE);
+                addEditLayoutScroll.setVisibility(View.GONE);
+            }
+
+        }
+    }
 
 //    private void returnToMain() {
 //
@@ -964,6 +973,10 @@ public class MainActivity extends AppCompatActivity
         if (mTwoPane) {
             acctEditRequest(this.account.getId());
         }
+
+        Toast.makeText(this,
+                "Long click select for more details",
+                Toast.LENGTH_SHORT).show();
 
 //        mSectionsPagerAdapter.destroyItem(mViewPager, frag1Pos, frag1);
 //        mSectionsPagerAdapter.destroyItem(mViewPager, frag2Pos, frag2);
@@ -1979,12 +1992,23 @@ public class MainActivity extends AppCompatActivity
                     Log.d(TAG, "onActivityResult: fileview imported? "  + blnImported);
 //                    returnToMain();
                     if (blnImported) {
+
                         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                         sharedPreferences.edit().putInt(SELECTION_ONE_ITEM, -1).apply();
+                        final AccountListActivityFragment listFragment = (AccountListActivityFragment)
+                                getSupportFragmentManager().findFragmentById(R.id.fragment);
+                        listFragment.setAccountSelectedPos(-1);
+                        listFragment.setAcctId(-1);
                         loadSearchDB();
-                        setMenuItemChecked(R.id.menuacct_sort_corpname, true
-                        );
+                        setMenuItemChecked(R.id.menuacct_sort_corpname, true);
                         resortList(AccountsContract.ACCOUNT_LIST_BY_CORP_NAME);
+
+                        mainFragment.setVisibility(View.VISIBLE);
+                        View addEditLayout = findViewById(R.id.task_details_container);
+                        View addEditLayoutScroll = findViewById(R.id.task_details_container_scroll);
+                        addEditLayout.setVisibility(View.GONE);
+                        addEditLayoutScroll.setVisibility(View.GONE);
+
                         Log.d(TAG, "onActivityResult: refreshed");
                     }
                 }
@@ -2583,6 +2607,10 @@ public class MainActivity extends AppCompatActivity
             View addEditLayoutScroll = findViewById(R.id.task_details_container_scroll);
             addEditLayout.setVisibility(View.GONE);
             addEditLayoutScroll.setVisibility(View.GONE);
+            Toast.makeText(this,
+                    "Long click select for more details",
+                    Toast.LENGTH_SHORT).show();
+
             super.onBackPressed();
 
         }

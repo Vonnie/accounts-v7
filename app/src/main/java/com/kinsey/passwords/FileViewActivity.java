@@ -264,26 +264,37 @@ public class FileViewActivity extends AppCompatActivity
 
         Log.d(TAG, "ExportAccountDB: " + android.os.Environment.getExternalStorageDirectory());
 
-        File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+
+        File path = null;
         try {
-            Log.d(TAG, "ExportAccountDB: path " + path.getPath());
+            path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+
+            Log.d(TAG, "ExportAccountDB: path found " + path.getPath());
             // Make sure the Pictures directory exists.
-            path.mkdirs();
+            if (!path.exists()) {
+                path.mkdirs();
+            }
         } catch (Exception e) {
             // Unable to create file, likely because external storage is
             // not currently mounted.
-            Log.w("ExternalStorage", "Error writing path ", e);
+//            Log.w("ExternalStorage", "Error writing path ", e);
+            Log.e(TAG, "ExportAccountDB: path error ", e);
         }
 
-        File path2 = new File(path, "passport");
+        File path2 = null;
         try {
-            Log.d(TAG, "ExportAccountDB: path " + path2.getPath());
+            path2 = new File(path, "passport");
+
+            Log.d(TAG, "ExportAccountDB: path2 " + path2.getPath());
             // Make sure the Pictures directory exists.
-            path2.mkdirs();
+            if (!path2.exists()) {
+                path2.mkdirs();
+            }
         } catch (Exception e) {
             // Unable to create file, likely because external storage is
             // not currently mounted.
-            Log.w("ExternalStorage", "Error writing path ", e);
+//            Log.w("ExternalStorage", "Error writing path ", e);
+            Log.e(TAG, "ExportAccountDB: path 2 error ", e);
         }
 
 
@@ -338,7 +349,10 @@ public class FileViewActivity extends AppCompatActivity
 //            }
 
 //        File file = new File(DEFAULT_APP_DIRECTORY, "accounts.json");
+
+        Log.d(TAG, "ExportAccountDB: " + path2.getAbsoluteFile());
         File file = new File(path2, "accounts.json");
+        Log.d(TAG, "ExportAccountDB: " + file.getAbsoluteFile());
 
         if (file.exists()) {
             Log.d(TAG, "ExportAccountDB: file exists " + file.getAbsoluteFile());
@@ -595,7 +609,7 @@ public class FileViewActivity extends AppCompatActivity
 //                        + " " + item.getCorpName());
                         addAccountToDB(contentResolver, item);
                         itemCount++;
-                        int remCount = itemCount % 100;
+                        int remCount = itemCount % 50;
                         if (remCount == 0 || itemCount == 1) {
                             Log.d(TAG, "run: count " + itemCount);
                             final int runCount = itemCount;
@@ -621,6 +635,13 @@ public class FileViewActivity extends AppCompatActivity
 
                     msg = listAccounts.size() + " Accounts Imported";
 
+                    importRefreshReq = true;
+                    Intent intent = new Intent();
+                    intent.putExtra("IMPORT", importRefreshReq);
+                    setResult(RESULT_OK, intent);
+                    finish();
+
+
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                     msg = "import file not found";
@@ -645,11 +666,6 @@ public class FileViewActivity extends AppCompatActivity
                         Toast.makeText(getApplicationContext(),
                                 notifyMsg, Toast.LENGTH_LONG).show();
 
-                        importRefreshReq = true;
-                        Intent intent = new Intent();
-                        intent.putExtra("IMPORT", importRefreshReq);
-                        setResult(RESULT_OK, intent);
-                        finish();
 
                     }
                 });
@@ -759,6 +775,9 @@ public class FileViewActivity extends AppCompatActivity
                             }
                             c1.setTime(dte);
                             item.setActvyLong(c1.getTimeInMillis());
+                        } else if (name.equals("note")) {
+                            value = reader.nextString();
+                            item.setNote(value);
                         } else {
                             reader.skipValue(); // avoid some unhandle events
                         }
@@ -781,6 +800,7 @@ public class FileViewActivity extends AppCompatActivity
 
                     List<Account> listAccounts = loadAccounts();
 
+                    Log.d(TAG, "writeMessagesArray: " + listAccounts);
                     writer.beginArray();
                     for (Account item : listAccounts) {
                         writeMessage(writer, item);
@@ -824,7 +844,9 @@ public class FileViewActivity extends AppCompatActivity
                         writer.name("actvyDt").value(
                                 format_ymdtime.format(item.getActvyLong()));
                     }
+                    Log.d(TAG, "writeMessage: note " + item.getNote());
                     writer.name("note").value(item.getNote());
+
                     writer.endObject();
                 } catch (Exception e2) {
                     e2.printStackTrace();
@@ -844,39 +866,40 @@ public class FileViewActivity extends AppCompatActivity
                 List<Account> listAccounts = new ArrayList<Account>();
                 if (cursor != null) {
                     while (cursor.moveToNext()) {
-                        Account item = new Account(
-                                cursor.getInt(cursor.getColumnIndex(AccountsContract.Columns._ID_COL)),
-                                cursor.getString(cursor.getColumnIndex(AccountsContract.Columns.CORP_NAME_COL)),
-                                cursor.getString(cursor.getColumnIndex(AccountsContract.Columns.USER_NAME_COL)),
-                                cursor.getString(cursor.getColumnIndex(AccountsContract.Columns.USER_EMAIL_COL)),
-                                cursor.getString(cursor.getColumnIndex(AccountsContract.Columns.CORP_WEBSITE_COL)),
-                                cursor.getInt(cursor.getColumnIndex(AccountsContract.Columns.SEQUENCE_COL)));
-
-                        if (cursor.getColumnIndex(AccountsContract.Columns.PASSPORT_ID_COL) != -1) {
-                            if (!cursor.isNull(cursor.getColumnIndex(AccountsContract.Columns.PASSPORT_ID_COL))) {
-                                item.setPassportId(cursor.getInt(cursor.getColumnIndex(AccountsContract.Columns.PASSPORT_ID_COL)));
-                            }
-                        }
-                        if (cursor.getColumnIndex(AccountsContract.Columns.OPEN_DATE_COL) != -1) {
-                            if (!cursor.isNull(cursor.getColumnIndex(AccountsContract.Columns.OPEN_DATE_COL))) {
-                                item.setOpenLong(cursor.getLong(cursor.getColumnIndex(AccountsContract.Columns.OPEN_DATE_COL)));
-                            }
-                        }
-                        if (cursor.getColumnIndex(AccountsContract.Columns.ACTVY_DATE_COL) != -1) {
-                            if (!cursor.isNull(cursor.getColumnIndex(AccountsContract.Columns.ACTVY_DATE_COL))) {
-                                item.setActvyLong(cursor.getLong(cursor.getColumnIndex(AccountsContract.Columns.ACTVY_DATE_COL)));
-                            }
-                        }
-                        if (cursor.getColumnIndex(AccountsContract.Columns.REF_FROM_COL) != -1) {
-                            if (!cursor.isNull(cursor.getColumnIndex(AccountsContract.Columns.REF_FROM_COL))) {
-                                item.setRefFrom(cursor.getInt(cursor.getColumnIndex(AccountsContract.Columns.REF_FROM_COL)));
-                            }
-                        }
-                        if (cursor.getColumnIndex(AccountsContract.Columns.REF_TO_COL) != -1) {
-                            if (!cursor.isNull(cursor.getColumnIndex(AccountsContract.Columns.REF_TO_COL))) {
-                                item.setRefFrom(cursor.getInt(cursor.getColumnIndex(AccountsContract.Columns.REF_TO_COL)));
-                            }
-                        }
+                        Account item = AccountsContract.getAccountFromCursor(cursor);
+//                        Account item = new Account(
+//                                cursor.getInt(cursor.getColumnIndex(AccountsContract.Columns._ID_COL)),
+//                                cursor.getString(cursor.getColumnIndex(AccountsContract.Columns.CORP_NAME_COL)),
+//                                cursor.getString(cursor.getColumnIndex(AccountsContract.Columns.USER_NAME_COL)),
+//                                cursor.getString(cursor.getColumnIndex(AccountsContract.Columns.USER_EMAIL_COL)),
+//                                cursor.getString(cursor.getColumnIndex(AccountsContract.Columns.CORP_WEBSITE_COL)),
+//                                cursor.getInt(cursor.getColumnIndex(AccountsContract.Columns.SEQUENCE_COL)));
+//
+//                        if (cursor.getColumnIndex(AccountsContract.Columns.PASSPORT_ID_COL) != -1) {
+//                            if (!cursor.isNull(cursor.getColumnIndex(AccountsContract.Columns.PASSPORT_ID_COL))) {
+//                                item.setPassportId(cursor.getInt(cursor.getColumnIndex(AccountsContract.Columns.PASSPORT_ID_COL)));
+//                            }
+//                        }
+//                        if (cursor.getColumnIndex(AccountsContract.Columns.OPEN_DATE_COL) != -1) {
+//                            if (!cursor.isNull(cursor.getColumnIndex(AccountsContract.Columns.OPEN_DATE_COL))) {
+//                                item.setOpenLong(cursor.getLong(cursor.getColumnIndex(AccountsContract.Columns.OPEN_DATE_COL)));
+//                            }
+//                        }
+//                        if (cursor.getColumnIndex(AccountsContract.Columns.ACTVY_DATE_COL) != -1) {
+//                            if (!cursor.isNull(cursor.getColumnIndex(AccountsContract.Columns.ACTVY_DATE_COL))) {
+//                                item.setActvyLong(cursor.getLong(cursor.getColumnIndex(AccountsContract.Columns.ACTVY_DATE_COL)));
+//                            }
+//                        }
+//                        if (cursor.getColumnIndex(AccountsContract.Columns.REF_FROM_COL) != -1) {
+//                            if (!cursor.isNull(cursor.getColumnIndex(AccountsContract.Columns.REF_FROM_COL))) {
+//                                item.setRefFrom(cursor.getInt(cursor.getColumnIndex(AccountsContract.Columns.REF_FROM_COL)));
+//                            }
+//                        }
+//                        if (cursor.getColumnIndex(AccountsContract.Columns.REF_TO_COL) != -1) {
+//                            if (!cursor.isNull(cursor.getColumnIndex(AccountsContract.Columns.REF_TO_COL))) {
+//                                item.setRefFrom(cursor.getInt(cursor.getColumnIndex(AccountsContract.Columns.REF_TO_COL)));
+//                            }
+//                        }
                         listAccounts.add(item);
                     }
                     cursor.close();

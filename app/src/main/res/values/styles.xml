@@ -2,15 +2,33 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/primaryColor</item>
         <item name="colorPrimaryDark">@color/primaryDarkColor</item>
         <item name="colorAccent">@color/secondaryColor</item>
         <item name="android:textColorTertiary">@color/secondaryDarkColor</item>
-        <item name="android:textColorPrimary">@color/secondaryDarkColor</item>
+        <item name="android:textColorPrimary">@color/primaryTextColor</item>
         <item name="android:textColorSecondary">@color/secondaryTextColor</item>
         <item name="android:windowBackground">@color/primaryLightColor</item>
     </style>
+
+
+    <!--?attr/textColorAlertDialogListItem-->
+    <!--<item name="colorPrimary">@color/primaryColor</item>-->
+    <!--<item name="colorPrimaryDark">@color/primaryDarkColor</item>-->
+    <!--<item name="colorAccent">@color/secondaryColor</item>-->
+    <!--<item name="android:textColorTertiary">@color/secondaryDarkColor</item>-->
+    <!--<item name="android:textColorPrimary">@color/primaryTextColor</item>-->
+    <!--<item name="android:textColorSecondary">?attr/textColorAlertDialogListItem</item>-->
+    <!--<item name="android:windowBackground">@color/primaryLightColor</item>-->
+
+    <!--<item name="colorPrimary">@color/primaryColor</item>-->
+    <!--<item name="colorPrimaryDark">@color/primaryDarkColor</item>-->
+    <!--<item name="colorAccent">@color/secondaryColor</item>-->
+    <!--<item name="android:textColorTertiary">@color/secondaryDarkColor</item>-->
+    <!--<item name="android:textColorPrimary">@color/primaryTextColor</item>-->
+    <!--<item name="android:textColorSecondary">?attr/textColorAlertDialogListItem</item>-->
+    <!--<item name="android:windowBackground">@color/primaryLightColor</item>-->
+
     <!--<item name="cardBackgroundColor">@color/primaryColor</item>-->
     <!--<item name="android:icon">@color/icons</item>-->
     <!--<item name="colorPrimary">@color/colorPrimary</item>-->
@@ -30,5 +48,11 @@
     <style name="AppTheme.AppBarOverlay" parent="Base.ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="Base.ThemeOverlay.AppCompat.Light" />
+
+
+    <style name="CardViewStyle" parent="CardView">
+        <item name="cardCornerRadius">4dp</item>
+        <item name="cardElevation">4dp</item>
+    </style>
 
 </resources>

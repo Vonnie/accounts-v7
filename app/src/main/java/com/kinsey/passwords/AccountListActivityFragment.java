@@ -415,20 +415,18 @@ public class AccountListActivityFragment extends Fragment
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        Log.d(TAG, "onLoadFinished: starts");
         Log.d(TAG, "onLoadFinished: starts " + mAccountAdapter.getAccountSelectedId());
 //        this.loader = loader;
         int count = 0;
         mAccountAdapter.swapCursor(data);
         if (mAccountAdapter.getAccountSelectedId() != -1) {
 
-            if (mAccountAdapter.getAccountSelectedId() != -1) {
 
                 mAccountAdapter.setPosById(mAccountAdapter.getAccountSelectedId());
 //        if (mAccountAdapter.getAccountSelectedPos() != -1) {
                 Log.d(TAG, "onLoadFinished: adapter set");
                 mRecyclerView.scrollToPosition(mAccountAdapter.getAccountSelectedPos());
-            }
+
             mListener.onListComplete();
 
 //            new Thread(new Runnable() {
