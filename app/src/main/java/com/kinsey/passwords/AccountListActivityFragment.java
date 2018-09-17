@@ -227,8 +227,7 @@ public class AccountListActivityFragment extends Fragment
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Log.d(TAG, "onCreateLoader: starts");
-//        Log.d(TAG, "onCreateLoader: id " + String.valueOf(id));
+        Log.d(TAG, "onCreateLoader: id " + String.valueOf(id));
 
         String[] projectionAcct =
                 {AccountsContract.Columns._ID_COL,

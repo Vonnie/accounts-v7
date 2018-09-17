@@ -1312,6 +1312,7 @@ public class MainActivity extends AppCompatActivity
 //        showAboutDialog();
 
             @SuppressLint("InflateParams") View messageView = getLayoutInflater().inflate(R.layout.activity_itemview, null, false);
+
             final AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle(R.string.app_name);
             builder.setIcon(R.mipmap.ic_launcher);

@@ -166,6 +166,7 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
 //            holder.editButton.setVisibility(View.GONE);
 //            holder.deleteButton.setVisibility(View.GONE);
         } else {
+            Log.d(TAG, "onBindViewHolder: count " + mCursor.getCount() + ":" + position);
             if (!mCursor.moveToPosition(position)) {
                 throw new IllegalStateException("Couldn't move cursor to position " + position);
             }
@@ -251,6 +252,7 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
 //            holder.user_email.setText(mCursor.getString(mCursor.getColumnIndex(AccountsContract.Columns.USER_EMAIL_COL)));
 //            holder.corp_.setText(mCursor.getString(mCursor.getColumnIndex(AccountsContract.Columns.CORP_WEBSITE_COL)));
 
+            Log.d(TAG, "onBindViewHolder: corpname " + account.getCorpName());
             holder.corp_name.setText(account.getCorpName());
             if (holder.user_name != null) {
                 if (accountSortorder == AccountsContract.ACCOUNT_LIST_BY_SEQUENCE) {

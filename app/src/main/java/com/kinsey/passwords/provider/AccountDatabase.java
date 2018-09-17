@@ -39,6 +39,8 @@ public class AccountDatabase extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
+
+        Log.d(TAG, "onCreate: creating table " + AccountsContract.TABLE_NAME);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS "
                 + AccountsContract.TABLE_NAME);
         String SQL_CREATE_PASSPORT = "create table "
@@ -82,4 +84,7 @@ public class AccountDatabase extends SQLiteOpenHelper {
                 throw new IllegalStateException("onUpgrade() with unknown newVersion: " + newVersion);
         }
     }
+
+
+
 }
