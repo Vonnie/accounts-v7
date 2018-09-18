@@ -6,9 +6,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.JsResult;
-import android.webkit.WebChromeClient;
-import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -16,6 +13,7 @@ import android.webkit.WebViewClient;
 /**
  * A placeholder fragment containing a simple view.
  */
+//https://guides.codepath.com/android/Working-with-the-WebView
 public class WebViewActivityFragment extends Fragment {
     private static final String TAG = "WebViewActivityFragment";
 
@@ -34,7 +32,7 @@ public class WebViewActivityFragment extends Fragment {
 
         webAddr = (String) arguments.getSerializable(WebViewActivity.class.getSimpleName());
 
-//        Log.d(TAG, "onCreateView: webAddr " + webAddr);
+        Log.d(TAG, "onCreateView: webAddr " + webAddr);
         if (webAddr == null) {
             return view;
         }
@@ -46,12 +44,24 @@ public class WebViewActivityFragment extends Fragment {
 
 
         WebSettings webSettings = webview.getSettings();
-
+        // Configure related browser settings
+        webSettings.setLoadsImagesAutomatically(true);
         webSettings.setJavaScriptEnabled(true);
-        webSettings.setDomStorageEnabled(true);
+        webview.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
+
+        // Enable responsive layout
+        webSettings.setUseWideViewPort(true);
+// Zoom out if the content width is greater than the width of the viewport
+        webSettings.setLoadWithOverviewMode(true);
+
+        webSettings.setSupportZoom(true);
+        webSettings.setBuiltInZoomControls(true); // allow pinch to zooom
+        webSettings.setDisplayZoomControls(false); // disable the default zoom controls on the page
+
+//        webSettings.setDomStorageEnabled(true);
 
 
-        WebView.setWebContentsDebuggingEnabled(true);
+//        WebView.setWebContentsDebuggingEnabled(true);
 
 //        webview.setWebChromeClient(new WebChromeClient() {
 //            public void onProgressChanged(WebView view, int progress) {
@@ -75,20 +85,21 @@ public class WebViewActivityFragment extends Fragment {
 //        });
 
 
-        webview.setWebChromeClient(new WebChromeClient() {
-            @Override
-            public boolean onJsBeforeUnload(WebView view, String url, String message, JsResult result) {
-                Log.d(TAG, "onJsBeforeUnload: ");
-                return super.onJsBeforeUnload(view, url, message, result);
-            }
-        });
+//        webview.setWebChromeClient(new WebChromeClient() {
+//            @Override
+//            public boolean onJsBeforeUnload(WebView view, String url, String message, JsResult result) {
+//                Log.d(TAG, "onJsBeforeUnload: ");
+//                return super.onJsBeforeUnload(view, url, message, result);
+//            }
+//        });
 
-        webview.setWebViewClient(new WebViewClient() {
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-                return false;
-            }
-        });
+        webview.setWebViewClient(new WebViewClient());
+//        {
+//            @Override
+//            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+//                return false;
+//            }
+//        });
 
 
         if (!webAddr.equals("")) {
@@ -112,12 +123,12 @@ public class WebViewActivityFragment extends Fragment {
     }
 
 
-
-    private class MyWebViewClient extends WebViewClient {
-        //		http://www.androidaspect.com/2012/09/android-webview-tutorial.html
-        @Override
-        public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            return false;
-        }
-    }
+//
+//    private class MyWebViewClient extends WebViewClient {
+//        //		http://www.androidaspect.com/2012/09/android-webview-tutorial.html
+//        @Override
+//        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+//            return false;
+//        }
+//    }
 }

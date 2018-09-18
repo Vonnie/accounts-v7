@@ -285,6 +285,20 @@
                 app:layout_constraintTop_toBottomOf="@+id/lbl_seq" />
             <!--android:hint="@string/accedit_seq_hint"-->
 
+
+            <ImageButton
+                android:id="@+id/imgbtn_globe"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="24dp"
+                android:layout_marginTop="24dp"
+                android:background="@color/primaryColor"
+                android:backgroundTint="@color/primaryDarkColor"
+                android:contentDescription="Link to @string/acct_show_website"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/acc_ref_to"
+                app:srcCompat="@drawable/selector_globe" />
+
         </android.support.constraint.ConstraintLayout>
 
     </android.support.v7.widget.CardView>

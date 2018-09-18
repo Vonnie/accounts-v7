@@ -14,6 +14,7 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,6 +51,8 @@ public class AccountListActivityFragment extends Fragment
     private AccountRecyclerViewAdapter mAccountAdapter; // add adapter reference
     TextView twCurrentTitle;
     private String queryCorp = "";
+    StaggeredGridLayoutManager gridLayoutManager =
+            new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
 
 //    Loader<Cursor> loader;
 
@@ -150,6 +153,24 @@ public class AccountListActivityFragment extends Fragment
 //        Log.d(TAG, "onCreateView: selected_position " + selected_position);
         View view = inflater.inflate(R.layout.fragment_account_list, container, false);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.account_items_list);
+
+
+//        if (mAccountAdapter == null || mAccountAdapter.getAccountSortorder() == AccountsContract.ACCOUNT_LIST_BY_CORP_NAME) {
+//            if (mRecyclerView.getLayoutManager() != null) {
+//                mRecyclerView.setLayoutManager(null);
+//            }
+//            // First param is number of columns and second param is orientation i.e Vertical or Horizontal
+////            StaggeredGridLayoutManager gridLayoutManager =
+////                    new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+//// Attach the layout manager to the recycler view
+//            mRecyclerView.setLayoutManager(gridLayoutManager);
+//        } else {
+//            mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+//        }
+//
+//        if (mAccountAdapter != null) {
+//            mRecyclerView.setAdapter(mAccountAdapter);
+//        }
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
 //        twCurrentTitle = (TextView) view.findViewById(R.id.current_title);

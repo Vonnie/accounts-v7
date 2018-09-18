@@ -31,30 +31,30 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lbl_corp_name" />
 
-    <TextView
-        android:id="@+id/lbl_website"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:labelFor="@+id/addedit_corp_website"
-        android:text="Website"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_corp_name" />
+    <!--<TextView-->
+        <!--android:id="@+id/lbl_website"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginStart="8dp"-->
+        <!--android:layout_marginTop="8dp"-->
+        <!--android:labelFor="@+id/addedit_corp_website"-->
+        <!--android:text="Website"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/txt_corp_name" />-->
 
-    <EditText
-        android:id="@+id/addedit_corp_website"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:ems="10"
-        android:inputType="textMultiLine"
-        android:maxLength="64"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lbl_website" />
+    <!--<EditText-->
+        <!--android:id="@+id/addedit_corp_website"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginEnd="8dp"-->
+        <!--android:layout_marginStart="8dp"-->
+        <!--android:ems="10"-->
+        <!--android:inputType="textMultiLine"-->
+        <!--android:maxLength="64"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintHorizontal_bias="0.0"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/lbl_website" />-->
     <!--android:hint="@string/accedit_corp_website_hint"-->
 
     <TextView
@@ -65,60 +65,60 @@
         android:layout_marginTop="24dp"
         android:text="TextView"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addedit_corp_website" />
+        app:layout_constraintTop_toBottomOf="@+id/txt_corp_name" />
 
     <ImageButton
         android:id="@+id/imgbtn_edit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="32dp"
         android:layout_marginTop="24dp"
         android:background="@color/primaryColor"
         android:backgroundTint="@color/primaryDarkColor"
         android:contentDescription="Edit Account"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/imgbtn_globe"
-        app:layout_constraintTop_toBottomOf="@+id/addedit_corp_website"
+        app:layout_constraintEnd_toStartOf="@+id/imgbtn_delete"
+        app:layout_constraintTop_toBottomOf="@+id/txt_corp_name"
         app:srcCompat="@drawable/selector_edit" />
 
-    <ImageButton
-        android:id="@+id/imgbtn_globe"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="24dp"
-        android:layout_marginTop="24dp"
-        android:background="@color/primaryColor"
-        android:backgroundTint="@color/primaryDarkColor"
-        android:contentDescription="Link to @string/acct_show_website"
-        app:layout_constraintEnd_toStartOf="@+id/imgbtn_delete"
-        app:layout_constraintTop_toBottomOf="@+id/addedit_corp_website"
-        app:srcCompat="@drawable/selector_globe" />
+    <!--<ImageButton-->
+        <!--android:id="@+id/imgbtn_globe"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginEnd="32dp"-->
+        <!--android:layout_marginTop="24dp"-->
+        <!--android:background="@color/primaryColor"-->
+        <!--android:backgroundTint="@color/primaryDarkColor"-->
+        <!--android:contentDescription="Link to @string/acct_show_website"-->
+        <!--app:layout_constraintEnd_toStartOf="@+id/imgbtn_delete"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/addedit_corp_website"-->
+        <!--app:srcCompat="@drawable/selector_globe" />-->
 
     <ImageButton
         android:id="@+id/imgbtn_delete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="24dp"
+        android:layout_marginEnd="32dp"
         android:layout_marginTop="24dp"
         android:background="@color/primaryColor"
         android:backgroundTint="@color/primaryDarkColor"
         android:contentDescription="Delete account"
         app:layout_constraintEnd_toStartOf="@+id/imgbtn_save"
-        app:layout_constraintTop_toBottomOf="@+id/addedit_corp_website"
+        app:layout_constraintTop_toBottomOf="@+id/txt_corp_name"
         app:srcCompat="@drawable/selector_delete" />
 
     <ImageButton
         android:id="@+id/imgbtn_save"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="24dp"
+        android:layout_marginEnd="32dp"
         android:layout_marginTop="24dp"
         android:background="@color/primaryColor"
         android:backgroundTint="@color/primaryDarkColor"
-        android:contentDescription="Save Corp name / Website"
+        android:contentDescription="Save Corp name"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addedit_corp_website"
+        app:layout_constraintTop_toBottomOf="@+id/txt_corp_name"
         app:srcCompat="@drawable/selector_save" />
 
 </android.support.constraint.ConstraintLayout>

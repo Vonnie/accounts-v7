@@ -4,12 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.webkit.JsResult;
-import android.webkit.WebChromeClient;
-import android.webkit.WebResourceRequest;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 
 public class WebViewActivity
 //        extends WebViewClient {
@@ -46,44 +41,44 @@ public class WebViewActivity
         webAddr = (String) arguments.getSerializable(WebViewActivity.class.getSimpleName());
         webview = (WebView) findViewById(R.id.webview);
 
-        WebSettings webSettings = webview.getSettings();
-        webSettings.setJavaScriptEnabled(true);
-        webSettings.setDomStorageEnabled(true);
-
-        Log.d(TAG, "onCreate: loadUrl returned");
-        blnWebLoaded = true;
-
-        webview.setWebChromeClient(new WebChromeClient() {
-            @Override
-            public boolean onJsBeforeUnload(WebView view, String url, String message, JsResult result) {
-                Log.d(TAG, "onJsBeforeUnload: ");
-                return super.onJsBeforeUnload(view, url, message, result);
-            }
-        });
-
-        webview.setWebViewClient(new WebViewClient() {
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-                return false;
-            }
-        });
-
-
-        if (!webAddr.equals("")) {
-            webview.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    webview.loadUrl(webAddr);
-                }
-            }, 500);
-        }
-
-
-//        wvFragment = (WebViewActivityFragment) getSupportFragmentManager().findFragmentById(R.id.fragmentWebView);
-
-//        getWindow().requestFeature(Window.FEATURE_PROGRESS);
-
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        WebSettings webSettings = webview.getSettings();
+//        webSettings.setJavaScriptEnabled(true);
+//        webSettings.setDomStorageEnabled(true);
+//
+//        Log.d(TAG, "onCreate: loadUrl returned");
+//        blnWebLoaded = true;
+//
+//        webview.setWebChromeClient(new WebChromeClient() {
+//            @Override
+//            public boolean onJsBeforeUnload(WebView view, String url, String message, JsResult result) {
+//                Log.d(TAG, "onJsBeforeUnload: ");
+//                return super.onJsBeforeUnload(view, url, message, result);
+//            }
+//        });
+//
+//        webview.setWebViewClient(new WebViewClient() {
+//            @Override
+//            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+//                return false;
+//            }
+//        });
+//
+//
+//        if (!webAddr.equals("")) {
+//            webview.postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    webview.loadUrl(webAddr);
+//                }
+//            }, 500);
+//        }
+//
+//
+////        wvFragment = (WebViewActivityFragment) getSupportFragmentManager().findFragmentById(R.id.fragmentWebView);
+//
+////        getWindow().requestFeature(Window.FEATURE_PROGRESS);
+//
+////        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
 

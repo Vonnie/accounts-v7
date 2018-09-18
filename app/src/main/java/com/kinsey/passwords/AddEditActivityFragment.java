@@ -6,9 +6,12 @@ import android.app.DatePickerDialog;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
@@ -19,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -67,7 +71,7 @@ public class AddEditActivityFragment extends Fragment {
         void saveComplete();
         void updateAccount(Account account);
         void updateNewAccount(Account account);
-        void updateDictCorpName();
+//        void updateDictCorpName();
     }
 
     private static String pattern_mdy = "MM/dd/yyyy";
@@ -292,7 +296,19 @@ public class AddEditActivityFragment extends Fragment {
         } else {
             Log.d(TAG, "onCreateView: to Chg");
         }
-        Log.d(TAG, "onCreateView: Exiting...");
+
+
+        ImageButton btnWebsite = view.findViewById(R.id.imgbtn_globe);
+        btnWebsite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "onClick: for edit");
+                if (mCorpWebsiteTextView != null) {
+                    verifyEmail(mCorpWebsiteTextView);
+                    linkToInternet(mCorpWebsiteTextView.getText().toString());
+                }
+            }
+        });
 
 //        mOpenDate.setInputType(InputType.TYPE_NULL);
         mtvOpenDate.setOnClickListener(new View.OnClickListener() {
@@ -405,6 +421,43 @@ public class AddEditActivityFragment extends Fragment {
 //        super.onDestroyView();
 //    }
 
+
+
+    private void linkToInternet(String webpage) {
+        Log.d(TAG, "linkToInternet: " + account);
+        if (webpage.equals("")
+                || webpage.toLowerCase().equals("http://")
+                || webpage.toLowerCase().equals("https://")) {
+            Toast.makeText(getContext(),
+                    "Account has no corp website to link to",
+                    Toast.LENGTH_LONG).show();
+        } else {
+            if (!webpage.equals("")) {
+                Log.d(TAG, "linkToInternet: " + webpage);
+                vewInternet(webpage);
+//                webview.loadUrl(account.getCorpWebsite());
+            } else {
+                Log.d(TAG, "linkToInternet: none");;
+            }
+        }
+    }
+
+
+    private void vewInternet(String webpage) {
+
+        Log.d(TAG, "vewInternet: webpage " + webpage);
+        Uri uri = Uri.parse(webpage);
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        startActivity(intent);
+//        if (intent.resolveActivity(getPackageManager()) != null) {
+//            startActivity(intent);
+//        }
+
+
+    }
+
+
+
     public int getAcctId() {
         return account.getId();
     }
@@ -499,9 +552,13 @@ public class AddEditActivityFragment extends Fragment {
                     account = getAccount(account.getId());
                     Log.d(TAG, "onClick: " + account);
                     Log.d(TAG, "onClick: " + account.getOpenLong());
+                    mtvActvyDate.setText("ActvyDate:\n" + format_ymdtimehm.format(account.getActvyLong()));
                     mListener.updateAccount(account);
+
                     if (blnCorpNameChg) {
-                        mListener.updateDictCorpName();
+                        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+                        sharedPreferences.edit().putBoolean(MainActivity.SEARCH_DICT_REFRESHED, false).apply();
+                        //                        mListener.updateDictCorpName();
                         blnCorpNameChg = false;
                     }
                     Toast.makeText(getActivity(),
@@ -551,7 +608,12 @@ public class AddEditActivityFragment extends Fragment {
                     account = getAccount((int) id);
                     Log.d(TAG, "onClick: " + account);
                     Log.d(TAG, "onClick: " + account.getOpenLong());
+                    mtvActvyDate.setText("ActvyDate:\n" + format_ymdtimehm.format(account.getActvyLong()));
                     mListener.updateNewAccount(account);
+
+                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+                    sharedPreferences.edit().putBoolean(MainActivity.SEARCH_DICT_REFRESHED, false).apply();
+
                     Toast.makeText(getActivity(),
                             "New account " + account.getCorpName() + " added",
                             Toast.LENGTH_LONG).show();
@@ -681,6 +743,15 @@ public class AddEditActivityFragment extends Fragment {
         return true;
     }
 
+    private void verifyEmail(TextView tvWebsite) {
+        if (!tvWebsite.getText().toString().equals("")) {
+            if (tvWebsite.getText().toString().toLowerCase().startsWith("http://")
+                    || tvWebsite.getText().toString().toLowerCase().startsWith("https://")) {
+            } else {
+                tvWebsite.setText("http://" + mCorpWebsiteTextView.getText().toString());
+            }
+        }
+    }
 
     public boolean isEmailValid(String email) {
         String regExpn = "^(([\\w-]+\\.)+[\\w-]+|([a-zA-Z]{1}|[\\w-]{2,}))@"

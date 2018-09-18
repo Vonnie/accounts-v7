@@ -106,6 +106,7 @@ public class MainActivity extends AppCompatActivity
     private final String SELECTION_QUERY = "Query";
     private final String SELECTION_ONE_ITEM = "SeLectionOneItem";
     private final String SORTED_LIST_ORDER = "SortedListOrder";
+    public final static String SEARCH_DICT_REFRESHED = "SearchDictRefreshed";
 
     Menu menu;
     MenuItem miActionProgressItem;
@@ -378,7 +379,28 @@ public class MainActivity extends AppCompatActivity
         mSearchView.setSearchableInfo(searchableInfo);
 
         mSearchView.setIconified(true);
-//        mSearchView.clearFocus();
+
+        mSearchView.setOnSearchClickListener(new SearchView.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "onClick: v " + v.toString());
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                boolean isDictRefreshed = sharedPreferences.getBoolean(SEARCH_DICT_REFRESHED, false);
+                if (isDictRefreshed) {
+                    Log.d(TAG, "onClick: yes dict refreshed");
+                } else {
+                    Log.d(TAG, "onClick: no dict refreshed");
+                    Toast.makeText(getApplicationContext(), "One moment to populate search dictionary", Toast.LENGTH_LONG).show();
+                    loadSearchDB();
+                    isDictRefreshed = sharedPreferences.getBoolean(SEARCH_DICT_REFRESHED, false);
+                    Log.d(TAG, "onClick: dict refreshed");
+                }
+
+            }
+        });
+
+        //        mSearchView.clearFocus();
 //        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 //        String queryResult = sharedPreferences.getString(SELECTION_QUERY, "");
 
@@ -457,6 +479,7 @@ public class MainActivity extends AppCompatActivity
 
 
         });
+
 
         mSearchView.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
@@ -552,6 +575,10 @@ public class MainActivity extends AppCompatActivity
         // as you specify a parent activity in AndroidManifest.xml.
 //        feedUrl = "http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topTvEpisodes/xml";
 
+        Log.d(TAG, "onOptionsItemSelected: search cancel");
+        if (!mSearchView.isIconified()) {
+            mSearchView.setIconified(true);
+        }
         AddEditActivityFragment editFragment;
         int id = item.getItemId();
         //noinspection SimplifiableIfStatement
@@ -687,6 +714,7 @@ public class MainActivity extends AppCompatActivity
 
 
 //            case R.id.menumain_search:
+//                Log.d(TAG, "onOptionsItemSelected: search request");
 //                Log.d(TAG, "onOptionsItemSelected: search request");
 ////                searchListRequest();
 //                requestSearch();
@@ -1337,8 +1365,8 @@ public class MainActivity extends AppCompatActivity
             TextView tvId = (TextView) messageView.findViewById(R.id.txt_id);
 //            tvId.setText(String.valueOf("AcctId " + account.getId()));
         tvId.setText(String.valueOf("AcctId " + account.getPassportId()));
-            final EditText tvWebsite = messageView.findViewById(R.id.addedit_corp_website);
-            tvWebsite.setText(account.getCorpWebsite());
+//            final EditText tvWebsite = messageView.findViewById(R.id.addedit_corp_website);
+//            tvWebsite.setText(account.getCorpWebsite());
 
             ImageButton btnEdit = messageView.findViewById(R.id.imgbtn_edit);
             btnEdit.setOnClickListener(new View.OnClickListener() {
@@ -1357,13 +1385,15 @@ public class MainActivity extends AppCompatActivity
                     Log.d(TAG, "onClick: for edit");
                     String prevCorpName = account.getCorpName();
                     account.setCorpName(tvName.getText().toString());
-                    if (tvWebsite.getText().toString().startsWith("http://") ||
-                            tvWebsite.getText().toString().startsWith("https://")) {
-                        account.setCorpWebsite(tvWebsite.getText().toString());
-                    } else {
-                        tvWebsite.setError("website must start with http");
-                        return;
-                    }
+//                    if (!tvWebsite.getText().toString().startsWith("")) {
+//                        if (tvWebsite.getText().toString().startsWith("http://") ||
+//                                tvWebsite.getText().toString().startsWith("https://")) {
+//                            account.setCorpWebsite(tvWebsite.getText().toString());
+//                        } else {
+//                            tvWebsite.setError("website must start with http");
+//                            return;
+//                        }
+//                    }
                     updateCorp(account);
                     mDialog.dismiss();
                     if (mTwoPane) {
@@ -1387,15 +1417,16 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        ImageButton btnWebsite = messageView.findViewById(R.id.imgbtn_globe);
-        btnWebsite.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "onClick: for edit");
-                linkToInternet(account);
-                mDialog.dismiss();
-            }
-        });
+//        ImageButton btnWebsite = messageView.findViewById(R.id.imgbtn_globe);
+//        btnWebsite.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Log.d(TAG, "onClick: for edit");
+//                verifyEmail(tvWebsite);
+//                linkToInternet(tvWebsite.getText().toString());
+//                mDialog.dismiss();
+//            }
+//        });
 //            TextView about_url = (TextView) messageView.findViewById(R.id.about_url);
 //            if(about_url != null) {
 //                about_url.setOnClickListener(new View.OnClickListener() {
@@ -1430,6 +1461,17 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+//    private void verifyEmail(TextView tvWebsite) {
+//        if (!tvWebsite.getText().toString().equals("")) {
+//            if (tvWebsite.getText().toString().toLowerCase().startsWith("http://")
+//                    || tvWebsite.getText().toString().toLowerCase().startsWith("https://")) {
+//            } else {
+//                tvWebsite.setText("http://" + tvWebsite.getText().toString());
+//            }
+//        }
+//    }
+
+
     private void removeEditing() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         Fragment editFragment = fragmentManager.findFragmentById(R.id.task_details_container);
@@ -1453,6 +1495,10 @@ public class MainActivity extends AppCompatActivity
         values.put(AccountsContract.Columns.CORP_NAME_COL, account.getCorpName());
         values.put(AccountsContract.Columns.CORP_WEBSITE_COL, account.getCorpWebsite());
         getContentResolver().update(AccountsContract.buildIdUri(account.getId()), values, null, null);
+
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        sharedPreferences.edit().putBoolean(SEARCH_DICT_REFRESHED, false).apply();
 
     }
 
@@ -1482,28 +1528,30 @@ public class MainActivity extends AppCompatActivity
 
         newFragment.setArguments(args);
         newFragment.show(fragmentManager, "dialog");
+
+
     }
 
 
-    private void linkToInternet(Account account) {
-        Log.d(TAG, "linkToInternet: " + account);
-        if (account.getCorpWebsite().equals("")
-                || account.getCorpWebsite().toLowerCase().equals("http://")
-                || account.getCorpWebsite().toLowerCase().equals("https://")) {
-            Toast.makeText(this,
-                    "Selected account must have a corp website",
-                    Toast.LENGTH_LONG).show();
-        } else {
-            if (!account.getCorpWebsite().equals("")) {
-//                mActivityStart = true;
-                Log.d(TAG, "linkToInternet: " + account.getCorpWebsite());
-                vewInternet(account.getCorpWebsite());
-//                webview.loadUrl(account.getCorpWebsite());
-            } else {
-                Log.d(TAG, "linkToInternet: none");;
-            }
-        }
-    }
+//    private void linkToInternet(String webpage) {
+//        Log.d(TAG, "linkToInternet: " + webpage);
+//        if (webpage.equals("")
+//                || webpage.toLowerCase().equals("http://")
+//                || webpage.toLowerCase().equals("https://")) {
+//            Toast.makeText(this,
+//                    "Selected account has no corp website to link to",
+//                    Toast.LENGTH_LONG).show();
+//        } else {
+//            if (!webpage.equals("")) {
+////                mActivityStart = true;
+//                Log.d(TAG, "linkToInternet: " + webpage);
+//                vewInternet(webpage);
+////                webview.loadUrl(account.getCorpWebsite());
+//            } else {
+//                Log.d(TAG, "linkToInternet: none");;
+//            }
+//        }
+//    }
 
     private void vewInternet(String webpage) {
 //        Bundle arguments = new Bundle();
@@ -1524,9 +1572,10 @@ public class MainActivity extends AppCompatActivity
         Log.d(TAG, "vewInternet: webpage " + webpage);
         Uri uri = Uri.parse(webpage);
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-        if (intent.resolveActivity(getPackageManager()) != null) {
-            startActivity(intent);
-        }
+        startActivity(intent);
+//        if (intent.resolveActivity(getPackageManager()) != null) {
+//            startActivity(intent);
+//        }
 
 //        Intent detailIntent = new Intent(this, WebViewActivity.class);
 //        detailIntent.putExtra(WebViewActivity.class.getSimpleName(), account.getCorpWebsite());
@@ -1701,31 +1750,31 @@ public class MainActivity extends AppCompatActivity
 
         listFragment.notifyItemChanged();
 
-        searchListRequest();
+//        searchListRequest();
     }
 
-    @Override
-    public void updateDictCorpName() {
-//        AccountListActivityFragment listFragment = (AccountListActivityFragment)
-//                getSupportFragmentManager().findFragmentById(R.id.fragment);
-
-//        listFragment.unselectItem();
-
-        searchListRequest();
-    }
-
-    //    private void addAccountRequest() {
-////        Log.d(TAG, "addAccountRequest: starts");
-////        if (mTwoPane) {
-////            mAccountAdapter.resetSelection();
-//        accountMode = AccountsContract.ACCOUNT_ACTION_ADD;
-//        this.account = new Account();
-//        accountSelectedPos = -1;
-//        setMenuItemEnabled(R.id.menuacct_delete, false);
-////        setMenuItemEnabled(R.id.menuacct_save, true);
-//        setMenuItemEnabled(R.id.menuacct_internet, false);
-//        updatePages(frag1Pos);
+//    @Override
+//    public void updateDictCorpName() {
+////        AccountListActivityFragment listFragment = (AccountListActivityFragment)
+////                getSupportFragmentManager().findFragmentById(R.id.fragment);
+//
+////        listFragment.unselectItem();
+//
+////        searchListRequest();
 //    }
+//
+//    //    private void addAccountRequest() {
+//////        Log.d(TAG, "addAccountRequest: starts");
+//////        if (mTwoPane) {
+//////            mAccountAdapter.resetSelection();
+////        accountMode = AccountsContract.ACCOUNT_ACTION_ADD;
+////        this.account = new Account();
+////        accountSelectedPos = -1;
+////        setMenuItemEnabled(R.id.menuacct_delete, false);
+//////        setMenuItemEnabled(R.id.menuacct_save, true);
+////        setMenuItemEnabled(R.id.menuacct_internet, false);
+////        updatePages(frag1Pos);
+////    }
 
 
 //    private void editAccountRequest(Account account) {
@@ -2187,6 +2236,10 @@ public class MainActivity extends AppCompatActivity
                         getSupportFragmentManager().findFragmentById(R.id.fragment);
                 listFragment.rebuildDict();
 
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                sharedPreferences.edit().putBoolean(SEARCH_DICT_REFRESHED, true).apply();
+
+
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
@@ -2407,6 +2460,8 @@ public class MainActivity extends AppCompatActivity
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         sharedPreferences.edit().putInt(SELECTION_ONE_ITEM, -1).apply();
+        sharedPreferences.edit().putBoolean(SEARCH_DICT_REFRESHED, false).apply();
+
 
 //        AccountListActivityFragment listFragment = (AccountListActivityFragment)
 //                getSupportFragmentManager().findFragmentById(R.id.fragment);
@@ -2418,7 +2473,7 @@ public class MainActivity extends AppCompatActivity
         }
 
 
-        searchListRequest();
+//        searchListRequest();
     }
 
     @Override
@@ -2608,11 +2663,12 @@ public class MainActivity extends AppCompatActivity
             View addEditLayoutScroll = findViewById(R.id.task_details_container_scroll);
             addEditLayout.setVisibility(View.GONE);
             addEditLayoutScroll.setVisibility(View.GONE);
+            mainFragment.setVisibility(View.VISIBLE);
             Toast.makeText(this,
                     "Long click select for more details",
                     Toast.LENGTH_SHORT).show();
 
-            super.onBackPressed();
+//            super.onBackPressed();
 
         }
 
