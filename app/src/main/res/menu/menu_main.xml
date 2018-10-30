@@ -34,12 +34,12 @@
     <!--android:orderInCategory="114"-->
     <!--android:title="@string/delete_cap"-->
     <!--app:showAsAction="ifRoom" />-->
-    <item
-        android:id="@+id/menuacct_save"
-        android:icon="@drawable/selector_save"
-        android:orderInCategory="102"
-        android:title="@string/menu_save"
-        app:showAsAction="ifRoom" />
+    <!--<item-->
+        <!--android:id="@+id/menuacct_save"-->
+        <!--android:icon="@drawable/selector_save"-->
+        <!--android:orderInCategory="102"-->
+        <!--android:title="@string/menu_save"-->
+        <!--app:showAsAction="ifRoom" />-->
     <item
         android:id="@+id/menumain_add"
         android:icon="@drawable/selector_add"
@@ -52,16 +52,10 @@
         android:orderInCategory="104"
         android:title="@string/menuacct_about"
         app:showAsAction="ifRoom" />
-
-    <item
-        android:id="@+id/menuacct_external_accts"
-        android:orderInCategory="119"
-        android:title="@string/menuacct_external_accts"
-        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/menumain_showSuggests"
         android:icon="@drawable/selector_key"
-        android:orderInCategory="120"
+        android:orderInCategory="119"
         android:title="@string/menu_suggests"
         app:showAsAction="ifRoom" />
     <!--<group-->
@@ -117,6 +111,12 @@
             android:title="@string/menuacct_sort_custom"
             app:showAsAction="ifRoom" />
     </group>
+
+    <item
+        android:id="@+id/menuacct_external_accts"
+        android:orderInCategory="240"
+        android:title="@string/menuacct_external_accts"
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/menumain_refresh"

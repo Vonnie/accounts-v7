@@ -50,6 +50,10 @@ import java.util.Locale;
 
 //import static com.kinsey.passwords.SearchActivity.SEARCH_ACCOUNT;
 //import static com.kinsey.passwords.SearchActivity.SELECTION_QUERY;
+// ====================
+// Statement to assist in debugging
+// if (BuildConfig.DEBUG && acctId == 0) throw new AssertionError("Account Id is zero");
+//
 
 public class MainActivity extends AppCompatActivity
         implements
@@ -161,6 +165,8 @@ public class MainActivity extends AppCompatActivity
 //        setContentView(R.layout.activity_main_rss_list);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setLogo(R.mipmap.ic_launcher);
+//        getSupportActionBar().setTitle(getString(R.string.app_name_corpname));
 
 //        Log.d(TAG, "onCreate: layout activity_main");
 
@@ -628,9 +634,9 @@ public class MainActivity extends AppCompatActivity
 //                suggestsListRequest3();
 //                break;
 
-            case R.id.menuacct_save:
-                saveAccountEdits();
-                break;
+//            case R.id.menuacct_save:
+//                saveAccountEdits();
+//                break;
 
             case R.id.menumain_showSuggests:
                 suggestsListRequest2();
@@ -1688,42 +1694,42 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    private void saveAccountEdits() {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        AddEditActivityFragment editFragment = (AddEditActivityFragment)fragmentManager.findFragmentById(R.id.task_details_container);
-        if (editFragment == null) {
-            Log.d(TAG, "saveAccountEdits: no edit frame to save");
-            return;
-        }
-        editFragment.saveEdits();
-
-
-//        View addEditLayout = findViewById(R.id.task_details_container);
-//        View addEditLayoutScroll = findViewById(R.id.task_details_container_scroll);
-//        View mainFragment = findViewById(R.id.fragment);
-//
-//        if(!mTwoPane) {
-//            if (editFragment != null) {
-//                getSupportFragmentManager().beginTransaction()
-//                        .remove(editFragment)
-//                        .commit();
-//            }
-//
-//            // We've just removed the editing fragment, so hide the frame
-//            addEditLayout.setVisibility(View.GONE);
-//            addEditLayoutScroll.setVisibility(View.GONE);
-//
-//            // and make sure the MainActivityFragment is visible.
-//            mainFragment.setVisibility(View.VISIBLE);
+//    private void saveAccountEdits() {
+//        FragmentManager fragmentManager = getSupportFragmentManager();
+//        AddEditActivityFragment editFragment = (AddEditActivityFragment)fragmentManager.findFragmentById(R.id.task_details_container);
+//        if (editFragment == null) {
+//            Log.d(TAG, "saveAccountEdits: no edit frame to save");
+//            return;
 //        }
+//        editFragment.saveEdits();
 //
-//        AccountListActivityFragment listFragment = (AccountListActivityFragment)
-//                getSupportFragmentManager().findFragmentById(R.id.fragment);
-//        listFragment.setAcctId(editFragment.getAcctId());
 //
-////        setMenuItemVisible(R.id.menuacct_save, false);
-
-    }
+////        View addEditLayout = findViewById(R.id.task_details_container);
+////        View addEditLayoutScroll = findViewById(R.id.task_details_container_scroll);
+////        View mainFragment = findViewById(R.id.fragment);
+////
+////        if(!mTwoPane) {
+////            if (editFragment != null) {
+////                getSupportFragmentManager().beginTransaction()
+////                        .remove(editFragment)
+////                        .commit();
+////            }
+////
+////            // We've just removed the editing fragment, so hide the frame
+////            addEditLayout.setVisibility(View.GONE);
+////            addEditLayoutScroll.setVisibility(View.GONE);
+////
+////            // and make sure the MainActivityFragment is visible.
+////            mainFragment.setVisibility(View.VISIBLE);
+////        }
+////
+////        AccountListActivityFragment listFragment = (AccountListActivityFragment)
+////                getSupportFragmentManager().findFragmentById(R.id.fragment);
+////        listFragment.setAcctId(editFragment.getAcctId());
+////
+//////        setMenuItemVisible(R.id.menuacct_save, false);
+//
+//    }
 
     @Override
     public void saveComplete() {
@@ -1934,7 +1940,6 @@ public class MainActivity extends AppCompatActivity
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.app_name);
         builder.setIcon(R.mipmap.ic_launcher);
-
         builder.setView(messageView);
 
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
@@ -1949,6 +1954,16 @@ public class MainActivity extends AppCompatActivity
 
         mDialog = builder.create();
         mDialog.setCanceledOnTouchOutside(true);
+
+//        messageView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Log.d(TAG, "onClick: Entering meassageView.onClick, showing = " + mDialog.isShowing());
+//                if (mDialog != null && mDialog.isShowing()) {
+//                    mDialog.dismiss();
+//                }
+//            }
+//        });
 
         TextView tv = (TextView) messageView.findViewById(R.id.about_version);
         tv.setText("v" + BuildConfig.VERSION_NAME);
@@ -1969,6 +1984,8 @@ public class MainActivity extends AppCompatActivity
                 }
             });
         }
+
+
 
         mDialog.show();
     }
@@ -2400,6 +2417,7 @@ public class MainActivity extends AppCompatActivity
                 break;
             case AppDialog.DIALOG_ID_CONFIRM_DELETE_ACCOUNT:
                 int acctId = args.getInt(AppDialog.DIALOG_ACCOUNT_ID);
+                if (BuildConfig.DEBUG && acctId == 0) throw new AssertionError("Account Id is zero");
                 Log.d(TAG, "onPositiveDialogResult: ready to delete " + acctId);
                 deleteAccount(acctId);
                 break;
@@ -2721,6 +2739,15 @@ public class MainActivity extends AppCompatActivity
 //
 //    }
 
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mDialog != null && mDialog.isShowing()) {
+            mDialog.dismiss();
+        }
+    }
+
     private void showConfirmationLeaveApp() {
         AppDialog dialog = new AppDialog();
         Bundle args = new Bundle();
@@ -2781,6 +2808,7 @@ public class MainActivity extends AppCompatActivity
         dialog.show(getSupportFragmentManager(), null);
 
     }
+
 
 
 }

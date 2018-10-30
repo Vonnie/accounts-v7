@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">Accounts</string>
-    <string name="app_name_corpname">Accounts by Corp Name</string>
-    <string name="app_name_opendate">Accounts by Open Date, desc</string>
-    <string name="app_name_acctid">Accounts by Acct Id</string>
-    <string name="app_name_custom">Accounts by Custom Seq</string>
+    <string name="app_name_corpname"> Accounts by Corp Name</string>
+    <string name="app_name_opendate"> Accounts by Open Date, desc</string>
+    <string name="app_name_acctid"> Accounts by Acct Id</string>
+    <string name="app_name_custom"> Accounts by Custom Seq</string>
     <string name="action_settings">Settings</string>
     <string name="menu_accounts">Accounts List</string>
     <string name="menu_suggests">Password Suggestions</string>
@@ -169,5 +169,9 @@
     <string name="accedit_actvy_date_label">Activity Date</string>
     <string name="accedit_corp_name_label">Corp Name</string>
     <string name="accedit_notes_label">Notes</string>
+    <string name="empty_list">Accounts List is empty</string>
+    <string name="empty_list_subtitle">Select \'Add an account\' from menu</string>
+    <string name="link_to_string_acct_show_website">Link to @string/acct_show_website</string>
+    <string name="descr_save">Save account</string>
 
 </resources>

@@ -36,15 +36,43 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <ImageButton
+                android:id="@+id/imgbtn_globe"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="8dp"
+                android:background="@color/secondaryColor"
+                android:backgroundTint="@color/secondaryDarkColor"
+                android:src="@drawable/selector_globe"
+                android:contentDescription="@string/link_to_string_acct_show_website"
+                app:layout_constraintStart_toEndOf="@+id/imgbtn_save"
+                app:layout_constraintTop_toTopOf="parent" />
+                <!--app:srcCompat="@drawable/selector_globe" />-->
+
+            <ImageButton
+                android:id="@+id/imgbtn_save"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:background="@color/secondaryColor"
+                android:backgroundTint="@color/secondaryColor"
+                android:contentDescription="@string/descr_save"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/selector_save" />
+
             <TextView
                 android:id="@+id/acc_account_id"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:textAlignment="viewEnd"
-                android:textSize="18sp"
+                android:textSize="30sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Acct-Id" />
 
             <TextView
                 android:id="@+id/lbl_corp_name"
@@ -56,23 +84,25 @@
                 android:text="@string/accedit_corp_name_label"
                 android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@+id/imgbtn_globe" />
 
             <EditText
                 android:id="@+id/addedit_corp_name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="4dp"
+                android:layout_marginEnd="8dp"
+                android:autofillHints=""
                 android:ems="10"
-                android:inputType="textMultiLine|textNoSuggestions"
+                android:inputType="textCapSentences|textMultiLine"
                 android:maxLength="64"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/lbl_corp_name" />
+                app:layout_constraintTop_toBottomOf="@+id/lbl_corp_name"
+                tools:targetApi="o"
+                tools:text="Corp Name" />
             <!--android:hint="@string/addedit_corp_name_hint"-->
 
             <TextView
@@ -90,18 +120,20 @@
                 android:id="@+id/addedit_corp_website"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="4dp"
+                android:layout_marginEnd="8dp"
+                android:autofillHints=""
                 android:ems="10"
-                android:inputType="textMultiLine"
+                android:inputType="textMultiLine|textUri"
                 android:maxLength="64"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/lbl_website" />
+                app:layout_constraintTop_toBottomOf="@+id/lbl_website"
+                tools:targetApi="o"
+                tools:text="Corp website" />
             <!--android:hint="@string/accedit_corp_website_hint"-->
 
             <TextView
@@ -128,7 +160,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/lbl_user_name" />
+                app:layout_constraintTop_toBottomOf="@+id/lbl_user_name"
+                android:autofillHints="" tools:targetApi="o"/>
             <!--android:hint="@string/addedit_user_name_hint"-->
             <TextView
                 android:id="@+id/lbl_user_email"
@@ -153,7 +186,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/lbl_user_email" />
+                app:layout_constraintTop_toBottomOf="@+id/lbl_user_email"
+                android:autofillHints="" tools:targetApi="o"/>
             <!--android:hint="@string/addedit_user_email_hint"-->
             <TextView
                 android:id="@+id/lbl_notes"
@@ -172,56 +206,47 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:ems="10"
-                android:inputType="textAutoComplete|textMultiLine"
+                android:inputType="textCapSentences|textMultiLine"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/lbl_notes" />
+                app:layout_constraintTop_toBottomOf="@+id/lbl_notes"
+                android:autofillHints="" tools:targetApi="o"/>
             <!--android:hint="@string/accedit_notes_hint"-->
-            <TextView
-                android:id="@+id/addedit_actvy_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:text="@string/accedit_actvy_date_label"
-                android:textSize="18sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/addedit_notes" />
-
-            <TextView
-                android:id="@+id/lbl_open_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:labelFor="@+id/addedit_open_date"
-                android:text="@string/accedit_open_date_label"
-                android:textSize="18sp"
-                app:layout_constraintBaseline_toBaselineOf="@+id/addedit_actvy_date"
-                app:layout_constraintEnd_toEndOf="parent" />
-
 
             <Button
                 android:id="@+id/addedit_open_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:text="@string/btn_open_date_label"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/lbl_open_date" />
+                app:layout_constraintTop_toBottomOf="@+id/addedit_notes" />
+
+            <TextView
+                android:id="@+id/addedit_actvy_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:text="@string/accedit_actvy_date_label"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/addedit_open_date" />
 
             <TextView
                 android:id="@+id/lbl_ref_from"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:labelFor="@+id/acc_ref_from"
                 android:text="@string/accedit_from_seq_label"
                 android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/addedit_open_date" />
+                app:layout_constraintTop_toBottomOf="@+id/addedit_notes" />
 
             <EditText
                 android:id="@+id/acc_ref_from"
@@ -233,71 +258,72 @@
                 android:textAlignment="textEnd"
                 android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/lbl_ref_from" />
+                app:layout_constraintTop_toBottomOf="@+id/lbl_ref_from"
+                android:autofillHints="" tools:targetApi="o"/>
             <!--android:hint="@string/accedit_ref_from_hint"-->
 
             <TextView
                 android:id="@+id/lbl_ref_to"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:labelFor="@+id/acc_ref_to"
-                android:text="@string/accedit_to_seq"
-                android:textSize="18sp"
-                app:layout_constraintBaseline_toBaselineOf="@+id/lbl_ref_from"
-                app:layout_constraintEnd_toEndOf="parent" />
-
-            <EditText
-                android:id="@+id/acc_ref_to"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:ems="10"
-                android:inputType="number"
-                android:textAlignment="viewEnd"
-                android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/lbl_ref_to" />
-            <!--android:hint="@string/accedit_ref_to_hint"-->
-
-            <TextView
-                android:id="@+id/lbl_seq"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:labelFor="@+id/acc_seq"
-                android:text="@string/accedit_sort_seq_label"
+                android:labelFor="@+id/acc_ref_to"
+                android:text="@string/accedit_to_seq"
                 android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/acc_ref_from" />
 
             <EditText
-                android:id="@+id/acc_seq"
+                android:id="@+id/acc_ref_to"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="8dp"
                 android:ems="10"
                 android:inputType="number"
-                android:textAlignment="textEnd"
+                android:textAlignment="viewEnd"
                 android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/lbl_seq" />
+                app:layout_constraintTop_toBottomOf="@+id/lbl_ref_to"
+                android:autofillHints="" tools:targetApi="o"/>
+            <!--android:hint="@string/accedit_ref_to_hint"-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/acc_account_id_2"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginTop="8dp"-->
+                <!--android:layout_marginEnd="32dp"-->
+                <!--android:textSize="18sp"-->
+                <!--app:layout_constraintEnd_toStartOf="@+id/imgvw_save"-->
+                <!--app:layout_constraintTop_toBottomOf="@+id/addedit_open_date"-->
+                <!--tools:text="Acct Id" />-->
+
+            <!--<TextView-->
+            <!--android:id="@+id/lbl_seq"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginStart="8dp"-->
+            <!--android:layout_marginTop="8dp"-->
+            <!--android:labelFor="@+id/acc_seq"-->
+            <!--android:text="@string/accedit_sort_seq_label"-->
+            <!--android:textSize="18sp"-->
+            <!--app:layout_constraintStart_toStartOf="parent"-->
+            <!--app:layout_constraintTop_toBottomOf="@+id/acc_ref_from" />-->
+
+            <!--<EditText-->
+            <!--android:id="@+id/acc_seq"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginStart="16dp"-->
+            <!--android:ems="10"-->
+            <!--android:inputType="number"-->
+            <!--android:textAlignment="textEnd"-->
+            <!--android:textSize="18sp"-->
+            <!--app:layout_constraintStart_toStartOf="parent"-->
+            <!--app:layout_constraintTop_toBottomOf="@+id/lbl_seq" />-->
             <!--android:hint="@string/accedit_seq_hint"-->
 
-
-            <ImageButton
-                android:id="@+id/imgbtn_globe"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="24dp"
-                android:layout_marginTop="24dp"
-                android:background="@color/primaryColor"
-                android:backgroundTint="@color/primaryDarkColor"
-                android:contentDescription="Link to @string/acct_show_website"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/acc_ref_to"
-                app:srcCompat="@drawable/selector_globe" />
 
         </android.support.constraint.ConstraintLayout>
 

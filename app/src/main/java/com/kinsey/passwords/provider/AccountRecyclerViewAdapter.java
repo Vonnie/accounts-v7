@@ -3,7 +3,6 @@ package com.kinsey.passwords.provider;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.RecyclerView;
@@ -26,11 +25,14 @@ import java.util.Locale;
 //import static com.kinsey.passwords.AccountListActivity.accountSelectedPos;
 //import static com.kinsey.passwords.AccountListActivity.accountSortorder;
 
+
+//https://www.codexpedia.com/android/android-recyclerview-with-multiple-different-layouts/
+
 /**
  * Created by Yvonne on 2/21/2017.
  */
 
-public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecyclerViewAdapter.AccountViewHolder>
+public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         implements LoaderManager.LoaderCallbacks<Cursor> {
     private static final String TAG = "AcctRecyclerViewAdpt";
 
@@ -93,79 +95,90 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
 
 
     @Override
-    public AccountViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 //        Log.d(TAG, "onCreateViewHolder: new view requested " + viewType);
-        View view;
-//        Log.d(TAG, "AccountRecyclerViewAdapter: cursor " + mCursor.getCount());
-        switch (accountSortorder) {
-            case AccountsContract.ACCOUNT_LIST_BY_CORP_NAME:
-//                Log.d(TAG, "onCreateViewHolder: list by corp name");
-                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_account_items, parent, false);
-                break;
-            case AccountsContract.ACCOUNT_LIST_BY_OPEN_DATE:
-//                Log.d(TAG, "onCreateViewHolder: list by open date");
-                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_account_items_open_date, parent, false);
-                break;
-            case AccountsContract.ACCOUNT_LIST_BY_PASSPORT_ID:
-//                Log.d(TAG, "onCreateViewHolder: list by acct id");
-                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_account_items_id, parent, false);
-                break;
-            case AccountsContract.ACCOUNT_LIST_BY_SEQUENCE:
-//                Log.d(TAG, "onCreateViewHolder: list by user seq");
-                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_account_items_user_seq, parent, false);
-                break;
-            default:
-//                Log.d(TAG, "onCreateViewHolder: list by default");
-                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_account_items, parent, false);
+
+        View view = LayoutInflater.from(parent.getContext()).inflate(viewType, parent, false);
+//        RecyclerView.ViewHolder viewHolder = null;
+        if (viewType == R.layout.empty) {
+            return new EmptyViewHolder(view);
+//            viewHolder = new EmptyViewHolder(view);
+        } else {
+            return new AccountViewHolder(view);
+//            viewHolder = new AccountViewHolder(view);
         }
 
-        return new AccountViewHolder(view);
+
+//        View view;
+////        Log.d(TAG, "AccountRecyclerViewAdapter: cursor " + mCursor.getCount());
+//        switch (accountSortorder) {
+//            case AccountsContract.ACCOUNT_LIST_BY_CORP_NAME:
+////                Log.d(TAG, "onCreateViewHolder: list by corp name");
+//                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_account_items, parent, false);
+//                break;
+//            case AccountsContract.ACCOUNT_LIST_BY_OPEN_DATE:
+////                Log.d(TAG, "onCreateViewHolder: list by open date");
+//                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_account_items_open_date, parent, false);
+//                break;
+//            case AccountsContract.ACCOUNT_LIST_BY_PASSPORT_ID:
+////                Log.d(TAG, "onCreateViewHolder: list by acct id");
+//                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_account_items_id, parent, false);
+//                break;
+//            case AccountsContract.ACCOUNT_LIST_BY_SEQUENCE:
+////                Log.d(TAG, "onCreateViewHolder: list by user seq");
+//                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_account_items_user_seq, parent, false);
+//                break;
+//            default:
+////                Log.d(TAG, "onCreateViewHolder: list by default");
+//                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_account_items, parent, false);
+//        }
+//
+//        return new AccountViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(final AccountViewHolder holder, final int position) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         Log.d(TAG, "onBindViewHolder: starts");
+        if (getItemViewType(position) == R.layout.empty) {
+            initLayoutEmpty((EmptyViewHolder)holder, position);
+        } else {
+            initLayoutAccount((AccountViewHolder)holder, position);
+        }
+    }
 
-//        if (mCursor == null) {
-//            Log.d(TAG, "onBindViewHolder: mCursor null");
-//        } else {
-//            Log.d(TAG, "onBindViewHolder: mCursor count " + mCursor.getCount());
+    private void initLayoutEmpty(final EmptyViewHolder holder, final int position) {
+        Log.d(TAG, "initLayoutEmpty: empty");
+    }
+
+
+    private void initLayoutAccount(final AccountViewHolder holder, final int position) {
+
+
+//        if ((mCursor == null) || (mCursor.getCount() == 0)) {
+//            new CountDownTimer(10000, 5000) {
+//
+//                public void onTick(long millisUntilFinished) {
+////                    holder.corp_name.setText("checking db, seconds remaining: " + millisUntilFinished / 1000);
+//                }
+//
+//                public void onFinish() {
+//                    if ((mCursor == null) || (mCursor.getCount() == 0)) {
+//                        holder.corp_name.setText(R.string.no_account_items);
+//                    }
+//                }
+//            }.start();
 //        }
 
-        if ((mCursor == null) || (mCursor.getCount() == 0)) {
-            new CountDownTimer(10000, 5000) {
-
-                public void onTick(long millisUntilFinished) {
-//                    holder.corp_name.setText("checking db, seconds remaining: " + millisUntilFinished / 1000);
-                }
-
-                public void onFinish() {
-                    if ((mCursor == null) || (mCursor.getCount() == 0)) {
-                        holder.corp_name.setText(R.string.no_account_items);
-                    }
-                }
-            }.start();
-        }
-
-        if ((mCursor == null) || (mCursor.getCount() == 0)) {
-            Log.d(TAG, "onBindViewHolder: no accts");
-
-            if (holder.upAcctBtn == null ||
-                    holder.dnAcctBtn == null) {
-            } else {
-                holder.upAcctBtn.setVisibility(View.GONE);
-                holder.dnAcctBtn.setVisibility(View.GONE);
-            }
-//            if (mTwoPane) {
-//                holder.user_name.setText(R.string.no_account_items_twopane_line2);
+//        if ((mCursor == null) || (mCursor.getCount() == 0)) {
+//            Log.d(TAG, "onBindViewHolder: no accts");
+//
+//            if (holder.upAcctBtn == null ||
+//                    holder.dnAcctBtn == null) {
 //            } else {
-//                holder.user_name.setText(R.string.no_account_items_line2);
+//                holder.upAcctBtn.setVisibility(View.GONE);
+//                holder.dnAcctBtn.setVisibility(View.GONE);
 //            }
-//            holder.user_name.setText(R.string.no_account_items_line2);
-//            holder.open_date.setText("");
-//            holder.editButton.setVisibility(View.GONE);
-//            holder.deleteButton.setVisibility(View.GONE);
-        } else {
+//        } else {
             Log.d(TAG, "onBindViewHolder: count " + mCursor.getCount() + ":" + position);
             if (!mCursor.moveToPosition(position)) {
                 throw new IllegalStateException("Couldn't move cursor to position " + position);
@@ -449,7 +462,7 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
 //            holder.editButton.setOnClickListener(buttonListener);
 //            holder.deleteButton.setOnClickListener(buttonListener);
             holder.itemView.setOnLongClickListener(buttonLongListener);
-        }
+//        }
 
     }
 
@@ -521,9 +534,32 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
         }
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        if ((mCursor == null) || (mCursor.getCount() == 0)) {
+            return R.layout.empty;
+        }
+//        else return R.layout.normal_layout;
+        switch (accountSortorder) {
+            case AccountsContract.ACCOUNT_LIST_BY_CORP_NAME:
+//                Log.d(TAG, "onCreateViewHolder: list by corp name");
+                return R.layout.list_account_items;
+            case AccountsContract.ACCOUNT_LIST_BY_OPEN_DATE:
+//                Log.d(TAG, "onCreateViewHolder: list by open date");
+                return R.layout.list_account_items_open_date;
+            case AccountsContract.ACCOUNT_LIST_BY_PASSPORT_ID:
+//                Log.d(TAG, "onCreateViewHolder: list by acct id");
+                return R.layout.list_account_items_id;
+            case AccountsContract.ACCOUNT_LIST_BY_SEQUENCE:
+//                Log.d(TAG, "onCreateViewHolder: list by user seq");
+                return R.layout.list_account_items_user_seq;
+            default:
+//                Log.d(TAG, "onCreateViewHolder: list by default");
+                return R.layout.list_account_items;
+        }
+    }
 
-
-//    public void resetSelection() {
+    //    public void resetSelection() {
 //        selected_position = -1;
 ////        holder.itemView.setBackgroundColor(Color.TRANSPARENT);
 //    }
@@ -574,11 +610,6 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
         return oldCursor;
     }
 
-    @Override
-    public int getItemViewType(int position) {
-//        Log.d(TAG, "getItemViewType: " + position);
-        return super.getItemViewType(position);
-    }
 
     public void setAccountSortorder(int accountSortorder) {
         this.accountSortorder = accountSortorder;
@@ -646,6 +677,23 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
 //            this.deleteButton = (ImageButton) itemView.findViewById(R.id.acc_delete);
             this.itemView = itemView;
             Log.d(TAG, "AccountViewHolder: corp_name tag " + this.corp_name.getTag());
+
+        }
+    }
+
+    public static class EmptyViewHolder extends RecyclerView.ViewHolder {
+        private static final String TAG = "EmptyViewHolder";
+        public final View mView;
+        TextView txtEmptyMsg;
+
+        View itemView;
+
+        public EmptyViewHolder(View itemView) {
+            super(itemView);
+//            Log.d(TAG, "AccountViewHolder: starts");
+            mView = itemView;
+            this.txtEmptyMsg = (TextView) itemView.findViewById(R.id.txtEmptyMsg);
+            this.itemView = itemView;
 
         }
     }
