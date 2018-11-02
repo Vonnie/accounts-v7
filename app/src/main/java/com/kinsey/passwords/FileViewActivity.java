@@ -1,7 +1,10 @@
 package com.kinsey.passwords;
 
+import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -173,11 +176,12 @@ public class FileViewActivity extends AppCompatActivity
                 break;
 
             case R.id.vw_filename:
-                Log.d(TAG, "onOptionsItemSelected: View filename");
+                Log.d(TAG, "onOptionsItemSelected: Share View filename");
                 showFilename();
                 break;
 
-            case R.id.menu_item_share:
+            case R.id.vw_shared:
+                shareExport();
                 Log.d(TAG, "onOptionsItemSelected: View share");
                 break;
 
@@ -224,6 +228,37 @@ public class FileViewActivity extends AppCompatActivity
     }
 
     private void shareExport() {
+        AlertDialog.Builder dlg = new AlertDialog.Builder(this);
+        dlg.setIcon(getResources().getDrawable(android.R.drawable.ic_dialog_alert));
+        dlg.setTitle(getResources().getString(R.string.app_name))
+                .setMessage("Is the exported file up-to-date for this share.")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        shareIntent();
+                        // finish dialog
+                        dialog.dismiss();
+                        return;
+                    }
+
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        // finish dialog
+                        dialog.dismiss();
+                        return;
+                    }
+
+                })
+                .show();
+        dlg = null;
+
+    }
+
+    private void shareIntent() {
 
         Intent emailintent = new Intent(Intent.ACTION_SEND);
         emailintent.putExtra(Intent.EXTRA_SUBJECT, "My Accounts App");
@@ -249,11 +284,18 @@ public class FileViewActivity extends AppCompatActivity
 
         emailintent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 //        emailintent.putExtra(Intent.EXTRA_TEXT, "My Accounts Attachments");
-        startActivity(Intent.createChooser(emailintent, "Send Email..."));
 
-        Toast.makeText(FileViewActivity.this,
-                "Exported file shared",
-                Toast.LENGTH_SHORT).show();
+        try {
+            startActivity(Intent.createChooser(emailintent, "Send your accounts.json..."));
+        } catch(ActivityNotFoundException e) {
+            Toast.makeText(FileViewActivity.this,
+                    "Unable to get the shared menu",
+                    Toast.LENGTH_LONG).show();
+        }
+
+//        Toast.makeText(FileViewActivity.this,
+//                "Exported file shared sent",
+//                Toast.LENGTH_SHORT).show();
 
     }
 

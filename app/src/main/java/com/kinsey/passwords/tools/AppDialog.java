@@ -1,21 +1,26 @@
 package com.kinsey.passwords.tools;
 
-import android.app.AlertDialog;
+//import android.app.AlertDialog;
+//import android.app.Dialog;
+
+//import android.app.Dialog;
+
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatDialogFragment;
 import android.util.Log;
-import android.widget.EditText;
 
 import com.kinsey.passwords.R;
+
 
 /**
  * Created by Yvonne on 2/27/2017.
  */
 
-public class AppDialog extends DialogFragment {
+public class AppDialog extends AppCompatDialogFragment {
     private static final String TAG = "AppDialog";
 
     public static final String DIALOG_ID = "id";
@@ -55,8 +60,6 @@ public class AppDialog extends DialogFragment {
     public static final int DIALOG_ACCT_LIST_VIEW_EXPORT_FILE = 6;
     public static final int DIALOG_ACCT_LIST_VIEW_SUGGESTIONS = 7;
     public static final int DIALOG_ACCT_SEARCH_REQUEST = 8;
-
-    private EditText mEditText;
 
     /**
      * The dialogue's callback interface to notify of user selected results (deletion confirmed, etc.).

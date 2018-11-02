@@ -20,7 +20,13 @@
         app:showAsAction="never" />
     <item
         android:id="@+id/vw_filename"
+        android:icon="@drawable/ic_action_document"
         android:orderInCategory="103"
         android:title="Filename"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/vw_shared"
+        android:orderInCategory="104"
+        android:icon="@android:drawable/ic_menu_share"
+        android:title="Share" />
 </menu>

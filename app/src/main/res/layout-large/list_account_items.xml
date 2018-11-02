@@ -28,9 +28,10 @@
         android:id="@+id/tli_acct_id"
         android:layout_width="103dp"
         android:layout_height="28dp"
-        android:layout_marginEnd="8dp"
         android:layout_marginTop="8dp"
-        android:textSize="24sp"
+        android:layout_marginEnd="8dp"
+        android:textAlignment="textEnd"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

@@ -80,18 +80,22 @@
     <string name="home_message_title">List Accounts, Search Accounts, Suggest Passwords</string>
     <string name="home_message_text">
         This app tracks your accounts with sorted lists, search of accounts, edits, exported data, and gives suggestions of 8 or 10 character passwords.
-        \nDo a long click on an account item in the list. This will give option to edit, link to website, delete account, or save corp name or website on the dialog.
-        \nIMPORTANT MESSAGE
-        \nA data db, a file storage, paper file are used with the accounts db. The data db is a abbreviated copy for search functions.
-        The data file is a json file exported from accounts db. Use this for backup or restore data.
-        The paper file has the password id and its password. Keep it separate. From the app, take the account id to look up on the paper file for its password.
+        \nDo a long click on an account item in the list. This presents a dialog to request edit, delete the account, or save corp name change.
+        \nDEFINITION MESSAGE
+        \nThe data db contains accounts with account Id and account info. Use paper to record the db\'s account Id and password you assigned it.
+        To add an account, add on the app, then take the id generated and the new assigned password to write on the paper file.
+        Later when an account it needed, couple account and password by doing a search on the app for the account, then use the id to reference into paper file for the password.
+        The data db is exported thru Menu of \'External Accounts\', then do a Menu for Export. This exported data file is a json file representation of accounts db. Use this for backup.
+        To restore data onto the app db, select Menu Import to rebuild from a previously exported file.
+        The menu also has a selection to have suggestions for passwords. The icon for this search is a key.
         \nIMPORTANT SEARCH MESSAGE
-        \nMenu Search Setting is to rebuild the Search DB.
-        Will need to re-align again if any corp name changes, add of an account,
-        or a delete of an account. If the app see changes that will affect the search db, it will ask if want to rebuild.
-        \n\nKeeping passwords electronically, even if encrypted, may leave you open to have your credentials stolen.
+        \nSearch DB is an abbreviated copy of the data db.
+        Will need to re-align again if data db has any corp name changes, any add of an account, or any delete of an account.
+        If the app see changes, it will rebuild that search db on the next search. User can ask to rebuild that search db thru the menu.
+        \nIMPORTANT SECURITY MESSAGE
+        \nKeeping passwords electronically, even if encrypted, may leave you open to have your credentials stolen.
         Having an electronic copy (from a file or the app&quot;s database) with the credentials of company, user name, and password would highly exposed your accounts to hackers.
-        \nRecommend to copy exported file to Dropbox.
+        \nRecommend to copy exported file to Dropbox OR request a \'External Accounts\' menu share for a share menu, then request option Dropbox.
     </string>
     <string name="home_message_text2">
         \nFor this security reason, the passwords are not saved on a file or database. This app keeps account information excluding passwords. Your action is to manually tie together using the account id from this app to the written list of account id and password value.

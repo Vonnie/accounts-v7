@@ -307,8 +307,7 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
 
             if (holder.acctId != null) {
-                if (accountSortorder == AccountsContract.ACCOUNT_LIST_BY_SEQUENCE
-                        || accountSortorder == AccountsContract.ACCOUNT_LIST_BY_CORP_NAME) {
+                if (accountSortorder == AccountsContract.ACCOUNT_LIST_BY_SEQUENCE) {
                     holder.acctId.setVisibility(View.GONE);
                 } else {
                     holder.acctId.setVisibility(View.VISIBLE);
