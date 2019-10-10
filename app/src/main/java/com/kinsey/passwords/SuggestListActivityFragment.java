@@ -1,5 +1,6 @@
 package com.kinsey.passwords;
 
+import android.arch.lifecycle.AndroidViewModel;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -32,8 +33,9 @@ import static com.kinsey.passwords.MainActivity.SUGGEST_LOADER_ID;
  * A placeholder fragment containing a simple view.
  */
 public class SuggestListActivityFragment extends Fragment
-        implements LoaderManager.LoaderCallbacks<Cursor>,
-        CursorRecyclerViewAdapter.OnSuggestClickListener{
+        implements AndroidViewModel<Cursor>,
+//        LoaderManager.LoaderCallbacks<Cursor>,
+        CursorRecyclerViewAdapter.OnSuggestClickListener {
 
     private static final String TAG = "SuggestListActivityFrag";
 
@@ -51,7 +53,9 @@ public class SuggestListActivityFragment extends Fragment
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
 //        Log.d(TAG, "onActivityCreated: starts loader_id " + LOADER_ID);
         super.onActivityCreated(savedInstanceState);
-        getLoaderManager().initLoader(SUGGEST_LOADER_ID, null, this);
+
+//        getLoaderManager().initLoader(SUGGEST_LOADER_ID, null, this);
+
 //      Trying to use new version approach
         //        LoaderManager.getInstance(this)
     }
@@ -129,7 +133,7 @@ public class SuggestListActivityFragment extends Fragment
         }
         mRecyclerView.setAdapter(mSuggestAdapter);
 
-        getLoaderManager().initLoader(SUGGEST_LOADER_ID, null, this);
+        new LoaderManager().initLoader(SUGGEST_LOADER_ID, null, this);
     }
 
 

@@ -1,6 +1,7 @@
 package com.kinsey.passwords;
 
 import android.app.Activity;
+import android.arch.lifecycle.ViewModelProvider;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -59,6 +60,13 @@ public class SuggestListActivity extends AppCompatActivity
 //            }
 //        });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        JsonViewModel model =
+                ViewModelProvider.of(this).get(JsonViewModel.class);
+        model.getData().observe(this, data -> {
+//            get data
+        });
+
     }
 
     @Override
@@ -97,7 +105,7 @@ public class SuggestListActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-            private void generatePasswords(int passwordLen) {
+    private void generatePasswords(int passwordLen) {
         ContentResolver contentResolver = getContentResolver();
         ContentValues values = new ContentValues();
 

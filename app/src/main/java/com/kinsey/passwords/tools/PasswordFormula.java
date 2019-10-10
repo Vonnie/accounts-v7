@@ -1,5 +1,7 @@
 package com.kinsey.passwords.tools;
 
+import android.util.Log;
+
 import java.util.Locale;
 import java.util.Random;
 
@@ -18,6 +20,8 @@ public class PasswordFormula {
             "Q", "W", "E", "R", "T", "Z", "X", "C", "V"};
     String[] keyRbrd = { "H", "J", "K", "L", "Y",
             "U", "I", "O", "P", "B", "N", "M"};
+    String[] symbols = {"!", "(", ")", "?", "[", "]", "_", "`", "~",
+            ";", ":", "!", "#", "$", "%", "^", "&", "*", "+", "="};
 
     private boolean rightHand = false;
 
@@ -119,11 +123,31 @@ public class PasswordFormula {
 //				+ password.substring(numPlace);
 //		return password.substring(0,8);
         if (passwordLen == 10) {
-            return password;
+            return insertSymbol(password, 9);
         } else {
-            return password.substring(0, 8);
+
+            return insertSymbol(password, 7);
         }
     }
+
+    private String insertSymbol(String password, int maxSub) {
+        String randSym = symbols[myRandom.nextInt(symbols.length-1)];
+        int randSymPos = myRandom.nextInt(maxSub);
+//        Log.d(TAG, "randSym: " + randSym);
+//        Log.d(TAG, "randSymPos: " + randSymPos);
+//        Log.d(TAG, "password: " + password);
+        String newPassword = password.substring(0, randSymPos) +
+                randSym;
+//        Log.d(TAG, "password: " + newPassword);
+
+        if (randSymPos < maxSub) {
+//            Log.d(TAG, "password: " + password.substring(randSymPos, maxSub));
+            newPassword += password.substring(randSymPos, maxSub);
+//            Log.d(TAG, "password: " + newPassword);
+        }
+        return newPassword;
+    }
+
     private String findPrimaryLetter() {
         String aLetter = "";
         int iSize = 0;

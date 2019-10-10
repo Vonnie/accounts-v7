@@ -41,7 +41,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import static com.kinsey.passwords.MainActivity.DEFAULT_APP_DIRECTORY;
 import static com.kinsey.passwords.MainActivity.format_ymdtime;
 
 public class AccountListActivity extends AppCompatActivity
@@ -1438,7 +1437,7 @@ public class AccountListActivity extends AppCompatActivity
 //            } else {
 //                Log.d(TAG, "ExportAccountDB: dir not exists " + fileDir.getAbsoluteFile());
 //            }
-            File file = new File(DEFAULT_APP_DIRECTORY, "accounts.json");
+            File file = new File(MainActivity.DEFAULT_APP_DIRECTORY_DATA, MainActivity.BACKUP_FILENAME);
 //
 ////            if (file.exists()) {
 ////                file.delete();
@@ -1630,7 +1629,7 @@ public class AccountListActivity extends AppCompatActivity
         try {
             List<Account> listAccounts = new ArrayList<Account>();
             JsonReader reader = new JsonReader(new FileReader(
-                    MainActivity.DEFAULT_APP_DIRECTORY + "/accounts.json"));
+                    MainActivity.DEFAULT_APP_DIRECTORY_DATA + "/" + MainActivity.BACKUP_FILENAME));
             // reader.beginObject();
 
             reader.beginArray();

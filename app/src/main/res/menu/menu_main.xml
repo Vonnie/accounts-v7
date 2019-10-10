@@ -41,18 +41,18 @@
         <!--android:title="@string/menu_save"-->
         <!--app:showAsAction="ifRoom" />-->
     <item
+        android:id="@+id/menumain_add"
+        android:icon="@drawable/selector_add"
+        android:orderInCategory="104"
+        android:title="@string/menu_add_account"
+        app:showAsAction="ifRoom" />
+    <item
         android:id="@+id/menumain_about"
         android:icon="@android:drawable/ic_menu_help"
         android:orderInCategory="103"
         android:title="@string/menuacct_about"
         app:showAsAction="ifRoom" />
     <!--android:icon="@android:drawable/ic_menu_info_details"-->
-    <item
-        android:id="@+id/menumain_add"
-        android:icon="@drawable/selector_add"
-        android:orderInCategory="104"
-        android:title="@string/menu_add_account"
-        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/menumain_showSuggests"
         android:icon="@drawable/selector_key"
@@ -116,7 +116,7 @@
     <item
         android:id="@+id/menuacct_external_accts"
         android:orderInCategory="240"
-        android:title="@string/menuacct_external_accts"
+        android:title="@string/menuacct_backup_restore_accts"
         app:showAsAction="ifRoom" />
 
     <item

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.SearchManager;
 import android.app.SearchableInfo;
+import android.arch.lifecycle.ViewModelProvider;
 import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
 import android.content.Context;
@@ -80,8 +81,14 @@ public class MainActivity extends AppCompatActivity
     private boolean mTwoPane = false;
     private Boolean editing = false;
     private static final String ACCOUNT_FRAGMENT = "AccountFragment";
-    public static String DEFAULT_APP_DIRECTORY = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath()
-            + "/Passport";
+
+    public static String DEFAULT_APP_DIRECTORY = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath();
+
+    public static String DEFAULT_APP_DIRECTORY_DATA = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath()
+            + "/passport";
+
+    public static String BACKUP_FILENAME = "accounts.json";
+
     private String feedUrl = "http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topTvEpisodes/xml";
     private int feedLimit = 10;
     private String feedCachedUrl = "INVALIDATED";
@@ -222,6 +229,8 @@ public class MainActivity extends AppCompatActivity
         }
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
 
 //        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 //        String queryResult = sharedPreferences.getString(SELECTION_QUERY, "");

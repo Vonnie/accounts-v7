@@ -52,6 +52,8 @@ public class FileViewActivity extends AppCompatActivity
     ProgressBar progressBar;
     private Handler mHandler = new Handler();
     private ShareActionProvider myShareActionProvider;
+    File dirStorage = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath());
+    Menu menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +84,9 @@ public class FileViewActivity extends AppCompatActivity
 //            }
 //        });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
+
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         fvFragment = (FileViewActivityFragment) fragmentManager.findFragmentById(R.id.json_fragment);
@@ -134,7 +139,33 @@ public class FileViewActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+//        this.menu = menu;
+
         getMenuInflater().inflate(R.menu.menu_file_view, menu);
+
+        MenuItem item;
+        Log.d(TAG, "can read: " + dirStorage.canRead());
+        if (dirStorage.canRead()) {
+            item = menu.findItem(R.id.vw_show_file);
+            item.setEnabled(true);
+            item = menu.findItem(R.id.vw_export);
+            item.setEnabled(true);
+            item = menu.findItem(R.id.vw_import);
+            item.setEnabled(true);
+            item = menu.findItem(R.id.vw_shared);
+            item.setEnabled(true);
+        } else {
+            item = menu.findItem(R.id.vw_show_file);
+            item.setEnabled(false);
+            item = menu.findItem(R.id.vw_export);
+            item.setEnabled(false);
+            item = menu.findItem(R.id.vw_import);
+            item.setEnabled(false);
+            item = menu.findItem(R.id.vw_shared);
+            item.setEnabled(false);
+        }
+
+
 
 
 //        getMenuInflater().inflate(R.menu.share_menu, menu);
@@ -152,6 +183,8 @@ public class FileViewActivity extends AppCompatActivity
         return true;
     }
 
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -163,6 +196,11 @@ public class FileViewActivity extends AppCompatActivity
         switch (id) {
             case R.id.action_settings:
                 Log.d(TAG, "onOptionsItemSelected: ");
+                break;
+
+            case R.id.vw_show_file:
+                Log.d(TAG, "onOptionsItemSelected: Export");
+                fvFragment.reportFile();
                 break;
 
             case R.id.vw_export:
@@ -213,13 +251,13 @@ public class FileViewActivity extends AppCompatActivity
     }
 
     private void showFilename() {
-        Log.d(TAG, "showFilename: " + MainActivity.DEFAULT_APP_DIRECTORY + "/accounts.json");
+        Log.d(TAG, "showFilename: " + MainActivity.DEFAULT_APP_DIRECTORY_DATA + "/" + MainActivity.BACKUP_FILENAME);
         AppDialog dialog = new AppDialog();
         Bundle args = new Bundle();
         args.putInt(AppDialog.DIALOG_ID, AppDialog.DIALOG_ID_EXPORT_FILENAME);
         args.putInt(AppDialog.DIALOG_TYPE, AppDialog.DIALOG_OK);
         args.putString(AppDialog.DIALOG_MESSAGE, getString(R.string.confirmdiag_export_filename));
-        args.putString(AppDialog.DIALOG_SUB_MESSAGE, MainActivity.DEFAULT_APP_DIRECTORY + "/accounts.json");
+        args.putString(AppDialog.DIALOG_SUB_MESSAGE, MainActivity.DEFAULT_APP_DIRECTORY_DATA + "/" + MainActivity.BACKUP_FILENAME);
         args.putInt(AppDialog.DIALOG_POSITIVE_RID, R.string.ok);
 
         dialog.setArguments(args);
@@ -267,8 +305,8 @@ public class FileViewActivity extends AppCompatActivity
         emailintent.setType("text/html");
 
 
-        File file = new File(MainActivity.DEFAULT_APP_DIRECTORY,
-                "/accounts.json");
+        File file = new File(MainActivity.DEFAULT_APP_DIRECTORY_DATA,
+                MainActivity.BACKUP_FILENAME);
         if (!file.exists()) {
             Toast.makeText(FileViewActivity.this,
                     "File not exported to email",
@@ -394,7 +432,7 @@ public class FileViewActivity extends AppCompatActivity
 //        File file = new File(DEFAULT_APP_DIRECTORY, "accounts.json");
 
         Log.d(TAG, "ExportAccountDB: " + path2.getAbsoluteFile());
-        File file = new File(path2, "accounts.json");
+        File file = new File(path2, MainActivity.BACKUP_FILENAME);
         Log.d(TAG, "ExportAccountDB: " + file.getAbsoluteFile());
 
         if (file.exists()) {
@@ -610,13 +648,14 @@ public class FileViewActivity extends AppCompatActivity
                 try {
                     List<Account> listAccounts = new ArrayList<Account>();
 
-                    File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-                    File path2 = new File(path, "passport");
+//                    File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+                    File path = new File(MainActivity.DEFAULT_APP_DIRECTORY_DATA);
+//                    File path2 = new File(path, "passport");
 
-                    Log.d(TAG, "run: path2 " + path2.getAbsoluteFile());
+                    Log.d(TAG, "run: path " + path.getAbsoluteFile());
 
                     final JsonReader reader = new JsonReader(new FileReader(
-                            path2.getAbsoluteFile() + "/accounts.json"));
+                            path.getAbsoluteFile() + "/" + MainActivity.BACKUP_FILENAME));
                     // reader.beginObject();
 
 
@@ -630,7 +669,9 @@ public class FileViewActivity extends AppCompatActivity
 //                    Log.d(TAG, "run: begin to read from file");
                     reader.beginArray();
                     while (reader.hasNext()) {
-                        Account account = readMessage(reader);
+//                        Account account = readMessage(reader);
+                        Account account = fvFragment.readMessage(reader);
+
                         if (account == null) {
                             break;
                         } else {
@@ -752,89 +793,89 @@ public class FileViewActivity extends AppCompatActivity
 
             }
 
-            final private Account readMessage(JsonReader reader) {
-                Account item = new Account();
-                boolean retSuccess = true;
-                try {
-                    reader.beginObject();
-                    Calendar c1 = Calendar.getInstance();
-                    while (reader.hasNext()) {
-                        String name = reader.nextName();
-                        String value = "";
-                        int iValue = 0;
-                        if (name.equals("corpName")) {
-                            // System.out.println(reader.nextString());
-                            value = reader.nextString();
-//					Log.v(TAG, "json corpName " + value);
-                            item.setCorpName(value);
-                        } else if (name.equals("accountId")) {
-                            // System.out.println(reader.nextInt());
-                            iValue = reader.nextInt();
-                            Log.v(TAG, "json id " + iValue);
-                            item.setPassportId(iValue);
-                        } else if (name.equals("seq")) {
-                            // System.out.println(reader.nextInt());
-                            iValue = reader.nextInt();
-//					Log.v(TAG, "json seq " + iValue);
-                            item.setSequence(iValue);
-                        } else if (name.equals("userName")) {
-                            value = reader.nextString();
-//					Log.v(TAG, "json userName " + value);
-                            item.setUserName(value);
-                        } else if (name.equals("userEmail")) {
-                            value = reader.nextString();
-//					Log.v(TAG, "json userEmail " + value);
-                            item.setUserEmail(value);
-                        } else if (name.equals("refFrom")) {
-                            iValue = reader.nextInt();
-//					Log.v(TAG, "json refFrom " + iValue);
-                            item.setRefFrom(iValue);
-                        } else if (name.equals("refTo")) {
-                            iValue = reader.nextInt();
-//					Log.v(TAG, "json refTo " + iValue);
-                            item.setRefTo(iValue);
-                        } else if (name.equals("website")) {
-                            value = reader.nextString();
-//					Log.v(TAG, "json website " + value);
-//                    URL urlValue = new URL(value);
-//                    item.setCorpWebsite(urlValue);
-                            item.setCorpWebsite(value);
-                        } else if (name.equals("openDt")) {
-                            value = reader.nextString();
-//					Log.v(TAG, "json openDt " + value);
-                            Date dte = format_ymdtime.parse(value);
-                            c1.setTime(dte);
-                            item.setOpenLong(c1.getTimeInMillis());
-                        } else if (name.equals("actvyDt")) {
-//					Log.v(TAG, "actvyDt reader " + reader);
-                            Date dte;
-                            if (reader.peek() == JsonToken.NULL) {
-                                reader.nextNull();
-                                dte = new Date();
-                            } else {
-                                value = reader.nextString();
-//						Log.v(TAG, "json actvyDt " + value);
-                                dte = format_ymdtime.parse(value);
-                            }
-                            c1.setTime(dte);
-                            item.setActvyLong(c1.getTimeInMillis());
-                        } else if (name.equals("note")) {
-                            value = reader.nextString();
-                            item.setNote(value);
-                        } else {
-                            reader.skipValue(); // avoid some unhandle events
-                        }
-                    }
-
-                    reader.endObject();
-
-                } catch (Exception e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                    item = null;
-                }
-                return item;
-            }
+//            final private Account readMessage(JsonReader reader) {
+//                Account item = new Account();
+//                boolean retSuccess = true;
+//                try {
+//                    reader.beginObject();
+//                    Calendar c1 = Calendar.getInstance();
+//                    while (reader.hasNext()) {
+//                        String name = reader.nextName();
+//                        String value = "";
+//                        int iValue = 0;
+//                        if (name.equals("corpName")) {
+//                            // System.out.println(reader.nextString());
+//                            value = reader.nextString();
+////					Log.v(TAG, "json corpName " + value);
+//                            item.setCorpName(value);
+//                        } else if (name.equals("accountId")) {
+//                            // System.out.println(reader.nextInt());
+//                            iValue = reader.nextInt();
+//                            Log.v(TAG, "json id " + iValue);
+//                            item.setPassportId(iValue);
+//                        } else if (name.equals("seq")) {
+//                            // System.out.println(reader.nextInt());
+//                            iValue = reader.nextInt();
+////					Log.v(TAG, "json seq " + iValue);
+//                            item.setSequence(iValue);
+//                        } else if (name.equals("userName")) {
+//                            value = reader.nextString();
+////					Log.v(TAG, "json userName " + value);
+//                            item.setUserName(value);
+//                        } else if (name.equals("userEmail")) {
+//                            value = reader.nextString();
+////					Log.v(TAG, "json userEmail " + value);
+//                            item.setUserEmail(value);
+//                        } else if (name.equals("refFrom")) {
+//                            iValue = reader.nextInt();
+////					Log.v(TAG, "json refFrom " + iValue);
+//                            item.setRefFrom(iValue);
+//                        } else if (name.equals("refTo")) {
+//                            iValue = reader.nextInt();
+////					Log.v(TAG, "json refTo " + iValue);
+//                            item.setRefTo(iValue);
+//                        } else if (name.equals("website")) {
+//                            value = reader.nextString();
+////					Log.v(TAG, "json website " + value);
+////                    URL urlValue = new URL(value);
+////                    item.setCorpWebsite(urlValue);
+//                            item.setCorpWebsite(value);
+//                        } else if (name.equals("openDt")) {
+//                            value = reader.nextString();
+////					Log.v(TAG, "json openDt " + value);
+//                            Date dte = format_ymdtime.parse(value);
+//                            c1.setTime(dte);
+//                            item.setOpenLong(c1.getTimeInMillis());
+//                        } else if (name.equals("actvyDt")) {
+////					Log.v(TAG, "actvyDt reader " + reader);
+//                            Date dte;
+//                            if (reader.peek() == JsonToken.NULL) {
+//                                reader.nextNull();
+//                                dte = new Date();
+//                            } else {
+//                                value = reader.nextString();
+////						Log.v(TAG, "json actvyDt " + value);
+//                                dte = format_ymdtime.parse(value);
+//                            }
+//                            c1.setTime(dte);
+//                            item.setActvyLong(c1.getTimeInMillis());
+//                        } else if (name.equals("note")) {
+//                            value = reader.nextString();
+//                            item.setNote(value);
+//                        } else {
+//                            reader.skipValue(); // avoid some unhandle events
+//                        }
+//                    }
+//
+//                    reader.endObject();
+//
+//                } catch (Exception e) {
+//                    // TODO Auto-generated catch block
+//                    e.printStackTrace();
+//                    item = null;
+//                }
+//                return item;
+//            }
 
 
             public int writeMessagesArray(JsonWriter writer) throws IOException {
@@ -853,7 +894,7 @@ public class FileViewActivity extends AppCompatActivity
                 } catch (Exception e2) {
                     e2.printStackTrace();
                     System.out.println(e2.getMessage());
-                    Log.v(TAG, "writeMessageArrayError: " + e2.getMessage());
+                    Log.e(TAG, "writeMessageArrayError: " + e2.getMessage());
                 }
                 return count;
             }

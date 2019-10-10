@@ -9,6 +9,11 @@
         <!--app:showAsAction="ifRoom"-->
         <!--app:actionProviderClass="android.support.v7.widget.ShareActionProvider" />-->
     <item
+        android:id="@+id/vw_show_file"
+        android:orderInCategory="101"
+        android:title="@string/menuvw_show_file"
+        app:showAsAction="never" />
+    <item
         android:id="@+id/vw_import"
         android:orderInCategory="101"
         android:title="@string/menuvw_import"
