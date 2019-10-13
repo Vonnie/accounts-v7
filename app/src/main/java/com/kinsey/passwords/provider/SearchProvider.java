@@ -10,7 +10,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.net.Uri;
 import android.provider.BaseColumns;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.util.Log;
 
 /**

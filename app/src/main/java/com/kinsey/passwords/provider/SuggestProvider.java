@@ -7,13 +7,13 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import com.kinsey.passwords.items.AccountsContract;
 import com.kinsey.passwords.items.SuggestsContract;
 
 import static com.kinsey.passwords.items.SuggestsContract.Columns.SEQUENCE_COL;
-import static com.kinsey.passwords.provider.SuggestDatabase.DATABASE_NAME;
+import static com.kinsey.passwords.provider.SuggestDatabaseV1.DATABASE_NAME;
 
 /**
  * Created by Yvonne on 2/18/2017.
@@ -22,7 +22,7 @@ import static com.kinsey.passwords.provider.SuggestDatabase.DATABASE_NAME;
 public class SuggestProvider extends ContentProvider {
     private static final String TAG = "SuggestProvider";
 
-    private SuggestDatabase mOpenHelper;
+    private SuggestDatabaseV1 mOpenHelper;
 
     private static final UriMatcher sUriMatcher = buildUriMatcher();
 
@@ -39,9 +39,9 @@ public class SuggestProvider extends ContentProvider {
     private static UriMatcher buildUriMatcher() {
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
 
-        matcher.addURI(AUTHORITY, SuggestDatabase.DATABASE_NAME, BOOK);
-        matcher.addURI(AUTHORITY, SuggestDatabase.DATABASE_NAME + "/#", ROW_ID);
-        matcher.addURI(AUTHORITY, SuggestDatabase.DATABASE_NAME + "/maxvalue", MAX_SEQUENCE_VALUE);
+        matcher.addURI(AUTHORITY, SuggestDatabaseV1.DATABASE_NAME, BOOK);
+        matcher.addURI(AUTHORITY, SuggestDatabaseV1.DATABASE_NAME + "/#", ROW_ID);
+        matcher.addURI(AUTHORITY, SuggestDatabaseV1.DATABASE_NAME + "/maxvalue", MAX_SEQUENCE_VALUE);
 
         return matcher;
     }
@@ -49,7 +49,7 @@ public class SuggestProvider extends ContentProvider {
     @Override
     public boolean onCreate() {
 //        Log.d(TAG, "onCreate: starts");
-        mOpenHelper = SuggestDatabase.getInstance(getContext());
+        mOpenHelper = SuggestDatabaseV1.getInstance(getContext());
         return true;
     }
 

@@ -3,8 +3,8 @@ package com.kinsey.passwords;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Environment;
-import android.support.v4.app.Fragment;
+
+import androidx.fragment.app.Fragment;
 import android.util.JsonReader;
 import android.util.JsonToken;
 import android.util.Log;
@@ -17,7 +17,6 @@ import android.webkit.WebViewClient;
 import com.kinsey.passwords.items.Account;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;

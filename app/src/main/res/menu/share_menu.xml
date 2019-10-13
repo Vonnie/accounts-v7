@@ -5,6 +5,6 @@
         android:id="@+id/menu_item_share"
         android:title="Share"
         app:showAsAction="ifRoom|collapseActionView"
-        app:actionProviderClass="android.support.v7.widget.ShareActionProvider" />
+        app:actionProviderClass="androidx.appcompat.widget.ShareActionProvider" />
 
 </menu>

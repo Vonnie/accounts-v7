@@ -1,8 +1,10 @@
 package com.kinsey.passwords.provider;
 
+//import android.support.v7.widget.RecyclerView;
+
 import android.database.Cursor;
 import android.graphics.Color;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +18,7 @@ import com.kinsey.passwords.items.SuggestsContract;
 
 //import static com.kinsey.passwords.AccountListActivity.account;
 //import static com.kinsey.passwords.AccountListActivity.accountSelectedPos;
-//import static com.kinsey.passwords.SuggestListActivity.suggestSelectedPos;
+//import static com.kinsey.passwords.SuggestListActivityV1.suggestSelectedPos;
 
 /**
  * Created by Yvonne on 2/21/2017.
@@ -73,9 +75,11 @@ public class CursorRecyclerViewAdapter extends RecyclerView.Adapter<CursorRecycl
                 throw new IllegalStateException("Couldn't move cursor to position " + position);
             }
 
-            final Suggest suggest = new Suggest(mCursor.getInt(mCursor.getColumnIndex(SuggestsContract.Columns._ID_COL)),
+            final Suggest suggest = new Suggest(
+//                    mCursor.getInt(mCursor.getColumnIndex(SuggestsContract.Columns._ID_COL)),
                     mCursor.getString(mCursor.getColumnIndex(SuggestsContract.Columns.PASSWORD_COL)),
-                    mCursor.getInt(mCursor.getColumnIndex(SuggestsContract.Columns.SEQUENCE_COL)));
+                    mCursor.getInt(mCursor.getColumnIndex(SuggestsContract.Columns.SEQUENCE_COL)),
+                    mCursor.getString(mCursor.getColumnIndex(SuggestsContract.Columns.NOTE_COL)));
 
             Log.d(TAG, "onBindViewHolder: " + mCursor.getString(mCursor.getColumnIndex(SuggestsContract.Columns.PASSWORD_COL)));
             holder.password.setText(mCursor.getString(mCursor.getColumnIndex(SuggestsContract.Columns.PASSWORD_COL)));

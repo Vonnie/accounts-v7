@@ -1,6 +1,6 @@
 package com.kinsey.passwords.items;
 
-interface User {
+public interface User {
     String userId = "";
     String userName = "";
     String defaultUserId = "";

@@ -16,12 +16,12 @@
     <item
         android:id="@+id/vw_import"
         android:orderInCategory="101"
-        android:title="@string/menuvw_import"
+        android:title="@string/menuvw_retore"
         app:showAsAction="never" />
     <item
         android:id="@+id/vw_export"
         android:orderInCategory="102"
-        android:title="@string/menuvw_export"
+        android:title="@string/menuvw_backup"
         app:showAsAction="never" />
     <item
         android:id="@+id/vw_filename"

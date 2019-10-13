@@ -6,11 +6,11 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.viewpager.widget.ViewPager;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.util.JsonReader;
 import android.util.JsonToken;
 import android.util.JsonWriter;
@@ -2689,7 +2689,7 @@ public class AccountListActivity extends AppCompatActivity
 
     private void suggestPasswordList() {
         mActivityStart = true;
-        Intent detailIntent = new Intent(this, SuggestListActivity.class);
+        Intent detailIntent = new Intent(this, SuggestListActivityV1.class);
         detailIntent.putExtra(Suggest.class.getSimpleName(), "sortorder");
 //        startActivity(detailIntent);
         startActivityForResult(detailIntent, AccountsContract.ACCOUNT_ACTION_SUGGESTIONS);

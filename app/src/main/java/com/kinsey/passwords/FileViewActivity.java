@@ -11,12 +11,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.ShareActionProvider;
-import android.support.v7.widget.Toolbar;
+import androidx.fragment.app.FragmentManager;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.ShareActionProvider;
+import androidx.appcompat.widget.Toolbar;
 import android.util.JsonReader;
-import android.util.JsonToken;
 import android.util.JsonWriter;
 import android.util.Log;
 import android.view.Menu;
@@ -35,8 +34,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import static com.kinsey.passwords.MainActivity.format_ymdtime;
@@ -58,11 +55,12 @@ public class FileViewActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_suggest_list);
+//        setContentView(R.layout.activity_suggest_listV1);
         setContentView(R.layout.activity_file_view);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setLogo(R.mipmap.ic_launcher);
+//        getSupportActionBar().setLogo(R.mipmap.ic_launcher);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close);
 
         progressBar = findViewById(R.id.progressBar);
         progressBar.setVisibility(View.VISIBLE);
@@ -83,6 +81,9 @@ public class FileViewActivity extends AppCompatActivity
 //                                ).show();
 //            }
 //        });
+
+
+//        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 

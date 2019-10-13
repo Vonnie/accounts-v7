@@ -4,7 +4,7 @@ import android.content.ContentUris;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
-import com.kinsey.passwords.provider.SuggestDatabase;
+import com.kinsey.passwords.provider.SuggestDatabaseV1;
 import com.kinsey.passwords.provider.SuggestProvider;
 
 /**
@@ -36,7 +36,7 @@ public class SuggestsContract {
      *  The URI to access the Tasks table
      */
 //    public static final Uri CONTENT_URI = Uri.withAppendedPath(SuggestProvider.CONTENT_AUTHORITY_URI, TABLE_NAME);
-    public static final Uri CONTENT_URI = Uri.withAppendedPath(SuggestProvider.CONTENT_AUTHORITY_URI, SuggestDatabase.DATABASE_NAME);
+    public static final Uri CONTENT_URI = Uri.withAppendedPath(SuggestProvider.CONTENT_AUTHORITY_URI, SuggestDatabaseV1.DATABASE_NAME);
     public static final Uri CONTENT_MAX_VALUE_URI = Uri.withAppendedPath(CONTENT_URI, "maxvalue");
 
     //    public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.kinsey.passport";

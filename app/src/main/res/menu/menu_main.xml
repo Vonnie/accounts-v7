@@ -43,13 +43,13 @@
     <item
         android:id="@+id/menumain_add"
         android:icon="@drawable/selector_add"
-        android:orderInCategory="104"
+        android:orderInCategory="103"
         android:title="@string/menu_add_account"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/menumain_about"
         android:icon="@android:drawable/ic_menu_help"
-        android:orderInCategory="103"
+        android:orderInCategory="104"
         android:title="@string/menuacct_about"
         app:showAsAction="ifRoom" />
     <!--android:icon="@android:drawable/ic_menu_info_details"-->
@@ -58,6 +58,12 @@
         android:icon="@drawable/selector_key"
         android:orderInCategory="119"
         android:title="@string/menu_suggests"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/menumain_showSuggestsV1"
+        android:icon="@drawable/selector_key"
+        android:orderInCategory="120"
+        android:title="@string/menu_suggests_v1"
         app:showAsAction="ifRoom" />
     <!--<group-->
         <!--android:id="@+id/group_rss"-->

@@ -1,18 +1,18 @@
 package com.kinsey.passwords;
 
-import android.arch.lifecycle.AndroidViewModel;
+import androidx.lifecycle.AndroidViewModel;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.CursorLoader;
+import androidx.loader.content.Loader;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,8 +33,9 @@ import static com.kinsey.passwords.MainActivity.SUGGEST_LOADER_ID;
  * A placeholder fragment containing a simple view.
  */
 public class SuggestListActivityFragment extends Fragment
-        implements AndroidViewModel<Cursor>,
-//        LoaderManager.LoaderCallbacks<Cursor>,
+        implements
+//        AndroidViewModel<Cursor>,
+        LoaderManager.LoaderCallbacks<Cursor>,
         CursorRecyclerViewAdapter.OnSuggestClickListener {
 
     private static final String TAG = "SuggestListActivityFrag";
@@ -54,7 +55,7 @@ public class SuggestListActivityFragment extends Fragment
 //        Log.d(TAG, "onActivityCreated: starts loader_id " + LOADER_ID);
         super.onActivityCreated(savedInstanceState);
 
-//        getLoaderManager().initLoader(SUGGEST_LOADER_ID, null, this);
+        getLoaderManager().initLoader(SUGGEST_LOADER_ID, null, this);
 
 //      Trying to use new version approach
         //        LoaderManager.getInstance(this)
@@ -133,7 +134,7 @@ public class SuggestListActivityFragment extends Fragment
         }
         mRecyclerView.setAdapter(mSuggestAdapter);
 
-        new LoaderManager().initLoader(SUGGEST_LOADER_ID, null, this);
+        getLoaderManager().initLoader(SUGGEST_LOADER_ID, null, this);
     }
 
 
@@ -186,9 +187,10 @@ public class SuggestListActivityFragment extends Fragment
 //                Log.d(TAG, "loadPasswords: seq " + cursor.getInt(cursor.getColumnIndex(SuggestsContract.Columns.SEQUENCE_COL))
 //                        + ":" + cursor.getString(cursor.getColumnIndex(SuggestsContract.Columns.PASSWORD_COL)));
                 Suggest item = new Suggest(
-                        cursor.getInt(cursor.getColumnIndex(SuggestsContract.Columns._ID_COL)),
+//                        cursor.getInt(cursor.getColumnIndex(SuggestsContract.Columns._ID_COL)),
                         cursor.getString(cursor.getColumnIndex(SuggestsContract.Columns.PASSWORD_COL)),
-                        cursor.getInt(cursor.getColumnIndex(SuggestsContract.Columns.SEQUENCE_COL)));
+                        cursor.getInt(cursor.getColumnIndex(SuggestsContract.Columns.SEQUENCE_COL)),
+                        cursor.getString(cursor.getColumnIndex(SuggestsContract.Columns.NOTE_COL)));
                 item.setNewSequence(cursor.getInt(cursor.getColumnIndex(SuggestsContract.Columns.SEQUENCE_COL)));
                 listSuggests.add(item);
             }

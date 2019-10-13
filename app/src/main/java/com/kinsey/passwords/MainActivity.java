@@ -1,10 +1,17 @@
 package com.kinsey.passwords;
 
+//import android.support.v4.app.DialogFragment;
+//import android.support.v4.app.Fragment;
+//import android.support.v4.app.FragmentManager;
+//import android.support.v7.app.AlertDialog;
+//import android.support.v7.app.AppCompatActivity;
+//import android.support.v7.widget.Toolbar;
+
+
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.SearchManager;
 import android.app.SearchableInfo;
-import android.arch.lifecycle.ViewModelProvider;
 import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
 import android.content.Context;
@@ -18,12 +25,12 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.preference.PreferenceManager;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -37,6 +44,7 @@ import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.kinsey.passwords.items.Account;
 import com.kinsey.passwords.items.AccountsContract;
 import com.kinsey.passwords.items.SearchesContract;
@@ -191,6 +199,15 @@ public class MainActivity extends AppCompatActivity
 //        downloadUrl("http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topfreeapplications/limit=10/xml");
 //        downloadUrl(feedUrl);
 
+
+        FloatingActionButton buttonAddNote = findViewById(R.id.button_add_account);
+        buttonAddNote.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                acctEditRequest(-1);
+            }
+        });
+
         FragmentManager fragmentManager = getSupportFragmentManager();
         // If the AddEditActivity fragment exists, we're editing
         editing = fragmentManager.findFragmentById(R.id.task_details_container) != null;
@@ -228,8 +245,8 @@ public class MainActivity extends AppCompatActivity
             Log.d(TAG, "onCreate: activated " + mSearchView.isActivated());
         }
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close);
 
 
 //        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -330,7 +347,7 @@ public class MainActivity extends AppCompatActivity
 ////        AccountDatabase accountDatabase = AccountDatabase.getInstance(this);
 ////        final SQLiteDatabase db = accountDatabase.getReadableDatabase();
 //
-//        SuggestDatabase suggestDatabase = SuggestDatabase.getInstance(this);
+//        SuggestDatabaseV1 suggestDatabase = SuggestDatabaseV1.getInstance(this);
 //        final SQLiteDatabase dbSuggest = suggestDatabase.getReadableDatabase();
 
 
@@ -648,6 +665,10 @@ public class MainActivity extends AppCompatActivity
 //                break;
 
             case R.id.menumain_showSuggests:
+                suggestsListRequest4();
+                break;
+
+            case R.id.menumain_showSuggestsV1:
                 suggestsListRequest2();
                 break;
 
@@ -1887,7 +1908,7 @@ public class MainActivity extends AppCompatActivity
         } else {
         }
 
-        Intent detailIntent = new Intent(this, SuggestListActivity.class);
+        Intent detailIntent = new Intent(this, SuggestListActivityV1.class);
         detailIntent.putExtra(Suggest.class.getSimpleName(), "sortorder");
         startActivity(detailIntent);
 
@@ -1901,6 +1922,19 @@ public class MainActivity extends AppCompatActivity
 //        getSupportFragmentManager().beginTransaction()
 //                .replace(R.id.fragmentMain, fragment)
 //                .commit();
+
+    }
+
+    private void suggestsListRequest4() {
+        Log.d(TAG, "suggestsListRequest3: starts");
+        currFrag = AppFragType.PASSWORDS;
+        if (mTwoPane) {
+        } else {
+        }
+
+        Intent detailIntent = new Intent(this, SuggestListActivity.class);
+        detailIntent.putExtra(Suggest.class.getSimpleName(), "sortorder");
+        startActivity(detailIntent);
 
     }
 
@@ -2177,7 +2211,7 @@ public class MainActivity extends AppCompatActivity
                     }
                 });
             }
-        }).start();;
+        }).start();
 
 //        String queryResult = sharedPreferences.getString(SELECTION_QUERY, "");
 //
