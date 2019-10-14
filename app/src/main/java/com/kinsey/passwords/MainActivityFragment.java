@@ -3,6 +3,9 @@ package com.kinsey.passwords;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +23,10 @@ public class MainActivityFragment extends Fragment {
 //    public static final int LOADER_ACCOUNTS_ID = 1;
 
     public static final String BUNDLE_TABLE_ID = "TABLE_ID";
+
+    RecyclerView recyclerView;
+    GridLayoutManager layoutManager;
+
 
 //    private CursorRecyclerViewAdapter mSuggestAdapter; // add adapter reference
 //    private AccountRecyclerViewAdapter mAccountAdapter; // add adapter reference
@@ -54,7 +61,16 @@ public class MainActivityFragment extends Fragment {
                              Bundle savedInstanceState) {
 //        Log.d(TAG, "onCreateView: starts");
 //        View view = inflater.inflate(R.layout.fragment_main, container, false);
-        View view = inflater.inflate(R.layout.fragment_account_list, container, false);
+//        View view = inflater.inflate(R.layout.fragment_account_list, container, false);
+        recyclerView = (RecyclerView) inflater.inflate(R.layout.fragment_account_list, container, false);
+
+        layoutManager = new GridLayoutManager(getContext(), 2);
+
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(layoutManager);
+
+
+
 
 //        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.items_list);
 //        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
