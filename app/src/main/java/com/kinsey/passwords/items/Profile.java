@@ -5,7 +5,7 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "Password")
+@Entity(tableName = "Passport")
 public class Profile {
 
     @PrimaryKey(autoGenerate = true)
@@ -61,6 +61,54 @@ public class Profile {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public void setPassportId(int passportId) {
+        this.passportId = passportId;
+    }
+
+    public void setSequence(int sequence) {
+        this.sequence = sequence;
+    }
+
+    public void setCorpName(String corpName) {
+        this.corpName = corpName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
+
+    public void setOpenLong(long openLong) {
+        this.openLong = openLong;
+    }
+
+    public void setActvyLong(long actvyLong) {
+        this.actvyLong = actvyLong;
+    }
+
+    public void setCorpWebsite(String corpWebsite) {
+        this.corpWebsite = corpWebsite;
+    }
+
+    public void setRefFrom(int refFrom) {
+        this.refFrom = refFrom;
+    }
+
+    public void setRefTo(int refTo) {
+        this.refTo = refTo;
+    }
+
+    public void setNewSequence(int newSequence) {
+        this.newSequence = newSequence;
     }
 
     public int getId() {

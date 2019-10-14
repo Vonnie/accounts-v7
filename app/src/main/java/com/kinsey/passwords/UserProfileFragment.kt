@@ -1,11 +1,10 @@
 package com.kinsey.passwords
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.kinsey.passwords.items.UserProfileViewModel
+import com.kinsey.passwords.provider.UserProfileViewModel
 
 class UserProfileFragment : androidx.fragment.app.Fragment() {
 

@@ -13,6 +13,7 @@ import androidx.loader.app.LoaderManager;
 import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
 import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
@@ -54,6 +55,8 @@ public class AccountListActivityFragment extends Fragment
     private String queryCorp = "";
     StaggeredGridLayoutManager gridLayoutManager =
             new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+
+    GridLayoutManager layoutManager;
 
 //    Loader<Cursor> loader;
 
@@ -173,6 +176,12 @@ public class AccountListActivityFragment extends Fragment
 //            mRecyclerView.setAdapter(mAccountAdapter);
 //        }
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        layoutManager = new GridLayoutManager(getContext(), 2);
+
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setLayoutManager(layoutManager);
+
 
 //        twCurrentTitle = (TextView) view.findViewById(R.id.current_title);
 //        Bundle arguments = getActivity().getIntent().getExtras();

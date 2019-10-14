@@ -1,4 +1,4 @@
-package com.kinsey.passwords.items;
+package com.kinsey.passwords.provider;
 
 import android.app.Application;
 
@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
+import com.kinsey.passwords.items.Suggest;
 import com.kinsey.passwords.provider.SuggestRepository;
 
 import java.util.List;

@@ -14,14 +14,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.kinsey.passwords.items.Suggest;
-import com.kinsey.passwords.items.SuggestViewModel;
+import com.kinsey.passwords.provider.SuggestViewModel;
 import com.kinsey.passwords.provider.SuggestAdapter;
 
 import java.util.List;

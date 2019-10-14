@@ -275,7 +275,9 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                 if (accountSortorder == AccountsContract.ACCOUNT_LIST_BY_SEQUENCE) {
                     holder.user_name.setVisibility(View.GONE);
                 } else if (accountSortorder == AccountsContract.ACCOUNT_LIST_BY_CORP_NAME) {
-                    holder.user_name.setVisibility(View.GONE);
+//                    holder.user_name.setVisibility(View.GONE);
+                    holder.user_name.setVisibility(View.VISIBLE);
+                    holder.user_name.setText(account.getUserName());
 //                } else if (!holder.corp_name.getTag().equals(mContext.getString(R.string.tag_xlarge)) &&
 //                        !holder.corp_name.getTag().equals(mContext.getString(R.string.tag_large)) &&
 //                        (accountSortorder == AccountsContract.ACCOUNT_LIST_BY_CORP_NAME ||
@@ -546,7 +548,7 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         switch (accountSortorder) {
             case AccountsContract.ACCOUNT_LIST_BY_CORP_NAME:
 //                Log.d(TAG, "onCreateViewHolder: list by corp name");
-                return R.layout.list_account_items;
+                return R.layout.profile_item;
             case AccountsContract.ACCOUNT_LIST_BY_OPEN_DATE:
 //                Log.d(TAG, "onCreateViewHolder: list by open date");
                 return R.layout.list_account_items_open_date;

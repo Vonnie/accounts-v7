@@ -31,6 +31,9 @@ import androidx.fragment.app.FragmentManager;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -47,14 +50,18 @@ import android.widget.Toast;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.kinsey.passwords.items.Account;
 import com.kinsey.passwords.items.AccountsContract;
+import com.kinsey.passwords.items.Profile;
 import com.kinsey.passwords.items.SearchesContract;
 import com.kinsey.passwords.items.Suggest;
 import com.kinsey.passwords.provider.DatePickerFragment;
+import com.kinsey.passwords.provider.ProfileViewModel;
+import com.kinsey.passwords.provider.SuggestViewModel;
 import com.kinsey.passwords.tools.AppDialog;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.Locale;
 
 //import static com.kinsey.passwords.SearchActivity.SEARCH_ACCOUNT;
@@ -145,12 +152,17 @@ public class MainActivity extends AppCompatActivity
     View mainFragment;
 
 
+    private ProfileViewModel profileViewModel;
+
     //    private AccountListActivityFragment fragList;
 //    private static AccountPlaceholderFrag1 frag1;
 //    private static AccountPlaceholderFrag2 frag2;
 //    private static AccountPlaceholderFrag3 frag3;
 
     private SearchView mSearchView;
+
+    public MainActivity() {
+    }
 
 
     private enum ListHomeType {
@@ -184,6 +196,19 @@ public class MainActivity extends AppCompatActivity
 //        getSupportActionBar().setTitle(getString(R.string.app_name_corpname));
 
 //        Log.d(TAG, "onCreate: layout activity_main");
+
+
+        profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
+
+        profileViewModel.getAllProfiles().observe(this, new Observer<List<Profile>>() {
+            @Override
+            public void onChanged(List<Profile> profiles) {
+                //update RecyclerView
+                Toast.makeText(MainActivity.this, "onChanged", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
 
         mTwoPane = (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE);
 //        Log.d(TAG, "onCreate: twoPane is " + mTwoPane);

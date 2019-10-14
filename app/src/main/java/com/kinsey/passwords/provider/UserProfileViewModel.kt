@@ -1,8 +1,9 @@
-package com.kinsey.passwords.items
+package com.kinsey.passwords.provider
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import com.kinsey.passwords.items.User
 
 
 class UserProfileViewModel(
@@ -17,7 +18,7 @@ class UserProfileViewModel(
 //        get() = TODO()
 
     fun loadData() {
-        val id = this.savedStateHandle["id"] ?: "default"
+//        val id = this.savedStateHandle["id"] ?: "default"
     }
 }
 

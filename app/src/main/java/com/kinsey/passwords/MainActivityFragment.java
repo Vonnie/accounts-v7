@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,7 +60,7 @@ public class MainActivityFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-//        Log.d(TAG, "onCreateView: starts");
+        Log.d(TAG, "onCreateView: starts");
 //        View view = inflater.inflate(R.layout.fragment_main, container, false);
 //        View view = inflater.inflate(R.layout.fragment_account_list, container, false);
         recyclerView = (RecyclerView) inflater.inflate(R.layout.fragment_account_list, container, false);
@@ -156,7 +157,7 @@ public class MainActivityFragment extends Fragment {
 
 
 
-        return view;
+        return recyclerView;
 //        return inflater.inflate(R.layout.fragment_main, container, false);
     }
 
