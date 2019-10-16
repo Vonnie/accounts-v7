@@ -239,7 +239,7 @@ public class MainActivity extends AppCompatActivity
         profileViewModel.getAllProfiles().observe(this, new Observer<List<Profile>>() {
             @Override
             public void onChanged(List<Profile> profiles) {
-                adapter.setProfiles(profiles);
+                adapter.submitList(profiles);
             }
         });
 
@@ -268,6 +268,8 @@ public class MainActivity extends AppCompatActivity
                 intent.putExtra(AddEditProfileActivity.EXTRA_USER_EMAIL, profile.getUserEmail());
                 intent.putExtra(AddEditProfileActivity.EXTRA_CORP_WEBSITE, profile.getCorpWebsite());
                 intent.putExtra(AddEditProfileActivity.EXTRA_NOTE, profile.getNote());
+                intent.putExtra(AddEditProfileActivity.EXTRA_ACTVY_LONG, profile.getActvyLong());
+                intent.putExtra(AddEditProfileActivity.EXTRA_OPEN_DATE_LONG, profile.getOpenLong());
 
                 startActivityForResult(intent, EDIT_PROFILE_REQUEST);
 
@@ -706,11 +708,11 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
         //noinspection SimplifiableIfStatement
         switch (id) {
-            case R.id.menumain_add:
-//                editAccountRequest(null);
-//                addAccountRequest();
-                showAddConfirmationDialog(AppDialog.DIALOG_ID_CONFIRM_ADD_ACCOUNT);
-                break;
+//            case R.id.menumain_add:
+////                editAccountRequest(null);
+////                addAccountRequest();
+//                showAddConfirmationDialog(AppDialog.DIALOG_ID_CONFIRM_ADD_ACCOUNT);
+//                break;
 //            case R.id.menumain_showAccounts:
 //                currList = ListHomeType.LISTACCOUNTS;
 //                if (!item.isChecked()) {
@@ -1130,9 +1132,9 @@ public class MainActivity extends AppCompatActivity
         sharedPreferences.edit().putInt(SELECTION_ONE_ITEM, this.account.getId()).apply();
 
 
-        if (mTwoPane) {
-            acctEditRequest(this.account.getId());
-        }
+//        if (mTwoPane) {
+//            acctEditRequest(this.account.getId());
+//        }
 
         Toast.makeText(this,
                 "Long click select for more details",
@@ -2170,6 +2172,7 @@ public class MainActivity extends AppCompatActivity
                 Profile profile = new Profile(this.adapter.getItemCount() + 1,
                         corpName, userName, userEmail, corpWebsite);
                 profile.setNote(note);
+                profile.setActvyLong(System.currentTimeMillis());
 
                 profileViewModel.insert(profile);
 
@@ -2192,6 +2195,9 @@ public class MainActivity extends AppCompatActivity
 
                 Profile profile = new Profile(1, corpName, userName, userEmail, corpWebsite);
                 profile.setId(id);
+                profile.setNote(note);
+                profile.setActvyLong(System.currentTimeMillis());
+
                 profileViewModel.update(profile);
                 Toast.makeText(this, "Profile updated", Toast.LENGTH_SHORT).show();
             }
@@ -2611,9 +2617,9 @@ public class MainActivity extends AppCompatActivity
                 Log.d(TAG, "onPositiveDialogResult: ready to delete " + acctId);
                 deleteAccount(acctId);
                 break;
-            case AppDialog.DIALOG_ID_CONFIRM_ADD_ACCOUNT:
-                acctEditRequest(-1);
-                break;
+//            case AppDialog.DIALOG_ID_CONFIRM_ADD_ACCOUNT:
+//                acctEditRequest(-1);
+//                break;
             case AppDialog.DIALOG_ID_EDITS_APPLIED:
                 break;
         }

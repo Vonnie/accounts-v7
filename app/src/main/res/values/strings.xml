@@ -133,6 +133,7 @@
     <string name="tag_large">large</string>
     <string name="tag_xlarge">xlarge</string>
     <string name="acct_show_website">Show Website</string>
+    <string name="acct_show_notes">Show Notes</string>
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="accedit_seq_cap">Seq for custom sort</string>
     <string name="menu_link_internet">Link to Internet</string>

@@ -195,7 +195,7 @@ public class AccountListActivityFragment extends Fragment
         profileViewModel.getAllProfiles().observe(this, new Observer<List<Profile>>() {
             @Override
             public void onChanged(List<Profile> profiles) {
-                adapter.setProfiles(profiles);
+                adapter.submitList(profiles);
             }
         });
 

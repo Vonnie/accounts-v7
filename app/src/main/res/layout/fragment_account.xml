@@ -31,21 +31,34 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/acc_user_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="@string/accedit_user_name_hint"
-                android:inputType="textNoSuggestions" />
 
-            <EditText
-                android:id="@+id/acc_user_email"
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/input_layout_user_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="@string/accedit_user_email_hint"
-                android:inputType="textEmailAddress" />
+                android:hint="@string/accedit_user_name_hint">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/acc_user_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/input_layout_user_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/accedit_user_email_hint">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/acc_user_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+
+                    android:inputType="textEmailAddress" />
+            </android.support.design.widget.TextInputLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"

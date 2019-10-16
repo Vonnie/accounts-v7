@@ -3,20 +3,44 @@ package com.kinsey.passwords.provider;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.kinsey.passwords.R;
 import com.kinsey.passwords.items.Profile;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
-public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ProfileHolder> {
-    private List<Profile> profiles = new ArrayList<Profile>();
+public class ProfileAdapter extends ListAdapter<Profile, ProfileAdapter.ProfileHolder> {
+//    private List<Profile> profiles = new ArrayList<Profile>();
     private OnItemClickListener listener;
+
+    public ProfileAdapter() {
+        super(DIFF_CALLBACK);
+    }
+
+    private static final DiffUtil.ItemCallback<Profile> DIFF_CALLBACK = new DiffUtil.ItemCallback<Profile>() {
+
+        @Override
+        public boolean areItemsTheSame(@NonNull Profile oldItem, @NonNull Profile newItem) {
+            return oldItem.getId() == newItem.getId();
+        }
+
+        @Override
+        public boolean areContentsTheSame(@NonNull Profile oldItem, @NonNull Profile newItem) {
+            return oldItem.getCorpName().equals(newItem.getCorpName()) &&
+                    oldItem.getUserName().equals(newItem.getUserName()) &&
+                    oldItem.getUserEmail().equals(newItem.getUserEmail());
+        }
+    };
 
     @NonNull
     @Override
@@ -28,24 +52,15 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ProfileH
 
     @Override
     public void onBindViewHolder(@NonNull ProfileHolder holder, int position) {
-        Profile currentProfile = profiles.get(position);
+        Profile currentProfile = getItem(position);
         holder.tvCorpName.setText(currentProfile.getCorpName());
         holder.tvAcctId.setText(String.valueOf(currentProfile.getId()));
         holder.tvUserName.setText(currentProfile.getUserName());
-    }
 
-    @Override
-    public int getItemCount() {
-        return profiles.size();
-    }
-
-    public void setProfiles(List<Profile> profiles) {
-        this.profiles = profiles;
-        notifyDataSetChanged();
     }
 
     public Profile getNoteAt(int position) {
-        return profiles.get(position);
+        return getItem(position);
     }
 
     class ProfileHolder extends RecyclerView.ViewHolder {
@@ -66,7 +81,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ProfileH
                 public void onClick(View v) {
                     int position = getAdapterPosition();
                     if (listener != null && position != RecyclerView.NO_POSITION) {
-                        listener.onItemClick(profiles.get(position));
+                        listener.onItemClick(getItem(position));
                     }
                 }
             });
