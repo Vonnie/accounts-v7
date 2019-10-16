@@ -8,7 +8,7 @@
     android:scrollbarStyle="insideInset"
     android:scrollbars="vertical"
     tools:context="com.kinsey.passwords.MainActivityFragment"
-    tools:showIn="@layout/activity_main">
+    tools:showIn="@layout/activity_mainV1">
 
     <!--<TextView-->
         <!--android:id="@+id/home_title"-->

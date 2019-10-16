@@ -7,8 +7,8 @@
     android:layout_height="wrap_content"
     android:scrollbarStyle="insideInset"
     android:scrollbars="vertical"
-    tools:context="com.kinsey.passwords.MainActivityFragment"
-    tools:showIn="@layout/activity_main">
+    tools:context="com.kinsey.passwords.MainActivityFragment" >
+<!--    tools:showIn="@layout/activity_main_V1">-->
 
     <TextView
         android:id="@+id/home_title"

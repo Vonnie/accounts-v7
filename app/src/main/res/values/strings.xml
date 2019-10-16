@@ -8,6 +8,7 @@
     <string name="menu_accounts">Accounts List</string>
     <string name="menu_suggests">Password Suggestions</string>
     <string name="menu_suggests_v1">Password Suggestions V1</string>
+    <string name="menu_profile">Profile</string>
     <string name="menu_generate">Generate Passwords</string>
     <string name="no_items_message">No Items</string>
     <string name="edit_description_description">Button to edit passwords</string>
@@ -120,6 +121,7 @@
     <string name="accedit_date_open_label">Open Date</string>
     <string name="accedit_note_label">Notes:</string>
     <string name="title_activity_web_view">WebViewActivity</string>
+    <string name="title_activity_addedit_profile">AddEditProfileActivity</string>
     <string name="srch_instruction_text">Search on accounts for Corp-Names</string>
     <string name="srch_instruction_2_text">When items are found, either select search icon on keyboard or select one of the items from the dropdown list.</string>
     <string name="accedit_seq_hint">Custom seq sort</string>

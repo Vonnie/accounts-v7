@@ -4,11 +4,14 @@ import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
@@ -25,9 +28,12 @@ import android.widget.TextView;
 
 import com.kinsey.passwords.items.Account;
 import com.kinsey.passwords.items.AccountsContract;
+import com.kinsey.passwords.items.Profile;
 import com.kinsey.passwords.items.SuggestsContract;
 import com.kinsey.passwords.provider.AccountRecyclerViewAdapter;
 import com.kinsey.passwords.provider.AccountSearchLoaderCallbacks;
+import com.kinsey.passwords.provider.ProfileAdapter;
+import com.kinsey.passwords.provider.ProfileViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,6 +63,7 @@ public class AccountListActivityFragment extends Fragment
             new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
 
     GridLayoutManager layoutManager;
+    private ProfileViewModel profileViewModel;
 
 //    Loader<Cursor> loader;
 
@@ -175,9 +182,34 @@ public class AccountListActivityFragment extends Fragment
 //        if (mAccountAdapter != null) {
 //            mRecyclerView.setAdapter(mAccountAdapter);
 //        }
+
+
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mRecyclerView.setHasFixedSize(true);
+
+        final ProfileAdapter adapter = new ProfileAdapter();
+        mRecyclerView.setAdapter(adapter);
+
+        profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
+
+        profileViewModel.getAllProfiles().observe(this, new Observer<List<Profile>>() {
+            @Override
+            public void onChanged(List<Profile> profiles) {
+                adapter.setProfiles(profiles);
+            }
+        });
+
+
+
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        layoutManager = new GridLayoutManager(getContext(), 2);
+        boolean isLandscape = (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE);
+        if (isLandscape) {
+            layoutManager = new GridLayoutManager(getContext(), 2);
+        } else {
+            layoutManager = new GridLayoutManager(getContext(), 1);
+        }
+
 
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(layoutManager);

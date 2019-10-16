@@ -39,7 +39,8 @@
             android:parentActivityName=".SuggestListActivity" />
         <activity
             android:name=".MainActivity"
-            android:label="@string/app_name">
+            android:label="@string/app_name"
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -131,6 +132,9 @@
                 android:name="android.app.default_searchable"
                 android:value=".SearchActivity" />
         </activity>
+        <activity android:name=".AddEditProfileActivity"
+            android:label="@string/title_activity_addedit_profile"
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".WebViewActivity"
             android:label="@string/title_activity_web_view"

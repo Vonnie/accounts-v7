@@ -648,6 +648,8 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         this.queryCorp = queryCorp;
     }
 
+
+
     public static class AccountViewHolder extends RecyclerView.ViewHolder {
         private static final String TAG = "AccountViewHolder";
         public final View mView;
@@ -670,7 +672,7 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 //            Log.d(TAG, "AccountViewHolder: starts");
             mView = itemView;
             this.corp_name = (TextView) itemView.findViewById(R.id.srli_corp_name);
-            this.user_name = (TextView) itemView.findViewById(R.id.srli_user_name);
+            this.user_name = (TextView) itemView.findViewById(R.id.user_name);
 //            this.user_email = (TextView) itemView.findViewById(R.id.srli_user_email);
             this.open_date = (TextView) itemView.findViewById(R.id.tli_open_date);
 //            this.website = (TextView) itemView.findViewById(R.id.tli_website);

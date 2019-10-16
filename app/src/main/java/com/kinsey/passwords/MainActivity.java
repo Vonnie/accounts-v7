@@ -25,6 +25,8 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -33,6 +35,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.Menu;
@@ -54,6 +59,7 @@ import com.kinsey.passwords.items.Profile;
 import com.kinsey.passwords.items.SearchesContract;
 import com.kinsey.passwords.items.Suggest;
 import com.kinsey.passwords.provider.DatePickerFragment;
+import com.kinsey.passwords.provider.ProfileAdapter;
 import com.kinsey.passwords.provider.ProfileViewModel;
 import com.kinsey.passwords.provider.SuggestViewModel;
 import com.kinsey.passwords.tools.AppDialog;
@@ -116,15 +122,19 @@ public class MainActivity extends AppCompatActivity
     private int frag2Pos = 1;
     private int frag3Pos = 2;
 
+
+
     public static final int ACCOUNT_LOADER_ID = 1;
     public static final int SEARCH_LOADER_ID = 2;
     public static final int SUGGEST_LOADER_ID = 3;
 
-    public static final int REQUEST_ACCOUNTS_LIST = 1;
-    public static final int REQUEST_SUGGESTS_LIST = 2;
-    public static final int REQUEST_ACCOUNT_EDIT = 3;
-    public static final int REQUEST_ACCOUNT_SEARCH = 4;
-    public static final int REQUEST_VIEW_EXPORT = 5;
+    public static final int ADD_PROFILE_REQUEST = 1;
+    public static final int EDIT_PROFILE_REQUEST = 2;
+    public static final int REQUEST_ACCOUNTS_LIST = 3;
+    public static final int REQUEST_SUGGESTS_LIST = 4;
+    public static final int REQUEST_ACCOUNT_EDIT = 5;
+    public static final int REQUEST_ACCOUNT_SEARCH = 6;
+    public static final int REQUEST_VIEW_EXPORT = 7;
 
     public static int accountSelectedPos = -1;
 
@@ -161,6 +171,9 @@ public class MainActivity extends AppCompatActivity
 
     private SearchView mSearchView;
 
+    private ProfileAdapter adapter;
+
+
     public MainActivity() {
     }
 
@@ -187,28 +200,79 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_main);
-        setContentView(R.layout.activity_account_list);
+//        setContentView(R.layout.activity_mainV1);
+//        setContentView(R.layout.activity_account_list);
 //        setContentView(R.layout.activity_main_rss_list);
+        setContentView(R.layout.activity_main);
+
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setLogo(R.mipmap.ic_launcher);
 //        getSupportActionBar().setTitle(getString(R.string.app_name_corpname));
 
-//        Log.d(TAG, "onCreate: layout activity_main");
+//        Log.d(TAG, "onCreate: layout activity_mainV1");
 
+
+        FloatingActionButton buttonAddPofile = findViewById(R.id.button_add_profile);
+        buttonAddPofile.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, AddEditProfileActivity.class);
+                Log.d(TAG, "onCreate: start activity AddEditProfileActivity");
+                startActivityForResult(intent, ADD_PROFILE_REQUEST);
+//                startActivity(intent);
+            }
+        });
+
+        RecyclerView recyclerView = findViewById(R.id.recycler_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setHasFixedSize(true);
+
+
+        this.adapter = new ProfileAdapter();
+        recyclerView.setAdapter(adapter);
 
         profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
 
         profileViewModel.getAllProfiles().observe(this, new Observer<List<Profile>>() {
             @Override
             public void onChanged(List<Profile> profiles) {
-                //update RecyclerView
-                Toast.makeText(MainActivity.this, "onChanged", Toast.LENGTH_SHORT).show();
+                adapter.setProfiles(profiles);
             }
         });
 
 
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
+                ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                profileViewModel.delete(adapter.getNoteAt(viewHolder.getAdapterPosition()));
+                Toast.makeText(MainActivity.this, "Profile deleted", Toast.LENGTH_SHORT).show();
+            }
+        }).attachToRecyclerView(recyclerView);
+
+        adapter.setOnItemClickListener(new ProfileAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(Profile profile) {
+                Intent intent = new Intent(MainActivity.this, AddEditProfileActivity.class);
+                intent.putExtra(AddEditProfileActivity.EXTRA_ID, profile.getId());
+                intent.putExtra(AddEditProfileActivity.EXTRA_CORP_NAME, profile.getCorpName());
+                intent.putExtra(AddEditProfileActivity.EXTRA_USER_NAME, profile.getUserName());
+                intent.putExtra(AddEditProfileActivity.EXTRA_USER_EMAIL, profile.getUserEmail());
+                intent.putExtra(AddEditProfileActivity.EXTRA_CORP_WEBSITE, profile.getCorpWebsite());
+                intent.putExtra(AddEditProfileActivity.EXTRA_NOTE, profile.getNote());
+
+                startActivityForResult(intent, EDIT_PROFILE_REQUEST);
+
+            }
+        });
 
         mTwoPane = (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE);
 //        Log.d(TAG, "onCreate: twoPane is " + mTwoPane);
@@ -225,45 +289,47 @@ public class MainActivity extends AppCompatActivity
 //        downloadUrl(feedUrl);
 
 
-        FloatingActionButton buttonAddNote = findViewById(R.id.button_add_account);
-        buttonAddNote.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                acctEditRequest(-1);
-            }
-        });
+//        FloatingActionButton buttonAddNote = findViewById(R.id.button_add_account);
+//        buttonAddNote.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                acctEditRequest(-1);
+//            }
+//        });
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        // If the AddEditActivity fragment exists, we're editing
-        editing = fragmentManager.findFragmentById(R.id.task_details_container) != null;
-//        Log.d(TAG, "onCreate: editing is " + editing);
 
-        // We need references to the containers, so we can show or hide them as necessary.
-        // No need to cast them, as we're only calling a method that's available for all views.
-        View addEditLayout = findViewById(R.id.task_details_container);
-        View addEditLayoutScroll = findViewById(R.id.task_details_container_scroll);
-        mainFragment = findViewById(R.id.fragment);
-        progressBar  = findViewById(R.id.progressBar);
-//        progressBar.setVisibility(View.VISIBLE);
-//        progressBar.setVisibility(View.GONE);
 
-        if(mTwoPane) {
-            Log.d(TAG, "onCreate: twoPane mode");
-            mainFragment.setVisibility(View.VISIBLE);
-            addEditLayout.setVisibility(View.VISIBLE);
-            addEditLayoutScroll.setVisibility(View.VISIBLE);
-        } else if (editing) {
-            Log.d(TAG, "onCreate: single pane, editing");
-            // hide the left hand fragment, to make room for editing
-            mainFragment.setVisibility(View.GONE);
-        } else {
-            Log.d(TAG, "onCreate: single pane, not editing");
-            // Show left hand fragment
-            mainFragment.setVisibility(View.VISIBLE);
-            // Hide the editing frame
-            addEditLayout.setVisibility(View.GONE);
-            addEditLayoutScroll.setVisibility(View.GONE);
-        }
+//        FragmentManager fragmentManager = getSupportFragmentManager();
+//        // If the AddEditActivity fragment exists, we're editing
+//        editing = fragmentManager.findFragmentById(R.id.task_details_container) != null;
+////        Log.d(TAG, "onCreate: editing is " + editing);
+//
+//        // We need references to the containers, so we can show or hide them as necessary.
+//        // No need to cast them, as we're only calling a method that's available for all views.
+//        View addEditLayout = findViewById(R.id.task_details_container);
+//        View addEditLayoutScroll = findViewById(R.id.task_details_container_scroll);
+//        mainFragment = findViewById(R.id.fragment);
+//        progressBar  = findViewById(R.id.progressBar);
+////        progressBar.setVisibility(View.VISIBLE);
+////        progressBar.setVisibility(View.GONE);
+//
+//        if(mTwoPane) {
+//            Log.d(TAG, "onCreate: twoPane mode");
+//            mainFragment.setVisibility(View.VISIBLE);
+//            addEditLayout.setVisibility(View.VISIBLE);
+//            addEditLayoutScroll.setVisibility(View.VISIBLE);
+//        } else if (editing) {
+//            Log.d(TAG, "onCreate: single pane, editing");
+//            // hide the left hand fragment, to make room for editing
+//            mainFragment.setVisibility(View.GONE);
+//        } else {
+//            Log.d(TAG, "onCreate: single pane, not editing");
+//            // Show left hand fragment
+//            mainFragment.setVisibility(View.VISIBLE);
+//            // Hide the editing frame
+//            addEditLayout.setVisibility(View.GONE);
+//            addEditLayoutScroll.setVisibility(View.GONE);
+//        }
 
 
         if (mSearchView != null) {
@@ -696,6 +762,11 @@ public class MainActivity extends AppCompatActivity
             case R.id.menumain_showSuggestsV1:
                 suggestsListRequest2();
                 break;
+
+            case R.id.menumain_showProfile:
+                profileRequest();
+                break;
+
 
             case R.id.menuacct_external_accts:
 //                addEditActivityFragment = (AddEditActivityFragment)
@@ -1614,7 +1685,7 @@ public class MainActivity extends AppCompatActivity
 //        }
 //    }
 
-    private void vewInternet(String webpage) {
+    private void viewInternet(String webpage) {
 //        Bundle arguments = new Bundle();
 //        arguments.putString(WebViewActivity.class.getSimpleName(),
 //                webpage);
@@ -1991,6 +2062,17 @@ public class MainActivity extends AppCompatActivity
         showDatePickerDialog("Activity Date", 0, mCalendar);
     }
 
+
+
+    private void profileRequest() {
+        Log.d(TAG, "profileRequest: starts");
+
+        Intent detailIntent = new Intent(this, AddEditProfileActivity.class);
+        detailIntent.putExtra(Profile.class.getSimpleName(), "sortorder");
+        startActivity(detailIntent);
+
+    }
+
 //    private void downloadUrl(String feedUrl) {
 //        if (!feedUrl.equalsIgnoreCase(feedCachedUrl)) {
 //            Log.d(TAG, "downloadURL: " + feedUrl);
@@ -2071,10 +2153,48 @@ public class MainActivity extends AppCompatActivity
         if (resultCode == RESULT_CANCELED) {
             return;
         }
+
+        super.onActivityResult(requestCode, resultCode, data);
+
 //        Log.d(TAG, "onActivityResult: requestCode " + requestCode);
 //        Log.d(TAG, "onActivityResult: resultCode " + resultCode);
         // Check which request we're responding to
         switch (requestCode) {
+            case ADD_PROFILE_REQUEST: {
+                String corpName = data.getStringExtra(AddEditProfileActivity.EXTRA_CORP_NAME);
+                String userName = data.getStringExtra(AddEditProfileActivity.EXTRA_USER_NAME);
+                String userEmail = data.getStringExtra(AddEditProfileActivity.EXTRA_USER_EMAIL);
+                String corpWebsite = data.getStringExtra(AddEditProfileActivity.EXTRA_CORP_WEBSITE);
+                String note = data.getStringExtra(AddEditProfileActivity.EXTRA_NOTE);
+
+                Profile profile = new Profile(this.adapter.getItemCount() + 1,
+                        corpName, userName, userEmail, corpWebsite);
+                profile.setNote(note);
+
+                profileViewModel.insert(profile);
+
+
+                Toast.makeText(this, "Profile saved", Toast.LENGTH_SHORT).show();
+            }
+            case EDIT_PROFILE_REQUEST: {
+                int id = data.getIntExtra(AddEditProfileActivity.EXTRA_ID, -1);
+
+                if (id == -1) {
+                    Toast.makeText(this, "Profile can't be updated", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                String corpName = data.getStringExtra(AddEditProfileActivity.EXTRA_CORP_NAME);
+                String userName = data.getStringExtra(AddEditProfileActivity.EXTRA_USER_NAME);
+                String userEmail = data.getStringExtra(AddEditProfileActivity.EXTRA_USER_EMAIL);
+                String corpWebsite = data.getStringExtra(AddEditProfileActivity.EXTRA_CORP_WEBSITE);
+                String note = data.getStringExtra(AddEditProfileActivity.EXTRA_NOTE);
+
+                Profile profile = new Profile(1, corpName, userName, userEmail, corpWebsite);
+                profile.setId(id);
+                profileViewModel.update(profile);
+                Toast.makeText(this, "Profile updated", Toast.LENGTH_SHORT).show();
+            }
             case REQUEST_ACCOUNTS_LIST: {
 
                 // Make sure the request was successful
@@ -2153,138 +2273,140 @@ public class MainActivity extends AppCompatActivity
             default:
                 break;
         }
+
+
     }
 
-
-    @Override
-    protected void onResume() {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        editing = fragmentManager.findFragmentById(R.id.task_details_container) != null;
-        Log.d(TAG, "onResume: starts " + editing);
-
-
-        if (editing) {
-            super.onResume();
-            return;
-        }
-
-        progressBar.setVisibility(View.VISIBLE);
-//        mainFragment.setVisibility(View.GONE);
-        isResumed = true;
-//        Log.d(TAG, "onResume: isResumed " + isResumed);
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-
-                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                final String queryResult = sharedPreferences.getString(SELECTION_QUERY, "");
-                final int accountId = sharedPreferences.getInt(SELECTION_ONE_ITEM, -1);
-
-//        Log.d(TAG, "onResume: qry/id " + queryResult + "/" + accountId);
-
-                final AccountListActivityFragment listFragment = (AccountListActivityFragment)
-                        getSupportFragmentManager().findFragmentById(R.id.fragment);
-
-
-                mHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        if (!queryResult.equals("")) {
-                            listFragment.setQuery(queryResult);
-                        }
-
-
-                        Log.d(TAG, "run: the acctId " + accountId);
-
-                        if (accountId == -1) {
-                            listFragment.setAccountSelectedPos(-1);
-                        } else {
-                            if (listFragment.isOnDBById(accountId)) {
-
-
-                                Log.d(TAG, "run: on selectAccount " + accountId);
-                                listFragment.setAcctId(accountId);
-    //                            Cursor cursorSearch = getContentResolver().query(
-    //                                    AccountsContract.buildIdUri(accountId), null, null, null, null);
-
-
-    //                            if (cursorSearch.getCount() == 0) {
-    //                                searchListRequest();
-    //                            } else {
-                                acctEditRequest(accountId);
-                            } else {
-                                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                                sharedPreferences.edit().putString(SELECTION_QUERY, "").apply();
-                                sharedPreferences.edit().putInt(SELECTION_ONE_ITEM, -1).apply();
-                            }
-    //                            }
-                        }
-                    //        sharedPreferences.edit().putBoolean(APP_RESUMED, true).apply();
-                        View mainFragment = findViewById(R.id.fragment);
-                        if (mainFragment.getVisibility() == View.VISIBLE) {
-
-                            Toast.makeText(MainActivity.this,
-                                    "Long click on item for more options",
-                                    Toast.LENGTH_LONG).show();
-                        }
-
-                        progressBar.setVisibility(View.GONE);
-    //                        mainFragment.setVisibility(View.VISIBLE);
-
-                    }
-                });
-            }
-        }).start();
-
-//        String queryResult = sharedPreferences.getString(SELECTION_QUERY, "");
 //
-//        Log.d(TAG, "onResume: return a value " + queryResult);
-
-//        AccountListActivityFragment listFragment = (AccountListActivityFragment)
-//                getSupportFragmentManager().findFragmentById(R.id.fragment);
-//        listFragment.setQuery(queryResult);
-
-
-//        if (queryResult.length() > 0) {
+//    @Override
+//    protected void onResume() {
+//        FragmentManager fragmentManager = getSupportFragmentManager();
+//        editing = fragmentManager.findFragmentById(R.id.task_details_container) != null;
+//        Log.d(TAG, "onResume: starts " + editing);
 //
-//            int queryResultId = sharedPreferences.getInt(SEARCH_ACCOUNT, -1);
-//            Log.d(TAG, "onResume: queryResultsId " + queryResultId);
-//            sharedPreferences.edit().putString(SELECTION_QUERY, "").apply();;
-//            if (queryResultId == -1) {
-//                Intent detailIntent = new Intent(this, SearchListActivity.class);
-//                detailIntent.putExtra(SearchListActivity.class.getSimpleName(), (int)-1);
-//                startActivity(detailIntent);
-//            } else {
-//                resetPreferences();
-//                Cursor cursor = getContentResolver().query(
-//                        AccountsContract.buildIdUri(queryResultId), null, null, null, null);
-//                if (cursor.moveToFirst()) {
-//                    Intent detailIntent = new Intent(this, AccountActivity.class);
-//                    Account account = AccountsContract.getAccountFromCursor(cursor);
-//                    detailIntent.putExtra(Account.class.getSimpleName(), account);
-//                    Log.d(TAG, "showAccount: account " + account.toString());
-//                }
-//            }
-
-
-
-
-//            Intent detailIntent = new Intent(this, AccountActivity.class);
-
-//            detailIntent.putExtra(Account.class.getSimpleName(), account);
-////            startActivityForResult(detailIntent, AccountsContract.ACCOUNT_ACTION_CHG);
-//            startActivity(detailIntent);
-
-
+//
+//        if (editing) {
+//            super.onResume();
+//            return;
 //        }
-
-
-//        onSearchRequested();
-
-        super.onResume();
-    }
+//
+//        progressBar.setVisibility(View.VISIBLE);
+////        mainFragment.setVisibility(View.GONE);
+//        isResumed = true;
+////        Log.d(TAG, "onResume: isResumed " + isResumed);
+//
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//
+//                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+//                final String queryResult = sharedPreferences.getString(SELECTION_QUERY, "");
+//                final int accountId = sharedPreferences.getInt(SELECTION_ONE_ITEM, -1);
+//
+////        Log.d(TAG, "onResume: qry/id " + queryResult + "/" + accountId);
+//
+//                final AccountListActivityFragment listFragment = (AccountListActivityFragment)
+//                        getSupportFragmentManager().findFragmentById(R.id.fragment);
+//
+//
+//                mHandler.post(new Runnable() {
+//                    @Override
+//                    public void run() {
+//
+//                        if (!queryResult.equals("")) {
+//                            listFragment.setQuery(queryResult);
+//                        }
+//
+//
+//                        Log.d(TAG, "run: the acctId " + accountId);
+//
+//                        if (accountId == -1) {
+//                            listFragment.setAccountSelectedPos(-1);
+//                        } else {
+//                            if (listFragment.isOnDBById(accountId)) {
+//
+//
+//                                Log.d(TAG, "run: on selectAccount " + accountId);
+//                                listFragment.setAcctId(accountId);
+//    //                            Cursor cursorSearch = getContentResolver().query(
+//    //                                    AccountsContract.buildIdUri(accountId), null, null, null, null);
+//
+//
+//    //                            if (cursorSearch.getCount() == 0) {
+//    //                                searchListRequest();
+//    //                            } else {
+//                                acctEditRequest(accountId);
+//                            } else {
+//                                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+//                                sharedPreferences.edit().putString(SELECTION_QUERY, "").apply();
+//                                sharedPreferences.edit().putInt(SELECTION_ONE_ITEM, -1).apply();
+//                            }
+//    //                            }
+//                        }
+//                    //        sharedPreferences.edit().putBoolean(APP_RESUMED, true).apply();
+//                        View mainFragment = findViewById(R.id.fragment);
+//                        if (mainFragment.getVisibility() == View.VISIBLE) {
+//
+//                            Toast.makeText(MainActivity.this,
+//                                    "Long click on item for more options",
+//                                    Toast.LENGTH_LONG).show();
+//                        }
+//
+//                        progressBar.setVisibility(View.GONE);
+//    //                        mainFragment.setVisibility(View.VISIBLE);
+//
+//                    }
+//                });
+//            }
+//        }).start();
+//
+////        String queryResult = sharedPreferences.getString(SELECTION_QUERY, "");
+////
+////        Log.d(TAG, "onResume: return a value " + queryResult);
+//
+////        AccountListActivityFragment listFragment = (AccountListActivityFragment)
+////                getSupportFragmentManager().findFragmentById(R.id.fragment);
+////        listFragment.setQuery(queryResult);
+//
+//
+////        if (queryResult.length() > 0) {
+////
+////            int queryResultId = sharedPreferences.getInt(SEARCH_ACCOUNT, -1);
+////            Log.d(TAG, "onResume: queryResultsId " + queryResultId);
+////            sharedPreferences.edit().putString(SELECTION_QUERY, "").apply();;
+////            if (queryResultId == -1) {
+////                Intent detailIntent = new Intent(this, SearchListActivity.class);
+////                detailIntent.putExtra(SearchListActivity.class.getSimpleName(), (int)-1);
+////                startActivity(detailIntent);
+////            } else {
+////                resetPreferences();
+////                Cursor cursor = getContentResolver().query(
+////                        AccountsContract.buildIdUri(queryResultId), null, null, null, null);
+////                if (cursor.moveToFirst()) {
+////                    Intent detailIntent = new Intent(this, AccountActivity.class);
+////                    Account account = AccountsContract.getAccountFromCursor(cursor);
+////                    detailIntent.putExtra(Account.class.getSimpleName(), account);
+////                    Log.d(TAG, "showAccount: account " + account.toString());
+////                }
+////            }
+//
+//
+//
+//
+////            Intent detailIntent = new Intent(this, AccountActivity.class);
+//
+////            detailIntent.putExtra(Account.class.getSimpleName(), account);
+//////            startActivityForResult(detailIntent, AccountsContract.ACCOUNT_ACTION_CHG);
+////            startActivity(detailIntent);
+//
+//
+////        }
+//
+//
+////        onSearchRequested();
+//
+//        super.onResume();
+//    }
 
 
     private void resetPreferences() {
