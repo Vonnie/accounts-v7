@@ -9,8 +9,10 @@ import android.util.Patterns;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,8 +21,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.material.textfield.TextInputLayout;
+import com.kinsey.passwords.items.AccountsContract;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 public class AddEditProfileActivity extends AppCompatActivity {
@@ -57,7 +62,7 @@ public class AddEditProfileActivity extends AppCompatActivity {
     private TextView tvActvyDate;
     private DatePicker mDtePickOpen;
     private long lngOpenDate;
-
+    private ImageButton mImgWebView;
 
     private static String pattern_ymdtimehm = "yyyy-MM-dd kk:mm";
     public static SimpleDateFormat format_ymdtimehm = new SimpleDateFormat(
@@ -80,6 +85,7 @@ public class AddEditProfileActivity extends AppCompatActivity {
         editNote = findViewById(R.id.edit_notes);
         tvActvyDate = findViewById(R.id.actvy_date);
         mDtePickOpen = (DatePicker) findViewById(R.id.datePicker);
+        mImgWebView = (ImageButton) findViewById(R.id.img_website);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -95,7 +101,23 @@ public class AddEditProfileActivity extends AppCompatActivity {
             setEditUICols(intent);
         } else {
             setTitle("Add Profile Account");
+            setAddUIDefaults(intent);
         }
+
+
+        mImgWebView.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                String corpWebsiteInput = textInputCorpWebsite.getEditText().getText().toString().trim();
+                Intent detailIntent = new Intent(AddEditProfileActivity.this, WebViewActivity.class);
+                detailIntent.putExtra(WebViewActivity.class.getSimpleName(), corpWebsiteInput);
+//                Log.d(TAG, "onClick: website " + account.getCorpWebsite());
+//                Log.d(TAG, "onClick: wv class " + WebViewActivity.class.getSimpleName());
+                startActivity(detailIntent);
+
+            }
+        });
+
     }
 
 
@@ -112,7 +134,37 @@ public class AddEditProfileActivity extends AppCompatActivity {
         } else {
             tvActvyDate.setText("ActvyDate: " + format_ymdtimehm.format(intent.getLongExtra(EXTRA_ACTVY_LONG, 0)));
         }
+        Date dte = new Date(intent.getLongExtra(EXTRA_OPEN_DATE_LONG, 0));
+        setOpenDateCalendar(dte);
+    }
 
+    private void setOpenDateCalendar(Date dte) {
+        Calendar c1 = Calendar.getInstance();
+        c1.setTime(dte);
+        lngOpenDate = c1.getTimeInMillis();
+
+        mDtePickOpen.init(c1.get(Calendar.YEAR),
+                c1.get(Calendar.MONTH),
+                c1.get(Calendar.DAY_OF_MONTH),
+                new DatePicker.OnDateChangedListener() {
+                    @Override
+                    public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+//                                Log.d(TAG, "onDateChanged: clicked ");
+                        Calendar c2 = Calendar.getInstance();
+                        c2.set(year, monthOfYear, dayOfMonth);
+                        lngOpenDate = c2.getTimeInMillis();
+//                                Log.d(TAG, "onDateChanged: lngOpenDate " + lngOpenDate);
+                    }
+                });
+
+    }
+
+    private void setAddUIDefaults(Intent intent) {
+        mDtePickOpen.setMaxDate(new Date().getTime());
+        mDtePickOpen.setMinDate(0);
+        Date dte = new Date();
+
+        setOpenDateCalendar(dte);
     }
 
     private boolean validateUserEmail() {
@@ -197,6 +249,17 @@ public class AddEditProfileActivity extends AppCompatActivity {
         data.putExtra(EXTRA_USER_EMAIL, userEmail);
         data.putExtra(EXTRA_CORP_WEBSITE, corpWebsite);
         data.putExtra(EXTRA_NOTE, note);
+
+
+//        Calendar c2 = Calendar.getInstance();
+//        c2.set(mDtePickOpen.getYear(), mDtePickOpen.getMonth(), mDtePickOpen.getDayOfMonth());
+//        long lngDatePickerOpenDate = c2.getTimeInMillis();
+//
+//        data.putExtra(EXTRA_OPEN_DATE_LONG, lngDatePickerOpenDate);
+
+        data.putExtra(EXTRA_OPEN_DATE_LONG, lngOpenDate);
+
+        data.putExtra(EXTRA_ACTVY_LONG, new Date().getTime());
 
         int id = getIntent().getIntExtra(EXTRA_ID, -1);
         if (id != -1) {
