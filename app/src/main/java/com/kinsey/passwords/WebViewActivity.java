@@ -1,18 +1,29 @@
 package com.kinsey.passwords;
 
-import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.util.Log;
+import android.view.KeyEvent;
 import android.webkit.WebView;
 
 public class WebViewActivity
 //        extends WebViewClient {
         extends AppCompatActivity {
     private static final String TAG = "WebViewActivity";
+
+    public static final String EXTRA_CORP_NAME =
+            "com.kinsey.passwords.EXTRA_CORP_NAME";
+    public static final String EXTRA_CORP_WEBSITE =
+            "com.kinsey.passwords.EXTRA_CORP_WEBSITE";
+
+
     //    WebViewActivityFragment wvFragment;
     private WebView webview = null;
+    private WebView myWebView;
     private String webAddr;
+    private String corpName;
 
     private boolean blnWebLoaded = false;
 
@@ -20,8 +31,7 @@ public class WebViewActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate: ");
-        Log.d(TAG, "onCreate: ");
-        setContentView(R.layout.activity_web_view);
+//        setContentView(R.layout.activity_web_view);
 //        setContentView(R.layout.fragment_web_view);
 
 //        View fragView = findViewById(R.id.fragmentWebView);
@@ -37,9 +47,31 @@ public class WebViewActivity
 //        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 //        setSupportActionBar(toolbar);
 
-        Bundle arguments = getIntent().getExtras();
-        webAddr = (String) arguments.getSerializable(WebViewActivity.class.getSimpleName());
-        webview = (WebView) findViewById(R.id.webview);
+        Intent intent = getIntent();
+//        Bundle arguments = getIntent().getExtras();
+//        webAddr = (String) arguments.getSerializable(WebViewActivity.class.getSimpleName());
+
+        webAddr = (String) intent.getStringExtra(EXTRA_CORP_WEBSITE).toString();
+        corpName = (String) intent.getStringExtra(EXTRA_CORP_NAME).toString();
+
+//        webview = (WebView) findViewById(R.id.webview);
+
+//        myWebView = (WebView) findViewById(R.id.webview);
+//        myWebView.loadUrl("http://www.example.com");
+
+        myWebView = new WebView(getApplicationContext());
+
+        if (webAddr != null | webAddr != "") {
+            setContentView(myWebView);
+            myWebView.loadUrl(webAddr);
+        }
+
+        Log.d(TAG, "onCreate: " + webAddr);
+//        if (webAddr != null) {
+//            myWebView.loadUrl(webAddr);
+//        }
+
+        setTitle(corpName);
 
 //        WebSettings webSettings = webview.getSettings();
 //        webSettings.setJavaScriptEnabled(true);
@@ -82,45 +114,58 @@ public class WebViewActivity
     }
 
 
-    @Override
-    protected void onPostResume() {
-        Log.d(TAG, "onPostResume: " + blnWebLoaded);
-        Log.d(TAG, "onPostResume: " + blnWebLoaded);
-//        if (blnWebLoaded) {
-//            setResult(Activity.RESULT_OK);
-//            finish();
-//        } else {
-//            super.onPostResume();
-//        }
-        super.onPostResume();
-    }
+//    @Override
+//    protected void onPostResume() {
+//        Log.d(TAG, "onPostResume: " + blnWebLoaded);
+//        Log.d(TAG, "onPostResume: " + blnWebLoaded);
+////        if (blnWebLoaded) {
+////            setResult(Activity.RESULT_OK);
+////            finish();
+////        } else {
+////            super.onPostResume();
+////        }
+//        super.onPostResume();
+//    }
+
 
     @Override
-    public void onBackPressed() {
-
-        Log.d(TAG, "onBackPressed: ");
-        Log.d(TAG, "onBackPressed: " + webview.canGoBack());
-
-        if (webview.canGoBack()) {
-            webview.goBack();
-        } else {
-            setResult(Activity.RESULT_OK);
-            finish();
-            super.onBackPressed();
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        // Check if the key event was the Back button and if there's history
+        if ((keyCode == KeyEvent.KEYCODE_BACK) && myWebView.canGoBack()) {
+            myWebView.goBack();
+            return true;
         }
-
-//        if (wvFragment.canBackOut()) {
-//            Log.d(TAG, "onBackPressed: canbackout");
-////            super.onBackPressed();
-//            setResult(Activity.RESULT_OK);
-//            finish();
-//        } else {
-//            Log.d(TAG, "onBackPressed: finished");
-//            setResult(Activity.RESULT_OK);
-//            finish();
-//        }
-
+        // If it wasn't the Back key or there's no web page history, bubble up to the default
+        // system behavior (probably exit the activity)
+        return super.onKeyDown(keyCode, event);
     }
+}
+//    @Override
+//    public void onBackPressed() {
+//
+//        Log.d(TAG, "onBackPressed: ");
+//        Log.d(TAG, "onBackPressed: " + webview.canGoBack());
+//
+//        if (webview.canGoBack()) {
+//            webview.goBack();
+//        } else {
+//            setResult(Activity.RESULT_OK);
+//            finish();
+//            super.onBackPressed();
+//        }
+//
+////        if (wvFragment.canBackOut()) {
+////            Log.d(TAG, "onBackPressed: canbackout");
+//////            super.onBackPressed();
+////            setResult(Activity.RESULT_OK);
+////            finish();
+////        } else {
+////            Log.d(TAG, "onBackPressed: finished");
+////            setResult(Activity.RESULT_OK);
+////            finish();
+////        }
+//
+//    }
 
 //    @Override
 //    public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -138,4 +183,4 @@ public class WebViewActivity
 //        // system behavior (probably exit the activity)
 //        return super.onKeyDown(keyCode, event);
 //    }
-}
+//}

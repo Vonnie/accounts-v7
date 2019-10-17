@@ -138,10 +138,7 @@
         <activity
             android:name=".WebViewActivity"
             android:label="@string/title_activity_web_view"
-            android:parentActivityName=".MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.kinsey.passwords.MainActivity" />
+            android:parentActivityName=".AddEditProfileActivity">
         </activity>
     </application>
 

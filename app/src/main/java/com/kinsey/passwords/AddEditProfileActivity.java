@@ -57,8 +57,8 @@ public class AddEditProfileActivity extends AppCompatActivity {
     private TextInputLayout textInputUserName;
     private TextInputLayout textInputUserEmail;
     private TextInputLayout textInputCorpWebsite;
+    private TextInputLayout textInputNote;
 
-    private EditText editNote;
     private TextView tvActvyDate;
     private DatePicker mDtePickOpen;
     private long lngOpenDate;
@@ -81,8 +81,8 @@ public class AddEditProfileActivity extends AppCompatActivity {
         textInputUserName = findViewById(R.id.text_input_user_name);
         textInputUserEmail = findViewById(R.id.text_input_user_email);
         textInputCorpWebsite = findViewById(R.id.text_input_corp_website);
+        textInputNote = findViewById(R.id.text_input_note);
 
-        editNote = findViewById(R.id.edit_notes);
         tvActvyDate = findViewById(R.id.actvy_date);
         mDtePickOpen = (DatePicker) findViewById(R.id.datePicker);
         mImgWebView = (ImageButton) findViewById(R.id.img_website);
@@ -111,6 +111,10 @@ public class AddEditProfileActivity extends AppCompatActivity {
                 String corpWebsiteInput = textInputCorpWebsite.getEditText().getText().toString().trim();
                 Intent detailIntent = new Intent(AddEditProfileActivity.this, WebViewActivity.class);
                 detailIntent.putExtra(WebViewActivity.class.getSimpleName(), corpWebsiteInput);
+                detailIntent.putExtra(WebViewActivity.EXTRA_CORP_NAME,
+                        textInputCorpName.getEditText().getText().toString().trim());
+                detailIntent.putExtra(WebViewActivity.EXTRA_CORP_WEBSITE,
+                        textInputCorpWebsite.getEditText().getText().toString().trim());
 //                Log.d(TAG, "onClick: website " + account.getCorpWebsite());
 //                Log.d(TAG, "onClick: wv class " + WebViewActivity.class.getSimpleName());
                 startActivity(detailIntent);
@@ -126,8 +130,7 @@ public class AddEditProfileActivity extends AppCompatActivity {
         textInputUserName.getEditText().setText(intent.getStringExtra(EXTRA_USER_NAME).toString());
         textInputUserEmail.getEditText().setText(intent.getStringExtra(EXTRA_USER_EMAIL).toString());
         textInputCorpWebsite.getEditText().setText(intent.getStringExtra(EXTRA_CORP_WEBSITE).toString());
-
-        editNote.setText(intent.getStringExtra(EXTRA_NOTE));
+        textInputNote.getEditText().setText(intent.getStringExtra(EXTRA_NOTE).toString());
 
         if (intent.getLongExtra(EXTRA_ACTVY_LONG, 0) == 0) {
             tvActvyDate.setText("");
@@ -234,7 +237,7 @@ public class AddEditProfileActivity extends AppCompatActivity {
         String userName = textInputUserName.getEditText().getText().toString().trim();
         String userEmail = textInputUserEmail.getEditText().getText().toString().trim();
         String corpWebsite = textInputCorpWebsite.getEditText().getText().toString();
-        String note = editNote.getText().toString();
+        String note = textInputNote.getEditText().getText().toString();
 
         if (corpName.trim().isEmpty() || userName.trim().isEmpty()
                 || userEmail.trim().isEmpty()) {
