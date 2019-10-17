@@ -1,6 +1,7 @@
 package com.kinsey.passwords.provider;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -32,6 +33,6 @@ public interface ProfileDao {
     @Query("SELECT * FROM Passport ORDER BY passport_id ASC")
     LiveData<List<Profile>> getAllProfilesById();
 
-    @Query("SELECT * FROM Passport ORDER BY open_date ASC")
+    @Query("SELECT * FROM Passport ORDER BY open_date DESC")
     LiveData<List<Profile>> getAllProfilesByOpenDate();
 }

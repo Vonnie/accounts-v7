@@ -60,7 +60,7 @@ public class MainActivityFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.d(TAG, "onCreateView: starts");
+//        Log.d(TAG, "onCreateView: starts");
 //        View view = inflater.inflate(R.layout.fragment_main, container, false);
 //        View view = inflater.inflate(R.layout.fragment_account_list, container, false);
         recyclerView = (RecyclerView) inflater.inflate(R.layout.fragment_account_list, container, false);

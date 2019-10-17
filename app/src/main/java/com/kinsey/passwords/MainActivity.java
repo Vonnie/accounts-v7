@@ -700,7 +700,7 @@ public class MainActivity extends AppCompatActivity
         // as you specify a parent activity in AndroidManifest.xml.
 //        feedUrl = "http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topTvEpisodes/xml";
 
-        Log.d(TAG, "onOptionsItemSelected: search cancel");
+        Log.d(TAG, "onOptionsItemSelected: menu");
         if (!mSearchView.isIconified()) {
             mSearchView.setIconified(true);
         }
@@ -725,21 +725,48 @@ public class MainActivity extends AppCompatActivity
                 if (!item.isChecked()) {
                     item.setChecked(true);
                 }
-                resortList(AccountsContract.ACCOUNT_LIST_BY_CORP_NAME);
+
+                profileViewModel.getAllProfiles().observe(this, new Observer<List<Profile>>() {
+                    @Override
+                    public void onChanged(List<Profile> profiles) {
+                        adapter.submitList(profiles);
+                    }
+                });
+
+//                resortList(AccountsContract.ACCOUNT_LIST_BY_CORP_NAME);
                 break;
 
             case R.id.menuacct_sort_opendate:
                 if (!item.isChecked()) {
                     item.setChecked(true);
                 }
-                resortList(AccountsContract.ACCOUNT_LIST_BY_OPEN_DATE);
+
+
+                profileViewModel.getAllProfilesByOpenDate().observe(this, new Observer<List<Profile>>() {
+                    @Override
+                    public void onChanged(List<Profile> profiles) {
+                        adapter.submitList(profiles);
+                    }
+                });
+
+
+//                resortList(AccountsContract.ACCOUNT_LIST_BY_OPEN_DATE);
                 break;
 
             case R.id.menuacct_sort_passport:
                 if (!item.isChecked()) {
                     item.setChecked(true);
                 }
-                resortList(AccountsContract.ACCOUNT_LIST_BY_PASSPORT_ID);
+
+
+                profileViewModel.getAllProfilesById().observe(this, new Observer<List<Profile>>() {
+                    @Override
+                    public void onChanged(List<Profile> profiles) {
+                        adapter.submitList(profiles);
+                    }
+                });
+
+//                resortList(AccountsContract.ACCOUNT_LIST_BY_PASSPORT_ID);
                 break;
 
             case R.id.menuacct_sort_custom:
@@ -2172,6 +2199,7 @@ public class MainActivity extends AppCompatActivity
                 Profile profile = new Profile(this.adapter.getItemCount() + 1,
                         corpName, userName, userEmail, corpWebsite);
                 profile.setNote(note);
+                profile.setOpenLong(data.getLongExtra(AddEditProfileActivity.EXTRA_OPEN_DATE_LONG, 0));
                 profile.setActvyLong(System.currentTimeMillis());
 
                 profileViewModel.insert(profile);
@@ -2196,6 +2224,7 @@ public class MainActivity extends AppCompatActivity
                 Profile profile = new Profile(1, corpName, userName, userEmail, corpWebsite);
                 profile.setId(id);
                 profile.setNote(note);
+                profile.setOpenLong(data.getLongExtra(AddEditProfileActivity.EXTRA_OPEN_DATE_LONG, 0));
                 profile.setActvyLong(System.currentTimeMillis());
 
                 profileViewModel.update(profile);

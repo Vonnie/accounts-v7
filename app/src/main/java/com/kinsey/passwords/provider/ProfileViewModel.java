@@ -5,9 +5,9 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
 
 import com.kinsey.passwords.items.Profile;
-import com.kinsey.passwords.items.Suggest;
 
 import java.util.List;
 
@@ -37,7 +37,19 @@ public class ProfileViewModel extends AndroidViewModel {
         repository.deleteAllProfiles();
     }
 
+
     public LiveData<List<Profile>> getAllProfiles() {
+        allProfiles = repository.getAllProfiles();
+        return allProfiles;
+    }
+
+    public LiveData<List<Profile>> getAllProfilesById() {
+        allProfiles = repository.getAllProfilesById();
+        return allProfiles;
+    }
+
+    public LiveData<List<Profile>> getAllProfilesByOpenDate() {
+        allProfiles = repository.getAllProfilesByOpenDate();
         return allProfiles;
     }
 

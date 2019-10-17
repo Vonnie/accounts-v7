@@ -33,6 +33,7 @@
             android:layout_toStartOf="@+id/tli_acct_id"
             android:ellipsize="end"
             android:tag="@string/tag_portrait"
+            android:layout_marginRight="20dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:textColor="?android:attr/textColorPrimary" />
 

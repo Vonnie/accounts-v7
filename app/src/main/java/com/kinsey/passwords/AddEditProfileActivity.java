@@ -137,7 +137,10 @@ public class AddEditProfileActivity extends AppCompatActivity {
         } else {
             tvActvyDate.setText("ActvyDate: " + format_ymdtimehm.format(intent.getLongExtra(EXTRA_ACTVY_LONG, 0)));
         }
+
+        lngOpenDate = intent.getLongExtra(EXTRA_OPEN_DATE_LONG, 0);
         Date dte = new Date(intent.getLongExtra(EXTRA_OPEN_DATE_LONG, 0));
+//        Log.d(TAG, "onDateChanged: lngOpenDate " + lngOpenDate);
         setOpenDateCalendar(dte);
     }
 
@@ -156,7 +159,7 @@ public class AddEditProfileActivity extends AppCompatActivity {
                         Calendar c2 = Calendar.getInstance();
                         c2.set(year, monthOfYear, dayOfMonth);
                         lngOpenDate = c2.getTimeInMillis();
-//                                Log.d(TAG, "onDateChanged: lngOpenDate " + lngOpenDate);
+//                        Log.d(TAG, "onDateChanged: lngOpenDate " + lngOpenDate);
                     }
                 });
 
@@ -261,6 +264,7 @@ public class AddEditProfileActivity extends AppCompatActivity {
 //        data.putExtra(EXTRA_OPEN_DATE_LONG, lngDatePickerOpenDate);
 
         data.putExtra(EXTRA_OPEN_DATE_LONG, lngOpenDate);
+//        Log.d(TAG, "onDateChanged: lngOpenDate " + lngOpenDate);
 
         data.putExtra(EXTRA_ACTVY_LONG, new Date().getTime());
 

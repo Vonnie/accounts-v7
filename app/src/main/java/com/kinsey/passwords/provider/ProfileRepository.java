@@ -4,6 +4,7 @@ import android.app.Application;
 import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
 
 import com.kinsey.passwords.items.Profile;
 
@@ -37,6 +38,17 @@ public class ProfileRepository {
     }
 
     public LiveData<List<Profile>> getAllProfiles() {
+        allProfiles = profileDao.getAllProfiles();
+        return allProfiles;
+    }
+
+    public LiveData<List<Profile>> getAllProfilesById() {
+        allProfiles = profileDao.getAllProfilesById();
+        return allProfiles;
+    }
+
+    public LiveData<List<Profile>> getAllProfilesByOpenDate() {
+        allProfiles = profileDao.getAllProfilesByOpenDate();
         return allProfiles;
     }
 
