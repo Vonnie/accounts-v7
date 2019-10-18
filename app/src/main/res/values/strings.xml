@@ -10,6 +10,8 @@
     <string name="menu_suggests_v1">Password Suggestions V1</string>
     <string name="menu_profile">Profile</string>
     <string name="menu_generate">Generate Passwords</string>
+    <string name="menu_generate10">Generate 10 Char Passwords</string>
+    <string name="menu_generate8">Generate 8 Char Passwords</string>
     <string name="no_items_message">No Items</string>
     <string name="edit_description_description">Button to edit passwords</string>
     <string name="delete_button_description">Button to delete password</string>

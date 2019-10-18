@@ -79,7 +79,8 @@ public class CursorRecyclerViewAdapter extends RecyclerView.Adapter<CursorRecycl
 //                    mCursor.getInt(mCursor.getColumnIndex(SuggestsContract.Columns._ID_COL)),
                     mCursor.getString(mCursor.getColumnIndex(SuggestsContract.Columns.PASSWORD_COL)),
                     mCursor.getInt(mCursor.getColumnIndex(SuggestsContract.Columns.SEQUENCE_COL)),
-                    mCursor.getString(mCursor.getColumnIndex(SuggestsContract.Columns.NOTE_COL)));
+                    mCursor.getLong(mCursor.getColumnIndex(SuggestsContract.Columns.ACTVY_DATE_COL)));
+//                    mCursor.getString(mCursor.getColumnIndex(SuggestsContract.Columns.NOTE_COL)));
 
             Log.d(TAG, "onBindViewHolder: " + mCursor.getString(mCursor.getColumnIndex(SuggestsContract.Columns.PASSWORD_COL)));
             holder.password.setText(mCursor.getString(mCursor.getColumnIndex(SuggestsContract.Columns.PASSWORD_COL)));

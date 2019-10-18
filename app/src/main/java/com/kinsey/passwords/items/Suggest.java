@@ -36,11 +36,11 @@ public class Suggest implements Serializable {
     @Ignore
     private int newSequence = 0;
 
-    public Suggest(String password, int sequence, String note) {
+    public Suggest(String password, int sequence, Long actvyDate) {
 //        this.id = id;
         this.password = password;
         this.sequence = sequence;
-        this.note = note;
+        this.actvyDate = actvyDate;
     }
 
 

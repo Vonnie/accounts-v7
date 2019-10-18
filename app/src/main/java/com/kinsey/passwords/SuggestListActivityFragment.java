@@ -190,7 +190,8 @@ public class SuggestListActivityFragment extends Fragment
 //                        cursor.getInt(cursor.getColumnIndex(SuggestsContract.Columns._ID_COL)),
                         cursor.getString(cursor.getColumnIndex(SuggestsContract.Columns.PASSWORD_COL)),
                         cursor.getInt(cursor.getColumnIndex(SuggestsContract.Columns.SEQUENCE_COL)),
-                        cursor.getString(cursor.getColumnIndex(SuggestsContract.Columns.NOTE_COL)));
+                        cursor.getLong(cursor.getColumnIndex(SuggestsContract.Columns.ACTVY_DATE_COL)));
+//                        cursor.getString(cursor.getColumnIndex(SuggestsContract.Columns.NOTE_COL)));
                 item.setNewSequence(cursor.getInt(cursor.getColumnIndex(SuggestsContract.Columns.SEQUENCE_COL)));
                 listSuggests.add(item);
             }

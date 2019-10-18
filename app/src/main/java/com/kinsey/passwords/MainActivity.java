@@ -2279,7 +2279,7 @@ public class MainActivity extends AppCompatActivity
             case REQUEST_VIEW_EXPORT:
                 if (resultCode == RESULT_OK) {
                     boolean blnImported = data.getBooleanExtra("IMPORT", false);
-                    Log.d(TAG, "onActivityResult: fileview imported? "  + blnImported);
+//                    Log.d(TAG, "onActivityResult: fileview imported? "  + blnImported);
 //                    returnToMain();
                     if (blnImported) {
 
@@ -2299,7 +2299,7 @@ public class MainActivity extends AppCompatActivity
                         addEditLayout.setVisibility(View.GONE);
                         addEditLayoutScroll.setVisibility(View.GONE);
 
-                        Log.d(TAG, "onActivityResult: refreshed");
+//                        Log.d(TAG, "onActivityResult: refreshed");
                     }
                 }
                 break;

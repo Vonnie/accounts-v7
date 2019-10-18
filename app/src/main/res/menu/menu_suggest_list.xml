@@ -3,14 +3,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.kinsey.passwords.SuggestListActivityV1">
     <item
-        android:id="@+id/menu_generate"
+        android:id="@+id/menu_generate10"
         android:icon="@android:drawable/ic_menu_add"
         android:orderInCategory="100"
-        android:title="@string/menu_generate"
-        app:showAsAction="always" />
+        android:title="@string/menu_generate10"
+
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/menu_generate8"
+        android:icon="@android:drawable/ic_menu_add"
+        android:orderInCategory="100"
+        android:title="@string/menu_generate8"
+        app:showAsAction="never" />
 
     <item
         android:id="@+id/delete_all_suggestions"
+        android:orderInCategory="110"
         android:title="Delete all password suggestions"
         app:showAsAction="never" />
 

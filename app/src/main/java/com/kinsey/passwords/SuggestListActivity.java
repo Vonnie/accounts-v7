@@ -1,7 +1,9 @@
 package com.kinsey.passwords;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -14,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,14 +25,21 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.kinsey.passwords.items.Suggest;
 import com.kinsey.passwords.provider.SuggestViewModel;
 import com.kinsey.passwords.provider.SuggestAdapter;
+import com.kinsey.passwords.tools.PasswordFormula;
 
+import java.util.Date;
 import java.util.List;
 
 public class SuggestListActivity extends AppCompatActivity {
+    public static final String TAG = "SuggestListActivity";
     public static final int ADD_SUGGEST_REQUEST = 1;
     public static final int EDIT_SUGGEST_REQUEST = 2;
 
     private SuggestViewModel suggestViewModel;
+    private PasswordFormula passwordFormula = new PasswordFormula();
+    GridLayoutManager layoutManager;
+
+    private int maxSeq = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,6 +59,16 @@ public class SuggestListActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
 
+        boolean isLandscape = (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE);
+        if (isLandscape) {
+            layoutManager = new GridLayoutManager(this, 4);
+        } else {
+            layoutManager = new GridLayoutManager(this, 2);
+        }
+
+        recyclerView.setLayoutManager(layoutManager);
+
+
         final SuggestAdapter adapter = new SuggestAdapter();
         recyclerView.setAdapter(adapter);
 
@@ -59,6 +79,15 @@ public class SuggestListActivity extends AppCompatActivity {
             public void onChanged(@Nullable List<Suggest> suggests) {
 //                update RecyclerView
 //                Toast.makeText(SuggestListActivity.this, "onChanged", Toast.LENGTH_SHORT).show();
+
+                maxSeq = 0;
+                for (Suggest suggest: suggests) {
+                    if (suggest.getSequence() > maxSeq) {
+                        maxSeq = suggest.getSequence();
+                    }
+                }
+                Log.d(TAG, "onChg new max seq " + maxSeq);
+
                 adapter.submitList(suggests);
             }
         });
@@ -107,7 +136,7 @@ public class SuggestListActivity extends AppCompatActivity {
             String description = data.getStringExtra(AddEditSuggestActivity.EXTRA_DESCRIPTION);
             int priority = data.getIntExtra(AddEditSuggestActivity.EXTRA_PRIORITY, 1);
 
-            Suggest suggest = new Suggest(title, priority, description );
+            Suggest suggest = new Suggest(title, priority, new Date().getTime());
             suggestViewModel.insert(suggest);
 
             Toast.makeText(this, "Suggest Saved", Toast.LENGTH_SHORT).show();
@@ -123,7 +152,7 @@ public class SuggestListActivity extends AppCompatActivity {
             String description = data.getStringExtra(AddEditSuggestActivity.EXTRA_DESCRIPTION);
             int priority = data.getIntExtra(AddEditSuggestActivity.EXTRA_PRIORITY, 1);
 
-            Suggest suggest = new Suggest(title, priority, description);
+            Suggest suggest = new Suggest(title, priority, new Date().getTime());
             suggest.setId(id);
             suggestViewModel.update(suggest);
 
@@ -146,12 +175,43 @@ public class SuggestListActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.menu_generate10:
+                generatePasswords(10);
+                return true;
+            case R.id.menu_generate8:
+                generatePasswords(8);
+                return true;
             case R.id.delete_all_suggestions:
                 suggestViewModel.deleteAllSuggests();
                 Toast.makeText(this, "All suggestions deleted", Toast.LENGTH_SHORT).show();
                 return true;
+
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
+
+
+    private void generatePasswords(int passwordLen) {
+
+        Log.d(TAG, "new max seq " + maxSeq);
+
+        int nbrPasswords = 0;
+        while(nbrPasswords < 10) {
+//            int iSeq = getMaxValue(SuggestsContract.Columns.SEQUENCE_COL);
+
+            maxSeq += 1;
+            Suggest suggest = new Suggest(
+                    passwordFormula.createPassword(passwordLen),
+                    maxSeq,
+                    new Date().getTime());
+
+            suggestViewModel.insert(suggest);
+
+            nbrPasswords++;
+        }
+
+        Toast.makeText(this, "10 new passwords added", Toast.LENGTH_SHORT).show();
+    }
 }
+
