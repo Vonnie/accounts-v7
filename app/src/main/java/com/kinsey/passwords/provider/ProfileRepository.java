@@ -52,6 +52,10 @@ public class ProfileRepository {
         return allProfiles;
     }
 
+    public LiveData<List<Profile>> searchCorpNameProfiles(String query) {
+        allProfiles = profileDao.searchCorpNameProfiles(query);
+        return allProfiles;
+    }
     private static class InsertProfileAsyncTask extends AsyncTask<Profile, Void, Void> {
         private ProfileDao profileDao;
 

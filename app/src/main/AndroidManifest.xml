@@ -107,7 +107,7 @@
                 android:value="com.kinsey.passwords.MainActivity" />
         </activity>
         <activity
-            android:name=".SearchActivity"
+            android:name=".SearchActivityV1"
             android:label="@string/title_activity_search"
             android:parentActivityName=".MainActivity">
             <intent-filter>
@@ -134,6 +134,9 @@
         </activity>
         <activity android:name=".AddEditProfileActivity"
             android:label="@string/title_activity_addedit_profile"
+            android:parentActivityName=".MainActivity" />
+        <activity android:name=".SearchActivity"
+            android:label="@string/title_activity_search_profile"
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".WebViewActivity"

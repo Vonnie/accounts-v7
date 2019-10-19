@@ -12,9 +12,11 @@
         android:id="@+id/menumain_search"
         android:icon="@drawable/ic_search"
         android:orderInCategory="100"
-        android:title="@string/menu_search"
-        app:actionViewClass="android.widget.SearchView"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom"
+        android:title="@string/menu_search" />
+<!--        app:actionViewClass="android.widget.SearchView"-->
+<!--        app:showAsAction="ifRoom|collapseActionView" />-->
+<!--    app:actionViewClass="androidx.appcompat.widget.SearchView"-->
     <!--android:icon="@drawable/selector_search"-->
     <!--android:icon="@drawable/ic_action_document"-->
     <!--<item-->

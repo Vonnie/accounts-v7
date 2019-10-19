@@ -12,6 +12,8 @@ import com.kinsey.passwords.items.Profile;
 
 import java.util.List;
 
+import javax.sql.DataSource;
+
 @Dao
 public interface ProfileDao {
 
@@ -35,4 +37,7 @@ public interface ProfileDao {
 
     @Query("SELECT * FROM Passport ORDER BY open_date DESC")
     LiveData<List<Profile>> getAllProfilesByOpenDate();
+
+    @Query("SELECT * FROM Passport where corporation_name LIKE  :name or LOWER(corporation_name) like LOWER(:name) order by corporation_name")
+    LiveData<List<Profile>> searchCorpNameProfiles(String name);
 }

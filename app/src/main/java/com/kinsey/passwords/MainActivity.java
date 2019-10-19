@@ -45,6 +45,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -61,17 +63,17 @@ import com.kinsey.passwords.items.Suggest;
 import com.kinsey.passwords.provider.DatePickerFragment;
 import com.kinsey.passwords.provider.ProfileAdapter;
 import com.kinsey.passwords.provider.ProfileViewModel;
-import com.kinsey.passwords.provider.SuggestViewModel;
 import com.kinsey.passwords.tools.AppDialog;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
-//import static com.kinsey.passwords.SearchActivity.SEARCH_ACCOUNT;
-//import static com.kinsey.passwords.SearchActivity.SELECTION_QUERY;
+//import static com.kinsey.passwords.SearchActivityV1.SEARCH_ACCOUNT;
+//import static com.kinsey.passwords.SearchActivityV1.SELECTION_QUERY;
 // ====================
 // Statement to assist in debugging
 // if (BuildConfig.DEBUG && acctId == 0) throw new AssertionError("Account Id is zero");
@@ -79,6 +81,7 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity
         implements
+        Filterable,
         AccountListActivityFragment.OnAccountListClickListener,
         AddEditActivityFragment.OnListenerClicked,
         AppDialog.DialogEvents,
@@ -99,7 +102,7 @@ public class MainActivity extends AppCompatActivity
 
     // whether or not the activity is i 2-pane mode
     // i.e. running in landscape on a tablet
-    private boolean mTwoPane = false;
+    private boolean isLandscape = false;
     private Boolean editing = false;
     private static final String ACCOUNT_FRAGMENT = "AccountFragment";
 
@@ -107,6 +110,9 @@ public class MainActivity extends AppCompatActivity
 
     public static String DEFAULT_APP_DIRECTORY_DATA = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath()
             + "/passport";
+
+    private List<Profile> profileListFull;
+    private List<Profile> profileList;
 
     public static String BACKUP_FILENAME = "accounts.json";
 
@@ -236,9 +242,14 @@ public class MainActivity extends AppCompatActivity
 
         profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
 
-        profileViewModel.getAllProfiles().observe(this, new Observer<List<Profile>>() {
+
+
+//        profileViewModel.getAllProfiles().observe(this, new Observer<List<Profile>>() {
+        profileViewModel.searchCorpNameProfiles("%Von%").observe(this, new Observer<List<Profile>>() {
             @Override
             public void onChanged(List<Profile> profiles) {
+
+                profileListFull = new ArrayList<>(profiles);
                 adapter.submitList(profiles);
             }
         });
@@ -276,8 +287,8 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        mTwoPane = (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE);
-//        Log.d(TAG, "onCreate: twoPane is " + mTwoPane);
+        isLandscape = (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE);
+//        Log.d(TAG, "onCreate: twoPane is " + isLandscape);
 
 
 //        listApps = (ListView) findViewById(R.id.xmlListView);
@@ -315,7 +326,7 @@ public class MainActivity extends AppCompatActivity
 ////        progressBar.setVisibility(View.VISIBLE);
 ////        progressBar.setVisibility(View.GONE);
 //
-//        if(mTwoPane) {
+//        if(isLandscape) {
 //            Log.d(TAG, "onCreate: twoPane mode");
 //            mainFragment.setVisibility(View.VISIBLE);
 //            addEditLayout.setVisibility(View.VISIBLE);
@@ -497,6 +508,11 @@ public class MainActivity extends AppCompatActivity
 //            menu.findItem(R.id.menumain_rss_top_tv_seasons).setChecked(true);
 //        }
 
+
+        return true;
+    }
+
+    private void searchTextEntry(Menu menu) {
         Log.d(TAG, "onCreateOptionsMenu: search starting");
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         mSearchView = (SearchView) menu.findItem(R.id.menumain_search).getActionView();
@@ -671,7 +687,7 @@ public class MainActivity extends AppCompatActivity
         Log.d(TAG, "onCreateOptionsMenu: returned " + true);
 
 
-        return true;
+//        return true;
     }
 
 
@@ -700,11 +716,11 @@ public class MainActivity extends AppCompatActivity
         // as you specify a parent activity in AndroidManifest.xml.
 //        feedUrl = "http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topTvEpisodes/xml";
 
-        Log.d(TAG, "onOptionsItemSelected: menu");
-        if (!mSearchView.isIconified()) {
-            mSearchView.setIconified(true);
-        }
-        AddEditActivityFragment editFragment;
+//        Log.d(TAG, "onOptionsItemSelected: menu");
+//        if (!mSearchView.isIconified()) {
+//            mSearchView.setIconified(true);
+//        }
+//        AddEditActivityFragment editFragment;
         int id = item.getItemId();
         //noinspection SimplifiableIfStatement
         switch (id) {
@@ -869,8 +885,8 @@ public class MainActivity extends AppCompatActivity
 //                break;
 
 
-            case R.id.menumain_search_setting:
-                searchListRequest();
+            case R.id.menumain_search:
+                searchRequestActivity();
                 break;
 
 
@@ -926,44 +942,52 @@ public class MainActivity extends AppCompatActivity
                 break;
 
             case android.R.id.home:
-                Log.d(TAG, "onOptionsItemSelected: home button pressed");
+
+                showConfirmationLeaveApp();
 
 
-                editFragment = (AddEditActivityFragment)
-                        getSupportFragmentManager().findFragmentById(R.id.task_details_container);
+//                Log.d(TAG, "onOptionsItemSelected: home button pressed");
+//
+//
+//                editFragment = (AddEditActivityFragment)
+//                        getSupportFragmentManager().findFragmentById(R.id.task_details_container);
+//
+//                if(editFragment == null) {
+//                    showConfirmationLeaveApp();
+//                    break;
+//                }
+//
+//                if (!editFragment.canClose()) {
+//                    showConfirmationDialog(AppDialog.DIALOG_ID_CANCEL_EDIT_UP);
+//                    break;
+//                }
+//
+//
+//
+//                getSupportFragmentManager().beginTransaction()
+//                        .remove(editFragment)
+//                        .commit();
+//                if (isLandscape) {
+//                    return false;
+//                } else {
+//                    mainFragment.setVisibility(View.VISIBLE);
+//                    View addEditLayout = findViewById(R.id.task_details_container);
+//                    View addEditLayoutScroll = findViewById(R.id.task_details_container_scroll);
+//                    addEditLayout.setVisibility(View.GONE);
+//                    addEditLayoutScroll.setVisibility(View.GONE);
+//                    Toast.makeText(this,
+//                            "Long click select for more details",
+//                            Toast.LENGTH_SHORT).show();
+//
+//                    return true;
+//                }
 
-                if(editFragment == null) {
-                    showConfirmationLeaveApp();
-                    break;
-                }
-
-                if (!editFragment.canClose()) {
-                    showConfirmationDialog(AppDialog.DIALOG_ID_CANCEL_EDIT_UP);
-                    break;
-                }
 
 
 
-                getSupportFragmentManager().beginTransaction()
-                        .remove(editFragment)
-                        .commit();
-                if (mTwoPane) {
-                    return false;
-                } else {
-                    mainFragment.setVisibility(View.VISIBLE);
-                    View addEditLayout = findViewById(R.id.task_details_container);
-                    View addEditLayoutScroll = findViewById(R.id.task_details_container_scroll);
-                    addEditLayout.setVisibility(View.GONE);
-                    addEditLayoutScroll.setVisibility(View.GONE);
-                    Toast.makeText(this,
-                            "Long click select for more details",
-                            Toast.LENGTH_SHORT).show();
-
-                    return true;
-                }
 
 //
-//                    if (mTwoPane) {
+//                    if (isLandscape) {
 //                        // in Landscape, so quit only if the back button was used
 ////                            Log.d(TAG, "onPositiveDialogResult: get list");
 ////                            AccountListActivityFragment listFragment = (AccountListActivityFragment)
@@ -978,7 +1002,7 @@ public class MainActivity extends AppCompatActivity
 //
 //
 //
-//                if (mTwoPane) {
+//                if (isLandscape) {
 //                } else {
 //                    showConfirmationLeaveApp();
 //                    break;
@@ -1028,7 +1052,7 @@ public class MainActivity extends AppCompatActivity
 
             mainFragment.setVisibility(View.VISIBLE);
 
-            if (!mTwoPane) {
+            if (!isLandscape) {
                 View addEditLayout = findViewById(R.id.task_details_container);
                 View addEditLayoutScroll = findViewById(R.id.task_details_container_scroll);
                 addEditLayout.setVisibility(View.GONE);
@@ -1159,7 +1183,7 @@ public class MainActivity extends AppCompatActivity
         sharedPreferences.edit().putInt(SELECTION_ONE_ITEM, this.account.getId()).apply();
 
 
-//        if (mTwoPane) {
+//        if (isLandscape) {
 //            acctEditRequest(this.account.getId());
 //        }
 
@@ -1287,7 +1311,7 @@ public class MainActivity extends AppCompatActivity
 ////        mSectionsPagerAdapter.setFrag1(frag1);
 ////        mSectionsPagerAdapter.setFrag2(frag2);
 ////        mSectionsPagerAdapter.setFrag3(frag3);
-////        if (!mTwoPane && accountSortorder == AccountsContract.ACCOUNT_LIST_BY_SEQUENCE) {
+////        if (!isLandscape && accountSortorder == AccountsContract.ACCOUNT_LIST_BY_SEQUENCE) {
 //
 ////        if (fragListPos == -1) {
 ////            if (accountMode == AccountsContract.ACCOUNT_ACTION_ADD) {
@@ -1557,7 +1581,7 @@ public class MainActivity extends AppCompatActivity
 //                    }
                     updateCorp(account);
                     mDialog.dismiss();
-                    if (mTwoPane) {
+                    if (isLandscape) {
                         removeEditing();
                     }
 
@@ -1779,9 +1803,18 @@ public class MainActivity extends AppCompatActivity
 
     private void requestSearch() {
         Log.d(TAG, "onPositiveDialogResult: request to rebuild search");
-        Intent detailIntent = new Intent(this, SearchActivity.class);
-        detailIntent.putExtra(SearchActivity.class.getSimpleName(), true);
+        Intent detailIntent = new Intent(this, SearchActivityV1.class);
+        detailIntent.putExtra(SearchActivityV1.class.getSimpleName(), true);
         startActivity(detailIntent);
+    }
+
+
+    private void searchRequestActivity() {
+
+        Intent detailIntent = new Intent(this, SearchActivity.class);
+        detailIntent.putExtra(Profile.class.getSimpleName(), "sortorder");
+        startActivity(detailIntent);
+
     }
 
 
@@ -1806,7 +1839,7 @@ public class MainActivity extends AppCompatActivity
 
     private void acctEditRequest(int accountId) {
         Log.d(TAG, "taskEditRequest: starts " + accountId);
-        Log.d(TAG, "taskEditRequest: in two-pane mode (tablet) " + mTwoPane);
+        Log.d(TAG, "taskEditRequest: in two-pane mode (tablet) " + isLandscape);
 
         try {
             accountMode = AccountsContract.ACCOUNT_ACTION_CHG;
@@ -1825,7 +1858,7 @@ public class MainActivity extends AppCompatActivity
             arguments.putInt(Account.class.getSimpleName(), accountId);
             editFragment.setArguments(arguments);
 
-            Log.d(TAG, "taskEditRequest: twoPaneMode " + mTwoPane);
+            Log.d(TAG, "taskEditRequest: twoPaneMode " + isLandscape);
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.task_details_container, editFragment)
                     .commit();
@@ -1838,7 +1871,7 @@ public class MainActivity extends AppCompatActivity
             View addEditLayoutScroll = findViewById(R.id.task_details_container_scroll);
             addEditLayout.setVisibility(View.VISIBLE);
             addEditLayoutScroll.setVisibility(View.VISIBLE);
-            if(!mTwoPane) {
+            if(!isLandscape) {
                 mainFragment.setVisibility(View.GONE);
             }
         } catch (Exception e) {
@@ -1863,7 +1896,7 @@ public class MainActivity extends AppCompatActivity
 ////        View addEditLayoutScroll = findViewById(R.id.task_details_container_scroll);
 ////        View mainFragment = findViewById(R.id.fragment);
 ////
-////        if(!mTwoPane) {
+////        if(!isLandscape) {
 ////            if (editFragment != null) {
 ////                getSupportFragmentManager().beginTransaction()
 ////                        .remove(editFragment)
@@ -1926,7 +1959,7 @@ public class MainActivity extends AppCompatActivity
 //
 //    //    private void addAccountRequest() {
 //////        Log.d(TAG, "addAccountRequest: starts");
-//////        if (mTwoPane) {
+//////        if (isLandscape) {
 //////            mAccountAdapter.resetSelection();
 ////        accountMode = AccountsContract.ACCOUNT_ACTION_ADD;
 ////        this.account = new Account();
@@ -1940,7 +1973,7 @@ public class MainActivity extends AppCompatActivity
 
 //    private void editAccountRequest(Account account) {
 ////        Log.d(TAG, "addAccountRequest: starts");
-//        if (mTwoPane) {
+//        if (isLandscape) {
 ////            Log.d(TAG, "addAccountRequest: in two-pane mode (tablet)");
 //        } else {
 ////            Log.d(TAG, "addAccountRequest: in single-pan mode (phone)");
@@ -2004,7 +2037,7 @@ public class MainActivity extends AppCompatActivity
 
     private void accountsListRequest(int sortorder) {
 //        Log.d(TAG, "accountsListRequest: starts");
-        if (mTwoPane) {
+        if (isLandscape) {
         } else {
         }
 
@@ -2029,7 +2062,7 @@ public class MainActivity extends AppCompatActivity
     private void suggestsListRequest2() {
         Log.d(TAG, "suggestsListRequest2: starts");
         currFrag = AppFragType.PASSWORDS;
-        if (mTwoPane) {
+        if (isLandscape) {
         } else {
         }
 
@@ -2053,7 +2086,7 @@ public class MainActivity extends AppCompatActivity
     private void suggestsListRequest4() {
         Log.d(TAG, "suggestsListRequest3: starts");
         currFrag = AppFragType.PASSWORDS;
-        if (mTwoPane) {
+        if (isLandscape) {
         } else {
         }
 
@@ -2072,7 +2105,7 @@ public class MainActivity extends AppCompatActivity
 //        arguments.putSerializable(Account.class.getSimpleName(), acct);
 //        fragment.setArguments(arguments);
 
-        Log.d(TAG, "suggestsListRequest: twoPaneMode " + mTwoPane);
+        Log.d(TAG, "suggestsListRequest: twoPaneMode " + isLandscape);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.task_details_container, fragment)
                 .commit();
@@ -2542,8 +2575,8 @@ public class MainActivity extends AppCompatActivity
 
 //    @Override
 //    public void onSearchClicked() {
-//        Intent detailIntent = new Intent(this, SearchActivity.class);
-//        detailIntent.putExtra(SearchActivity.class.getSimpleName(), (int)-1);
+//        Intent detailIntent = new Intent(this, SearchActivityV1.class);
+//        detailIntent.putExtra(SearchActivityV1.class.getSimpleName(), (int)-1);
 ////        detailIntent.putExtra(Suggest.class.getSimpleName(), "sortorder");
 //        startActivity(detailIntent);
 //    }
@@ -2597,8 +2630,8 @@ public class MainActivity extends AppCompatActivity
 //
 //                Toast.makeText(this, "Long click on item for more options", Toast.LENGTH_LONG).show();
 
-                    //                Intent detailIntent = new Intent(this, SearchActivity.class);
-//                detailIntent.putExtra(SearchActivity.class.getSimpleName(), true);
+                    //                Intent detailIntent = new Intent(this, SearchActivityV1.class);
+//                detailIntent.putExtra(SearchActivityV1.class.getSimpleName(), true);
 //                startActivity(detailIntent);
                 break;
             case AppDialog.DIALOG_ID_LEAVE_APP:
@@ -2614,7 +2647,7 @@ public class MainActivity extends AppCompatActivity
                     getSupportFragmentManager().beginTransaction()
                             .remove(editFragment)
                             .commit();
-                    if(mTwoPane) {
+                    if(isLandscape) {
 //                        Log.d(TAG, "onPositiveDialogResult: get list");
 //                        listFragment = (AccountListActivityFragment)
 //                                getSupportFragmentManager().findFragmentById(R.id.fragment);
@@ -2676,8 +2709,8 @@ public class MainActivity extends AppCompatActivity
 //                    Toast.makeText(this, "List from search on " + queryResult, Toast.LENGTH_LONG).show();
 //                }
 
-                //                Intent detailIntent = new Intent(this, SearchActivity.class);
-//        detailIntent.putExtra(SearchActivity.class.getSimpleName(), false);
+                //                Intent detailIntent = new Intent(this, SearchActivityV1.class);
+//        detailIntent.putExtra(SearchActivityV1.class.getSimpleName(), false);
 //                startActivity(detailIntent);
                 break;
             case AppDialog.DIALOG_ID_LEAVE_APP:
@@ -2691,7 +2724,7 @@ public class MainActivity extends AppCompatActivity
 
     private void deleteAccount(int acctId) {
         getContentResolver().delete(AccountsContract.buildIdUri((long)acctId), null, null);
-        if (!mTwoPane) {
+        if (!isLandscape) {
             FragmentManager fragmentManager = getSupportFragmentManager();
             Fragment fragment = fragmentManager.findFragmentById(R.id.task_details_container);
             if (fragment != null) {
@@ -2711,7 +2744,7 @@ public class MainActivity extends AppCompatActivity
 //        listFragment.setAcctId(-1);
 
 
-        if (mTwoPane) {
+        if (isLandscape) {
             removeEditing();
         }
 
@@ -2807,7 +2840,7 @@ public class MainActivity extends AppCompatActivity
 //        View addEditLayout = findViewById(R.id.task_details_container);
 //        View mainFragment = findViewById(R.id.fragment);
 //
-//        if(!mTwoPane) {
+//        if(!isLandscape) {
 //            FragmentManager fragmentManager = getSupportFragmentManager();
 //            Fragment fragment = fragmentManager.findFragmentById(R.id.task_details_container);
 //            if (fragment != null) {
@@ -2901,7 +2934,7 @@ public class MainActivity extends AppCompatActivity
         getSupportFragmentManager().beginTransaction()
                 .remove(editFragment)
                 .commit();
-        if (!mTwoPane) {
+        if (!isLandscape) {
             View addEditLayout = findViewById(R.id.task_details_container);
             View addEditLayoutScroll = findViewById(R.id.task_details_container_scroll);
             addEditLayout.setVisibility(View.GONE);
@@ -2929,7 +2962,7 @@ public class MainActivity extends AppCompatActivity
 
 //            View mainFragment = findViewById(R.id.fragment);
 //
-//        if (!mTwoPane) {
+//        if (!isLandscape) {
 //            showConfirmationLeaveApp();
 //            return;
 //        }
@@ -3035,5 +3068,40 @@ public class MainActivity extends AppCompatActivity
     }
 
 
+    @Override
+    public Filter getFilter() {
+        return profileFilter;
+    }
 
+    private Filter profileFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            List<Profile> filteredList = new ArrayList<>();
+
+            if (constraint == null || constraint.length() == 0) {
+               filteredList.addAll(profileListFull);
+            } else {
+                String filterPattern = constraint.toString().toLowerCase().trim();
+
+                for (Profile item : profileListFull) {
+                    if (item.getCorpName().toLowerCase().contains(filterPattern)) {
+                        filteredList.add(item);
+                    }
+                }
+            }
+
+            FilterResults results = new FilterResults();
+            results.values = filteredList;
+
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            profileList.clear();
+            profileList.addAll((List) results.values);
+
+//            notifyDataSetChanged();
+        }
+    };
 }

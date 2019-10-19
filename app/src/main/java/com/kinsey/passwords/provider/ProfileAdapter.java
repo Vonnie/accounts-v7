@@ -21,6 +21,7 @@ import java.util.Locale;
 
 public class ProfileAdapter extends ListAdapter<Profile, ProfileAdapter.ProfileHolder> {
 //    private List<Profile> profiles = new ArrayList<Profile>();
+
     private OnItemClickListener listener;
 
     public ProfileAdapter() {

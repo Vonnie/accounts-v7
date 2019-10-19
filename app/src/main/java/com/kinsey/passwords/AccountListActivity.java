@@ -2428,8 +2428,8 @@ public class AccountListActivity extends AppCompatActivity
             case AppDialog.DIALOG_ID_ASK_REFRESH_SEARCHDB:
 
                 Log.d(TAG, "onPositiveDialogResult: request to rebuild search");
-                Intent detailIntent = new Intent(this, SearchActivity.class);
-                detailIntent.putExtra(SearchActivity.class.getSimpleName(), true);
+                Intent detailIntent = new Intent(this, SearchActivityV1.class);
+                detailIntent.putExtra(SearchActivityV1.class.getSimpleName(), true);
                 startActivity(detailIntent);
                 break;
             default:
@@ -2445,8 +2445,8 @@ public class AccountListActivity extends AppCompatActivity
         switch (dialogId) {
 
             case AppDialog.DIALOG_ID_ASK_REFRESH_SEARCHDB:
-                Intent detailIntent = new Intent(this, SearchActivity.class);
-                detailIntent.putExtra(SearchActivity.class.getSimpleName(), false);
+                Intent detailIntent = new Intent(this, SearchActivityV1.class);
+                detailIntent.putExtra(SearchActivityV1.class.getSimpleName(), false);
                 startActivity(detailIntent);
                 break;
 
