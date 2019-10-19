@@ -70,6 +70,14 @@ public class AddEditProfileActivity extends AppCompatActivity {
 
 
     @Override
+    public boolean onSupportNavigateUp() {
+//        return super.onSupportNavigateUp();
+        setResult(RESULT_CANCELED);
+        finish();
+        return false;
+    }
+
+    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
 //        , @Nullable PersistableBundle persistentState
 //        super.onCreate(savedInstanceState, persistentState);

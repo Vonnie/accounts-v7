@@ -111,10 +111,11 @@ public class MainActivity extends AppCompatActivity
     public static String DEFAULT_APP_DIRECTORY_DATA = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath()
             + "/passport";
 
+    public static String BACKUP_FILENAME = "accounts.json";
+
+
     private List<Profile> profileListFull;
     private List<Profile> profileList;
-
-    public static String BACKUP_FILENAME = "accounts.json";
 
     private String feedUrl = "http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topTvEpisodes/xml";
     private int feedLimit = 10;
@@ -244,8 +245,7 @@ public class MainActivity extends AppCompatActivity
 
 
 
-//        profileViewModel.getAllProfiles().observe(this, new Observer<List<Profile>>() {
-        profileViewModel.searchCorpNameProfiles("%Von%").observe(this, new Observer<List<Profile>>() {
+        profileViewModel.getAllProfiles().observe(this, new Observer<List<Profile>>() {
             @Override
             public void onChanged(List<Profile> profiles) {
 
@@ -264,7 +264,7 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                profileViewModel.delete(adapter.getNoteAt(viewHolder.getAdapterPosition()));
+                profileViewModel.delete(adapter.getProfileAt(viewHolder.getAdapterPosition()));
                 Toast.makeText(MainActivity.this, "Profile deleted", Toast.LENGTH_SHORT).show();
             }
         }).attachToRecyclerView(recyclerView);

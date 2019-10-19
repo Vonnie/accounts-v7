@@ -3,7 +3,6 @@ package com.kinsey.passwords.provider;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.DatePicker;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,17 +13,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.kinsey.passwords.R;
 import com.kinsey.passwords.items.Profile;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-
-public class ProfileAdapter extends ListAdapter<Profile, ProfileAdapter.ProfileHolder> {
+public class SearchAdapter extends ListAdapter<Profile, SearchAdapter.ProfileHolder> {
 //    private List<Profile> profiles = new ArrayList<Profile>();
 
     private OnItemClickListener listener;
 
-    public ProfileAdapter() {
+    public SearchAdapter() {
         super(DIFF_CALLBACK);
     }
 
@@ -39,7 +33,9 @@ public class ProfileAdapter extends ListAdapter<Profile, ProfileAdapter.ProfileH
         public boolean areContentsTheSame(@NonNull Profile oldItem, @NonNull Profile newItem) {
             return oldItem.getCorpName().equals(newItem.getCorpName()) &&
                     oldItem.getUserName().equals(newItem.getUserName()) &&
-                    oldItem.getUserEmail().equals(newItem.getUserEmail());
+                    oldItem.getUserEmail().equals(newItem.getUserEmail()) &&
+                    oldItem.getUserEmail().equals(newItem.getUserEmail()) &&
+                    oldItem.getCorpWebsite().equals(newItem.getCorpWebsite());
         }
     };
 
@@ -47,17 +43,18 @@ public class ProfileAdapter extends ListAdapter<Profile, ProfileAdapter.ProfileH
     @Override
     public ProfileHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.profile_item, parent, false);
+                .inflate(R.layout.search_item, parent, false);
         return new ProfileHolder((itemView));
     }
 
     @Override
     public void onBindViewHolder(@NonNull ProfileHolder holder, int position) {
         Profile currentProfile = getItem(position);
-        holder.tvCorpName.setText(currentProfile.getCorpName());
         holder.tvAcctId.setText(String.valueOf(currentProfile.getId()));
+        holder.tvCorpName.setText(currentProfile.getCorpName());
+        holder.tvCorpWebsite.setText(currentProfile.getCorpWebsite());
         holder.tvUserName.setText(currentProfile.getUserName());
-
+        holder.tvUserEmail.setText(currentProfile.getUserEmail());
     }
 
     public Profile getProfileAt(int position) {
@@ -67,14 +64,18 @@ public class ProfileAdapter extends ListAdapter<Profile, ProfileAdapter.ProfileH
     class ProfileHolder extends RecyclerView.ViewHolder {
         private TextView tvAcctId;
         private TextView tvCorpName;
+        private TextView tvCorpWebsite;
         private TextView tvUserName;
+        private TextView tvUserEmail;
 
 
         public ProfileHolder(@NonNull View itemView) {
             super(itemView);
             tvAcctId = itemView.findViewById(R.id.acct_id);
             tvCorpName = itemView.findViewById(R.id.corp_name);
+            tvCorpWebsite = itemView.findViewById(R.id.corp_website);
             tvUserName = itemView.findViewById(R.id.user_name);
+            tvUserEmail = itemView.findViewById(R.id.user_email);
 
             itemView.setOnClickListener(new View.OnClickListener() {
 
@@ -93,7 +94,7 @@ public class ProfileAdapter extends ListAdapter<Profile, ProfileAdapter.ProfileH
         void onItemClick(Profile profile);
     }
 
-    public void setOnItemClickListener(ProfileAdapter.OnItemClickListener listener) {
+    public void setOnItemClickListener(SearchAdapter.OnItemClickListener listener) {
         this.listener = listener;
     }
 }

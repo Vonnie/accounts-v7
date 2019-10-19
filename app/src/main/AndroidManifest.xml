@@ -34,7 +34,8 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-        <activity android:name=".AddEditSuggestActivity"
+        <activity
+            android:name=".AddEditSuggestActivity"
             android:label="@string/title_activity_suggest_add"
             android:parentActivityName=".SuggestListActivity" />
         <activity
@@ -83,8 +84,8 @@
         </activity>
         <activity
             android:name=".SuggestListActivity"
-            android:launchMode="singleTop"
             android:label="@string/title_activity_suggest_list"
+            android:launchMode="singleTop"
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -132,17 +133,18 @@
                 android:name="android.app.default_searchable"
                 android:value=".SearchActivity" />
         </activity>
-        <activity android:name=".AddEditProfileActivity"
-            android:label="@string/title_activity_addedit_profile"
-            android:parentActivityName=".MainActivity" />
-        <activity android:name=".SearchActivity"
+        <activity
+            android:name=".AddEditProfileActivity"
+            android:label="@string/title_activity_addedit_profile">
+        </activity>
+        <activity
+            android:name=".SearchActivity"
             android:label="@string/title_activity_search_profile"
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".WebViewActivity"
             android:label="@string/title_activity_web_view"
-            android:parentActivityName=".AddEditProfileActivity">
-        </activity>
+            android:parentActivityName=".AddEditProfileActivity"></activity>
     </application>
 
 </manifest>
