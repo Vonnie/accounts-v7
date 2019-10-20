@@ -1784,7 +1784,7 @@ public class AccountListActivity extends AppCompatActivity
     private void viewAccountsFile() {
         Log.d(TAG, "viewAccountsFile: request request view exports");
         mActivityStart = true;
-        Intent detailIntent = new Intent(this, FileViewActivity.class);
+        Intent detailIntent = new Intent(this, FileViewActivityV1.class);
 //        startActivity(detailIntent);
         startActivityForResult(detailIntent, AccountsContract.ACCOUNT_ACTION_VIEW_EXPORT);
     }
@@ -2395,7 +2395,7 @@ public class AccountListActivity extends AppCompatActivity
     @Override
     public void onDialogCancelled(int dialogId) {
 //        Log.d(TAG, "onDialogCancelled: starts");
-        Intent detailIntent = new Intent(this, FileViewActivity.class);
+        Intent detailIntent = new Intent(this, FileViewActivityV1.class);
         startActivity(detailIntent);
     }
 

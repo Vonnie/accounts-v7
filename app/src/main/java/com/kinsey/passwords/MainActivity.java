@@ -804,13 +804,13 @@ public class MainActivity extends AppCompatActivity
                 suggestsListRequest4();
                 break;
 
-            case R.id.menumain_showSuggestsV1:
-                suggestsListRequest2();
-                break;
+//            case R.id.menumain_showSuggestsV1:
+//                suggestsListRequest2();
+//                break;
 
-            case R.id.menumain_showProfile:
-                profileRequest();
-                break;
+//            case R.id.menumain_showProfile:
+//                profileRequest();
+//                break;
 
 
             case R.id.menuacct_external_accts:
@@ -845,22 +845,25 @@ public class MainActivity extends AppCompatActivity
                 viewAccountsFile();
                 break;
 
-            case R.id.menumain_refresh:
-                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                sharedPreferences.edit().putString(SELECTION_QUERY, "").apply();
-                sharedPreferences.edit().putInt(SELECTION_ONE_ITEM, -1).apply();
-                AccountListActivityFragment listFragment = (AccountListActivityFragment)
-                        getSupportFragmentManager().findFragmentById(R.id.fragment);
-                if (listFragment.getQueryCorp().equals("")) {
-                    listFragment.unselectItem();
-                } else {
-                    listFragment.setQuery("");
-                }
 
-                removeEditFrag();
+                //            case R.id.menumain_refresh:
+//                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+//                sharedPreferences.edit().putString(SELECTION_QUERY, "").apply();
+//                sharedPreferences.edit().putInt(SELECTION_ONE_ITEM, -1).apply();
+//                AccountListActivityFragment listFragment = (AccountListActivityFragment)
+//                        getSupportFragmentManager().findFragmentById(R.id.fragment);
+//                if (listFragment.getQueryCorp().equals("")) {
+//                    listFragment.unselectItem();
+//                } else {
+//                    listFragment.setQuery("");
+//                }
+//
+//                removeEditFrag();
+//
+//                Toast.makeText(this, "Refreshed", Toast.LENGTH_LONG).show();
+//                break;
 
-                Toast.makeText(this, "Refreshed", Toast.LENGTH_LONG).show();
-                break;
+
 
 //                Log.d(TAG, "onOptionsItemSelected: ifSearch " + item.isChecked());
 //                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -1013,7 +1016,7 @@ public class MainActivity extends AppCompatActivity
 //                return true;  // indicate we are handling this
 //
 ////                    setMenuItemVisible(R.id.menuacct_save, false);
-////                FileViewActivityFragment fvFragment = (FileViewActivityFragment)
+////                FileViewActivityFragmentV1 fvFragment = (FileViewActivityFragmentV1)
 ////                        getSupportFragmentManager().findFragmentByTag("fileview");
 //////                        getSu1pportFragmentManager().findFragmentById(R.id.task_details_container);
 ////                if (fvFragment != null) {

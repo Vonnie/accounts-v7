@@ -9,29 +9,24 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-import com.kinsey.passwords.items.Account;
-import com.kinsey.passwords.items.AccountsContract;
-import com.kinsey.passwords.tools.AppDialog;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import android.os.Environment;
 import android.os.Handler;
+import androidx.fragment.app.FragmentManager;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.ShareActionProvider;
+import androidx.appcompat.widget.Toolbar;
 import android.util.JsonReader;
-import android.util.JsonToken;
 import android.util.JsonWriter;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import com.kinsey.passwords.items.Account;
+import com.kinsey.passwords.items.AccountsContract;
+import com.kinsey.passwords.tools.AppDialog;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -39,62 +34,108 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import static com.kinsey.passwords.MainActivity.format_ymdtime;
 
-public class FileViewActivity extends AppCompatActivity
-    implements AppDialog.DialogEvents {
-    private static final String TAG = "FileViewActivity";
+public class FileViewActivityV1 extends AppCompatActivity
+    implements FileViewActivityFragmentV1.OnFileViewClickListener,
+        AppDialog.DialogEvents {
 
-    ProgressBar progressBar;
-    WebView webView;
+    private static final String TAG = "FileViewActivityV1";
 
-    File dirStorage = new File(Environment.getDataDirectory().getAbsolutePath());
-    private Handler mHandler = new Handler();
+    FileViewActivityFragmentV1 fvFragment;
     boolean importRefreshReq = false;
+    ProgressBar progressBar;
+    private Handler mHandler = new Handler();
+    private ShareActionProvider myShareActionProvider;
+    File dirStorage = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath());
+    Menu menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_file_view);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+//        setContentView(R.layout.activity_suggest_listV1);
+        setContentView(R.layout.activity_file_view_v1);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+//        getSupportActionBar().setLogo(R.mipmap.ic_launcher);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close);
 
         progressBar = findViewById(R.id.progressBar);
         progressBar.setVisibility(View.VISIBLE);
 
+//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Snackbar.make(view, "Share Exported file", Snackbar.LENGTH_LONG)
+//                        .setAction("Send",
+//                                new View.OnClickListener() {
+//                                    @Override
+//                                    public void onClick(View view) {
+//                                        shareExport();
+//
+//                                    }
+//                                }
+//                                ).show();
+//            }
+//        });
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
+//        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        setTitle("Backup / Restore");
 
 
-        webView = (WebView) findViewById(R.id.wv_page);
 
-        webView.setWebViewClient(new WebViewClient() {
-            @Override
-            public void onPageFinished(WebView web, String url) {
-                web.loadUrl("javascript:(function(){ document.body.style.paddingTop = '1px'})();");
-                Log.d(TAG, "onPageFinished: ");
-            }
 
-        });
-        introPage();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fvFragment = (FileViewActivityFragmentV1) fragmentManager.findFragmentById(R.id.json_fragment);
+//        if (fvFragment != null) {
+//            Log.d(TAG, "onCreate: found the fragment");
+//            fvFragment.setInfoMessage("Able to connect");
+//        }
+
+        //
+//        FragmentManager fragmentManager = getFragmentManager();
+//        if (fragmentManager.findFragmentById(R.id.fragment) == null) {
+//
+//        }
+
+
+//        new CountDownTimer(3000, 3000) {
+//
+//            public void onTick(long millisUntilFinished) {
+////                    holder.corp_name.setText("checking db, seconds remaining: " + millisUntilFinished / 1000);
+//            }
+//
+//            public void onFinish() {
+//                progressBar  = findViewById(R.id.progressBar);
+//                progressBar.setVisibility(View.GONE);
+//            }
+//        }.start();
+
 
     }
 
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent();
+        intent.putExtra("IMPORT", importRefreshReq);
+        setResult(RESULT_OK, intent);
+        finish();
+        super.onBackPressed();
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        Intent intent = new Intent();
+        intent.putExtra("IMPORT", importRefreshReq);
+        setResult(RESULT_OK, intent);
+        finish();
+//        return super.onSupportNavigateUp();
+        return true;
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -105,7 +146,6 @@ public class FileViewActivity extends AppCompatActivity
 
         MenuItem item;
         Log.d(TAG, "can read: " + dirStorage.canRead());
-        Log.d(TAG, "storage dir: " + dirStorage.getAbsolutePath());
         if (dirStorage.canRead()) {
             item = menu.findItem(R.id.vw_show_file);
             item.setEnabled(true);
@@ -127,6 +167,20 @@ public class FileViewActivity extends AppCompatActivity
         }
 
 
+
+
+//        getMenuInflater().inflate(R.menu.share_menu, menu);
+
+//        // Locate MenuItem with ShareActionProvider
+//        MenuItem item = menu.findItem(R.id.menu_item_share);
+//
+//        // Fetch and store ShareActionProvider
+//        mShareActionProvider = (ShareActionProvider) item.getActionProvider();
+
+//        MenuItem shareItem = menu.findItem(R.id.menu_item_share);
+//        myShareActionProvider =
+//                (ShareActionProvider) MenuItemCompat.getActionProvider(shareItem);
+
         return true;
     }
 
@@ -147,7 +201,7 @@ public class FileViewActivity extends AppCompatActivity
 
             case R.id.vw_show_file:
                 Log.d(TAG, "onOptionsItemSelected: Export");
-                reportFile();
+                fvFragment.reportFile();
                 break;
 
             case R.id.vw_export:
@@ -170,153 +224,119 @@ public class FileViewActivity extends AppCompatActivity
                 Log.d(TAG, "onOptionsItemSelected: View share");
                 break;
 
+            case android.R.id.home:
+//                AccountListActivityFragment listFragment = (AccountListActivityFragment)
+//                        getSupportFragmentManager().findFragmentByTag("acctlistfrag");
+//
+//                if (listFragment != null) {
+//                    Log.d(TAG, "onOptionsItemSelected: found account list fragment");
+//                }
+
+                Log.d(TAG, "onOptionsItemSelected: home button pressed");
+
+                Intent intent = new Intent();
+                intent.putExtra("IMPORT", importRefreshReq);
+                setResult(RESULT_OK, intent);
+                finish();
+
         }
 
         return super.onOptionsItemSelected(item);
     }
 
+    // Call to update the share intent
+    private void setShareIntent(Intent shareIntent) {
+        if (myShareActionProvider != null) {
+            myShareActionProvider.setShareIntent(shareIntent);
+        }
+    }
 
-    private void introPage() {
-        try {
-//            Log.d(TAG, "reportJson: " + MainActivity.DEFAULT_APP_DIRECTORY);
-            Log.d(TAG, "reportJson: ");
-            boolean retSuccess = true;
+    private void showFilename() {
+        Log.d(TAG, "showFilename: " + MainActivity.DEFAULT_APP_DIRECTORY_DATA + "/" + MainActivity.BACKUP_FILENAME);
+        AppDialog dialog = new AppDialog();
+        Bundle args = new Bundle();
+        args.putInt(AppDialog.DIALOG_ID, AppDialog.DIALOG_ID_EXPORT_FILENAME);
+        args.putInt(AppDialog.DIALOG_TYPE, AppDialog.DIALOG_OK);
+        args.putString(AppDialog.DIALOG_MESSAGE, getString(R.string.confirmdiag_export_filename));
+        args.putString(AppDialog.DIALOG_SUB_MESSAGE, MainActivity.DEFAULT_APP_DIRECTORY_DATA + "/" + MainActivity.BACKUP_FILENAME);
+        args.putInt(AppDialog.DIALOG_POSITIVE_RID, R.string.ok);
 
-            webView.getSettings().setJavaScriptEnabled(true);
-            String htmlString;
+        dialog.setArguments(args);
+        dialog.show(getSupportFragmentManager(), null);
 
-            File dirStorage = new File(MainActivity.DEFAULT_APP_DIRECTORY);
+    }
 
-            File pathExternal = new File(MainActivity.DEFAULT_APP_DIRECTORY_DATA);
+    private void shareExport() {
+        AlertDialog.Builder dlg = new AlertDialog.Builder(this);
+        dlg.setIcon(getResources().getDrawable(android.R.drawable.ic_dialog_alert));
+        dlg.setTitle(getResources().getString(R.string.app_name))
+                .setMessage("Is the exported file up-to-date for this share.")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
 
-            File fileExternal = new File(pathExternal, MainActivity.BACKUP_FILENAME);
-
-//            Log.d(TAG, "reportJson: state " + Environment.getExternalStorageState());
-//            Log.d(TAG, "reportJson: system " + System.getenv());
-
-            if (dirStorage.exists()) {
-                Log.d(TAG, "reportJson dirExternal " + dirStorage.getAbsolutePath());
-                Log.d(TAG, "reportJson dirExternal canRead " + dirStorage.canRead());
-                Log.d(TAG, "reportJson dirInternal free space " + dirStorage.getFreeSpace());
-
-                if (dirStorage.canRead()) {
-
-                    if (pathExternal.exists()) {
-                        if (fileExternal.exists()) {
-                            htmlString = notfyMsg() +
-                                    "<h4>Have storage file "  + "</h4>" +
-                                    "<h5>" + fileExternal.getAbsoluteFile() + "</h5>" +
-                                    "<h5>" + accountJsonProperties(fileExternal) + "</h5>";
-
-                            //                File path2 = new File(, "passport");
-                            //
-                            //                Log.d(TAG, "run: path2 " + path2.getAbsoluteFile());
-                            //
-                            //                final JsonReader reader = new JsonReader(new FileReader(
-                            //                        path2.getAbsoluteFile() + "/accounts.json"));
-                        } else {
-                            htmlString = notfyMsg() +
-                                    "<h4>But presently no account export file on " + pathExternal.getAbsoluteFile() + "</h4>" +
-                                    "<h5>Use menu to export data to this file.</h5>";
-//                            try {
-//                                fileExternal.createNewFile();
-//                                Log.d(TAG, "reportJson: new file create on " + fileExternal.getAbsoluteFile());
-//                            } catch (Exception ex) {
-//                                Log.d(TAG, "reportJson: " + ex.getMessage());
-//                            }
-                        }
-                    } else {
-                        htmlString = notfyMsg() +
-                                "<h4>Path external does not exists " + pathExternal.getAbsoluteFile() + "</h4>" +
-                                "<h5>Use menu to export data to this file.</h5>";
+                        shareIntent();
+                        // finish dialog
+                        dialog.dismiss();
+                        return;
                     }
-                } else {
-                    htmlString = permissionMsg();
-                }
-            } else {
-                htmlString = warningMsg() +
-                        "<h5>Have no external storage for file " + dirStorage.getAbsoluteFile() + "</h5>";
-            }
 
-            webView.loadData(htmlString, "text/html", null);
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
 
-        } catch (Exception ex) {
-            Log.d(TAG, "reportJson: " + ex.getMessage());
+                        // finish dialog
+                        dialog.dismiss();
+                        return;
+                    }
+
+                })
+                .show();
+        dlg = null;
+
+    }
+
+    private void shareIntent() {
+
+        Intent emailintent = new Intent(Intent.ACTION_SEND);
+        emailintent.putExtra(Intent.EXTRA_SUBJECT, "My Accounts App");
+//        emailIntent.putExtra(Intent.EXTRA_TEXT, emailText);
+//        ArrayList<Uri> uris = new ArrayList<Uri>();
+        emailintent.setType("text/html");
+
+
+        File file = new File(MainActivity.DEFAULT_APP_DIRECTORY_DATA,
+                MainActivity.BACKUP_FILENAME);
+        if (!file.exists()) {
+            Toast.makeText(FileViewActivityV1.this,
+                    "File not exported to email",
+                    Toast.LENGTH_SHORT).show();
+            return;
         }
 
-    }
+        emailintent.putExtra(Intent.EXTRA_SUBJECT, "My Accounts App - import/export file");
+//                Uri u = Uri.fromFile(file);
+//                uris.add(u);
+        emailintent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
+        emailintent.putExtra(Intent.EXTRA_TEXT, "Exported JSON file");
 
+        emailintent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+//        emailintent.putExtra(Intent.EXTRA_TEXT, "My Accounts Attachments");
 
-    private String warningMsg() {
-        String htmlString = "<br><br><h1>Warning</h1>\n" +
-                "<h2>Unable to acquire Exported Accounts</h2>\n" +
-                "<h3>Either not previously exported or file storage issue</h3>";
-        return htmlString;
-    }
-
-    private String notfyMsg() {
-        String htmlString = "<br><br><h1>Notification</h1>\n" +
-                "<h2>App storage available</h2>\n" ;
-        return htmlString;
-    }
-
-    private String permissionMsg() {
-        String htmlString = "<br><br><h1>Permission Issue</h1>\n" +
-                "<h2>Unable to access App storage for backup file.</h2>\n" +
-                "<h3>Grant access for this App from Settings to select apps</h3>" +
-                "<h3>Select Accounts app in apps list. Select permissions. Then, set on Storage.</h3>" +
-                "<h4>Since version 10, backup storage is moved. See Filename from menu";
-        return htmlString;
-    }
-
-
-    private String accountJsonProperties(File file) {
-
-        String returnValue = "";
         try {
-
-            List<Account> listAccounts = new ArrayList<Account>();
-
-            final JsonReader reader = new JsonReader(new FileReader(file.getAbsoluteFile()));
-
-            int listCount = 0;
-            reader.beginArray();
-            while (reader.hasNext()) {
-                Account account = readMessage(reader);
-                if (account == null) {
-                    break;
-                } else {
-                    listAccounts.add(account);
-                    listCount = listAccounts.size();
-                }
-            }
-//                    Log.d(TAG, "run: count " + listAccounts.size());
-            reader.endArray();
-            reader.close();
-
-            returnValue = listCount + " #Accounts on backup file";
-        } catch (IOException e) {
-            e.printStackTrace();
-            returnValue = "error: " + e.getMessage();
-        } catch (Exception e) {
-            e.printStackTrace();
-            returnValue = "error: " + e.getMessage();
-        } finally {
-            return returnValue;
+            startActivity(Intent.createChooser(emailintent, "Send your accounts.json..."));
+        } catch(ActivityNotFoundException e) {
+            Toast.makeText(FileViewActivityV1.this,
+                    "Unable to get the shared menu",
+                    Toast.LENGTH_LONG).show();
         }
 
+//        Toast.makeText(FileViewActivityV1.this,
+//                "Exported file shared sent",
+//                Toast.LENGTH_SHORT).show();
+
     }
-
-
-    public void reportFile() {
-        File fileExternal = new File(MainActivity.DEFAULT_APP_DIRECTORY_DATA
-                + "/" + MainActivity.BACKUP_FILENAME);
-        String loc = "file://" + fileExternal.getAbsolutePath();
-        Log.d(TAG, "reportJson: " + loc);
-        webView.loadUrl(loc);
-    }
-
-
 
 
     public String ExportAccountDB() {
@@ -562,7 +582,7 @@ public class FileViewActivity extends AppCompatActivity
             count = writeMessagesArray(writer);
             writer.flush();
             writer.close();
-            introPage();
+            fvFragment.reportJson();
         } catch (IOException e1) {
             msgError = e1.getMessage();
             Log.e(TAG, "ExportAccountDB error: " + e1.getMessage());
@@ -587,6 +607,15 @@ public class FileViewActivity extends AppCompatActivity
         return msgError;
     }
 
+//    private void grantPermission(String permission) {
+//        Context context = InstrumentationRegistry.getTargetContext();
+//        TestButler.grantPermission(context, permission);
+//
+//        long checkPermission = ContextCompat.checkSelfPermission(context, permission);
+//        if (checkPermission != PERMISSION_GRANTED) {
+//            throw new RuntimeException("Failed to grant " + permission);
+//        }
+//    }
 
 
     private void ImportAccountDB() {
@@ -642,7 +671,7 @@ public class FileViewActivity extends AppCompatActivity
                     reader.beginArray();
                     while (reader.hasNext()) {
 //                        Account account = readMessage(reader);
-                        Account account = readMessage(reader);
+                        Account account = fvFragment.readMessage(reader);
 
                         if (account == null) {
                             break;
@@ -749,273 +778,180 @@ public class FileViewActivity extends AppCompatActivity
 
     final private void addAccountToDB(ContentResolver contentResolver, Account account) {
 
-        ContentValues values = new ContentValues();
-        values.put(AccountsContract.Columns.PASSPORT_ID_COL, account.getPassportId());
-        values.put(AccountsContract.Columns.CORP_NAME_COL, account.getCorpName());
-        values.put(AccountsContract.Columns.USER_NAME_COL, account.getUserName());
-        values.put(AccountsContract.Columns.USER_EMAIL_COL, account.getUserEmail());
-        values.put(AccountsContract.Columns.CORP_WEBSITE_COL, account.getCorpWebsite());
-        values.put(AccountsContract.Columns.NOTE_COL, account.getNote());
-        values.put(AccountsContract.Columns.OPEN_DATE_COL, account.getOpenLong());
-        values.put(AccountsContract.Columns.ACTVY_DATE_COL, account.getActvyLong());
-        values.put(AccountsContract.Columns.REF_FROM_COL, account.getRefFrom());
-        values.put(AccountsContract.Columns.REF_TO_COL, account.getRefTo());
-        values.put(AccountsContract.Columns.SEQUENCE_COL, account.getSequence());
-        contentResolver.insert(AccountsContract.CONTENT_URI, values);
+                ContentValues values = new ContentValues();
+                values.put(AccountsContract.Columns.PASSPORT_ID_COL, account.getPassportId());
+                values.put(AccountsContract.Columns.CORP_NAME_COL, account.getCorpName());
+                values.put(AccountsContract.Columns.USER_NAME_COL, account.getUserName());
+                values.put(AccountsContract.Columns.USER_EMAIL_COL, account.getUserEmail());
+                values.put(AccountsContract.Columns.CORP_WEBSITE_COL, account.getCorpWebsite());
+                values.put(AccountsContract.Columns.NOTE_COL, account.getNote());
+                values.put(AccountsContract.Columns.OPEN_DATE_COL, account.getOpenLong());
+                values.put(AccountsContract.Columns.ACTVY_DATE_COL, account.getActvyLong());
+                values.put(AccountsContract.Columns.REF_FROM_COL, account.getRefFrom());
+                values.put(AccountsContract.Columns.REF_TO_COL, account.getRefTo());
+                values.put(AccountsContract.Columns.SEQUENCE_COL, account.getSequence());
+                contentResolver.insert(AccountsContract.CONTENT_URI, values);
 
-    }
+            }
+
+//            final private Account readMessage(JsonReader reader) {
+//                Account item = new Account();
+//                boolean retSuccess = true;
+//                try {
+//                    reader.beginObject();
+//                    Calendar c1 = Calendar.getInstance();
+//                    while (reader.hasNext()) {
+//                        String name = reader.nextName();
+//                        String value = "";
+//                        int iValue = 0;
+//                        if (name.equals("corpName")) {
+//                            // System.out.println(reader.nextString());
+//                            value = reader.nextString();
+////					Log.v(TAG, "json corpName " + value);
+//                            item.setCorpName(value);
+//                        } else if (name.equals("accountId")) {
+//                            // System.out.println(reader.nextInt());
+//                            iValue = reader.nextInt();
+//                            Log.v(TAG, "json id " + iValue);
+//                            item.setPassportId(iValue);
+//                        } else if (name.equals("seq")) {
+//                            // System.out.println(reader.nextInt());
+//                            iValue = reader.nextInt();
+////					Log.v(TAG, "json seq " + iValue);
+//                            item.setSequence(iValue);
+//                        } else if (name.equals("userName")) {
+//                            value = reader.nextString();
+////					Log.v(TAG, "json userName " + value);
+//                            item.setUserName(value);
+//                        } else if (name.equals("userEmail")) {
+//                            value = reader.nextString();
+////					Log.v(TAG, "json userEmail " + value);
+//                            item.setUserEmail(value);
+//                        } else if (name.equals("refFrom")) {
+//                            iValue = reader.nextInt();
+////					Log.v(TAG, "json refFrom " + iValue);
+//                            item.setRefFrom(iValue);
+//                        } else if (name.equals("refTo")) {
+//                            iValue = reader.nextInt();
+////					Log.v(TAG, "json refTo " + iValue);
+//                            item.setRefTo(iValue);
+//                        } else if (name.equals("website")) {
+//                            value = reader.nextString();
+////					Log.v(TAG, "json website " + value);
+////                    URL urlValue = new URL(value);
+////                    item.setCorpWebsite(urlValue);
+//                            item.setCorpWebsite(value);
+//                        } else if (name.equals("openDt")) {
+//                            value = reader.nextString();
+////					Log.v(TAG, "json openDt " + value);
+//                            Date dte = format_ymdtime.parse(value);
+//                            c1.setTime(dte);
+//                            item.setOpenLong(c1.getTimeInMillis());
+//                        } else if (name.equals("actvyDt")) {
+////					Log.v(TAG, "actvyDt reader " + reader);
+//                            Date dte;
+//                            if (reader.peek() == JsonToken.NULL) {
+//                                reader.nextNull();
+//                                dte = new Date();
+//                            } else {
+//                                value = reader.nextString();
+////						Log.v(TAG, "json actvyDt " + value);
+//                                dte = format_ymdtime.parse(value);
+//                            }
+//                            c1.setTime(dte);
+//                            item.setActvyLong(c1.getTimeInMillis());
+//                        } else if (name.equals("note")) {
+//                            value = reader.nextString();
+//                            item.setNote(value);
+//                        } else {
+//                            reader.skipValue(); // avoid some unhandle events
+//                        }
+//                    }
+//
+//                    reader.endObject();
+//
+//                } catch (Exception e) {
+//                    // TODO Auto-generated catch block
+//                    e.printStackTrace();
+//                    item = null;
+//                }
+//                return item;
+//            }
 
 
-    private void showFilename() {
-        Log.d(TAG, "showFilename: " + MainActivity.DEFAULT_APP_DIRECTORY_DATA + "/" + MainActivity.BACKUP_FILENAME);
-        AppDialog dialog = new AppDialog();
-        Bundle args = new Bundle();
-        args.putInt(AppDialog.DIALOG_ID, AppDialog.DIALOG_ID_EXPORT_FILENAME);
-        args.putInt(AppDialog.DIALOG_TYPE, AppDialog.DIALOG_OK);
-        args.putString(AppDialog.DIALOG_MESSAGE, getString(R.string.confirmdiag_export_filename));
-        args.putString(AppDialog.DIALOG_SUB_MESSAGE, MainActivity.DEFAULT_APP_DIRECTORY_DATA + "/" + MainActivity.BACKUP_FILENAME);
-        args.putInt(AppDialog.DIALOG_POSITIVE_RID, R.string.ok);
+            public int writeMessagesArray(JsonWriter writer) throws IOException {
+                int count = 0;
+                try {
 
-        dialog.setArguments(args);
-        dialog.show(getSupportFragmentManager(), null);
+                    List<Account> listAccounts = loadAccounts();
 
-    }
-
-    private void shareExport() {
-        AlertDialog.Builder dlg = new AlertDialog.Builder(this);
-        dlg.setIcon(getResources().getDrawable(android.R.drawable.ic_dialog_alert));
-        dlg.setTitle(getResources().getString(R.string.app_name))
-                .setMessage("Is the exported file up-to-date for this share.")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        shareIntent();
-                        // finish dialog
-                        dialog.dismiss();
-                        return;
+                    Log.d(TAG, "writeMessagesArray: " + listAccounts);
+                    writer.beginArray();
+                    for (Account item : listAccounts) {
+                        writeMessage(writer, item);
+                        count++;
                     }
-
-                })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        // finish dialog
-                        dialog.dismiss();
-                        return;
-                    }
-
-                })
-                .show();
-        dlg = null;
-
-    }
-
-    private void shareIntent() {
-
-        Intent emailintent = new Intent(Intent.ACTION_SEND);
-        emailintent.putExtra(Intent.EXTRA_SUBJECT, "My Accounts App");
-//        emailIntent.putExtra(Intent.EXTRA_TEXT, emailText);
-//        ArrayList<Uri> uris = new ArrayList<Uri>();
-        emailintent.setType("text/html");
+                    writer.endArray();
+                } catch (Exception e2) {
+                    e2.printStackTrace();
+                    System.out.println(e2.getMessage());
+                    Log.e(TAG, "writeMessageArrayError: " + e2.getMessage());
+                }
+                return count;
+            }
 
 
-        File file = new File(MainActivity.DEFAULT_APP_DIRECTORY_DATA,
-                MainActivity.BACKUP_FILENAME);
-        if (!file.exists()) {
-            Toast.makeText(FileViewActivity.this,
-                    "File not exported to email",
-                    Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        emailintent.putExtra(Intent.EXTRA_SUBJECT, "My Accounts App - import/export file");
-//                Uri u = Uri.fromFile(file);
-//                uris.add(u);
-        emailintent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
-        emailintent.putExtra(Intent.EXTRA_TEXT, "Exported JSON file");
-
-        emailintent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-//        emailintent.putExtra(Intent.EXTRA_TEXT, "My Accounts Attachments");
-
-        try {
-            startActivity(Intent.createChooser(emailintent, "Send your accounts.json..."));
-        } catch(ActivityNotFoundException e) {
-            Toast.makeText(FileViewActivity.this,
-                    "Unable to get the shared menu",
-                    Toast.LENGTH_LONG).show();
-        }
-
-//        Toast.makeText(FileViewActivityV1.this,
-//                "Exported file shared sent",
-//                Toast.LENGTH_SHORT).show();
-
-    }
-
-
-
-    final public Account readMessage(JsonReader reader) {
-        Account item = new Account();
-        boolean retSuccess = true;
-        try {
-            reader.beginObject();
-            Calendar c1 = Calendar.getInstance();
-            while (reader.hasNext()) {
-                String name = reader.nextName();
-                String value = "";
-                int iValue = 0;
-                if (name.equals("corpName")) {
-                    // System.out.println(reader.nextString());
-                    value = reader.nextString();
-//					Log.v(TAG, "json corpName " + value);
-                    item.setCorpName(value);
-                } else if (name.equals("accountId")) {
-                    // System.out.println(reader.nextInt());
-                    iValue = reader.nextInt();
-                    Log.v(TAG, "json id " + iValue);
-                    item.setPassportId(iValue);
-                } else if (name.equals("seq")) {
-                    // System.out.println(reader.nextInt());
-                    iValue = reader.nextInt();
-//					Log.v(TAG, "json seq " + iValue);
-                    item.setSequence(iValue);
-                } else if (name.equals("userName")) {
-                    value = reader.nextString();
-//					Log.v(TAG, "json userName " + value);
-                    item.setUserName(value);
-                } else if (name.equals("userEmail")) {
-                    value = reader.nextString();
-//					Log.v(TAG, "json userEmail " + value);
-                    item.setUserEmail(value);
-                } else if (name.equals("refFrom")) {
-                    iValue = reader.nextInt();
-//					Log.v(TAG, "json refFrom " + iValue);
-                    item.setRefFrom(iValue);
-                } else if (name.equals("refTo")) {
-                    iValue = reader.nextInt();
-//					Log.v(TAG, "json refTo " + iValue);
-                    item.setRefTo(iValue);
-                } else if (name.equals("website")) {
-                    value = reader.nextString();
-//					Log.v(TAG, "json website " + value);
-//                    URL urlValue = new URL(value);
-//                    item.setCorpWebsite(urlValue);
-                    item.setCorpWebsite(value);
-                } else if (name.equals("openDt")) {
-                    value = reader.nextString();
-//					Log.v(TAG, "json openDt " + value);
-                    Date dte = format_ymdtime.parse(value);
-                    c1.setTime(dte);
-                    item.setOpenLong(c1.getTimeInMillis());
-                } else if (name.equals("actvyDt")) {
-//					Log.v(TAG, "actvyDt reader " + reader);
-                    Date dte;
-                    if (reader.peek() == JsonToken.NULL) {
-                        reader.nextNull();
-                        dte = new Date();
+            public void writeMessage(JsonWriter writer, Account item)
+                    throws IOException {
+                try {
+                    writer.beginObject();
+                    writer.name("corpName").value(item.getCorpName());
+                    writer.name("accountId").value(item.getPassportId());
+                    writer.name("seq").value(item.getSequence());
+                    writer.name("userName").value(item.getUserName());
+                    writer.name("userEmail").value(item.getUserEmail());
+                    writer.name("refFrom").value(item.getRefFrom());
+                    writer.name("refTo").value(item.getRefTo());
+                    if (item.getCorpWebsite() == null) {
+                        writer.name("website").nullValue();
                     } else {
-                        value = reader.nextString();
-//						Log.v(TAG, "json actvyDt " + value);
-                        dte = format_ymdtime.parse(value);
+                        writer.name("website").value(item.getCorpWebsite().toString());
                     }
-                    c1.setTime(dte);
-                    item.setActvyLong(c1.getTimeInMillis());
-                } else if (name.equals("note")) {
-                    value = reader.nextString();
-                    item.setNote(value);
-                } else {
-                    reader.skipValue(); // avoid some unhandle events
+                    if (item.getOpenLong() == 0) {
+                        writer.name("openDt").nullValue();
+                    } else {
+                        writer.name("openDt").value(
+                                format_ymdtime.format(item.getOpenLong()));
+                    }
+                    if (item.getActvyLong() == 0) {
+                        writer.name("actvyDt").nullValue();
+                    } else {
+                        writer.name("actvyDt").value(
+                                format_ymdtime.format(item.getActvyLong()));
+                    }
+                    Log.d(TAG, "writeMessage: note " + item.getNote());
+                    writer.name("note").value(item.getNote());
+
+                    writer.endObject();
+                } catch (Exception e2) {
+                    e2.printStackTrace();
+                    System.out.println(e2.getMessage());
+                    Log.v(TAG, "writeMessageError: " + e2.getMessage());
                 }
             }
 
-            reader.endObject();
 
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            item = null;
-        }
-        return item;
-    }
-
-
-
-
-
-    public int writeMessagesArray(JsonWriter writer) throws IOException {
-        int count = 0;
-        try {
-
-            List<Account> listAccounts = loadAccounts();
-
-            Log.d(TAG, "writeMessagesArray: " + listAccounts);
-            writer.beginArray();
-            for (Account item : listAccounts) {
-                writeMessage(writer, item);
-                count++;
-            }
-            writer.endArray();
-        } catch (Exception e2) {
-            e2.printStackTrace();
-            System.out.println(e2.getMessage());
-            Log.e(TAG, "writeMessageArrayError: " + e2.getMessage());
-        }
-        return count;
-    }
-
-
-    public void writeMessage(JsonWriter writer, Account item)
-            throws IOException {
-        try {
-            writer.beginObject();
-            writer.name("corpName").value(item.getCorpName());
-            writer.name("accountId").value(item.getPassportId());
-            writer.name("seq").value(item.getSequence());
-            writer.name("userName").value(item.getUserName());
-            writer.name("userEmail").value(item.getUserEmail());
-            writer.name("refFrom").value(item.getRefFrom());
-            writer.name("refTo").value(item.getRefTo());
-            if (item.getCorpWebsite() == null) {
-                writer.name("website").nullValue();
-            } else {
-                writer.name("website").value(item.getCorpWebsite().toString());
-            }
-            if (item.getOpenLong() == 0) {
-                writer.name("openDt").nullValue();
-            } else {
-                writer.name("openDt").value(
-                        format_ymdtime.format(item.getOpenLong()));
-            }
-            if (item.getActvyLong() == 0) {
-                writer.name("actvyDt").nullValue();
-            } else {
-                writer.name("actvyDt").value(
-                        format_ymdtime.format(item.getActvyLong()));
-            }
-            Log.d(TAG, "writeMessage: note " + item.getNote());
-            writer.name("note").value(item.getNote());
-
-            writer.endObject();
-        } catch (Exception e2) {
-            e2.printStackTrace();
-            System.out.println(e2.getMessage());
-            Log.v(TAG, "writeMessageError: " + e2.getMessage());
-        }
-    }
-
-
-    List<Account> loadAccounts() {
+            List<Account> loadAccounts() {
 //        Log.d(TAG, "loadAccounts: starts ");
-        Cursor cursor = getContentResolver().query(
-                AccountsContract.CONTENT_URI, null, null, null,
-                String.format("%s COLLATE NOCASE ASC, %s COLLATE NOCASE ASC", AccountsContract.Columns.CORP_NAME_COL, AccountsContract.Columns.SEQUENCE_COL));
+                Cursor cursor = getContentResolver().query(
+                        AccountsContract.CONTENT_URI, null, null, null,
+                        String.format("%s COLLATE NOCASE ASC, %s COLLATE NOCASE ASC", AccountsContract.Columns.CORP_NAME_COL, AccountsContract.Columns.SEQUENCE_COL));
 //                        AccountsContract.Columns.CORP_NAME_COL);
 
-        List<Account> listAccounts = new ArrayList<Account>();
-        if (cursor != null) {
-            while (cursor.moveToNext()) {
-                Account item = AccountsContract.getAccountFromCursor(cursor);
+                List<Account> listAccounts = new ArrayList<Account>();
+                if (cursor != null) {
+                    while (cursor.moveToNext()) {
+                        Account item = AccountsContract.getAccountFromCursor(cursor);
 //                        Account item = new Account(
 //                                cursor.getInt(cursor.getColumnIndex(AccountsContract.Columns._ID_COL)),
 //                                cursor.getString(cursor.getColumnIndex(AccountsContract.Columns.CORP_NAME_COL)),
@@ -1049,13 +985,36 @@ public class FileViewActivity extends AppCompatActivity
 //                                item.setRefFrom(cursor.getInt(cursor.getColumnIndex(AccountsContract.Columns.REF_TO_COL)));
 //                            }
 //                        }
-                listAccounts.add(item);
-            }
-            cursor.close();
-        }
+                        listAccounts.add(item);
+                    }
+                    cursor.close();
+                }
 
-        return listAccounts;
-    }
+                return listAccounts;
+            }
+
+
+//    private void loadSearchDB() {
+//        deleteAllSearchItems();
+//        AccountSearchLoaderCallbacks loaderAcctCallbacks = new AccountSearchLoaderCallbacks(this);
+//        getLoaderManager().restartLoader(MainActivity.SEARCH_LOADER_ID, null, loaderAcctCallbacks);
+//        Toast.makeText(this,
+//                "Search Dictionary DB built",
+//                Toast.LENGTH_LONG).show();
+//
+//    }
+//
+//
+//    private void deleteAllSearchItems() {
+////		String selectionClause = SearchManager.SUGGEST_COLUMN_FLAGS + " = ?";
+////		String[] selectionArgs = { "account" };
+////        Log.d(TAG, "deleteAllSuggestions: delUri " + SearchesContract.CONTENT_URI_TRUNCATE);
+//        getContentResolver().delete(
+//                SearchesContract.CONTENT_URI_TRUNCATE,
+//                null, null);
+//
+//    }
+
 
     @Override
     public void onPositiveDialogResult(int dialogId, Bundle args) {
@@ -1076,4 +1035,11 @@ public class FileViewActivity extends AppCompatActivity
     public void onDialogCancelled(int dialogId) {
 
     }
+
+    @Override
+    public void onFileViewShown() {
+        progressBar  = findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.GONE);
+    }
+
 }

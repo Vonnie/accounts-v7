@@ -35,6 +35,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
         <activity
+            android:name=".FileViewActivity"
+            android:label="@string/title_activity_file_view"
+            android:theme="@style/AppTheme.NoActionBar.NoActionBar"></activity>
+        <activity
             android:name=".AddEditSuggestActivity"
             android:label="@string/title_activity_suggest_add"
             android:parentActivityName=".SuggestListActivity" />
@@ -100,7 +104,7 @@
                 android:value="com.kinsey.passwords.MainActivity" />
         </activity>
         <activity
-            android:name=".FileViewActivity"
+            android:name=".FileViewActivityV1"
             android:label="@string/title_activity_file_view"
             android:parentActivityName=".MainActivity">
             <meta-data
@@ -135,8 +139,7 @@
         </activity>
         <activity
             android:name=".AddEditProfileActivity"
-            android:label="@string/title_activity_addedit_profile">
-        </activity>
+            android:label="@string/title_activity_addedit_profile" />
         <activity
             android:name=".SearchActivity"
             android:label="@string/title_activity_search_profile"
@@ -144,7 +147,7 @@
         <activity
             android:name=".WebViewActivity"
             android:label="@string/title_activity_web_view"
-            android:parentActivityName=".AddEditProfileActivity"></activity>
+            android:parentActivityName=".AddEditProfileActivity" />
     </application>
 
 </manifest>

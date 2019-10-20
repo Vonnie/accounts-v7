@@ -12,7 +12,7 @@
     android:layout_marginEnd="8dp"
     android:layout_marginRight="8dp"
     android:layout_marginBottom="8dp">
-    <!--tools:showIn="@layout/activity_file_view">-->
+    <!--tools:showIn="@layout/activity_file_view_v1">-->
 
 
     <TextView

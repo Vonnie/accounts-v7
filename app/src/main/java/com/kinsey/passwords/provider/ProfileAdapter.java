@@ -37,9 +37,7 @@ public class ProfileAdapter extends ListAdapter<Profile, ProfileAdapter.ProfileH
 
         @Override
         public boolean areContentsTheSame(@NonNull Profile oldItem, @NonNull Profile newItem) {
-            return oldItem.getCorpName().equals(newItem.getCorpName()) &&
-                    oldItem.getUserName().equals(newItem.getUserName()) &&
-                    oldItem.getUserEmail().equals(newItem.getUserEmail());
+            return oldItem.getCorpName().equals(newItem.getCorpName());
         }
     };
 
@@ -56,7 +54,6 @@ public class ProfileAdapter extends ListAdapter<Profile, ProfileAdapter.ProfileH
         Profile currentProfile = getItem(position);
         holder.tvCorpName.setText(currentProfile.getCorpName());
         holder.tvAcctId.setText(String.valueOf(currentProfile.getId()));
-        holder.tvUserName.setText(currentProfile.getUserName());
 
     }
 
@@ -67,14 +64,12 @@ public class ProfileAdapter extends ListAdapter<Profile, ProfileAdapter.ProfileH
     class ProfileHolder extends RecyclerView.ViewHolder {
         private TextView tvAcctId;
         private TextView tvCorpName;
-        private TextView tvUserName;
 
 
         public ProfileHolder(@NonNull View itemView) {
             super(itemView);
             tvAcctId = itemView.findViewById(R.id.acct_id);
             tvCorpName = itemView.findViewById(R.id.corp_name);
-            tvUserName = itemView.findViewById(R.id.user_name);
 
             itemView.setOnClickListener(new View.OnClickListener() {
 

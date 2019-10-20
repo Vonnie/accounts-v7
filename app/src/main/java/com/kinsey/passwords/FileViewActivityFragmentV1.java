@@ -29,7 +29,7 @@ import static com.kinsey.passwords.MainActivity.format_ymdtime;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class FileViewActivityFragment extends Fragment {
+public class FileViewActivityFragmentV1 extends Fragment {
     private static final String TAG = "FileViewActivityFrag";
 
     WebView webView;
@@ -46,7 +46,7 @@ public class FileViewActivityFragment extends Fragment {
     }
 
 
-    public FileViewActivityFragment() {
+    public FileViewActivityFragmentV1() {
     }
 
     @Override
@@ -394,11 +394,11 @@ public class FileViewActivityFragment extends Fragment {
 
         // Activities containing this fragment must implement it's callbacks
         Activity activity = getActivity();
-        if (!(activity instanceof FileViewActivityFragment.OnFileViewClickListener)) {
+        if (!(activity instanceof FileViewActivityFragmentV1.OnFileViewClickListener)) {
             throw new ClassCastException(activity.getClass().getSimpleName()
-                    + " must implement FileViewActivityFragment interface");
+                    + " must implement FileViewActivityFragmentV1 interface");
         }
-        mListener = (FileViewActivityFragment.OnFileViewClickListener) activity;
+        mListener = (FileViewActivityFragmentV1.OnFileViewClickListener) activity;
 
     }
 
