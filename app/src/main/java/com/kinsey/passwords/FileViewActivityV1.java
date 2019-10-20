@@ -252,13 +252,13 @@ public class FileViewActivityV1 extends AppCompatActivity
     }
 
     private void showFilename() {
-        Log.d(TAG, "showFilename: " + MainActivity.DEFAULT_APP_DIRECTORY_DATA + "/" + MainActivity.BACKUP_FILENAME);
+        Log.d(TAG, "showFilename: " + Environment.getDataDirectory() + "/passport/" + MainActivity.BACKUP_FILENAME);
         AppDialog dialog = new AppDialog();
         Bundle args = new Bundle();
         args.putInt(AppDialog.DIALOG_ID, AppDialog.DIALOG_ID_EXPORT_FILENAME);
         args.putInt(AppDialog.DIALOG_TYPE, AppDialog.DIALOG_OK);
         args.putString(AppDialog.DIALOG_MESSAGE, getString(R.string.confirmdiag_export_filename));
-        args.putString(AppDialog.DIALOG_SUB_MESSAGE, MainActivity.DEFAULT_APP_DIRECTORY_DATA + "/" + MainActivity.BACKUP_FILENAME);
+        args.putString(AppDialog.DIALOG_SUB_MESSAGE, Environment.getDataDirectory() + "/passport/" + MainActivity.BACKUP_FILENAME);
         args.putInt(AppDialog.DIALOG_POSITIVE_RID, R.string.ok);
 
         dialog.setArguments(args);
@@ -306,8 +306,8 @@ public class FileViewActivityV1 extends AppCompatActivity
         emailintent.setType("text/html");
 
 
-        File file = new File(MainActivity.DEFAULT_APP_DIRECTORY_DATA,
-                MainActivity.BACKUP_FILENAME);
+        File file = new File(Environment.getDataDirectory() + "/passport/"
+                + MainActivity.BACKUP_FILENAME);
         if (!file.exists()) {
             Toast.makeText(FileViewActivityV1.this,
                     "File not exported to email",
@@ -650,7 +650,7 @@ public class FileViewActivityV1 extends AppCompatActivity
                     List<Account> listAccounts = new ArrayList<Account>();
 
 //                    File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-                    File path = new File(MainActivity.DEFAULT_APP_DIRECTORY_DATA);
+                    File path = new File(Environment.getDataDirectory() + "/passport");
 //                    File path2 = new File(path, "passport");
 
                     Log.d(TAG, "run: path " + path.getAbsoluteFile());

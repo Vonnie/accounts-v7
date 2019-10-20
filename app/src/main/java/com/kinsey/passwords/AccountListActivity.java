@@ -11,6 +11,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
+import android.os.Environment;
 import android.util.JsonReader;
 import android.util.JsonToken;
 import android.util.JsonWriter;
@@ -1437,7 +1439,7 @@ public class AccountListActivity extends AppCompatActivity
 //            } else {
 //                Log.d(TAG, "ExportAccountDB: dir not exists " + fileDir.getAbsoluteFile());
 //            }
-            File file = new File(MainActivity.DEFAULT_APP_DIRECTORY_DATA, MainActivity.BACKUP_FILENAME);
+            File file = new File(Environment.getDataDirectory() + "/passport", MainActivity.BACKUP_FILENAME);
 //
 ////            if (file.exists()) {
 ////                file.delete();
@@ -1629,7 +1631,7 @@ public class AccountListActivity extends AppCompatActivity
         try {
             List<Account> listAccounts = new ArrayList<Account>();
             JsonReader reader = new JsonReader(new FileReader(
-                    MainActivity.DEFAULT_APP_DIRECTORY_DATA + "/" + MainActivity.BACKUP_FILENAME));
+                    Environment.getDataDirectory() + "/" + "passport"  + "/" + MainActivity.BACKUP_FILENAME));
             // reader.beginObject();
 
             reader.beginArray();

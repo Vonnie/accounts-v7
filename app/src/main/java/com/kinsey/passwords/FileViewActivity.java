@@ -14,10 +14,15 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.kinsey.passwords.items.Account;
 import com.kinsey.passwords.items.AccountsContract;
+import com.kinsey.passwords.items.Profile;
+import com.kinsey.passwords.provider.ProfileAdapter;
+import com.kinsey.passwords.provider.ProfileViewModel;
 import com.kinsey.passwords.tools.AppDialog;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Environment;
 import android.os.Handler;
@@ -46,11 +51,14 @@ import java.util.List;
 import static com.kinsey.passwords.MainActivity.format_ymdtime;
 
 public class FileViewActivity extends AppCompatActivity
-    implements AppDialog.DialogEvents {
+        implements AppDialog.DialogEvents {
     private static final String TAG = "FileViewActivity";
 
     ProgressBar progressBar;
     WebView webView;
+//    private ProfileAdapter adapter;
+//    private ProfileViewModel profileViewModel;
+
 
     File dirStorage = new File(Environment.getDataDirectory().getAbsolutePath());
     private Handler mHandler = new Handler();
@@ -79,6 +87,18 @@ public class FileViewActivity extends AppCompatActivity
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle("Backup / Restore");
+
+
+//        this.adapter = new ProfileAdapter();
+//
+//        profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
+//
+//        profileViewModel.getAllProfiles().observe(this, new Observer<List<Profile>>() {
+//            @Override
+//            public void onChanged(List<Profile> profiles) {
+//                adapter.submitList(profiles);
+//            }
+//        });
 
 
         webView = (WebView) findViewById(R.id.wv_page);
@@ -129,7 +149,6 @@ public class FileViewActivity extends AppCompatActivity
 
         return true;
     }
-
 
 
     @Override
@@ -185,11 +204,9 @@ public class FileViewActivity extends AppCompatActivity
             webView.getSettings().setJavaScriptEnabled(true);
             String htmlString;
 
-            File dirStorage = new File(MainActivity.DEFAULT_APP_DIRECTORY);
+            File dirStorage = new File(Environment.getDataDirectory() + "/passport");
 
-            File pathExternal = new File(MainActivity.DEFAULT_APP_DIRECTORY_DATA);
-
-            File fileExternal = new File(pathExternal, MainActivity.BACKUP_FILENAME);
+            File fileExternal = new File(dirStorage, MainActivity.BACKUP_FILENAME);
 
 //            Log.d(TAG, "reportJson: state " + Environment.getExternalStorageState());
 //            Log.d(TAG, "reportJson: system " + System.getenv());
@@ -200,47 +217,35 @@ public class FileViewActivity extends AppCompatActivity
                 Log.d(TAG, "reportJson dirInternal free space " + dirStorage.getFreeSpace());
 
                 if (dirStorage.canRead()) {
+                    if (fileExternal.exists()) {
+                        htmlString = notfyMsg() +
+                                "<h4>Have storage file " + "</h4>" +
+                                "<h5>" + fileExternal.getAbsoluteFile() + "</h5>" +
+                                "<h5>" + accountJsonProperties(fileExternal) + "</h5>" +
+                                "<h5>" + MainActivity.adapter.getItemCount() + " Account Profile items on db<h5>";
 
-                    if (pathExternal.exists()) {
-                        if (fileExternal.exists()) {
-                            htmlString = notfyMsg() +
-                                    "<h4>Have storage file "  + "</h4>" +
-                                    "<h5>" + fileExternal.getAbsoluteFile() + "</h5>" +
-                                    "<h5>" + accountJsonProperties(fileExternal) + "</h5>";
-
-                            //                File path2 = new File(, "passport");
-                            //
-                            //                Log.d(TAG, "run: path2 " + path2.getAbsoluteFile());
-                            //
-                            //                final JsonReader reader = new JsonReader(new FileReader(
-                            //                        path2.getAbsoluteFile() + "/accounts.json"));
-                        } else {
-                            htmlString = notfyMsg() +
-                                    "<h4>But presently no account export file on " + pathExternal.getAbsoluteFile() + "</h4>" +
-                                    "<h5>Use menu to export data to this file.</h5>";
-//                            try {
-//                                fileExternal.createNewFile();
-//                                Log.d(TAG, "reportJson: new file create on " + fileExternal.getAbsoluteFile());
-//                            } catch (Exception ex) {
-//                                Log.d(TAG, "reportJson: " + ex.getMessage());
-//                            }
-                        }
                     } else {
                         htmlString = notfyMsg() +
-                                "<h4>Path external does not exists " + pathExternal.getAbsoluteFile() + "</h4>" +
-                                "<h5>Use menu to export data to this file.</h5>";
+                                "<h4>But presently no account export file on " + fileExternal.getAbsoluteFile() + "</h4>" +
+                                "<h5>Use menu to export data to this file.</h5>" +
+                                "<h5>" + MainActivity.adapter.getItemCount() + " Account Profile items currently on db<h5>";
                     }
                 } else {
-                    htmlString = permissionMsg();
+                    htmlString = notfyMsg() +
+                            "<h4>Path storage dir does not exists " + dirStorage.getAbsoluteFile() + "</h4>" +
+                            "<h5>Use menu to export data to this file.</h5>" +
+                            "<h5>" + MainActivity.adapter.getItemCount() + " Account Profile items to backup<h5>";
                 }
             } else {
-                htmlString = warningMsg() +
-                        "<h5>Have no external storage for file " + dirStorage.getAbsoluteFile() + "</h5>";
+                htmlString = permissionMsg() +
+                        "<h5>" + MainActivity.adapter.getItemCount() + " Account Profile items to backup once permission is granted<h5>";
             }
 
             webView.loadData(htmlString, "text/html", null);
 
-        } catch (Exception ex) {
+            Log.d(TAG, "db count: " + MainActivity.adapter.getItemCount());
+        } catch (
+                Exception ex) {
             Log.d(TAG, "reportJson: " + ex.getMessage());
         }
 
@@ -256,7 +261,7 @@ public class FileViewActivity extends AppCompatActivity
 
     private String notfyMsg() {
         String htmlString = "<br><br><h1>Notification</h1>\n" +
-                "<h2>App storage available</h2>\n" ;
+                "<h2>App storage available</h2>\n";
         return htmlString;
     }
 
@@ -309,14 +314,12 @@ public class FileViewActivity extends AppCompatActivity
 
 
     public void reportFile() {
-        File fileExternal = new File(MainActivity.DEFAULT_APP_DIRECTORY_DATA
-                + "/" + MainActivity.BACKUP_FILENAME);
+        File fileExternal = new File(Environment.getDataDirectory() + "/passport/"
+                + MainActivity.BACKUP_FILENAME);
         String loc = "file://" + fileExternal.getAbsolutePath();
         Log.d(TAG, "reportJson: " + loc);
         webView.loadUrl(loc);
     }
-
-
 
 
     public String ExportAccountDB() {
@@ -588,7 +591,6 @@ public class FileViewActivity extends AppCompatActivity
     }
 
 
-
     private void ImportAccountDB() {
         Log.d(TAG, "ImportAccountDB: starts");
         progressBar = findViewById(R.id.progressBar);
@@ -621,7 +623,7 @@ public class FileViewActivity extends AppCompatActivity
                     List<Account> listAccounts = new ArrayList<Account>();
 
 //                    File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-                    File path = new File(MainActivity.DEFAULT_APP_DIRECTORY_DATA);
+                    File path = new File(Environment.getDataDirectory() + "/passport");
 //                    File path2 = new File(path, "passport");
 
                     Log.d(TAG, "run: path " + path.getAbsoluteFile());
@@ -767,13 +769,13 @@ public class FileViewActivity extends AppCompatActivity
 
 
     private void showFilename() {
-        Log.d(TAG, "showFilename: " + MainActivity.DEFAULT_APP_DIRECTORY_DATA + "/" + MainActivity.BACKUP_FILENAME);
+        Log.d(TAG, "showFilename: " + Environment.getDataDirectory() + "/passport/" + MainActivity.BACKUP_FILENAME);
         AppDialog dialog = new AppDialog();
         Bundle args = new Bundle();
         args.putInt(AppDialog.DIALOG_ID, AppDialog.DIALOG_ID_EXPORT_FILENAME);
         args.putInt(AppDialog.DIALOG_TYPE, AppDialog.DIALOG_OK);
         args.putString(AppDialog.DIALOG_MESSAGE, getString(R.string.confirmdiag_export_filename));
-        args.putString(AppDialog.DIALOG_SUB_MESSAGE, MainActivity.DEFAULT_APP_DIRECTORY_DATA + "/" + MainActivity.BACKUP_FILENAME);
+        args.putString(AppDialog.DIALOG_SUB_MESSAGE, Environment.getDataDirectory() + "/passport/" + MainActivity.BACKUP_FILENAME);
         args.putInt(AppDialog.DIALOG_POSITIVE_RID, R.string.ok);
 
         dialog.setArguments(args);
@@ -821,7 +823,7 @@ public class FileViewActivity extends AppCompatActivity
         emailintent.setType("text/html");
 
 
-        File file = new File(MainActivity.DEFAULT_APP_DIRECTORY_DATA,
+        File file = new File(Environment.getDataDirectory() + "/passport",
                 MainActivity.BACKUP_FILENAME);
         if (!file.exists()) {
             Toast.makeText(FileViewActivity.this,
@@ -841,7 +843,7 @@ public class FileViewActivity extends AppCompatActivity
 
         try {
             startActivity(Intent.createChooser(emailintent, "Send your accounts.json..."));
-        } catch(ActivityNotFoundException e) {
+        } catch (ActivityNotFoundException e) {
             Toast.makeText(FileViewActivity.this,
                     "Unable to get the shared menu",
                     Toast.LENGTH_LONG).show();
@@ -852,7 +854,6 @@ public class FileViewActivity extends AppCompatActivity
 //                Toast.LENGTH_SHORT).show();
 
     }
-
 
 
     final public Account readMessage(JsonReader reader) {
@@ -938,9 +939,6 @@ public class FileViewActivity extends AppCompatActivity
         }
         return item;
     }
-
-
-
 
 
     public int writeMessagesArray(JsonWriter writer) throws IOException {

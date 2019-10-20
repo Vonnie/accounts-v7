@@ -60,6 +60,7 @@
             android:layout_below="@id/user_name"
             android:ellipsize="end"
             android:textColor="?android:attr/textColorPrimary" />
+<!--        android:visibility="@{prod.corp_website ? Visibility.VISIBLE : Visibility.GONE"-->
 
     </RelativeLayout>
 

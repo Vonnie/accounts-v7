@@ -106,11 +106,6 @@ public class MainActivity extends AppCompatActivity
     private Boolean editing = false;
     private static final String ACCOUNT_FRAGMENT = "AccountFragment";
 
-    public static String DEFAULT_APP_DIRECTORY = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath();
-
-    public static String DEFAULT_APP_DIRECTORY_DATA = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath()
-            + "/passport";
-
     public static String BACKUP_FILENAME = "accounts.json";
 
 
@@ -178,7 +173,7 @@ public class MainActivity extends AppCompatActivity
 
     private SearchView mSearchView;
 
-    private ProfileAdapter adapter;
+    public static ProfileAdapter adapter;
 
 
     public MainActivity() {
@@ -242,8 +237,6 @@ public class MainActivity extends AppCompatActivity
         recyclerView.setAdapter(adapter);
 
         profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
-
-
 
         profileViewModel.getAllProfiles().observe(this, new Observer<List<Profile>>() {
             @Override
@@ -1158,6 +1151,7 @@ public class MainActivity extends AppCompatActivity
 
     private void viewAccountsFile() {
         Log.d(TAG, "viewAccountsFile: request request view exports");
+        Log.d(TAG, adapter.getItemCount() + " count on db");
 //        mActivityStart = true;
         Intent detailIntent = new Intent(this, FileViewActivity.class);
 //        startActivity(detailIntent);

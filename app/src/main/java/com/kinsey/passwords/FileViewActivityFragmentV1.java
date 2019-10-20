@@ -5,6 +5,8 @@ import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+
+import android.os.Environment;
 import android.util.JsonReader;
 import android.util.JsonToken;
 import android.util.Log;
@@ -96,11 +98,9 @@ public class FileViewActivityFragmentV1 extends Fragment {
             webView.getSettings().setJavaScriptEnabled(true);
             String htmlString;
 
-            File dirStorage = new File(MainActivity.DEFAULT_APP_DIRECTORY);
+            File dirStorage = new File(Environment.getDataDirectory() + "/passport");
 
-            File pathExternal = new File(MainActivity.DEFAULT_APP_DIRECTORY_DATA);
-
-            File fileExternal = new File(pathExternal, MainActivity.BACKUP_FILENAME);
+            File fileExternal = new File(dirStorage, MainActivity.BACKUP_FILENAME);
 
 //            Log.d(TAG, "reportJson: state " + Environment.getExternalStorageState());
 //            Log.d(TAG, "reportJson: system " + System.getenv());
@@ -112,41 +112,24 @@ public class FileViewActivityFragmentV1 extends Fragment {
 
                 if (dirStorage.canRead()) {
 
-                    if (pathExternal.exists()) {
-                        if (fileExternal.exists()) {
-                            htmlString = notfyMsg() +
-                                    "<h4>Have storage file "  + "</h4>" +
-                                    "<h5>" + fileExternal.getAbsoluteFile() + "</h5>" +
-                                    "<h5>" + accountJsonProperties(fileExternal) + "</h5>";
+                    if (fileExternal.exists()) {
+                        htmlString = notfyMsg() +
+                                "<h4>Have storage file " + "</h4>" +
+                                "<h5>" + fileExternal.getAbsoluteFile() + "</h5>" +
+                                "<h5>" + accountJsonProperties(fileExternal) + "</h5>";
 
-                            //                File path2 = new File(, "passport");
-                            //
-                            //                Log.d(TAG, "run: path2 " + path2.getAbsoluteFile());
-                            //
-                            //                final JsonReader reader = new JsonReader(new FileReader(
-                            //                        path2.getAbsoluteFile() + "/accounts.json"));
-                        } else {
-                            htmlString = notfyMsg() +
-                                    "<h4>But presently no account export file on " + pathExternal.getAbsoluteFile() + "</h4>" +
-                                    "<h5>Use menu to export data to this file.</h5>";
-//                            try {
-//                                fileExternal.createNewFile();
-//                                Log.d(TAG, "reportJson: new file create on " + fileExternal.getAbsoluteFile());
-//                            } catch (Exception ex) {
-//                                Log.d(TAG, "reportJson: " + ex.getMessage());
-//                            }
-                        }
                     } else {
                         htmlString = notfyMsg() +
-                                "<h4>Path external does not exists " + pathExternal.getAbsoluteFile() + "</h4>" +
+                                "<h4>But presently no account export file on " + fileExternal.getAbsoluteFile() + "</h4>" +
                                 "<h5>Use menu to export data to this file.</h5>";
                     }
                 } else {
-                    htmlString = permissionMsg();
+                    htmlString = notfyMsg() +
+                            "<h4>Path external does not exists " + dirStorage.getAbsoluteFile() + "</h4>" +
+                            "<h5>Use menu to export data to this file.</h5>";
                 }
             } else {
-                htmlString = warningMsg() +
-                        "<h5>Have no external storage for file " + dirStorage.getAbsoluteFile() + "</h5>";
+                htmlString = permissionMsg();
             }
 
             webView.loadData(htmlString, "text/html", null);
@@ -166,7 +149,7 @@ public class FileViewActivityFragmentV1 extends Fragment {
 
     private String notfyMsg() {
         String htmlString = "<br><br><h1>Notification</h1>\n" +
-                "<h2>App storage available</h2>\n" ;
+                "<h2>App storage available</h2>\n";
         return htmlString;
     }
 
@@ -217,8 +200,8 @@ public class FileViewActivityFragmentV1 extends Fragment {
     }
 
     public void reportFile() {
-        File fileExternal = new File(MainActivity.DEFAULT_APP_DIRECTORY_DATA
-                + "/" + MainActivity.BACKUP_FILENAME);
+        File fileExternal = new File(Environment.getDataDirectory()
+                + "/passport/" + MainActivity.BACKUP_FILENAME);
         String loc = "file://" + fileExternal.getAbsolutePath();
         Log.d(TAG, "reportJson: " + loc);
         webView.loadUrl(loc);
@@ -226,8 +209,8 @@ public class FileViewActivityFragmentV1 extends Fragment {
 
     public void reportFile2() {
         boolean retSuccess = true;
-        File file = new File(MainActivity.DEFAULT_APP_DIRECTORY_DATA
-                + "/" + MainActivity.BACKUP_FILENAME);
+        File file = new File(Environment.getDataDirectory()
+                + "/passport/" + MainActivity.BACKUP_FILENAME);
         String loc = "file://" + file.getAbsolutePath();
         Log.d(TAG, "reportJson: " + loc);
 //        webView.setVisibility(View.GONE);
@@ -283,8 +266,8 @@ public class FileViewActivityFragmentV1 extends Fragment {
 
     public void exportJson() {
         try {
-            File fileExternal = new File(MainActivity.DEFAULT_APP_DIRECTORY_DATA
-                    + "/" + MainActivity.BACKUP_FILENAME);
+            File fileExternal = new File(Environment.getDataDirectory()
+                    + "/passport/" + MainActivity.BACKUP_FILENAME);
             String loc = "file://" + fileExternal.getAbsolutePath();
             webView.loadUrl(loc);
         } catch (Exception ex) {
@@ -298,7 +281,6 @@ public class FileViewActivityFragmentV1 extends Fragment {
 //    public void setImportRefreshReq(boolean importRefreshReq) {
 //        this.importRefreshReq = importRefreshReq;
 //    }
-
 
 
     final public Account readMessage(JsonReader reader) {
@@ -384,8 +366,6 @@ public class FileViewActivityFragmentV1 extends Fragment {
         }
         return item;
     }
-
-
 
 
     @Override
