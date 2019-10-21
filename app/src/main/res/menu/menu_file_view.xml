@@ -1,37 +1,53 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.kinsey.passwords.FileViewActivityV1">
+    tools:context="com.kinsey.passwords.FileViewActivity">
     <!--<item-->
-        <!--android:id="@+id/menu_item_share"-->
-        <!--android:orderInCategory="100"-->
-        <!--android:title="Share"-->
-        <!--app:showAsAction="ifRoom"-->
-        <!--app:actionProviderClass="android.support.v7.widget.ShareActionProvider" />-->
+    <!--android:id="@+id/menu_item_share"-->
+    <!--android:orderInCategory="100"-->
+    <!--android:title="Share"-->
+    <!--app:showAsAction="ifRoom"-->
+    <!--app:actionProviderClass="android.support.v7.widget.ShareActionProvider" />-->
+
     <item
-        android:id="@+id/vw_show_file"
-        android:orderInCategory="101"
-        android:title="@string/menuvw_show_file"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/vw_import"
-        android:orderInCategory="101"
-        android:title="@string/menuvw_retore"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/vw_export"
-        android:orderInCategory="102"
-        android:title="@string/menuvw_backup"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/vw_filename"
-        android:icon="@drawable/ic_action_document"
-        android:orderInCategory="103"
-        android:title="Filename"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/vw_shared"
-        android:orderInCategory="104"
-        android:icon="@android:drawable/ic_menu_share"
-        android:title="Share" />
+        android:icon="@drawable/ic_more_vert"
+        android:title=""
+        app:showAsAction="always">
+<!--        android:iconTint="@color/primaryColor"-->
+<!--        android:iconTintMode="#437380"-->
+        <menu>
+            <item
+                android:id="@+id/vw_filename"
+                android:icon="@drawable/ic_insert_drive_file_black"
+                android:orderInCategory="101"
+                android:title="@string/menuvw_show_filename"
+                app:showAsAction="ifRoom" />
+            <item
+                android:id="@+id/vw_export"
+                android:icon="@drawable/ic_file_download_black"
+                android:orderInCategory="102"
+                android:title="@string/menuvw_backup"
+                app:showAsAction="ifRoom" />
+            <item
+                android:id="@+id/vw_import"
+                android:icon="@drawable/ic_file_upload_black"
+                android:orderInCategory="103"
+                android:title="@string/menuvw_retore"
+                app:showAsAction="ifRoom" />
+            <item
+                android:id="@+id/vw_show_file"
+                android:icon="@drawable/ic_format_align_justify_black"
+                android:orderInCategory="104"
+                android:title="@string/menuvw_show_file"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/vw_shared"
+                android:icon="@drawable/ic_share_black"
+                android:orderInCategory="105"
+                android:title="@string/menuvw_share"
+                app:showAsAction="never" />
+        </menu>
+
+    </item>
+
 </menu>

@@ -37,6 +37,10 @@ public class ProfileRepository {
         new DeleteAllProfilesAsyncTask(profileDao).execute();
     }
 
+    public void insertMulti(List<Profile> profiles) {
+        new InsertProfilesAsyncTask(profileDao).execute(profiles);
+    }
+
     public LiveData<List<Profile>> getAllProfiles() {
         allProfiles = profileDao.getAllProfiles();
         return allProfiles;
@@ -56,6 +60,7 @@ public class ProfileRepository {
         allProfiles = profileDao.searchCorpNameProfiles(query);
         return allProfiles;
     }
+
     private static class InsertProfileAsyncTask extends AsyncTask<Profile, Void, Void> {
         private ProfileDao profileDao;
 
@@ -66,6 +71,23 @@ public class ProfileRepository {
         @Override
         protected Void doInBackground(Profile... profiles) {
             profileDao.insert(profiles[0]);
+            return null;
+        }
+    }
+
+    private static class InsertProfilesAsyncTask extends AsyncTask<List<Profile>, Void, Void> {
+        private ProfileDao profileDao;
+
+        private InsertProfilesAsyncTask(ProfileDao profileDao) {
+            this.profileDao = profileDao;
+        }
+
+        @Override
+        protected Void doInBackground(List<Profile>... profiles) {
+
+            for (Profile item : profiles[0]) {
+                profileDao.insert(item);
+            }
             return null;
         }
     }

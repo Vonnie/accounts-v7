@@ -37,6 +37,10 @@ public class ProfileViewModel extends AndroidViewModel {
         repository.deleteAllProfiles();
     }
 
+    public void insertMulti(List<Profile> profiles) {
+        repository.insertMulti(profiles);
+    }
+
 
     public LiveData<List<Profile>> getAllProfiles() {
         allProfiles = repository.getAllProfiles();

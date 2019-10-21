@@ -164,7 +164,9 @@ public class MainActivity extends AppCompatActivity
     View mainFragment;
 
 
-    private ProfileViewModel profileViewModel;
+    public static ProfileViewModel profileViewModel;
+
+    public static ProfileAdapter adapter;
 
     //    private AccountListActivityFragment fragList;
 //    private static AccountPlaceholderFrag1 frag1;
@@ -172,8 +174,6 @@ public class MainActivity extends AppCompatActivity
 //    private static AccountPlaceholderFrag3 frag3;
 
     private SearchView mSearchView;
-
-    public static ProfileAdapter adapter;
 
 
     public MainActivity() {

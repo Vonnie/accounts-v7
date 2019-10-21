@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -16,6 +17,7 @@ import com.kinsey.passwords.items.Account;
 import com.kinsey.passwords.items.AccountsContract;
 import com.kinsey.passwords.items.Profile;
 import com.kinsey.passwords.provider.ProfileAdapter;
+import com.kinsey.passwords.provider.ProfileDao;
 import com.kinsey.passwords.provider.ProfileViewModel;
 import com.kinsey.passwords.tools.AppDialog;
 
@@ -40,9 +42,12 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -59,8 +64,6 @@ public class FileViewActivity extends AppCompatActivity
 //    private ProfileAdapter adapter;
 //    private ProfileViewModel profileViewModel;
 
-
-    File dirStorage = new File(Environment.getDataDirectory().getAbsolutePath());
     private Handler mHandler = new Handler();
     boolean importRefreshReq = false;
 
@@ -76,14 +79,15 @@ public class FileViewActivity extends AppCompatActivity
         progressBar.setVisibility(View.VISIBLE);
 
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+//        FloatingActionButton fab = findViewById(R.id.fab);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                String filename = getExternalFilesDir("passport/") + MainActivity.BACKUP_FILENAME;
+//                Snackbar.make(view, filename, Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+//            }
+//        });
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle("Backup / Restore");
@@ -124,6 +128,7 @@ public class FileViewActivity extends AppCompatActivity
         getMenuInflater().inflate(R.menu.menu_file_view, menu);
 
         MenuItem item;
+        File dirStorage = getExternalFilesDir("passport/");
         Log.d(TAG, "can read: " + dirStorage.canRead());
         Log.d(TAG, "storage dir: " + dirStorage.getAbsolutePath());
         if (dirStorage.canRead()) {
@@ -195,6 +200,45 @@ public class FileViewActivity extends AppCompatActivity
     }
 
 
+//    void createExternalStoragePrivateFile() {
+//        // Create a path where we will place our private file on external
+//        // storage.
+//        File file = new File(getExternalFilesDir(null), "DemoFile.jpg");
+//
+//        try {
+//            // Very simple code to copy a picture from the application's
+//            // resource into the external file.  Note that this code does
+//            // no error checking, and assumes the picture is small (does not
+//            // try to copy it in chunks).  Note that if external storage is
+//            // not currently mounted this will silently fail.
+//            InputStream is = getResources().openRawResource(R.drawable.ic_action_add);
+//            OutputStream os = new FileOutputStream(file);
+//            byte[] data = new byte[is.available()];
+//            is.read(data);
+//            os.write(data);
+//            is.close();
+//            os.close();
+//        } catch (IOException e) {
+//            // Unable to create file, likely because external storage is
+//            // not currently mounted.
+//            Log.w("ExternalStorage", "Error writing " + file, e);
+//        }
+//    }
+
+    void deleteExternalStoragePrivateFile() {
+        // Get path for the file on external storage.  If external
+        // storage is not currently mounted this will fail.
+        File file = new File(getExternalFilesDir(null), "DemoFile.jpg");
+        file.delete();
+    }
+
+    boolean hasExternalStoragePrivateFile() {
+        // Get path for the file on external storage.  If external
+        // storage is not currently mounted this will fail.
+        File file = new File(getExternalFilesDir(null), "DemoFile.jpg");
+        return file.exists();
+    }
+
     private void introPage() {
         try {
 //            Log.d(TAG, "reportJson: " + MainActivity.DEFAULT_APP_DIRECTORY);
@@ -204,7 +248,9 @@ public class FileViewActivity extends AppCompatActivity
             webView.getSettings().setJavaScriptEnabled(true);
             String htmlString;
 
-            File dirStorage = new File(Environment.getDataDirectory() + "/passport");
+//            String filename = getExternalFilesDir("passport/");
+//            File dirStorage = new File(Environment.getDataDirectory() + "/passport");
+            File dirStorage = getExternalFilesDir("passport");
 
             File fileExternal = new File(dirStorage, MainActivity.BACKUP_FILENAME);
 
@@ -218,16 +264,13 @@ public class FileViewActivity extends AppCompatActivity
 
                 if (dirStorage.canRead()) {
                     if (fileExternal.exists()) {
-                        htmlString = notfyMsg() +
-                                "<h4>Have storage file " + "</h4>" +
-                                "<h5>" + fileExternal.getAbsoluteFile() + "</h5>" +
+                        htmlString = greetMsg() +
                                 "<h5>" + accountJsonProperties(fileExternal) + "</h5>" +
                                 "<h5>" + MainActivity.adapter.getItemCount() + " Account Profile items on db<h5>";
 
                     } else {
                         htmlString = notfyMsg() +
-                                "<h4>But presently no account export file on " + fileExternal.getAbsoluteFile() + "</h4>" +
-                                "<h5>Use menu to export data to this file.</h5>" +
+                                "<h4>Use menu to export data.</h4>" +
                                 "<h5>" + MainActivity.adapter.getItemCount() + " Account Profile items currently on db<h5>";
                     }
                 } else {
@@ -253,24 +296,32 @@ public class FileViewActivity extends AppCompatActivity
 
 
     private String warningMsg() {
-        String htmlString = "<br><br><h1>Warning</h1>\n" +
+        String htmlString = "<h1>Warning</h1>\n" +
                 "<h2>Unable to acquire Exported Accounts</h2>\n" +
                 "<h3>Either not previously exported or file storage issue</h3>";
         return htmlString;
     }
 
     private String notfyMsg() {
-        String htmlString = "<br><br><h1>Notification</h1>\n" +
-                "<h2>App storage available</h2>\n";
+        String htmlString = "<h1>Notification</h1>" +
+                "<h2>App storage available, export file not yet created</h2>";
         return htmlString;
     }
 
+    private String greetMsg() {
+        String htmlString = "<h1>Welcome</h1>" +
+                "<h2>File Offload Properties</h2>" +
+                "<h3>App storage available and export file exists.</h3>" +
+                "<h4>See menu for file location</h4>";
+        return htmlString;
+    }
     private String permissionMsg() {
-        String htmlString = "<br><br><h1>Permission Issue</h1>\n" +
-                "<h2>Unable to access App storage for backup file.</h2>\n" +
-                "<h3>Grant access for this App from Settings to select apps</h3>" +
+        String htmlString = "<h1>Permission Issue</h1>" +
+                "<h2>Unable to access App storage for backup file.</h2>" +
+                "<h3>Grant access for this App from Settings</h3>" +
                 "<h3>Select Accounts app in apps list. Select permissions. Then, set on Storage.</h3>" +
-                "<h4>Since version 10, backup storage is moved. See Filename from menu";
+                "<h4>Since version 10, backup storage has moved. See Filename from menu</h4>" +
+                "<h4>Once permission is granted, return to backup the db.</h4>";
         return htmlString;
     }
 
@@ -280,14 +331,14 @@ public class FileViewActivity extends AppCompatActivity
         String returnValue = "";
         try {
 
-            List<Account> listAccounts = new ArrayList<Account>();
+            List<Profile> listAccounts = new ArrayList<Profile>();
 
             final JsonReader reader = new JsonReader(new FileReader(file.getAbsoluteFile()));
 
             int listCount = 0;
             reader.beginArray();
             while (reader.hasNext()) {
-                Account account = readMessage(reader);
+                Profile account = readMessage(reader);
                 if (account == null) {
                     break;
                 } else {
@@ -299,7 +350,7 @@ public class FileViewActivity extends AppCompatActivity
             reader.endArray();
             reader.close();
 
-            returnValue = listCount + " #Accounts on backup file";
+            returnValue = listCount + " Accounts Items on backup file";
         } catch (IOException e) {
             e.printStackTrace();
             returnValue = "error: " + e.getMessage();
@@ -314,263 +365,85 @@ public class FileViewActivity extends AppCompatActivity
 
 
     public void reportFile() {
-        File fileExternal = new File(Environment.getDataDirectory() + "/passport/"
+//        File fileExternal = new File(Environment.getDataDirectory() + "/passport/"
+//                + MainActivity.BACKUP_FILENAME);
+        File fileExternal = new File(getExternalFilesDir(null) + "/passport/"
                 + MainActivity.BACKUP_FILENAME);
+
+
         String loc = "file://" + fileExternal.getAbsolutePath();
         Log.d(TAG, "reportJson: " + loc);
         webView.loadUrl(loc);
     }
 
 
-    public String ExportAccountDB() {
+    public void ExportAccountDB() {
         String msgError = "";
         int count = -1;
 
-
-        Log.d(TAG, "ExportAccountDB: " + android.os.Environment.getExternalStorageDirectory());
-
-
-        File path = null;
+//        File path = null;
         try {
-            path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
 
-            Log.d(TAG, "ExportAccountDB: path found " + path.getPath());
+            File dirStorage = getExternalFilesDir("passport");
+
+            Log.d(TAG, "ExportAccountDB: path found " + dirStorage.getPath());
             // Make sure the Pictures directory exists.
-            if (!path.exists()) {
-                path.mkdirs();
+            if (!dirStorage.exists()) {
+                dirStorage.mkdirs();
             }
-        } catch (Exception e) {
-            // Unable to create file, likely because external storage is
-            // not currently mounted.
-//            Log.w("ExternalStorage", "Error writing path ", e);
-            Log.e(TAG, "ExportAccountDB: path error ", e);
-        }
-
-        File path2 = null;
-        try {
-            path2 = new File(path, "passport");
-
-            Log.d(TAG, "ExportAccountDB: path2 " + path2.getPath());
-            // Make sure the Pictures directory exists.
-            if (!path2.exists()) {
-                path2.mkdirs();
-            }
-        } catch (Exception e) {
-            // Unable to create file, likely because external storage is
-            // not currently mounted.
-//            Log.w("ExternalStorage", "Error writing path ", e);
-            Log.e(TAG, "ExportAccountDB: path 2 error ", e);
-        }
 
 
-////            File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath(), filename);
-//
-//            String jsonDownload = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath();
-//
-//            File folder = new File(jsonDownload);
-//            if (!folder.exists()) {
-////                Log.d(TAG, "ExportAccountDB: create download " + jsonDownload);
-////                 create directory
-//                folder.mkdirs();
-//                Log.v(TAG, "dirCreated " + DEFAULT_APP_DIRECTORY);
-//            }
-//
-////            Log.v(TAG, "default dir " + DEFAULT_APP_DIRECTORY);
+            File file = new File(dirStorage, MainActivity.BACKUP_FILENAME);
+            Log.d(TAG, "ExportAccountDB export filename: " + file.getAbsoluteFile());
 
-//            File folder = new File(DEFAULT_APP_DIRECTORY);
-//            if (!folder.exists()) {
-////                Log.d(TAG, "ExportAccountDB: create download passport " + DEFAULT_APP_DIRECTORY);
-//                // create directory
-//                folder.mkdirs();
-//                Log.v(TAG, "dirCreated " + DEFAULT_APP_DIRECTORY);
-//            }
+            if (file.exists()) {
+                Log.d(TAG, "ExportAccountDB: file exists " + file.getAbsoluteFile());
+            } else {
+
+                Log.d(TAG, "ExportAccountDB: file " + file.getAbsoluteFile());
+                Log.d(TAG, "ExportAccountDB: got dir " + file.getParentFile().getAbsoluteFile());
+                Log.d(TAG, "ExportAccountDB: got dir " + file.getParentFile().getParentFile().getAbsoluteFile());
+                Log.d(TAG, "ExportAccountDB: got dir " + file.getParentFile().getParentFile().getParentFile().getAbsoluteFile());
+                Log.d(TAG, "ExportAccountDB: got path " + file.getParentFile().getPath());
+                Log.d(TAG, "ExportAccountDB: got path " + file.getParentFile().getParentFile().getPath());
+                Log.d(TAG, "ExportAccountDB: got path " + file.getParentFile().getParentFile().getParentFile().getPath());
 
 
-//            String jsonFile = DEFAULT_APP_DIRECTORY
-//                    + "/accounts.json";
-//
-////            Log.d(TAG, "ExportAccountDB: accounts.json " + jsonFile);
-//
-////			FileWriter fileWriter = new FileWriter(jsonFilePath);
-////            File file = new File(jsonFile);
-//            File fileDir = new File(DEFAULT_APP_DIRECTORY);
-//
-//            if (fileDir.exists()) {
-//                Log.d(TAG, "ExportAccountDB: dir exists " + fileDir.getAbsoluteFile());
-//            } else {
-//                Log.d(TAG, "ExportAccountDB: dir not exists " + fileDir.getAbsoluteFile());
-//            }
-//            File dirAccounts;
-//            try {
-//                dirAccounts = new File(DEFAULT_APP_DIRECTORY);
-//                File file = new File(DEFAULT_APP_DIRECTORY, "accounts.json");
-//                if (file.exists()) {
-//                    Log.d(TAG, "ExportAccountDB: dir found");
-//                }
-//            } catch (IOException ioexc) {
-//                if (!dirAccounts.exists()) {
-//                    dirAccounts.mkdirs();
-//                }
-//            }
-
-//        File file = new File(DEFAULT_APP_DIRECTORY, "accounts.json");
-
-        Log.d(TAG, "ExportAccountDB: " + path2.getAbsoluteFile());
-        File file = new File(path2, MainActivity.BACKUP_FILENAME);
-        Log.d(TAG, "ExportAccountDB: " + file.getAbsoluteFile());
-
-        if (file.exists()) {
-            Log.d(TAG, "ExportAccountDB: file exists " + file.getAbsoluteFile());
-        } else {
-
-            Log.d(TAG, "ExportAccountDB: file " + file.getAbsoluteFile());
-            Log.d(TAG, "ExportAccountDB: got dir " + file.getParentFile().getAbsoluteFile());
-            Log.d(TAG, "ExportAccountDB: got dir " + file.getParentFile().getParentFile().getAbsoluteFile());
-            Log.d(TAG, "ExportAccountDB: got dir " + file.getParentFile().getParentFile().getParentFile().getAbsoluteFile());
-            Log.d(TAG, "ExportAccountDB: got path " + file.getParentFile().getPath());
-            Log.d(TAG, "ExportAccountDB: got path " + file.getParentFile().getParentFile().getPath());
-            Log.d(TAG, "ExportAccountDB: got path " + file.getParentFile().getParentFile().getParentFile().getPath());
-
-
-//            String pathname = "/storage/emulated";
-//            File testFile = new File(pathname);
-//            if (testFile.exists()) {
-//                Log.d(TAG, "ExportAccountDB: storage dir exists " + pathname);
-//            } else {
-//                Log.d(TAG, "ExportAccountDB: no storage dir " + pathname);
-//            }
-//
-//            pathname = "/storage/emulated/0";
-//            testFile = new File(pathname);
-//            if (testFile.exists()) {
-//                Log.d(TAG, "ExportAccountDB: storage dir exists " + pathname);
-//            } else {
-//                Log.d(TAG, "ExportAccountDB: no storage dir " + pathname);
-//            }
-//
-//            pathname = "/storage/emulated/0/Download";
-//            testFile = new File(pathname);
-//            if (testFile.exists()) {
-//                Log.d(TAG, "ExportAccountDB: storage dir exists " + pathname);
-//            } else {
-//                Log.d(TAG, "ExportAccountDB: no storage dir " + pathname);
-//            }
-//
-//            pathname = "/storage/emulated/0/Download/passport";
-//            testFile = new File(pathname);
-//            if (testFile.exists()) {
-//                Log.d(TAG, "ExportAccountDB: storage dir exists " + pathname);
-//            } else {
-//                Log.d(TAG, "ExportAccountDB: no storage dir " + pathname);
-//                if (testFile.mkdirs()) {
-//                    Log.d(TAG, "ExportAccountDB: dirs made " + testFile.getPath());
-//                } else {
-//                    Log.d(TAG, "ExportAccountDB: unable to mkdir " + testFile.getPath());
-//                }
-//            }
-
-//            try {
-//                if (file.getParentFile().getParentFile().getParentFile().exists()) {
-//                    Log.d(TAG, "ExportAccountDB: parent dir found " + file.getParentFile().getParentFile().getParentFile().getAbsoluteFile());
-//                } else {
-//                    File dirFile = file.getParentFile().getParentFile().getParentFile();
-//                    if (dirFile.mkdirs()) {
-//                        Log.d(TAG, "ExportAccountDB: dirs made " + dirFile.getPath());
-//                    } else {
-//                        Log.d(TAG, "ExportAccountDB: unable to mkdir " + dirFile.getPath());
-//                    }
-//                }
-//            } catch (Exception ex) {
-//                Log.e(TAG, String.format("ExportAccountDB error: %s Msg: %s", file.getParentFile().getParentFile().getParentFile(), ex.getMessage()));
-//                return ex.getMessage();
-//            }
-
-//            try {
-//                if (file.getParentFile().getParentFile().exists()) {
-//                    Log.d(TAG, "ExportAccountDB: parent dir found " + file.getParentFile().getParentFile().getAbsoluteFile());
-//                } else {
-//                    if (file.getParentFile().getParentFile().mkdir()) {
-//                        Log.d(TAG, "ExportAccountDB: dirs made " + file.getParentFile().getParentFile().getAbsoluteFile());
-//                    } else {
-//                        Log.d(TAG, "ExportAccountDB: unable to mkdirs " + file.getParentFile().getParentFile().getAbsoluteFile());
-//                    }
-//                }
-//            } catch (Exception ex) {
-//                Log.e(TAG, String.format("ExportAccountDB: %s Msg: %s", file.getParentFile().getParentFile(), ex.getMessage()));
-//                return ex.getMessage();
-//            }
-
-//            try {
-//                if (file.getParentFile().exists()) {
-//                    Log.d(TAG, "ExportAccountDB: parent dir found " + file.getParentFile().getAbsoluteFile());
-//                } else {
-//                    if (file.getParentFile().mkdir()) {
-//                        Log.d(TAG, "ExportAccountDB: dirs made " + file.getParentFile().getAbsoluteFile());
-//                    } else {
-//                        Log.d(TAG, "ExportAccountDB: unable to mkdirs " + file.getParentFile().getAbsoluteFile());
-//                    }
-//                }
-//            } catch (Exception ex) {
-//                Log.e(TAG, String.format("ExportAccountDB: %s Msg: %s", file.getParentFile(), ex.getMessage()));
-//                return ex.getMessage();
-//            }
-
-
-            //                Log.d(TAG, "ExportAccountDB: file does not exists");
-//                if (file.isDirectory()) {
-//                    Log.d(TAG, "ExportAccountDB: file is dir");
-//                }
-            Log.d(TAG, "ExportAccountDB: file " + file.getAbsoluteFile());
-
-            try {
-                if (file.createNewFile()) {
-                    Log.d(TAG, "ExportAccountDB: file created " + file.getAbsoluteFile());
-                }
-            } catch (IOException e1) {
-                msgError = e1.getMessage();
-                Log.e(TAG, "ExportAccountDB error: " + e1.getMessage());
-                Toast.makeText(this,
-                        " Exported directory not exists",
-                        Toast.LENGTH_LONG).show();
+                try {
+                    if (file.createNewFile()) {
+                        Log.d(TAG, "ExportAccountDB: file created " + file.getAbsoluteFile());
+                    }
+                } catch (IOException e1) {
+                    msgError = e1.getMessage();
+                    Log.e(TAG, "ExportAccountDB error: " + e1.getMessage());
+                    Toast.makeText(this,
+                            " Exported directory not exists",
+                            Toast.LENGTH_LONG).show();
 //                    fvFragment.setInfoMessage("Exported directory not exists");
-            } catch (Exception e2) {
-                e2.printStackTrace();
-                System.out.println(e2.getMessage());
-                msgError = "jsonError: " + e2.getMessage();
-                Log.v(TAG, msgError);
+                } catch (Exception e2) {
+                    e2.printStackTrace();
+                    System.out.println(e2.getMessage());
+                    msgError = "jsonError: " + e2.getMessage();
+                    Log.v(TAG, msgError);
+                }
+
             }
 
-        }
-        ;
-//                Log.d(TAG, "ExportAccountDB: file created");
-
-//                OutputStream fos = new BufferedOutputStream(new FileOutputStream(file));
-//                Log.d(TAG, "ExportAccountDB: fos created");
-//                writeJson(fos);
-//                Log.d(TAG, "ExportAccountDB: fos written & closed");
-
-//
-//            OutputStream fos = new BufferedOutputStream(new FileOutputStream(file));
-//            OutputStreamWriter out = new OutputStreamWriter(fos, "UTF-8");
-
-//            FileWriter fos = new FileWriter(jsonFile);
-//            fos.write(response);
-
-
-        try {
-//			JsonWriter writer = new JsonWriter(fileWriter);
-//            JsonWriter writer = new JsonWriter(out);
             JsonWriter writer = new JsonWriter(new FileWriter(file));
             writer.setIndent("  ");
             count = writeMessagesArray(writer);
             writer.flush();
             writer.close();
             introPage();
+            Toast.makeText(this,
+                    count + " Exported accounts",
+                    Toast.LENGTH_LONG).show();
+
         } catch (IOException e1) {
             msgError = e1.getMessage();
             Log.e(TAG, "ExportAccountDB error: " + e1.getMessage());
             Toast.makeText(this,
-                    " Exported directory not exists",
+                    " Exported file directory issues",
                     Toast.LENGTH_LONG).show();
 //                    fvFragment.setInfoMessage("Exported directory not exists");
         } catch (Exception e2) {
@@ -578,16 +451,8 @@ public class FileViewActivity extends AppCompatActivity
             System.out.println(e2.getMessage());
             msgError = "jsonError: " + e2.getMessage();
             Log.v(TAG, msgError);
+            Toast.makeText(this, "Export has errors", Toast.LENGTH_SHORT).show();
         }
-
-//        Log.d(TAG, "ExportAccountDB: return msg " + msgError);
-        if (count != -1) {
-
-            Toast.makeText(this,
-                    count + " Exported accounts",
-                    Toast.LENGTH_LONG).show();
-        }
-        return msgError;
     }
 
 
@@ -597,54 +462,26 @@ public class FileViewActivity extends AppCompatActivity
         progressBar.setVisibility(View.VISIBLE);
 
 
-//        final String msg = "";
-//        new Thread(new Runnable() {
-//
-//            @Override
-//            public void run() {
-//                List<Account> listAccounts = new ArrayList<Account>();
-//
-//                mHandler.post(new Runnable() {
-//                @Override
-//                public void run() {
-//                    Log.d(TAG, "Runnable: post");
-//                }
-//            });
-//        };
-
-
         new Thread(new Runnable() {
             @Override
             public void run() {
 
-                String msg = "";
+//                String msg = "";
                 boolean error = false;
                 try {
-                    List<Account> listAccounts = new ArrayList<Account>();
+                    List<Profile> listAccounts = new ArrayList<Profile>();
 
-//                    File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-                    File path = new File(Environment.getDataDirectory() + "/passport");
-//                    File path2 = new File(path, "passport");
+                    File dirStorage = getExternalFilesDir("passport");
 
-                    Log.d(TAG, "run: path " + path.getAbsoluteFile());
+                    Log.d(TAG, "run: path " + dirStorage.getAbsoluteFile());
+
 
                     final JsonReader reader = new JsonReader(new FileReader(
-                            path.getAbsoluteFile() + "/" + MainActivity.BACKUP_FILENAME));
-                    // reader.beginObject();
+                            dirStorage.getAbsoluteFile() + "/" + MainActivity.BACKUP_FILENAME));
 
-
-                    //                Toast.makeText(this,
-//                        " File of exported accounts not found",
-//                        Toast.LENGTH_LONG).show();
-//                fvFragment.setInfoMessage("Not able to find external file of exported accounts");
-//                return;
-
-
-//                    Log.d(TAG, "run: begin to read from file");
                     reader.beginArray();
                     while (reader.hasNext()) {
-//                        Account account = readMessage(reader);
-                        Account account = readMessage(reader);
+                        Profile account = readMessage(reader);
 
                         if (account == null) {
                             break;
@@ -657,76 +494,90 @@ public class FileViewActivity extends AppCompatActivity
                     reader.endArray();
                     reader.close();
 
-                    ContentResolver contentResolver = getContentResolver();
-                    int deleteCount = getContentResolver().delete(AccountsContract.CONTENT_URI, null, null);
-                    Log.d(TAG, "run: delete count " + deleteCount);
 
-                    int itemCount = 0;
-                    for (Account item : listAccounts) {
-//                Log.d(TAG, "ImportAccountDB: acc " + item.getPassportId()
-//                        + " " + item.getCorpName());
-                        addAccountToDB(contentResolver, item);
-                        itemCount++;
-                        int remCount = itemCount % 50;
-                        if (remCount == 0 || itemCount == 1) {
-                            Log.d(TAG, "run: count " + itemCount);
-                            final int runCount = itemCount;
-                            mHandler.post(new Runnable() {
-                                @Override
-                                public void run() {
 
-                                    String notifyMsg;
-                                    if (runCount == 1) {
-                                        notifyMsg = "progress: db replace begins";
-                                    } else {
-                                        notifyMsg = String.format("progress: %s rows replaced", runCount);
-                                    }
-                                    Toast.makeText(getApplicationContext(),
-                                            notifyMsg, Toast.LENGTH_LONG).show();
 
-                                }
-                            });
-                        }
-                    }
+                    MainActivity.profileViewModel.deleteAllProfiles();
 
-                    Log.d(TAG, "run: import count " + itemCount);
+                    MainActivity.profileViewModel.insertMulti(listAccounts);
 
-                    msg = listAccounts.size() + " Accounts Imported";
+//                    for (Profile item : listAccounts) {
+//                        MainActivity.profileViewModel.insert(item);
+//                    }
+//
+//                    String msg = MainActivity.adapter.getItemCount() + " Items uploaded";
+//                    Toast.makeText(FileViewActivity.this, msg, Toast.LENGTH_SHORT).show();
 
-                    importRefreshReq = true;
-                    Intent intent = new Intent();
-                    intent.putExtra("IMPORT", importRefreshReq);
-                    setResult(RESULT_OK, intent);
-                    finish();
+//                    ContentResolver contentResolver = getContentResolver();
+//                    int deleteCount = getContentResolver().delete(AccountsContract.CONTENT_URI, null, null);
+//                    Log.d(TAG, "run: delete count " + deleteCount);
+//
+//                    int itemCount = 0;
+//                    for (Profile item : listAccounts) {
+////                Log.d(TAG, "ImportAccountDB: acc " + item.getPassportId()
+////                        + " " + item.getCorpName());
+//                        addAccountToDB(contentResolver, item);
+//                        itemCount++;
+//                        int remCount = itemCount % 50;
+//                        if (remCount == 0 || itemCount == 1) {
+//                            Log.d(TAG, "run: count " + itemCount);
+//                            final int runCount = itemCount;
+//                            mHandler.post(new Runnable() {
+//                                @Override
+//                                public void run() {
+//
+//                                    String notifyMsg;
+//                                    if (runCount == 1) {
+//                                        notifyMsg = "progress: db replace begins";
+//                                    } else {
+//                                        notifyMsg = String.format("progress: %s rows replaced", runCount);
+//                                    }
+//                                    Toast.makeText(getApplicationContext(),
+//                                            notifyMsg, Toast.LENGTH_LONG).show();
+//
+//                                }
+//                            });
+//                        }
+//                    }
+//
+//                    Log.d(TAG, "run: import count " + itemCount);
+//
+//                    msg = listAccounts.size() + " Accounts Imported";
+//
+//                    importRefreshReq = true;
+//                    Intent intent = new Intent();
+//                    intent.putExtra("IMPORT", importRefreshReq);
+//                    setResult(RESULT_OK, intent);
+//                    finish();
 
 
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
-                    msg = "import file not found";
+//                    msg = "import file not found";
                     error = true;
                 } catch (IOException e) {
                     e.printStackTrace();
-                    msg = "import file error " + e.getMessage();
+//                    msg = "import file error " + e.getMessage();
                     error = true;
 //			savePassports();
                 } catch (Exception e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
-                    msg = "import exception";
+//                    msg = "import exception";
                     error = true;
                 }
 
-                final String notifyMsg = msg;
-                mHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        Toast.makeText(getApplicationContext(),
-                                notifyMsg, Toast.LENGTH_LONG).show();
-
-
-                    }
-                });
+//                final String notifyMsg = msg;
+//                mHandler.post(new Runnable() {
+//                    @Override
+//                    public void run() {
+//
+//                        Toast.makeText(getApplicationContext(),
+//                                notifyMsg, Toast.LENGTH_LONG).show();
+//
+//
+//                    }
+//                });
             }
         }).start();
 
@@ -769,13 +620,18 @@ public class FileViewActivity extends AppCompatActivity
 
 
     private void showFilename() {
+        File fileExternal = new File(getExternalFilesDir(null) + "/passport/"
+                + MainActivity.BACKUP_FILENAME);
+
         Log.d(TAG, "showFilename: " + Environment.getDataDirectory() + "/passport/" + MainActivity.BACKUP_FILENAME);
+        Log.d(TAG, "showFilename: " + getExternalFilesDir(null) + "/passport/" + MainActivity.BACKUP_FILENAME);
+        Log.d(TAG, "showFilename: " + getExternalFilesDir("passport/") + MainActivity.BACKUP_FILENAME);
         AppDialog dialog = new AppDialog();
         Bundle args = new Bundle();
         args.putInt(AppDialog.DIALOG_ID, AppDialog.DIALOG_ID_EXPORT_FILENAME);
         args.putInt(AppDialog.DIALOG_TYPE, AppDialog.DIALOG_OK);
         args.putString(AppDialog.DIALOG_MESSAGE, getString(R.string.confirmdiag_export_filename));
-        args.putString(AppDialog.DIALOG_SUB_MESSAGE, Environment.getDataDirectory() + "/passport/" + MainActivity.BACKUP_FILENAME);
+        args.putString(AppDialog.DIALOG_SUB_MESSAGE, getExternalFilesDir(null) + "/passport/" + MainActivity.BACKUP_FILENAME);
         args.putInt(AppDialog.DIALOG_POSITIVE_RID, R.string.ok);
 
         dialog.setArguments(args);
@@ -856,8 +712,8 @@ public class FileViewActivity extends AppCompatActivity
     }
 
 
-    final public Account readMessage(JsonReader reader) {
-        Account item = new Account();
+    final public Profile readMessage(JsonReader reader) {
+        Profile item = new Profile();
         boolean retSuccess = true;
         try {
             reader.beginObject();
@@ -949,7 +805,8 @@ public class FileViewActivity extends AppCompatActivity
 
             Log.d(TAG, "writeMessagesArray: " + listAccounts);
             writer.beginArray();
-            for (Account item : listAccounts) {
+            for (Profile item : MainActivity.adapter.getCurrentList()) {
+//            for (Account item : listAccounts) {
                 writeMessage(writer, item);
                 count++;
             }
@@ -963,7 +820,7 @@ public class FileViewActivity extends AppCompatActivity
     }
 
 
-    public void writeMessage(JsonWriter writer, Account item)
+    public void writeMessage(JsonWriter writer, Profile item)
             throws IOException {
         try {
             writer.beginObject();
@@ -1074,4 +931,22 @@ public class FileViewActivity extends AppCompatActivity
     public void onDialogCancelled(int dialogId) {
 
     }
+
+
+
+    private static class UploadProfileAsyncTask extends AsyncTask<Profile, Void, Void> {
+        private ProfileDao profileDao;
+
+        private UploadProfileAsyncTask(ProfileDao profileDao) {
+            this.profileDao = profileDao;
+        }
+
+        @Override
+        protected Void doInBackground(Profile... profiles) {
+            profileDao.update(profiles[0]);
+            return null;
+        }
+    }
+
+
 }
