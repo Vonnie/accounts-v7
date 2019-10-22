@@ -1018,7 +1018,7 @@ public class FileViewActivity extends AppCompatActivity
             MainActivity.profileViewModel.deleteAllProfiles();
             Log.d(TAG, "run: delete all complete ");
 
-            MainActivity.profileViewModel.insertMulti(listAccounts);
+            MainActivity.profileViewModel.insertAll(listAccounts);
             Log.d(TAG, "run: upload complete ");
 
             FileViewActivity.progressBar.setVisibility(View.GONE);

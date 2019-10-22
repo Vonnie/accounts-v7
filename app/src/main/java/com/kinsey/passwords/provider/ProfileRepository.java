@@ -5,15 +5,19 @@ import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.kinsey.passwords.items.Profile;
 
 import java.util.List;
 
+import io.reactivex.schedulers.Schedulers;
+
 
 public class ProfileRepository {
     private ProfileDao profileDao;
     private LiveData<List<Profile>> allProfiles;
+    private MutableLiveData<Long> dbInsertId = new MediatorLiveData<>();
 
 
     public ProfileRepository(Application application) {
@@ -22,8 +26,12 @@ public class ProfileRepository {
         allProfiles = profileDao.getAllProfiles();
     }
 
-    public void insert(Profile profile, Task myInterface) {
+    public void insertProfile(Profile profile, Task myInterface) {
         new InsertProfileAsyncTask(profileDao, myInterface).execute(profile);
+    }
+
+    public void insertAll(List<Profile> profiles) {
+        new InsertProfilesAsyncTask(profileDao).execute(profiles);
     }
 
     public void update(Profile profile) {
@@ -38,22 +46,22 @@ public class ProfileRepository {
         new DeleteAllProfilesAsyncTask(profileDao).execute();
     }
 
-    public void insertMulti(List<Profile> profiles) {
-        new InsertProfilesAsyncTask(profileDao).execute(profiles);
-    }
-
     public LiveData<List<Profile>> getAllProfiles() {
         allProfiles = profileDao.getAllProfiles();
         return allProfiles;
     }
 
-    public LiveData<List<Profile>> getAllProfilesById() {
-        allProfiles = profileDao.getAllProfilesById();
-        return allProfiles;
+    public LiveData<Profile> getProfileById(int id) {
+        return profileDao.getProfileById(id);
     }
 
     public LiveData<List<Profile>> getAllProfilesByOpenDate() {
         allProfiles = profileDao.getAllProfilesByOpenDate();
+        return allProfiles;
+    }
+
+    public LiveData<List<Profile>> getAllProfilesByPassportId() {
+        allProfiles = profileDao.getAllProfilesByPassportId();
         return allProfiles;
     }
 
@@ -63,38 +71,35 @@ public class ProfileRepository {
     }
 
     private static class InsertProfileAsyncTask extends AsyncTask<Profile, Void, Profile> {
-        private ProfileDao dao;
-        private Task taskId;
+        private ProfileDao mDao;
+        private Task mTask;
 
-        private InsertProfileAsyncTask(ProfileDao profileDao, Task taskId) {
-            this.dao = profileDao;
-            this.taskId = taskId;
+        private InsertProfileAsyncTask(ProfileDao profileDao, Task task) {
+            this.mDao = profileDao;
+            this.mTask = task;
         }
 
         @Override
         protected Profile doInBackground(Profile... profile) {
-//            Profile item = profile[0];
-//            long id = profileDao.insert(item);
-//            int intId = (int)id;
-//            item.setId(intId);
-//            item.setPassportId(intId);
+            Profile item = profile[0];
+            long id = this.mDao.insertProfile(item);
+            int intId = (int)id;
+            item.setId(intId);
+            item.setPassportId(intId);
+            return item;
 //            profileDao.update(item);
 //
 //            return item;
-            return profileDao.insert(profile);
+//            return profileDao.insert(profile);
+//            return mDao.insertProfile(profile[0]);
         }
 
         @Override
         protected void onPostExecute(Profile profile) {
             super.onPostExecute(profile);
-            taskId.processInsert(profile.id);
+            mTask.processInsert(profile);
 
 //            return profile;
-        }
-
-
-        public void insertMyProfile(Profile profile, Task myInterface) {
-            new ProfileRepository.InsertProfileAsyncTask(profileDao, myInterface).execute(profile);
         }
 
 

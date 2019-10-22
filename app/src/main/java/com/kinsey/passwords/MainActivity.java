@@ -81,12 +81,12 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity
         implements
-        Filterable,
         AccountListActivityFragment.OnAccountListClickListener,
         AddEditActivityFragment.OnListenerClicked,
         AppDialog.DialogEvents,
         DatePickerDialog.OnDateSetListener{
 
+//    Filterable,
 //    AccountRecyclerViewAdapter.OnAccountClickListener,
 //    AccountActivityFragment.OnActionListener,
 //    AccountPlaceholderFrag1.OnAccountListener,
@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity
     public static String BACKUP_FILENAME = "accounts.json";
 
 
-    private List<Profile> profileListFull;
+//    private List<Profile> profileListFull;
     private List<Profile> profileList;
 
     private String feedUrl = "http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topTvEpisodes/xml";
@@ -242,7 +242,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onChanged(List<Profile> profiles) {
 
-                profileListFull = new ArrayList<>(profiles);
+//                profileListFull = new ArrayList<>(profiles);
                 adapter.submitList(profiles);
             }
         });
@@ -275,6 +275,7 @@ public class MainActivity extends AppCompatActivity
                 intent.putExtra(AddEditProfileActivity.EXTRA_ACTVY_LONG, profile.getActvyLong());
                 intent.putExtra(AddEditProfileActivity.EXTRA_OPEN_DATE_LONG, profile.getOpenLong());
 
+                Log.d(TAG, "edit requested");
                 startActivityForResult(intent, EDIT_PROFILE_REQUEST);
 
             }
@@ -768,7 +769,7 @@ public class MainActivity extends AppCompatActivity
                 }
 
 
-                profileViewModel.getAllProfilesById().observe(this, new Observer<List<Profile>>() {
+                profileViewModel.getAllProfilesByPassportId().observe(this, new Observer<List<Profile>>() {
                     @Override
                     public void onChanged(List<Profile> profiles) {
                         adapter.submitList(profiles);
@@ -2232,10 +2233,11 @@ public class MainActivity extends AppCompatActivity
                 profile.setOpenLong(data.getLongExtra(AddEditProfileActivity.EXTRA_OPEN_DATE_LONG, 0));
                 profile.setActvyLong(System.currentTimeMillis());
 
-                profileViewModel.insert(profile);
+                profileViewModel.insertProfile(profile);
 
 
-                Toast.makeText(this, "Profile saved", Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "profile added");
+                Toast.makeText(this, "Profile added", Toast.LENGTH_SHORT).show();
             }
             case EDIT_PROFILE_REQUEST: {
                 int id = data.getIntExtra(AddEditProfileActivity.EXTRA_ID, -1);
@@ -3065,40 +3067,40 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    @Override
-    public Filter getFilter() {
-        return profileFilter;
-    }
-
-    private Filter profileFilter = new Filter() {
-        @Override
-        protected FilterResults performFiltering(CharSequence constraint) {
-            List<Profile> filteredList = new ArrayList<>();
-
-            if (constraint == null || constraint.length() == 0) {
-               filteredList.addAll(profileListFull);
-            } else {
-                String filterPattern = constraint.toString().toLowerCase().trim();
-
-                for (Profile item : profileListFull) {
-                    if (item.getCorpName().toLowerCase().contains(filterPattern)) {
-                        filteredList.add(item);
-                    }
-                }
-            }
-
-            FilterResults results = new FilterResults();
-            results.values = filteredList;
-
-            return results;
-        }
-
-        @Override
-        protected void publishResults(CharSequence constraint, FilterResults results) {
-            profileList.clear();
-            profileList.addAll((List) results.values);
-
-//            notifyDataSetChanged();
-        }
-    };
+//    @Override
+//    public Filter getFilter() {
+//        return profileFilter;
+//    }
+//
+//    private Filter profileFilter = new Filter() {
+//        @Override
+//        protected FilterResults performFiltering(CharSequence constraint) {
+//            List<Profile> filteredList = new ArrayList<>();
+//
+//            if (constraint == null || constraint.length() == 0) {
+//               filteredList.addAll(profileListFull);
+//            } else {
+//                String filterPattern = constraint.toString().toLowerCase().trim();
+//
+//                for (Profile item : profileListFull) {
+//                    if (item.getCorpName().toLowerCase().contains(filterPattern)) {
+//                        filteredList.add(item);
+//                    }
+//                }
+//            }
+//
+//            FilterResults results = new FilterResults();
+//            results.values = filteredList;
+//
+//            return results;
+//        }
+//
+//        @Override
+//        protected void publishResults(CharSequence constraint, FilterResults results) {
+//            profileList.clear();
+//            profileList.addAll((List) results.values);
+//
+////            notifyDataSetChanged();
+//        }
+//    };
 }

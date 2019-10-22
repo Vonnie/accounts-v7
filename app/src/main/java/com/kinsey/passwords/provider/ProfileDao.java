@@ -20,6 +20,12 @@ public interface ProfileDao {
     @Insert
     Long insert(Profile profile);
 
+    @Insert
+    Long[] insertAll(Profile[] profiles);
+
+    @Insert
+    Long insertProfile(Profile profile);
+
     @Update
     void update(Profile profile);
 
@@ -33,16 +39,15 @@ public interface ProfileDao {
     LiveData<List<Profile>> getAllProfiles();
 
     @Query("SELECT * FROM Passport ORDER BY passport_id ASC")
-    LiveData<List<Profile>> getAllProfilesById();
+    LiveData<List<Profile>> getAllProfilesByPassportId();
 
     @Query("SELECT * FROM Passport ORDER BY open_date DESC")
     LiveData<List<Profile>> getAllProfilesByOpenDate();
 
-    @Query("SELECT * FROM Passport where corporation_name LIKE  :name or LOWER(corporation_name) like LOWER(:name) order by corporation_name")
+    @Query("SELECT * FROM Passport where corporation_name LIKE :name or LOWER(corporation_name) like LOWER(:name) order by corporation_name")
     LiveData<List<Profile>> searchCorpNameProfiles(String name);
 
-    @Query("SELECT * FROM Passport where _id == :id")
-    LiveData<List<Profile>> getProfileById(String id);
-
+    @Query("SELECT * FROM Passport where _id = :id")
+    LiveData<Profile> getProfileById(int id);
 
 }
