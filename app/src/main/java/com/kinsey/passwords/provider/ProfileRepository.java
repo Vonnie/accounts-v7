@@ -10,6 +10,7 @@ import com.kinsey.passwords.items.Profile;
 
 import java.util.List;
 
+
 public class ProfileRepository {
     private ProfileDao profileDao;
     private LiveData<List<Profile>> allProfiles;
@@ -21,8 +22,8 @@ public class ProfileRepository {
         allProfiles = profileDao.getAllProfiles();
     }
 
-    public void insert(Profile profile) {
-        new InsertProfileAsyncTask(profileDao).execute(profile);
+    public void insert(Profile profile, Task myInterface) {
+        new InsertProfileAsyncTask(profileDao, myInterface).execute(profile);
     }
 
     public void update(Profile profile) {
@@ -61,19 +62,45 @@ public class ProfileRepository {
         return allProfiles;
     }
 
-    private static class InsertProfileAsyncTask extends AsyncTask<Profile, Void, Void> {
-        private ProfileDao profileDao;
+    private static class InsertProfileAsyncTask extends AsyncTask<Profile, Void, Profile> {
+        private ProfileDao dao;
+        private Task taskId;
 
-        private InsertProfileAsyncTask(ProfileDao profileDao) {
-            this.profileDao = profileDao;
+        private InsertProfileAsyncTask(ProfileDao profileDao, Task taskId) {
+            this.dao = profileDao;
+            this.taskId = taskId;
         }
 
         @Override
-        protected Void doInBackground(Profile... profiles) {
-            profileDao.insert(profiles[0]);
-            return null;
+        protected Profile doInBackground(Profile... profile) {
+//            Profile item = profile[0];
+//            long id = profileDao.insert(item);
+//            int intId = (int)id;
+//            item.setId(intId);
+//            item.setPassportId(intId);
+//            profileDao.update(item);
+//
+//            return item;
+            return profileDao.insert(profile);
         }
+
+        @Override
+        protected void onPostExecute(Profile profile) {
+            super.onPostExecute(profile);
+            taskId.processInsert(profile.id);
+
+//            return profile;
+        }
+
+
+        public void insertMyProfile(Profile profile, Task myInterface) {
+            new ProfileRepository.InsertProfileAsyncTask(profileDao, myInterface).execute(profile);
+        }
+
+
     }
+
+//    https://stackoverflow.com/questions/56950531/how-to-make-room-database-insert-method-return-int-through-mvvm-architecture
 
     private static class InsertProfilesAsyncTask extends AsyncTask<List<Profile>, Void, Void> {
         private ProfileDao profileDao;

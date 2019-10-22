@@ -53,7 +53,8 @@ public class ProfileAdapter extends ListAdapter<Profile, ProfileAdapter.ProfileH
     public void onBindViewHolder(@NonNull ProfileHolder holder, int position) {
         Profile currentProfile = getItem(position);
         holder.tvCorpName.setText(currentProfile.getCorpName());
-        holder.tvAcctId.setText(String.valueOf(currentProfile.getId()));
+//        holder.tvAcctId.setText(String.valueOf(currentProfile.getId()));
+        holder.tvAcctId.setText(String.valueOf(currentProfile.getPassportId()));
 
     }
 

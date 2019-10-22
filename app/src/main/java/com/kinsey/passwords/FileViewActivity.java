@@ -59,13 +59,14 @@ public class FileViewActivity extends AppCompatActivity
         implements AppDialog.DialogEvents {
     private static final String TAG = "FileViewActivity";
 
-    ProgressBar progressBar;
+    public static ProgressBar progressBar;
     WebView webView;
 //    private ProfileAdapter adapter;
 //    private ProfileViewModel profileViewModel;
 
     private Handler mHandler = new Handler();
     boolean importRefreshReq = false;
+    public static File dirStorage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +78,6 @@ public class FileViewActivity extends AppCompatActivity
 
         progressBar = findViewById(R.id.progressBar);
         progressBar.setVisibility(View.VISIBLE);
-
 
 //        FloatingActionButton fab = findViewById(R.id.fab);
 //        fab.setOnClickListener(new View.OnClickListener() {
@@ -194,9 +194,19 @@ public class FileViewActivity extends AppCompatActivity
                 Log.d(TAG, "onOptionsItemSelected: View share");
                 break;
 
+
+
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+//        return super.onSupportNavigateUp();
+        setResult(RESULT_CANCELED);
+        finish();
+        return false;
     }
 
 
@@ -265,8 +275,8 @@ public class FileViewActivity extends AppCompatActivity
                 if (dirStorage.canRead()) {
                     if (fileExternal.exists()) {
                         htmlString = greetMsg() +
-                                "<h5>" + accountJsonProperties(fileExternal) + "</h5>" +
-                                "<h5>" + MainActivity.adapter.getItemCount() + " Account Profile items on db<h5>";
+                                "<h5>" + MainActivity.adapter.getItemCount() + " Account Profile items currently on db<h5>" +
+                                "<h5>" + accountJsonProperties(fileExternal) + "</h5>";
 
                     } else {
                         htmlString = notfyMsg() +
@@ -315,6 +325,7 @@ public class FileViewActivity extends AppCompatActivity
                 "<h4>See menu for file location</h4>";
         return htmlString;
     }
+
     private String permissionMsg() {
         String htmlString = "<h1>Permission Issue</h1>" +
                 "<h2>Unable to access App storage for backup file.</h2>" +
@@ -350,7 +361,7 @@ public class FileViewActivity extends AppCompatActivity
             reader.endArray();
             reader.close();
 
-            returnValue = listCount + " Accounts Items on backup file";
+            returnValue = listCount + " Items on Accounts backup file";
         } catch (IOException e) {
             e.printStackTrace();
             returnValue = "error: " + e.getMessage();
@@ -458,146 +469,158 @@ public class FileViewActivity extends AppCompatActivity
 
     private void ImportAccountDB() {
         Log.d(TAG, "ImportAccountDB: starts");
-        progressBar = findViewById(R.id.progressBar);
+
         progressBar.setVisibility(View.VISIBLE);
 
+        try {
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
+            File dirStorage = getExternalFilesDir("passport");
+            String dirStorageName = dirStorage.getAbsolutePath();
 
-//                String msg = "";
-                boolean error = false;
-                try {
-                    List<Profile> listAccounts = new ArrayList<Profile>();
+            Log.d(TAG, "call asyncTask");
+            new UploadProfileAsyncTask().execute(dirStorageName);
 
-                    File dirStorage = getExternalFilesDir("passport");
+            Toast.makeText(this, "Upload restore complete", Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
 
-                    Log.d(TAG, "run: path " + dirStorage.getAbsoluteFile());
-
-
-                    final JsonReader reader = new JsonReader(new FileReader(
-                            dirStorage.getAbsoluteFile() + "/" + MainActivity.BACKUP_FILENAME));
-
-                    reader.beginArray();
-                    while (reader.hasNext()) {
-                        Profile account = readMessage(reader);
-
-                        if (account == null) {
-                            break;
-                        } else {
-                            listAccounts.add(account);
-                            int listCount = listAccounts.size();
-                        }
-                    }
-//                    Log.d(TAG, "run: count " + listAccounts.size());
-                    reader.endArray();
-                    reader.close();
-
-
-
-
-                    MainActivity.profileViewModel.deleteAllProfiles();
-
-                    MainActivity.profileViewModel.insertMulti(listAccounts);
-
-//                    for (Profile item : listAccounts) {
-//                        MainActivity.profileViewModel.insert(item);
-//                    }
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
 //
-//                    String msg = MainActivity.adapter.getItemCount() + " Items uploaded";
-//                    Toast.makeText(FileViewActivity.this, msg, Toast.LENGTH_SHORT).show();
-
-//                    ContentResolver contentResolver = getContentResolver();
-//                    int deleteCount = getContentResolver().delete(AccountsContract.CONTENT_URI, null, null);
-//                    Log.d(TAG, "run: delete count " + deleteCount);
+////                String msg = "";
+//                boolean error = false;
+//                try {
+//                    List<Profile> listAccounts = new ArrayList<Profile>();
 //
-//                    int itemCount = 0;
-//                    for (Profile item : listAccounts) {
-////                Log.d(TAG, "ImportAccountDB: acc " + item.getPassportId()
-////                        + " " + item.getCorpName());
-//                        addAccountToDB(contentResolver, item);
-//                        itemCount++;
-//                        int remCount = itemCount % 50;
-//                        if (remCount == 0 || itemCount == 1) {
-//                            Log.d(TAG, "run: count " + itemCount);
-//                            final int runCount = itemCount;
-//                            mHandler.post(new Runnable() {
-//                                @Override
-//                                public void run() {
+//                    File dirStorage = getExternalFilesDir("passport");
 //
-//                                    String notifyMsg;
-//                                    if (runCount == 1) {
-//                                        notifyMsg = "progress: db replace begins";
-//                                    } else {
-//                                        notifyMsg = String.format("progress: %s rows replaced", runCount);
-//                                    }
-//                                    Toast.makeText(getApplicationContext(),
-//                                            notifyMsg, Toast.LENGTH_LONG).show();
+//                    Log.d(TAG, "run: path " + dirStorage.getAbsoluteFile());
 //
-//                                }
-//                            });
+//
+//                    final JsonReader reader = new JsonReader(new FileReader(
+//                            dirStorage.getAbsoluteFile() + "/" + MainActivity.BACKUP_FILENAME));
+//
+//                    reader.beginArray();
+//                    while (reader.hasNext()) {
+//                        Profile account = readMessage(reader);
+//
+//                        if (account == null) {
+//                            break;
+//                        } else {
+//                            listAccounts.add(account);
+//                            int listCount = listAccounts.size();
 //                        }
 //                    }
-//
-//                    Log.d(TAG, "run: import count " + itemCount);
-//
-//                    msg = listAccounts.size() + " Accounts Imported";
-//
-//                    importRefreshReq = true;
-//                    Intent intent = new Intent();
-//                    intent.putExtra("IMPORT", importRefreshReq);
-//                    setResult(RESULT_OK, intent);
-//                    finish();
-
-
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-//                    msg = "import file not found";
-                    error = true;
-                } catch (IOException e) {
-                    e.printStackTrace();
-//                    msg = "import file error " + e.getMessage();
-                    error = true;
-//			savePassports();
-                } catch (Exception e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-//                    msg = "import exception";
-                    error = true;
-                }
-
-//                final String notifyMsg = msg;
-//                mHandler.post(new Runnable() {
-//                    @Override
-//                    public void run() {
-//
-//                        Toast.makeText(getApplicationContext(),
-//                                notifyMsg, Toast.LENGTH_LONG).show();
+////                    Log.d(TAG, "run: count " + listAccounts.size());
+//                    reader.endArray();
+//                    reader.close();
 //
 //
-//                    }
-//                });
-            }
-        }).start();
-
-//        loadSearchDB();
-
-//        fvFragment.setImportRefreshReq(true);
-
-
-        //        FragmentManager fragmentManager = getSupportFragmentManager();
-//        AppDialog newFragment = AppDialog.newInstance();
-//        Bundle args = new Bundle();
-//        args.putInt(AppDialog.DIALOG_ID, AppDialog.DIALOG_ID_ASK_IF_NEED_DICTIONARY_REBUILD);
-//        args.putInt(AppDialog.DIALOG_TYPE, AppDialog.DIALOG_YES_NO);
-//        args.putString(AppDialog.DIALOG_MESSAGE, "Ask to rebuild search dictionary");
-//        args.putString(AppDialog.DIALOG_SUB_MESSAGE, "Accounts changed, rebuild dictionary to sync up?");
+//                    MainActivity.profileViewModel.deleteAllProfiles();
 //
-//        newFragment.setArguments(args);
-//        newFragment.show(fragmentManager, "dialog");
+//                    MainActivity.profileViewModel.insertMulti(listAccounts);
+//
+////                    for (Profile item : listAccounts) {
+////                        MainActivity.profileViewModel.insert(item);
+////                    }
+////
+////                    String msg = MainActivity.adapter.getItemCount() + " Items uploaded";
+////                    Toast.makeText(FileViewActivity.this, msg, Toast.LENGTH_SHORT).show();
+//
+////                    ContentResolver contentResolver = getContentResolver();
+////                    int deleteCount = getContentResolver().delete(AccountsContract.CONTENT_URI, null, null);
+////                    Log.d(TAG, "run: delete count " + deleteCount);
+////
+////                    int itemCount = 0;
+////                    for (Profile item : listAccounts) {
+//////                Log.d(TAG, "ImportAccountDB: acc " + item.getPassportId()
+//////                        + " " + item.getCorpName());
+////                        addAccountToDB(contentResolver, item);
+////                        itemCount++;
+////                        int remCount = itemCount % 50;
+////                        if (remCount == 0 || itemCount == 1) {
+////                            Log.d(TAG, "run: count " + itemCount);
+////                            final int runCount = itemCount;
+////                            mHandler.post(new Runnable() {
+////                                @Override
+////                                public void run() {
+////
+////                                    String notifyMsg;
+////                                    if (runCount == 1) {
+////                                        notifyMsg = "progress: db replace begins";
+////                                    } else {
+////                                        notifyMsg = String.format("progress: %s rows replaced", runCount);
+////                                    }
+////                                    Toast.makeText(getApplicationContext(),
+////                                            notifyMsg, Toast.LENGTH_LONG).show();
+////
+////                                }
+////                            });
+////                        }
+////                    }
+////
+////                    Log.d(TAG, "run: import count " + itemCount);
+////
+////                    msg = listAccounts.size() + " Accounts Imported";
+////
+////                    importRefreshReq = true;
+////                    Intent intent = new Intent();
+////                    intent.putExtra("IMPORT", importRefreshReq);
+////                    setResult(RESULT_OK, intent);
+////                    finish();
+//
+//
+//                } catch (FileNotFoundException e) {
+//                    e.printStackTrace();
+////                    msg = "import file not found";
+//                    error = true;
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+////                    msg = "import file error " + e.getMessage();
+//                    error = true;
+////			savePassports();
+//                } catch (Exception e) {
+//                    // TODO Auto-generated catch block
+//                    e.printStackTrace();
+////                    msg = "import exception";
+//                    error = true;
+//                }
+//
+////                final String notifyMsg = msg;
+////                mHandler.post(new Runnable() {
+////                    @Override
+////                    public void run() {
+////
+////                        Toast.makeText(getApplicationContext(),
+////                                notifyMsg, Toast.LENGTH_LONG).show();
+////
+////
+////                    }
+////                });
+//            }
+//        }).start();
+//
+////        loadSearchDB();
+//
+////        fvFragment.setImportRefreshReq(true);
+//
+//
+//        //        FragmentManager fragmentManager = getSupportFragmentManager();
+////        AppDialog newFragment = AppDialog.newInstance();
+////        Bundle args = new Bundle();
+////        args.putInt(AppDialog.DIALOG_ID, AppDialog.DIALOG_ID_ASK_IF_NEED_DICTIONARY_REBUILD);
+////        args.putInt(AppDialog.DIALOG_TYPE, AppDialog.DIALOG_YES_NO);
+////        args.putString(AppDialog.DIALOG_MESSAGE, "Ask to rebuild search dictionary");
+////        args.putString(AppDialog.DIALOG_SUB_MESSAGE, "Accounts changed, rebuild dictionary to sync up?");
+////
+////        newFragment.setArguments(args);
+////        newFragment.show(fragmentManager, "dialog");
 
-    }
+//    }
 
 
     final private void addAccountToDB(ContentResolver contentResolver, Account account) {
@@ -933,20 +956,161 @@ public class FileViewActivity extends AppCompatActivity
     }
 
 
+    private static class UploadProfileAsyncTask extends AsyncTask<String, Void, Void> {
+//        private ProfileDao profileDao;
+        private List<Profile> listAccounts = new ArrayList<Profile>();
 
-    private static class UploadProfileAsyncTask extends AsyncTask<Profile, Void, Void> {
-        private ProfileDao profileDao;
+//        private UploadProfileAsyncTask(ProfileDao profileDao) {
+//            this.profileDao = profileDao;
+//        }
 
-        private UploadProfileAsyncTask(ProfileDao profileDao) {
-            this.profileDao = profileDao;
+        @Override
+        protected void onPreExecute() {
+            FileViewActivity.progressBar.setVisibility(View.VISIBLE);
+
+
         }
 
         @Override
-        protected Void doInBackground(Profile... profiles) {
-            profileDao.update(profiles[0]);
+        protected Void doInBackground(String... dirname) {
+//            profileDao.update(profiles[0]);
+//            File dirStorage = getExternalFilesDir("passport");
+
+            try {
+
+                Log.d(TAG, "run: path " + dirname[0]);
+
+                final JsonReader reader = new JsonReader(new FileReader(
+                        dirname[0] + "/" + MainActivity.BACKUP_FILENAME));
+
+                reader.beginArray();
+                while (reader.hasNext()) {
+                    Profile account = readMessage(reader);
+
+                    if (account == null) {
+                        break;
+                    } else {
+                        listAccounts.add(account);
+                        int listCount = listAccounts.size();
+                    }
+                }
+//                    Log.d(TAG, "run: count " + listAccounts.size());
+                reader.endArray();
+                reader.close();
+                Log.d(TAG, "run: upload complete " + dirname[0]);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+//			savePassports();
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
             return null;
         }
-    }
 
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+
+            MainActivity.profileViewModel.deleteAllProfiles();
+            Log.d(TAG, "run: delete all complete ");
+
+            MainActivity.profileViewModel.insertMulti(listAccounts);
+            Log.d(TAG, "run: upload complete ");
+
+            FileViewActivity.progressBar.setVisibility(View.GONE);
+
+        }
+
+
+
+        final public Profile readMessage(JsonReader reader) {
+            Profile item = new Profile();
+            boolean retSuccess = true;
+            try {
+                reader.beginObject();
+                Calendar c1 = Calendar.getInstance();
+                while (reader.hasNext()) {
+                    String name = reader.nextName();
+                    String value = "";
+                    int iValue = 0;
+                    if (name.equals("corpName")) {
+                        // System.out.println(reader.nextString());
+                        value = reader.nextString();
+//					Log.v(TAG, "json corpName " + value);
+                        item.setCorpName(value);
+                    } else if (name.equals("accountId")) {
+                        // System.out.println(reader.nextInt());
+                        iValue = reader.nextInt();
+                        Log.v(TAG, "json id " + iValue);
+                        item.setPassportId(iValue);
+                    } else if (name.equals("seq")) {
+                        // System.out.println(reader.nextInt());
+                        iValue = reader.nextInt();
+//					Log.v(TAG, "json seq " + iValue);
+                        item.setSequence(iValue);
+                    } else if (name.equals("userName")) {
+                        value = reader.nextString();
+//					Log.v(TAG, "json userName " + value);
+                        item.setUserName(value);
+                    } else if (name.equals("userEmail")) {
+                        value = reader.nextString();
+//					Log.v(TAG, "json userEmail " + value);
+                        item.setUserEmail(value);
+                    } else if (name.equals("refFrom")) {
+                        iValue = reader.nextInt();
+//					Log.v(TAG, "json refFrom " + iValue);
+                        item.setRefFrom(iValue);
+                    } else if (name.equals("refTo")) {
+                        iValue = reader.nextInt();
+//					Log.v(TAG, "json refTo " + iValue);
+                        item.setRefTo(iValue);
+                    } else if (name.equals("website")) {
+                        value = reader.nextString();
+//					Log.v(TAG, "json website " + value);
+//                    URL urlValue = new URL(value);
+//                    item.setCorpWebsite(urlValue);
+                        item.setCorpWebsite(value);
+                    } else if (name.equals("openDt")) {
+                        value = reader.nextString();
+//					Log.v(TAG, "json openDt " + value);
+                        Date dte = format_ymdtime.parse(value);
+                        c1.setTime(dte);
+                        item.setOpenLong(c1.getTimeInMillis());
+                    } else if (name.equals("actvyDt")) {
+//					Log.v(TAG, "actvyDt reader " + reader);
+                        Date dte;
+                        if (reader.peek() == JsonToken.NULL) {
+                            reader.nextNull();
+                            dte = new Date();
+                        } else {
+                            value = reader.nextString();
+//						Log.v(TAG, "json actvyDt " + value);
+                            dte = format_ymdtime.parse(value);
+                        }
+                        c1.setTime(dte);
+                        item.setActvyLong(c1.getTimeInMillis());
+                    } else if (name.equals("note")) {
+                        value = reader.nextString();
+                        item.setNote(value);
+                    } else {
+                        reader.skipValue(); // avoid some unhandle events
+                    }
+                }
+
+                reader.endObject();
+
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+                item = null;
+            }
+            return item;
+        }
+
+    }
 
 }

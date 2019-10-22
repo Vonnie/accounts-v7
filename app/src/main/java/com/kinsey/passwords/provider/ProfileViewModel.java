@@ -21,8 +21,8 @@ public class ProfileViewModel extends AndroidViewModel {
         allProfiles = repository.getAllProfiles();
     }
 
-    public void insert(Profile profile) {
-        repository.insert(profile);
+    public Long insert(Profile profile) {
+        return repository.insert(profile);
     }
 
     public void update(Profile profile) {

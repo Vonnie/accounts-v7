@@ -18,7 +18,7 @@ import javax.sql.DataSource;
 public interface ProfileDao {
 
     @Insert
-    void insert(Profile profile);
+    Long insert(Profile profile);
 
     @Update
     void update(Profile profile);
@@ -40,4 +40,9 @@ public interface ProfileDao {
 
     @Query("SELECT * FROM Passport where corporation_name LIKE  :name or LOWER(corporation_name) like LOWER(:name) order by corporation_name")
     LiveData<List<Profile>> searchCorpNameProfiles(String name);
+
+    @Query("SELECT * FROM Passport where _id == :id")
+    LiveData<List<Profile>> getProfileById(String id);
+
+
 }
