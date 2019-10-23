@@ -52,7 +52,12 @@ public class SearchAdapter extends ListAdapter<Profile, SearchAdapter.ProfileHol
         Profile currentProfile = getItem(position);
         holder.tvAcctId.setText(String.valueOf(currentProfile.getId()));
         holder.tvCorpName.setText(currentProfile.getCorpName());
-        holder.tvCorpWebsite.setText(currentProfile.getCorpWebsite());
+        if (currentProfile.getCorpWebsite().equals("") || currentProfile.getCorpWebsite().equals("http://")) {
+            holder.tvCorpWebsite.setVisibility(View.GONE);
+        } else {
+            holder.tvCorpWebsite.setVisibility(View.VISIBLE);
+            holder.tvCorpWebsite.setText(currentProfile.getCorpWebsite());
+        }
         holder.tvUserName.setText(currentProfile.getUserName());
         holder.tvUserEmail.setText(currentProfile.getUserEmail());
     }

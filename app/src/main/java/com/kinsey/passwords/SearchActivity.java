@@ -16,6 +16,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -59,6 +60,7 @@ public class SearchActivity extends AppCompatActivity {
     private long lngOpenDate;
     private ImageButton mImgWebView;
     ProgressBar progressBar;
+    private String searchforValue = "";
 
     private static String pattern_ymdtimehm = "yyyy-MM-dd kk:mm";
     public static SimpleDateFormat format_ymdtimehm = new SimpleDateFormat(
@@ -158,9 +160,15 @@ public class SearchActivity extends AppCompatActivity {
             }
         });
 
+
+        if (savedInstanceState != null) {
+            this.searchforValue = savedInstanceState.getString("searchfor");
+            textInputSearchCorpName.getEditText().setText(this.searchforValue);
+        }
     }
 
     private void searchResults(String searchfor) {
+        this.searchforValue = searchfor;
         String searchforreq = "%" + searchfor + "%";
         profileViewModel.searchCorpNameProfiles(searchforreq).observe(this, new Observer<List<Profile>>() {
             @Override
@@ -168,7 +176,7 @@ public class SearchActivity extends AppCompatActivity {
                 Log.d(TAG, "profiles search len " + profiles.size());
 //                profileListFull = new ArrayList<>(profiles);
                 adapter.submitList(profiles);
-                setTitle(profiles.size() + " Search Results Items");
+//                setTitle(profiles.size() + " Search Results Items");
             }
         });
 
@@ -215,4 +223,10 @@ public class SearchActivity extends AppCompatActivity {
 
 
         }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("searchfor", this.searchforValue);
+    }
 }

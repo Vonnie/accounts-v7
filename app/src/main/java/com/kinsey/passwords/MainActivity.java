@@ -35,6 +35,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -48,6 +49,7 @@ import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
@@ -229,8 +231,19 @@ public class MainActivity extends AppCompatActivity
         });
 
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+//        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
+
+        boolean isLandscape = (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE);
+        if (isLandscape) {
+            GridLayoutManager layoutManager;
+            layoutManager = new GridLayoutManager(this, 2);
+            recyclerView.setLayoutManager(layoutManager);
+        } else {
+            LinearLayoutManager layoutManager;
+            layoutManager = new LinearLayoutManager(this);
+            recyclerView.setLayoutManager(layoutManager);
+        }
 
 
         this.adapter = new ProfileAdapter();
@@ -2200,12 +2213,12 @@ public class MainActivity extends AppCompatActivity
         mDialog.show();
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        outState.putString(STATE_URL, feedUrl);
-        outState.putInt(STATE_LIMIT, feedLimit);
-        super.onSaveInstanceState(outState);
-    }
+//    @Override
+//    protected void onSaveInstanceState(Bundle outState) {
+//        outState.putString(STATE_URL, feedUrl);
+//        outState.putInt(STATE_LIMIT, feedLimit);
+//        super.onSaveInstanceState(outState);
+//    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

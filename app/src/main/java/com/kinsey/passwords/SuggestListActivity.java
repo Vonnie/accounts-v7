@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -14,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GestureDetectorCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -25,12 +27,15 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.kinsey.passwords.items.Suggest;
 import com.kinsey.passwords.provider.SuggestViewModel;
 import com.kinsey.passwords.provider.SuggestAdapter;
+import com.kinsey.passwords.tools.ItemTouchHelperAdapter;
 import com.kinsey.passwords.tools.PasswordFormula;
 
 import java.util.Date;
 import java.util.List;
 
-public class SuggestListActivity extends AppCompatActivity {
+public class SuggestListActivity extends AppCompatActivity implements
+    GestureDetector.OnGestureListener,
+    GestureDetector.OnDoubleTapListener {
     public static final String TAG = "SuggestListActivity";
     public static final int ADD_SUGGEST_REQUEST = 1;
     public static final int EDIT_SUGGEST_REQUEST = 2;
@@ -38,6 +43,7 @@ public class SuggestListActivity extends AppCompatActivity {
     private SuggestViewModel suggestViewModel;
     private PasswordFormula passwordFormula = new PasswordFormula();
     GridLayoutManager layoutManager;
+    GestureDetector gestureDetector;
 
     private int maxSeq = 0;
 
@@ -92,19 +98,57 @@ public class SuggestListActivity extends AppCompatActivity {
             }
         });
 
-        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
-                ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, 0) {
+
+            ItemTouchHelper itemTouchHelper;
+
             @Override
-            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+            public boolean onMove(@NonNull RecyclerView recyclerView,
+                                  @NonNull RecyclerView.ViewHolder viewHolder,
+                                  @NonNull RecyclerView.ViewHolder target) {
+                Suggest suggest = adapter.getSuggestAt(viewHolder.getAdapterPosition());
+                suggestViewModel.delete(adapter.getSuggestAt(viewHolder.getAdapterPosition()));
+                suggestViewModel.insert(suggest);
+                adapter.notifyItemMoved(viewHolder.getAdapterPosition(), target.getAdapterPosition());
                 return false;
             }
 
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                Log.d(TAG, "direction " + direction);
                 suggestViewModel.delete(adapter.getSuggestAt(viewHolder.getAdapterPosition()));
                 Toast.makeText(SuggestListActivity.this, "Suggestion deleted", Toast.LENGTH_SHORT).show();
             }
+
+            public void setTouchHelper(ItemTouchHelper itemTouchHelper) {
+                this.itemTouchHelper = itemTouchHelper;
+            }
+
         }).attachToRecyclerView(recyclerView);
+
+
+        gestureDetector = new GestureDetectorCompat(this, this);
+
+        //        new ItemTouchHelperAdapter(new ItemTouchHelperAdapter() {
+//
+//            @Override
+//            public void onItemMove(int fromPosition, int toPosition) {
+//                Suggest suggest = adapter.getSuggestAt(fromPosition);
+//                suggestViewModel.delete(adapter.getSuggestAt(fromPosition));
+//                suggestViewModel.insert(suggest);
+//                adapter.notifyItemMoved(fromPosition, toPosition);
+//            }
+//
+//            @Override
+//            public void onItemSwiped(int position) {
+////                Log.d(TAG, "direction " + direction);
+//                suggestViewModel.delete(adapter.getSuggestAt(position));
+//                Toast.makeText(SuggestListActivity.this, "Suggestion deleted", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+////        .attachToRecyclerView(recyclerView);
+
+
 
         adapter.setOnItemClickListener(new SuggestAdapter.OnItemClickListener() {
             @Override
