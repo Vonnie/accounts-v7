@@ -74,6 +74,7 @@ public class ProfileViewModel extends AndroidViewModel
     @Override
     public void processInsert(Profile profile) {
 
+        profile.setPassportId(profile.getId());
         repository.update(profile);
 
 //        int intId = (int) id;

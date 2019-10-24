@@ -61,16 +61,17 @@ public class WebViewActivity
 
         myWebView = new WebView(getApplicationContext());
 
-        if (webAddr != null | webAddr != "") {
+//        if (webAddr != null | webAddr != "") {
             setContentView(myWebView);
-            myWebView.loadUrl(webAddr);
-        }
+            myWebView.loadUrl("https://" + webAddr);
+//        }
 
         Log.d(TAG, "onCreate: " + webAddr);
 //        if (webAddr != null) {
-//            myWebView.loadUrl(webAddr);
+//            myWebView.loadUrl("http://" + webAddr);
 //        }
 
+//        webview.loadUrl(webAddr);
         setTitle(corpName);
 
 //        WebSettings webSettings = webview.getSettings();

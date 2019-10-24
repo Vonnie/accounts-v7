@@ -20,6 +20,8 @@ import com.kinsey.passwords.provider.ProfileAdapter;
 import com.kinsey.passwords.provider.ProfileDao;
 import com.kinsey.passwords.provider.ProfileViewModel;
 import com.kinsey.passwords.tools.AppDialog;
+import com.kinsey.passwords.tools.PasswordFormula;
+import com.kinsey.passwords.tools.ReadProfileJsonIntoList;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -115,7 +117,8 @@ public class FileViewActivity extends AppCompatActivity
             }
 
         });
-        introPage();
+
+        infoPage("See menu for functions");
 
     }
 
@@ -249,7 +252,7 @@ public class FileViewActivity extends AppCompatActivity
         return file.exists();
     }
 
-    private void introPage() {
+    private void infoPage(String infoMsg) {
         try {
 //            Log.d(TAG, "reportJson: " + MainActivity.DEFAULT_APP_DIRECTORY);
             Log.d(TAG, "reportJson: ");
@@ -276,7 +279,8 @@ public class FileViewActivity extends AppCompatActivity
                     if (fileExternal.exists()) {
                         htmlString = greetMsg() +
                                 "<h5>" + MainActivity.adapter.getItemCount() + " Account Profile items currently on db<h5>" +
-                                "<h5>" + accountJsonProperties(fileExternal) + "</h5>";
+                                "<h5>" + accountJsonProperties(fileExternal.getAbsoluteFile().toString()) + "</h5>" +
+                                "<h5>" + infoMsg + "</h5>";
 
                     } else {
                         htmlString = notfyMsg() +
@@ -337,34 +341,20 @@ public class FileViewActivity extends AppCompatActivity
     }
 
 
-    private String accountJsonProperties(File file) {
+    private String accountJsonProperties(String filename) {
 
         String returnValue = "";
+        ReadProfileJsonIntoList readProfileJsonIntoList = new ReadProfileJsonIntoList();
         try {
 
             List<Profile> listAccounts = new ArrayList<Profile>();
 
-            final JsonReader reader = new JsonReader(new FileReader(file.getAbsoluteFile()));
+            listAccounts = readProfileJsonIntoList.readProfileJson(filename);
 
-            int listCount = 0;
-            reader.beginArray();
-            while (reader.hasNext()) {
-                Profile account = readMessage(reader);
-                if (account == null) {
-                    break;
-                } else {
-                    listAccounts.add(account);
-                    listCount = listAccounts.size();
-                }
-            }
-//                    Log.d(TAG, "run: count " + listAccounts.size());
-            reader.endArray();
-            reader.close();
+            int listCount = listAccounts.size();
 
             returnValue = listCount + " Items on Accounts backup file";
-        } catch (IOException e) {
-            e.printStackTrace();
-            returnValue = "error: " + e.getMessage();
+
         } catch (Exception e) {
             e.printStackTrace();
             returnValue = "error: " + e.getMessage();
@@ -445,7 +435,9 @@ public class FileViewActivity extends AppCompatActivity
             count = writeMessagesArray(writer);
             writer.flush();
             writer.close();
-            introPage();
+
+            infoPage("Account Profiles exported");
+
             Toast.makeText(this,
                     count + " Exported accounts",
                     Toast.LENGTH_LONG).show();
@@ -470,15 +462,13 @@ public class FileViewActivity extends AppCompatActivity
     private void ImportAccountDB() {
         Log.d(TAG, "ImportAccountDB: starts");
 
-        progressBar.setVisibility(View.VISIBLE);
-
         try {
 
             File dirStorage = getExternalFilesDir("passport");
-            String dirStorageName = dirStorage.getAbsolutePath();
+            String storageFilename = dirStorage.getAbsolutePath() + "/" + MainActivity.BACKUP_FILENAME;
 
             Log.d(TAG, "call asyncTask");
-            new UploadProfileAsyncTask().execute(dirStorageName);
+            new UploadProfileAsyncTask().execute(storageFilename);
 
             Toast.makeText(this, "Upload restore complete", Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
@@ -487,159 +477,25 @@ public class FileViewActivity extends AppCompatActivity
         }
     }
 
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//
-////                String msg = "";
-//                boolean error = false;
-//                try {
-//                    List<Profile> listAccounts = new ArrayList<Profile>();
-//
-//                    File dirStorage = getExternalFilesDir("passport");
-//
-//                    Log.d(TAG, "run: path " + dirStorage.getAbsoluteFile());
-//
-//
-//                    final JsonReader reader = new JsonReader(new FileReader(
-//                            dirStorage.getAbsoluteFile() + "/" + MainActivity.BACKUP_FILENAME));
-//
-//                    reader.beginArray();
-//                    while (reader.hasNext()) {
-//                        Profile account = readMessage(reader);
-//
-//                        if (account == null) {
-//                            break;
-//                        } else {
-//                            listAccounts.add(account);
-//                            int listCount = listAccounts.size();
-//                        }
-//                    }
-////                    Log.d(TAG, "run: count " + listAccounts.size());
-//                    reader.endArray();
-//                    reader.close();
-//
-//
-//                    MainActivity.profileViewModel.deleteAllProfiles();
-//
-//                    MainActivity.profileViewModel.insertMulti(listAccounts);
-//
-////                    for (Profile item : listAccounts) {
-////                        MainActivity.profileViewModel.insert(item);
-////                    }
-////
-////                    String msg = MainActivity.adapter.getItemCount() + " Items uploaded";
-////                    Toast.makeText(FileViewActivity.this, msg, Toast.LENGTH_SHORT).show();
-//
-////                    ContentResolver contentResolver = getContentResolver();
-////                    int deleteCount = getContentResolver().delete(AccountsContract.CONTENT_URI, null, null);
-////                    Log.d(TAG, "run: delete count " + deleteCount);
-////
-////                    int itemCount = 0;
-////                    for (Profile item : listAccounts) {
-//////                Log.d(TAG, "ImportAccountDB: acc " + item.getPassportId()
-//////                        + " " + item.getCorpName());
-////                        addAccountToDB(contentResolver, item);
-////                        itemCount++;
-////                        int remCount = itemCount % 50;
-////                        if (remCount == 0 || itemCount == 1) {
-////                            Log.d(TAG, "run: count " + itemCount);
-////                            final int runCount = itemCount;
-////                            mHandler.post(new Runnable() {
-////                                @Override
-////                                public void run() {
-////
-////                                    String notifyMsg;
-////                                    if (runCount == 1) {
-////                                        notifyMsg = "progress: db replace begins";
-////                                    } else {
-////                                        notifyMsg = String.format("progress: %s rows replaced", runCount);
-////                                    }
-////                                    Toast.makeText(getApplicationContext(),
-////                                            notifyMsg, Toast.LENGTH_LONG).show();
-////
-////                                }
-////                            });
-////                        }
-////                    }
-////
-////                    Log.d(TAG, "run: import count " + itemCount);
-////
-////                    msg = listAccounts.size() + " Accounts Imported";
-////
-////                    importRefreshReq = true;
-////                    Intent intent = new Intent();
-////                    intent.putExtra("IMPORT", importRefreshReq);
-////                    setResult(RESULT_OK, intent);
-////                    finish();
-//
-//
-//                } catch (FileNotFoundException e) {
-//                    e.printStackTrace();
-////                    msg = "import file not found";
-//                    error = true;
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-////                    msg = "import file error " + e.getMessage();
-//                    error = true;
-////			savePassports();
-//                } catch (Exception e) {
-//                    // TODO Auto-generated catch block
-//                    e.printStackTrace();
-////                    msg = "import exception";
-//                    error = true;
-//                }
-//
-////                final String notifyMsg = msg;
-////                mHandler.post(new Runnable() {
-////                    @Override
-////                    public void run() {
-////
-////                        Toast.makeText(getApplicationContext(),
-////                                notifyMsg, Toast.LENGTH_LONG).show();
-////
-////
-////                    }
-////                });
-//            }
-//        }).start();
-//
-////        loadSearchDB();
-//
-////        fvFragment.setImportRefreshReq(true);
-//
-//
-//        //        FragmentManager fragmentManager = getSupportFragmentManager();
-////        AppDialog newFragment = AppDialog.newInstance();
-////        Bundle args = new Bundle();
-////        args.putInt(AppDialog.DIALOG_ID, AppDialog.DIALOG_ID_ASK_IF_NEED_DICTIONARY_REBUILD);
-////        args.putInt(AppDialog.DIALOG_TYPE, AppDialog.DIALOG_YES_NO);
-////        args.putString(AppDialog.DIALOG_MESSAGE, "Ask to rebuild search dictionary");
-////        args.putString(AppDialog.DIALOG_SUB_MESSAGE, "Accounts changed, rebuild dictionary to sync up?");
-////
-////        newFragment.setArguments(args);
-////        newFragment.show(fragmentManager, "dialog");
 
+
+//    final private void addAccountToDB(ContentResolver contentResolver, Account account) {
+//
+//        ContentValues values = new ContentValues();
+//        values.put(AccountsContract.Columns.PASSPORT_ID_COL, account.getPassportId());
+//        values.put(AccountsContract.Columns.CORP_NAME_COL, account.getCorpName());
+//        values.put(AccountsContract.Columns.USER_NAME_COL, account.getUserName());
+//        values.put(AccountsContract.Columns.USER_EMAIL_COL, account.getUserEmail());
+//        values.put(AccountsContract.Columns.CORP_WEBSITE_COL, account.getCorpWebsite());
+//        values.put(AccountsContract.Columns.NOTE_COL, account.getNote());
+//        values.put(AccountsContract.Columns.OPEN_DATE_COL, account.getOpenLong());
+//        values.put(AccountsContract.Columns.ACTVY_DATE_COL, account.getActvyLong());
+//        values.put(AccountsContract.Columns.REF_FROM_COL, account.getRefFrom());
+//        values.put(AccountsContract.Columns.REF_TO_COL, account.getRefTo());
+//        values.put(AccountsContract.Columns.SEQUENCE_COL, account.getSequence());
+//        contentResolver.insert(AccountsContract.CONTENT_URI, values);
+//
 //    }
-
-
-    final private void addAccountToDB(ContentResolver contentResolver, Account account) {
-
-        ContentValues values = new ContentValues();
-        values.put(AccountsContract.Columns.PASSPORT_ID_COL, account.getPassportId());
-        values.put(AccountsContract.Columns.CORP_NAME_COL, account.getCorpName());
-        values.put(AccountsContract.Columns.USER_NAME_COL, account.getUserName());
-        values.put(AccountsContract.Columns.USER_EMAIL_COL, account.getUserEmail());
-        values.put(AccountsContract.Columns.CORP_WEBSITE_COL, account.getCorpWebsite());
-        values.put(AccountsContract.Columns.NOTE_COL, account.getNote());
-        values.put(AccountsContract.Columns.OPEN_DATE_COL, account.getOpenLong());
-        values.put(AccountsContract.Columns.ACTVY_DATE_COL, account.getActvyLong());
-        values.put(AccountsContract.Columns.REF_FROM_COL, account.getRefFrom());
-        values.put(AccountsContract.Columns.REF_TO_COL, account.getRefTo());
-        values.put(AccountsContract.Columns.SEQUENCE_COL, account.getSequence());
-        contentResolver.insert(AccountsContract.CONTENT_URI, values);
-
-    }
 
 
     private void showFilename() {
@@ -734,99 +590,6 @@ public class FileViewActivity extends AppCompatActivity
 
     }
 
-
-    final public Profile readMessage(JsonReader reader) {
-        Profile item = new Profile();
-        boolean retSuccess = true;
-        try {
-            reader.beginObject();
-            Calendar c1 = Calendar.getInstance();
-            while (reader.hasNext()) {
-                String name = reader.nextName();
-                String value = "";
-                int iValue = 0;
-                if (name.equals("corpName")) {
-                    // System.out.println(reader.nextString());
-                    value = reader.nextString();
-//					Log.v(TAG, "json corpName " + value);
-                    item.setCorpName(value);
-                } else if (name.equals("accountId")) {
-                    // System.out.println(reader.nextInt());
-                    iValue = reader.nextInt();
-                    Log.v(TAG, "json id " + iValue);
-                    item.setPassportId(iValue);
-                } else if (name.equals("seq")) {
-                    // System.out.println(reader.nextInt());
-                    iValue = reader.nextInt();
-//					Log.v(TAG, "json seq " + iValue);
-                    item.setSequence(iValue);
-                } else if (name.equals("userName")) {
-                    value = reader.nextString();
-//					Log.v(TAG, "json userName " + value);
-                    item.setUserName(value);
-                } else if (name.equals("userEmail")) {
-                    value = reader.nextString();
-//					Log.v(TAG, "json userEmail " + value);
-                    item.setUserEmail(value);
-                } else if (name.equals("refFrom")) {
-                    iValue = reader.nextInt();
-//					Log.v(TAG, "json refFrom " + iValue);
-                    item.setRefFrom(iValue);
-                } else if (name.equals("refTo")) {
-                    iValue = reader.nextInt();
-//					Log.v(TAG, "json refTo " + iValue);
-                    item.setRefTo(iValue);
-                } else if (name.equals("website") && reader.peek() != JsonToken.NULL) {
-                    value = reader.nextString();
-//					Log.v(TAG, "json website " + value);
-//                    URL urlValue = new URL(value);
-//                    item.setCorpWebsite(urlValue);
-                    item.setCorpWebsite(value);
-                } else if (name.equals("website")) {
-                    reader.nextNull();
-                    item.setCorpWebsite("");
-                } else if (name.equals("openDt") && reader.peek() != JsonToken.NULL) {
-                    value = reader.nextString();
-//					Log.v(TAG, "json openDt " + value);
-                    Date dte = format_ymdtime.parse(value);
-                    c1.setTime(dte);
-                    item.setOpenLong(c1.getTimeInMillis());
-                } else if (name.equals("openDt")) {
-                    reader.nextNull();
-                    item.setOpenLong(new Date().getTime());
-                } else if (name.equals("actvyDt") && reader.peek() != JsonToken.NULL) {
-//					Log.v(TAG, "actvyDt reader " + reader);
-                    Date dte;
-                    if (reader.peek() == JsonToken.NULL) {
-                        reader.nextNull();
-                        dte = new Date();
-                    } else {
-                        value = reader.nextString();
-//						Log.v(TAG, "json actvyDt " + value);
-                        dte = format_ymdtime.parse(value);
-                    }
-                    c1.setTime(dte);
-                    item.setActvyLong(c1.getTimeInMillis());
-                } else if (name.equals("actvyDt")) {
-                    reader.nextNull();
-                    item.setActvyLong(new Date().getTime());
-                } else if (name.equals("note")) {
-                    value = reader.nextString();
-                    item.setNote(value);
-                } else {
-                    reader.skipValue(); // avoid some unhandle events
-                }
-            }
-
-            reader.endObject();
-
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            item = null;
-        }
-        return item;
-    }
 
 
     public int writeMessagesArray(JsonWriter writer) throws IOException {
@@ -967,6 +730,7 @@ public class FileViewActivity extends AppCompatActivity
 
     private static class UploadProfileAsyncTask extends AsyncTask<String, Void, Void> {
 //        private ProfileDao profileDao;
+        ReadProfileJsonIntoList readProfileJsonIntoList = new ReadProfileJsonIntoList();
         private List<Profile> listAccounts = new ArrayList<Profile>();
 
 //        private UploadProfileAsyncTask(ProfileDao profileDao) {
@@ -976,42 +740,21 @@ public class FileViewActivity extends AppCompatActivity
         @Override
         protected void onPreExecute() {
             FileViewActivity.progressBar.setVisibility(View.VISIBLE);
-
-
         }
 
         @Override
-        protected Void doInBackground(String... dirname) {
+        protected Void doInBackground(String... filename) {
 //            profileDao.update(profiles[0]);
 //            File dirStorage = getExternalFilesDir("passport");
 
             try {
 
-                Log.d(TAG, "run: path " + dirname[0]);
+                Log.d(TAG, "upload file " + filename[0]);
 
-                final JsonReader reader = new JsonReader(new FileReader(
-                        dirname[0] + "/" + MainActivity.BACKUP_FILENAME));
+                listAccounts = readProfileJsonIntoList.readProfileJson(filename[0]);
 
-                reader.beginArray();
-                while (reader.hasNext()) {
-                    Profile account = readMessage(reader);
 
-                    if (account == null) {
-                        break;
-                    } else {
-                        listAccounts.add(account);
-                        int listCount = listAccounts.size();
-                    }
-                }
-//                    Log.d(TAG, "run: count " + listAccounts.size());
-                reader.endArray();
-                reader.close();
-                Log.d(TAG, "run: upload complete " + dirname[0]);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-//			savePassports();
+                Log.d(TAG, "run: upload size " + listAccounts.size());
             } catch (Exception e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -1030,96 +773,10 @@ public class FileViewActivity extends AppCompatActivity
             MainActivity.profileViewModel.insertAll(listAccounts);
             Log.d(TAG, "run: upload complete ");
 
-            FileViewActivity.progressBar.setVisibility(View.GONE);
+//            FileViewActivity.progressBar.setVisibility(View.GONE);
 
         }
 
-
-
-//        final public Profile readMessage(JsonReader reader) {
-//            Profile item = new Profile();
-//            boolean retSuccess = true;
-//            try {
-//                reader.beginObject();
-//                Calendar c1 = Calendar.getInstance();
-//                while (reader.hasNext()) {
-//                    String name = reader.nextName();
-//                    String value = "";
-//                    int iValue = 0;
-//                    if (name.equals("corpName")) {
-//                        // System.out.println(reader.nextString());
-//                        value = reader.nextString();
-////					Log.v(TAG, "json corpName " + value);
-//                        item.setCorpName(value);
-//                    } else if (name.equals("accountId")) {
-//                        // System.out.println(reader.nextInt());
-//                        iValue = reader.nextInt();
-//                        Log.v(TAG, "json id " + iValue);
-//                        item.setPassportId(iValue);
-//                    } else if (name.equals("seq")) {
-//                        // System.out.println(reader.nextInt());
-//                        iValue = reader.nextInt();
-////					Log.v(TAG, "json seq " + iValue);
-//                        item.setSequence(iValue);
-//                    } else if (name.equals("userName")) {
-//                        value = reader.nextString();
-////					Log.v(TAG, "json userName " + value);
-//                        item.setUserName(value);
-//                    } else if (name.equals("userEmail")) {
-//                        value = reader.nextString();
-////					Log.v(TAG, "json userEmail " + value);
-//                        item.setUserEmail(value);
-//                    } else if (name.equals("refFrom")) {
-//                        iValue = reader.nextInt();
-////					Log.v(TAG, "json refFrom " + iValue);
-//                        item.setRefFrom(iValue);
-//                    } else if (name.equals("refTo")) {
-//                        iValue = reader.nextInt();
-////					Log.v(TAG, "json refTo " + iValue);
-//                        item.setRefTo(iValue);
-//                    } else if (name.equals("website")) {
-//                        value = reader.nextString();
-////					Log.v(TAG, "json website " + value);
-////                    URL urlValue = new URL(value);
-////                    item.setCorpWebsite(urlValue);
-//                        item.setCorpWebsite(value);
-//                    } else if (name.equals("openDt")) {
-//                        value = reader.nextString();
-////					Log.v(TAG, "json openDt " + value);
-//                        Date dte = format_ymdtime.parse(value);
-//                        c1.setTime(dte);
-//                        item.setOpenLong(c1.getTimeInMillis());
-//                    } else if (name.equals("actvyDt")) {
-////					Log.v(TAG, "actvyDt reader " + reader);
-//                        Date dte;
-//                        if (reader.peek() == JsonToken.NULL) {
-//                            reader.nextNull();
-//                            dte = new Date();
-//                        } else {
-//                            value = reader.nextString();
-////						Log.v(TAG, "json actvyDt " + value);
-//                            dte = format_ymdtime.parse(value);
-//                        }
-//                        c1.setTime(dte);
-//                        item.setActvyLong(c1.getTimeInMillis());
-//                    } else if (name.equals("note")) {
-//                        value = reader.nextString();
-//                        item.setNote(value);
-//                    } else {
-//                        reader.skipValue(); // avoid some unhandle events
-//                    }
-//                }
-//
-//                reader.endObject();
-//
-//            } catch (Exception e) {
-//                // TODO Auto-generated catch block
-//                e.printStackTrace();
-//                item = null;
-//            }
-//            return item;
-//        }
-//
     }
 
 }

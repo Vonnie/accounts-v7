@@ -43,7 +43,7 @@
         android:layout_height="match_parent"
         android:clipToPadding="true"
         android:fillViewport="true"
-        android:scrollbarStyle="insideInset">
+        android:scrollbarStyle="outsideOverlay">
 
 
         <LinearLayout

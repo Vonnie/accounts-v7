@@ -288,6 +288,7 @@ public class MainActivity extends AppCompatActivity
             public void onItemClick(Profile profile) {
                 Intent intent = new Intent(MainActivity.this, AddEditProfileActivity.class);
                 intent.putExtra(AddEditProfileActivity.EXTRA_ID, profile.getId());
+                intent.putExtra(AddEditProfileActivity.EXTRA_PASSPORT_ID, profile.getPassportId());
                 intent.putExtra(AddEditProfileActivity.EXTRA_CORP_NAME, profile.getCorpName());
                 intent.putExtra(AddEditProfileActivity.EXTRA_USER_NAME, profile.getUserName());
                 intent.putExtra(AddEditProfileActivity.EXTRA_USER_EMAIL, profile.getUserEmail());
@@ -2268,6 +2269,7 @@ public class MainActivity extends AppCompatActivity
                     return;
                 }
 
+                int passportId = data.getIntExtra(AddEditProfileActivity.EXTRA_PASSPORT_ID, 0);
                 String corpName = data.getStringExtra(AddEditProfileActivity.EXTRA_CORP_NAME);
                 String userName = data.getStringExtra(AddEditProfileActivity.EXTRA_USER_NAME);
                 String userEmail = data.getStringExtra(AddEditProfileActivity.EXTRA_USER_EMAIL);
@@ -2276,6 +2278,7 @@ public class MainActivity extends AppCompatActivity
 
                 Profile profile = new Profile(1, corpName, userName, userEmail, corpWebsite);
                 profile.setId(id);
+                profile.setPassportId(passportId);
                 profile.setNote(note);
                 profile.setOpenLong(data.getLongExtra(AddEditProfileActivity.EXTRA_OPEN_DATE_LONG, 0));
                 profile.setActvyLong(System.currentTimeMillis());

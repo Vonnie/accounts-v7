@@ -105,7 +105,7 @@ public class AddEditProfileActivity extends AppCompatActivity {
         Intent intent = getIntent();
 
         if (intent.hasExtra(EXTRA_ID)) {
-            setTitle("Profile Account ID: " + intent.getIntExtra(EXTRA_ID, 0));
+            setTitle("Profile Account ID: " + intent.getIntExtra(EXTRA_PASSPORT_ID, 0));
             setEditUICols(intent);
         } else {
             setTitle("Add Profile Account");
@@ -280,6 +280,8 @@ public class AddEditProfileActivity extends AppCompatActivity {
         if (id != -1) {
             data.putExtra(EXTRA_ID, id);
         }
+        int passportId = getIntent().getIntExtra(EXTRA_PASSPORT_ID, 0);
+        data.putExtra(EXTRA_PASSPORT_ID, id);
 
         setResult(RESULT_OK, data);
         finish();
