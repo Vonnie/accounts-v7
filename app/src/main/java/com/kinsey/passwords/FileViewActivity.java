@@ -776,19 +776,25 @@ public class FileViewActivity extends AppCompatActivity
                     iValue = reader.nextInt();
 //					Log.v(TAG, "json refTo " + iValue);
                     item.setRefTo(iValue);
-                } else if (name.equals("website")) {
+                } else if (name.equals("website") && reader.peek() != JsonToken.NULL) {
                     value = reader.nextString();
 //					Log.v(TAG, "json website " + value);
 //                    URL urlValue = new URL(value);
 //                    item.setCorpWebsite(urlValue);
                     item.setCorpWebsite(value);
-                } else if (name.equals("openDt")) {
+                } else if (name.equals("website")) {
+                    reader.nextNull();
+                    item.setCorpWebsite("");
+                } else if (name.equals("openDt") && reader.peek() != JsonToken.NULL) {
                     value = reader.nextString();
 //					Log.v(TAG, "json openDt " + value);
                     Date dte = format_ymdtime.parse(value);
                     c1.setTime(dte);
                     item.setOpenLong(c1.getTimeInMillis());
-                } else if (name.equals("actvyDt")) {
+                } else if (name.equals("openDt")) {
+                    reader.nextNull();
+                    item.setOpenLong(new Date().getTime());
+                } else if (name.equals("actvyDt") && reader.peek() != JsonToken.NULL) {
 //					Log.v(TAG, "actvyDt reader " + reader);
                     Date dte;
                     if (reader.peek() == JsonToken.NULL) {
@@ -801,6 +807,9 @@ public class FileViewActivity extends AppCompatActivity
                     }
                     c1.setTime(dte);
                     item.setActvyLong(c1.getTimeInMillis());
+                } else if (name.equals("actvyDt")) {
+                    reader.nextNull();
+                    item.setActvyLong(new Date().getTime());
                 } else if (name.equals("note")) {
                     value = reader.nextString();
                     item.setNote(value);
@@ -1027,90 +1036,90 @@ public class FileViewActivity extends AppCompatActivity
 
 
 
-        final public Profile readMessage(JsonReader reader) {
-            Profile item = new Profile();
-            boolean retSuccess = true;
-            try {
-                reader.beginObject();
-                Calendar c1 = Calendar.getInstance();
-                while (reader.hasNext()) {
-                    String name = reader.nextName();
-                    String value = "";
-                    int iValue = 0;
-                    if (name.equals("corpName")) {
-                        // System.out.println(reader.nextString());
-                        value = reader.nextString();
-//					Log.v(TAG, "json corpName " + value);
-                        item.setCorpName(value);
-                    } else if (name.equals("accountId")) {
-                        // System.out.println(reader.nextInt());
-                        iValue = reader.nextInt();
-                        Log.v(TAG, "json id " + iValue);
-                        item.setPassportId(iValue);
-                    } else if (name.equals("seq")) {
-                        // System.out.println(reader.nextInt());
-                        iValue = reader.nextInt();
-//					Log.v(TAG, "json seq " + iValue);
-                        item.setSequence(iValue);
-                    } else if (name.equals("userName")) {
-                        value = reader.nextString();
-//					Log.v(TAG, "json userName " + value);
-                        item.setUserName(value);
-                    } else if (name.equals("userEmail")) {
-                        value = reader.nextString();
-//					Log.v(TAG, "json userEmail " + value);
-                        item.setUserEmail(value);
-                    } else if (name.equals("refFrom")) {
-                        iValue = reader.nextInt();
-//					Log.v(TAG, "json refFrom " + iValue);
-                        item.setRefFrom(iValue);
-                    } else if (name.equals("refTo")) {
-                        iValue = reader.nextInt();
-//					Log.v(TAG, "json refTo " + iValue);
-                        item.setRefTo(iValue);
-                    } else if (name.equals("website")) {
-                        value = reader.nextString();
-//					Log.v(TAG, "json website " + value);
-//                    URL urlValue = new URL(value);
-//                    item.setCorpWebsite(urlValue);
-                        item.setCorpWebsite(value);
-                    } else if (name.equals("openDt")) {
-                        value = reader.nextString();
-//					Log.v(TAG, "json openDt " + value);
-                        Date dte = format_ymdtime.parse(value);
-                        c1.setTime(dte);
-                        item.setOpenLong(c1.getTimeInMillis());
-                    } else if (name.equals("actvyDt")) {
-//					Log.v(TAG, "actvyDt reader " + reader);
-                        Date dte;
-                        if (reader.peek() == JsonToken.NULL) {
-                            reader.nextNull();
-                            dte = new Date();
-                        } else {
-                            value = reader.nextString();
-//						Log.v(TAG, "json actvyDt " + value);
-                            dte = format_ymdtime.parse(value);
-                        }
-                        c1.setTime(dte);
-                        item.setActvyLong(c1.getTimeInMillis());
-                    } else if (name.equals("note")) {
-                        value = reader.nextString();
-                        item.setNote(value);
-                    } else {
-                        reader.skipValue(); // avoid some unhandle events
-                    }
-                }
-
-                reader.endObject();
-
-            } catch (Exception e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-                item = null;
-            }
-            return item;
-        }
-
+//        final public Profile readMessage(JsonReader reader) {
+//            Profile item = new Profile();
+//            boolean retSuccess = true;
+//            try {
+//                reader.beginObject();
+//                Calendar c1 = Calendar.getInstance();
+//                while (reader.hasNext()) {
+//                    String name = reader.nextName();
+//                    String value = "";
+//                    int iValue = 0;
+//                    if (name.equals("corpName")) {
+//                        // System.out.println(reader.nextString());
+//                        value = reader.nextString();
+////					Log.v(TAG, "json corpName " + value);
+//                        item.setCorpName(value);
+//                    } else if (name.equals("accountId")) {
+//                        // System.out.println(reader.nextInt());
+//                        iValue = reader.nextInt();
+//                        Log.v(TAG, "json id " + iValue);
+//                        item.setPassportId(iValue);
+//                    } else if (name.equals("seq")) {
+//                        // System.out.println(reader.nextInt());
+//                        iValue = reader.nextInt();
+////					Log.v(TAG, "json seq " + iValue);
+//                        item.setSequence(iValue);
+//                    } else if (name.equals("userName")) {
+//                        value = reader.nextString();
+////					Log.v(TAG, "json userName " + value);
+//                        item.setUserName(value);
+//                    } else if (name.equals("userEmail")) {
+//                        value = reader.nextString();
+////					Log.v(TAG, "json userEmail " + value);
+//                        item.setUserEmail(value);
+//                    } else if (name.equals("refFrom")) {
+//                        iValue = reader.nextInt();
+////					Log.v(TAG, "json refFrom " + iValue);
+//                        item.setRefFrom(iValue);
+//                    } else if (name.equals("refTo")) {
+//                        iValue = reader.nextInt();
+////					Log.v(TAG, "json refTo " + iValue);
+//                        item.setRefTo(iValue);
+//                    } else if (name.equals("website")) {
+//                        value = reader.nextString();
+////					Log.v(TAG, "json website " + value);
+////                    URL urlValue = new URL(value);
+////                    item.setCorpWebsite(urlValue);
+//                        item.setCorpWebsite(value);
+//                    } else if (name.equals("openDt")) {
+//                        value = reader.nextString();
+////					Log.v(TAG, "json openDt " + value);
+//                        Date dte = format_ymdtime.parse(value);
+//                        c1.setTime(dte);
+//                        item.setOpenLong(c1.getTimeInMillis());
+//                    } else if (name.equals("actvyDt")) {
+////					Log.v(TAG, "actvyDt reader " + reader);
+//                        Date dte;
+//                        if (reader.peek() == JsonToken.NULL) {
+//                            reader.nextNull();
+//                            dte = new Date();
+//                        } else {
+//                            value = reader.nextString();
+////						Log.v(TAG, "json actvyDt " + value);
+//                            dte = format_ymdtime.parse(value);
+//                        }
+//                        c1.setTime(dte);
+//                        item.setActvyLong(c1.getTimeInMillis());
+//                    } else if (name.equals("note")) {
+//                        value = reader.nextString();
+//                        item.setNote(value);
+//                    } else {
+//                        reader.skipValue(); // avoid some unhandle events
+//                    }
+//                }
+//
+//                reader.endObject();
+//
+//            } catch (Exception e) {
+//                // TODO Auto-generated catch block
+//                e.printStackTrace();
+//                item = null;
+//            }
+//            return item;
+//        }
+//
     }
 
 }

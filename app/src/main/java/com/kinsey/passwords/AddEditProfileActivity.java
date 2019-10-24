@@ -105,7 +105,7 @@ public class AddEditProfileActivity extends AppCompatActivity {
         Intent intent = getIntent();
 
         if (intent.hasExtra(EXTRA_ID)) {
-            setTitle("Edit Profile Account: " + intent.getIntExtra(EXTRA_ID, 0));
+            setTitle("Profile Account ID: " + intent.getIntExtra(EXTRA_ID, 0));
             setEditUICols(intent);
         } else {
             setTitle("Add Profile Account");

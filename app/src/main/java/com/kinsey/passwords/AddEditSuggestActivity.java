@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 
 public class AddEditSuggestActivity extends AppCompatActivity {
@@ -27,13 +28,15 @@ public class AddEditSuggestActivity extends AppCompatActivity {
             "com.kinsey.passwords.EXTRA_ID";
     public static final String EXTRA_PASSWORD =
             "com.kinsey.passwords.EXTRA_PASSWORD";
+    public static final String EXTRA_SEQUENCE =
+            "com.kinsey.passwords.EXTRA_SEQUENCE";
     public static final String EXTRA_NOTE =
             "com.kinsey.passwords.EXTRA_NOTE";
     public static final String EXTRA_ACTVY_DATE =
             "com.kinsey.passwords.EXTRA_ACTVY_DATE";
 
     private TextInputLayout textInputPassword;
-    private EditText editTextDescription;
+    private TextInputLayout textInputNote;
     private TextView textActvyDate;
 //    private NumberPicker numberPickerPriority;
 
@@ -48,7 +51,7 @@ public class AddEditSuggestActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_suggest);
 
         textInputPassword = findViewById(R.id.text_input_password);
-        editTextDescription = findViewById(R.id.edit_text_note);
+        textInputNote = findViewById(R.id.text_input_note);
         textActvyDate = findViewById(R.id.text_actv_date);
 
 //        numberPickerPriority = findViewById(R.id.number_picker_priority);
@@ -74,7 +77,7 @@ public class AddEditSuggestActivity extends AppCompatActivity {
         if (intent.hasExtra(EXTRA_ID)) {
             setTitle("Edit Suggestion");
             textInputPassword.getEditText().setText(intent.getStringExtra(EXTRA_PASSWORD));
-            editTextDescription.setText(intent.getStringExtra(EXTRA_NOTE));
+            textInputNote.getEditText().setText(intent.getStringExtra(EXTRA_NOTE));
             Long longActvyDate = intent.getLongExtra(EXTRA_ACTVY_DATE, 0L);
             if (longActvyDate == 0) {
                 textActvyDate.setText("");
@@ -91,7 +94,7 @@ public class AddEditSuggestActivity extends AppCompatActivity {
 
     private void saveNote() {
         String password = textInputPassword.getEditText().getText().toString().trim();
-        String note = editTextDescription.getText().toString();
+        String note = textInputNote.getEditText().getText().toString();
 //        int priority = numberPickerPriority.getValue();
 
 
@@ -103,14 +106,19 @@ public class AddEditSuggestActivity extends AppCompatActivity {
         Intent data = new Intent();
         data.putExtra(EXTRA_PASSWORD, password);
         data.putExtra(EXTRA_NOTE, note);
-//        data.putExtra(EXTRA_ACTVY_DATE, priority);
+        data.putExtra(EXTRA_ACTVY_DATE, new Date().getTime());
+
+        int sequence = getIntent().getIntExtra(EXTRA_SEQUENCE, 0);
+        if (sequence != 0) {
+            data.putExtra(EXTRA_SEQUENCE, sequence);
+        }
 
         int id = getIntent().getIntExtra(EXTRA_ID, -1);
         if (id != -1) {
             data.putExtra(EXTRA_ID, id);
         }
 
-        Log.d(TAG, "password " + password);
+//        Log.d(TAG, "password " + password);
 
         setResult(RESULT_OK, data);
         finish();

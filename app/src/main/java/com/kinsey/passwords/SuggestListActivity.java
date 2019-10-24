@@ -52,7 +52,7 @@ public class SuggestListActivity extends AppCompatActivity implements
     GridLayoutManager layoutManager;
     private GestureDetectorCompat gestureDetector;
 
-    private List<Suggest> suggestListFull;
+//    private List<Suggest> suggestListFull;
     private int maxSeq = 0;
     Suggest suggestItem;
 
@@ -77,7 +77,7 @@ public class SuggestListActivity extends AppCompatActivity implements
 
         boolean isLandscape = (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE);
         if (isLandscape) {
-            layoutManager = new GridLayoutManager(this, 4);
+            layoutManager = new GridLayoutManager(this, 3);
         } else {
             layoutManager = new GridLayoutManager(this, 2);
         }
@@ -96,9 +96,9 @@ public class SuggestListActivity extends AppCompatActivity implements
 //                update RecyclerView
 //                Toast.makeText(SuggestListActivity.this, "onChanged", Toast.LENGTH_SHORT).show();
 
-                suggestListFull = new ArrayList<>(suggests);
+//                suggestListFull = new ArrayList<>(suggests);
                 adapter.submitList(suggests);
-                Log.d(TAG, "suggests size " + suggestListFull.size());
+//                Log.d(TAG, "suggests size " + suggestListFull.size());
             }
         });
 
@@ -255,46 +255,9 @@ public class SuggestListActivity extends AppCompatActivity implements
 
 
 
-        gestureDetector = new GestureDetectorCompat(this,this);
+//        gestureDetector = new GestureDetectorCompat(this,this);
 
-
-
-//        new GestureDetector(new GestureDetector.OnGestureListener() {
-//            @Override
-//            public boolean onDown(MotionEvent e) {
-//                return false;
-//            }
-//
-//            @Override
-//            public void onShowPress(MotionEvent e) {
-//
-//            }
-//
-//            @Override
-//            public boolean onSingleTapUp(MotionEvent e) {
-//                return false;
-//            }
-//
-//            @Override
-//            public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-//                return false;
-//            }
-//
-//            @Override
-//            public void onLongPress(MotionEvent e) {
-//
-//            }
-//
-//            @Override
-//            public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-//                return false;
-//            }
-//        });
-//
-//        new GestureDetectorCompat(this, this );
-
-
-        gestureDetector = new GestureDetectorCompat(this, this);
+//        gestureDetector = new GestureDetectorCompat(this, this);
 
         //        new ItemTouchHelperAdapter(new ItemTouchHelperAdapter() {
 //
@@ -323,6 +286,7 @@ public class SuggestListActivity extends AppCompatActivity implements
                 Intent intent = new Intent(SuggestListActivity.this, AddEditSuggestActivity.class);
                 intent.putExtra(AddEditSuggestActivity.EXTRA_ID, suggest.getId());
                 intent.putExtra(AddEditSuggestActivity.EXTRA_PASSWORD, suggest.getPassword());
+                intent.putExtra(AddEditSuggestActivity.EXTRA_SEQUENCE, suggest.getSequence());
                 intent.putExtra(AddEditSuggestActivity.EXTRA_NOTE, suggest.getNote());
                 intent.putExtra(AddEditSuggestActivity.EXTRA_ACTVY_DATE, suggest.getActvyDate());
 
@@ -345,15 +309,15 @@ public class SuggestListActivity extends AppCompatActivity implements
         if (requestCode == ADD_SUGGEST_REQUEST && resultCode == RESULT_OK) {
             String password = data.getStringExtra(AddEditSuggestActivity.EXTRA_PASSWORD);
             String note = data.getStringExtra(AddEditSuggestActivity.EXTRA_NOTE);
-//            Long actvyDate = data.getLongExtra(AddEditSuggestActivity.EXTRA_ACTVY_DATE, 1);
-
+            Long actvyDate = data.getLongExtra(AddEditSuggestActivity.EXTRA_ACTVY_DATE, 1);
 
 //            requestAddSuggest(password, note);
 
             Log.d(TAG, "max seq " + suggestItem.getSequence());
 
-            Suggest newSuggestItem = new Suggest(password, suggestItem.getSequence() + 1, new Date().getTime());
+            Suggest newSuggestItem = new Suggest(password, suggestItem.getSequence() + 1, actvyDate);
             newSuggestItem.setNote(note);
+            newSuggestItem.setActvyDate(actvyDate);
 
             suggestViewModel.insert(newSuggestItem);
 
@@ -368,12 +332,15 @@ public class SuggestListActivity extends AppCompatActivity implements
             }
 
             String title = data.getStringExtra(AddEditSuggestActivity.EXTRA_PASSWORD);
+            int sequence = data.getIntExtra(AddEditSuggestActivity.EXTRA_SEQUENCE, 0);
             String note = data.getStringExtra(AddEditSuggestActivity.EXTRA_NOTE);
-            int priority = data.getIntExtra(AddEditSuggestActivity.EXTRA_ACTVY_DATE, 1);
+            Long actvyDate = data.getLongExtra(AddEditSuggestActivity.EXTRA_ACTVY_DATE, 1);
+//            int priority = data.getIntExtra(AddEditSuggestActivity.EXTRA_ACTVY_DATE, 1);
 
-            Suggest suggest = new Suggest(title, priority, new Date().getTime());
+            Suggest suggest = new Suggest(title, sequence, new Date().getTime());
             suggest.setId(id);
             suggest.setNote(note);
+            suggest.setActvyDate(actvyDate);
             suggestViewModel.update(suggest);
 
             Toast.makeText(this, "Suggestion updated", Toast.LENGTH_SHORT).show();
