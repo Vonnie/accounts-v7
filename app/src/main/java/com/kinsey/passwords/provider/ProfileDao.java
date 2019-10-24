@@ -35,7 +35,7 @@ public interface ProfileDao {
     @Query("DELETE FROM Passport")
     void deleteAllProfiles();
 
-    @Query("SELECT * FROM Passport ORDER BY corporation_name ASC")
+    @Query("SELECT * FROM Passport ORDER BY corporation_name COLLATE NOCASE ASC")
     LiveData<List<Profile>> getAllProfiles();
 
     @Query("SELECT * FROM Passport ORDER BY passport_id ASC")
@@ -44,7 +44,7 @@ public interface ProfileDao {
     @Query("SELECT * FROM Passport ORDER BY open_date DESC")
     LiveData<List<Profile>> getAllProfilesByOpenDate();
 
-    @Query("SELECT * FROM Passport where corporation_name LIKE :name or LOWER(corporation_name) like LOWER(:name) order by corporation_name")
+    @Query("SELECT * FROM Passport where corporation_name LIKE :name or LOWER(corporation_name) like LOWER(:name) order by corporation_name COLLATE NOCASE ASC")
     LiveData<List<Profile>> searchCorpNameProfiles(String name);
 
     @Query("SELECT * FROM Passport where _id = :id")
