@@ -5,39 +5,56 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.NumberPicker;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.material.textfield.TextInputLayout;
+
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 public class AddEditSuggestActivity extends AppCompatActivity {
 
+    public static final String TAG = "AddEditSuggestActivity";
+
     public static final String EXTRA_ID =
             "com.kinsey.passwords.EXTRA_ID";
-    public static final String EXTRA_TITLE =
-            "com.kinsey.passwords.EXTRA_TITLE";
-    public static final String EXTRA_DESCRIPTION =
-            "com.kinsey.passwords.EXTRA_DESCRIPTION";
-    public static final String EXTRA_PRIORITY =
-            "com.kinsey.passwords.EXTRA_PRIORITY";
+    public static final String EXTRA_PASSWORD =
+            "com.kinsey.passwords.EXTRA_PASSWORD";
+    public static final String EXTRA_NOTE =
+            "com.kinsey.passwords.EXTRA_NOTE";
+    public static final String EXTRA_ACTVY_DATE =
+            "com.kinsey.passwords.EXTRA_ACTVY_DATE";
 
-    private EditText editTextTitle;
+    private TextInputLayout textInputPassword;
     private EditText editTextDescription;
-    private NumberPicker numberPickerPriority;
+    private TextView textActvyDate;
+//    private NumberPicker numberPickerPriority;
+
+
+    private static String pattern_ymdtimehm = "yyyy-MM-dd kk:mm";
+    public static SimpleDateFormat format_ymdtimehm = new SimpleDateFormat(
+            pattern_ymdtimehm, Locale.US);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_suggest);
 
-        editTextTitle = findViewById(R.id.edit_text_title);
-        editTextDescription = findViewById(R.id.edit_text_description);
-        numberPickerPriority = findViewById(R.id.number_picker_priority);
+        textInputPassword = findViewById(R.id.text_input_password);
+        editTextDescription = findViewById(R.id.edit_text_note);
+        textActvyDate = findViewById(R.id.text_actv_date);
 
-        numberPickerPriority.setMinValue(1);
-        numberPickerPriority.setMaxValue(10);
+//        numberPickerPriority = findViewById(R.id.number_picker_priority);
+
+//        numberPickerPriority.setMinValue(1);
+//        numberPickerPriority.setMaxValue(10);
 
 //        final ActionBar actionBar = getSupportActionBar();
 //        actionBar.setDisplayHomeAsUpEnabled(true);
@@ -56,9 +73,16 @@ public class AddEditSuggestActivity extends AppCompatActivity {
 
         if (intent.hasExtra(EXTRA_ID)) {
             setTitle("Edit Suggestion");
-            editTextTitle.setText(intent.getStringExtra(EXTRA_TITLE));
-            editTextDescription.setText(intent.getStringExtra(EXTRA_DESCRIPTION));
-            numberPickerPriority.setValue(intent.getIntExtra(EXTRA_PRIORITY, 1));
+            textInputPassword.getEditText().setText(intent.getStringExtra(EXTRA_PASSWORD));
+            editTextDescription.setText(intent.getStringExtra(EXTRA_NOTE));
+            Long longActvyDate = intent.getLongExtra(EXTRA_ACTVY_DATE, 0L);
+            if (longActvyDate == 0) {
+                textActvyDate.setText("");
+            } else {
+                textActvyDate.setText("ActvyDate: " + format_ymdtimehm.format(longActvyDate));
+            }
+
+//            numberPickerPriority.setValue(intent.getIntExtra(EXTRA_PRIORITY, 1));
         } else {
             setTitle("Add Suggestion");
         }
@@ -66,24 +90,27 @@ public class AddEditSuggestActivity extends AppCompatActivity {
     }
 
     private void saveNote() {
-        String title = editTextTitle.getText().toString();
-        String description = editTextDescription.getText().toString();
-        int priority = numberPickerPriority.getValue();
+        String password = textInputPassword.getEditText().getText().toString().trim();
+        String note = editTextDescription.getText().toString();
+//        int priority = numberPickerPriority.getValue();
 
-        if (title.trim().isEmpty() || description.trim().isEmpty()) {
+
+        if (password.trim().isEmpty()) {
             Toast.makeText(this, "Please insert a title and description", Toast.LENGTH_SHORT).show();
             return;
         }
 
         Intent data = new Intent();
-        data.putExtra(EXTRA_TITLE, title);
-        data.putExtra(EXTRA_DESCRIPTION, description);
-        data.putExtra(EXTRA_PRIORITY, priority);
+        data.putExtra(EXTRA_PASSWORD, password);
+        data.putExtra(EXTRA_NOTE, note);
+//        data.putExtra(EXTRA_ACTVY_DATE, priority);
 
-        int id = getIntent().getIntExtra(EXTRA_ID, 1);
+        int id = getIntent().getIntExtra(EXTRA_ID, -1);
         if (id != -1) {
             data.putExtra(EXTRA_ID, id);
         }
+
+        Log.d(TAG, "password " + password);
 
         setResult(RESULT_OK, data);
         finish();
@@ -100,6 +127,7 @@ public class AddEditSuggestActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.save_note:
+                Log.d(TAG, "save password");
                 saveNote();
                 return true;
             default:

@@ -59,7 +59,7 @@ public class SuggestAdapter extends ListAdapter<Suggest, SuggestAdapter.SuggestH
     public void onBindViewHolder(@NonNull SuggestHolder holder, int position) {
         Suggest currentSuggest = getItem(position);
         holder.textViewTitle.setText(currentSuggest.getPassword());
-        holder.textViewDescription.setText(currentSuggest.getNote());
+        holder.textViewDescription.setText(String.valueOf(currentSuggest.getId()));
         holder.textViewPriority.setText(String.valueOf(currentSuggest.getSequence()));
 
     }

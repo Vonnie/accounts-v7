@@ -111,7 +111,7 @@ public class MainActivity extends AppCompatActivity
     public static String BACKUP_FILENAME = "accounts.json";
 
 
-//    private List<Profile> profileListFull;
+    private List<Profile> profileListFull;
     private List<Profile> profileList;
 
     private String feedUrl = "http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topTvEpisodes/xml";
@@ -255,16 +255,24 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onChanged(List<Profile> profiles) {
 
-//                profileListFull = new ArrayList<>(profiles);
+                profileListFull = new ArrayList<>(profiles);
                 adapter.submitList(profiles);
             }
         });
 
 
-        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
-                ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(
+                ItemTouchHelper.START | ItemTouchHelper.END,
+                ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT | ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.START | ItemTouchHelper.END) {
             @Override
             public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+
+                Log.d(TAG, "onMove");
+                Profile profile = adapter.getProfileAt(viewHolder.getAdapterPosition());
+                profileViewModel.delete(adapter.getProfileAt(viewHolder.getAdapterPosition()));
+                profileViewModel.insertProfile(profile);
+                adapter.notifyItemMoved(viewHolder.getAdapterPosition(), target.getAdapterPosition());
+
                 return false;
             }
 

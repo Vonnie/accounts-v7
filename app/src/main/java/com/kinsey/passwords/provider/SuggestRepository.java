@@ -39,6 +39,10 @@ public class SuggestRepository {
         return allSuggests;
     }
 
+    public LiveData<Suggest> getMaxSequence() {
+        return suggestDao.getMaxSequence();
+    }
+
     private static class InsertSuggestAsyncTask extends AsyncTask<Suggest, Void, Void> {
         private SuggestDao suggestDao;
 

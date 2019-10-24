@@ -41,4 +41,6 @@ public class SuggestViewModel extends AndroidViewModel {
         return allSuggests;
     }
 
+    public LiveData<Suggest> getMaxSequence() { return repository.getMaxSequence();}
+
 }

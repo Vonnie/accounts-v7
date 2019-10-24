@@ -17,6 +17,7 @@ public class Suggest implements Serializable {
     public static final long serialVersionUID = 20170222l;
 
     @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "_id")
     private int id = 0;
 
     private int sequence = 0;

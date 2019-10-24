@@ -29,6 +29,9 @@ public interface SuggestDao {
     @Query("SELECT * FROM password_item_v2 ORDER BY sequence ASC")
     LiveData<List<Suggest>> getAllSuggest();
 
+    @Query("SELECT * FROM password_item_v2 ORDER BY sequence DESC LIMIT 1")
+    LiveData<Suggest> getMaxSequence();
+
 //    @Query("SELECT MAX(sequence) FROM password_item_v2 ORDER BY sequence DESC")
 //    LiveData<Suggest> getMaxSuggestSeq();
 }

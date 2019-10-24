@@ -8,6 +8,7 @@ import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
@@ -15,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GestureDetectorCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -24,14 +26,19 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.kinsey.passwords.items.Profile;
 import com.kinsey.passwords.items.Suggest;
 import com.kinsey.passwords.provider.SuggestViewModel;
 import com.kinsey.passwords.provider.SuggestAdapter;
 import com.kinsey.passwords.tools.ItemTouchHelperAdapter;
 import com.kinsey.passwords.tools.PasswordFormula;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+
+import static androidx.recyclerview.widget.ItemTouchHelper.ACTION_STATE_DRAG;
 
 public class SuggestListActivity extends AppCompatActivity implements
     GestureDetector.OnGestureListener,
@@ -43,9 +50,11 @@ public class SuggestListActivity extends AppCompatActivity implements
     private SuggestViewModel suggestViewModel;
     private PasswordFormula passwordFormula = new PasswordFormula();
     GridLayoutManager layoutManager;
-    GestureDetector gestureDetector;
+    private GestureDetectorCompat gestureDetector;
 
+    private List<Suggest> suggestListFull;
     private int maxSeq = 0;
+    Suggest suggestItem;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -56,6 +65,7 @@ public class SuggestListActivity extends AppCompatActivity implements
         buttonAddNote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Intent intent = new Intent(SuggestListActivity.this, AddEditSuggestActivity.class);
                 startActivityForResult(intent, ADD_SUGGEST_REQUEST);
             }
@@ -86,45 +96,202 @@ public class SuggestListActivity extends AppCompatActivity implements
 //                update RecyclerView
 //                Toast.makeText(SuggestListActivity.this, "onChanged", Toast.LENGTH_SHORT).show();
 
-                maxSeq = 0;
-                for (Suggest suggest: suggests) {
-                    if (suggest.getSequence() > maxSeq) {
-                        maxSeq = suggest.getSequence();
-                    }
-                }
-                Log.d(TAG, "onChg new max seq " + maxSeq);
-
+                suggestListFull = new ArrayList<>(suggests);
                 adapter.submitList(suggests);
+                Log.d(TAG, "suggests size " + suggestListFull.size());
             }
         });
 
-        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, 0) {
+//        Log.d(TAG, "suggests size " + suggestListFull.size());
+
+        suggestViewModel.getMaxSequence().observe(this, new Observer<Suggest>() {
+            @Override
+            public void onChanged(@Nullable Suggest suggest) {
+//                update RecyclerView
+//                Toast.makeText(SuggestListActivity.this, "onChanged", Toast.LENGTH_SHORT).show();
+
+
+//                adapter.submitList(suggests);
+
+                Log.d(TAG, "max Item " + suggest);
+
+                if (suggest == null) {
+                    suggestItem = new Suggest("", 0, 0l);
+                } else {
+                    suggestItem = new Suggest(
+                            suggest.getPassword(),
+                            suggest.getSequence(),
+                            suggest.getActvyDate()
+                    );
+                }
+
+//                this.maxSeq = suggestItem.getSequence();
+
+//                Log.d(TAG, "new seq " + this.maxSeq);
+
+
+//                Suggest suggestItem = new Suggest(password, suggest.getSequence() + 1, new Date().getTime());
+//                suggestItem.setNote(note);
+//
+//
+//                suggestViewModel.insert(suggestItem);
+//
+//                Toast.makeText(SuggestListActivity.this, "Suggest Added", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(
+                ItemTouchHelper.START | ItemTouchHelper.END | ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT,
+                ItemTouchHelper.START | ItemTouchHelper.END | ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT ) {
 
             ItemTouchHelper itemTouchHelper;
+            Suggest fromSuggest;
+            RecyclerView.ViewHolder fromViewHolder;
+            RecyclerView.ViewHolder toViewHolder;
 
             @Override
             public boolean onMove(@NonNull RecyclerView recyclerView,
                                   @NonNull RecyclerView.ViewHolder viewHolder,
                                   @NonNull RecyclerView.ViewHolder target) {
-                Suggest suggest = adapter.getSuggestAt(viewHolder.getAdapterPosition());
-                suggestViewModel.delete(adapter.getSuggestAt(viewHolder.getAdapterPosition()));
-                suggestViewModel.insert(suggest);
-                adapter.notifyItemMoved(viewHolder.getAdapterPosition(), target.getAdapterPosition());
-                return false;
+                Log.d(TAG, "onMovePos * * * *");
+                Log.d(TAG, "onMovePos " + viewHolder.getAdapterPosition() + ":" + target.getAdapterPosition());
+
+//                viewHolder.itemView.setBackgroundColor(
+//                        ContextCompat.getColor(getApplicationContext(), R.color.secondaryLightColor)
+//                );
+
+
+//                if (fromSuggest == null) {
+//                    fromSuggest = suggest;
+//                    return false;
+//                }
+//                if (fromSuggest.getId() == suggest.getId()) {
+//                    return false;
+//                }
+
+
+//                fromSuggest = suggest;
+//                suggestViewModel.delete(adapter.getSuggestAt(viewHolder.getAdapterPosition()));
+//                suggestViewModel.insert(suggest);
+
+//                Collections.swap();
+                return true;
             }
+
+
 
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                Log.d(TAG, "direction " + direction);
+                Log.d(TAG, "swipe direction " + direction);
+//                Log.d(TAG, "view " + );
                 suggestViewModel.delete(adapter.getSuggestAt(viewHolder.getAdapterPosition()));
                 Toast.makeText(SuggestListActivity.this, "Suggestion deleted", Toast.LENGTH_SHORT).show();
             }
+
+            @Override
+            public void onMoved(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, int fromPos, @NonNull RecyclerView.ViewHolder target, int toPos, int x, int y) {
+                Log.d(TAG, "onMoved");
+                target.itemView.setBackgroundColor(
+                        ContextCompat.getColor(getApplicationContext(), R.color.secondaryDarkColor)
+                );
+
+                toViewHolder = target;
+                super.onMoved(recyclerView, viewHolder, fromPos, target, toPos, x, y);
+            }
+
+            @Override
+            public void onSelectedChanged(@Nullable RecyclerView.ViewHolder viewHolder, int actionState) {
+                Log.d(TAG, "selected changed " + actionState);
+                if (actionState == ACTION_STATE_DRAG) {
+                    viewHolder.itemView.setBackgroundColor(
+                            ContextCompat.getColor(getApplicationContext(), R.color.secondaryLightColor)
+                    );
+                    fromViewHolder = viewHolder;
+                } else {
+                    if (fromViewHolder != null) {
+                        fromViewHolder.itemView.setBackgroundColor(
+                                ContextCompat.getColor(getApplicationContext(), R.color.primaryDarkColor)
+                        );
+                        int fromPos = fromViewHolder.getAdapterPosition();
+                        int toPos = toViewHolder.getAdapterPosition();
+                        Suggest suggest = adapter.getSuggestAt(fromViewHolder.getAdapterPosition());
+                        Suggest suggestTarget = adapter.getSuggestAt(toViewHolder.getAdapterPosition());
+                        int fromSeq = suggest.getSequence();
+                        int toSeq = suggestTarget.getSequence();
+                        suggest.setSequence(toSeq);
+                        suggestTarget.setSequence(fromSeq);
+                        Log.d(TAG, "onMovePos " + fromViewHolder.getAdapterPosition() + ":" + toViewHolder.getAdapterPosition());
+                        Log.d(TAG, "onMovePswd " + suggest.getPassword() + ":" + suggestTarget.getPassword());
+                        Log.d(TAG, "onMoveId " + suggest.getId() + ":" + suggestTarget.getId());
+                        Log.d(TAG, "onMoveSeq " + suggest.getSequence() + ":" + suggestTarget.getSequence());
+                        Log.d(TAG, "notifyPos " + fromPos + ":" + toPos);
+
+                        suggestViewModel.update(suggest);
+                        suggestViewModel.update(suggestTarget);
+                        adapter.notifyItemMoved(fromPos, toPos);
+                        adapter.notifyDataSetChanged();
+
+                        fromViewHolder = null;
+                    }
+                }
+                super.onSelectedChanged(viewHolder, actionState);
+            }
+
+
+            //            @Override
+//            public boolean canDropOver(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder current, @NonNull RecyclerView.ViewHolder target) {
+//                Log.d(TAG, "canDropOver " + current.getAdapterPosition() + ":" + target.getAdapterPosition());
+//                return super.canDropOver(recyclerView, current, target);
+//            }
+
+
 
             public void setTouchHelper(ItemTouchHelper itemTouchHelper) {
                 this.itemTouchHelper = itemTouchHelper;
             }
 
         }).attachToRecyclerView(recyclerView);
+
+
+
+        gestureDetector = new GestureDetectorCompat(this,this);
+
+
+
+//        new GestureDetector(new GestureDetector.OnGestureListener() {
+//            @Override
+//            public boolean onDown(MotionEvent e) {
+//                return false;
+//            }
+//
+//            @Override
+//            public void onShowPress(MotionEvent e) {
+//
+//            }
+//
+//            @Override
+//            public boolean onSingleTapUp(MotionEvent e) {
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+//                return false;
+//            }
+//
+//            @Override
+//            public void onLongPress(MotionEvent e) {
+//
+//            }
+//
+//            @Override
+//            public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+//                return false;
+//            }
+//        });
+//
+//        new GestureDetectorCompat(this, this );
 
 
         gestureDetector = new GestureDetectorCompat(this, this);
@@ -155,9 +322,9 @@ public class SuggestListActivity extends AppCompatActivity implements
             public void onItemClick(Suggest suggest) {
                 Intent intent = new Intent(SuggestListActivity.this, AddEditSuggestActivity.class);
                 intent.putExtra(AddEditSuggestActivity.EXTRA_ID, suggest.getId());
-                intent.putExtra(AddEditSuggestActivity.EXTRA_TITLE, suggest.getPassword());
-                intent.putExtra(AddEditSuggestActivity.EXTRA_DESCRIPTION, suggest.getNote());
-                intent.putExtra(AddEditSuggestActivity.EXTRA_PRIORITY, suggest.getSequence());
+                intent.putExtra(AddEditSuggestActivity.EXTRA_PASSWORD, suggest.getPassword());
+                intent.putExtra(AddEditSuggestActivity.EXTRA_NOTE, suggest.getNote());
+                intent.putExtra(AddEditSuggestActivity.EXTRA_ACTVY_DATE, suggest.getActvyDate());
 
                 startActivityForResult(intent, EDIT_SUGGEST_REQUEST);
             }
@@ -176,14 +343,22 @@ public class SuggestListActivity extends AppCompatActivity implements
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == ADD_SUGGEST_REQUEST && resultCode == RESULT_OK) {
-            String title = data.getStringExtra(AddEditSuggestActivity.EXTRA_TITLE);
-            String description = data.getStringExtra(AddEditSuggestActivity.EXTRA_DESCRIPTION);
-            int priority = data.getIntExtra(AddEditSuggestActivity.EXTRA_PRIORITY, 1);
+            String password = data.getStringExtra(AddEditSuggestActivity.EXTRA_PASSWORD);
+            String note = data.getStringExtra(AddEditSuggestActivity.EXTRA_NOTE);
+//            Long actvyDate = data.getLongExtra(AddEditSuggestActivity.EXTRA_ACTVY_DATE, 1);
 
-            Suggest suggest = new Suggest(title, priority, new Date().getTime());
-            suggestViewModel.insert(suggest);
 
-            Toast.makeText(this, "Suggest Saved", Toast.LENGTH_SHORT).show();
+//            requestAddSuggest(password, note);
+
+            Log.d(TAG, "max seq " + suggestItem.getSequence());
+
+            Suggest newSuggestItem = new Suggest(password, suggestItem.getSequence() + 1, new Date().getTime());
+            newSuggestItem.setNote(note);
+
+            suggestViewModel.insert(newSuggestItem);
+
+            Toast.makeText(SuggestListActivity.this, "Suggest Added", Toast.LENGTH_SHORT).show();
+
         } else if (requestCode == EDIT_SUGGEST_REQUEST && resultCode == RESULT_OK) {
             int id = data.getIntExtra(AddEditSuggestActivity.EXTRA_ID, -1);
 
@@ -192,12 +367,13 @@ public class SuggestListActivity extends AppCompatActivity implements
                 return;
             }
 
-            String title = data.getStringExtra(AddEditSuggestActivity.EXTRA_TITLE);
-            String description = data.getStringExtra(AddEditSuggestActivity.EXTRA_DESCRIPTION);
-            int priority = data.getIntExtra(AddEditSuggestActivity.EXTRA_PRIORITY, 1);
+            String title = data.getStringExtra(AddEditSuggestActivity.EXTRA_PASSWORD);
+            String note = data.getStringExtra(AddEditSuggestActivity.EXTRA_NOTE);
+            int priority = data.getIntExtra(AddEditSuggestActivity.EXTRA_ACTVY_DATE, 1);
 
             Suggest suggest = new Suggest(title, priority, new Date().getTime());
             suggest.setId(id);
+            suggest.setNote(note);
             suggestViewModel.update(suggest);
 
             Toast.makeText(this, "Suggestion updated", Toast.LENGTH_SHORT).show();
@@ -256,6 +432,92 @@ public class SuggestListActivity extends AppCompatActivity implements
         }
 
         Toast.makeText(this, "10 new passwords added", Toast.LENGTH_SHORT).show();
+    }
+
+
+    private void requestAddSuggest(String password, String note) {
+//        maxSeq = 0;
+//        for (Suggest suggest: suggests) {
+//            if (suggest.getSequence() > maxSeq) {
+//                maxSeq = suggest.getSequence();
+//            }
+//        }
+//
+//        Log.d(TAG, "max " + maxSeq);
+////        int maxSeq = suggestViewModel.getMaxSequence();
+
+        Suggest maxSuggest;
+
+        suggestViewModel.getMaxSequence().observe(this, new Observer<Suggest>() {
+            @Override
+            public void onChanged(@Nullable Suggest suggest) {
+//                update RecyclerView
+//                Toast.makeText(SuggestListActivity.this, "onChanged", Toast.LENGTH_SHORT).show();
+
+
+//                adapter.submitList(suggests);
+
+                Log.d(TAG, "max Item " + suggest);
+
+//                this.maxSeq = suggest.getSequence();
+//
+//                SuggestListActivity.maxSeq = suggest.getSequence();
+//
+//                maxSuggest = suggest;
+
+            }
+        });
+
+//        Log.d(TAG, "max Item " + this.maxSuggest);
+
+        Log.d(TAG, "onChg new max seq " + maxSeq);
+    }
+
+    @Override
+    public boolean onSingleTapConfirmed(MotionEvent e) {
+        return false;
+    }
+
+    @Override
+    public boolean onDoubleTap(MotionEvent e) {
+        Log.d(TAG, "single tap");
+        return false;
+    }
+
+    @Override
+    public boolean onDoubleTapEvent(MotionEvent e) {
+        return false;
+    }
+
+    @Override
+    public boolean onDown(MotionEvent e) {
+        Log.d(TAG, "on down");
+        return false;
+    }
+
+    @Override
+    public void onShowPress(MotionEvent e) {
+
+    }
+
+    @Override
+    public boolean onSingleTapUp(MotionEvent e) {
+        return false;
+    }
+
+    @Override
+    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+        return false;
+    }
+
+    @Override
+    public void onLongPress(MotionEvent e) {
+
+    }
+
+    @Override
+    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+        return false;
     }
 }
 
