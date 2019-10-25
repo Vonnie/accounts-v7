@@ -23,24 +23,11 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/text_input_corp_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:counterEnabled="true"
-        app:errorEnabled="true">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Corporation name required"
-            android:inputType="textCapWords|textNoSuggestions" />
-
-    </com.google.android.material.textfield.TextInputLayout>
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="3dp"
         android:clipToPadding="true"
         android:fillViewport="true"
         android:scrollbarStyle="outsideOverlay">
@@ -50,6 +37,23 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/text_input_corp_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:errorEnabled="true">
+                <!--        app:counterEnabled="true">-->
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Corporation name required"
+                    android:inputType="textCapWords|textNoSuggestions" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/text_input_user_name"
@@ -61,7 +65,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="User name required"
-                    android:inputType="text" />
+                    android:inputType="text|textNoSuggestions" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -76,7 +80,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="User email required"
-                    android:inputType="textEmailAddress" />
+                    android:inputType="textEmailAddress|textNoSuggestions" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -105,7 +109,7 @@
                         android:layout_height="wrap_content"
                         android:ems="10"
                         android:hint="@string/accedit_corp_website_hint"
-                        android:inputType="textUri" />
+                        android:inputType="textUri|textNoSuggestions" />
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
 

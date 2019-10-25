@@ -2,11 +2,16 @@ package com.kinsey.passwords.tools;
 
 import android.util.JsonReader;
 import android.util.JsonToken;
+import android.util.JsonWriter;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.kinsey.passwords.MainActivity;
 import com.kinsey.passwords.items.Profile;
 
+import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -15,8 +20,8 @@ import java.util.List;
 
 import static com.kinsey.passwords.MainActivity.format_ymdtime;
 
-public class ReadProfileJsonIntoList {
-    private static final String TAG = "ReadProfileJsonIntoList";
+public class ProfileJsonListIO {
+    private static final String TAG = "ProfileJsonListIO";
 
     public List<Profile> readProfileJson(String jsonFilename) {
 
@@ -51,7 +56,6 @@ public class ReadProfileJsonIntoList {
         }
 
     }
-
 
 
     final public Profile readMessage(JsonReader reader) {
@@ -145,6 +149,85 @@ public class ReadProfileJsonIntoList {
             item = null;
         }
         return item;
+    }
+
+    public int writeProfileJson(File file) {
+
+        int count = 0;
+        try {
+            JsonWriter writer = new JsonWriter(new FileWriter(file));
+            writer.setIndent("  ");
+            count = writeMessagesArray(writer);
+            writer.flush();
+            writer.close();
+
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            count = 0;
+        }
+
+        return count;
+    }
+
+
+    public int writeMessagesArray(JsonWriter writer) throws IOException {
+        int count = 0;
+        try {
+
+            writer.beginArray();
+            for (Profile item : MainActivity.adapter.getCurrentList()) {
+//            for (Account item : listAccounts) {
+                writeMessage(writer, item);
+                count++;
+            }
+            writer.endArray();
+        } catch (Exception e2) {
+            e2.printStackTrace();
+            System.out.println(e2.getMessage());
+            Log.e(TAG, "writeMessageArrayError: " + e2.getMessage());
+        }
+        return count;
+    }
+
+
+    public void writeMessage(JsonWriter writer, Profile item)
+            throws IOException {
+        try {
+            writer.beginObject();
+            writer.name("corpName").value(item.getCorpName());
+            writer.name("accountId").value(item.getPassportId());
+            writer.name("seq").value(item.getSequence());
+            writer.name("userName").value(item.getUserName());
+            writer.name("userEmail").value(item.getUserEmail());
+            writer.name("refFrom").value(item.getRefFrom());
+            writer.name("refTo").value(item.getRefTo());
+            if (item.getCorpWebsite() == null) {
+                writer.name("website").nullValue();
+            } else {
+                writer.name("website").value(item.getCorpWebsite().toString());
+            }
+            if (item.getOpenLong() == 0) {
+                writer.name("openDt").nullValue();
+            } else {
+                writer.name("openDt").value(
+                        format_ymdtime.format(item.getOpenLong()));
+            }
+            if (item.getActvyLong() == 0) {
+                writer.name("actvyDt").nullValue();
+            } else {
+                writer.name("actvyDt").value(
+                        format_ymdtime.format(item.getActvyLong()));
+            }
+            Log.d(TAG, "writeMessage: note " + item.getNote());
+            writer.name("note").value(item.getNote());
+
+            writer.endObject();
+        } catch (Exception e2) {
+            e2.printStackTrace();
+            System.out.println(e2.getMessage());
+            Log.v(TAG, "writeMessageError: " + e2.getMessage());
+        }
     }
 
 }

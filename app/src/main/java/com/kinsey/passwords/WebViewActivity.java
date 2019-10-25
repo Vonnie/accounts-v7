@@ -63,7 +63,7 @@ public class WebViewActivity
 
 //        if (webAddr != null | webAddr != "") {
             setContentView(myWebView);
-            myWebView.loadUrl("https://" + webAddr);
+            myWebView.loadUrl(webAddr);
 //        }
 
         Log.d(TAG, "onCreate: " + webAddr);

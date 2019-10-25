@@ -1,9 +1,9 @@
 package com.kinsey.passwords;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
-import android.content.ContentResolver;
-import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -11,27 +11,17 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.kinsey.passwords.items.Account;
 import com.kinsey.passwords.items.AccountsContract;
 import com.kinsey.passwords.items.Profile;
-import com.kinsey.passwords.provider.ProfileAdapter;
-import com.kinsey.passwords.provider.ProfileDao;
-import com.kinsey.passwords.provider.ProfileViewModel;
 import com.kinsey.passwords.tools.AppDialog;
-import com.kinsey.passwords.tools.PasswordFormula;
-import com.kinsey.passwords.tools.ReadProfileJsonIntoList;
+import com.kinsey.passwords.tools.ProfileJsonListIO;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Environment;
 import android.os.Handler;
-import android.util.JsonReader;
-import android.util.JsonToken;
 import android.util.JsonWriter;
 import android.util.Log;
 import android.view.Menu;
@@ -40,20 +30,16 @@ import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.Formatter;
 import java.util.List;
+import java.util.Locale;
 
 import static com.kinsey.passwords.MainActivity.format_ymdtime;
 
@@ -62,13 +48,14 @@ public class FileViewActivity extends AppCompatActivity
     private static final String TAG = "FileViewActivity";
 
     public static ProgressBar progressBar;
-    WebView webView;
+    public static WebView webView;
 //    private ProfileAdapter adapter;
 //    private ProfileViewModel profileViewModel;
 
     private Handler mHandler = new Handler();
     boolean importRefreshReq = false;
     public static File dirStorage;
+    View fileViewActivityView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -252,7 +239,7 @@ public class FileViewActivity extends AppCompatActivity
         return file.exists();
     }
 
-    private void infoPage(String infoMsg) {
+    public void infoPage(String infoMsg) {
         try {
 //            Log.d(TAG, "reportJson: " + MainActivity.DEFAULT_APP_DIRECTORY);
             Log.d(TAG, "reportJson: ");
@@ -301,8 +288,8 @@ public class FileViewActivity extends AppCompatActivity
             webView.loadData(htmlString, "text/html", null);
 
             Log.d(TAG, "db count: " + MainActivity.adapter.getItemCount());
-        } catch (
-                Exception ex) {
+
+        } catch (Exception ex) {
             Log.d(TAG, "reportJson: " + ex.getMessage());
         }
 
@@ -310,8 +297,8 @@ public class FileViewActivity extends AppCompatActivity
 
 
     private String warningMsg() {
-        String htmlString = "<h1>Warning</h1>\n" +
-                "<h2>Unable to acquire Exported Accounts</h2>\n" +
+        String htmlString = "<h1>Warning</h1>" +
+                "<h2>Unable to acquire Exported Accounts</h2>" +
                 "<h3>Either not previously exported or file storage issue</h3>";
         return htmlString;
     }
@@ -344,12 +331,12 @@ public class FileViewActivity extends AppCompatActivity
     private String accountJsonProperties(String filename) {
 
         String returnValue = "";
-        ReadProfileJsonIntoList readProfileJsonIntoList = new ReadProfileJsonIntoList();
+        ProfileJsonListIO profileJsonListIO = new ProfileJsonListIO();
         try {
 
             List<Profile> listAccounts = new ArrayList<Profile>();
 
-            listAccounts = readProfileJsonIntoList.readProfileJson(filename);
+            listAccounts = profileJsonListIO.readProfileJson(filename);
 
             int listCount = listAccounts.size();
 
@@ -378,7 +365,7 @@ public class FileViewActivity extends AppCompatActivity
     }
 
 
-    public void ExportAccountDB() {
+    private void ExportAccountDB() {
         String msgError = "";
         int count = -1;
 
@@ -396,6 +383,7 @@ public class FileViewActivity extends AppCompatActivity
 
             File file = new File(dirStorage, MainActivity.BACKUP_FILENAME);
             Log.d(TAG, "ExportAccountDB export filename: " + file.getAbsoluteFile());
+
 
             if (file.exists()) {
                 Log.d(TAG, "ExportAccountDB: file exists " + file.getAbsoluteFile());
@@ -430,25 +418,29 @@ public class FileViewActivity extends AppCompatActivity
 
             }
 
-            JsonWriter writer = new JsonWriter(new FileWriter(file));
-            writer.setIndent("  ");
-            count = writeMessagesArray(writer);
-            writer.flush();
-            writer.close();
 
-            infoPage("Account Profiles exported");
 
-            Toast.makeText(this,
-                    count + " Exported accounts",
-                    Toast.LENGTH_LONG).show();
+            new DownloadProfileAsyncTask(getApplicationContext(), file).execute();
 
-        } catch (IOException e1) {
-            msgError = e1.getMessage();
-            Log.e(TAG, "ExportAccountDB error: " + e1.getMessage());
-            Toast.makeText(this,
-                    " Exported file directory issues",
-                    Toast.LENGTH_LONG).show();
-//                    fvFragment.setInfoMessage("Exported directory not exists");
+//            JsonWriter writer = new JsonWriter(new FileWriter(file));
+//            writer.setIndent("  ");
+//            count = writeMessagesArray(writer);
+//            writer.flush();
+//            writer.close();
+//
+//            infoPage("Account Profiles exported");
+//
+//            Toast.makeText(this,
+//                    count + " Exported accounts",
+//                    Toast.LENGTH_LONG).show();
+
+//        } catch (IOException e1) {
+//            msgError = e1.getMessage();
+//            Log.e(TAG, "ExportAccountDB error: " + e1.getMessage());
+//            Toast.makeText(this,
+//                    " Exported file directory issues",
+//                    Toast.LENGTH_LONG).show();
+////                    fvFragment.setInfoMessage("Exported directory not exists");
         } catch (Exception e2) {
             e2.printStackTrace();
             System.out.println(e2.getMessage());
@@ -467,10 +459,9 @@ public class FileViewActivity extends AppCompatActivity
             File dirStorage = getExternalFilesDir("passport");
             String storageFilename = dirStorage.getAbsolutePath() + "/" + MainActivity.BACKUP_FILENAME;
 
-            Log.d(TAG, "call asyncTask");
-            new UploadProfileAsyncTask().execute(storageFilename);
+//            Log.d(TAG, "call asyncTask");
+            new UploadProfileAsyncTask(getApplicationContext()).execute(storageFilename);
 
-            Toast.makeText(this, "Upload restore complete", Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -557,12 +548,11 @@ public class FileViewActivity extends AppCompatActivity
 //        ArrayList<Uri> uris = new ArrayList<Uri>();
         emailintent.setType("text/html");
 
-
-        File file = new File(Environment.getDataDirectory() + "/passport",
-                MainActivity.BACKUP_FILENAME);
+        File dirStorage = getExternalFilesDir("passport/");
+        File file = new File(dirStorage, MainActivity.BACKUP_FILENAME);
         if (!file.exists()) {
             Toast.makeText(FileViewActivity.this,
-                    "File not exported to email",
+                    "No Exported File to share",
                     Toast.LENGTH_SHORT).show();
             return;
         }
@@ -591,68 +581,69 @@ public class FileViewActivity extends AppCompatActivity
     }
 
 
+//
+//    public int writeMessagesArray(JsonWriter writer) throws IOException {
+//        int count = 0;
+//        try {
+//
+////            List<Account> listAccounts = loadAccounts();
+//
+////            Log.d(TAG, "writeMessagesArray: " + listAccounts);
+//
+//            writer.beginArray();
+//            for (Profile item : MainActivity.adapter.getCurrentList()) {
+////            for (Account item : listAccounts) {
+//                writeMessage(writer, item);
+//                count++;
+//            }
+//            writer.endArray();
+//        } catch (Exception e2) {
+//            e2.printStackTrace();
+//            System.out.println(e2.getMessage());
+//            Log.e(TAG, "writeMessageArrayError: " + e2.getMessage());
+//        }
+//        return count;
+//    }
 
-    public int writeMessagesArray(JsonWriter writer) throws IOException {
-        int count = 0;
-        try {
 
-            List<Account> listAccounts = loadAccounts();
-
-            Log.d(TAG, "writeMessagesArray: " + listAccounts);
-            writer.beginArray();
-            for (Profile item : MainActivity.adapter.getCurrentList()) {
-//            for (Account item : listAccounts) {
-                writeMessage(writer, item);
-                count++;
-            }
-            writer.endArray();
-        } catch (Exception e2) {
-            e2.printStackTrace();
-            System.out.println(e2.getMessage());
-            Log.e(TAG, "writeMessageArrayError: " + e2.getMessage());
-        }
-        return count;
-    }
-
-
-    public void writeMessage(JsonWriter writer, Profile item)
-            throws IOException {
-        try {
-            writer.beginObject();
-            writer.name("corpName").value(item.getCorpName());
-            writer.name("accountId").value(item.getPassportId());
-            writer.name("seq").value(item.getSequence());
-            writer.name("userName").value(item.getUserName());
-            writer.name("userEmail").value(item.getUserEmail());
-            writer.name("refFrom").value(item.getRefFrom());
-            writer.name("refTo").value(item.getRefTo());
-            if (item.getCorpWebsite() == null) {
-                writer.name("website").nullValue();
-            } else {
-                writer.name("website").value(item.getCorpWebsite().toString());
-            }
-            if (item.getOpenLong() == 0) {
-                writer.name("openDt").nullValue();
-            } else {
-                writer.name("openDt").value(
-                        format_ymdtime.format(item.getOpenLong()));
-            }
-            if (item.getActvyLong() == 0) {
-                writer.name("actvyDt").nullValue();
-            } else {
-                writer.name("actvyDt").value(
-                        format_ymdtime.format(item.getActvyLong()));
-            }
-            Log.d(TAG, "writeMessage: note " + item.getNote());
-            writer.name("note").value(item.getNote());
-
-            writer.endObject();
-        } catch (Exception e2) {
-            e2.printStackTrace();
-            System.out.println(e2.getMessage());
-            Log.v(TAG, "writeMessageError: " + e2.getMessage());
-        }
-    }
+//    public void writeMessage(JsonWriter writer, Profile item)
+//            throws IOException {
+//        try {
+//            writer.beginObject();
+//            writer.name("corpName").value(item.getCorpName());
+//            writer.name("accountId").value(item.getPassportId());
+//            writer.name("seq").value(item.getSequence());
+//            writer.name("userName").value(item.getUserName());
+//            writer.name("userEmail").value(item.getUserEmail());
+//            writer.name("refFrom").value(item.getRefFrom());
+//            writer.name("refTo").value(item.getRefTo());
+//            if (item.getCorpWebsite() == null) {
+//                writer.name("website").nullValue();
+//            } else {
+//                writer.name("website").value(item.getCorpWebsite().toString());
+//            }
+//            if (item.getOpenLong() == 0) {
+//                writer.name("openDt").nullValue();
+//            } else {
+//                writer.name("openDt").value(
+//                        format_ymdtime.format(item.getOpenLong()));
+//            }
+//            if (item.getActvyLong() == 0) {
+//                writer.name("actvyDt").nullValue();
+//            } else {
+//                writer.name("actvyDt").value(
+//                        format_ymdtime.format(item.getActvyLong()));
+//            }
+//            Log.d(TAG, "writeMessage: note " + item.getNote());
+//            writer.name("note").value(item.getNote());
+//
+//            writer.endObject();
+//        } catch (Exception e2) {
+//            e2.printStackTrace();
+//            System.out.println(e2.getMessage());
+//            Log.v(TAG, "writeMessageError: " + e2.getMessage());
+//        }
+//    }
 
 
     List<Account> loadAccounts() {
@@ -728,14 +719,15 @@ public class FileViewActivity extends AppCompatActivity
     }
 
 
-    private static class UploadProfileAsyncTask extends AsyncTask<String, Void, Void> {
+    private static class UploadProfileAsyncTask extends AsyncTask<String, String, Integer> {
 //        private ProfileDao profileDao;
-        ReadProfileJsonIntoList readProfileJsonIntoList = new ReadProfileJsonIntoList();
+        ProfileJsonListIO profileJsonListIO = new ProfileJsonListIO();
         private List<Profile> listAccounts = new ArrayList<Profile>();
+        Context context;
 
-//        private UploadProfileAsyncTask(ProfileDao profileDao) {
-//            this.profileDao = profileDao;
-//        }
+        private UploadProfileAsyncTask(Context context) {
+            this.context = context;
+        }
 
         @Override
         protected void onPreExecute() {
@@ -743,7 +735,7 @@ public class FileViewActivity extends AppCompatActivity
         }
 
         @Override
-        protected Void doInBackground(String... filename) {
+        protected Integer doInBackground(String... filename) {
 //            profileDao.update(profiles[0]);
 //            File dirStorage = getExternalFilesDir("passport");
 
@@ -751,32 +743,176 @@ public class FileViewActivity extends AppCompatActivity
 
                 Log.d(TAG, "upload file " + filename[0]);
 
-                listAccounts = readProfileJsonIntoList.readProfileJson(filename[0]);
-
+                listAccounts = profileJsonListIO.readProfileJson(filename[0]);
 
                 Log.d(TAG, "run: upload size " + listAccounts.size());
+
+                StringBuilder sb = new StringBuilder();
+                Formatter formatter = new Formatter(sb, Locale.US);
+
+                String msgDisplay = formatter.format("<h2>%3d Account Profiles Upload</h2>",
+                        listAccounts.size()).toString();
+                publishProgress(msgDisplay);
+
+                publishProgress("<h2>%3d Account Profile uploaded</h2>" );
+
+                MainActivity.profileViewModel.deleteAllProfiles();
+                Log.d(TAG, "run: delete all complete ");
+
+                MainActivity.profileViewModel.insertAll(listAccounts);
+                Log.d(TAG, "run: upload complete ");
+
+                publishProgress(msgDisplay + "<h3>App DB Updated</h3>");
+
             } catch (Exception e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
 
-            return null;
+            return listAccounts.size();
         }
 
         @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
+        protected void onProgressUpdate(String... values) {
+            super.onProgressUpdate(values);
+//            WebView webView = (WebView)FileViewActivity.this.findViewById(R.id.wv_page);
+//            FileViewActivity.infoPage("Account Profiles exported");
+            FileViewActivity.webView.loadData(values[0], "text/html", null);
+        }
 
-            MainActivity.profileViewModel.deleteAllProfiles();
-            Log.d(TAG, "run: delete all complete ");
+        @Override
+        protected void onPostExecute(Integer count) {
+            super.onPostExecute(count);
 
-            MainActivity.profileViewModel.insertAll(listAccounts);
-            Log.d(TAG, "run: upload complete ");
+
+            Toast.makeText(context, "Upload restore complete", Toast.LENGTH_SHORT).show();
 
 //            FileViewActivity.progressBar.setVisibility(View.GONE);
 
         }
 
     }
+
+
+    private static class DownloadProfileAsyncTask extends AsyncTask<Void, String, Integer> {
+        //        private ProfileDao profileDao;
+        ProfileJsonListIO profileJsonListIO = new ProfileJsonListIO();
+        private List<Profile> listAccounts = new ArrayList<Profile>();
+        Context context;
+        File storageFile;
+        String msgError;
+
+        private DownloadProfileAsyncTask(Context context, File file) {
+            this.context = context;
+            this.storageFile = file;
+
+//            File dirStorage = context.getExternalFilesDir("passport");
+        }
+
+        @Override
+        protected void onPreExecute() {
+            FileViewActivity.progressBar.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected Integer doInBackground(Void... voids) {
+            int count = 0;
+//            profileDao.update(profiles[0]);
+//            File dirStorage = getExternalFilesDir("passport");
+
+            try {
+
+//                Log.d(TAG, "ExportAccountDB: path found " + storageFile.getPath());
+//                // Make sure the Pictures directory exists.
+//                if (!dirStorage.exists()) {
+//                    dirStorage.mkdirs();
+//                }
+//
+//                File file = new File(dirStorage, MainActivity.BACKUP_FILENAME);
+//                Log.d(TAG, "ExportAccountDB export filename: " + file.getAbsoluteFile());
+//
+//
+//                if (file.exists()) {
+//                    Log.d(TAG, "ExportAccountDB: file exists " + file.getAbsoluteFile());
+//                } else {
+//
+//                    Log.d(TAG, "ExportAccountDB: file " + file.getAbsolutePath());
+//
+//
+//                    if (file.createNewFile()) {
+//                        Log.d(TAG, "ExportAccountDB: file created " + file.getAbsoluteFile());
+//                    }
+//
+//                }
+
+                Log.d(TAG, "upload file " + this.storageFile.getAbsolutePath());
+
+
+//                count = profileJsonListIO.writeProfileJson(this.storageFile);
+//
+//                JsonWriter writer = new JsonWriter(new FileWriter(file));
+//                writer.setIndent("  ");
+//                count = writeMessagesArray(writer);
+//                writer.flush();
+//                writer.close();
+
+
+                count = profileJsonListIO.writeProfileJson(this.storageFile);
+
+
+                Log.d(TAG, "run: upload size " + count);
+
+                StringBuilder sb = new StringBuilder();
+                Formatter formatter = new Formatter(sb, Locale.US);
+
+                publishProgress(formatter.format("<h2>%3d Account Profiles Download to backup file</h2>" +
+                                "<h3>See menu for export filename</h3>" +
+                                "<h3>See menu to view exported file</h3>",
+                        count).toString());
+//            } catch (IOException e1) {
+//                msgError = "jsonFile Error: " + e1.getMessage();
+//                Log.e(TAG, "ExportAccountDB error: " + e1.getMessage());
+////                    fvFragment.setInfoMessage("Exported directory not exists");
+            } catch (Exception e2) {
+                e2.printStackTrace();
+                System.out.println(e2.getMessage());
+                msgError = "jsonError: " + e2.getMessage();
+                Log.v(TAG, msgError);
+            }
+
+            return count;
+        }
+
+
+        @Override
+        protected void onProgressUpdate(String... values) {
+            super.onProgressUpdate(values);
+            FileViewActivity.webView.loadData(values[0], "text/html", null);
+        }
+
+
+        @Override
+        protected void onPostExecute(Integer count) {
+            super.onPostExecute(count);
+
+            if (msgError != null) {
+                Toast.makeText(context,
+                        msgError,
+                        Toast.LENGTH_LONG).show();
+                return;
+            }
+
+//            FileViewActivity.infoPage("Account Profiles exported");
+
+            Toast.makeText(context,
+                    count + " Exported accounts to backup file",
+                    Toast.LENGTH_LONG).show();
+
+//            FileViewActivity.progressBar.setVisibility(View.GONE);
+
+        }
+
+    }
+
 
 }

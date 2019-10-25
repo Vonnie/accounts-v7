@@ -1,9 +1,7 @@
 package com.kinsey.passwords;
 
 import android.content.Intent;
-import android.nfc.Tag;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.Menu;
@@ -11,17 +9,16 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.material.textfield.TextInputLayout;
-import com.kinsey.passwords.items.AccountsContract;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -102,6 +99,7 @@ public class AddEditProfileActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
+
         Intent intent = getIntent();
 
         if (intent.hasExtra(EXTRA_ID)) {
@@ -112,6 +110,8 @@ public class AddEditProfileActivity extends AppCompatActivity {
             setAddUIDefaults(intent);
         }
 
+
+        Log.d(TAG, "onCreate");
 
         mImgWebView.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -130,6 +130,26 @@ public class AddEditProfileActivity extends AppCompatActivity {
             }
         });
 
+        if (savedInstanceState != null) {
+            textInputCorpName.getEditText().setText(
+                    savedInstanceState.getString("corpName")
+            );
+            textInputUserName.getEditText().setText(
+                    savedInstanceState.getString("username")
+            );
+            textInputUserEmail.getEditText().setText(
+                    savedInstanceState.getString("useremail")
+            );
+            textInputCorpWebsite.getEditText().setText(
+                    savedInstanceState.getString("corpwebsite")
+            );
+            textInputNote.getEditText().setText(
+                    savedInstanceState.getString("note")
+            );
+
+            lngOpenDate = savedInstanceState.getLong("opendate");
+//            Log.d(TAG, "instance of " + savedInstanceState.getString("corpName"));
+        }
     }
 
 
@@ -185,14 +205,14 @@ public class AddEditProfileActivity extends AppCompatActivity {
         String emailInput = textInputUserEmail.getEditText().getText().toString().trim();
 
         if (emailInput.isEmpty()) {
-            textInputUserEmail.setError("Field can't be empty");
+            textInputUserEmail.getEditText().setError("Email is required");
             return false;
         } else if (!Patterns.EMAIL_ADDRESS.matcher(emailInput).matches()) {
-            textInputUserEmail.setError("Please enter a valid email address");
+            textInputUserEmail.getEditText().setError("Please enter a valid email address");
             return false;
         } else {
 //            Log.d(TAG, "xxxxxxxxxx ");
-            textInputUserEmail.setError(null);
+            textInputUserEmail.getEditText().setError(null);
 //            textInputUserEmail.setErrorEnabled(false);
             return true;
         }
@@ -202,10 +222,10 @@ public class AddEditProfileActivity extends AppCompatActivity {
         String usernameInput = textInputUserName.getEditText().getText().toString().trim();
 
         if (usernameInput.isEmpty()) {
-            textInputUserName.setError("Field can't be empty");
+            textInputUserName.getEditText().setError("User name can't be empty");
             return false;
         } else {
-            textInputUserName.setError(null);
+            textInputUserName.getEditText().setError(null);
             return true;
         }
     }
@@ -214,10 +234,15 @@ public class AddEditProfileActivity extends AppCompatActivity {
         String corpnameInput = textInputCorpName.getEditText().getText().toString().trim();
 
         if (corpnameInput.isEmpty()) {
-            textInputCorpName.setError("Field can't be empty");
+            Log.d(TAG, "corp name empty");
+//            textInputCorpName.getEditText().setFocusable(true);
+            textInputCorpName.getEditText().setError("Corp name is required");
+//            textInputCorpName.setErrorEnabled(true);
+//            textInputCorpName.getEditText().requestFocus();
             return false;
         } else {
-            textInputCorpName.setError(null);
+            textInputCorpName.getEditText().setError(null);
+//            textInputCorpName.setErrorEnabled(false);
             return true;
         }
     }
@@ -232,16 +257,22 @@ public class AddEditProfileActivity extends AppCompatActivity {
         if (corpWebsiteInput.isEmpty()) {
             return true;
         } else if (!Patterns.WEB_URL.matcher(corpWebsiteInput).matches()) {
-            textInputCorpWebsite.setError("Please enter a valid corp website");
+            textInputCorpWebsite.getEditText().setError("Please enter a valid corp website");
+            return false;
+        } else if (!corpWebsiteInput.startsWith("http")) {
+            textInputCorpWebsite.getEditText().setError("Websites must start with http");
             return false;
         } else {
-            textInputCorpName.setError(null);
+            textInputCorpName.getEditText().setError(null);
             return true;
         }
 }
 
     private void saveProfile() {
-        if (!validateCorpName() | !validateUserName() | !validateUserEmail() | !validateCorpWebsite()) {
+        if (!validateCorpName()) {
+            return;
+        }
+        if (!validateUserName() | !validateUserEmail() | !validateCorpWebsite()) {
             return;
         }
         String corpName = textInputCorpName.getEditText().getText().toString().trim();
@@ -303,7 +334,17 @@ public class AddEditProfileActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
 
-
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("corpName", textInputCorpName.getEditText().getText().toString().trim());
+        Log.d(TAG, "saved instance " + textInputCorpName.getEditText().getText().toString().trim());
+        outState.putString("username", textInputUserName.getEditText().getText().toString().trim());
+        outState.putString("useremail", textInputUserEmail.getEditText().getText().toString().trim());
+        outState.putString("corpwebsite", textInputCorpWebsite.getEditText().getText().toString().trim());
+        outState.putString("note", textInputNote.getEditText().getText().toString().trim());
+        outState.putLong("openlong", lngOpenDate);
     }
 }
