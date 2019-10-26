@@ -31,15 +31,17 @@ public class AppDialog extends AppCompatDialogFragment {
     public static final String DIALOG_POSITIVE_RID = "positive_rid";
     public static final String DIALOG_NEGATIVE_RID = "negative_rid";
 
+
     public static final int DIALOG_YES_NO = 1;
     public static final int DIALOG_ACCOUNT_LIST_OPTIONS = 2;
     public static final int DIALOG_ACCOUNT_FILE_OPTIONS = 3;
     public static final int DIALOG_OK = 4;
 
     public static final int DIALOG_ID_CONFIRM_DELETE_ACCOUNT = 1;
-    public static final int DIALOG_ID_REQUEST_GEN_PASSWORD_LENGTH = 2;
-    public static final int DIALOG_ID_ACCOUNT_ACTIONS_LIST = 3;
-    public static final int DIALOG_ID_ASK_IF_NEED_DICTIONARY_REBUILD = 4;
+    public static final int DIALOG_ID_CONFIRM_DELETE_PROFILE = 2;
+    public static final int DIALOG_ID_REQUEST_GEN_PASSWORD_LENGTH = 3;
+    public static final int DIALOG_ID_ACCOUNT_ACTIONS_LIST = 4;
+    public static final int DIALOG_ID_ASK_IF_NEED_DICTIONARY_REBUILD = 5;
     public static final int DIALOG_ID_CONFIRM_TO_IMPORT = 6;
     public static final int DIALOG_ID_CONFIRM_TO_EXPORT = 7;
     public static final int DIALOG_ID_ASK_REFRESH_SEARCHDB = 8;

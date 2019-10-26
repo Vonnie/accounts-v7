@@ -278,8 +278,10 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                profileViewModel.delete(adapter.getProfileAt(viewHolder.getAdapterPosition()));
-                Toast.makeText(MainActivity.this, "Profile deleted", Toast.LENGTH_SHORT).show();
+                Profile profile = adapter.getProfileAt(viewHolder.getAdapterPosition());
+                confirmDeleteProfile(profile);
+//                profileViewModel.delete(adapter.getProfileAt(viewHolder.getAdapterPosition()));
+//                Toast.makeText(MainActivity.this, "Profile deleted", Toast.LENGTH_SHORT).show();
             }
         }).attachToRecyclerView(recyclerView);
 
@@ -1737,6 +1739,36 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    private void confirmDeleteProfile(Profile profile) {
+//        Log.d(TAG, "deleteAccount: ");
+//        if (account == null) {
+//            Toast.makeText(this,
+//                    "No Account selected to delete",
+//                    Toast.LENGTH_LONG).show();
+//            return;
+//        }
+//        if (accountSelectedPos == -1) {
+//            Toast.makeText(this,
+//                    "Must select an account to delete",
+//                    Toast.LENGTH_LONG).show();
+//            return;
+//        }
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        AppDialog newFragment = AppDialog.newInstance();
+        Bundle args = new Bundle();
+        args.putInt(AppDialog.DIALOG_ID, AppDialog.DIALOG_ID_CONFIRM_DELETE_PROFILE);
+        args.putInt(AppDialog.DIALOG_TYPE, AppDialog.DIALOG_YES_NO);
+        args.putString(AppDialog.DIALOG_MESSAGE, getString(R.string.deldiag_message));
+        args.putString(AppDialog.DIALOG_SUB_MESSAGE, getString(R.string.deldiag_sub_message, profile.getCorpName(), profile.getPassportId()));
+        args.putInt(AppDialog.DIALOG_ACCOUNT_ID, profile.getPassportId());
+        args.putInt(AppDialog.DIALOG_POSITIVE_RID, R.string.deldiag_positive_caption);
+
+        newFragment.setArguments(args);
+        newFragment.show(fragmentManager, "dialog");
+
+
+    }
+
 
 //    private void linkToInternet(String webpage) {
 //        Log.d(TAG, "linkToInternet: " + webpage);
@@ -2229,6 +2261,8 @@ public class MainActivity extends AppCompatActivity
 //        super.onSaveInstanceState(outState);
 //    }
 
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.d(TAG, "onActivityResult: starts");
@@ -2702,6 +2736,15 @@ public class MainActivity extends AppCompatActivity
                 Log.d(TAG, "onPositiveDialogResult: ready to delete " + acctId);
                 deleteAccount(acctId);
                 break;
+            case AppDialog.DIALOG_ID_CONFIRM_DELETE_PROFILE:
+                int profileId = args.getInt(AppDialog.DIALOG_ACCOUNT_ID);
+                for ( Profile item : profileListFull) {
+                    if (item.getPassportId() == profileId) {
+                        profileViewModel.delete(item);
+                        break;
+                    }
+                }
+                break;
 //            case AppDialog.DIALOG_ID_CONFIRM_ADD_ACCOUNT:
 //                acctEditRequest(-1);
 //                break;
@@ -2740,6 +2783,9 @@ public class MainActivity extends AppCompatActivity
                 case AppDialog.DIALOG_ID_CANCEL_EDIT:
             case AppDialog.DIALOG_ID_CANCEL_EDIT_UP:
             case AppDialog.DIALOG_ID_CONFIRM_ADD_ACCOUNT:
+                break;
+            case AppDialog.DIALOG_ID_CONFIRM_DELETE_PROFILE:
+                adapter.notifyDataSetChanged();
                 break;
         }
 
