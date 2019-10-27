@@ -192,7 +192,7 @@ public class AccountListActivityFragment extends Fragment
 
         profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
 
-        profileViewModel.getAllProfiles().observe(this, new Observer<List<Profile>>() {
+        profileViewModel.getAllProfiles(MainActivity.LISTSORT_CORP_NAME).observe(this, new Observer<List<Profile>>() {
             @Override
             public void onChanged(List<Profile> profiles) {
                 adapter.submitList(profiles);

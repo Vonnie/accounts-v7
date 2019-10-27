@@ -18,7 +18,9 @@ import com.kinsey.passwords.tools.AppDialog;
 import com.kinsey.passwords.tools.ProfileJsonListIO;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.ShareActionProvider;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.MenuItemCompat;
 
 import android.os.Environment;
 import android.os.Handler;
@@ -56,6 +58,7 @@ public class FileViewActivity extends AppCompatActivity
     boolean importRefreshReq = false;
     public static File dirStorage;
     View fileViewActivityView;
+    ShareActionProvider myShareActionProvider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,6 +144,9 @@ public class FileViewActivity extends AppCompatActivity
             item.setEnabled(false);
         }
 
+        MenuItem shareItem = menu.findItem(R.id.vw_shared);
+        myShareActionProvider =
+                (ShareActionProvider) MenuItemCompat.getActionProvider(shareItem);
 
         return true;
     }
@@ -566,13 +572,15 @@ public class FileViewActivity extends AppCompatActivity
         emailintent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 //        emailintent.putExtra(Intent.EXTRA_TEXT, "My Accounts Attachments");
 
-        try {
-            startActivity(Intent.createChooser(emailintent, "Send your accounts.json..."));
-        } catch (ActivityNotFoundException e) {
-            Toast.makeText(FileViewActivity.this,
-                    "Unable to get the shared menu",
-                    Toast.LENGTH_LONG).show();
-        }
+
+        myShareActionProvider.setShareIntent(emailintent);
+//        try {
+//            startActivity(Intent.createChooser(emailintent, "Send your accounts.json..."));
+//        } catch (ActivityNotFoundException e) {
+//            Toast.makeText(FileViewActivity.this,
+//                    "Unable to get the shared menu",
+//                    Toast.LENGTH_LONG).show();
+//        }
 
 //        Toast.makeText(FileViewActivityV1.this,
 //                "Exported file shared sent",

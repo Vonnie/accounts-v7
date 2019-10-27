@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.kinsey.passwords.MainActivity;
 import com.kinsey.passwords.items.Profile;
 
 import java.util.List;
@@ -46,8 +47,25 @@ public class ProfileRepository {
         new DeleteAllProfilesAsyncTask(profileDao).execute();
     }
 
-    public LiveData<List<Profile>> getAllProfiles() {
-        allProfiles = profileDao.getAllProfiles();
+    public LiveData<List<Profile>> getAllProfiles(int listsortOrder) {
+        switch (listsortOrder) {
+            case MainActivity.LISTSORT_CORP_NAME:
+                allProfiles = profileDao.getAllProfilesByCorpName();
+                break;
+            case MainActivity.LISTSORT_PASSPORT_ID:
+                allProfiles = profileDao.getAllProfilesByPassportId();
+                break;
+            case MainActivity.LISTSORT_OPEN_DATE:
+                allProfiles = profileDao.getAllProfilesByOpenDate();
+                break;
+            case MainActivity.LISTSORT_CUSTOM_SORT:
+                allProfiles = profileDao.getAllProfilesCustomSort();
+                break;
+            default:
+                allProfiles = profileDao.getAllProfilesByCorpName();
+                break;
+        }
+
         return allProfiles;
     }
 

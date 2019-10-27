@@ -26,7 +26,7 @@ public class ProfileViewModel extends AndroidViewModel
     public ProfileViewModel(@NonNull Application application) {
         super(application);
         repository = new ProfileRepository(application);
-        allProfiles = repository.getAllProfiles();
+//        allProfiles = repository.getAllProfiles();
     }
 
     public void insertProfile(Profile profile) {
@@ -51,8 +51,8 @@ public class ProfileViewModel extends AndroidViewModel
     }
 
 
-    public LiveData<List<Profile>> getAllProfiles() {
-        allProfiles = repository.getAllProfiles();
+    public LiveData<List<Profile>> getAllProfiles(int listsortOrder) {
+        allProfiles = repository.getAllProfiles(listsortOrder);
         return allProfiles;
     }
 

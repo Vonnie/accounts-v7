@@ -38,6 +38,9 @@ public interface ProfileDao {
     @Query("SELECT * FROM Passport ORDER BY corporation_name COLLATE NOCASE ASC")
     LiveData<List<Profile>> getAllProfiles();
 
+    @Query("SELECT * FROM Passport ORDER BY corporation_name COLLATE NOCASE ASC")
+    LiveData<List<Profile>> getAllProfilesByCorpName();
+
     @Query("SELECT * FROM Passport ORDER BY passport_id ASC")
     LiveData<List<Profile>> getAllProfilesByPassportId();
 

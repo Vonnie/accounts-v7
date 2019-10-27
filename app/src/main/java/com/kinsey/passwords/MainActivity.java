@@ -1,12 +1,5 @@
 package com.kinsey.passwords;
 
-//import android.support.v4.app.DialogFragment;
-//import android.support.v4.app.Fragment;
-//import android.support.v4.app.FragmentManager;
-//import android.support.v7.app.AlertDialog;
-//import android.support.v7.app.AppCompatActivity;
-//import android.support.v7.widget.Toolbar;
-
 
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
@@ -90,7 +83,7 @@ public class MainActivity extends AppCompatActivity
         AccountListActivityFragment.OnAccountListClickListener,
         AddEditActivityFragment.OnListenerClicked,
         AppDialog.DialogEvents,
-        DatePickerDialog.OnDateSetListener{
+        DatePickerDialog.OnDateSetListener {
 
 //    Filterable,
 //    AccountRecyclerViewAdapter.OnAccountClickListener,
@@ -116,7 +109,7 @@ public class MainActivity extends AppCompatActivity
 
 
     private List<Profile> profileListFull;
-//    private List<Profile> profileList;
+    //    private List<Profile> profileList;
     private boolean isCustomSort = false;
 
     private String feedUrl = "http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topTvEpisodes/xml";
@@ -125,12 +118,11 @@ public class MainActivity extends AppCompatActivity
     public static final String STATE_URL = "feedUrl";
     public static final String STATE_LIMIT = "feedLimit";
     private ListView listApps;
-//    private ViewPager mViewPager;
+    //    private ViewPager mViewPager;
     private int fragListPos = -1;
     private int frag1Pos = 0;
     private int frag2Pos = 1;
     private int frag3Pos = 2;
-
 
 
     public static final int ACCOUNT_LOADER_ID = 1;
@@ -153,6 +145,12 @@ public class MainActivity extends AppCompatActivity
     private final String SORTED_LIST_ORDER = "SortedListOrder";
     public final static String SEARCH_DICT_REFRESHED = "SearchDictRefreshed";
 
+    public static final int LISTSORT_CORP_NAME = 1;
+    public static final int LISTSORT_PASSPORT_ID = 2;
+    public static final int LISTSORT_OPEN_DATE = 3;
+    public static final int LISTSORT_CUSTOM_SORT = 4;
+    private int listsortOrder = LISTSORT_CORP_NAME;
+
     Menu menu;
     MenuItem miActionProgressItem;
     ProgressBar progressBar;
@@ -166,14 +164,23 @@ public class MainActivity extends AppCompatActivity
     private boolean isResumed = false;
 
     private int accountMode = AccountsContract.ACCOUNT_ACTION_ADD;
-//    View addEditLayout;
+    //    View addEditLayout;
 //    View addEditLayoutScroll;
     View mainFragment;
 
 
+    RecyclerView recyclerView;
     public static ProfileViewModel profileViewModel;
 
     public static ProfileAdapter adapter;
+
+//    public static ProfileAdapter adapterCorpName = new ProfileAdapter();
+//
+//    public static ProfileAdapter adapterOpenDate = new ProfileAdapter();
+//
+//    public static ProfileAdapter adapterPassportId = new ProfileAdapter();
+//
+//    public static ProfileAdapter adapterCustomSort = new ProfileAdapter();
 
     //    private AccountListActivityFragment fragList;
 //    private static AccountPlaceholderFrag1 frag1;
@@ -194,12 +201,14 @@ public class MainActivity extends AppCompatActivity
         TOPTVEPISODE,
         TOPTVSEASONS;
     }
+
     ListHomeType currList = ListHomeType.LISTACCOUNTS;
 
     private enum AppFragType {
         ACCOUNTEDIT,
         PASSWORDS;
     }
+
     AppFragType currFrag = AppFragType.ACCOUNTEDIT;
 
     private static String pattern_ymdtime = "yyyy-MM-dd HH:mm:ss.0";
@@ -235,7 +244,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        RecyclerView recyclerView = findViewById(R.id.recycler_view);
+        recyclerView = findViewById(R.id.recycler_view);
 //        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
 
@@ -252,11 +261,12 @@ public class MainActivity extends AppCompatActivity
 
 
         this.adapter = new ProfileAdapter();
+//        adapter = adapterCorpName;
         recyclerView.setAdapter(adapter);
 
         profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
 
-        profileViewModel.getAllProfiles().observe(this, new Observer<List<Profile>>() {
+        profileViewModel.getAllProfiles(listsortOrder).observe(this, new Observer<List<Profile>>() {
             @Override
             public void onChanged(List<Profile> profiles) {
 
@@ -320,15 +330,15 @@ public class MainActivity extends AppCompatActivity
                     return;
                 }
 
-                if (toViewHolder != null) {
-                    toViewHolder.itemView.setBackgroundColor(
-                            ContextCompat.getColor(getApplicationContext(), R.color.primaryDarkColor)
-                    );
-                }
+//                if (toViewHolder != null) {
+//                    toViewHolder.itemView.setBackgroundColor(
+//                            ContextCompat.getColor(getApplicationContext(), R.color.primaryDarkColor)
+//                    );
+//                }
 
-                target.itemView.setBackgroundColor(
-                        ContextCompat.getColor(getApplicationContext(), R.color.secondaryDarkColor)
-                );
+//                target.itemView.setBackgroundColor(
+//                        ContextCompat.getColor(getApplicationContext(), R.color.secondaryDarkColor)
+//                );
 
                 toViewHolder = target;
 
@@ -361,71 +371,76 @@ public class MainActivity extends AppCompatActivity
                     }
 
                 } else {
-                    if (fromViewHolder != null) {
-                        fromViewHolder.itemView.setBackgroundColor(
+                    if (fromViewHolder == null) {
+                        return;
+                    }
+                    if (toViewHolder == null) {
+                        return;
+                    }
+                    fromViewHolder.itemView.setBackgroundColor(
+                            ContextCompat.getColor(getApplicationContext(), R.color.primaryDarkColor)
+                    );
+                    if (toViewHolder != null) {
+                        toViewHolder.itemView.setBackgroundColor(
                                 ContextCompat.getColor(getApplicationContext(), R.color.primaryDarkColor)
                         );
-                        if (toViewHolder != null) {
-                            toViewHolder.itemView.setBackgroundColor(
-                                    ContextCompat.getColor(getApplicationContext(), R.color.primaryDarkColor)
-                            );
-                        } else {
-                            return;
-                        }
-                        int fromPos = fromViewHolder.getAdapterPosition();
-                        int toPos = toViewHolder.getAdapterPosition();
-                        if (fromPos == toPos) {
-                            return;
-                        }
+                    }
+                    int fromPos = fromViewHolder.getAdapterPosition();
+                    int toPos = toViewHolder.getAdapterPosition();
+                    if (fromPos == toPos) {
+                        return;
+                    }
 
 
-                        Log.d(TAG, "from:to " + fromPos + ":" + toPos);
+                    Log.d(TAG, "from:to " + fromPos + ":" + toPos);
 
-                        Profile reposProfile = adapter.getProfileAt(fromViewHolder.getAdapterPosition());
+                    Profile reposProfile = adapter.getProfileAt(fromViewHolder.getAdapterPosition());
 
-                        int lowPos = fromPos < toPos ? fromPos : toPos;
-                        int highPos = fromPos > toPos ? fromPos : toPos;
-                        Log.d(TAG, "low:high " + lowPos + ":" + highPos);
+                    int lowPos = fromPos < toPos ? fromPos : toPos;
+                    int highPos = fromPos > toPos ? fromPos : toPos;
+                    Log.d(TAG, "low:high " + lowPos + ":" + highPos);
 
-                        int nextSeq = -1;
-                        if (lowPos == 0) {
-                            nextSeq = 1;
-                        } else {
-                            Profile profileNext = adapter.getProfileAt(lowPos);
-                            nextSeq = profileNext.getSequence();
-                        }
+                    int nextSeq = -1;
+                    if (lowPos == 0) {
+                        nextSeq = 1;
+                    } else {
+                        Profile profileNext = adapter.getProfileAt(lowPos);
+                        nextSeq = profileNext.getSequence();
+                    }
 
-                        List<Profile> modifyProfileList = new ArrayList<Profile>();
-                        int currentPos = lowPos;
+                    List<Profile> modifyProfileList = new ArrayList<Profile>();
+                    int currentPos = lowPos;
 
-                        if (currentPos == toPos) {
-                            reposProfile.setSequence(nextSeq);
-                            modifyProfileList.add(reposProfile);
-                            nextSeq += 1;
-                            while (currentPos < highPos) {
-                                Profile profileSeq = adapter.getProfileAt(currentPos);
-                                profileSeq.setSequence(nextSeq);
-                                modifyProfileList.add(profileSeq);
-                                currentPos += 1;
-                                nextSeq += 1;
-                            }
-                        } else {
+                    if (currentPos == toPos) {
+                        reposProfile.setSequence(nextSeq);
+                        modifyProfileList.add(reposProfile);
+                        nextSeq += 1;
+                        while (currentPos < highPos) {
+                            Profile profileSeq = adapter.getProfileAt(currentPos);
+                            profileSeq.setSequence(nextSeq);
+                            modifyProfileList.add(profileSeq);
                             currentPos += 1;
-                            while (currentPos < highPos) {
-                                Profile profileSeq = adapter.getProfileAt(currentPos);
-                                profileSeq.setSequence(nextSeq);
-                                modifyProfileList.add(profileSeq);
-                                nextSeq += 1;
-                                currentPos += 1;
-                            }
-                            reposProfile.setSequence(nextSeq);
-                            modifyProfileList.add(reposProfile);
+                            nextSeq += 1;
                         }
+                    } else {
+                        currentPos += 1;
+                        while (currentPos < highPos) {
+                            Profile profileSeq = adapter.getProfileAt(currentPos);
+                            profileSeq.setSequence(nextSeq);
+                            modifyProfileList.add(profileSeq);
+                            nextSeq += 1;
+                            currentPos += 1;
+                        }
+                        reposProfile.setSequence(nextSeq);
+                        modifyProfileList.add(reposProfile);
+                    }
 
 
-                        for ( Profile item : modifyProfileList) {
-                            profileViewModel.update(item);
-                        }
+                    for (Profile item : modifyProfileList) {
+                        profileViewModel.update(item);
+                    }
+
+                    recyclerView.scrollToPosition(toPos);
 //                        suggest.setSequence(toSeq);
 //                        suggestTarget.setSequence(fromSeq);
 //                        Log.d(TAG, "onMovePos " + fromViewHolder.getAdapterPosition() + ":" + toViewHolder.getAdapterPosition());
@@ -437,14 +452,13 @@ public class MainActivity extends AppCompatActivity
 //                        suggestViewModel.update(suggest);
 //                        suggestViewModel.update(suggestTarget);
 
-                        Log.d(TAG, "min:max " + minPos + ":" + maxPos);
-//                        adapter.notifyItemMoved(minPos, maxPos);
-                        adapter.notifyDataSetChanged();
+//                        Log.d(TAG, "min:max " + minPos + ":" + maxPos);
+//                    adapter.notifyItemMoved(fromPos, toPos);
+//                        adapter.notifyDataSetChanged();
 
-                        fromViewHolder = null;
-                    }
+
+                    fromViewHolder = null;
                 }
-
 
 
                 super.onSelectedChanged(viewHolder, actionState);
@@ -474,6 +488,9 @@ public class MainActivity extends AppCompatActivity
         isLandscape = (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE);
 //        Log.d(TAG, "onCreate: twoPane is " + isLandscape);
 
+        if (savedInstanceState != null) {
+            setMenuItemChecked(R.id.menuacct_sort_corpname, true);
+        }
 
 //        listApps = (ListView) findViewById(R.id.xmlListView);
 //        if (savedInstanceState != null) {
@@ -493,7 +510,6 @@ public class MainActivity extends AppCompatActivity
 //                acctEditRequest(-1);
 //            }
 //        });
-
 
 
 //        FragmentManager fragmentManager = getSupportFragmentManager();
@@ -738,7 +754,7 @@ public class MainActivity extends AppCompatActivity
 
 //        Log.d(TAG, "onCreateOptionsMenu: activated " + mSearchView.isActivated());
 
-        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener(){
+        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 Log.d(TAG, "onQueryTextSubmit: called " + query);
@@ -927,13 +943,23 @@ public class MainActivity extends AppCompatActivity
                 }
 
                 isCustomSort = false;
-                profileViewModel.getAllProfiles().observe(this, new Observer<List<Profile>>() {
+
+                listsortOrder = LISTSORT_CORP_NAME;
+//                adapter = adapterCorpName;
+//                recyclerView.setAdapter(adapter);
+
+                profileViewModel.getAllProfiles(listsortOrder).observe(this, new Observer<List<Profile>>() {
                     @Override
                     public void onChanged(List<Profile> profiles) {
                         profileListFull = new ArrayList<>(profiles);
                         adapter.submitList(profiles);
                     }
+
                 });
+
+                recyclerView.scrollToPosition(0);
+                this.adapter.notifyDataSetChanged();
+
 
 //                resortList(AccountsContract.ACCOUNT_LIST_BY_CORP_NAME);
                 break;
@@ -944,7 +970,12 @@ public class MainActivity extends AppCompatActivity
                 }
 
                 isCustomSort = false;
-                profileViewModel.getAllProfilesByOpenDate().observe(this, new Observer<List<Profile>>() {
+
+                listsortOrder = LISTSORT_OPEN_DATE;
+//                adapter = adapterOpenDate;
+//                recyclerView.setAdapter(adapter);
+
+                profileViewModel.getAllProfiles(listsortOrder).observe(this, new Observer<List<Profile>>() {
                     @Override
                     public void onChanged(List<Profile> profiles) {
                         profileListFull = new ArrayList<>(profiles);
@@ -952,6 +983,8 @@ public class MainActivity extends AppCompatActivity
                     }
                 });
 
+                recyclerView.scrollToPosition(0);
+                this.adapter.notifyDataSetChanged();
 
 //                resortList(AccountsContract.ACCOUNT_LIST_BY_OPEN_DATE);
                 break;
@@ -962,13 +995,21 @@ public class MainActivity extends AppCompatActivity
                 }
 
                 isCustomSort = false;
-                profileViewModel.getAllProfilesByPassportId().observe(this, new Observer<List<Profile>>() {
-                    @Override
-                    public void onChanged(List<Profile> profiles) {
-                        profileListFull = new ArrayList<>(profiles);
-                        adapter.submitList(profiles);
-                    }
-                });
+
+                listsortOrder = LISTSORT_PASSPORT_ID;
+//                adapter = adapterPassportId;
+//                recyclerView.setAdapter(adapter);
+
+//                profileViewModel.getAllProfiles(listsortOrder).observe(this, new Observer<List<Profile>>() {
+//                    @Override
+//                    public void onChanged(List<Profile> profiles) {
+//                        profileListFull = new ArrayList<>(profiles);
+//                        adapter.submitList(profiles);
+//                    }
+//                });
+
+                recyclerView.scrollToPosition(0);
+                this.adapter.notifyDataSetChanged();
 
 //                resortList(AccountsContract.ACCOUNT_LIST_BY_PASSPORT_ID);
                 break;
@@ -979,13 +1020,29 @@ public class MainActivity extends AppCompatActivity
                 }
 
                 isCustomSort = true;
-                profileViewModel.getAllProfilesCustomSort().observe(this, new Observer<List<Profile>>() {
+
+
+                listsortOrder = LISTSORT_CUSTOM_SORT;
+//                this.adapterCustomSort = new ProfileAdapter();
+//                recyclerView.setAdapter(adapterCustomSort);
+
+//                adapter = adapterCustomSort;
+//                recyclerView.setAdapter(adapter);
+//                recyclerView.swapAdapter(adapterCustomSort, true);
+
+                profileViewModel.getAllProfiles(listsortOrder).observe(this, new Observer<List<Profile>>() {
                     @Override
                     public void onChanged(List<Profile> profiles) {
                         profileListFull = new ArrayList<>(profiles);
                         adapter.submitList(profiles);
                     }
                 });
+
+                recyclerView.scrollToPosition(0);
+                this.adapter.notifyDataSetChanged();
+
+//                this.adapter = new ProfileAdapter();
+//                recyclerView.setAdapter(adapter);
 
 //                resortList(AccountsContract.ACCOUNT_LIST_BY_SEQUENCE);
                 break;
@@ -1044,7 +1101,7 @@ public class MainActivity extends AppCompatActivity
                 break;
 
 
-                //            case R.id.menumain_refresh:
+            //            case R.id.menumain_refresh:
 //                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 //                sharedPreferences.edit().putString(SELECTION_QUERY, "").apply();
 //                sharedPreferences.edit().putInt(SELECTION_ONE_ITEM, -1).apply();
@@ -1060,7 +1117,6 @@ public class MainActivity extends AppCompatActivity
 //
 //                Toast.makeText(this, "Refreshed", Toast.LENGTH_LONG).show();
 //                break;
-
 
 
 //                Log.d(TAG, "onOptionsItemSelected: ifSearch " + item.isChecked());
@@ -1182,9 +1238,6 @@ public class MainActivity extends AppCompatActivity
 //
 //                    return true;
 //                }
-
-
-
 
 
 //
@@ -1327,7 +1380,7 @@ public class MainActivity extends AppCompatActivity
 //    @Override
 //    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 //
- //
+    //
 //    @Override
 //    public void onPageSelected(int position) {
 //        Log.d(TAG, "onPageSelected: " + position);
@@ -1726,13 +1779,13 @@ public class MainActivity extends AppCompatActivity
         Log.d(TAG, "onAccountLong: " + account);
 //        showAboutDialog();
 
-            @SuppressLint("InflateParams") View messageView = getLayoutInflater().inflate(R.layout.activity_itemview, null, false);
+        @SuppressLint("InflateParams") View messageView = getLayoutInflater().inflate(R.layout.activity_itemview, null, false);
 
-            final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle(R.string.app_name);
-            builder.setIcon(R.mipmap.ic_launcher);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.app_name);
+        builder.setIcon(R.mipmap.ic_launcher);
 
-            builder.setView(messageView);
+        builder.setView(messageView);
 
 //            builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
 //                @Override
@@ -1744,34 +1797,34 @@ public class MainActivity extends AppCompatActivity
 //                }
 //            });
 
-            mDialog = builder.create();
-            mDialog.setCanceledOnTouchOutside(true);
+        mDialog = builder.create();
+        mDialog.setCanceledOnTouchOutside(true);
 
-            final EditText tvName = messageView.findViewById(R.id.txt_corp_name);
-            tvName.setText(account.getCorpName());
-            TextView tvId = (TextView) messageView.findViewById(R.id.txt_id);
+        final EditText tvName = messageView.findViewById(R.id.txt_corp_name);
+        tvName.setText(account.getCorpName());
+        TextView tvId = (TextView) messageView.findViewById(R.id.txt_id);
 //            tvId.setText(String.valueOf("AcctId " + account.getId()));
         tvId.setText(String.valueOf("AcctId " + account.getPassportId()));
 //            final EditText tvWebsite = messageView.findViewById(R.id.addedit_corp_website);
 //            tvWebsite.setText(account.getCorpWebsite());
 
-            ImageButton btnEdit = messageView.findViewById(R.id.imgbtn_edit);
-            btnEdit.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.d(TAG, "onClick: for edit");
-                    acctEditRequest(account.getId());
-                    mDialog.dismiss();
-                }
-            });
+        ImageButton btnEdit = messageView.findViewById(R.id.imgbtn_edit);
+        btnEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "onClick: for edit");
+                acctEditRequest(account.getId());
+                mDialog.dismiss();
+            }
+        });
 
-            ImageButton btnSave = messageView.findViewById(R.id.imgbtn_save);
-            btnSave.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.d(TAG, "onClick: for edit");
-                    String prevCorpName = account.getCorpName();
-                    account.setCorpName(tvName.getText().toString());
+        ImageButton btnSave = messageView.findViewById(R.id.imgbtn_save);
+        btnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "onClick: for edit");
+                String prevCorpName = account.getCorpName();
+                account.setCorpName(tvName.getText().toString());
 //                    if (!tvWebsite.getText().toString().startsWith("")) {
 //                        if (tvWebsite.getText().toString().startsWith("http://") ||
 //                                tvWebsite.getText().toString().startsWith("https://")) {
@@ -1781,18 +1834,18 @@ public class MainActivity extends AppCompatActivity
 //                            return;
 //                        }
 //                    }
-                    updateCorp(account);
-                    mDialog.dismiss();
-                    if (isLandscape) {
-                        removeEditing();
-                    }
+                updateCorp(account);
+                mDialog.dismiss();
+                if (isLandscape) {
+                    removeEditing();
+                }
 
 //                    if (!prevCorpName.equals(account.getCorpName())) {
 //                        Log.d(TAG, "onClick: corpname chg to refresh search");
 //                        searchListRequest();
 //                    }
-                }
-            });
+            }
+        });
 
         ImageButton btnDelete = messageView.findViewById(R.id.imgbtn_delete);
         btnDelete.setOnClickListener(new View.OnClickListener() {
@@ -1831,7 +1884,7 @@ public class MainActivity extends AppCompatActivity
 //                });
 //            }
 
-            mDialog.show();
+        mDialog.show();
 
 //        fragAppDialog = new AppItem();
 ////        currentFragClass = fragCurrencyCountry.getClass().toString();
@@ -1862,7 +1915,7 @@ public class MainActivity extends AppCompatActivity
     private void removeEditing() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         Fragment editFragment = fragmentManager.findFragmentById(R.id.task_details_container);
-        if(editFragment != null) {
+        if (editFragment != null) {
 
             getSupportFragmentManager().beginTransaction()
                     .remove(editFragment)
@@ -2075,18 +2128,18 @@ public class MainActivity extends AppCompatActivity
 
         try {
             accountMode = AccountsContract.ACCOUNT_ACTION_CHG;
-    //        setMenuItemVisible(R.id.menuacct_save, true);
+            //        setMenuItemVisible(R.id.menuacct_save, true);
             currFrag = AppFragType.ACCOUNTEDIT;
             AddEditActivityFragment editFragment = new AddEditActivityFragment();
-    //        FragmentManager fragmentManager = getSupportFragmentManager();
-    //        AddEditActivityFragment editFragment = (AddEditActivityFragment)fragmentManager.findFragmentById(R.id.task_details_container);
+            //        FragmentManager fragmentManager = getSupportFragmentManager();
+            //        AddEditActivityFragment editFragment = (AddEditActivityFragment)fragmentManager.findFragmentById(R.id.task_details_container);
 
-    //        if (editFragment == null) {
-    //            Log.d(TAG, "acctEditRequest: create add/edit");
-    //            editFragment = new AddEditActivityFragment();
-    //        }
+            //        if (editFragment == null) {
+            //            Log.d(TAG, "acctEditRequest: create add/edit");
+            //            editFragment = new AddEditActivityFragment();
+            //        }
             Bundle arguments = new Bundle();
-    //        arguments.putSerializable(Account.class.getSimpleName(), accountId);
+            //        arguments.putSerializable(Account.class.getSimpleName(), accountId);
             arguments.putInt(Account.class.getSimpleName(), accountId);
             editFragment.setArguments(arguments);
 
@@ -2103,7 +2156,7 @@ public class MainActivity extends AppCompatActivity
             View addEditLayoutScroll = findViewById(R.id.task_details_container_scroll);
             addEditLayout.setVisibility(View.VISIBLE);
             addEditLayoutScroll.setVisibility(View.VISIBLE);
-            if(!isLandscape) {
+            if (!isLandscape) {
                 mainFragment.setVisibility(View.GONE);
             }
         } catch (Exception e) {
@@ -2274,7 +2327,6 @@ public class MainActivity extends AppCompatActivity
         }
 
 
-
         Intent detailIntent = new Intent(this, AccountListActivity.class);
         detailIntent.putExtra(Account.class.getSimpleName(), sortorder);
         startActivityForResult(detailIntent, REQUEST_ACCOUNTS_LIST);
@@ -2357,7 +2409,6 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-
     private void profileRequest() {
         Log.d(TAG, "profileRequest: starts");
 
@@ -2390,7 +2441,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(DialogInterface dialog, int which) {
 //                Log.d(TAG, "onClick: Entering messageView.onClick, showing = " + mDialog.isShowing());
-                if(mDialog != null && mDialog.isShowing()) {
+                if (mDialog != null && mDialog.isShowing()) {
                     mDialog.dismiss();
                 }
             }
@@ -2413,7 +2464,7 @@ public class MainActivity extends AppCompatActivity
         tv.setText("v" + BuildConfig.VERSION_NAME);
 
         TextView about_url = (TextView) messageView.findViewById(R.id.about_url);
-        if(about_url != null) {
+        if (about_url != null) {
             about_url.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -2422,13 +2473,12 @@ public class MainActivity extends AppCompatActivity
                     intent.setData(Uri.parse(s));
                     try {
                         startActivity(intent);
-                    } catch(ActivityNotFoundException e) {
+                    } catch (ActivityNotFoundException e) {
                         Toast.makeText(MainActivity.this, "No browser application found, cannot visit world-wide web", Toast.LENGTH_LONG).show();
                     }
                 }
             });
         }
-
 
 
         mDialog.show();
@@ -2440,7 +2490,6 @@ public class MainActivity extends AppCompatActivity
 //        outState.putInt(STATE_LIMIT, feedLimit);
 //        super.onSaveInstanceState(outState);
 //    }
-
 
 
     @Override
@@ -2739,7 +2788,6 @@ public class MainActivity extends AppCompatActivity
 //        };
 
 
-
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -2867,7 +2915,7 @@ public class MainActivity extends AppCompatActivity
 //
 //                Toast.makeText(this, "Long click on item for more options", Toast.LENGTH_LONG).show();
 
-                    //                Intent detailIntent = new Intent(this, SearchActivityV1.class);
+                //                Intent detailIntent = new Intent(this, SearchActivityV1.class);
 //                detailIntent.putExtra(SearchActivityV1.class.getSimpleName(), true);
 //                startActivity(detailIntent);
                 break;
@@ -2879,12 +2927,12 @@ public class MainActivity extends AppCompatActivity
                 // If we're editing, remove the fragment. Otherwise, close the app
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 Fragment editFragment = fragmentManager.findFragmentById(R.id.task_details_container);
-                if(editFragment != null) {
+                if (editFragment != null) {
                     // we were not editing
                     getSupportFragmentManager().beginTransaction()
                             .remove(editFragment)
                             .commit();
-                    if(isLandscape) {
+                    if (isLandscape) {
 //                        Log.d(TAG, "onPositiveDialogResult: get list");
 //                        listFragment = (AccountListActivityFragment)
 //                                getSupportFragmentManager().findFragmentById(R.id.fragment);
@@ -2912,13 +2960,14 @@ public class MainActivity extends AppCompatActivity
                 break;
             case AppDialog.DIALOG_ID_CONFIRM_DELETE_ACCOUNT:
                 int acctId = args.getInt(AppDialog.DIALOG_ACCOUNT_ID);
-                if (BuildConfig.DEBUG && acctId == 0) throw new AssertionError("Account Id is zero");
+                if (BuildConfig.DEBUG && acctId == 0)
+                    throw new AssertionError("Account Id is zero");
                 Log.d(TAG, "onPositiveDialogResult: ready to delete " + acctId);
                 deleteAccount(acctId);
                 break;
             case AppDialog.DIALOG_ID_CONFIRM_DELETE_PROFILE:
                 int profileId = args.getInt(AppDialog.DIALOG_ACCOUNT_ID);
-                for ( Profile item : profileListFull) {
+                for (Profile item : profileListFull) {
                     if (item.getPassportId() == profileId) {
                         profileViewModel.delete(item);
                         break;
@@ -2960,7 +3009,7 @@ public class MainActivity extends AppCompatActivity
 //                startActivity(detailIntent);
                 break;
             case AppDialog.DIALOG_ID_LEAVE_APP:
-                case AppDialog.DIALOG_ID_CANCEL_EDIT:
+            case AppDialog.DIALOG_ID_CANCEL_EDIT:
             case AppDialog.DIALOG_ID_CANCEL_EDIT_UP:
             case AppDialog.DIALOG_ID_CONFIRM_ADD_ACCOUNT:
                 break;
@@ -2972,7 +3021,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void deleteAccount(int acctId) {
-        getContentResolver().delete(AccountsContract.buildIdUri((long)acctId), null, null);
+        getContentResolver().delete(AccountsContract.buildIdUri((long) acctId), null, null);
         if (!isLandscape) {
             FragmentManager fragmentManager = getSupportFragmentManager();
             Fragment fragment = fragmentManager.findFragmentById(R.id.task_details_container);
@@ -3170,7 +3219,7 @@ public class MainActivity extends AppCompatActivity
         AddEditActivityFragment editFragment = (AddEditActivityFragment) fragmentManager.findFragmentById(R.id.task_details_container);
 
 
-        if(editFragment == null) {
+        if (editFragment == null) {
             showConfirmationLeaveApp();
             return;
         }
@@ -3206,7 +3255,7 @@ public class MainActivity extends AppCompatActivity
 ////                returnToMain();
 //                return;
 //            }
-        }
+    }
 
 
 //            View mainFragment = findViewById(R.id.fragment);
