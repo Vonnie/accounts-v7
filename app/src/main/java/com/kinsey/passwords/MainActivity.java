@@ -27,6 +27,8 @@ import android.os.Handler;
 import android.preference.PreferenceManager;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -74,6 +76,8 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
+import static androidx.recyclerview.widget.ItemTouchHelper.ACTION_STATE_DRAG;
+
 //import static com.kinsey.passwords.SearchActivityV1.SEARCH_ACCOUNT;
 //import static com.kinsey.passwords.SearchActivityV1.SELECTION_QUERY;
 // ====================
@@ -113,6 +117,7 @@ public class MainActivity extends AppCompatActivity
 
     private List<Profile> profileListFull;
 //    private List<Profile> profileList;
+    private boolean isCustomSort = false;
 
     private String feedUrl = "http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topTvEpisodes/xml";
     private int feedLimit = 10;
@@ -262,18 +267,42 @@ public class MainActivity extends AppCompatActivity
 
 
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(
-                ItemTouchHelper.START | ItemTouchHelper.END,
+                ItemTouchHelper.START | ItemTouchHelper.END | ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.START | ItemTouchHelper.END,
                 ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT | ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.START | ItemTouchHelper.END) {
+
+            RecyclerView.ViewHolder fromViewHolder;
+            RecyclerView.ViewHolder toViewHolder;
+            int maxPos = 0, minPos = 0;
+
             @Override
             public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
 
-                Log.d(TAG, "onMove");
-                Profile profile = adapter.getProfileAt(viewHolder.getAdapterPosition());
-                profileViewModel.delete(adapter.getProfileAt(viewHolder.getAdapterPosition()));
-                profileViewModel.insertProfile(profile);
-                adapter.notifyItemMoved(viewHolder.getAdapterPosition(), target.getAdapterPosition());
+//                Log.d(TAG, "onMove");
+//                Profile profile = adapter.getProfileAt(viewHolder.getAdapterPosition());
+//                profileViewModel.delete(adapter.getProfileAt(viewHolder.getAdapterPosition()));
+//                profileViewModel.insertProfile(profile);
+//                adapter.notifyItemMoved(viewHolder.getAdapterPosition(), target.getAdapterPosition());
 
-                return false;
+                if (!isCustomSort) {
+                    return false;
+                }
+
+                if (target.getAdapterPosition() < minPos) {
+                    minPos = target.getAdapterPosition();
+                }
+                if (viewHolder.getAdapterPosition() < minPos) {
+                    minPos = viewHolder.getAdapterPosition();
+                }
+
+                if (target.getAdapterPosition() > maxPos) {
+                    maxPos = target.getAdapterPosition();
+                }
+                if (viewHolder.getAdapterPosition() > maxPos) {
+                    maxPos = viewHolder.getAdapterPosition();
+                }
+
+                return true;
+
             }
 
             @Override
@@ -282,6 +311,143 @@ public class MainActivity extends AppCompatActivity
                 confirmDeleteProfile(profile);
 //                profileViewModel.delete(adapter.getProfileAt(viewHolder.getAdapterPosition()));
 //                Toast.makeText(MainActivity.this, "Profile deleted", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onMoved(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, int fromPos, @NonNull RecyclerView.ViewHolder target, int toPos, int x, int y) {
+
+                if (!isCustomSort) {
+                    return;
+                }
+
+                if (toViewHolder != null) {
+                    toViewHolder.itemView.setBackgroundColor(
+                            ContextCompat.getColor(getApplicationContext(), R.color.primaryDarkColor)
+                    );
+                }
+
+                target.itemView.setBackgroundColor(
+                        ContextCompat.getColor(getApplicationContext(), R.color.secondaryDarkColor)
+                );
+
+                toViewHolder = target;
+
+
+                super.onMoved(recyclerView, viewHolder, fromPos, target, toPos, x, y);
+            }
+
+
+            @Override
+            public void onSelectedChanged(@Nullable RecyclerView.ViewHolder viewHolder, int actionState) {
+
+                if (!isCustomSort) {
+                    return;
+                }
+
+                if (actionState == ACTION_STATE_DRAG) {
+                    viewHolder.itemView.setBackgroundColor(
+                            ContextCompat.getColor(getApplicationContext(), R.color.secondaryLightColor)
+                    );
+                    fromViewHolder = viewHolder;
+                    minPos = adapter.getItemCount();
+                    maxPos = 0;
+
+                    if (viewHolder.getAdapterPosition() < minPos) {
+                        minPos = viewHolder.getAdapterPosition();
+                    }
+
+                    if (viewHolder.getAdapterPosition() > maxPos) {
+                        maxPos = viewHolder.getAdapterPosition();
+                    }
+
+                } else {
+                    if (fromViewHolder != null) {
+                        fromViewHolder.itemView.setBackgroundColor(
+                                ContextCompat.getColor(getApplicationContext(), R.color.primaryDarkColor)
+                        );
+                        if (toViewHolder != null) {
+                            toViewHolder.itemView.setBackgroundColor(
+                                    ContextCompat.getColor(getApplicationContext(), R.color.primaryDarkColor)
+                            );
+                        } else {
+                            return;
+                        }
+                        int fromPos = fromViewHolder.getAdapterPosition();
+                        int toPos = toViewHolder.getAdapterPosition();
+                        if (fromPos == toPos) {
+                            return;
+                        }
+
+
+                        Log.d(TAG, "from:to " + fromPos + ":" + toPos);
+
+                        Profile reposProfile = adapter.getProfileAt(fromViewHolder.getAdapterPosition());
+
+                        int lowPos = fromPos < toPos ? fromPos : toPos;
+                        int highPos = fromPos > toPos ? fromPos : toPos;
+                        Log.d(TAG, "low:high " + lowPos + ":" + highPos);
+
+                        int nextSeq = -1;
+                        if (lowPos == 0) {
+                            nextSeq = 1;
+                        } else {
+                            Profile profileNext = adapter.getProfileAt(lowPos);
+                            nextSeq = profileNext.getSequence();
+                        }
+
+                        List<Profile> modifyProfileList = new ArrayList<Profile>();
+                        int currentPos = lowPos;
+
+                        if (currentPos == toPos) {
+                            reposProfile.setSequence(nextSeq);
+                            modifyProfileList.add(reposProfile);
+                            nextSeq += 1;
+                            while (currentPos < highPos) {
+                                Profile profileSeq = adapter.getProfileAt(currentPos);
+                                profileSeq.setSequence(nextSeq);
+                                modifyProfileList.add(profileSeq);
+                                currentPos += 1;
+                                nextSeq += 1;
+                            }
+                        } else {
+                            currentPos += 1;
+                            while (currentPos < highPos) {
+                                Profile profileSeq = adapter.getProfileAt(currentPos);
+                                profileSeq.setSequence(nextSeq);
+                                modifyProfileList.add(profileSeq);
+                                nextSeq += 1;
+                                currentPos += 1;
+                            }
+                            reposProfile.setSequence(nextSeq);
+                            modifyProfileList.add(reposProfile);
+                        }
+
+
+                        for ( Profile item : modifyProfileList) {
+                            profileViewModel.update(item);
+                        }
+//                        suggest.setSequence(toSeq);
+//                        suggestTarget.setSequence(fromSeq);
+//                        Log.d(TAG, "onMovePos " + fromViewHolder.getAdapterPosition() + ":" + toViewHolder.getAdapterPosition());
+//                        Log.d(TAG, "onMovePswd " + suggest.getPassword() + ":" + suggestTarget.getPassword());
+//                        Log.d(TAG, "onMoveId " + suggest.getId() + ":" + suggestTarget.getId());
+//                        Log.d(TAG, "onMoveSeq " + suggest.getSequence() + ":" + suggestTarget.getSequence());
+//                        Log.d(TAG, "notifyPos " + fromPos + ":" + toPos);
+//
+//                        suggestViewModel.update(suggest);
+//                        suggestViewModel.update(suggestTarget);
+
+                        Log.d(TAG, "min:max " + minPos + ":" + maxPos);
+//                        adapter.notifyItemMoved(minPos, maxPos);
+                        adapter.notifyDataSetChanged();
+
+                        fromViewHolder = null;
+                    }
+                }
+
+
+
+                super.onSelectedChanged(viewHolder, actionState);
             }
         }).attachToRecyclerView(recyclerView);
 
@@ -760,6 +926,7 @@ public class MainActivity extends AppCompatActivity
                     item.setChecked(true);
                 }
 
+                isCustomSort = false;
                 profileViewModel.getAllProfiles().observe(this, new Observer<List<Profile>>() {
                     @Override
                     public void onChanged(List<Profile> profiles) {
@@ -776,7 +943,7 @@ public class MainActivity extends AppCompatActivity
                     item.setChecked(true);
                 }
 
-
+                isCustomSort = false;
                 profileViewModel.getAllProfilesByOpenDate().observe(this, new Observer<List<Profile>>() {
                     @Override
                     public void onChanged(List<Profile> profiles) {
@@ -794,7 +961,7 @@ public class MainActivity extends AppCompatActivity
                     item.setChecked(true);
                 }
 
-
+                isCustomSort = false;
                 profileViewModel.getAllProfilesByPassportId().observe(this, new Observer<List<Profile>>() {
                     @Override
                     public void onChanged(List<Profile> profiles) {
@@ -811,6 +978,7 @@ public class MainActivity extends AppCompatActivity
                     item.setChecked(true);
                 }
 
+                isCustomSort = true;
                 profileViewModel.getAllProfilesCustomSort().observe(this, new Observer<List<Profile>>() {
                     @Override
                     public void onChanged(List<Profile> profiles) {

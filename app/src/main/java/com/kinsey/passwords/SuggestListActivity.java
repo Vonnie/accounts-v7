@@ -146,12 +146,11 @@ public class SuggestListActivity extends AppCompatActivity implements
                 ItemTouchHelper.START | ItemTouchHelper.END | ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT,
                 ItemTouchHelper.START | ItemTouchHelper.END | ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT ) {
 
-            ItemTouchHelper itemTouchHelper;
-            Suggest fromSuggest;
+//            ItemTouchHelper itemTouchHelper;
             RecyclerView.ViewHolder fromViewHolder;
             RecyclerView.ViewHolder toViewHolder;
             int maxPos = 0, minPos = 0;
-            List<Integer> highlightPos;
+//            List<Integer> highlightPos;
 
             @Override
             public boolean onMove(@NonNull RecyclerView recyclerView,
@@ -277,7 +276,7 @@ public class SuggestListActivity extends AppCompatActivity implements
                             nextSeq = suggestNext.getSequence();
                         }
 
-                        List<Suggest> modifySuggestList = suggestList;
+                        List<Suggest> modifySuggestList = new ArrayList<Suggest>();
                         int currentPos = lowPos;
 
                         if (currentPos == toPos) {
@@ -338,9 +337,9 @@ public class SuggestListActivity extends AppCompatActivity implements
 
 
 
-            public void setTouchHelper(ItemTouchHelper itemTouchHelper) {
-                this.itemTouchHelper = itemTouchHelper;
-            }
+//            public void setTouchHelper(ItemTouchHelper itemTouchHelper) {
+//                this.itemTouchHelper = itemTouchHelper;
+//            }
 
         }).attachToRecyclerView(recyclerView);
 
