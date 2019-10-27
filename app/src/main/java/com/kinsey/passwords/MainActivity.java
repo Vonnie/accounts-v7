@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity
 
 
     private List<Profile> profileListFull;
-    private List<Profile> profileList;
+//    private List<Profile> profileList;
 
     private String feedUrl = "http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topTvEpisodes/xml";
     private int feedLimit = 10;
@@ -763,6 +763,7 @@ public class MainActivity extends AppCompatActivity
                 profileViewModel.getAllProfiles().observe(this, new Observer<List<Profile>>() {
                     @Override
                     public void onChanged(List<Profile> profiles) {
+                        profileListFull = new ArrayList<>(profiles);
                         adapter.submitList(profiles);
                     }
                 });
@@ -779,6 +780,7 @@ public class MainActivity extends AppCompatActivity
                 profileViewModel.getAllProfilesByOpenDate().observe(this, new Observer<List<Profile>>() {
                     @Override
                     public void onChanged(List<Profile> profiles) {
+                        profileListFull = new ArrayList<>(profiles);
                         adapter.submitList(profiles);
                     }
                 });
@@ -796,6 +798,7 @@ public class MainActivity extends AppCompatActivity
                 profileViewModel.getAllProfilesByPassportId().observe(this, new Observer<List<Profile>>() {
                     @Override
                     public void onChanged(List<Profile> profiles) {
+                        profileListFull = new ArrayList<>(profiles);
                         adapter.submitList(profiles);
                     }
                 });
@@ -807,7 +810,16 @@ public class MainActivity extends AppCompatActivity
                 if (!item.isChecked()) {
                     item.setChecked(true);
                 }
-                resortList(AccountsContract.ACCOUNT_LIST_BY_SEQUENCE);
+
+                profileViewModel.getAllProfilesCustomSort().observe(this, new Observer<List<Profile>>() {
+                    @Override
+                    public void onChanged(List<Profile> profiles) {
+                        profileListFull = new ArrayList<>(profiles);
+                        adapter.submitList(profiles);
+                    }
+                });
+
+//                resortList(AccountsContract.ACCOUNT_LIST_BY_SEQUENCE);
                 break;
 
 //            case R.id.menuacct_showdate:

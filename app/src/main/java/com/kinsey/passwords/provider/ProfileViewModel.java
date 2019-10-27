@@ -66,6 +66,11 @@ public class ProfileViewModel extends AndroidViewModel
         return allProfiles;
     }
 
+    public LiveData<List<Profile>> getAllProfilesCustomSort() {
+        allProfiles = repository.getAllProfilesCustomSort();
+        return allProfiles;
+    }
+
     public LiveData<List<Profile>> searchCorpNameProfiles(String query) {
         allProfiles = repository.searchCorpNameProfiles(query);
         return allProfiles;

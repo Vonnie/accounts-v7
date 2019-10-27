@@ -44,6 +44,9 @@ public interface ProfileDao {
     @Query("SELECT * FROM Passport ORDER BY open_date DESC")
     LiveData<List<Profile>> getAllProfilesByOpenDate();
 
+    @Query("SELECT * FROM Passport ORDER BY sequence ASC")
+    LiveData<List<Profile>> getAllProfilesCustomSort();
+
     @Query("SELECT * FROM Passport where corporation_name LIKE :name or LOWER(corporation_name) like LOWER(:name) order by corporation_name COLLATE NOCASE ASC")
     LiveData<List<Profile>> searchCorpNameProfiles(String name);
 

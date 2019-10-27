@@ -65,6 +65,11 @@ public class ProfileRepository {
         return allProfiles;
     }
 
+    public LiveData<List<Profile>> getAllProfilesCustomSort() {
+        allProfiles = profileDao.getAllProfilesCustomSort();
+        return allProfiles;
+    }
+
     public LiveData<List<Profile>> searchCorpNameProfiles(String query) {
         allProfiles = profileDao.searchCorpNameProfiles(query);
         return allProfiles;

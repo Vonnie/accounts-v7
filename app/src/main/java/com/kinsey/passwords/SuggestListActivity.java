@@ -49,6 +49,7 @@ public class SuggestListActivity extends AppCompatActivity implements
 
     private SuggestViewModel suggestViewModel;
     private PasswordFormula passwordFormula = new PasswordFormula();
+    private List<Suggest> suggestList;
     GridLayoutManager layoutManager;
     private GestureDetectorCompat gestureDetector;
 
@@ -96,7 +97,7 @@ public class SuggestListActivity extends AppCompatActivity implements
 //                update RecyclerView
 //                Toast.makeText(SuggestListActivity.this, "onChanged", Toast.LENGTH_SHORT).show();
 
-//                suggestListFull = new ArrayList<>(suggests);
+                suggestList = new ArrayList<>(suggests);
                 adapter.submitList(suggests);
 //                Log.d(TAG, "suggests size " + suggestListFull.size());
             }
@@ -149,13 +150,15 @@ public class SuggestListActivity extends AppCompatActivity implements
             Suggest fromSuggest;
             RecyclerView.ViewHolder fromViewHolder;
             RecyclerView.ViewHolder toViewHolder;
+            int maxPos = 0, minPos = 0;
+            List<Integer> highlightPos;
 
             @Override
             public boolean onMove(@NonNull RecyclerView recyclerView,
                                   @NonNull RecyclerView.ViewHolder viewHolder,
                                   @NonNull RecyclerView.ViewHolder target) {
-                Log.d(TAG, "onMovePos * * * *");
-                Log.d(TAG, "onMovePos " + viewHolder.getAdapterPosition() + ":" + target.getAdapterPosition());
+//                Log.d(TAG, "onMovePos * * * *");
+//                Log.d(TAG, "onMovePos " + viewHolder.getAdapterPosition() + ":" + target.getAdapterPosition());
 
 //                viewHolder.itemView.setBackgroundColor(
 //                        ContextCompat.getColor(getApplicationContext(), R.color.secondaryLightColor)
@@ -175,7 +178,24 @@ public class SuggestListActivity extends AppCompatActivity implements
 //                suggestViewModel.delete(adapter.getSuggestAt(viewHolder.getAdapterPosition()));
 //                suggestViewModel.insert(suggest);
 
-//                Collections.swap();
+//                if (target == null) {
+//                    Log.d(TAG, "target is null");
+//                }
+
+                if (target.getAdapterPosition() < minPos) {
+                    minPos = target.getAdapterPosition();
+                }
+                if (viewHolder.getAdapterPosition() < minPos) {
+                    minPos = viewHolder.getAdapterPosition();
+                }
+
+                if (target.getAdapterPosition() > maxPos) {
+                    maxPos = target.getAdapterPosition();
+                }
+                if (viewHolder.getAdapterPosition() > maxPos) {
+                    maxPos = viewHolder.getAdapterPosition();
+                }
+
                 return true;
             }
 
@@ -191,7 +211,14 @@ public class SuggestListActivity extends AppCompatActivity implements
 
             @Override
             public void onMoved(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, int fromPos, @NonNull RecyclerView.ViewHolder target, int toPos, int x, int y) {
-                Log.d(TAG, "onMoved");
+//                Log.d(TAG, "onMoved");
+
+                if (toViewHolder != null) {
+                    toViewHolder.itemView.setBackgroundColor(
+                            ContextCompat.getColor(getApplicationContext(), R.color.primaryDarkColor)
+                    );
+                }
+
                 target.itemView.setBackgroundColor(
                         ContextCompat.getColor(getApplicationContext(), R.color.secondaryDarkColor)
                 );
@@ -208,28 +235,92 @@ public class SuggestListActivity extends AppCompatActivity implements
                             ContextCompat.getColor(getApplicationContext(), R.color.secondaryLightColor)
                     );
                     fromViewHolder = viewHolder;
+                    minPos = adapter.getItemCount();
+                    maxPos = 0;
+
+                    if (viewHolder.getAdapterPosition() < minPos) {
+                        minPos = viewHolder.getAdapterPosition();
+                    }
+
+                    if (viewHolder.getAdapterPosition() > maxPos) {
+                        maxPos = viewHolder.getAdapterPosition();
+                    }
+
                 } else {
                     if (fromViewHolder != null) {
                         fromViewHolder.itemView.setBackgroundColor(
                                 ContextCompat.getColor(getApplicationContext(), R.color.primaryDarkColor)
                         );
+                        toViewHolder.itemView.setBackgroundColor(
+                                ContextCompat.getColor(getApplicationContext(), R.color.primaryDarkColor)
+                        );
                         int fromPos = fromViewHolder.getAdapterPosition();
                         int toPos = toViewHolder.getAdapterPosition();
-                        Suggest suggest = adapter.getSuggestAt(fromViewHolder.getAdapterPosition());
-                        Suggest suggestTarget = adapter.getSuggestAt(toViewHolder.getAdapterPosition());
-                        int fromSeq = suggest.getSequence();
-                        int toSeq = suggestTarget.getSequence();
-                        suggest.setSequence(toSeq);
-                        suggestTarget.setSequence(fromSeq);
-                        Log.d(TAG, "onMovePos " + fromViewHolder.getAdapterPosition() + ":" + toViewHolder.getAdapterPosition());
-                        Log.d(TAG, "onMovePswd " + suggest.getPassword() + ":" + suggestTarget.getPassword());
-                        Log.d(TAG, "onMoveId " + suggest.getId() + ":" + suggestTarget.getId());
-                        Log.d(TAG, "onMoveSeq " + suggest.getSequence() + ":" + suggestTarget.getSequence());
-                        Log.d(TAG, "notifyPos " + fromPos + ":" + toPos);
+                        if (fromPos == toPos) {
+                            return;
+                        }
 
-                        suggestViewModel.update(suggest);
-                        suggestViewModel.update(suggestTarget);
-                        adapter.notifyItemMoved(fromPos, toPos);
+
+                        Log.d(TAG, "from:to " + fromPos + ":" + toPos);
+
+                        Suggest reposSuggest = adapter.getSuggestAt(fromViewHolder.getAdapterPosition());
+
+                        int lowPos = fromPos < toPos ? fromPos : toPos;
+                        int highPos = fromPos > toPos ? fromPos : toPos;
+                        Log.d(TAG, "low:high " + lowPos + ":" + highPos);
+
+                        int nextSeq = -1;
+                        if (lowPos == 0) {
+                            nextSeq = 1;
+                        } else {
+                            Suggest suggestNext = adapter.getSuggestAt(lowPos);
+                            nextSeq = suggestNext.getSequence();
+                        }
+
+                        List<Suggest> modifySuggestList = suggestList;
+                        int currentPos = lowPos;
+
+                        if (currentPos == toPos) {
+                            reposSuggest.setSequence(nextSeq);
+                            modifySuggestList.add(reposSuggest);
+                            nextSeq += 1;
+                            while (currentPos < highPos) {
+                                Suggest suggestSeq = adapter.getSuggestAt(currentPos);
+                                suggestSeq.setSequence(nextSeq);
+                                modifySuggestList.add(suggestSeq);
+                                currentPos += 1;
+                                nextSeq += 1;
+                            }
+                        } else {
+                            currentPos += 1;
+                            while (currentPos < highPos) {
+                                Suggest suggestSeq = adapter.getSuggestAt(currentPos);
+                                suggestSeq.setSequence(nextSeq);
+                                modifySuggestList.add(suggestSeq);
+                                nextSeq += 1;
+                                currentPos += 1;
+                            }
+                            reposSuggest.setSequence(nextSeq);
+                            modifySuggestList.add(reposSuggest);
+                        }
+
+
+                        for ( Suggest item : modifySuggestList) {
+                            suggestViewModel.update(item);
+                        }
+//                        suggest.setSequence(toSeq);
+//                        suggestTarget.setSequence(fromSeq);
+//                        Log.d(TAG, "onMovePos " + fromViewHolder.getAdapterPosition() + ":" + toViewHolder.getAdapterPosition());
+//                        Log.d(TAG, "onMovePswd " + suggest.getPassword() + ":" + suggestTarget.getPassword());
+//                        Log.d(TAG, "onMoveId " + suggest.getId() + ":" + suggestTarget.getId());
+//                        Log.d(TAG, "onMoveSeq " + suggest.getSequence() + ":" + suggestTarget.getSequence());
+//                        Log.d(TAG, "notifyPos " + fromPos + ":" + toPos);
+//
+//                        suggestViewModel.update(suggest);
+//                        suggestViewModel.update(suggestTarget);
+
+                        Log.d(TAG, "min:max " + minPos + ":" + maxPos);
+//                        adapter.notifyItemMoved(minPos, maxPos);
                         adapter.notifyDataSetChanged();
 
                         fromViewHolder = null;
