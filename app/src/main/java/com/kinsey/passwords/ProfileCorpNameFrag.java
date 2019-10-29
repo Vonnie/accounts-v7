@@ -35,9 +35,9 @@ public class ProfileCorpNameFrag extends Fragment {
 
     Context context;
     RecyclerView recyclerView;
-    ProfileViewModel profileViewModel;
+//    ProfileViewModel profileViewModel;
     private List<Profile> profileListFull;
-    private ProfileAdapter adapter = new ProfileAdapter();
+//    private ProfileAdapter adapter = new ProfileAdapter();
 
     private ProfileCorpNameFrag.OnProfileCorpNameClickListener mListener;
     public interface OnProfileCorpNameClickListener {
@@ -67,42 +67,22 @@ public class ProfileCorpNameFrag extends Fragment {
         }
 
 
-        recyclerView.setAdapter(adapter);
+        recyclerView.setAdapter(MainActivity.adapter);
 
-        profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
-        profileViewModel.getAllProfilesByCorpName().observe(this, new Observer<List<Profile>>() {
-            @Override
-            public void onChanged(List<Profile> profiles) {
-
-                profileListFull = new ArrayList<>(profiles);
-                adapter.submitList(profiles);
-                Log.d(TAG, "list submit");
-            }
-        });
+//        profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
+//        profileViewModel.getAllProfilesByCorpName().observe(this, new Observer<List<Profile>>() {
+//            @Override
+//            public void onChanged(List<Profile> profiles) {
+//
+//                profileListFull = new ArrayList<>(profiles);
+//                adapter.submitList(profiles);
+//                Log.d(TAG, "list submit");
+//            }
+//        });
 
         recyclerView.scrollToPosition(0);
-        this.adapter.notifyDataSetChanged();
+        MainActivity.adapter.notifyDataSetChanged();
 
-
-        adapter.setOnItemClickListener(new ProfileAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(Profile profile) {
-                Intent intent = new Intent(context, AddEditProfileActivity.class);
-                intent.putExtra(AddEditProfileActivity.EXTRA_ID, profile.getId());
-                intent.putExtra(AddEditProfileActivity.EXTRA_PASSPORT_ID, profile.getPassportId());
-                intent.putExtra(AddEditProfileActivity.EXTRA_CORP_NAME, profile.getCorpName());
-                intent.putExtra(AddEditProfileActivity.EXTRA_USER_NAME, profile.getUserName());
-                intent.putExtra(AddEditProfileActivity.EXTRA_USER_EMAIL, profile.getUserEmail());
-                intent.putExtra(AddEditProfileActivity.EXTRA_CORP_WEBSITE, profile.getCorpWebsite());
-                intent.putExtra(AddEditProfileActivity.EXTRA_NOTE, profile.getNote());
-                intent.putExtra(AddEditProfileActivity.EXTRA_ACTVY_LONG, profile.getActvyLong());
-                intent.putExtra(AddEditProfileActivity.EXTRA_OPEN_DATE_LONG, profile.getOpenLong());
-
-                Log.d(TAG, "edit requested");
-                startActivityForResult(intent, EDIT_PROFILE_REQUEST);
-
-            }
-        });
 
 
         Log.d(TAG, "view set");

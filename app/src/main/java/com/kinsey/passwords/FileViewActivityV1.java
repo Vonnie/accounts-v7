@@ -153,8 +153,8 @@ public class FileViewActivityV1 extends AppCompatActivity
             item.setEnabled(true);
             item = menu.findItem(R.id.vw_import);
             item.setEnabled(true);
-            item = menu.findItem(R.id.vw_shared);
-            item.setEnabled(true);
+//            item = menu.findItem(R.id.vw_shared);
+//            item.setEnabled(true);
         } else {
             item = menu.findItem(R.id.vw_show_file);
             item.setEnabled(false);
@@ -162,8 +162,8 @@ public class FileViewActivityV1 extends AppCompatActivity
             item.setEnabled(false);
             item = menu.findItem(R.id.vw_import);
             item.setEnabled(false);
-            item = menu.findItem(R.id.vw_shared);
-            item.setEnabled(false);
+//            item = menu.findItem(R.id.vw_shared);
+//            item.setEnabled(false);
         }
 
 
@@ -219,10 +219,10 @@ public class FileViewActivityV1 extends AppCompatActivity
                 showFilename();
                 break;
 
-            case R.id.vw_shared:
-                shareExport();
-                Log.d(TAG, "onOptionsItemSelected: View share");
-                break;
+//            case R.id.vw_shared:
+//                shareExport();
+//                Log.d(TAG, "onOptionsItemSelected: View share");
+//                break;
 
             case android.R.id.home:
 //                AccountListActivityFragment listFragment = (AccountListActivityFragment)

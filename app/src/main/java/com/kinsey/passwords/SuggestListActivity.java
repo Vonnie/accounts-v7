@@ -54,8 +54,8 @@ public class SuggestListActivity extends AppCompatActivity implements
     private GestureDetectorCompat gestureDetector;
 
 //    private List<Suggest> suggestListFull;
-    private int maxSeq = 0;
-    Suggest suggestItem;
+//    private int maxSeq = 0;
+    Suggest suggestMaxItem;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -117,16 +117,16 @@ public class SuggestListActivity extends AppCompatActivity implements
                 Log.d(TAG, "max Item " + suggest);
 
                 if (suggest == null) {
-                    suggestItem = new Suggest("", 0, 0l);
+                    suggestMaxItem = new Suggest("", 0, 0l);
                 } else {
-                    suggestItem = new Suggest(
+                    suggestMaxItem = new Suggest(
                             suggest.getPassword(),
                             suggest.getSequence(),
                             suggest.getActvyDate()
                     );
                 }
 
-//                this.maxSeq = suggestItem.getSequence();
+//                this.maxSeq = suggestMaxItem.getSequence();
 
 //                Log.d(TAG, "new seq " + this.maxSeq);
 
@@ -403,9 +403,9 @@ public class SuggestListActivity extends AppCompatActivity implements
 
 //            requestAddSuggest(password, note);
 
-            Log.d(TAG, "max seq " + suggestItem.getSequence());
+            Log.d(TAG, "max seq " + suggestMaxItem.getSequence());
 
-            Suggest newSuggestItem = new Suggest(password, suggestItem.getSequence() + 1, actvyDate);
+            Suggest newSuggestItem = new Suggest(password, suggestMaxItem.getSequence() + 1, actvyDate);
             newSuggestItem.setNote(note);
             newSuggestItem.setActvyDate(actvyDate);
 
@@ -471,6 +471,7 @@ public class SuggestListActivity extends AppCompatActivity implements
 
     private void generatePasswords(int passwordLen) {
 
+        int maxSeq = this.suggestMaxItem.getSequence();
         Log.d(TAG, "new max seq " + maxSeq);
 
         int nbrPasswords = 0;
@@ -527,7 +528,7 @@ public class SuggestListActivity extends AppCompatActivity implements
 
 //        Log.d(TAG, "max Item " + this.maxSuggest);
 
-        Log.d(TAG, "onChg new max seq " + maxSeq);
+        Log.d(TAG, "onChg new max seq " + this.suggestMaxItem.getSequence());
     }
 
     @Override

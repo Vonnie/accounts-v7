@@ -84,7 +84,7 @@
     <string name="searchable_hint">Enter corporation name</string>
     <string name="home_message_title">List Accounts, Search Accounts, Password Suggestions</string>
     <string name="home_message_text">
-        This app tracks your accounts with sorted lists, search of accounts, edits, exported data, and gives suggestions of 8 or 10 character passwords.
+        Tracks your accounts with sorted lists, search of accounts, edits, backup data, and gives password suggestions of 8 or 10 character passwords.
         \nDo a long click on an account item in the list. This presents a dialog to request edit, delete the account, or save corp name change.
         \nDEFINITION MESSAGE
         \nThe data db contains accounts with account Id and account info. Use paper to record the db\'s account Id and password you assigned it.

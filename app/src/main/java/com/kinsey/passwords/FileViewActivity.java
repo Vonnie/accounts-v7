@@ -14,6 +14,8 @@ import android.os.Bundle;
 import com.kinsey.passwords.items.Account;
 import com.kinsey.passwords.items.AccountsContract;
 import com.kinsey.passwords.items.Profile;
+import com.kinsey.passwords.provider.ProfileAdapter;
+import com.kinsey.passwords.provider.ProfileViewModel;
 import com.kinsey.passwords.tools.AppDialog;
 import com.kinsey.passwords.tools.ProfileJsonListIO;
 
@@ -21,6 +23,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.ShareActionProvider;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.MenuItemCompat;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Environment;
 import android.os.Handler;
@@ -85,14 +89,13 @@ public class FileViewActivity extends AppCompatActivity
         setTitle("Backup / Restore");
 
 
-//        this.adapter = new ProfileAdapter();
-//
+//        adapter = new ProfileAdapter();
 //        profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
-//
-//        profileViewModel.getAllProfiles().observe(this, new Observer<List<Profile>>() {
+//        profileViewModel.getAllProfilesByCorpName().observe(this, new Observer<List<Profile>>() {
 //            @Override
 //            public void onChanged(List<Profile> profiles) {
 //                adapter.submitList(profiles);
+//                Log.d(TAG, "viewModel db count " + adapter.getItemCount());
 //            }
 //        });
 
@@ -131,8 +134,8 @@ public class FileViewActivity extends AppCompatActivity
             item.setEnabled(true);
             item = menu.findItem(R.id.vw_import);
             item.setEnabled(true);
-            item = menu.findItem(R.id.vw_shared);
-            item.setEnabled(true);
+//            item = menu.findItem(R.id.vw_shared);
+//            item.setEnabled(true);
         } else {
             item = menu.findItem(R.id.vw_show_file);
             item.setEnabled(false);
@@ -140,13 +143,13 @@ public class FileViewActivity extends AppCompatActivity
             item.setEnabled(false);
             item = menu.findItem(R.id.vw_import);
             item.setEnabled(false);
-            item = menu.findItem(R.id.vw_shared);
-            item.setEnabled(false);
+//            item = menu.findItem(R.id.vw_shared);
+//            item.setEnabled(false);
         }
 
-        MenuItem shareItem = menu.findItem(R.id.vw_shared);
-        myShareActionProvider =
-                (ShareActionProvider) MenuItemCompat.getActionProvider(shareItem);
+//        MenuItem shareItem = menu.findItem(R.id.vw_shared);
+//        myShareActionProvider =
+//                (ShareActionProvider) MenuItemCompat.getActionProvider(shareItem);
 
         return true;
     }
@@ -182,13 +185,14 @@ public class FileViewActivity extends AppCompatActivity
 
             case R.id.vw_filename:
                 Log.d(TAG, "onOptionsItemSelected: Share View filename");
-                showFilename();
+                composeEmail();
+//                showFilename();
                 break;
 
-            case R.id.vw_shared:
-                shareExport();
-                Log.d(TAG, "onOptionsItemSelected: View share");
-                break;
+//            case R.id.vw_shared:
+//                shareExport();
+//                Log.d(TAG, "onOptionsItemSelected: View share");
+//                break;
 
 
 
@@ -515,6 +519,31 @@ public class FileViewActivity extends AppCompatActivity
 
     }
 
+
+    public void composeEmail() {
+
+        File dirStorage = getExternalFilesDir("passport/");
+        File file = new File(dirStorage, MainActivity.BACKUP_FILENAME);
+        if (!file.exists()) {
+            Toast.makeText(FileViewActivity.this,
+                    "No Exported File to share",
+                    Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String[] addresses = {"vonniekinsey@gmail.com"};
+        String subject = "You Account Json";
+        Uri uri = Uri.fromFile(file);
+
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("*/*");
+        intent.putExtra(Intent.EXTRA_EMAIL, addresses);
+        intent.putExtra(Intent.EXTRA_SUBJECT, subject);
+        intent.putExtra(Intent.EXTRA_STREAM, uri);
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent);
+        }
+    }
     private void shareExport() {
         AlertDialog.Builder dlg = new AlertDialog.Builder(this);
         dlg.setIcon(getResources().getDrawable(android.R.drawable.ic_dialog_alert));
@@ -727,7 +756,7 @@ public class FileViewActivity extends AppCompatActivity
     }
 
 
-    private static class UploadProfileAsyncTask extends AsyncTask<String, String, Integer> {
+    private static class UploadProfileAsyncTask extends AsyncTask<String, Void, String> {
 //        private ProfileDao profileDao;
         ProfileJsonListIO profileJsonListIO = new ProfileJsonListIO();
         private List<Profile> listAccounts = new ArrayList<Profile>();
@@ -743,10 +772,11 @@ public class FileViewActivity extends AppCompatActivity
         }
 
         @Override
-        protected Integer doInBackground(String... filename) {
+        protected String doInBackground(String... filename) {
 //            profileDao.update(profiles[0]);
 //            File dirStorage = getExternalFilesDir("passport");
 
+            String msgDisplay = "No upload / updates";
             try {
 
                 Log.d(TAG, "upload file " + filename[0]);
@@ -758,39 +788,42 @@ public class FileViewActivity extends AppCompatActivity
                 StringBuilder sb = new StringBuilder();
                 Formatter formatter = new Formatter(sb, Locale.US);
 
-                String msgDisplay = formatter.format("<h2>%3d Account Profiles Upload</h2>",
-                        listAccounts.size()).toString();
-                publishProgress(msgDisplay);
-
-                publishProgress("<h2>%3d Account Profile uploaded</h2>" );
-
-                MainActivity.profileViewModel.deleteAllProfiles();
-                Log.d(TAG, "run: delete all complete ");
-
-                MainActivity.profileViewModel.insertAll(listAccounts);
-                Log.d(TAG, "run: upload complete ");
-
-                publishProgress(msgDisplay + "<h3>App DB Updated</h3>");
+                msgDisplay = formatter.format("<h2>%3d Account Profiles Upload</h2>",
+                        listAccounts.size()).toString() +
+                        "<h3>App DB Updated, restored from backup file</h3>";
+//                publishProgress(msgDisplay);
+//
+//                publishProgress("<h2>%3d Account Profile uploaded</h2>" );
+//
+//                publishProgress(msgDisplay + "<h3>App DB Updated</h3>");
 
             } catch (Exception e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
 
-            return listAccounts.size();
+            return msgDisplay;
         }
 
-        @Override
-        protected void onProgressUpdate(String... values) {
-            super.onProgressUpdate(values);
-//            WebView webView = (WebView)FileViewActivity.this.findViewById(R.id.wv_page);
-//            FileViewActivity.infoPage("Account Profiles exported");
-            FileViewActivity.webView.loadData(values[0], "text/html", null);
-        }
+//        @Override
+//        protected void onProgressUpdate(String... values) {
+//            super.onProgressUpdate(values);
+////            WebView webView = (WebView)FileViewActivity.this.findViewById(R.id.wv_page);
+////            FileViewActivity.infoPage("Account Profiles exported");
+//            FileViewActivity.webView.loadData(values[0], "text/html", null);
+//        }
 
         @Override
-        protected void onPostExecute(Integer count) {
-            super.onPostExecute(count);
+        protected void onPostExecute(String msgDisplay) {
+            super.onPostExecute(msgDisplay);
+
+            FileViewActivity.webView.loadData(msgDisplay, "text/html", null);
+
+            MainActivity.profileViewModel.deleteAllProfiles();
+            Log.d(TAG, "run: delete all complete ");
+
+            MainActivity.profileViewModel.insertAll(listAccounts);
+            Log.d(TAG, "run: upload complete ");
 
 
             Toast.makeText(context, "Upload restore complete", Toast.LENGTH_SHORT).show();

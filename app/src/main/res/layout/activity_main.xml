@@ -37,19 +37,19 @@
     <!--style="?android:attr/progressBarStyle"-->
 
 
-    <fragment
-        android:id="@+id/fragment_container_corpname"
+    <FrameLayout
+        android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:name="com.kinsey.passwords.ProfileCorpNameFrag"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-    <fragment
-        android:id="@+id/fragment_container_custom"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:name="com.kinsey.passwords.ProfileCustomFrag"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+<!--    android:name="com.kinsey.passwords.ProfileCorpNameFrag"-->
+<!--    <fragment-->
+<!--        android:id="@+id/fragment_container_custom"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:name="com.kinsey.passwords.ProfileFrag"-->
+<!--        app:layout_behavior="@string/appbar_scrolling_view_behavior" />-->
 
 
     <!--    <androidx.recyclerview.widget.RecyclerView-->

@@ -41,6 +41,8 @@ public class AddEditProfileActivity extends AppCompatActivity {
             "com.kinsey.passwords.EXTRA_USER_NAME";
     public static final String EXTRA_USER_EMAIL =
             "com.kinsey.passwords.EXTRA_USER_EMAIL";
+    public static final String EXTRA_SEQUENCE =
+            "com.kinsey.passwords.EXTRA_SEQUENCE";
     public static final String EXTRA_CORP_WEBSITE =
             "com.kinsey.passwords.EXTRA_CORP_WEBSITE";
     public static final String EXTRA_NOTE =

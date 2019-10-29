@@ -9,6 +9,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.kinsey.passwords.MainActivity;
 import com.kinsey.passwords.items.Profile;
+import com.kinsey.passwords.items.Suggest;
 
 import java.util.List;
 
@@ -91,6 +92,10 @@ public class ProfileRepository {
     public LiveData<List<Profile>> getAllProfilesCustomSort() {
         allProfiles = profileDao.getAllProfilesCustomSort();
         return allProfiles;
+    }
+
+    public LiveData<Profile> getMaxSequence() {
+        return profileDao.getMaxSequence();
     }
 
     public LiveData<List<Profile>> searchCorpNameProfiles(String query) {

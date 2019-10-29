@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.Transformations;
 
 import com.kinsey.passwords.items.Profile;
+import com.kinsey.passwords.items.Suggest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,6 +76,9 @@ public class ProfileViewModel extends AndroidViewModel
         allProfiles = repository.getAllProfilesCustomSort();
         return allProfiles;
     }
+
+    public LiveData<Profile> getMaxSequence() { return repository.getMaxSequence();}
+
 
     public LiveData<List<Profile>> searchCorpNameProfiles(String query) {
         allProfiles = repository.searchCorpNameProfiles(query);

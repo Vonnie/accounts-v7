@@ -40,12 +40,12 @@
                 android:orderInCategory="104"
                 android:title="@string/menuvw_show_file"
                 app:showAsAction="never" />
-            <item
-                android:id="@+id/vw_shared"
-                android:orderInCategory="105"
-                android:title="@string/menuvw_share"
-                app:actionProviderClass="androidx.appcompat.widget.ShareActionProvider"
-                app:showAsAction="never" />
+<!--            <item-->
+<!--                android:id="@+id/vw_shared"-->
+<!--                android:orderInCategory="105"-->
+<!--                android:title="@string/menuvw_share"-->
+<!--                app:actionProviderClass="androidx.appcompat.widget.ShareActionProvider"-->
+<!--                app:showAsAction="never" />-->
 <!--            android:icon="@drawable/ic_share_black"-->
         </menu>
 

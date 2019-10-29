@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.tabs.TabLayout;
 import com.kinsey.passwords.items.Account;
 import com.kinsey.passwords.items.Profile;
+import com.kinsey.passwords.items.Suggest;
 import com.kinsey.passwords.provider.ProfileAdapter;
 import com.kinsey.passwords.provider.ProfileViewModel;
 
@@ -43,11 +44,14 @@ public class ProfileCustomFrag extends Fragment {
     ProfileViewModel profileViewModel;
     private List<Profile> profileListFull;
     private ProfileAdapter adapter = new ProfileAdapter();
+    private Profile profileMaxItem;
 
     private ProfileCustomFrag.OnProfileCustomClickListener mListener;
     public interface OnProfileCustomClickListener {
 
         void onProfileCustomListSelect(Profile profile);
+
+        void onDeleteConfirm(Profile profile);
     }
 
     @Nullable
@@ -86,6 +90,21 @@ public class ProfileCustomFrag extends Fragment {
                 Log.d(TAG, "list submit");
             }
         });
+
+
+
+        profileViewModel.getMaxSequence().observe(this, new Observer<Profile>() {
+            @Override
+            public void onChanged(@Nullable Profile profile) {
+
+                if (profile == null) {
+                    profileMaxItem = new Profile(0, "", "", "", "");
+                } else {
+                    profileMaxItem = profile;
+                }
+            }
+        });
+
 
         recyclerView.scrollToPosition(0);
         this.adapter.notifyDataSetChanged();
@@ -156,6 +175,7 @@ public class ProfileCustomFrag extends Fragment {
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 Profile profile = adapter.getProfileAt(viewHolder.getAdapterPosition());
+                mListener.onDeleteConfirm(profile);
 //                confirmDeleteProfile(profile);
 
                 //                profileViewModel.delete(adapter.getProfileAt(viewHolder.getAdapterPosition()));
@@ -294,7 +314,9 @@ public class ProfileCustomFrag extends Fragment {
 //                    }
 
                     try {
-                        adapter.notifyItemRangeChanged(lowPos, highPos - lowPos + 1);
+                        int endCount = highPos - lowPos + 3;
+                        endCount = endCount > adapter.getItemCount() - 1 ? adapter.getItemCount() - 1 : endCount;
+                        adapter.notifyItemRangeChanged(lowPos, endCount);
                     } catch (Exception e) {
                         Log.d(TAG, "binding error" + fromPos + ":" + toPos);
                     }
@@ -336,6 +358,18 @@ public class ProfileCustomFrag extends Fragment {
         Log.d(TAG, "view set");
         return view;
     }
+
+
+    public void resequenceList() {
+        int newSeq = 0;
+        Log.d(TAG, "profile size " + profileListFull.size());
+        for ( Profile item : profileListFull) {
+            newSeq += 1;
+            item.setSequence(newSeq);
+            profileViewModel.update(item);
+        }
+    }
+
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {

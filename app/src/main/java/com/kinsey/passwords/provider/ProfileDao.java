@@ -9,6 +9,7 @@ import androidx.room.Query;
 import androidx.room.Update;
 
 import com.kinsey.passwords.items.Profile;
+import com.kinsey.passwords.items.Suggest;
 
 import java.util.List;
 
@@ -55,5 +56,8 @@ public interface ProfileDao {
 
     @Query("SELECT * FROM Passport where _id = :id")
     LiveData<Profile> getProfileById(int id);
+
+    @Query("SELECT * FROM Passport ORDER BY sequence DESC LIMIT 1")
+    LiveData<Profile> getMaxSequence();
 
 }

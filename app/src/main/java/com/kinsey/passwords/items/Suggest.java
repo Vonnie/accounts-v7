@@ -12,7 +12,7 @@ import java.util.Date;
  * Created by Yvonne on 2/18/2017.
  */
 
-@Entity(tableName = "password_item_v2")
+@Entity(tableName = "password_item")
 public class Suggest implements Serializable {
     public static final long serialVersionUID = 20170222l;
 

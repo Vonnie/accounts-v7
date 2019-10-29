@@ -20,8 +20,6 @@ import android.os.Handler;
 import android.preference.PreferenceManager;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -31,8 +29,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.RecyclerView.OnScrollListener;
@@ -81,6 +77,8 @@ public class MainActivity extends AppCompatActivity
         implements
         AccountListActivityFragment.OnAccountListClickListener,
         ProfileCorpNameFrag.OnProfileCorpNameClickListener,
+        ProfilePassportIdFrag.OnProfilePassportIdClickListener,
+        ProfileOpenDateFrag.OnProfileOpenDateClickListener,
         ProfileCustomFrag.OnProfileCustomClickListener,
         AddEditActivityFragment.OnListenerClicked,
         AppDialog.DialogEvents,
@@ -173,10 +171,7 @@ public class MainActivity extends AppCompatActivity
 
     RecyclerView recyclerView;
     public static ProfileViewModel profileViewModel;
-    public static ProfileViewModel profileViewModelCustom;
-
     public static ProfileAdapter adapter = new ProfileAdapter();
-    public static ProfileAdapter adapterCustom = new ProfileAdapter();
 
 //    public static ProfileAdapter adapterCorpName = new ProfileAdapter();
 //
@@ -197,17 +192,6 @@ public class MainActivity extends AppCompatActivity
 
 
     public MainActivity() {
-    }
-
-
-    @Override
-    public void onProfileCorpNameListSelect(Profile profile) {
-
-    }
-
-    @Override
-    public void onProfileCustomListSelect(Profile profile) {
-
     }
 
 
@@ -249,19 +233,20 @@ public class MainActivity extends AppCompatActivity
 //        Log.d(TAG, "onCreate: layout activity_mainV1");
 
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        if (savedInstanceState == null) {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-        ProfileCorpNameFrag fragment = new ProfileCorpNameFrag();
-        fragmentTransaction.add(R.id.fragment_container_corpname, fragment);
-        fragmentTransaction.commit();
+            ProfileCorpNameFrag fragment = new ProfileCorpNameFrag();
+            fragmentTransaction.add(R.id.fragment_container, fragment);
+            fragmentTransaction.commit();
+        }
 
-
-        fragCorpName = findViewById(R.id.fragment_container_corpname);
-        fragCorpName.setVisibility(View.VISIBLE);
-
-        fragCustom = findViewById(R.id.fragment_container_custom);
-        fragCustom.setVisibility(View.GONE);
+//        fragCorpName = findViewById(R.id.fragment_container_corpname);
+//        fragCorpName.setVisibility(View.VISIBLE);
+//
+//        fragCustom = findViewById(R.id.fragment_container_custom);
+//        fragCustom.setVisibility(View.GONE);
 
         FloatingActionButton buttonAddPofile = findViewById(R.id.button_add_profile);
         buttonAddPofile.setOnClickListener(new View.OnClickListener() {
@@ -296,16 +281,16 @@ public class MainActivity extends AppCompatActivity
 ////        adapter = adapterCorpName;
 //        recyclerView.setAdapter(adapter);
 //
-//        profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
-//        profileViewModel.getAllProfilesByCorpName().observe(this, new Observer<List<Profile>>() {
-//            @Override
-//            public void onChanged(List<Profile> profiles) {
-//
-//                profileListFull = new ArrayList<>(profiles);
-//                adapter.submitList(profiles);
-//            }
-//        });
-//
+        profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
+        profileViewModel.getAllProfilesByCorpName().observe(this, new Observer<List<Profile>>() {
+            @Override
+            public void onChanged(List<Profile> profiles) {
+
+                profileListFull = new ArrayList<>(profiles);
+                adapter.submitList(profiles);
+            }
+        });
+
 //
 //        profileViewModelCustom = new ViewModelProvider(this).get(ProfileViewModel.class);
 //        profileViewModelCustom.getAllProfilesCustomSort().observe(this, new Observer<List<Profile>>() {
@@ -317,11 +302,12 @@ public class MainActivity extends AppCompatActivity
 //            }
 //        });
 
-//
+
+
 //        adapter.setOnItemClickListener(new ProfileAdapter.OnItemClickListener() {
 //            @Override
 //            public void onItemClick(Profile profile) {
-//                Intent intent = new Intent(MainActivity.this, AddEditProfileActivity.class);
+//                Intent intent = new Intent(context, AddEditProfileActivity.class);
 //                intent.putExtra(AddEditProfileActivity.EXTRA_ID, profile.getId());
 //                intent.putExtra(AddEditProfileActivity.EXTRA_PASSPORT_ID, profile.getPassportId());
 //                intent.putExtra(AddEditProfileActivity.EXTRA_CORP_NAME, profile.getCorpName());
@@ -338,13 +324,35 @@ public class MainActivity extends AppCompatActivity
 //            }
 //        });
 
+
+        adapter.setOnItemClickListener(new ProfileAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(Profile profile) {
+                Intent intent = new Intent(MainActivity.this, AddEditProfileActivity.class);
+                intent.putExtra(AddEditProfileActivity.EXTRA_ID, profile.getId());
+                intent.putExtra(AddEditProfileActivity.EXTRA_PASSPORT_ID, profile.getPassportId());
+                intent.putExtra(AddEditProfileActivity.EXTRA_CORP_NAME, profile.getCorpName());
+                intent.putExtra(AddEditProfileActivity.EXTRA_USER_NAME, profile.getUserName());
+                intent.putExtra(AddEditProfileActivity.EXTRA_USER_EMAIL, profile.getUserEmail());
+                intent.putExtra(AddEditProfileActivity.EXTRA_CORP_WEBSITE, profile.getCorpWebsite());
+                intent.putExtra(AddEditProfileActivity.EXTRA_NOTE, profile.getNote());
+                intent.putExtra(AddEditProfileActivity.EXTRA_ACTVY_LONG, profile.getActvyLong());
+                intent.putExtra(AddEditProfileActivity.EXTRA_OPEN_DATE_LONG, profile.getOpenLong());
+
+                Log.d(TAG, "edit requested");
+                startActivityForResult(intent, EDIT_PROFILE_REQUEST);
+
+            }
+        });
+
 //        recyclerView.onScreenStateChanged(int state);
 
         isLandscape = (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE);
 //        Log.d(TAG, "onCreate: twoPane is " + isLandscape);
 
         if (savedInstanceState != null) {
-            setMenuItemChecked(R.id.menuacct_sort_corpname, true);
+            listsortOrder = savedInstanceState.getInt("listsortOrder", 1);
+//            setMenuItemChecked(R.id.menuacct_sort_corpname, true);
         }
 
 //        listApps = (ListView) findViewById(R.id.xmlListView);
@@ -556,7 +564,13 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-//    @Override
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("listsortOrder", listsortOrder);
+    }
+
+    //    @Override
 //    public boolean onPrepareOptionsMenu(Menu menu) {
 //        // Store instance of the menu item containing progress
 //        miActionProgressItem = menu.findItem(R.id.miActionProgress);
@@ -573,15 +587,15 @@ public class MainActivity extends AppCompatActivity
         this.menu = menu;
         getMenuInflater().inflate(R.menu.menu_main, menu);
 
-//        if (currList == ListHomeType.LISTACCOUNTS) {
-//            menu.findItem(R.id.menumain_showAccounts).setChecked(true);
-//        } else if (currList == ListHomeType.TOP10FREEAPP) {
-//            menu.findItem(R.id.menumain_rss_top_free_apps).setChecked(true);
-//        } else if (currList == ListHomeType.TOPTVEPISODE) {
-//            menu.findItem(R.id.menumain_rss_top_tv_episodes).setChecked(true);
-//        } else if (currList == ListHomeType.TOPTVSEASONS) {
-//            menu.findItem(R.id.menumain_rss_top_tv_seasons).setChecked(true);
-//        }
+        if (listsortOrder == LISTSORT_CORP_NAME) {
+            menu.findItem(R.id.menuacct_sort_corpname).setChecked(true);
+        } else if (listsortOrder == LISTSORT_PASSPORT_ID) {
+            menu.findItem(R.id.menuacct_sort_passport).setChecked(true);
+        } else if (listsortOrder == LISTSORT_OPEN_DATE) {
+            menu.findItem(R.id.menuacct_sort_opendate).setChecked(true);
+        } else if (listsortOrder == LISTSORT_CUSTOM_SORT) {
+            menu.findItem(R.id.menuacct_sort_custom).setChecked(true);
+        }
 
 
         return true;
@@ -797,6 +811,8 @@ public class MainActivity extends AppCompatActivity
 //        }
 //        AddEditActivityFragment editFragment;
         FragmentTransaction transaction;
+        FragmentManager fragmentManager;
+        Fragment profileFragment;
         int id = item.getItemId();
         //noinspection SimplifiableIfStatement
         switch (id) {
@@ -822,14 +838,32 @@ public class MainActivity extends AppCompatActivity
 
                 Log.d(TAG, "request frag Corp Name");
 
+                fragmentManager = getSupportFragmentManager();
+                profileFragment = fragmentManager.findFragmentById(R.id.fragment_container);
+
+                if (profileFragment != null) {
+                    getSupportFragmentManager().beginTransaction()
+                            .remove(profileFragment)
+                            .commit();
+
+                }
 
                 Fragment profileCorpNameFrag = new ProfileCorpNameFrag();
                 transaction = getSupportFragmentManager().beginTransaction();
 
-                transaction.replace(R.id.fragment_container_custom, profileCorpNameFrag);
-                transaction.addToBackStack(null);
+                transaction.add(R.id.fragment_container, profileCorpNameFrag);
+//                transaction.replace(R.id.fragment_container, profileCustomFrag);
+//                transaction.addToBackStack(null);
 
                 transaction.commit();
+
+//                Fragment profileCorpNameFrag = new ProfileCorpNameFrag();
+//                transaction = getSupportFragmentManager().beginTransaction();
+//
+//                transaction.replace(R.id.fragment_container, profileCorpNameFrag);
+//                transaction.addToBackStack(null);
+//
+//                transaction.commit();
 
 
                 Log.d(TAG, "new corp name frag committed");
@@ -863,20 +897,42 @@ public class MainActivity extends AppCompatActivity
                 }
 
                 listsortOrder = LISTSORT_OPEN_DATE;
-//                adapter = adapterOpenDate;
-//                recyclerView.setAdapter(adapter);
-                adapter = new ProfileAdapter();
 
-                profileViewModel.getAllProfilesByOpenDate().observe(this, new Observer<List<Profile>>() {
-                    @Override
-                    public void onChanged(List<Profile> profiles) {
-                        profileListFull = new ArrayList<>(profiles);
-                        adapter.submitList(profiles);
-                    }
-                });
 
-                recyclerView.scrollToPosition(0);
-                this.adapter.notifyDataSetChanged();
+                fragmentManager = getSupportFragmentManager();
+                profileFragment = fragmentManager.findFragmentById(R.id.fragment_container);
+
+                if (profileFragment != null) {
+                    getSupportFragmentManager().beginTransaction()
+                            .remove(profileFragment)
+                            .commit();
+                }
+
+                Fragment profileOpenDateFrag = new ProfileOpenDateFrag();
+                transaction = getSupportFragmentManager().beginTransaction();
+
+                transaction.add(R.id.fragment_container, profileOpenDateFrag);
+//                transaction.replace(R.id.fragment_container, profileCustomFrag);
+//                transaction.addToBackStack(null);
+
+                transaction.commit();
+
+
+
+//                //                adapter = adapterOpenDate;
+////                recyclerView.setAdapter(adapter);
+//                adapter = new ProfileAdapter();
+//
+//                profileViewModel.getAllProfilesByOpenDate().observe(this, new Observer<List<Profile>>() {
+//                    @Override
+//                    public void onChanged(List<Profile> profiles) {
+//                        profileListFull = new ArrayList<>(profiles);
+//                        adapter.submitList(profiles);
+//                    }
+//                });
+//
+//                recyclerView.scrollToPosition(0);
+//                this.adapter.notifyDataSetChanged();
 
 //                resortList(AccountsContract.ACCOUNT_LIST_BY_OPEN_DATE);
                 break;
@@ -888,6 +944,24 @@ public class MainActivity extends AppCompatActivity
 
                 listsortOrder = LISTSORT_PASSPORT_ID;
 
+                fragmentManager = getSupportFragmentManager();
+                profileFragment = fragmentManager.findFragmentById(R.id.fragment_container);
+
+                if (profileFragment != null) {
+                    getSupportFragmentManager().beginTransaction()
+                            .remove(profileFragment)
+                            .commit();
+
+                }
+
+                Fragment profilePassportIdFrag = new ProfilePassportIdFrag();
+                transaction = getSupportFragmentManager().beginTransaction();
+
+                transaction.add(R.id.fragment_container, profilePassportIdFrag);
+//                transaction.replace(R.id.fragment_container, profileCustomFrag);
+//                transaction.addToBackStack(null);
+
+                transaction.commit();
 
 
 //                Fragment profileCustomFrag = new ProfileCorpNameFrag();
@@ -900,21 +974,21 @@ public class MainActivity extends AppCompatActivity
 
 
 
-//                adapter = adapterPassportId;
-//                recyclerView.setAdapter(adapter);
-                adapter = new ProfileAdapter();
-
-                Log.d(TAG, "sort by id");
-
-                profileViewModel.getAllProfilesByPassportId().observe(this, new Observer<List<Profile>>() {
-                    @Override
-                    public void onChanged(List<Profile> profiles) {
-                        profileListFull = new ArrayList<>(profiles);
-                        adapter.submitList(profiles);
-                        recyclerView.scrollToPosition(0);
-                        adapter.notifyDataSetChanged();
-                    }
-                });
+////                adapter = adapterPassportId;
+////                recyclerView.setAdapter(adapter);
+//                adapter = new ProfileAdapter();
+//
+//                Log.d(TAG, "sort by id");
+//
+//                profileViewModel.getAllProfilesByPassportId().observe(this, new Observer<List<Profile>>() {
+//                    @Override
+//                    public void onChanged(List<Profile> profiles) {
+//                        profileListFull = new ArrayList<>(profiles);
+//                        adapter.submitList(profiles);
+//                        recyclerView.scrollToPosition(0);
+//                        adapter.notifyDataSetChanged();
+//                    }
+//                });
 
 
 //                resortList(AccountsContract.ACCOUNT_LIST_BY_PASSPORT_ID);
@@ -929,27 +1003,27 @@ public class MainActivity extends AppCompatActivity
                 listsortOrder = LISTSORT_CUSTOM_SORT;
 
 
-                fragCorpName.setVisibility(View.GONE);
-                fragCustom.setVisibility(View.VISIBLE);
+//                fragCorpName.setVisibility(View.GONE);
+//                fragCustom.setVisibility(View.VISIBLE);
 
-//                FragmentManager fragmentManager = getSupportFragmentManager();
-//                Fragment profileFragment = fragmentManager.findFragmentById(R.id.fragment_container_corpname);
-//
-//                if (profileFragment != null) {
-//                    getSupportFragmentManager().beginTransaction()
-//                            .remove(profileFragment)
-//                            .commit();
-//
-//                }
-//
-//                Fragment profileCustomFrag = new ProfileCustomFrag();
-//                transaction = getSupportFragmentManager().beginTransaction();
-//
-//                transaction.add(R.id.fragment_container_custom, profileCustomFrag);
-////                transaction.replace(R.id.fragment_container, profileCustomFrag);
-////                transaction.addToBackStack(null);
-//
-//                transaction.commit();
+                fragmentManager = getSupportFragmentManager();
+                profileFragment = fragmentManager.findFragmentById(R.id.fragment_container);
+
+                if (profileFragment != null) {
+                    getSupportFragmentManager().beginTransaction()
+                            .remove(profileFragment)
+                            .commit();
+
+                }
+
+                Fragment profileCustomFrag = new ProfileCustomFrag();
+                transaction = getSupportFragmentManager().beginTransaction();
+
+                transaction.add(R.id.fragment_container, profileCustomFrag);
+//                transaction.replace(R.id.fragment_container, profileCustomFrag);
+//                transaction.addToBackStack(null);
+
+                transaction.commit();
 
 
                 Log.d(TAG, "new frag Custom committed");
@@ -1232,15 +1306,6 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    private void resequenceList() {
-        int newSeq = 0;
-        for ( Profile item : profileListFullCustom) {
-            newSeq += 1;
-            item.setSequence(newSeq);
-            profileViewModelCustom.update(item);
-        }
-    }
-
     private void removeEditFrag() {
 
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -1261,6 +1326,20 @@ public class MainActivity extends AppCompatActivity
                 addEditLayoutScroll.setVisibility(View.GONE);
             }
 
+        }
+    }
+
+    private void resequenceList() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        String stringFragmentName = fragmentManager.findFragmentById(R.id.fragment_container).getClass().getSimpleName();
+
+        Log.d(TAG, stringFragmentName);
+        if (stringFragmentName.equals("ProfileCustomFrag")) {
+            Log.d(TAG, "about to re-sequence");
+            Fragment profileFragment = fragmentManager.findFragmentById(R.id.fragment_container);
+            ((ProfileCustomFrag) profileFragment).resequenceList();
+        } else {
+            Log.d(TAG, "no ProfileCustomFrag available");
         }
     }
 
@@ -1357,7 +1436,7 @@ public class MainActivity extends AppCompatActivity
 
     private void viewAccountsFile() {
         Log.d(TAG, "viewAccountsFile: request request view exports");
-        Log.d(TAG, adapter.getItemCount() + " count on db");
+//        Log.d(TAG, adapter.getItemCount() + " count on db");
 //        mActivityStart = true;
         Intent detailIntent = new Intent(this, FileViewActivity.class);
 //        startActivity(detailIntent);
@@ -2459,6 +2538,7 @@ public class MainActivity extends AppCompatActivity
                 String userName = data.getStringExtra(AddEditProfileActivity.EXTRA_USER_NAME);
                 String userEmail = data.getStringExtra(AddEditProfileActivity.EXTRA_USER_EMAIL);
                 String corpWebsite = data.getStringExtra(AddEditProfileActivity.EXTRA_CORP_WEBSITE);
+                int sequence = data.getIntExtra(AddEditProfileActivity.EXTRA_SEQUENCE, 0);
                 String note = data.getStringExtra(AddEditProfileActivity.EXTRA_NOTE);
 
                 Profile profile = new Profile(this.adapter.getItemCount() + 1,
@@ -2466,6 +2546,7 @@ public class MainActivity extends AppCompatActivity
                 profile.setNote(note);
                 profile.setOpenLong(data.getLongExtra(AddEditProfileActivity.EXTRA_OPEN_DATE_LONG, 0));
                 profile.setActvyLong(System.currentTimeMillis());
+                profile.setSequence(sequence);
 
                 profileViewModel.insertProfile(profile);
 
@@ -3314,6 +3395,49 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+
+    @Override
+    public void onProfileCorpNameListSelect(Profile profile) {
+
+    }
+
+    @Override
+    public void onProfilePassportIdSelect(Profile profile) {
+        this.startUpProfileUpdate(profile);
+    }
+
+    @Override
+    public void onProfileCustomListSelect(Profile profile) {
+
+    }
+
+    @Override
+    public void onDeleteConfirm(Profile profile) {
+        confirmDeleteProfile(profile);
+    }
+
+    @Override
+    public void onProfileOpenDateListSelect(Profile profile) {
+        this.startUpProfileUpdate(profile);
+    }
+
+    private void startUpProfileUpdate(Profile profile) {
+        Intent intent = new Intent(this, AddEditProfileActivity.class);
+        intent.putExtra(AddEditProfileActivity.EXTRA_ID, profile.getId());
+        intent.putExtra(AddEditProfileActivity.EXTRA_PASSPORT_ID, profile.getPassportId());
+        intent.putExtra(AddEditProfileActivity.EXTRA_CORP_NAME, profile.getCorpName());
+        intent.putExtra(AddEditProfileActivity.EXTRA_USER_NAME, profile.getUserName());
+        intent.putExtra(AddEditProfileActivity.EXTRA_USER_EMAIL, profile.getUserEmail());
+        intent.putExtra(AddEditProfileActivity.EXTRA_SEQUENCE, profile.getSequence());
+        intent.putExtra(AddEditProfileActivity.EXTRA_CORP_WEBSITE, profile.getCorpWebsite());
+        intent.putExtra(AddEditProfileActivity.EXTRA_NOTE, profile.getNote());
+        intent.putExtra(AddEditProfileActivity.EXTRA_ACTVY_LONG, profile.getActvyLong());
+        intent.putExtra(AddEditProfileActivity.EXTRA_OPEN_DATE_LONG, profile.getOpenLong());
+
+        Log.d(TAG, "edit requested");
+        startActivityForResult(intent, EDIT_PROFILE_REQUEST);
+
+    }
 
 //    @Override
 //    public Filter getFilter() {

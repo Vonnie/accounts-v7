@@ -37,7 +37,11 @@
         <activity
             android:name=".FileViewActivity"
             android:label="@string/title_activity_file_view"
-            android:theme="@style/AppTheme.NoActionBar.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.kinsey.passwords.MainActivity" />
+        </activity>
         <activity
             android:name=".AddEditSuggestActivity"
             android:label="@string/title_activity_suggest_add"
@@ -98,14 +102,6 @@
         <activity
             android:name=".SuggestListActivityV1"
             android:label="@string/title_activity_suggest_list"
-            android:parentActivityName=".MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.kinsey.passwords.MainActivity" />
-        </activity>
-        <activity
-            android:name=".FileViewActivityV1"
-            android:label="@string/title_activity_file_view"
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
