@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:fitsSystemWindows="true"
     tools:context=".MainActivity">
 
@@ -28,20 +27,36 @@
         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
         android:layout_width="0dp"
         android:layout_height="40dp"
-        android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
         android:indeterminate="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
     <!--style="?android:attr/progressBarStyle"-->
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view"
+
+    <fragment
+        android:id="@+id/fragment_container_corpname"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:name="com.kinsey.passwords.ProfileCorpNameFrag"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+    <fragment
+        android:id="@+id/fragment_container_custom"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:name="com.kinsey.passwords.ProfileCustomFrag"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+
+    <!--    <androidx.recyclerview.widget.RecyclerView-->
+    <!--        android:id="@+id/recycler_view"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="match_parent"-->
+    <!--        app:layout_behavior="@string/appbar_scrolling_view_behavior" />-->
     <!--        tools:listitem="@layout/profile_item"/>-->
 
 
@@ -49,11 +64,10 @@
         android:id="@+id/button_add_profile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_add"
         android:layout_gravity="bottom|end"
         android:layout_margin="32dp"
         android:backgroundTint="@color/primaryDarkColor"
-        app:rippleColor="@color/secondaryColor"
-        />
+        android:src="@drawable/ic_add"
+        app:rippleColor="@color/secondaryColor" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

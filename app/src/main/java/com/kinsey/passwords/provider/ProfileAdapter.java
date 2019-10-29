@@ -54,13 +54,15 @@ public class ProfileAdapter extends ListAdapter<Profile, ProfileAdapter.ProfileH
         Profile currentProfile = getItem(position);
         holder.tvCorpName.setText(currentProfile.getCorpName());
 //        holder.tvAcctId.setText(String.valueOf(currentProfile.getId()));
-        holder.tvAcctId.setText(String.valueOf(currentProfile.getPassportId()));
-
+//        holder.tvAcctId.setText(String.valueOf(currentProfile.getPassportId()));
+        holder.tvAcctId.setText(String.valueOf(currentProfile.getSequence()));
     }
 
     public Profile getProfileAt(int position) {
         return getItem(position);
     }
+
+
 
     class ProfileHolder extends RecyclerView.ViewHolder {
         private TextView tvAcctId;
@@ -85,6 +87,7 @@ public class ProfileAdapter extends ListAdapter<Profile, ProfileAdapter.ProfileH
         }
     }
 
+
     public interface OnItemClickListener {
         void onItemClick(Profile profile);
     }
@@ -92,4 +95,6 @@ public class ProfileAdapter extends ListAdapter<Profile, ProfileAdapter.ProfileH
     public void setOnItemClickListener(ProfileAdapter.OnItemClickListener listener) {
         this.listener = listener;
     }
+
+
 }

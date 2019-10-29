@@ -73,6 +73,11 @@ public class ProfileRepository {
         return profileDao.getProfileById(id);
     }
 
+    public LiveData<List<Profile>> getAllProfilesByCorpName() {
+        allProfiles = profileDao.getAllProfilesByCorpName();
+        return allProfiles;
+    }
+
     public LiveData<List<Profile>> getAllProfilesByOpenDate() {
         allProfiles = profileDao.getAllProfilesByOpenDate();
         return allProfiles;

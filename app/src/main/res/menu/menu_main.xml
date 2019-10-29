@@ -68,6 +68,15 @@
         android:orderInCategory="120"
         android:title="@string/menuacct_backup_restore_accts"
         app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/menumain_do_request"
+        android:icon="@drawable/ic_fullscreen"
+        android:orderInCategory="121"
+        android:title="Spl Request"
+        app:showAsAction="ifRoom" />
+
+
     <!--    <item-->
     <!--        android:id="@+id/menumain_showSuggestsV1"-->
     <!--        android:icon="@drawable/selector_key"-->

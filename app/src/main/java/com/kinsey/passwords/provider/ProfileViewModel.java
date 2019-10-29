@@ -56,6 +56,11 @@ public class ProfileViewModel extends AndroidViewModel
         return allProfiles;
     }
 
+    public LiveData<List<Profile>> getAllProfilesByCorpName() {
+        allProfiles = repository.getAllProfilesByCorpName();
+        return allProfiles;
+    }
+
     public LiveData<List<Profile>> getAllProfilesByPassportId() {
         allProfiles = repository.getAllProfilesByPassportId();
         return allProfiles;

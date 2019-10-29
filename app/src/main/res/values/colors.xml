@@ -10,6 +10,8 @@
     <color name="colorAccent">#795548</color>
     <color name="primaryTextColor">#941f4c</color>
     <color name="secondaryTextColor">#941f4c</color>
+    <color name="backgroundWhite">#FFFFFF</color>
+    <color name="backgroundTransparent">#00000000</color>
     <color name="icons">#FFFFFF</color>
 </resources>
 
