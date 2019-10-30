@@ -55,7 +55,7 @@ public class FileViewActivity extends AppCompatActivity
 
     public static ProgressBar progressBar;
     public static WebView webView;
-//    private ProfileAdapter adapter;
+    private ProfileAdapter adapter;
 //    private ProfileViewModel profileViewModel;
 
     private Handler mHandler = new Handler();
@@ -63,6 +63,7 @@ public class FileViewActivity extends AppCompatActivity
     public static File dirStorage;
     View fileViewActivityView;
     ShareActionProvider myShareActionProvider;
+    boolean onFirstReported = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,17 +90,6 @@ public class FileViewActivity extends AppCompatActivity
         setTitle("Backup / Restore");
 
 
-//        adapter = new ProfileAdapter();
-//        profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
-//        profileViewModel.getAllProfilesByCorpName().observe(this, new Observer<List<Profile>>() {
-//            @Override
-//            public void onChanged(List<Profile> profiles) {
-//                adapter.submitList(profiles);
-//                Log.d(TAG, "viewModel db count " + adapter.getItemCount());
-//            }
-//        });
-
-
         webView = (WebView) findViewById(R.id.wv_page);
 
         webView.setWebViewClient(new WebViewClient() {
@@ -111,7 +101,22 @@ public class FileViewActivity extends AppCompatActivity
 
         });
 
-        infoPage("See menu for functions");
+
+        adapter = new ProfileAdapter();
+//        profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
+        MainActivity.profileViewModel.getAllProfilesByCorpName().observe(this, new Observer<List<Profile>>() {
+            @Override
+            public void onChanged(List<Profile> profiles) {
+                adapter.submitList(profiles);
+                if (onFirstReported) {
+                    onFirstReported = false;
+                    infoPage("See menu for functions");
+                }
+                Log.d(TAG, "viewModel db count " + adapter.getItemCount());
+            }
+        });
+
+
 
     }
 
@@ -185,14 +190,14 @@ public class FileViewActivity extends AppCompatActivity
 
             case R.id.vw_filename:
                 Log.d(TAG, "onOptionsItemSelected: Share View filename");
-                composeEmail();
-//                showFilename();
+                showFilename();
                 break;
 
-//            case R.id.vw_shared:
+            case R.id.vw_shared:
+                composeEmail();
 //                shareExport();
-//                Log.d(TAG, "onOptionsItemSelected: View share");
-//                break;
+                Log.d(TAG, "onOptionsItemSelected: View share");
+                break;
 
 
 
@@ -268,36 +273,36 @@ public class FileViewActivity extends AppCompatActivity
 //            Log.d(TAG, "reportJson: system " + System.getenv());
 
             if (dirStorage.exists()) {
-                Log.d(TAG, "reportJson dirExternal " + dirStorage.getAbsolutePath());
-                Log.d(TAG, "reportJson dirExternal canRead " + dirStorage.canRead());
-                Log.d(TAG, "reportJson dirInternal free space " + dirStorage.getFreeSpace());
+//                Log.d(TAG, "reportJson dirExternal " + dirStorage.getAbsolutePath());
+//                Log.d(TAG, "reportJson dirExternal canRead " + dirStorage.canRead());
+//                Log.d(TAG, "reportJson dirInternal free space " + dirStorage.getFreeSpace());
 
                 if (dirStorage.canRead()) {
                     if (fileExternal.exists()) {
                         htmlString = greetMsg() +
-                                "<h5>" + MainActivity.adapter.getItemCount() + " Account Profile items currently on db<h5>" +
+                                "<h5>" + adapter.getItemCount() + " Account Profile items currently on db<h5>" +
                                 "<h5>" + accountJsonProperties(fileExternal.getAbsoluteFile().toString()) + "</h5>" +
                                 "<h5>" + infoMsg + "</h5>";
 
                     } else {
                         htmlString = notfyMsg() +
                                 "<h4>Use menu to export data.</h4>" +
-                                "<h5>" + MainActivity.adapter.getItemCount() + " Account Profile items currently on db<h5>";
+                                "<h5>" + adapter.getItemCount() + " Account Profile items currently on db<h5>";
                     }
                 } else {
                     htmlString = notfyMsg() +
                             "<h4>Path storage dir does not exists " + dirStorage.getAbsoluteFile() + "</h4>" +
                             "<h5>Use menu to export data to this file.</h5>" +
-                            "<h5>" + MainActivity.adapter.getItemCount() + " Account Profile items to backup<h5>";
+                            "<h5>" + adapter.getItemCount() + " Account Profile items to backup<h5>";
                 }
             } else {
                 htmlString = permissionMsg() +
-                        "<h5>" + MainActivity.adapter.getItemCount() + " Account Profile items to backup once permission is granted<h5>";
+                        "<h5>" + adapter.getItemCount() + " Account Profile items to backup once permission is granted<h5>";
             }
 
             webView.loadData(htmlString, "text/html", null);
 
-            Log.d(TAG, "db count: " + MainActivity.adapter.getItemCount());
+            Log.d(TAG, "db count: " + adapter.getItemCount());
 
         } catch (Exception ex) {
             Log.d(TAG, "reportJson: " + ex.getMessage());
@@ -430,7 +435,7 @@ public class FileViewActivity extends AppCompatActivity
 
 
 
-            new DownloadProfileAsyncTask(getApplicationContext(), file).execute();
+            new DownloadProfileAsyncTask(getApplicationContext(), file, adapter).execute();
 
 //            JsonWriter writer = new JsonWriter(new FileWriter(file));
 //            writer.setIndent("  ");
@@ -841,11 +846,13 @@ public class FileViewActivity extends AppCompatActivity
         private List<Profile> listAccounts = new ArrayList<Profile>();
         Context context;
         File storageFile;
+        ProfileAdapter adapter;
         String msgError;
 
-        private DownloadProfileAsyncTask(Context context, File file) {
+        private DownloadProfileAsyncTask(Context context, File file, ProfileAdapter adapter) {
             this.context = context;
             this.storageFile = file;
+            this.adapter = adapter;
 
 //            File dirStorage = context.getExternalFilesDir("passport");
         }
@@ -898,7 +905,8 @@ public class FileViewActivity extends AppCompatActivity
 //                writer.close();
 
 
-                count = profileJsonListIO.writeProfileJson(this.storageFile);
+                List<Profile> profiles = adapter.getCurrentList();
+                count = profileJsonListIO.writeProfileJson(this.storageFile, profiles);
 
 
                 Log.d(TAG, "run: upload size " + count);

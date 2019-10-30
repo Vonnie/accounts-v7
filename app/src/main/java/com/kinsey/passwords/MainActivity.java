@@ -3,19 +3,14 @@ package com.kinsey.passwords;
 
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
-import android.app.SearchManager;
-import android.app.SearchableInfo;
 import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 
@@ -32,7 +27,6 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.RecyclerView.OnScrollListener;
 
 import android.util.Log;
 import android.view.Menu;
@@ -67,8 +61,6 @@ import java.util.Locale;
 
 import static androidx.recyclerview.widget.ItemTouchHelper.ACTION_STATE_DRAG;
 
-//import static com.kinsey.passwords.SearchActivityV1.SEARCH_ACCOUNT;
-//import static com.kinsey.passwords.SearchActivityV1.SELECTION_QUERY;
 // ====================
 // Statement to assist in debugging
 // if (BuildConfig.DEBUG && acctId == 0) throw new AssertionError("Account Id is zero");
@@ -76,7 +68,6 @@ import static androidx.recyclerview.widget.ItemTouchHelper.ACTION_STATE_DRAG;
 
 public class MainActivity extends AppCompatActivity
         implements
-        AccountListActivityFragment.OnAccountListClickListener,
         ProfileCorpNameFrag.OnProfileCorpNameClickListener,
         ProfilePassportIdFrag.OnProfilePassportIdClickListener,
         ProfileOpenDateFrag.OnProfileOpenDateClickListener,
@@ -85,6 +76,7 @@ public class MainActivity extends AppCompatActivity
         AppDialog.DialogEvents,
         DatePickerDialog.OnDateSetListener {
 
+//    AccountListActivityFragment.OnAccountListClickListener,
 //    Filterable,
 //    AccountRecyclerViewAdapter.OnAccountClickListener,
 //    AccountActivityFragment.OnActionListener,
@@ -172,7 +164,7 @@ public class MainActivity extends AppCompatActivity
 
     RecyclerView recyclerView;
     public static ProfileViewModel profileViewModel;
-    public static ProfileAdapter adapter = new ProfileAdapter();
+//    public static ProfileAdapter adapter = new ProfileAdapter();
     private Profile profileMaxItem;
 
 //    public static ProfileAdapter adapterCorpName = new ProfileAdapter();
@@ -283,16 +275,16 @@ public class MainActivity extends AppCompatActivity
 ////        adapter = adapterCorpName;
 //        recyclerView.setAdapter(adapter);
 //
+
         profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
-        profileViewModel.getAllProfilesByCorpName().observe(this, new Observer<List<Profile>>() {
-            @Override
-            public void onChanged(List<Profile> profiles) {
-
-                profileListFull = new ArrayList<>(profiles);
-                adapter.submitList(profiles);
-            }
-        });
-
+//        profileViewModel.getAllProfilesByCorpName().observe(this, new Observer<List<Profile>>() {
+//            @Override
+//            public void onChanged(List<Profile> profiles) {
+//
+//                profileListFull = new ArrayList<>(profiles);
+//                adapter.submitList(profiles);
+//            }
+//        });
 
         profileViewModel.getMaxSequence().observe(this, new Observer<Profile>() {
             @Override
@@ -319,14 +311,17 @@ public class MainActivity extends AppCompatActivity
 
 
 
+
+
 //        adapter.setOnItemClickListener(new ProfileAdapter.OnItemClickListener() {
 //            @Override
 //            public void onItemClick(Profile profile) {
-//                Intent intent = new Intent(context, AddEditProfileActivity.class);
+//                Intent intent = new Intent(MainActivity.this, AddEditProfileActivity.class);
 //                intent.putExtra(AddEditProfileActivity.EXTRA_ID, profile.getId());
 //                intent.putExtra(AddEditProfileActivity.EXTRA_PASSPORT_ID, profile.getPassportId());
 //                intent.putExtra(AddEditProfileActivity.EXTRA_CORP_NAME, profile.getCorpName());
 //                intent.putExtra(AddEditProfileActivity.EXTRA_USER_NAME, profile.getUserName());
+//                intent.putExtra(AddEditProfileActivity.EXTRA_USER_EMAIL, profile.getUserEmail());
 //                intent.putExtra(AddEditProfileActivity.EXTRA_CORP_WEBSITE, profile.getCorpWebsite());
 //                intent.putExtra(AddEditProfileActivity.EXTRA_NOTE, profile.getNote());
 //                intent.putExtra(AddEditProfileActivity.EXTRA_ACTVY_LONG, profile.getActvyLong());
@@ -337,27 +332,6 @@ public class MainActivity extends AppCompatActivity
 //
 //            }
 //        });
-
-
-        adapter.setOnItemClickListener(new ProfileAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(Profile profile) {
-                Intent intent = new Intent(MainActivity.this, AddEditProfileActivity.class);
-                intent.putExtra(AddEditProfileActivity.EXTRA_ID, profile.getId());
-                intent.putExtra(AddEditProfileActivity.EXTRA_PASSPORT_ID, profile.getPassportId());
-                intent.putExtra(AddEditProfileActivity.EXTRA_CORP_NAME, profile.getCorpName());
-                intent.putExtra(AddEditProfileActivity.EXTRA_USER_NAME, profile.getUserName());
-                intent.putExtra(AddEditProfileActivity.EXTRA_USER_EMAIL, profile.getUserEmail());
-                intent.putExtra(AddEditProfileActivity.EXTRA_CORP_WEBSITE, profile.getCorpWebsite());
-                intent.putExtra(AddEditProfileActivity.EXTRA_NOTE, profile.getNote());
-                intent.putExtra(AddEditProfileActivity.EXTRA_ACTVY_LONG, profile.getActvyLong());
-                intent.putExtra(AddEditProfileActivity.EXTRA_OPEN_DATE_LONG, profile.getOpenLong());
-
-                Log.d(TAG, "edit requested");
-                startActivityForResult(intent, EDIT_PROFILE_REQUEST);
-
-            }
-        });
 
 //        recyclerView.onScreenStateChanged(int state);
 
@@ -615,202 +589,211 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    private void searchTextEntry(Menu menu) {
-        Log.d(TAG, "onCreateOptionsMenu: search starting");
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        mSearchView = (SearchView) menu.findItem(R.id.menumain_search).getActionView();
-        SearchableInfo searchableInfo = searchManager.getSearchableInfo(getComponentName());
-        mSearchView.setSearchableInfo(searchableInfo);
 
-        mSearchView.setIconified(true);
+//    ===================================================================================================
+//      Deprecated Search Method
+//
+//    ===================================================================================================
 
-        mSearchView.setOnSearchClickListener(new SearchView.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "onClick: v " + v.toString());
-                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                boolean isDictRefreshed = sharedPreferences.getBoolean(SEARCH_DICT_REFRESHED, false);
-                if (isDictRefreshed) {
-                    Log.d(TAG, "onClick: yes dict refreshed");
-                } else {
-                    Log.d(TAG, "onClick: no dict refreshed");
-                    Toast.makeText(getApplicationContext(), "One moment to populate search dictionary", Toast.LENGTH_LONG).show();
-                    loadSearchDB();
-                    isDictRefreshed = sharedPreferences.getBoolean(SEARCH_DICT_REFRESHED, false);
-                    Log.d(TAG, "onClick: dict refreshed");
-                }
-
-            }
-        });
-
-        //        mSearchView.clearFocus();
-//        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-//        String queryResult = sharedPreferences.getString(SELECTION_QUERY, "");
-
-//        if (queryResult.equals("")) {
-//            setMenuItemChecked(R.id.menumain_ifSearch, false);
-//        } else {
-//            setMenuItemChecked(R.id.menumain_ifSearch, true);
-//        }
-
-
-//        Log.d(TAG, "onCreateOptionsMenu: activated " + mSearchView.isActivated());
-
-        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                Log.d(TAG, "onQueryTextSubmit: called " + query);
-                mSearchView.clearFocus();
+//    private void searchTextEntry(Menu menu) {
+//        Log.d(TAG, "onCreateOptionsMenu: search starting");
+//        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+//        mSearchView = (SearchView) menu.findItem(R.id.menumain_search).getActionView();
+//        SearchableInfo searchableInfo = searchManager.getSearchableInfo(getComponentName());
+//        mSearchView.setSearchableInfo(searchableInfo);
+//
+//        mSearchView.setIconified(true);
+//
+//        mSearchView.setOnSearchClickListener(new SearchView.OnClickListener() {
+//
+//            @Override
+//            public void onClick(View v) {
+//                Log.d(TAG, "onClick: v " + v.toString());
+//                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+//                boolean isDictRefreshed = sharedPreferences.getBoolean(SEARCH_DICT_REFRESHED, false);
+//                if (isDictRefreshed) {
+//                    Log.d(TAG, "onClick: yes dict refreshed");
+//                } else {
+//                    Log.d(TAG, "onClick: no dict refreshed");
+//                    Toast.makeText(getApplicationContext(), "One moment to populate search dictionary", Toast.LENGTH_LONG).show();
+//                    loadSearchDB();
+//                    isDictRefreshed = sharedPreferences.getBoolean(SEARCH_DICT_REFRESHED, false);
+//                    Log.d(TAG, "onClick: dict refreshed");
+//                }
+//
+//            }
+//        });
+//
+//        //        mSearchView.clearFocus();
+////        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+////        String queryResult = sharedPreferences.getString(SELECTION_QUERY, "");
+//
+////        if (queryResult.equals("")) {
+////            setMenuItemChecked(R.id.menumain_ifSearch, false);
+////        } else {
+////            setMenuItemChecked(R.id.menumain_ifSearch, true);
+////        }
+//
+//
+////        Log.d(TAG, "onCreateOptionsMenu: activated " + mSearchView.isActivated());
+//
+//        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//            @Override
+//            public boolean onQueryTextSubmit(String query) {
+//                Log.d(TAG, "onQueryTextSubmit: called " + query);
+//                mSearchView.clearFocus();
+////                AccountListActivityFragment listFragment = (AccountListActivityFragment)
+////                        getSupportFragmentManager().findFragmentById(R.id.fragment);
+//                Cursor cursor = mSearchView.getSuggestionsAdapter().getCursor();
+//                if (cursor == null) {
+//                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+//                    sharedPreferences.edit().putString(SELECTION_QUERY, "").apply();
+//                    sharedPreferences.edit().putInt(SELECTION_ONE_ITEM, -1).apply();
+//                    return false;
+//                }
+//                if (cursor.getCount() == 1) {
+//                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+//                    sharedPreferences.edit().putString(SELECTION_QUERY, "").apply();
+//                    int accountId = getSearchAccountId(0);
+//                    Log.d(TAG, "onQueryTextSubmit: accountId " + accountId);
+//                    sharedPreferences.edit().putInt(SELECTION_ONE_ITEM, accountId).apply();
+////                    listFragment.setQuery("");
+////                    listFragment.setAcctId(accountId);
+////                    int pos = listFragment.getAccountSelectedPos();
+////                    Log.d(TAG, ": pos " + pos);
+////                    if (pos == -1) {
+////                        searchListRequest();
+////                    } else {
+////                        acctEditRequest(accountId);
+////                    }
+//                    return false;
+//                }
+//                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+//                sharedPreferences.edit().putString(SELECTION_QUERY, query).apply();
+//                sharedPreferences.edit().putInt(SELECTION_ONE_ITEM, -1).apply();
+//
+//                //                showSuggestions();
+//
+////                SearchesContract.cursorSearch = mSearchView.getSuggestionsAdapter().getCursor();
+//
+////                Log.d(TAG, "onQueryTextSubmit: #searches " + mSearchView.getSuggestionsAdapter().getCursor().getCount());
+//
+//                Log.d(TAG, "onQueryTextSubmit: showSearches");
+//
+////                showSearches();
+////                finish();
+////                listFragment.setQuery(query);
+//
+//
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean onQueryTextChange(String newText) {
+////                Log.d(TAG, "onQueryTextChange: adt " + mSearchView.getSuggestionsAdapter().getCount());
+////                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+////                sharedPreferences.edit().putString(SELECTION_QUERY, newText).apply();
+//
+//                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+//                sharedPreferences.edit().putString(SELECTION_QUERY, "").apply();
+//                sharedPreferences.edit().putInt(SELECTION_ONE_ITEM, -1).apply();
+//
+//                return false;
+//            }
+//
+//
+//        });
+//
+//
+//        mSearchView.setOnCloseListener(new SearchView.OnCloseListener() {
+//            @Override
+//            public boolean onClose() {
+//                Log.d(TAG, "SearchView onClose: starts");
+////                showSuggestions();
+////                finish();
+//                mSearchView.clearFocus();
+////                setMenuItemChecked(R.id.menumain_ifSearch, false);
+//                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+//                sharedPreferences.edit().putString(SELECTION_QUERY, "").apply();
+//                sharedPreferences.edit().putInt(SELECTION_ONE_ITEM, -1).apply();
+//
 //                AccountListActivityFragment listFragment = (AccountListActivityFragment)
 //                        getSupportFragmentManager().findFragmentById(R.id.fragment);
-                Cursor cursor = mSearchView.getSuggestionsAdapter().getCursor();
-                if (cursor == null) {
-                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                    sharedPreferences.edit().putString(SELECTION_QUERY, "").apply();
-                    sharedPreferences.edit().putInt(SELECTION_ONE_ITEM, -1).apply();
-                    return false;
-                }
-                if (cursor.getCount() == 1) {
-                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                    sharedPreferences.edit().putString(SELECTION_QUERY, "").apply();
-                    int accountId = getSearchAccountId(0);
-                    Log.d(TAG, "onQueryTextSubmit: accountId " + accountId);
-                    sharedPreferences.edit().putInt(SELECTION_ONE_ITEM, accountId).apply();
-//                    listFragment.setQuery("");
-//                    listFragment.setAcctId(accountId);
-//                    int pos = listFragment.getAccountSelectedPos();
-//                    Log.d(TAG, ": pos " + pos);
-//                    if (pos == -1) {
-//                        searchListRequest();
-//                    } else {
-//                        acctEditRequest(accountId);
-//                    }
-                    return false;
-                }
-                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                sharedPreferences.edit().putString(SELECTION_QUERY, query).apply();
-                sharedPreferences.edit().putInt(SELECTION_ONE_ITEM, -1).apply();
-
-                //                showSuggestions();
-
-//                SearchesContract.cursorSearch = mSearchView.getSuggestionsAdapter().getCursor();
-
-//                Log.d(TAG, "onQueryTextSubmit: #searches " + mSearchView.getSuggestionsAdapter().getCursor().getCount());
-
-                Log.d(TAG, "onQueryTextSubmit: showSearches");
-
-//                showSearches();
-//                finish();
-//                listFragment.setQuery(query);
-
-
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-//                Log.d(TAG, "onQueryTextChange: adt " + mSearchView.getSuggestionsAdapter().getCount());
-//                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-//                sharedPreferences.edit().putString(SELECTION_QUERY, newText).apply();
-
-                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                sharedPreferences.edit().putString(SELECTION_QUERY, "").apply();
-                sharedPreferences.edit().putInt(SELECTION_ONE_ITEM, -1).apply();
-
-                return false;
-            }
-
-
-        });
-
-
-        mSearchView.setOnCloseListener(new SearchView.OnCloseListener() {
-            @Override
-            public boolean onClose() {
-                Log.d(TAG, "SearchView onClose: starts");
-//                showSuggestions();
-//                finish();
-                mSearchView.clearFocus();
-//                setMenuItemChecked(R.id.menumain_ifSearch, false);
-                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                sharedPreferences.edit().putString(SELECTION_QUERY, "").apply();
-                sharedPreferences.edit().putInt(SELECTION_ONE_ITEM, -1).apply();
-
-                AccountListActivityFragment listFragment = (AccountListActivityFragment)
-                        getSupportFragmentManager().findFragmentById(R.id.fragment);
-                listFragment.setQuery("");
-
-
-//                Intent detailIntent = new Intent(this, AccountListActivity.class);
-//                detailIntent.putExtra(Account.class.getSimpleName(), sortorder);
-//                startActivityForResult(detailIntent, REQUEST_ACCOUNTS_LIST);
-
-                return false;
-            }
-        });
-
-        mSearchView.setOnSuggestionListener(new SearchView.OnSuggestionListener() {
-            @Override
-            public boolean onSuggestionSelect(int position) {
-                Log.d(TAG, "onSuggestionSelect: position " + position);
-//                showSuggestions();
-                return false;
-            }
-
-            @Override
-            public boolean onSuggestionClick(int position) {
-                Log.d(TAG, "onSuggestionClick: position " + position);
-//                showSuggestions();
-                mSearchView.clearFocus();
-                int accountId = getSearchAccountId(position);
-                Log.d(TAG, "onSuggestionClick: accountId " + accountId);
-//                showOneSearches(accountId, position);
-                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                sharedPreferences.edit().putString(SELECTION_QUERY, "").apply();
-                sharedPreferences.edit().putInt(SELECTION_ONE_ITEM, accountId).apply();
-                Log.d(TAG, "onSuggestionClick: finish");
-                AccountListActivityFragment listFragment = (AccountListActivityFragment)
-                        getSupportFragmentManager().findFragmentById(R.id.fragment);
 //                listFragment.setQuery("");
-//                listFragment.setAcctId(accountId);
-//                int pos = listFragment.getAccountSelectedPos();
-//                Log.d(TAG, "onSuggestionClick: pos " + pos);
-//                if (pos == -1) {
-//                    searchListRequest();
-//                } else {
-//                    acctEditRequest(accountId);
-//                }
-//                //                finish();
+//
+//
+////                Intent detailIntent = new Intent(this, AccountListActivity.class);
+////                detailIntent.putExtra(Account.class.getSimpleName(), sortorder);
+////                startActivityForResult(detailIntent, REQUEST_ACCOUNTS_LIST);
+//
+//                return false;
+//            }
+//        });
+//
+//        mSearchView.setOnSuggestionListener(new SearchView.OnSuggestionListener() {
+//            @Override
+//            public boolean onSuggestionSelect(int position) {
+//                Log.d(TAG, "onSuggestionSelect: position " + position);
+////                showSuggestions();
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean onSuggestionClick(int position) {
+//                Log.d(TAG, "onSuggestionClick: position " + position);
+////                showSuggestions();
+//                mSearchView.clearFocus();
+//                int accountId = getSearchAccountId(position);
+//                Log.d(TAG, "onSuggestionClick: accountId " + accountId);
+////                showOneSearches(accountId, position);
+//                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+//                sharedPreferences.edit().putString(SELECTION_QUERY, "").apply();
+//                sharedPreferences.edit().putInt(SELECTION_ONE_ITEM, accountId).apply();
+//                Log.d(TAG, "onSuggestionClick: finish");
+//                AccountListActivityFragment listFragment = (AccountListActivityFragment)
+//                        getSupportFragmentManager().findFragmentById(R.id.fragment);
+////                listFragment.setQuery("");
+////                listFragment.setAcctId(accountId);
+////                int pos = listFragment.getAccountSelectedPos();
+////                Log.d(TAG, "onSuggestionClick: pos " + pos);
+////                if (pos == -1) {
+////                    searchListRequest();
+////                } else {
+////                    acctEditRequest(accountId);
+////                }
+////                //                finish();
+//
+//                return false;
+//            }
+//        });
+//
+//        Log.d(TAG, "onCreateOptionsMenu: returned " + true);
+//
+//
+////        return true;
+//    }
 
-                return false;
-            }
-        });
 
-        Log.d(TAG, "onCreateOptionsMenu: returned " + true);
-
-
-//        return true;
-    }
-
-
-    private int getSearchAccountId(int position) {
-//        Log.d(TAG, "showAccount: pos " + position);
-        mSearchView.getSuggestionsAdapter().getCursor().moveToFirst();
-        mSearchView.getSuggestionsAdapter().getCursor().move(position);
-//        Log.d(TAG, "showAccount: " + mSearchView.getSuggestionsAdapter().getCursor().getColumnName(3));
-//        Log.d(TAG, "showAccount: " + mSearchView.getSuggestionsAdapter().getCursor().getString(3));
-//        Log.d(TAG, "showAccount: " + mSearchView.getSuggestionsAdapter().getCursor().getColumnName(5));
-        int dbId = Integer.valueOf(mSearchView.getSuggestionsAdapter().getCursor()
-                .getString(mSearchView.getSuggestionsAdapter().getCursor().getColumnIndex(SearchManager.SUGGEST_COLUMN_INTENT_DATA)));
-//        Log.d(TAG, "showAccount: " + dbId);
-//        String corpName = mSearchView.getSuggestionsAdapter().getCursor()
-//                .getString(mSearchView.getSuggestionsAdapter().getCursor().getColumnIndex(SearchManager.SUGGEST_COLUMN_TEXT_1));
-//        Log.d(TAG, "showAccount: corpName " + corpName);
-
-        return dbId;
-
-    }
+//    private int getSearchAccountId(int position) {
+////        Log.d(TAG, "showAccount: pos " + position);
+//        mSearchView.getSuggestionsAdapter().getCursor().moveToFirst();
+//        mSearchView.getSuggestionsAdapter().getCursor().move(position);
+////        Log.d(TAG, "showAccount: " + mSearchView.getSuggestionsAdapter().getCursor().getColumnName(3));
+////        Log.d(TAG, "showAccount: " + mSearchView.getSuggestionsAdapter().getCursor().getString(3));
+////        Log.d(TAG, "showAccount: " + mSearchView.getSuggestionsAdapter().getCursor().getColumnName(5));
+//        int dbId = Integer.valueOf(mSearchView.getSuggestionsAdapter().getCursor()
+//                .getString(mSearchView.getSuggestionsAdapter().getCursor().getColumnIndex(SearchManager.SUGGEST_COLUMN_INTENT_DATA)));
+////        Log.d(TAG, "showAccount: " + dbId);
+////        String corpName = mSearchView.getSuggestionsAdapter().getCursor()
+////                .getString(mSearchView.getSuggestionsAdapter().getCursor().getColumnIndex(SearchManager.SUGGEST_COLUMN_TEXT_1));
+////        Log.d(TAG, "showAccount: corpName " + corpName);
+//
+//        return dbId;
+//
+//    }
+//  ==================================================================================================
+//    End of commented depreciated search method
+//    ================================================================================================
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -1320,28 +1303,33 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    private void removeEditFrag() {
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        Fragment editFragment = fragmentManager.findFragmentById(R.id.task_details_container);
+//    =======================================================================================
+//    remove code Fragment 2pane technique which is no longer used
+//    =======================================================================================
 
-        if (editFragment != null) {
-
-            getSupportFragmentManager().beginTransaction()
-                    .remove(editFragment)
-                    .commit();
-
-            mainFragment.setVisibility(View.VISIBLE);
-
-            if (!isLandscape) {
-                View addEditLayout = findViewById(R.id.task_details_container);
-                View addEditLayoutScroll = findViewById(R.id.task_details_container_scroll);
-                addEditLayout.setVisibility(View.GONE);
-                addEditLayoutScroll.setVisibility(View.GONE);
-            }
-
-        }
-    }
+//    private void removeEditFrag() {
+//
+//        FragmentManager fragmentManager = getSupportFragmentManager();
+//        Fragment editFragment = fragmentManager.findFragmentById(R.id.task_details_container);
+//
+//        if (editFragment != null) {
+//
+//            getSupportFragmentManager().beginTransaction()
+//                    .remove(editFragment)
+//                    .commit();
+//
+//            mainFragment.setVisibility(View.VISIBLE);
+//
+//            if (!isLandscape) {
+//                View addEditLayout = findViewById(R.id.task_details_container);
+//                View addEditLayoutScroll = findViewById(R.id.task_details_container_scroll);
+//                addEditLayout.setVisibility(View.GONE);
+//                addEditLayoutScroll.setVisibility(View.GONE);
+//            }
+//
+//        }
+//    }
 
     private void resequenceList() {
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -1457,45 +1445,51 @@ public class MainActivity extends AppCompatActivity
         startActivityForResult(detailIntent, REQUEST_VIEW_EXPORT);
     }
 
-    @Override
-    public void onAccountListSelect(Account account) {
-        Log.d(TAG, "onAccountListSelect: " + account.getCorpName());
-//        accountMode = AccountsContract.ACCOUNT_ACTION_CHG;
-//        Log.d(TAG, "onAccountListSelect: selected pos " + selected_position);
-//        fragList.setSelected_position(selected_position);
-//        accountSelectedPos = selected_position;
-//        setMenuItemEnabled(R.id.menuacct_delete, true);
-//        setMenuItemEnabled(R.id.menuacct_save, false);
-//        setMenuItemVisible(R.id.menuacct_save, false);
-//        if (account.getCorpWebsite().equals("")) {
-//            setMenuItemEnabled(R.id.menuacct_internet, false);
-//        } else {
-//            setMenuItemEnabled(R.id.menuacct_internet, true);
-//        }
-        this.account = account;
 
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        sharedPreferences.edit().putString(SELECTION_QUERY, "").apply();
-        sharedPreferences.edit().putInt(SELECTION_ONE_ITEM, this.account.getId()).apply();
+//    ============================================================================================
+//    obsolete account list manipulate
+//    ===========================================================================================
 
-
-//        if (isLandscape) {
-//            acctEditRequest(this.account.getId());
-//        }
-
-        Toast.makeText(this,
-                "Long click select for more details",
-                Toast.LENGTH_SHORT).show();
-
-//        mSectionsPagerAdapter.destroyItem(mViewPager, frag1Pos, frag1);
-//        mSectionsPagerAdapter.destroyItem(mViewPager, frag2Pos, frag2);
-//        mSectionsPagerAdapter.destroyItem(mViewPager, frag3Pos, frag3);
-//        int currPage = mViewPager.getCurrentItem();
-
-//        updatePages(currPage);
-//        updatePages(frag1Pos);
-
-    }
+//    @Override
+//    public void onAccountListSelect(Account account) {
+//        Log.d(TAG, "onAccountListSelect: " + account.getCorpName());
+////        accountMode = AccountsContract.ACCOUNT_ACTION_CHG;
+////        Log.d(TAG, "onAccountListSelect: selected pos " + selected_position);
+////        fragList.setSelected_position(selected_position);
+////        accountSelectedPos = selected_position;
+////        setMenuItemEnabled(R.id.menuacct_delete, true);
+////        setMenuItemEnabled(R.id.menuacct_save, false);
+////        setMenuItemVisible(R.id.menuacct_save, false);
+////        if (account.getCorpWebsite().equals("")) {
+////            setMenuItemEnabled(R.id.menuacct_internet, false);
+////        } else {
+////            setMenuItemEnabled(R.id.menuacct_internet, true);
+////        }
+//        this.account = account;
+//
+//        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+//        sharedPreferences.edit().putString(SELECTION_QUERY, "").apply();
+//        sharedPreferences.edit().putInt(SELECTION_ONE_ITEM, this.account.getId()).apply();
+//
+//
+////        if (isLandscape) {
+////            acctEditRequest(this.account.getId());
+////        }
+//
+//        Toast.makeText(this,
+//                "Long click select for more details",
+//                Toast.LENGTH_SHORT).show();
+//
+////        mSectionsPagerAdapter.destroyItem(mViewPager, frag1Pos, frag1);
+////        mSectionsPagerAdapter.destroyItem(mViewPager, frag2Pos, frag2);
+////        mSectionsPagerAdapter.destroyItem(mViewPager, frag3Pos, frag3);
+////        int currPage = mViewPager.getCurrentItem();
+//
+////        updatePages(currPage);
+////        updatePages(frag1Pos);
+//
+//    }
+//==============================================================================================
 
 //    private void updatePages(int currPage) {
 //        isUserPaging = false;
@@ -1810,137 +1804,141 @@ public class MainActivity extends AppCompatActivity
 //    }
 
 
-    @Override
-    public void onListComplete() {
-        progressBar.setVisibility(View.GONE);
-    }
+//    ===========================================================================================
+//    obsolete Account list manipulate
+//    ===========================================================================================
 
-    @Override
-    public void onAccountLong(final Account account) {
-        Log.d(TAG, "onAccountLong: " + account);
-//        showAboutDialog();
-
-        @SuppressLint("InflateParams") View messageView = getLayoutInflater().inflate(R.layout.activity_itemview, null, false);
-
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.app_name);
-        builder.setIcon(R.mipmap.ic_launcher);
-
-        builder.setView(messageView);
-
-//            builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-//                @Override
-//                public void onClick(DialogInterface dialog, int which) {
-////                Log.d(TAG, "onClick: Entering messageView.onClick, showing = " + mDialog.isShowing());
-//                    if(mDialog != null && mDialog.isShowing()) {
-//                        mDialog.dismiss();
-//                    }
-//                }
-//            });
-
-        mDialog = builder.create();
-        mDialog.setCanceledOnTouchOutside(true);
-
-        final EditText tvName = messageView.findViewById(R.id.txt_corp_name);
-        tvName.setText(account.getCorpName());
-        TextView tvId = (TextView) messageView.findViewById(R.id.txt_id);
-//            tvId.setText(String.valueOf("AcctId " + account.getId()));
-        tvId.setText(String.valueOf("AcctId " + account.getPassportId()));
-//            final EditText tvWebsite = messageView.findViewById(R.id.addedit_corp_website);
-//            tvWebsite.setText(account.getCorpWebsite());
-
-        ImageButton btnEdit = messageView.findViewById(R.id.imgbtn_edit);
-        btnEdit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "onClick: for edit");
-                acctEditRequest(account.getId());
-                mDialog.dismiss();
-            }
-        });
-
-        ImageButton btnSave = messageView.findViewById(R.id.imgbtn_save);
-        btnSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "onClick: for edit");
-                String prevCorpName = account.getCorpName();
-                account.setCorpName(tvName.getText().toString());
-//                    if (!tvWebsite.getText().toString().startsWith("")) {
-//                        if (tvWebsite.getText().toString().startsWith("http://") ||
-//                                tvWebsite.getText().toString().startsWith("https://")) {
-//                            account.setCorpWebsite(tvWebsite.getText().toString());
-//                        } else {
-//                            tvWebsite.setError("website must start with http");
-//                            return;
-//                        }
-//                    }
-                updateCorp(account);
-                mDialog.dismiss();
-                if (isLandscape) {
-                    removeEditing();
-                }
-
-//                    if (!prevCorpName.equals(account.getCorpName())) {
-//                        Log.d(TAG, "onClick: corpname chg to refresh search");
-//                        searchListRequest();
-//                    }
-            }
-        });
-
-        ImageButton btnDelete = messageView.findViewById(R.id.imgbtn_delete);
-        btnDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "onClick: for edit");
-                confirmDeleteAccount(account);
-                mDialog.dismiss();
-            }
-        });
-
-//        ImageButton btnWebsite = messageView.findViewById(R.id.imgbtn_globe);
-//        btnWebsite.setOnClickListener(new View.OnClickListener() {
+//    @Override
+//    public void onListComplete() {
+//        progressBar.setVisibility(View.GONE);
+//    }
+//
+//    @Override
+//    public void onAccountLong(final Account account) {
+//        Log.d(TAG, "onAccountLong: " + account);
+////        showAboutDialog();
+//
+//        @SuppressLint("InflateParams") View messageView = getLayoutInflater().inflate(R.layout.activity_itemview, null, false);
+//
+//        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//        builder.setTitle(R.string.app_name);
+//        builder.setIcon(R.mipmap.ic_launcher);
+//
+//        builder.setView(messageView);
+//
+////            builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+////                @Override
+////                public void onClick(DialogInterface dialog, int which) {
+//////                Log.d(TAG, "onClick: Entering messageView.onClick, showing = " + mDialog.isShowing());
+////                    if(mDialog != null && mDialog.isShowing()) {
+////                        mDialog.dismiss();
+////                    }
+////                }
+////            });
+//
+//        mDialog = builder.create();
+//        mDialog.setCanceledOnTouchOutside(true);
+//
+//        final EditText tvName = messageView.findViewById(R.id.txt_corp_name);
+//        tvName.setText(account.getCorpName());
+//        TextView tvId = (TextView) messageView.findViewById(R.id.txt_id);
+////            tvId.setText(String.valueOf("AcctId " + account.getId()));
+//        tvId.setText(String.valueOf("AcctId " + account.getPassportId()));
+////            final EditText tvWebsite = messageView.findViewById(R.id.addedit_corp_website);
+////            tvWebsite.setText(account.getCorpWebsite());
+//
+//        ImageButton btnEdit = messageView.findViewById(R.id.imgbtn_edit);
+//        btnEdit.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
 //                Log.d(TAG, "onClick: for edit");
-//                verifyEmail(tvWebsite);
-//                linkToInternet(tvWebsite.getText().toString());
+//                acctEditRequest(account.getId());
 //                mDialog.dismiss();
 //            }
 //        });
-//            TextView about_url = (TextView) messageView.findViewById(R.id.about_url);
-//            if(about_url != null) {
-//                about_url.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        Intent intent = new Intent(Intent.ACTION_VIEW);
-//                        String s = ((TextView) v).getText().toString();
-//                        intent.setData(Uri.parse(s));
-//                        try {
-//                            startActivity(intent);
-//                        } catch(ActivityNotFoundException e) {
-//                            Toast.makeText(MainActivity.this, "No browser application found, cannot visit world-wide web", Toast.LENGTH_LONG).show();
-//                        }
-//                    }
-//                });
-//            }
-
-        mDialog.show();
-
-//        fragAppDialog = new AppItem();
-////        currentFragClass = fragCurrencyCountry.getClass().toString();
 //
-//        Bundle bundle = new Bundle();
-////            mBundle.putLong(DrawerItem.EXTRA_DRAWER_ID, idSelected);
-////			Log.v(TAG, "bundle set");
-////            getActivity().getActionBar().setTitle(drawerItem.getDescription());
-//        setTitle(getResources().getString(R.string.frag_title_feed));
-//        mBundle.putString(DrawerItem.EXTRA_RSS_VIEW, getResources().getString(R.string.dailyFxRss));
-//        fragDailyFxRss = new DailyFxRssFrag();
-//        addFragment(fragDailyFxRss);
-
-
-    }
+//        ImageButton btnSave = messageView.findViewById(R.id.imgbtn_save);
+//        btnSave.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Log.d(TAG, "onClick: for edit");
+//                String prevCorpName = account.getCorpName();
+//                account.setCorpName(tvName.getText().toString());
+////                    if (!tvWebsite.getText().toString().startsWith("")) {
+////                        if (tvWebsite.getText().toString().startsWith("http://") ||
+////                                tvWebsite.getText().toString().startsWith("https://")) {
+////                            account.setCorpWebsite(tvWebsite.getText().toString());
+////                        } else {
+////                            tvWebsite.setError("website must start with http");
+////                            return;
+////                        }
+////                    }
+//                updateCorp(account);
+//                mDialog.dismiss();
+//                if (isLandscape) {
+//                    removeEditing();
+//                }
+//
+////                    if (!prevCorpName.equals(account.getCorpName())) {
+////                        Log.d(TAG, "onClick: corpname chg to refresh search");
+////                        searchListRequest();
+////                    }
+//            }
+//        });
+//
+//        ImageButton btnDelete = messageView.findViewById(R.id.imgbtn_delete);
+//        btnDelete.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Log.d(TAG, "onClick: for edit");
+//                confirmDeleteAccount(account);
+//                mDialog.dismiss();
+//            }
+//        });
+//
+////        ImageButton btnWebsite = messageView.findViewById(R.id.imgbtn_globe);
+////        btnWebsite.setOnClickListener(new View.OnClickListener() {
+////            @Override
+////            public void onClick(View v) {
+////                Log.d(TAG, "onClick: for edit");
+////                verifyEmail(tvWebsite);
+////                linkToInternet(tvWebsite.getText().toString());
+////                mDialog.dismiss();
+////            }
+////        });
+////            TextView about_url = (TextView) messageView.findViewById(R.id.about_url);
+////            if(about_url != null) {
+////                about_url.setOnClickListener(new View.OnClickListener() {
+////                    @Override
+////                    public void onClick(View v) {
+////                        Intent intent = new Intent(Intent.ACTION_VIEW);
+////                        String s = ((TextView) v).getText().toString();
+////                        intent.setData(Uri.parse(s));
+////                        try {
+////                            startActivity(intent);
+////                        } catch(ActivityNotFoundException e) {
+////                            Toast.makeText(MainActivity.this, "No browser application found, cannot visit world-wide web", Toast.LENGTH_LONG).show();
+////                        }
+////                    }
+////                });
+////            }
+//
+//        mDialog.show();
+//
+////        fragAppDialog = new AppItem();
+//////        currentFragClass = fragCurrencyCountry.getClass().toString();
+////
+////        Bundle bundle = new Bundle();
+//////            mBundle.putLong(DrawerItem.EXTRA_DRAWER_ID, idSelected);
+//////			Log.v(TAG, "bundle set");
+//////            getActivity().getActionBar().setTitle(drawerItem.getDescription());
+////        setTitle(getResources().getString(R.string.frag_title_feed));
+////        mBundle.putString(DrawerItem.EXTRA_RSS_VIEW, getResources().getString(R.string.dailyFxRss));
+////        fragDailyFxRss = new DailyFxRssFrag();
+////        addFragment(fragDailyFxRss);
+//
+//
+//    }
 
 //    private void verifyEmail(TextView tvWebsite) {
 //        if (!tvWebsite.getText().toString().equals("")) {
@@ -2013,7 +2011,7 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    private void confirmDeleteProfile(Profile profile) {
+    private void confirmDeleteProfile(Profile profile, int position) {
 //        Log.d(TAG, "deleteAccount: ");
 //        if (account == null) {
 //            Toast.makeText(this,
@@ -2035,6 +2033,7 @@ public class MainActivity extends AppCompatActivity
         args.putString(AppDialog.DIALOG_MESSAGE, getString(R.string.deldiag_message));
         args.putString(AppDialog.DIALOG_SUB_MESSAGE, getString(R.string.deldiag_sub_message, profile.getCorpName(), profile.getPassportId()));
         args.putInt(AppDialog.DIALOG_ACCOUNT_ID, profile.getPassportId());
+        args.putInt(AppDialog.DIALOG_LIST_POSITION, position);
         args.putInt(AppDialog.DIALOG_POSITIVE_RID, R.string.deldiag_positive_caption);
 
         newFragment.setArguments(args);
@@ -2127,13 +2126,17 @@ public class MainActivity extends AppCompatActivity
 //    }
 
 
-    private void requestSearch() {
-        Log.d(TAG, "onPositiveDialogResult: request to rebuild search");
-        Intent detailIntent = new Intent(this, SearchActivityV1.class);
-        detailIntent.putExtra(SearchActivityV1.class.getSimpleName(), true);
-        startActivity(detailIntent);
-    }
+//    ====================================================================================
+//    search which is obsolete
+//    ===================================================================================
 
+//    private void requestSearch() {
+//        Log.d(TAG, "onPositiveDialogResult: request to rebuild search");
+//        Intent detailIntent = new Intent(this, SearchActivityV1.class);
+//        detailIntent.putExtra(SearchActivityV1.class.getSimpleName(), true);
+//        startActivity(detailIntent);
+//    }
+//  ==========================================================================================
 
     private void searchRequestActivity() {
 
@@ -2142,7 +2145,6 @@ public class MainActivity extends AppCompatActivity
         startActivity(detailIntent);
 
     }
-
 
     private void searchListRequest() {
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -2162,50 +2164,53 @@ public class MainActivity extends AppCompatActivity
         newFragment.show(fragmentManager, "dialog");
     }
 
+//==========================================================================================
+//    obsolete edit request manipulate
+//    ==========================================================================================
 
-    private void acctEditRequest(int accountId) {
-        Log.d(TAG, "taskEditRequest: starts " + accountId);
-        Log.d(TAG, "taskEditRequest: in two-pane mode (tablet) " + isLandscape);
-
-        try {
-            accountMode = AccountsContract.ACCOUNT_ACTION_CHG;
-            //        setMenuItemVisible(R.id.menuacct_save, true);
-            currFrag = AppFragType.ACCOUNTEDIT;
-            AddEditActivityFragment editFragment = new AddEditActivityFragment();
-            //        FragmentManager fragmentManager = getSupportFragmentManager();
-            //        AddEditActivityFragment editFragment = (AddEditActivityFragment)fragmentManager.findFragmentById(R.id.task_details_container);
-
-            //        if (editFragment == null) {
-            //            Log.d(TAG, "acctEditRequest: create add/edit");
-            //            editFragment = new AddEditActivityFragment();
-            //        }
-            Bundle arguments = new Bundle();
-            //        arguments.putSerializable(Account.class.getSimpleName(), accountId);
-            arguments.putInt(Account.class.getSimpleName(), accountId);
-            editFragment.setArguments(arguments);
-
-            Log.d(TAG, "taskEditRequest: twoPaneMode " + isLandscape);
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.task_details_container, editFragment)
-                    .commit();
-
-
-            Log.d(TAG, "taskEditRequest: in single-pane mode (phone)");
-            // Hide the left hand fragment and show the right hand frame
-            View mainFragment = findViewById(R.id.fragment);
-            View addEditLayout = findViewById(R.id.task_details_container);
-            View addEditLayoutScroll = findViewById(R.id.task_details_container_scroll);
-            addEditLayout.setVisibility(View.VISIBLE);
-            addEditLayoutScroll.setVisibility(View.VISIBLE);
-            if (!isLandscape) {
-                mainFragment.setVisibility(View.GONE);
-            }
-        } catch (Exception e) {
-            Log.e(TAG, "Edit build: " + e.getMessage());
-        }
-
-        Log.d(TAG, "Exiting taskEditRequest");
-    }
+//    private void acctEditRequest(int accountId) {
+//        Log.d(TAG, "taskEditRequest: starts " + accountId);
+//        Log.d(TAG, "taskEditRequest: in two-pane mode (tablet) " + isLandscape);
+//
+//        try {
+//            accountMode = AccountsContract.ACCOUNT_ACTION_CHG;
+//            //        setMenuItemVisible(R.id.menuacct_save, true);
+//            currFrag = AppFragType.ACCOUNTEDIT;
+//            AddEditActivityFragment editFragment = new AddEditActivityFragment();
+//            //        FragmentManager fragmentManager = getSupportFragmentManager();
+//            //        AddEditActivityFragment editFragment = (AddEditActivityFragment)fragmentManager.findFragmentById(R.id.task_details_container);
+//
+//            //        if (editFragment == null) {
+//            //            Log.d(TAG, "acctEditRequest: create add/edit");
+//            //            editFragment = new AddEditActivityFragment();
+//            //        }
+//            Bundle arguments = new Bundle();
+//            //        arguments.putSerializable(Account.class.getSimpleName(), accountId);
+//            arguments.putInt(Account.class.getSimpleName(), accountId);
+//            editFragment.setArguments(arguments);
+//
+//            Log.d(TAG, "taskEditRequest: twoPaneMode " + isLandscape);
+//            getSupportFragmentManager().beginTransaction()
+//                    .replace(R.id.task_details_container, editFragment)
+//                    .commit();
+//
+//
+//            Log.d(TAG, "taskEditRequest: in single-pane mode (phone)");
+//            // Hide the left hand fragment and show the right hand frame
+//            View mainFragment = findViewById(R.id.fragment);
+//            View addEditLayout = findViewById(R.id.task_details_container);
+//            View addEditLayoutScroll = findViewById(R.id.task_details_container_scroll);
+//            addEditLayout.setVisibility(View.VISIBLE);
+//            addEditLayoutScroll.setVisibility(View.VISIBLE);
+//            if (!isLandscape) {
+//                mainFragment.setVisibility(View.GONE);
+//            }
+//        } catch (Exception e) {
+//            Log.e(TAG, "Edit build: " + e.getMessage());
+//        }
+//
+//        Log.d(TAG, "Exiting taskEditRequest");
+//    }
 
 
 //    private void saveAccountEdits() {
@@ -2361,52 +2366,57 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    private void accountsListRequest(int sortorder) {
-//        Log.d(TAG, "accountsListRequest: starts");
-        if (isLandscape) {
-        } else {
-        }
 
+//    ============================================================================
+//    obsolete account list manipulate
+//    ============================================================================
 
-        Intent detailIntent = new Intent(this, AccountListActivity.class);
-        detailIntent.putExtra(Account.class.getSimpleName(), sortorder);
-        startActivityForResult(detailIntent, REQUEST_ACCOUNTS_LIST);
-
-//        AccountListActivityFragment fragment = new AccountListActivityFragment();
+//    private void accountsListRequest(int sortorder) {
+////        Log.d(TAG, "accountsListRequest: starts");
+//        if (isLandscape) {
+//        } else {
+//        }
 //
-////        fragment.LOADER_ID = 1;
-//        Bundle arguments = new Bundle();
-//        arguments.putSerializable(Account.class.getSimpleName(), AccountsContract.TABLE_NAME);
-//        fragment.setArguments(arguments);
 //
-//        getSupportFragmentManager().beginTransaction()
-//                .replace(R.id.fragment, fragment)
-//                .commit();
-    }
-
-    private void suggestsListRequest2() {
-        Log.d(TAG, "suggestsListRequest2: starts");
-        currFrag = AppFragType.PASSWORDS;
-        if (isLandscape) {
-        } else {
-        }
-
-        Intent detailIntent = new Intent(this, SuggestListActivityV1.class);
-        detailIntent.putExtra(Suggest.class.getSimpleName(), "sortorder");
-        startActivity(detailIntent);
-
-//        MainActivityFragment fragment = new MainActivityFragment();
+//        Intent detailIntent = new Intent(this, AccountListActivity.class);
+//        detailIntent.putExtra(Account.class.getSimpleName(), sortorder);
+//        startActivityForResult(detailIntent, REQUEST_ACCOUNTS_LIST);
 //
-////        fragment.LOADER_ID = 0;
-//        Bundle arguments = new Bundle();
-//        arguments.putSerializable(MainActivityFragment.BUNDLE_TABLE_ID, SuggestsContract.TABLE_NAME);
-//        fragment.setArguments(arguments);
+////        AccountListActivityFragment fragment = new AccountListActivityFragment();
+////
+//////        fragment.LOADER_ID = 1;
+////        Bundle arguments = new Bundle();
+////        arguments.putSerializable(Account.class.getSimpleName(), AccountsContract.TABLE_NAME);
+////        fragment.setArguments(arguments);
+////
+////        getSupportFragmentManager().beginTransaction()
+////                .replace(R.id.fragment, fragment)
+////                .commit();
+//    }
 //
-//        getSupportFragmentManager().beginTransaction()
-//                .replace(R.id.fragmentMain, fragment)
-//                .commit();
-
-    }
+//    private void suggestsListRequest2() {
+//        Log.d(TAG, "suggestsListRequest2: starts");
+//        currFrag = AppFragType.PASSWORDS;
+//        if (isLandscape) {
+//        } else {
+//        }
+//
+//        Intent detailIntent = new Intent(this, SuggestListActivityV1.class);
+//        detailIntent.putExtra(Suggest.class.getSimpleName(), "sortorder");
+//        startActivity(detailIntent);
+//
+////        MainActivityFragment fragment = new MainActivityFragment();
+////
+//////        fragment.LOADER_ID = 0;
+////        Bundle arguments = new Bundle();
+////        arguments.putSerializable(MainActivityFragment.BUNDLE_TABLE_ID, SuggestsContract.TABLE_NAME);
+////        fragment.setArguments(arguments);
+////
+////        getSupportFragmentManager().beginTransaction()
+////                .replace(R.id.fragmentMain, fragment)
+////                .commit();
+//
+//    }
 
     private void suggestsListRequest4() {
         Log.d(TAG, "suggestsListRequest3: starts");
@@ -2577,13 +2587,14 @@ public class MainActivity extends AppCompatActivity
                 }
 
                 int passportId = data.getIntExtra(AddEditProfileActivity.EXTRA_PASSPORT_ID, 0);
+                int sequence = data.getIntExtra(AddEditProfileActivity.EXTRA_SEQUENCE, 0);
                 String corpName = data.getStringExtra(AddEditProfileActivity.EXTRA_CORP_NAME);
                 String userName = data.getStringExtra(AddEditProfileActivity.EXTRA_USER_NAME);
                 String userEmail = data.getStringExtra(AddEditProfileActivity.EXTRA_USER_EMAIL);
                 String corpWebsite = data.getStringExtra(AddEditProfileActivity.EXTRA_CORP_WEBSITE);
                 String note = data.getStringExtra(AddEditProfileActivity.EXTRA_NOTE);
 
-                Profile profile = new Profile(1, corpName, userName, userEmail, corpWebsite);
+                Profile profile = new Profile(sequence, corpName, userName, userEmail, corpWebsite);
                 profile.setId(id);
                 profile.setPassportId(passportId);
                 profile.setNote(note);
@@ -2807,12 +2818,16 @@ public class MainActivity extends AppCompatActivity
 //    }
 
 
-    private void resetPreferences() {
-        Log.d(TAG, "resetPreferences: starts");
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        sharedPreferences.edit().putString(SELECTION_QUERY, "").apply();
-        sharedPreferences.edit().putInt(SELECTION_ONE_ITEM, -1).apply();
-    }
+//    ===================================================================================
+//    obsolete shared preference method
+//    ===================================================================================
+
+//    private void resetPreferences() {
+//        Log.d(TAG, "resetPreferences: starts");
+//        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+//        sharedPreferences.edit().putString(SELECTION_QUERY, "").apply();
+//        sharedPreferences.edit().putInt(SELECTION_ONE_ITEM, -1).apply();
+//    }
 
 
     private void loadSearchDB() {
@@ -3011,12 +3026,8 @@ public class MainActivity extends AppCompatActivity
                 break;
             case AppDialog.DIALOG_ID_CONFIRM_DELETE_PROFILE:
                 int profileId = args.getInt(AppDialog.DIALOG_ACCOUNT_ID);
-                for (Profile item : profileListFull) {
-                    if (item.getPassportId() == profileId) {
-                        profileViewModel.delete(item);
-                        break;
-                    }
-                }
+                int position = args.getInt(AppDialog.DIALOG_LIST_POSITION);
+                fragDelete(profileId);
                 break;
 //            case AppDialog.DIALOG_ID_CONFIRM_ADD_ACCOUNT:
 //                acctEditRequest(-1);
@@ -3024,6 +3035,30 @@ public class MainActivity extends AppCompatActivity
             case AppDialog.DIALOG_ID_EDITS_APPLIED:
                 break;
         }
+    }
+
+
+    private void fragDelete(int profileId) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        String stringFragmentName = fragmentManager.findFragmentById(R.id.fragment_container).getClass().getSimpleName();
+
+        Log.d(TAG, stringFragmentName);
+        Fragment profileFragment = fragmentManager.findFragmentById(R.id.fragment_container);
+        switch (stringFragmentName) {
+            case "ProfileCorpNameFrag":
+                ((ProfileCorpNameFrag) profileFragment).deleteFromList(profileId);
+                break;
+            case "ProfileOpenDateFrag":
+                ((ProfileOpenDateFrag) profileFragment).deleteFromList(profileId);
+                break;
+            case "ProfilePassportIdFrag":
+                ((ProfilePassportIdFrag) profileFragment).deleteFromList(profileId);
+                break;
+            case "ProfileCustomFrag":
+                ((ProfileCustomFrag) profileFragment).deleteFromList(profileId);
+                break;
+        }
+
     }
 
     @Override
@@ -3058,7 +3093,32 @@ public class MainActivity extends AppCompatActivity
             case AppDialog.DIALOG_ID_CONFIRM_ADD_ACCOUNT:
                 break;
             case AppDialog.DIALOG_ID_CONFIRM_DELETE_PROFILE:
-                adapter.notifyDataSetChanged();
+                int position = args.getInt(AppDialog.DIALOG_LIST_POSITION);
+                refreshDeletePos(position);
+//                adapter.notifyDataSetChanged();
+                break;
+        }
+
+    }
+
+    private void refreshDeletePos(int position) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        String stringFragmentName = fragmentManager.findFragmentById(R.id.fragment_container).getClass().getSimpleName();
+
+        Log.d(TAG, stringFragmentName);
+        Fragment profileFragment = fragmentManager.findFragmentById(R.id.fragment_container);
+        switch (stringFragmentName) {
+            case "ProfileCorpNameFrag":
+                ((ProfileCorpNameFrag) profileFragment).refreshListPos(position);
+                break;
+            case "ProfileOpenDateFrag":
+                ((ProfileOpenDateFrag) profileFragment).refreshListPos(position);
+                break;
+            case "ProfilePassportIdFrag":
+                ((ProfilePassportIdFrag) profileFragment).refreshListPos(position);
+                break;
+            case "ProfileCustomFrag":
+                ((ProfileCustomFrag) profileFragment).refreshListPos(position);
                 break;
         }
 
@@ -3410,10 +3470,6 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    @Override
-    public void onProfileCorpNameListSelect(Profile profile) {
-        this.startUpProfileUpdate(profile);
-    }
 
     @Override
     public void onProfilePassportIdSelect(Profile profile) {
@@ -3425,30 +3481,40 @@ public class MainActivity extends AppCompatActivity
         this.startUpProfileUpdate(profile);
     }
 
-    @Override
-    public void onDeleteConfirmCustom(Profile profile) {
-        confirmDeleteProfile(profile);
-    }
-
-    @Override
-    public void onDeleteConfirmCorpName(Profile profile) {
-        confirmDeleteProfile(profile);
-    }
-
-    @Override
-    public void onDeleteConfirmOpenDate(Profile profile) {
-        confirmDeleteProfile(profile);
-    }
-
-    @Override
-    public void onDeleteConfirmPassportId(Profile profile) {
-        confirmDeleteProfile(profile);
-    }
 
     @Override
     public void onProfileOpenDateListSelect(Profile profile) {
         this.startUpProfileUpdate(profile);
     }
+
+    @Override
+    public void onProfileCorpNameListSelect(Profile profile) {
+        this.startUpProfileUpdate(profile);
+    }
+
+
+
+    @Override
+    public void onDeleteConfirmCustom(Profile profile, int position) {
+        confirmDeleteProfile(profile, position );
+    }
+
+    @Override
+    public void onDeleteConfirmCorpName(Profile profile, int position) {
+        confirmDeleteProfile(profile, position);
+    }
+
+    @Override
+    public void onDeleteConfirmOpenDate(Profile profile, int position) {
+        confirmDeleteProfile(profile, position);
+    }
+
+    @Override
+    public void onDeleteConfirmPassportId(Profile profile, int position) {
+        confirmDeleteProfile(profile, position);
+    }
+
+
 
     private void startUpProfileUpdate(Profile profile) {
         Intent intent = new Intent(this, AddEditProfileActivity.class);
@@ -3467,6 +3533,36 @@ public class MainActivity extends AppCompatActivity
         startActivityForResult(intent, EDIT_PROFILE_REQUEST);
 
     }
+
+//    private void refreshList() {
+//        FragmentManager fragmentManager = getSupportFragmentManager();
+//        String stringFragmentName = fragmentManager.findFragmentById(R.id.fragment_container).getClass().getSimpleName();
+//
+//        Log.d(TAG, stringFragmentName);
+//        Fragment profileFragment = fragmentManager.findFragmentById(R.id.fragment_container);
+//        switch (stringFragmentName) {
+//            case "ProfileCorpNameFrag":
+//                ((ProfileCorpNameFrag) profileFragment).refreshList();
+//                break;
+//            case "ProfileOpenDateFrag":
+//                ((ProfileOpenDateFrag) profileFragment).refreshList();
+//                break;
+//            case "ProfilePassportIdFrag":
+//                ((ProfilePassportIdFrag) profileFragment).refreshList();
+//                break;
+//            case "ProfileCustomFrag":
+//                ((ProfileCustomFrag) profileFragment).refreshList();
+//                break;
+//        }
+//        if (stringFragmentName.equals("ProfileCustomFrag")) {
+//            Log.d(TAG, "about to re-sequence");
+//
+//
+//        } else {
+//            Log.d(TAG, "no ProfileCustomFrag available");
+//        }
+//
+//    }
 
 //    @Override
 //    public Filter getFilter() {

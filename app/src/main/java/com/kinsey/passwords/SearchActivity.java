@@ -147,6 +147,8 @@ public class SearchActivity extends AppCompatActivity {
             public void onItemClick(Profile profile) {
                 Intent intent = new Intent(SearchActivity.this, AddEditProfileActivity.class);
                 intent.putExtra(AddEditProfileActivity.EXTRA_ID, profile.getId());
+                intent.putExtra(AddEditProfileActivity.EXTRA_PASSPORT_ID, profile.getPassportId());
+                intent.putExtra(AddEditProfileActivity.EXTRA_SEQUENCE, profile.getSequence());
                 intent.putExtra(AddEditProfileActivity.EXTRA_CORP_NAME, profile.getCorpName());
                 intent.putExtra(AddEditProfileActivity.EXTRA_USER_NAME, profile.getUserName());
                 intent.putExtra(AddEditProfileActivity.EXTRA_USER_EMAIL, profile.getUserEmail());
@@ -199,14 +201,17 @@ public class SearchActivity extends AppCompatActivity {
                     return;
                 }
 
+                int passporId = data.getIntExtra(AddEditProfileActivity.EXTRA_PASSPORT_ID, -1);
+                int sequence = data.getIntExtra(AddEditProfileActivity.EXTRA_SEQUENCE, 0);
                 String corpName = data.getStringExtra(AddEditProfileActivity.EXTRA_CORP_NAME);
                 String userName = data.getStringExtra(AddEditProfileActivity.EXTRA_USER_NAME);
                 String userEmail = data.getStringExtra(AddEditProfileActivity.EXTRA_USER_EMAIL);
                 String corpWebsite = data.getStringExtra(AddEditProfileActivity.EXTRA_CORP_WEBSITE);
                 String note = data.getStringExtra(AddEditProfileActivity.EXTRA_NOTE);
 
-                Profile profile = new Profile(1, corpName, userName, userEmail, corpWebsite);
+                Profile profile = new Profile(sequence, corpName, userName, userEmail, corpWebsite);
                 profile.setId(id);
+                profile.setPassportId(passporId);
                 profile.setNote(note);
                 profile.setOpenLong(data.getLongExtra(AddEditProfileActivity.EXTRA_OPEN_DATE_LONG, 0));
                 profile.setActvyLong(System.currentTimeMillis());

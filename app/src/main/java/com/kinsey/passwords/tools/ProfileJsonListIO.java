@@ -76,7 +76,7 @@ public class ProfileJsonListIO {
                 } else if (name.equals("accountId")) {
                     // System.out.println(reader.nextInt());
                     iValue = reader.nextInt();
-                    Log.v(TAG, "json id " + iValue);
+//                    Log.v(TAG, "json id " + iValue);
                     item.setPassportId(iValue);
                 } else if (name.equals("seq")) {
                     // System.out.println(reader.nextInt());
@@ -151,13 +151,13 @@ public class ProfileJsonListIO {
         return item;
     }
 
-    public int writeProfileJson(File file) {
+    public int writeProfileJson(File file, List<Profile> profiles) {
 
         int count = 0;
         try {
             JsonWriter writer = new JsonWriter(new FileWriter(file));
             writer.setIndent("  ");
-            count = writeMessagesArray(writer);
+            count = writeMessagesArray(writer, profiles);
             writer.flush();
             writer.close();
 
@@ -171,12 +171,12 @@ public class ProfileJsonListIO {
     }
 
 
-    public int writeMessagesArray(JsonWriter writer) throws IOException {
+    private int writeMessagesArray(JsonWriter writer, List<Profile> profiles) throws IOException {
         int count = 0;
         try {
 
             writer.beginArray();
-            for (Profile item : MainActivity.adapter.getCurrentList()) {
+            for (Profile item : profiles) {
 //            for (Account item : listAccounts) {
                 writeMessage(writer, item);
                 count++;

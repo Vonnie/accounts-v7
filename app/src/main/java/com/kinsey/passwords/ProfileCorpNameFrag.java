@@ -31,21 +31,18 @@ public class ProfileCorpNameFrag extends Fragment {
 
     public static final String TAG = "ProfileCorpNameFrag";
 
-    public static final int ADD_PROFILE_REQUEST = 1;
-    public static final int EDIT_PROFILE_REQUEST = 2;
-
     Context context;
     RecyclerView recyclerView;
 //    ProfileViewModel profileViewModel;
     private List<Profile> profileListFull;
-//    private ProfileAdapter adapter = new ProfileAdapter();
+    private ProfileAdapter adapter = new ProfileAdapter();
 
     private ProfileCorpNameFrag.OnProfileCorpNameClickListener mListener;
     public interface OnProfileCorpNameClickListener {
 
         void onProfileCorpNameListSelect(Profile profile);
 
-        void onDeleteConfirmCorpName(Profile profile);
+        void onDeleteConfirmCorpName(Profile profile, int position);
     }
 
     @Nullable
@@ -70,18 +67,18 @@ public class ProfileCorpNameFrag extends Fragment {
         }
 
 
-        recyclerView.setAdapter(MainActivity.adapter);
+        recyclerView.setAdapter(adapter);
 
-//        profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
-//        profileViewModel.getAllProfilesByCorpName().observe(this, new Observer<List<Profile>>() {
-//            @Override
-//            public void onChanged(List<Profile> profiles) {
-//
-//                profileListFull = new ArrayList<>(profiles);
-//                adapter.submitList(profiles);
-//                Log.d(TAG, "list submit");
-//            }
-//        });
+//        MainActivity.profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
+        MainActivity.profileViewModel.getAllProfilesByCorpName().observe(this, new Observer<List<Profile>>() {
+            @Override
+            public void onChanged(List<Profile> profiles) {
+
+                profileListFull = new ArrayList<>(profiles);
+                adapter.submitList(profiles);
+                Log.d(TAG, "list submit");
+            }
+        });
 
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(
                 0,
@@ -94,21 +91,62 @@ public class ProfileCorpNameFrag extends Fragment {
 
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                Profile profile = MainActivity.adapter.getProfileAt(viewHolder.getAdapterPosition());
-                mListener.onDeleteConfirmCorpName(profile);
+                Profile profile = adapter.getProfileAt(viewHolder.getAdapterPosition());
+                mListener.onDeleteConfirmCorpName(profile, viewHolder.getAdapterPosition());
             }
 
         }).attachToRecyclerView(recyclerView);
 
 
+        adapter.setOnItemClickListener(new ProfileAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(Profile profile) {
+                mListener.onProfileCorpNameListSelect(profile);
+//                Intent intent = new Intent(context, AddEditProfileActivity.class);
+//                intent.putExtra(AddEditProfileActivity.EXTRA_ID, profile.getId());
+//                intent.putExtra(AddEditProfileActivity.EXTRA_PASSPORT_ID, profile.getPassportId());
+//                intent.putExtra(AddEditProfileActivity.EXTRA_CORP_NAME, profile.getCorpName());
+//                intent.putExtra(AddEditProfileActivity.EXTRA_USER_NAME, profile.getUserName());
+//                intent.putExtra(AddEditProfileActivity.EXTRA_CORP_WEBSITE, profile.getCorpWebsite());
+//                intent.putExtra(AddEditProfileActivity.EXTRA_NOTE, profile.getNote());
+//                intent.putExtra(AddEditProfileActivity.EXTRA_ACTVY_LONG, profile.getActvyLong());
+//                intent.putExtra(AddEditProfileActivity.EXTRA_OPEN_DATE_LONG, profile.getOpenLong());
+//
+//                Log.d(TAG, "edit requested");
+//                startActivityForResult(intent, EDIT_PROFILE_REQUEST);
+
+            }
+        });
+
+
         recyclerView.scrollToPosition(0);
-        MainActivity.adapter.notifyDataSetChanged();
+        adapter.notifyDataSetChanged();
 
 
 
         Log.d(TAG, "view set");
         return view;
 
+    }
+
+    private void refreshList() {
+        adapter.notifyItemRangeChanged(0, adapter.getItemCount() - 1);
+    }
+
+
+    public void deleteFromList(int profileId) {
+        List<Profile> profiles = adapter.getCurrentList();
+        for (Profile item : profiles) {
+            if (item.getPassportId() == profileId) {
+                MainActivity.profileViewModel.delete(item);
+                break;
+            }
+        }
+        refreshList();
+    }
+
+    public void refreshListPos(int position) {
+        adapter.notifyItemChanged(position);
     }
 
     @Override

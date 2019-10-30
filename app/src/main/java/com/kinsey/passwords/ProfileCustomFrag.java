@@ -15,7 +15,6 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -33,12 +32,9 @@ import static androidx.recyclerview.widget.ItemTouchHelper.ACTION_STATE_DRAG;
 public class ProfileCustomFrag extends Fragment {
     public static final String TAG = "ProfileCustomFrag";
 
-    public static final int ADD_PROFILE_REQUEST = 1;
-    public static final int EDIT_PROFILE_REQUEST = 2;
-
     Context context;
     RecyclerView recyclerView;
-    ProfileViewModel profileViewModel;
+//    ProfileViewModel profileViewModel;
     private List<Profile> profileListFull;
     private ProfileAdapter adapter = new ProfileAdapter();
 
@@ -47,7 +43,7 @@ public class ProfileCustomFrag extends Fragment {
 
         void onProfileCustomListSelect(Profile profile);
 
-        void onDeleteConfirmCustom(Profile profile);
+        void onDeleteConfirmCustom(Profile profile, int position);
     }
 
     @Nullable
@@ -76,8 +72,8 @@ public class ProfileCustomFrag extends Fragment {
         recyclerView.setAdapter(adapter);
 
 
-        profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
-        profileViewModel.getAllProfilesCustomSort().observe(this, new Observer<List<Profile>>() {
+//        profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
+        MainActivity.profileViewModel.getAllProfilesCustomSort().observe(this, new Observer<List<Profile>>() {
             @Override
             public void onChanged(List<Profile> profiles) {
 
@@ -160,7 +156,7 @@ public class ProfileCustomFrag extends Fragment {
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 Profile profile = adapter.getProfileAt(viewHolder.getAdapterPosition());
-                mListener.onDeleteConfirmCustom(profile);
+                mListener.onDeleteConfirmCustom(profile, viewHolder.getAdapterPosition());
 //                confirmDeleteProfile(profile);
 
                 //                profileViewModel.delete(adapter.getProfileAt(viewHolder.getAdapterPosition()));
@@ -284,7 +280,7 @@ public class ProfileCustomFrag extends Fragment {
 
 
                     for (Profile item : modifyProfileList) {
-                        profileViewModel.update(item);
+                        MainActivity.profileViewModel.update(item);
                     }
 
 
@@ -351,9 +347,30 @@ public class ProfileCustomFrag extends Fragment {
         for ( Profile item : profileListFull) {
             newSeq += 1;
             item.setSequence(newSeq);
-            profileViewModel.update(item);
+            MainActivity.profileViewModel.update(item);
         }
-        adapter.notifyItemRangeChanged(0, profileListFull.size() - 1);
+        adapter.notifyItemRangeChanged(0, adapter.getItemCount() - 1);
+    }
+
+    private void refreshList() {
+        adapter.notifyItemRangeChanged(0, adapter.getItemCount() - 1);
+    }
+
+
+    public void deleteFromList(int profileId) {
+        List<Profile> profiles = adapter.getCurrentList();
+        for (Profile item : profiles) {
+            if (item.getPassportId() == profileId) {
+                MainActivity.profileViewModel.delete(item);
+                break;
+            }
+        }
+        refreshList();
+    }
+
+
+    public void refreshListPos(int position) {
+        adapter.notifyItemChanged(position);
     }
 
 

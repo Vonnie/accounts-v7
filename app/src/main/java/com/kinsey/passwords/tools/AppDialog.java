@@ -30,7 +30,7 @@ public class AppDialog extends AppCompatDialogFragment {
     public static final String DIALOG_ACCOUNT_ID = "acct_id";
     public static final String DIALOG_POSITIVE_RID = "positive_rid";
     public static final String DIALOG_NEGATIVE_RID = "negative_rid";
-
+    public static final String DIALOG_LIST_POSITION = "position";
 
     public static final int DIALOG_YES_NO = 1;
     public static final int DIALOG_ACCOUNT_LIST_OPTIONS = 2;

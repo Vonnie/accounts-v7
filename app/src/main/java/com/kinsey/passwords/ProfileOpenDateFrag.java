@@ -46,7 +46,7 @@ public class ProfileOpenDateFrag extends Fragment {
 
         void onProfileOpenDateListSelect(Profile profile);
 
-        void onDeleteConfirmOpenDate(Profile profile);
+        void onDeleteConfirmOpenDate(Profile profile, int position);
     }
 
     @Nullable
@@ -97,8 +97,8 @@ public class ProfileOpenDateFrag extends Fragment {
 
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                Profile profile = MainActivity.adapter.getProfileAt(viewHolder.getAdapterPosition());
-                mListener.onDeleteConfirmOpenDate(profile);
+                Profile profile = adapter.getProfileAt(viewHolder.getAdapterPosition());
+                mListener.onDeleteConfirmOpenDate(profile, viewHolder.getAdapterPosition());
             }
 
         }).attachToRecyclerView(recyclerView);
@@ -134,6 +134,28 @@ public class ProfileOpenDateFrag extends Fragment {
         return view;
 
     }
+
+
+    private void refreshList() {
+        adapter.notifyItemRangeChanged(0, adapter.getItemCount() - 1);
+    }
+
+
+    public void deleteFromList(int profileId) {
+        List<Profile> profiles = adapter.getCurrentList();
+        for (Profile item : profiles) {
+            if (item.getPassportId() == profileId) {
+                MainActivity.profileViewModel.delete(item);
+                break;
+            }
+        }
+        refreshList();
+    }
+
+    public void refreshListPos(int position) {
+        adapter.notifyItemChanged(position);
+    }
+
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {

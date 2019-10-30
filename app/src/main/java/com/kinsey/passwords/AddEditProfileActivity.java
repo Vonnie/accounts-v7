@@ -58,9 +58,14 @@ public class AddEditProfileActivity extends AppCompatActivity {
     private TextInputLayout textInputCorpWebsite;
     private TextInputLayout textInputNote;
 
-    private TextView tvActvyDate;
     private DatePicker mDtePickOpen;
+    private TextView tvActvyDate;
+    private TextView tvPassportId;
+    private TextView tvSequence;
     private long lngOpenDate;
+    private long lngActvDate;
+    private int intPassportId;
+    private int intSequence;
     private ImageButton mImgWebView;
 
     private static String pattern_ymdtimehm = "yyyy-MM-dd kk:mm";
@@ -90,9 +95,11 @@ public class AddEditProfileActivity extends AppCompatActivity {
         textInputCorpWebsite = findViewById(R.id.text_input_corp_website);
         textInputNote = findViewById(R.id.text_input_note);
 
-        tvActvyDate = findViewById(R.id.actvy_date);
         mDtePickOpen = (DatePicker) findViewById(R.id.datePicker);
         mImgWebView = (ImageButton) findViewById(R.id.img_website);
+        tvActvyDate = findViewById(R.id.actvy_date);
+        tvPassportId = findViewById(R.id.passport_id);
+        tvSequence = findViewById(R.id.sequence);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -102,16 +109,19 @@ public class AddEditProfileActivity extends AppCompatActivity {
 
 
 
-        Intent intent = getIntent();
-
-        if (intent.hasExtra(EXTRA_ID)) {
-            setTitle("Profile Account ID: " + intent.getIntExtra(EXTRA_PASSPORT_ID, 0));
-            setEditUICols(intent);
+        if (savedInstanceState != null) {
+            restoreScreen(savedInstanceState);
         } else {
-            setTitle("Add Profile Account");
-            setAddUIDefaults(intent);
-        }
+            Intent intent = getIntent();
 
+            if (intent.hasExtra(EXTRA_ID)) {
+                setTitle("Profile ID: " + intent.getIntExtra(EXTRA_PASSPORT_ID, 0));
+                setEditUICols(intent);
+            } else {
+                setTitle("Add Profile Account");
+                setAddUIDefaults(intent);
+            }
+        }
 
         Log.d(TAG, "onCreate");
 
@@ -132,26 +142,6 @@ public class AddEditProfileActivity extends AppCompatActivity {
             }
         });
 
-        if (savedInstanceState != null) {
-            textInputCorpName.getEditText().setText(
-                    savedInstanceState.getString("corpName")
-            );
-            textInputUserName.getEditText().setText(
-                    savedInstanceState.getString("username")
-            );
-            textInputUserEmail.getEditText().setText(
-                    savedInstanceState.getString("useremail")
-            );
-            textInputCorpWebsite.getEditText().setText(
-                    savedInstanceState.getString("corpwebsite")
-            );
-            textInputNote.getEditText().setText(
-                    savedInstanceState.getString("note")
-            );
-
-            lngOpenDate = savedInstanceState.getLong("opendate");
-//            Log.d(TAG, "instance of " + savedInstanceState.getString("corpName"));
-        }
     }
 
 
@@ -162,16 +152,22 @@ public class AddEditProfileActivity extends AppCompatActivity {
         textInputCorpWebsite.getEditText().setText(intent.getStringExtra(EXTRA_CORP_WEBSITE).toString());
         textInputNote.getEditText().setText(intent.getStringExtra(EXTRA_NOTE).toString());
 
-        if (intent.getLongExtra(EXTRA_ACTVY_LONG, 0) == 0) {
-            tvActvyDate.setText("");
-        } else {
-            tvActvyDate.setText("ActvyDate: " + format_ymdtimehm.format(intent.getLongExtra(EXTRA_ACTVY_LONG, 0)));
-        }
-
         lngOpenDate = intent.getLongExtra(EXTRA_OPEN_DATE_LONG, 0);
         Date dte = new Date(intent.getLongExtra(EXTRA_OPEN_DATE_LONG, 0));
 //        Log.d(TAG, "onDateChanged: lngOpenDate " + lngOpenDate);
         setOpenDateCalendar(dte);
+
+        this.lngActvDate = intent.getLongExtra(EXTRA_ACTVY_LONG, 0);
+        if (lngActvDate == 0) {
+            tvActvyDate.setText("");
+        } else {
+            tvActvyDate.setText("ActvyDate: " + format_ymdtimehm.format(lngActvDate));
+        }
+
+        this.intPassportId = intent.getIntExtra(EXTRA_PASSPORT_ID, 0);
+        this.intSequence = intent.getIntExtra(EXTRA_SEQUENCE, 0);
+        this.tvPassportId.setText(" | Id: " + String.valueOf(this.intPassportId));
+        this.tvSequence.setText(" | Seq: " + String.valueOf(this.intSequence));
     }
 
     private void setOpenDateCalendar(Date dte) {
@@ -203,6 +199,40 @@ public class AddEditProfileActivity extends AppCompatActivity {
         setOpenDateCalendar(dte);
     }
 
+    private void restoreScreen(Bundle savedInstanceState) {
+        textInputCorpName.getEditText().setText(
+                savedInstanceState.getString(EXTRA_CORP_NAME)
+        );
+        textInputUserName.getEditText().setText(
+                savedInstanceState.getString(EXTRA_USER_NAME)
+        );
+        textInputUserEmail.getEditText().setText(
+                savedInstanceState.getString(EXTRA_USER_EMAIL)
+        );
+        textInputCorpWebsite.getEditText().setText(
+                savedInstanceState.getString(EXTRA_CORP_WEBSITE)
+        );
+        textInputNote.getEditText().setText(
+                savedInstanceState.getString(EXTRA_NOTE)
+        );
+
+        lngOpenDate = savedInstanceState.getLong(EXTRA_OPEN_DATE_LONG, 0l);
+        Date dte = new Date(lngOpenDate);
+        setOpenDateCalendar(dte);
+
+        lngActvDate = savedInstanceState.getLong(EXTRA_ACTVY_LONG, 0);
+        if (lngActvDate == 0) {
+            tvActvyDate.setText("");
+        } else {
+            tvActvyDate.setText("ActvyDate: " + format_ymdtimehm.format(lngActvDate));
+        }
+        intPassportId = savedInstanceState.getInt(EXTRA_PASSPORT_ID, 0);
+        intSequence = savedInstanceState.getInt(EXTRA_SEQUENCE, 0);
+        tvPassportId.setText(" | Id: " + String.valueOf(intPassportId));
+        tvSequence.setText(" | Seq: " + String.valueOf(intSequence));
+
+    }
+
     private boolean validateUserEmail() {
         String emailInput = textInputUserEmail.getEditText().getText().toString().trim();
 
@@ -213,7 +243,6 @@ public class AddEditProfileActivity extends AppCompatActivity {
             textInputUserEmail.getEditText().setError("Please enter a valid email address");
             return false;
         } else {
-//            Log.d(TAG, "xxxxxxxxxx ");
             textInputUserEmail.getEditText().setError(null);
 //            textInputUserEmail.setErrorEnabled(false);
             return true;
@@ -315,6 +344,8 @@ public class AddEditProfileActivity extends AppCompatActivity {
         }
         int passportId = getIntent().getIntExtra(EXTRA_PASSPORT_ID, 0);
         data.putExtra(EXTRA_PASSPORT_ID, id);
+        int sequence = getIntent().getIntExtra(EXTRA_SEQUENCE, 0);
+        data.putExtra(EXTRA_SEQUENCE, sequence);
 
         setResult(RESULT_OK, data);
         finish();
@@ -341,12 +372,15 @@ public class AddEditProfileActivity extends AppCompatActivity {
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString("corpName", textInputCorpName.getEditText().getText().toString().trim());
+        outState.putString(EXTRA_CORP_NAME, textInputCorpName.getEditText().getText().toString().trim());
         Log.d(TAG, "saved instance " + textInputCorpName.getEditText().getText().toString().trim());
-        outState.putString("username", textInputUserName.getEditText().getText().toString().trim());
-        outState.putString("useremail", textInputUserEmail.getEditText().getText().toString().trim());
-        outState.putString("corpwebsite", textInputCorpWebsite.getEditText().getText().toString().trim());
-        outState.putString("note", textInputNote.getEditText().getText().toString().trim());
-        outState.putLong("openlong", lngOpenDate);
+        outState.putString(EXTRA_USER_NAME, textInputUserName.getEditText().getText().toString().trim());
+        outState.putString(EXTRA_USER_EMAIL, textInputUserEmail.getEditText().getText().toString().trim());
+        outState.putString(EXTRA_CORP_WEBSITE, textInputCorpWebsite.getEditText().getText().toString().trim());
+        outState.putString(EXTRA_NOTE, textInputNote.getEditText().getText().toString().trim());
+        outState.putLong(EXTRA_OPEN_DATE_LONG, lngOpenDate);
+        outState.putLong(EXTRA_ACTVY_LONG, lngActvDate);
+        outState.putInt(EXTRA_PASSPORT_ID, intPassportId);
+        outState.putInt(EXTRA_SEQUENCE, intSequence);
     }
 }

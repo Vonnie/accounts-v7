@@ -32,9 +32,6 @@ public class ProfilePassportIdFrag extends Fragment {
 
     public static final String TAG = "ProfileCorpNameFrag";
 
-    public static final int ADD_PROFILE_REQUEST = 1;
-    public static final int EDIT_PROFILE_REQUEST = 2;
-
     Context context;
     RecyclerView recyclerView;
     ProfileViewModel profileViewModel;
@@ -46,7 +43,7 @@ public class ProfilePassportIdFrag extends Fragment {
 
         void onProfilePassportIdSelect(Profile profile);
 
-        void onDeleteConfirmPassportId(Profile profile);
+        void onDeleteConfirmPassportId(Profile profile, int position);
     }
 
     @Nullable
@@ -97,8 +94,8 @@ public class ProfilePassportIdFrag extends Fragment {
 
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                Profile profile = MainActivity.adapter.getProfileAt(viewHolder.getAdapterPosition());
-                mListener.onDeleteConfirmPassportId(profile);
+                Profile profile = adapter.getProfileAt(viewHolder.getAdapterPosition());
+                mListener.onDeleteConfirmPassportId(profile, viewHolder.getAdapterPosition());
             }
 
         }).attachToRecyclerView(recyclerView);
@@ -140,6 +137,28 @@ public class ProfilePassportIdFrag extends Fragment {
         super.onActivityCreated(savedInstanceState);
         context = getContext();
     }
+
+
+    private void refreshList() {
+        adapter.notifyItemRangeChanged(0, adapter.getItemCount() - 1);
+    }
+
+
+    public void deleteFromList(int profileId) {
+        List<Profile> profiles = adapter.getCurrentList();
+        for (Profile item : profiles) {
+            if (item.getPassportId() == profileId) {
+                MainActivity.profileViewModel.delete(item);
+                break;
+            }
+        }
+        refreshList();
+    }
+
+    public void refreshListPos(int position) {
+        adapter.notifyItemChanged(position);
+    }
+
 
 
     @Override

@@ -34,7 +34,6 @@ public class SearchAdapter extends ListAdapter<Profile, SearchAdapter.ProfileHol
             return oldItem.getCorpName().equals(newItem.getCorpName()) &&
                     oldItem.getUserName().equals(newItem.getUserName()) &&
                     oldItem.getUserEmail().equals(newItem.getUserEmail()) &&
-                    oldItem.getUserEmail().equals(newItem.getUserEmail()) &&
                     oldItem.getCorpWebsite().equals(newItem.getCorpWebsite());
         }
     };
@@ -50,7 +49,7 @@ public class SearchAdapter extends ListAdapter<Profile, SearchAdapter.ProfileHol
     @Override
     public void onBindViewHolder(@NonNull ProfileHolder holder, int position) {
         Profile currentProfile = getItem(position);
-        holder.tvAcctId.setText(String.valueOf(currentProfile.getId()));
+        holder.tvAcctId.setText(String.valueOf(currentProfile.getPassportId()));
         holder.tvCorpName.setText(currentProfile.getCorpName());
         if (currentProfile.getCorpWebsite().equals("") || currentProfile.getCorpWebsite().equals("http://")) {
             holder.tvCorpWebsite.setVisibility(View.GONE);
