@@ -21,10 +21,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.tabs.TabLayout;
-import com.kinsey.passwords.items.Account;
 import com.kinsey.passwords.items.Profile;
-import com.kinsey.passwords.items.Suggest;
 import com.kinsey.passwords.provider.ProfileAdapter;
 import com.kinsey.passwords.provider.ProfileViewModel;
 
@@ -44,14 +41,13 @@ public class ProfileCustomFrag extends Fragment {
     ProfileViewModel profileViewModel;
     private List<Profile> profileListFull;
     private ProfileAdapter adapter = new ProfileAdapter();
-    private Profile profileMaxItem;
 
     private ProfileCustomFrag.OnProfileCustomClickListener mListener;
     public interface OnProfileCustomClickListener {
 
         void onProfileCustomListSelect(Profile profile);
 
-        void onDeleteConfirm(Profile profile);
+        void onDeleteConfirmCustom(Profile profile);
     }
 
     @Nullable
@@ -93,18 +89,6 @@ public class ProfileCustomFrag extends Fragment {
 
 
 
-        profileViewModel.getMaxSequence().observe(this, new Observer<Profile>() {
-            @Override
-            public void onChanged(@Nullable Profile profile) {
-
-                if (profile == null) {
-                    profileMaxItem = new Profile(0, "", "", "", "");
-                } else {
-                    profileMaxItem = profile;
-                }
-            }
-        });
-
 
         recyclerView.scrollToPosition(0);
         this.adapter.notifyDataSetChanged();
@@ -114,19 +98,20 @@ public class ProfileCustomFrag extends Fragment {
         adapter.setOnItemClickListener(new ProfileAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Profile profile) {
-                Intent intent = new Intent(context, AddEditProfileActivity.class);
-                intent.putExtra(AddEditProfileActivity.EXTRA_ID, profile.getId());
-                intent.putExtra(AddEditProfileActivity.EXTRA_PASSPORT_ID, profile.getPassportId());
-                intent.putExtra(AddEditProfileActivity.EXTRA_CORP_NAME, profile.getCorpName());
-                intent.putExtra(AddEditProfileActivity.EXTRA_USER_NAME, profile.getUserName());
-                intent.putExtra(AddEditProfileActivity.EXTRA_USER_EMAIL, profile.getUserEmail());
-                intent.putExtra(AddEditProfileActivity.EXTRA_CORP_WEBSITE, profile.getCorpWebsite());
-                intent.putExtra(AddEditProfileActivity.EXTRA_NOTE, profile.getNote());
-                intent.putExtra(AddEditProfileActivity.EXTRA_ACTVY_LONG, profile.getActvyLong());
-                intent.putExtra(AddEditProfileActivity.EXTRA_OPEN_DATE_LONG, profile.getOpenLong());
-
-                Log.d(TAG, "edit requested");
-                startActivityForResult(intent, EDIT_PROFILE_REQUEST);
+                mListener.onProfileCustomListSelect(profile);
+//                Intent intent = new Intent(context, AddEditProfileActivity.class);
+//                intent.putExtra(AddEditProfileActivity.EXTRA_ID, profile.getId());
+//                intent.putExtra(AddEditProfileActivity.EXTRA_PASSPORT_ID, profile.getPassportId());
+//                intent.putExtra(AddEditProfileActivity.EXTRA_CORP_NAME, profile.getCorpName());
+//                intent.putExtra(AddEditProfileActivity.EXTRA_USER_NAME, profile.getUserName());
+//                intent.putExtra(AddEditProfileActivity.EXTRA_USER_EMAIL, profile.getUserEmail());
+//                intent.putExtra(AddEditProfileActivity.EXTRA_CORP_WEBSITE, profile.getCorpWebsite());
+//                intent.putExtra(AddEditProfileActivity.EXTRA_NOTE, profile.getNote());
+//                intent.putExtra(AddEditProfileActivity.EXTRA_ACTVY_LONG, profile.getActvyLong());
+//                intent.putExtra(AddEditProfileActivity.EXTRA_OPEN_DATE_LONG, profile.getOpenLong());
+//
+//                Log.d(TAG, "edit requested");
+//                startActivityForResult(intent, EDIT_PROFILE_REQUEST);
 
             }
         });
@@ -175,7 +160,7 @@ public class ProfileCustomFrag extends Fragment {
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 Profile profile = adapter.getProfileAt(viewHolder.getAdapterPosition());
-                mListener.onDeleteConfirm(profile);
+                mListener.onDeleteConfirmCustom(profile);
 //                confirmDeleteProfile(profile);
 
                 //                profileViewModel.delete(adapter.getProfileAt(viewHolder.getAdapterPosition()));
@@ -368,6 +353,7 @@ public class ProfileCustomFrag extends Fragment {
             item.setSequence(newSeq);
             profileViewModel.update(item);
         }
+        adapter.notifyItemRangeChanged(0, profileListFull.size() - 1);
     }
 
 

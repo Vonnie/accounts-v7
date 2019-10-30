@@ -20,6 +20,7 @@ import android.os.Handler;
 import android.preference.PreferenceManager;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -172,6 +173,7 @@ public class MainActivity extends AppCompatActivity
     RecyclerView recyclerView;
     public static ProfileViewModel profileViewModel;
     public static ProfileAdapter adapter = new ProfileAdapter();
+    private Profile profileMaxItem;
 
 //    public static ProfileAdapter adapterCorpName = new ProfileAdapter();
 //
@@ -291,6 +293,19 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
+
+        profileViewModel.getMaxSequence().observe(this, new Observer<Profile>() {
+            @Override
+            public void onChanged(@Nullable Profile profile) {
+
+                if (profile == null) {
+                    profileMaxItem = new Profile(0, "", "", "", "");
+                } else {
+                    profileMaxItem = profile;
+                }
+            }
+        });
+
 //
 //        profileViewModelCustom = new ViewModelProvider(this).get(ProfileViewModel.class);
 //        profileViewModelCustom.getAllProfilesCustomSort().observe(this, new Observer<List<Profile>>() {
@@ -312,7 +327,6 @@ public class MainActivity extends AppCompatActivity
 //                intent.putExtra(AddEditProfileActivity.EXTRA_PASSPORT_ID, profile.getPassportId());
 //                intent.putExtra(AddEditProfileActivity.EXTRA_CORP_NAME, profile.getCorpName());
 //                intent.putExtra(AddEditProfileActivity.EXTRA_USER_NAME, profile.getUserName());
-//                intent.putExtra(AddEditProfileActivity.EXTRA_USER_EMAIL, profile.getUserEmail());
 //                intent.putExtra(AddEditProfileActivity.EXTRA_CORP_WEBSITE, profile.getCorpWebsite());
 //                intent.putExtra(AddEditProfileActivity.EXTRA_NOTE, profile.getNote());
 //                intent.putExtra(AddEditProfileActivity.EXTRA_ACTVY_LONG, profile.getActvyLong());
@@ -528,25 +542,25 @@ public class MainActivity extends AppCompatActivity
 //        });
     }
 
-    private OnScrollListener onScrollListener = new OnScrollListener() {
-        @Override
-        public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-            super.onScrollStateChanged(recyclerView, newState);
-        }
-
-        @Override
-        public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-            super.onScrolled(recyclerView, dx, dy);
-            int visibleItemCount = layoutManager.getChildCount();
-            int totalItemCount = layoutManager.getItemCount();
-            int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
-            int lastVisibleItem = firstVisibleItemPosition +visibleItemCount;
-            Toast.makeText(MainActivity.this, "Visible Item Total:"+String.valueOf(visibleItemCount), Toast.LENGTH_SHORT).show();
-            Log.d(TAG, "scroll " + String.valueOf(visibleItemCount) + ":" + String.valueOf(totalItemCount));
-            Log.d(TAG, "scroll " + String.valueOf(firstVisibleItemPosition) + ":" + String.valueOf(lastVisibleItem));
-
-        }
-    };
+//    private OnScrollListener onScrollListener = new OnScrollListener() {
+//        @Override
+//        public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+//            super.onScrollStateChanged(recyclerView, newState);
+//        }
+//
+//        @Override
+//        public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+//            super.onScrolled(recyclerView, dx, dy);
+//            int visibleItemCount = layoutManager.getChildCount();
+//            int totalItemCount = layoutManager.getItemCount();
+//            int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
+//            int lastVisibleItem = firstVisibleItemPosition +visibleItemCount;
+//            Toast.makeText(MainActivity.this, "Visible Item Total:"+String.valueOf(visibleItemCount), Toast.LENGTH_SHORT).show();
+//            Log.d(TAG, "scroll " + String.valueOf(visibleItemCount) + ":" + String.valueOf(totalItemCount));
+//            Log.d(TAG, "scroll " + String.valueOf(firstVisibleItemPosition) + ":" + String.valueOf(lastVisibleItem));
+//
+//        }
+//    };
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
@@ -2538,21 +2552,21 @@ public class MainActivity extends AppCompatActivity
                 String userName = data.getStringExtra(AddEditProfileActivity.EXTRA_USER_NAME);
                 String userEmail = data.getStringExtra(AddEditProfileActivity.EXTRA_USER_EMAIL);
                 String corpWebsite = data.getStringExtra(AddEditProfileActivity.EXTRA_CORP_WEBSITE);
-                int sequence = data.getIntExtra(AddEditProfileActivity.EXTRA_SEQUENCE, 0);
+//                int sequence = data.getIntExtra(AddEditProfileActivity.EXTRA_SEQUENCE, 0);
                 String note = data.getStringExtra(AddEditProfileActivity.EXTRA_NOTE);
 
-                Profile profile = new Profile(this.adapter.getItemCount() + 1,
+                Profile profile = new Profile(this.profileMaxItem.getSequence() + 1,
                         corpName, userName, userEmail, corpWebsite);
                 profile.setNote(note);
                 profile.setOpenLong(data.getLongExtra(AddEditProfileActivity.EXTRA_OPEN_DATE_LONG, 0));
                 profile.setActvyLong(System.currentTimeMillis());
-                profile.setSequence(sequence);
 
                 profileViewModel.insertProfile(profile);
 
 
                 Log.d(TAG, "profile added");
                 Toast.makeText(this, "Profile added", Toast.LENGTH_SHORT).show();
+                break;
             }
             case EDIT_PROFILE_REQUEST: {
                 int id = data.getIntExtra(AddEditProfileActivity.EXTRA_ID, -1);
@@ -3398,7 +3412,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onProfileCorpNameListSelect(Profile profile) {
-
+        this.startUpProfileUpdate(profile);
     }
 
     @Override
@@ -3408,11 +3422,26 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onProfileCustomListSelect(Profile profile) {
-
+        this.startUpProfileUpdate(profile);
     }
 
     @Override
-    public void onDeleteConfirm(Profile profile) {
+    public void onDeleteConfirmCustom(Profile profile) {
+        confirmDeleteProfile(profile);
+    }
+
+    @Override
+    public void onDeleteConfirmCorpName(Profile profile) {
+        confirmDeleteProfile(profile);
+    }
+
+    @Override
+    public void onDeleteConfirmOpenDate(Profile profile) {
+        confirmDeleteProfile(profile);
+    }
+
+    @Override
+    public void onDeleteConfirmPassportId(Profile profile) {
         confirmDeleteProfile(profile);
     }
 

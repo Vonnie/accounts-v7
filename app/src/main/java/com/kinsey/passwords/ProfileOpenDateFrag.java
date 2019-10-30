@@ -17,6 +17,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -44,6 +45,8 @@ public class ProfileOpenDateFrag extends Fragment {
     public interface OnProfileOpenDateClickListener {
 
         void onProfileOpenDateListSelect(Profile profile);
+
+        void onDeleteConfirmOpenDate(Profile profile);
     }
 
     @Nullable
@@ -80,6 +83,26 @@ public class ProfileOpenDateFrag extends Fragment {
                 Log.d(TAG, "list submit");
             }
         });
+
+
+
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(
+                0,
+                ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT | ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.START | ItemTouchHelper.END) {
+
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                Profile profile = MainActivity.adapter.getProfileAt(viewHolder.getAdapterPosition());
+                mListener.onDeleteConfirmOpenDate(profile);
+            }
+
+        }).attachToRecyclerView(recyclerView);
+
 
         recyclerView.scrollToPosition(0);
         this.adapter.notifyDataSetChanged();
@@ -146,31 +169,31 @@ public class ProfileOpenDateFrag extends Fragment {
 //                Log.d(TAG, "profile added");
 //                Toast.makeText(context, "Profile added", Toast.LENGTH_SHORT).show();
 //            }
-            case EDIT_PROFILE_REQUEST: {
-                int id = data.getIntExtra(AddEditProfileActivity.EXTRA_ID, -1);
-
-                if (id == -1) {
-                    Toast.makeText(context, "Profile can't be updated", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                int passportId = data.getIntExtra(AddEditProfileActivity.EXTRA_PASSPORT_ID, 0);
-                String corpName = data.getStringExtra(AddEditProfileActivity.EXTRA_CORP_NAME);
-                String userName = data.getStringExtra(AddEditProfileActivity.EXTRA_USER_NAME);
-                String userEmail = data.getStringExtra(AddEditProfileActivity.EXTRA_USER_EMAIL);
-                String corpWebsite = data.getStringExtra(AddEditProfileActivity.EXTRA_CORP_WEBSITE);
-                String note = data.getStringExtra(AddEditProfileActivity.EXTRA_NOTE);
-
-                Profile profile = new Profile(1, corpName, userName, userEmail, corpWebsite);
-                profile.setId(id);
-                profile.setPassportId(passportId);
-                profile.setNote(note);
-                profile.setOpenLong(data.getLongExtra(AddEditProfileActivity.EXTRA_OPEN_DATE_LONG, 0));
-                profile.setActvyLong(System.currentTimeMillis());
-
-                profileViewModel.update(profile);
-                Toast.makeText(context, "Profile updated", Toast.LENGTH_SHORT).show();
-            }
+//            case EDIT_PROFILE_REQUEST: {
+//                int id = data.getIntExtra(AddEditProfileActivity.EXTRA_ID, -1);
+//
+//                if (id == -1) {
+//                    Toast.makeText(context, "Profile can't be updated", Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+//
+//                int passportId = data.getIntExtra(AddEditProfileActivity.EXTRA_PASSPORT_ID, 0);
+//                String corpName = data.getStringExtra(AddEditProfileActivity.EXTRA_CORP_NAME);
+//                String userName = data.getStringExtra(AddEditProfileActivity.EXTRA_USER_NAME);
+//                String userEmail = data.getStringExtra(AddEditProfileActivity.EXTRA_USER_EMAIL);
+//                String corpWebsite = data.getStringExtra(AddEditProfileActivity.EXTRA_CORP_WEBSITE);
+//                String note = data.getStringExtra(AddEditProfileActivity.EXTRA_NOTE);
+//
+//                Profile profile = new Profile(1, corpName, userName, userEmail, corpWebsite);
+//                profile.setId(id);
+//                profile.setPassportId(passportId);
+//                profile.setNote(note);
+//                profile.setOpenLong(data.getLongExtra(AddEditProfileActivity.EXTRA_OPEN_DATE_LONG, 0));
+//                profile.setActvyLong(System.currentTimeMillis());
+//
+//                profileViewModel.update(profile);
+//                Toast.makeText(context, "Profile updated", Toast.LENGTH_SHORT).show();
+//            }
 
 
             default:

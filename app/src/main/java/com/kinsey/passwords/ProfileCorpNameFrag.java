@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -43,6 +44,8 @@ public class ProfileCorpNameFrag extends Fragment {
     public interface OnProfileCorpNameClickListener {
 
         void onProfileCorpNameListSelect(Profile profile);
+
+        void onDeleteConfirmCorpName(Profile profile);
     }
 
     @Nullable
@@ -79,6 +82,24 @@ public class ProfileCorpNameFrag extends Fragment {
 //                Log.d(TAG, "list submit");
 //            }
 //        });
+
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(
+                0,
+                ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT | ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.START | ItemTouchHelper.END) {
+
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                Profile profile = MainActivity.adapter.getProfileAt(viewHolder.getAdapterPosition());
+                mListener.onDeleteConfirmCorpName(profile);
+            }
+
+        }).attachToRecyclerView(recyclerView);
+
 
         recyclerView.scrollToPosition(0);
         MainActivity.adapter.notifyDataSetChanged();
