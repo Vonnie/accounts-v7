@@ -21,8 +21,8 @@ public interface ProfileDao {
     @Insert
     Long insert(Profile profile);
 
-    @Insert
-    Long[] insertAll(Profile[] profiles);
+//    @Insert
+//    Long[] insertAll(Profile[] profiles);
 
     @Insert
     Long insertProfile(Profile profile);
@@ -45,7 +45,7 @@ public interface ProfileDao {
     @Query("SELECT * FROM passport_detail ORDER BY passport_id ASC")
     LiveData<List<Profile>> getAllProfilesByPassportId();
 
-    @Query("SELECT * FROM passport_detail ORDER BY open_date DESC")
+    @Query("SELECT * FROM passport_detail ORDER BY open_date DESC, corporation_name ASC")
     LiveData<List<Profile>> getAllProfilesByOpenDate();
 
     @Query("SELECT * FROM passport_detail ORDER BY sequence ASC, corporation_name COLLATE NOCASE ASC")

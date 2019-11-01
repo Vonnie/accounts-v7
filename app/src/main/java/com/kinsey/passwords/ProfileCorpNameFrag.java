@@ -83,7 +83,7 @@ public class ProfileCorpNameFrag extends Fragment {
             }
         });
 
-        tvListTitle.setText(MainActivity.profileViewModel.dbMsg);
+//        tvListTitle.setText(MainActivity.profileViewModel.dbMsg);
 
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(
                 0,

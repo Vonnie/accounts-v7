@@ -3,7 +3,6 @@ package com.kinsey.passwords.provider;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.DatePicker;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -16,8 +15,6 @@ import com.kinsey.passwords.R;
 import com.kinsey.passwords.items.Profile;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 public class ProfileAdapter extends ListAdapter<Profile, ProfileAdapter.ProfileHolder> {

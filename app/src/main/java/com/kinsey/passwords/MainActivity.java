@@ -1,10 +1,7 @@
 package com.kinsey.passwords;
 
 
-import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
-import android.content.ActivityNotFoundException;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
@@ -33,14 +30,11 @@ import android.widget.DatePicker;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.kinsey.passwords.items.Account;
-import com.kinsey.passwords.items.AccountsContract;
 import com.kinsey.passwords.items.Profile;
-import com.kinsey.passwords.items.SearchesContract;
 import com.kinsey.passwords.items.Suggest;
 import com.kinsey.passwords.provider.DatePickerFragment;
 import com.kinsey.passwords.provider.ProfileViewModel;
@@ -142,7 +136,8 @@ public class MainActivity extends AppCompatActivity
     private boolean appMsgSent = false;
     private boolean isResumed = false;
 
-    private int accountMode = AccountsContract.ACCOUNT_ACTION_ADD;
+//    private int accountMode = AccountsContract.ACCOUNT_ACTION_ADD;
+
     //    View addEditLayout;
 //    View addEditLayoutScroll;
     View mainFragment;
@@ -1200,6 +1195,8 @@ public class MainActivity extends AppCompatActivity
 
                 showConfirmationLeaveApp();
 
+                break;
+
 
 //                Log.d(TAG, "onOptionsItemSelected: home button pressed");
 //
@@ -1362,26 +1359,26 @@ public class MainActivity extends AppCompatActivity
 //////                            setMenuItemVisible(R.id.menuacct_save, false);
 //    }
 
-    private void setMenuItemEnabled(int id, boolean blnSet) {
-        MenuItem item = menu.findItem(id);
-        item.setEnabled(blnSet);
-    }
+//    private void setMenuItemEnabled(int id, boolean blnSet) {
+//        MenuItem item = menu.findItem(id);
+//        item.setEnabled(blnSet);
+//    }
 
-    private void setMenuItemVisible(int id, boolean blnSet) {
-        Log.d(TAG, "setMenuItemVisible: id " + id);
-        if (menu == null) {
-            Log.d(TAG, "setMenuItemVisible: ");
-            return;
-        }
-        MenuItem item = menu.findItem(id);
-        if (blnSet) {
-            item.setVisible(true);
-            item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-        } else {
-            item.setVisible(false);
-            item.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-        }
-    }
+//    private void setMenuItemVisible(int id, boolean blnSet) {
+//        Log.d(TAG, "setMenuItemVisible: id " + id);
+//        if (menu == null) {
+//            Log.d(TAG, "setMenuItemVisible: ");
+//            return;
+//        }
+//        MenuItem item = menu.findItem(id);
+//        if (blnSet) {
+//            item.setVisible(true);
+//            item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+//        } else {
+//            item.setVisible(false);
+//            item.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+//        }
+//    }
 
 
     private void setMenuItemChecked(int id, boolean blnSet) {
@@ -2875,15 +2872,15 @@ public class MainActivity extends AppCompatActivity
 //    }
 
 
-    private void deleteAllSearchItems() {
-//		String selectionClause = SearchManager.SUGGEST_COLUMN_FLAGS + " = ?";
-//		String[] selectionArgs = { "account" };
-//        Log.d(TAG, "deleteAllSuggestions: delUri " + SearchesContract.CONTENT_URI_TRUNCATE);
-        getContentResolver().delete(
-                SearchesContract.CONTENT_URI_TRUNCATE,
-                null, null);
-
-    }
+//    private void deleteAllSearchItems() {
+////		String selectionClause = SearchManager.SUGGEST_COLUMN_FLAGS + " = ?";
+////		String[] selectionArgs = { "account" };
+////        Log.d(TAG, "deleteAllSuggestions: delUri " + SearchesContract.CONTENT_URI_TRUNCATE);
+//        getContentResolver().delete(
+//                SearchesContract.CONTENT_URI_TRUNCATE,
+//                null, null);
+//
+//    }
 
 
     @Override

@@ -7,30 +7,44 @@ import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.TypeConverters;
+import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.kinsey.passwords.items.Profile;
+import com.kinsey.passwords.items.Suggest;
 
 import java.util.Calendar;
 import java.util.Date;
 
-@Database(entities = Profile.class, version = 1, exportSchema = false)
+@Database(entities = {Profile.class, Suggest.class}, version = 2, exportSchema = false)
+//@TypeConverters(DateConverter.class)
 public abstract class ProfileDatabase extends RoomDatabase {
 
     private static ProfileDatabase instance;
 
     public abstract ProfileDao profileDao();
 
+    public abstract SuggestDao suggestDao();
+
     public static synchronized ProfileDatabase getInstance(Context context) {
         if (instance == null) {
             instance = Room.databaseBuilder(context.getApplicationContext(),
                     ProfileDatabase.class, "Passport")
-                    .fallbackToDestructiveMigration()
-                    .addCallback(roomCallback)
+                    .addMigrations(MIGRATION_1_2)
+//                    .fallbackToDestructiveMigration()
+//                    .addCallback(roomCallback)
                     .build();
         }
         return instance;
     }
+
+    static final Migration MIGRATION_1_2 = new Migration(1, 2) {
+        @Override
+        public void migrate(SupportSQLiteDatabase database) {
+            // Since we didn't alter the table, there's nothing else to do here.
+        }
+    };
 
     private static RoomDatabase.Callback roomCallback = new RoomDatabase.Callback() {
         @Override
@@ -42,9 +56,12 @@ public abstract class ProfileDatabase extends RoomDatabase {
 
     private static class PopulateDbAsyncTask extends AsyncTask<Void, Void, Void> {
         private ProfileDao profileDao;
+        private SuggestDao suggestDao;
 
         private PopulateDbAsyncTask(ProfileDatabase db) {
+
             profileDao = db.profileDao();
+            suggestDao = db.suggestDao();
         }
 
         @Override
@@ -71,6 +88,11 @@ public abstract class ProfileDatabase extends RoomDatabase {
             profile.setOpenLong(c1.getTimeInMillis());
             profile.setActvyLong(c1.getTimeInMillis());
             profileDao.insertProfile(profile);
+
+            suggestDao.insert(new Suggest("aaaaaa", 2, 0l));
+            suggestDao.insert(new Suggest("bbbbbb", 5, 0l));
+            suggestDao.insert(new Suggest("cccccc", 9, 0l));
+
             return null;
         }
 

@@ -11,7 +11,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.kinsey.passwords.items.Suggest;
 
-@Database(entities = {Suggest.class}, version = 2, exportSchema = false)
+//@Database(entities = {Suggest.class}, version = 2, exportSchema = false)
 public abstract class SuggestDatabase extends RoomDatabase {
 
     private static SuggestDatabase instance;

@@ -164,9 +164,9 @@
     <string name="menuacct_backup_restore_accts">Backup / Restore</string>
     <string name="menuacct_external_accts">External accounts</string>
     <string name="menuacct_search">Search</string>
-    <string name="menuvw_show_file">Show Exported File</string>
+    <string name="menuvw_show_file">Show Backup File</string>
     <string name="menuvw_show_filename">Filename</string>
-    <string name="menuvw_share">Share</string>
+    <string name="menuvw_share">Share Backup File</string>
     <string name="menuvw_import">Import</string>
     <string name="menuvw_retore">Restore</string>
     <string name="menuvw_export">Export</string>

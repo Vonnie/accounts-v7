@@ -47,6 +47,9 @@ public class Profile {
     @Ignore
     private int newSequence = 0;
 
+    @Ignore
+    public Profile() {
+    }
 
     public Profile(int sequence,
                    String corpName,

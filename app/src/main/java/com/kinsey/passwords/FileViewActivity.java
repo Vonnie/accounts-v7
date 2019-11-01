@@ -1,34 +1,23 @@
 package com.kinsey.passwords;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
-import com.kinsey.passwords.items.Account;
-import com.kinsey.passwords.items.AccountsContract;
 import com.kinsey.passwords.items.Profile;
 import com.kinsey.passwords.provider.ProfileAdapter;
-import com.kinsey.passwords.provider.ProfileViewModel;
 import com.kinsey.passwords.tools.AppDialog;
 import com.kinsey.passwords.tools.ProfileJsonListIO;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.ShareActionProvider;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.MenuItemCompat;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Environment;
 import android.os.Handler;
-import android.util.JsonWriter;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -36,18 +25,14 @@ import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Formatter;
 import java.util.List;
 import java.util.Locale;
-
-import static com.kinsey.passwords.MainActivity.format_ymdtime;
 
 public class FileViewActivity extends AppCompatActivity
         implements AppDialog.DialogEvents {
@@ -110,7 +95,7 @@ public class FileViewActivity extends AppCompatActivity
                 adapter.submitList(profiles);
                 if (onFirstReported) {
                     onFirstReported = false;
-                    infoPage("See menu for functions");
+                    infoPage();
                 }
                 Log.d(TAG, "viewModel db count " + adapter.getItemCount());
             }
@@ -200,6 +185,9 @@ public class FileViewActivity extends AppCompatActivity
                 break;
 
 
+            default:
+                break;
+
 
         }
 
@@ -254,7 +242,7 @@ public class FileViewActivity extends AppCompatActivity
         return file.exists();
     }
 
-    public void infoPage(String infoMsg) {
+    public void infoPage() {
         try {
 //            Log.d(TAG, "reportJson: " + MainActivity.DEFAULT_APP_DIRECTORY);
             Log.d(TAG, "reportJson: ");
@@ -282,9 +270,8 @@ public class FileViewActivity extends AppCompatActivity
                         htmlString = greetMsg() +
                                 "<h5>" + adapter.getItemCount() + " Account Profile items currently on db<h5>" +
                                 "<h5>" + accountJsonProperties(fileExternal.getAbsoluteFile().toString()) + "</h5>" +
-                                "<h5>" + infoMsg + "</h5>" +
-                                "<h5>Warning: If uninstall, the exported / backup file is delete.</h5>" +
-                                "<h5>Perserve file with a file copy or request to share file onto another app.</h5>";
+                                "<h5>Notify: If uninstall, the exported / backup file also is deleted.</h5>" +
+                                "<h5>Perserve file with a file copy or request to share from menu</h5>";
 
                     } else {
                         htmlString = notfyMsg() +
@@ -322,7 +309,8 @@ public class FileViewActivity extends AppCompatActivity
 
     private String notfyMsg() {
         String htmlString = "<h1>Notification</h1>" +
-                "<h2>App storage available, export file not yet created</h2>";
+                "<h2>App storage available and with permissions,</h2>" +
+                "<h2>Export file not yet created</h2>";
         return htmlString;
     }
 
@@ -690,57 +678,57 @@ public class FileViewActivity extends AppCompatActivity
 //    }
 
 
-    List<Account> loadAccounts() {
-//        Log.d(TAG, "loadAccounts: starts ");
-        Cursor cursor = getContentResolver().query(
-                AccountsContract.CONTENT_URI, null, null, null,
-                String.format("%s COLLATE NOCASE ASC, %s COLLATE NOCASE ASC", AccountsContract.Columns.CORP_NAME_COL, AccountsContract.Columns.SEQUENCE_COL));
-//                        AccountsContract.Columns.CORP_NAME_COL);
-
-        List<Account> listAccounts = new ArrayList<Account>();
-        if (cursor != null) {
-            while (cursor.moveToNext()) {
-                Account item = AccountsContract.getAccountFromCursor(cursor);
-//                        Account item = new Account(
-//                                cursor.getInt(cursor.getColumnIndex(AccountsContract.Columns._ID_COL)),
-//                                cursor.getString(cursor.getColumnIndex(AccountsContract.Columns.CORP_NAME_COL)),
-//                                cursor.getString(cursor.getColumnIndex(AccountsContract.Columns.USER_NAME_COL)),
-//                                cursor.getString(cursor.getColumnIndex(AccountsContract.Columns.USER_EMAIL_COL)),
-//                                cursor.getString(cursor.getColumnIndex(AccountsContract.Columns.CORP_WEBSITE_COL)),
-//                                cursor.getInt(cursor.getColumnIndex(AccountsContract.Columns.SEQUENCE_COL)));
+//    List<Account> loadAccounts() {
+////        Log.d(TAG, "loadAccounts: starts ");
+//        Cursor cursor = getContentResolver().query(
+//                AccountsContract.CONTENT_URI, null, null, null,
+//                String.format("%s COLLATE NOCASE ASC, %s COLLATE NOCASE ASC", AccountsContract.Columns.CORP_NAME_COL, AccountsContract.Columns.SEQUENCE_COL));
+////                        AccountsContract.Columns.CORP_NAME_COL);
 //
-//                        if (cursor.getColumnIndex(AccountsContract.Columns.PASSPORT_ID_COL) != -1) {
-//                            if (!cursor.isNull(cursor.getColumnIndex(AccountsContract.Columns.PASSPORT_ID_COL))) {
-//                                item.setPassportId(cursor.getInt(cursor.getColumnIndex(AccountsContract.Columns.PASSPORT_ID_COL)));
-//                            }
-//                        }
-//                        if (cursor.getColumnIndex(AccountsContract.Columns.OPEN_DATE_COL) != -1) {
-//                            if (!cursor.isNull(cursor.getColumnIndex(AccountsContract.Columns.OPEN_DATE_COL))) {
-//                                item.setOpenLong(cursor.getLong(cursor.getColumnIndex(AccountsContract.Columns.OPEN_DATE_COL)));
-//                            }
-//                        }
-//                        if (cursor.getColumnIndex(AccountsContract.Columns.ACTVY_DATE_COL) != -1) {
-//                            if (!cursor.isNull(cursor.getColumnIndex(AccountsContract.Columns.ACTVY_DATE_COL))) {
-//                                item.setActvyLong(cursor.getLong(cursor.getColumnIndex(AccountsContract.Columns.ACTVY_DATE_COL)));
-//                            }
-//                        }
-//                        if (cursor.getColumnIndex(AccountsContract.Columns.REF_FROM_COL) != -1) {
-//                            if (!cursor.isNull(cursor.getColumnIndex(AccountsContract.Columns.REF_FROM_COL))) {
-//                                item.setRefFrom(cursor.getInt(cursor.getColumnIndex(AccountsContract.Columns.REF_FROM_COL)));
-//                            }
-//                        }
-//                        if (cursor.getColumnIndex(AccountsContract.Columns.REF_TO_COL) != -1) {
-//                            if (!cursor.isNull(cursor.getColumnIndex(AccountsContract.Columns.REF_TO_COL))) {
-//                                item.setRefFrom(cursor.getInt(cursor.getColumnIndex(AccountsContract.Columns.REF_TO_COL)));
-//                            }
-//                        }
-                listAccounts.add(item);
-            }
-            cursor.close();
-        }
-
-        return listAccounts;
-    }
+//        List<Account> listAccounts = new ArrayList<Account>();
+//        if (cursor != null) {
+//            while (cursor.moveToNext()) {
+//                Account item = AccountsContract.getAccountFromCursor(cursor);
+////                        Account item = new Account(
+////                                cursor.getInt(cursor.getColumnIndex(AccountsContract.Columns._ID_COL)),
+////                                cursor.getString(cursor.getColumnIndex(AccountsContract.Columns.CORP_NAME_COL)),
+////                                cursor.getString(cursor.getColumnIndex(AccountsContract.Columns.USER_NAME_COL)),
+////                                cursor.getString(cursor.getColumnIndex(AccountsContract.Columns.USER_EMAIL_COL)),
+////                                cursor.getString(cursor.getColumnIndex(AccountsContract.Columns.CORP_WEBSITE_COL)),
+////                                cursor.getInt(cursor.getColumnIndex(AccountsContract.Columns.SEQUENCE_COL)));
+////
+////                        if (cursor.getColumnIndex(AccountsContract.Columns.PASSPORT_ID_COL) != -1) {
+////                            if (!cursor.isNull(cursor.getColumnIndex(AccountsContract.Columns.PASSPORT_ID_COL))) {
+////                                item.setPassportId(cursor.getInt(cursor.getColumnIndex(AccountsContract.Columns.PASSPORT_ID_COL)));
+////                            }
+////                        }
+////                        if (cursor.getColumnIndex(AccountsContract.Columns.OPEN_DATE_COL) != -1) {
+////                            if (!cursor.isNull(cursor.getColumnIndex(AccountsContract.Columns.OPEN_DATE_COL))) {
+////                                item.setOpenLong(cursor.getLong(cursor.getColumnIndex(AccountsContract.Columns.OPEN_DATE_COL)));
+////                            }
+////                        }
+////                        if (cursor.getColumnIndex(AccountsContract.Columns.ACTVY_DATE_COL) != -1) {
+////                            if (!cursor.isNull(cursor.getColumnIndex(AccountsContract.Columns.ACTVY_DATE_COL))) {
+////                                item.setActvyLong(cursor.getLong(cursor.getColumnIndex(AccountsContract.Columns.ACTVY_DATE_COL)));
+////                            }
+////                        }
+////                        if (cursor.getColumnIndex(AccountsContract.Columns.REF_FROM_COL) != -1) {
+////                            if (!cursor.isNull(cursor.getColumnIndex(AccountsContract.Columns.REF_FROM_COL))) {
+////                                item.setRefFrom(cursor.getInt(cursor.getColumnIndex(AccountsContract.Columns.REF_FROM_COL)));
+////                            }
+////                        }
+////                        if (cursor.getColumnIndex(AccountsContract.Columns.REF_TO_COL) != -1) {
+////                            if (!cursor.isNull(cursor.getColumnIndex(AccountsContract.Columns.REF_TO_COL))) {
+////                                item.setRefFrom(cursor.getInt(cursor.getColumnIndex(AccountsContract.Columns.REF_TO_COL)));
+////                            }
+////                        }
+//                listAccounts.add(item);
+//            }
+//            cursor.close();
+//        }
+//
+//        return listAccounts;
+//    }
 
     @Override
     public void onPositiveDialogResult(int dialogId, Bundle args) {
