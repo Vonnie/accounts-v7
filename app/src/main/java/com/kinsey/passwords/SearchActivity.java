@@ -53,7 +53,7 @@ public class SearchActivity extends AppCompatActivity {
     private TextInputLayout textInputSearchCorpName;
 
     private SearchAdapter adapter;
-    private ProfileViewModel profileViewModel;
+//    private ProfileViewModel profileViewModel;
 
     private TextView tvActvyDate;
     private DatePicker mDtePickOpen;
@@ -116,10 +116,7 @@ public class SearchActivity extends AppCompatActivity {
 
         this.adapter = new SearchAdapter();
         recyclerView.setAdapter(adapter);
-
-        profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
-
-
+        searchResults("-1-1");
 
 
         textInputSearchCorpName.getEditText().addTextChangedListener(new TextWatcher() {
@@ -172,7 +169,7 @@ public class SearchActivity extends AppCompatActivity {
     private void searchResults(String searchfor) {
         this.searchforValue = searchfor;
         String searchforreq = "%" + searchfor + "%";
-        profileViewModel.searchCorpNameProfiles(searchforreq).observe(this, new Observer<List<Profile>>() {
+        MainActivity.profileViewModel.searchCorpNameProfiles(searchforreq).observe(this, new Observer<List<Profile>>() {
             @Override
             public void onChanged(List<Profile> profiles) {
                 Log.d(TAG, "profiles search len " + profiles.size());
@@ -216,7 +213,7 @@ public class SearchActivity extends AppCompatActivity {
                 profile.setOpenLong(data.getLongExtra(AddEditProfileActivity.EXTRA_OPEN_DATE_LONG, 0));
                 profile.setActvyLong(System.currentTimeMillis());
 
-                profileViewModel.update(profile);
+                MainActivity.profileViewModel.update(profile);
                 Toast.makeText(this, "Profile updated", Toast.LENGTH_SHORT).show();
                 break;
 

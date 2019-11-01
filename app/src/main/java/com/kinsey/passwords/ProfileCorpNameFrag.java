@@ -9,12 +9,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -34,6 +34,7 @@ public class ProfileCorpNameFrag extends Fragment {
     Context context;
     RecyclerView recyclerView;
 //    ProfileViewModel profileViewModel;
+    TextView tvListTitle;
     private List<Profile> profileListFull;
     private ProfileAdapter adapter = new ProfileAdapter();
 
@@ -52,6 +53,8 @@ public class ProfileCorpNameFrag extends Fragment {
         //        return super.onCreateView(inflater, container, savedInstanceState);
 
         recyclerView = view.findViewById(R.id.account_items_list);
+        tvListTitle = view.findViewById(R.id.list_title);
+
 
         recyclerView.setHasFixedSize(true);
 
@@ -79,6 +82,8 @@ public class ProfileCorpNameFrag extends Fragment {
                 Log.d(TAG, "list submit");
             }
         });
+
+        tvListTitle.setText(MainActivity.profileViewModel.dbMsg);
 
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(
                 0,
@@ -130,7 +135,9 @@ public class ProfileCorpNameFrag extends Fragment {
     }
 
     private void refreshList() {
-        adapter.notifyItemRangeChanged(0, adapter.getItemCount() - 1);
+        if (adapter.getItemCount() > 0) {
+            adapter.notifyItemRangeChanged(0, adapter.getItemCount() - 1);
+        }
     }
 
 

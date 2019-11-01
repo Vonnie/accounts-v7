@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_marginRight="20dp"
-            android:layout_toStartOf="@+id/tli_acct_id"
+            android:layout_toStartOf="@+id/acct_id"
             android:ellipsize="end"
             android:tag="@string/tag_portrait"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"

@@ -101,4 +101,10 @@ public class SearchAdapter extends ListAdapter<Profile, SearchAdapter.ProfileHol
     public void setOnItemClickListener(SearchAdapter.OnItemClickListener listener) {
         this.listener = listener;
     }
+
+//            \nSearch DB is an abbreviated copy of the data db.
+//    Will need to re-align again if data db has any corp name changes, any add of an account, or any delete of an account.
+//    If the app see changes, it will rebuild that search db on the next search. User can ask to rebuild that search db thru the menu.
+
+
 }

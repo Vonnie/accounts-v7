@@ -33,31 +33,31 @@ public interface ProfileDao {
     @Delete
     void delete(Profile profile);
 
-    @Query("DELETE FROM Passport")
+    @Query("DELETE FROM passport_detail")
     void deleteAllProfiles();
 
-    @Query("SELECT * FROM Passport ORDER BY corporation_name COLLATE NOCASE ASC")
+    @Query("SELECT * FROM passport_detail ORDER BY corporation_name COLLATE NOCASE ASC")
     LiveData<List<Profile>> getAllProfiles();
 
-    @Query("SELECT * FROM Passport ORDER BY corporation_name COLLATE NOCASE ASC")
+    @Query("SELECT * FROM passport_detail ORDER BY corporation_name COLLATE NOCASE ASC")
     LiveData<List<Profile>> getAllProfilesByCorpName();
 
-    @Query("SELECT * FROM Passport ORDER BY passport_id ASC")
+    @Query("SELECT * FROM passport_detail ORDER BY passport_id ASC")
     LiveData<List<Profile>> getAllProfilesByPassportId();
 
-    @Query("SELECT * FROM Passport ORDER BY open_date DESC")
+    @Query("SELECT * FROM passport_detail ORDER BY open_date DESC")
     LiveData<List<Profile>> getAllProfilesByOpenDate();
 
-    @Query("SELECT * FROM Passport ORDER BY sequence ASC")
+    @Query("SELECT * FROM passport_detail ORDER BY sequence ASC, corporation_name COLLATE NOCASE ASC")
     LiveData<List<Profile>> getAllProfilesCustomSort();
 
-    @Query("SELECT * FROM Passport where corporation_name LIKE :name or LOWER(corporation_name) like LOWER(:name) order by corporation_name COLLATE NOCASE ASC")
+    @Query("SELECT * FROM passport_detail where corporation_name LIKE :name or LOWER(corporation_name) like LOWER(:name) order by corporation_name COLLATE NOCASE ASC")
     LiveData<List<Profile>> searchCorpNameProfiles(String name);
 
-    @Query("SELECT * FROM Passport where _id = :id")
+    @Query("SELECT * FROM passport_detail where _id = :id")
     LiveData<Profile> getProfileById(int id);
 
-    @Query("SELECT * FROM Passport ORDER BY sequence DESC LIMIT 1")
+    @Query("SELECT * FROM passport_detail ORDER BY sequence DESC LIMIT 1")
     LiveData<Profile> getMaxSequence();
 
 }

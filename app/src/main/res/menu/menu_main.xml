@@ -9,114 +9,6 @@
     <!--android:title="Item"-->
     <!--app:showAsAction="always" />-->
     <item
-        android:id="@+id/menumain_search"
-        android:icon="@drawable/ic_search"
-        android:orderInCategory="100"
-        android:title="@string/menu_search"
-        app:showAsAction="ifRoom" />
-    <!--        app:actionViewClass="android.widget.SearchView"-->
-    <!--        app:showAsAction="ifRoom|collapseActionView" />-->
-    <!--    app:actionViewClass="androidx.appcompat.widget.SearchView"-->
-    <!--android:icon="@drawable/selector_search"-->
-    <!--android:icon="@drawable/ic_action_document"-->
-    <!--<item-->
-    <!--android:id="@+id/menumain_refresh"-->
-    <!--android:orderInCategory="111"-->
-    <!--android:title="@string/menuacct_refresh" />-->
-
-    <!--<item-->
-    <!--android:id="@+id/menuacct_internet"-->
-    <!--android:icon="@drawable/selector_globe"-->
-    <!--android:orderInCategory="113"-->
-    <!--android:title="@string/menu_link_internet"-->
-    <!--app:showAsAction="ifRoom" />-->
-    <!--<item-->
-    <!--android:id="@+id/menuacct_delete"-->
-    <!--android:icon="@drawable/selector_delete"-->
-    <!--android:orderInCategory="114"-->
-    <!--android:title="@string/delete_cap"-->
-    <!--app:showAsAction="ifRoom" />-->
-    <!--<item-->
-    <!--android:id="@+id/menuacct_save"-->
-    <!--android:icon="@drawable/selector_save"-->
-    <!--android:orderInCategory="102"-->
-    <!--android:title="@string/menu_save"-->
-    <!--app:showAsAction="ifRoom" />-->
-    <!--    <item-->
-    <!--        android:id="@+id/menumain_add"-->
-    <!--        android:icon="@drawable/selector_add"-->
-    <!--        android:orderInCategory="103"-->
-    <!--        android:title="@string/menu_add_account"-->
-    <!--        app:showAsAction="ifRoom" />-->
-    <item
-        android:id="@+id/menumain_about"
-        android:icon="@android:drawable/ic_menu_help"
-        android:orderInCategory="104"
-        android:title="@string/menuacct_about"
-        app:showAsAction="ifRoom" />
-    <!--android:icon="@android:drawable/ic_menu_info_details"-->
-    <item
-        android:id="@+id/menumain_showSuggests"
-        android:icon="@drawable/selector_key"
-        android:orderInCategory="119"
-        android:title="@string/menu_suggests"
-        app:showAsAction="ifRoom" />
-
-    <item
-        android:id="@+id/menuacct_external_accts"
-        android:icon="@drawable/ic_import_export"
-        android:orderInCategory="120"
-        android:title="@string/menuacct_backup_restore_accts"
-        app:showAsAction="ifRoom" />
-
-    <item
-        android:id="@+id/menumain_do_request"
-        android:icon="@drawable/ic_fullscreen"
-        android:orderInCategory="121"
-        android:title="Spl Request"
-        app:showAsAction="ifRoom" />
-
-
-    <!--    <item-->
-    <!--        android:id="@+id/menumain_showSuggestsV1"-->
-    <!--        android:icon="@drawable/selector_key"-->
-    <!--        android:orderInCategory="120"-->
-    <!--        android:title="@string/menu_suggests_v1"-->
-    <!--        app:showAsAction="ifRoom" />-->
-    <!--    <item-->
-    <!--        android:id="@+id/menumain_showProfile"-->
-    <!--        android:icon="@drawable/selector_key"-->
-    <!--        android:orderInCategory="121"-->
-    <!--        android:title="@string/menu_profile"-->
-    <!--        app:showAsAction="ifRoom" />-->
-    <!--<group-->
-    <!--android:id="@+id/group_rss"-->
-    <!--android:checkableBehavior="single"-->
-    <!--android:enabled="true"-->
-    <!--android:visible="true">-->
-    <!--<item-->
-    <!--android:id="@+id/menumain_showAccounts"-->
-    <!--android:checked="true"-->
-    <!--android:orderInCategory="107"-->
-    <!--android:title="@string/menu_accounts"-->
-    <!--app:showAsAction="ifRoom" />-->
-    <!--<item-->
-    <!--android:id="@+id/menumain_rss_top_free_apps"-->
-    <!--android:orderInCategory="108"-->
-    <!--android:title="@string/menuacct_rss_top_free_apps"-->
-    <!--app:showAsAction="ifRoom" />-->
-    <!--<item-->
-    <!--android:id="@+id/menumain_rss_top_tv_episodes"-->
-    <!--android:orderInCategory="109"-->
-    <!--android:title="@string/menuacct_rss_tv_episodes"-->
-    <!--app:showAsAction="ifRoom" />-->
-    <!--<item-->
-    <!--android:id="@+id/menumain_rss_top_tv_seasons"-->
-    <!--android:orderInCategory="110"-->
-    <!--android:title="@string/menuacct_rss_tv_season"-->
-    <!--app:showAsAction="ifRoom" />-->
-    <!--</group>-->
-    <item
         android:icon="@drawable/ic_filter_none"
         android:title="Sort"
         app:showAsAction="ifRoom">
@@ -151,22 +43,142 @@
             </group>
         </menu>
     </item>
-    <!--    <item-->
-    <!--        android:id="@+id/menumain_refresh"-->
-    <!--        android:orderInCategory="250"-->
-    <!--        android:title="Refresh List"-->
-    <!--        app:showAsAction="never" />-->
-    <!--app:actionViewClass="android.widget.CheckBox"-->
-    <!--    <item-->
-    <!--        android:id="@+id/menumain_search_setting"-->
-    <!--        android:orderInCategory="251"-->
-    <!--        android:title="Refresh Search DB"-->
-    <!--        app:showAsAction="never" />-->
-    <!--<item-->
-    <!--android:id="@+id/miActionProgress"-->
-    <!--android:orderInCategory="300"-->
-    <!--android:title="Loading..."-->
-    <!--android:visible="false"-->
-    <!--app:actionLayout="@layout/action_view_progress"-->
-    <!--app:showAsAction="always" />-->
+    <item
+        android:icon="@drawable/ic_more_vert"
+        android:title=""
+        app:showAsAction="always">
+        <!--        android:iconTint="@color/primaryColor"-->
+        <!--        android:iconTintMode="#437380"-->
+        <menu>
+            <item
+                android:id="@+id/menumain_search"
+                android:icon="@drawable/ic_search_black"
+                android:orderInCategory="100"
+                android:title="@string/menu_search"
+                app:showAsAction="ifRoom" />
+            <!--        app:actionViewClass="android.widget.SearchView"-->
+            <!--        app:showAsAction="ifRoom|collapseActionView" />-->
+            <!--    app:actionViewClass="androidx.appcompat.widget.SearchView"-->
+            <!--android:icon="@drawable/selector_search"-->
+            <!--android:icon="@drawable/ic_action_document"-->
+            <!--<item-->
+            <!--android:id="@+id/menumain_refresh"-->
+            <!--android:orderInCategory="111"-->
+            <!--android:title="@string/menuacct_refresh" />-->
+
+            <!--<item-->
+            <!--android:id="@+id/menuacct_internet"-->
+            <!--android:icon="@drawable/selector_globe"-->
+            <!--android:orderInCategory="113"-->
+            <!--android:title="@string/menu_link_internet"-->
+            <!--app:showAsAction="ifRoom" />-->
+            <!--<item-->
+            <!--android:id="@+id/menuacct_delete"-->
+            <!--android:icon="@drawable/selector_delete"-->
+            <!--android:orderInCategory="114"-->
+            <!--android:title="@string/delete_cap"-->
+            <!--app:showAsAction="ifRoom" />-->
+            <!--<item-->
+            <!--android:id="@+id/menuacct_save"-->
+            <!--android:icon="@drawable/selector_save"-->
+            <!--android:orderInCategory="102"-->
+            <!--android:title="@string/menu_save"-->
+            <!--app:showAsAction="ifRoom" />-->
+            <!--    <item-->
+            <!--        android:id="@+id/menumain_add"-->
+            <!--        android:icon="@drawable/selector_add"-->
+            <!--        android:orderInCategory="103"-->
+            <!--        android:title="@string/menu_add_account"-->
+            <!--        app:showAsAction="ifRoom" />-->
+            <item
+                android:id="@+id/menumain_about"
+                android:icon="@drawable/ic_help_outline_black"
+                android:orderInCategory="104"
+                android:title="@string/menuacct_about"
+                app:showAsAction="ifRoom" />
+            <!--android:icon="@android:drawable/ic_menu_info_details"-->
+            <item
+                android:id="@+id/menumain_showSuggests"
+                android:icon="@drawable/ic_vpn_key_black"
+                android:orderInCategory="119"
+                android:title="@string/menu_suggests"
+                app:showAsAction="ifRoom" />
+
+            <item
+                android:id="@+id/menuacct_external_accts"
+                android:icon="@drawable/ic_import_export_black"
+                android:orderInCategory="120"
+                android:title="@string/menuacct_backup_restore_accts"
+                app:showAsAction="ifRoom" />
+
+            <!--    <item-->
+            <!--        android:id="@+id/menumain_do_request"-->
+            <!--        android:icon="@drawable/ic_fullscreen"-->
+            <!--        android:orderInCategory="121"-->
+            <!--        android:title="Spl Request"-->
+            <!--        app:showAsAction="ifRoom" />-->
+
+
+            <!--    <item-->
+            <!--        android:id="@+id/menumain_showSuggestsV1"-->
+            <!--        android:icon="@drawable/selector_key"-->
+            <!--        android:orderInCategory="120"-->
+            <!--        android:title="@string/menu_suggests_v1"-->
+            <!--        app:showAsAction="ifRoom" />-->
+            <!--    <item-->
+            <!--        android:id="@+id/menumain_showProfile"-->
+            <!--        android:icon="@drawable/selector_key"-->
+            <!--        android:orderInCategory="121"-->
+            <!--        android:title="@string/menu_profile"-->
+            <!--        app:showAsAction="ifRoom" />-->
+            <!--<group-->
+            <!--android:id="@+id/group_rss"-->
+            <!--android:checkableBehavior="single"-->
+            <!--android:enabled="true"-->
+            <!--android:visible="true">-->
+            <!--<item-->
+            <!--android:id="@+id/menumain_showAccounts"-->
+            <!--android:checked="true"-->
+            <!--android:orderInCategory="107"-->
+            <!--android:title="@string/menu_accounts"-->
+            <!--app:showAsAction="ifRoom" />-->
+            <!--<item-->
+            <!--android:id="@+id/menumain_rss_top_free_apps"-->
+            <!--android:orderInCategory="108"-->
+            <!--android:title="@string/menuacct_rss_top_free_apps"-->
+            <!--app:showAsAction="ifRoom" />-->
+            <!--<item-->
+            <!--android:id="@+id/menumain_rss_top_tv_episodes"-->
+            <!--android:orderInCategory="109"-->
+            <!--android:title="@string/menuacct_rss_tv_episodes"-->
+            <!--app:showAsAction="ifRoom" />-->
+            <!--<item-->
+            <!--android:id="@+id/menumain_rss_top_tv_seasons"-->
+            <!--android:orderInCategory="110"-->
+            <!--android:title="@string/menuacct_rss_tv_season"-->
+            <!--app:showAsAction="ifRoom" />-->
+            <!--</group>-->
+            <!--    <item-->
+            <!--        android:id="@+id/menumain_refresh"-->
+            <!--        android:orderInCategory="250"-->
+            <!--        android:title="Refresh List"-->
+            <!--        app:showAsAction="never" />-->
+            <!--app:actionViewClass="android.widget.CheckBox"-->
+            <!--    <item-->
+            <!--        android:id="@+id/menumain_search_setting"-->
+            <!--        android:orderInCategory="251"-->
+            <!--        android:title="Refresh Search DB"-->
+            <!--        app:showAsAction="never" />-->
+            <!--<item-->
+            <!--android:id="@+id/miActionProgress"-->
+            <!--android:orderInCategory="300"-->
+            <!--android:title="Loading..."-->
+            <!--android:visible="false"-->
+            <!--app:actionLayout="@layout/action_view_progress"-->
+            <!--app:showAsAction="always" />-->
+
+        </menu>
+
+    </item>
+
 </menu>

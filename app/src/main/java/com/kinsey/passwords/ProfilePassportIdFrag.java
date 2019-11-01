@@ -140,7 +140,9 @@ public class ProfilePassportIdFrag extends Fragment {
 
 
     private void refreshList() {
-        adapter.notifyItemRangeChanged(0, adapter.getItemCount() - 1);
+        if (adapter.getItemCount() > 0) {
+            adapter.notifyItemRangeChanged(0, adapter.getItemCount() - 1);
+        }
     }
 
 

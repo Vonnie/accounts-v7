@@ -23,11 +23,13 @@ public class ProfileViewModel extends AndroidViewModel
     public static final String TAG = "ProfileViewModel";
     private ProfileRepository repository;
     private LiveData<List<Profile>> allProfiles;
+    public String dbMsg;
 
     public ProfileViewModel(@NonNull Application application) {
         super(application);
         repository = new ProfileRepository(application);
 //        allProfiles = repository.getAllProfiles();
+        dbMsg = repository.dbMsg;
     }
 
     public void insertProfile(Profile profile) {
@@ -52,10 +54,10 @@ public class ProfileViewModel extends AndroidViewModel
     }
 
 
-    public LiveData<List<Profile>> getAllProfiles(int listsortOrder) {
-        allProfiles = repository.getAllProfiles(listsortOrder);
-        return allProfiles;
-    }
+//    public LiveData<List<Profile>> getAllProfiles(int listsortOrder) {
+//        allProfiles = repository.getAllProfiles(listsortOrder);
+//        return allProfiles;
+//    }
 
     public LiveData<List<Profile>> getAllProfilesByCorpName() {
         allProfiles = repository.getAllProfilesByCorpName();

@@ -59,7 +59,7 @@ public class ProfileJsonListIO {
 
 
     final public Profile readMessage(JsonReader reader) {
-        Profile item = new Profile();
+        Profile item = new Profile(0, "", "", "", "");
         boolean retSuccess = true;
         try {
             reader.beginObject();

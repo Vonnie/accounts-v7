@@ -42,25 +42,27 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/corp_name"
-            android:layout_alignParentLeft="true"
+            android:ellipsize="end"
             android:textColor="?android:attr/textColorPrimary" />
+<!--        android:layout_alignParentLeft="true"-->
 
         <TextView
             android:id="@+id/user_email"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/corp_name"
-            android:layout_alignParentRight="true"
+            android:layout_below="@id/user_name"
+            android:ellipsize="end"
             android:textColor="?android:attr/textColorPrimary" />
+<!--        android:layout_alignParentRight="true"-->
 
         <TextView
             android:id="@+id/corp_website"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/user_name"
+            android:layout_below="@id/user_email"
             android:ellipsize="end"
             android:textColor="?android:attr/textColorPrimary" />
-<!--        android:visibility="@{prod.corp_website ? Visibility.VISIBLE : Visibility.GONE"-->
+        <!--        android:visibility="@{prod.corp_website ? Visibility.VISIBLE : Visibility.GONE"-->
 
     </RelativeLayout>
 

@@ -22,7 +22,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.kinsey.passwords.items.Profile;
 import com.kinsey.passwords.provider.ProfileAdapter;
-import com.kinsey.passwords.provider.ProfileViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +36,8 @@ public class ProfileCustomFrag extends Fragment {
 //    ProfileViewModel profileViewModel;
     private List<Profile> profileListFull;
     private ProfileAdapter adapter = new ProfileAdapter();
+    boolean onFirstReported = true;
+    boolean onFirstReposition = true;
 
     private ProfileCustomFrag.OnProfileCustomClickListener mListener;
     public interface OnProfileCustomClickListener {
@@ -71,7 +72,6 @@ public class ProfileCustomFrag extends Fragment {
 
         recyclerView.setAdapter(adapter);
 
-
 //        profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
         MainActivity.profileViewModel.getAllProfilesCustomSort().observe(this, new Observer<List<Profile>>() {
             @Override
@@ -79,15 +79,20 @@ public class ProfileCustomFrag extends Fragment {
 
                 profileListFull = new ArrayList<>(profiles);
                 adapter.submitList(profiles);
+                if (onFirstReported) {
+                    onFirstReported = false;
+                    resequenceList();
+                }
+                if (onFirstReported) {
+                    onFirstReported = false;
+                    recyclerView.scrollToPosition(0);
+                }
                 Log.d(TAG, "list submit");
             }
         });
 
 
-
-
-        recyclerView.scrollToPosition(0);
-        this.adapter.notifyDataSetChanged();
+//        this.adapter.notifyDataSetChanged();
 
 
 
@@ -224,7 +229,7 @@ public class ProfileCustomFrag extends Fragment {
                     );
                     if (toViewHolder != null) {
                         toViewHolder.itemView.setBackgroundColor(
-                                ContextCompat.getColor(context, R.color.primaryDarkColor)
+                                ContextCompat.getColor(context, R.color.backgroundTransparent)
                         );
                     }
                     int fromPos = fromViewHolder.getAdapterPosition();
@@ -342,18 +347,55 @@ public class ProfileCustomFrag extends Fragment {
 
 
     public void resequenceList() {
+        Boolean blnReseq = false;
+        List<Profile> currentList = adapter.getCurrentList();
+        int lastSeq = 0;
+        for ( Profile item : currentList) {
+            if (item.getSequence() == 0) {
+                blnReseq = true;
+            } else {
+                if (item.getSequence() == lastSeq + 1) {
+                    lastSeq += 1;
+                } else {
+                    blnReseq = true;
+                }
+            }
+        }
+
+        if (!blnReseq) {
+            return;
+        }
+
         int newSeq = 0;
-        Log.d(TAG, "profile size " + profileListFull.size());
-        for ( Profile item : profileListFull) {
+        Log.d(TAG, "profile size  to reseq " + currentList.size());
+        for ( Profile item : currentList) {
+            if (item.getSequence() == 0) {
+                continue;
+            }
             newSeq += 1;
             item.setSequence(newSeq);
             MainActivity.profileViewModel.update(item);
         }
-        adapter.notifyItemRangeChanged(0, adapter.getItemCount() - 1);
+        for ( Profile item : currentList) {
+            if (item.getSequence() != 0) {
+                break;
+            }
+            newSeq += 1;
+            item.setSequence(newSeq);
+            MainActivity.profileViewModel.update(item);
+        }
+
+
+        if (adapter.getItemCount() > 0) {
+            adapter.notifyItemRangeChanged(0, adapter.getItemCount() - 1);
+        }
+        onFirstReported = true;
     }
 
     private void refreshList() {
-        adapter.notifyItemRangeChanged(0, adapter.getItemCount() - 1);
+        if (adapter.getItemCount() > 0) {
+            adapter.notifyItemRangeChanged(0, adapter.getItemCount() - 1);
+        }
     }
 
 

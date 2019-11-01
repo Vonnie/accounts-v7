@@ -7,9 +7,9 @@ android {
     defaultConfig {
         applicationId "com.kinsey.passwords"
         minSdkVersion 21
-        targetSdkVersion 28
-        versionCode 56
-        versionName "10.50"
+        targetSdkVersion 29
+        versionCode 65
+        versionName "10.95"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -28,6 +28,13 @@ android {
         sourceCompatibility = 1.8
         targetCompatibility = 1.8
     }
+
+    lintOptions {
+        checkReleaseBuilds false
+        // Or, if you prefer, you can continue to check for errors in release builds,
+        // but continue the build even when errors are found:
+        abortOnError false
+    }
 }
 
 dependencies {
@@ -37,16 +44,16 @@ dependencies {
 
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'com.google.android.material:material:1.1.0-beta01'
+    implementation 'com.google.android.material:material:1.2.0-alpha01'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0-alpha02'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0-beta01'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel:2.2.0-beta01'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0-beta01'
-    implementation 'androidx.activity:activity-ktx:1.1.0-beta01'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0-rc01'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel:2.2.0-rc01'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0-rc01'
+    implementation 'androidx.activity:activity-ktx:1.1.0-rc01'
 
 //    annotationProcessor "androidx.arch.lifecycle:compiler:2.1.0"
 
@@ -65,8 +72,8 @@ dependencies {
 
     // Test helpers
     testImplementation "androidx.room:room-testing:$room_version"
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta2'
-    implementation 'androidx.lifecycle:lifecycle-runtime:2.2.0-beta01'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta3'
+    implementation 'androidx.lifecycle:lifecycle-runtime:2.2.0-rc01'
 }
 repositories {
     mavenCentral()

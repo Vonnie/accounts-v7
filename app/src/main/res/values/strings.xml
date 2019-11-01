@@ -48,6 +48,7 @@
     <string name="cancel">Cancel</string>
     <string name="accedit_open_date">Open Date</string>
     <string name="title_activity_file_view">FileViewActivity</string>
+    <string name="title_activity_about">AboutActivity</string>
     <string name="deldiag_positive_caption">Delete</string>
     <string name="deldiag_message">Delete account</string>
     <string name="deldiag_sub_message">%1$s.\nAcctId:%2$d</string>
@@ -84,23 +85,24 @@
     <string name="searchable_hint">Enter corporation name</string>
     <string name="home_message_title">List Accounts, Search Accounts, Password Suggestions</string>
     <string name="home_message_text">
-        Tracks your accounts with sorted lists, search of accounts, edits, backup data, and gives password suggestions of 8 or 10 character passwords.
-        \nDo a long click on an account item in the list. This presents a dialog to request edit, delete the account, or save corp name change.
-        \nDEFINITION MESSAGE
+        Tracks your accounts with sorted lists, searches, edits, backup / restore data, and gives password suggestions of 8 or 10 character passwords.
+        \nTo view list in a different order, click the filter icon for four different sorted orders. Use the search, to see only accounts for your keyed in values matching the corporation name.
+        \nTo view &amp; edit details, click on item. To delete, swipe account left or right. To add an account, click plus sign at lower right corner.
+        \nTo view accounts with more interest or activity, use the custom list. Use the drag/drop to rearrange for the order.
+        \nTo backup or restore use the Backup/Restore from the menu. This backups data. If a backup exists from a previous backup, this can be used to restore.
+        \nThe file location is noted in the Backup/Restore menu item Filename. Use menu item \'Show Exported File\' to view of this previously exported file. Use the menu item share to copy the exported file onto other systems.
+        \nPassword Suggestions menu list passwords. It does not attach these to an account. Reason why is explained next.
+        \n\nDEFINITION MESSAGE
         \nThe data db contains accounts with account Id and account info. Use paper to record the db\'s account Id and password you assigned it.
-        To add an account, add on the app, then take the id generated and the new assigned password to write on the paper file.
+        To add an account, add on the app, then take the auto-generated id and the new selected password to write on the paper file.
         Later when an account it needed, couple account and password by doing a search on the app for the account, then use the id to reference into paper file for the password.
-        The data db is exported thru Menu of \'External Accounts\', then do a Menu for Export. This exported data file is a json file representation of accounts db. Use this for backup.
+        The data db is exported through Menu of \'Backup / Restore\', then do a Menu for Export. This exported data file is a json file representation of accounts db. Use this for backup.
         To restore data onto the app db, select Menu Import to rebuild from a previously exported file.
         The menu also has a selection to have suggestions for passwords. The icon for this search is a key.
-        \nIMPORTANT SEARCH MESSAGE
-        \nSearch DB is an abbreviated copy of the data db.
-        Will need to re-align again if data db has any corp name changes, any add of an account, or any delete of an account.
-        If the app see changes, it will rebuild that search db on the next search. User can ask to rebuild that search db thru the menu.
-        \nIMPORTANT SECURITY MESSAGE
+        \n\nIMPORTANT SECURITY MESSAGE
         \nKeeping passwords electronically, even if encrypted, may leave you open to have your credentials stolen.
         Having an electronic copy (from a file or the app&quot;s database) with the credentials of company, user name, and password would highly exposed your accounts to hackers.
-        \nRecommend to copy exported file to Dropbox OR request a \'External Accounts\' menu share for a share menu, then request option Dropbox.
+        \nRecommend to share exported file to Dropbox or Email. Copy onto a safe space.
     </string>
     <string name="home_message_text2">
         \nFor this security reason, the passwords are not saved on a file or database. This app keeps account information excluding passwords. Your action is to manually tie together using the account id from this app to the written list of account id and password value.
@@ -170,7 +172,7 @@
     <string name="menuvw_export">Export</string>
     <string name="menuvw_backup">Backup</string>
     <string name="sugg_add_msg">No suggested passwords. Request Add fro list below.</string>
-    <string name="about_copyright">Copyright \u00a9 2018</string>
+    <string name="about_copyright">Copyright \u00a9 2019</string>
     <string name="about_weblink">Instructions available at</string>
     <string name="about_url"><u>http://www.learnprogramming.academy</u></string>
     <string name="about_weblink_21">Instructions available at www.learnprogramming.academy</string>

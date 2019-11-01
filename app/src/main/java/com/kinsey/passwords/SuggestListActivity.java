@@ -41,8 +41,8 @@ import java.util.List;
 import static androidx.recyclerview.widget.ItemTouchHelper.ACTION_STATE_DRAG;
 
 public class SuggestListActivity extends AppCompatActivity implements
-    GestureDetector.OnGestureListener,
-    GestureDetector.OnDoubleTapListener {
+        GestureDetector.OnGestureListener,
+        GestureDetector.OnDoubleTapListener {
     public static final String TAG = "SuggestListActivity";
     public static final int ADD_SUGGEST_REQUEST = 1;
     public static final int EDIT_SUGGEST_REQUEST = 2;
@@ -53,7 +53,7 @@ public class SuggestListActivity extends AppCompatActivity implements
     GridLayoutManager layoutManager;
     private GestureDetectorCompat gestureDetector;
 
-//    private List<Suggest> suggestListFull;
+    //    private List<Suggest> suggestListFull;
 //    private int maxSeq = 0;
     Suggest suggestMaxItem;
 
@@ -144,9 +144,9 @@ public class SuggestListActivity extends AppCompatActivity implements
 
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(
                 ItemTouchHelper.START | ItemTouchHelper.END | ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT,
-                ItemTouchHelper.START | ItemTouchHelper.END | ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT ) {
+                ItemTouchHelper.START | ItemTouchHelper.END | ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
 
-//            ItemTouchHelper itemTouchHelper;
+            //            ItemTouchHelper itemTouchHelper;
             RecyclerView.ViewHolder fromViewHolder;
             RecyclerView.ViewHolder toViewHolder;
             int maxPos = 0, minPos = 0;
@@ -199,7 +199,6 @@ public class SuggestListActivity extends AppCompatActivity implements
             }
 
 
-
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 Log.d(TAG, "swipe direction " + direction);
@@ -246,67 +245,72 @@ public class SuggestListActivity extends AppCompatActivity implements
                     }
 
                 } else {
-                    if (fromViewHolder != null) {
-                        fromViewHolder.itemView.setBackgroundColor(
-                                ContextCompat.getColor(getApplicationContext(), R.color.primaryDarkColor)
-                        );
-                        toViewHolder.itemView.setBackgroundColor(
-                                ContextCompat.getColor(getApplicationContext(), R.color.primaryDarkColor)
-                        );
-                        int fromPos = fromViewHolder.getAdapterPosition();
-                        int toPos = toViewHolder.getAdapterPosition();
-                        if (fromPos == toPos) {
-                            return;
-                        }
+                    if (fromViewHolder == null) {
+                        return;
+                    }
+                    if (toViewHolder == null) {
+                        return;
+                    }
+                    fromViewHolder.itemView.setBackgroundColor(
+                            ContextCompat.getColor(getApplicationContext(), R.color.backgroundTransparent)
+                    );
+                    toViewHolder.itemView.setBackgroundColor(
+                            ContextCompat.getColor(getApplicationContext(), R.color.backgroundTransparent)
+                    );
+                    int fromPos = fromViewHolder.getAdapterPosition();
+                    int toPos = toViewHolder.getAdapterPosition();
+                    if (fromPos == toPos) {
+                        return;
+                    }
 
 
-                        Log.d(TAG, "from:to " + fromPos + ":" + toPos);
+                    Log.d(TAG, "from:to " + fromPos + ":" + toPos);
 
-                        Suggest reposSuggest = adapter.getSuggestAt(fromViewHolder.getAdapterPosition());
+                    Suggest reposSuggest = adapter.getSuggestAt(fromViewHolder.getAdapterPosition());
 
-                        int lowPos = fromPos < toPos ? fromPos : toPos;
-                        int highPos = fromPos > toPos ? fromPos : toPos;
-                        Log.d(TAG, "low:high " + lowPos + ":" + highPos);
+                    int lowPos = fromPos < toPos ? fromPos : toPos;
+                    int highPos = fromPos > toPos ? fromPos : toPos;
+                    Log.d(TAG, "low:high " + lowPos + ":" + highPos);
 
-                        int nextSeq = -1;
-                        if (lowPos == 0) {
-                            nextSeq = 1;
-                        } else {
-                            Suggest suggestNext = adapter.getSuggestAt(lowPos);
-                            nextSeq = suggestNext.getSequence();
-                        }
+                    int nextSeq = -1;
+                    if (lowPos == 0) {
+                        nextSeq = 1;
+                    } else {
+                        Suggest suggestNext = adapter.getSuggestAt(lowPos);
+                        nextSeq = suggestNext.getSequence();
+                    }
 
-                        List<Suggest> modifySuggestList = new ArrayList<Suggest>();
-                        int currentPos = lowPos;
+                    List<Suggest> modifySuggestList = new ArrayList<Suggest>();
+                    int currentPos = lowPos;
 
-                        if (currentPos == toPos) {
-                            reposSuggest.setSequence(nextSeq);
-                            modifySuggestList.add(reposSuggest);
-                            nextSeq += 1;
-                            while (currentPos < highPos) {
-                                Suggest suggestSeq = adapter.getSuggestAt(currentPos);
-                                suggestSeq.setSequence(nextSeq);
-                                modifySuggestList.add(suggestSeq);
-                                currentPos += 1;
-                                nextSeq += 1;
-                            }
-                        } else {
+                    if (currentPos == toPos) {
+                        reposSuggest.setSequence(nextSeq);
+                        modifySuggestList.add(reposSuggest);
+                        nextSeq += 1;
+                        while (currentPos < highPos) {
+                            Suggest suggestSeq = adapter.getSuggestAt(currentPos);
+                            suggestSeq.setSequence(nextSeq);
+                            modifySuggestList.add(suggestSeq);
                             currentPos += 1;
-                            while (currentPos < highPos) {
-                                Suggest suggestSeq = adapter.getSuggestAt(currentPos);
-                                suggestSeq.setSequence(nextSeq);
-                                modifySuggestList.add(suggestSeq);
-                                nextSeq += 1;
-                                currentPos += 1;
-                            }
-                            reposSuggest.setSequence(nextSeq);
-                            modifySuggestList.add(reposSuggest);
+                            nextSeq += 1;
                         }
+                    } else {
+                        currentPos += 1;
+                        while (currentPos < highPos) {
+                            Suggest suggestSeq = adapter.getSuggestAt(currentPos);
+                            suggestSeq.setSequence(nextSeq);
+                            modifySuggestList.add(suggestSeq);
+                            nextSeq += 1;
+                            currentPos += 1;
+                        }
+                        reposSuggest.setSequence(nextSeq);
+                        modifySuggestList.add(reposSuggest);
+                    }
 
 
-                        for ( Suggest item : modifySuggestList) {
-                            suggestViewModel.update(item);
-                        }
+                    for (Suggest item : modifySuggestList) {
+                        suggestViewModel.update(item);
+                    }
 //                        suggest.setSequence(toSeq);
 //                        suggestTarget.setSequence(fromSeq);
 //                        Log.d(TAG, "onMovePos " + fromViewHolder.getAdapterPosition() + ":" + toViewHolder.getAdapterPosition());
@@ -318,12 +322,12 @@ public class SuggestListActivity extends AppCompatActivity implements
 //                        suggestViewModel.update(suggest);
 //                        suggestViewModel.update(suggestTarget);
 
-                        Log.d(TAG, "min:max " + minPos + ":" + maxPos);
+                    Log.d(TAG, "min:max " + minPos + ":" + maxPos);
 //                        adapter.notifyItemMoved(minPos, maxPos);
-                        adapter.notifyDataSetChanged();
+//                        adapter.notifyDataSetChanged();
+                    adapter.notifyItemRangeChanged(minPos, maxPos);
 
-                        fromViewHolder = null;
-                    }
+                    fromViewHolder = null;
                 }
                 super.onSelectedChanged(viewHolder, actionState);
             }
@@ -336,13 +340,11 @@ public class SuggestListActivity extends AppCompatActivity implements
 //            }
 
 
-
 //            public void setTouchHelper(ItemTouchHelper itemTouchHelper) {
 //                this.itemTouchHelper = itemTouchHelper;
 //            }
 
         }).attachToRecyclerView(recyclerView);
-
 
 
 //        gestureDetector = new GestureDetectorCompat(this,this);
@@ -367,7 +369,6 @@ public class SuggestListActivity extends AppCompatActivity implements
 //            }
 //        });
 ////        .attachToRecyclerView(recyclerView);
-
 
 
         adapter.setOnItemClickListener(new SuggestAdapter.OnItemClickListener() {
@@ -475,7 +476,7 @@ public class SuggestListActivity extends AppCompatActivity implements
         Log.d(TAG, "new max seq " + maxSeq);
 
         int nbrPasswords = 0;
-        while(nbrPasswords < 10) {
+        while (nbrPasswords < 10) {
 //            int iSeq = getMaxValue(SuggestsContract.Columns.SEQUENCE_COL);
 
             maxSeq += 1;

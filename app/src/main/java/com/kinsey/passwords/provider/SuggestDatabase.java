@@ -47,9 +47,9 @@ public abstract class SuggestDatabase extends RoomDatabase {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            suggestDao.insert(new Suggest("aaabbb", 2, 0l));
+            suggestDao.insert(new Suggest("aaaaaa", 2, 0l));
             suggestDao.insert(new Suggest("bbbbbb", 5, 0l));
-            suggestDao.insert(new Suggest("cccbbb", 9, 0l));
+            suggestDao.insert(new Suggest("cccccc", 9, 0l));
             return null;
         }
     }

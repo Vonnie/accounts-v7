@@ -51,6 +51,8 @@ public class AddEditProfileActivity extends AppCompatActivity {
             "com.kinsey.passwords.EXTRA_ACTVY_LONG";
     public static final String EXTRA_OPEN_DATE_LONG =
             "com.kinsey.passwords.EXTRA_OPEN_DATE_LONG";
+    public static final String EXTRA_EDIT_MODE =
+            "com.kinsey.passwords.EXTRA_EDIT_MODE";
 
     private TextInputLayout textInputCorpName;
     private TextInputLayout textInputUserName;
@@ -62,10 +64,12 @@ public class AddEditProfileActivity extends AppCompatActivity {
     private TextView tvActvyDate;
     private TextView tvPassportId;
     private TextView tvSequence;
-    private long lngOpenDate;
-    private long lngActvDate;
-    private int intPassportId;
-    private int intSequence;
+    private long lngOpenDate = 0l;
+    private long lngActvDate = 0l;
+    private int intId = -1;
+    private int intPassportId = -1;
+    private int intSequence = 0;
+    private boolean editModeAdd = false;
     private ImageButton mImgWebView;
 
     private static String pattern_ymdtimehm = "yyyy-MM-dd kk:mm";
@@ -115,12 +119,18 @@ public class AddEditProfileActivity extends AppCompatActivity {
             Intent intent = getIntent();
 
             if (intent.hasExtra(EXTRA_ID)) {
-                setTitle("Profile ID: " + intent.getIntExtra(EXTRA_PASSPORT_ID, 0));
+                editModeAdd = false;
                 setEditUICols(intent);
             } else {
-                setTitle("Add Profile Account");
+                editModeAdd = true;
                 setAddUIDefaults(intent);
             }
+        }
+
+        if (editModeAdd) {
+            setTitle("Add Profile Account");
+        } else {
+            setTitle("Profile ID: " + intPassportId);
         }
 
         Log.d(TAG, "onCreate");
@@ -164,6 +174,7 @@ public class AddEditProfileActivity extends AppCompatActivity {
             tvActvyDate.setText("ActvyDate: " + format_ymdtimehm.format(lngActvDate));
         }
 
+        this.intId = intent.getIntExtra(EXTRA_ID, -1);
         this.intPassportId = intent.getIntExtra(EXTRA_PASSPORT_ID, 0);
         this.intSequence = intent.getIntExtra(EXTRA_SEQUENCE, 0);
         this.tvPassportId.setText(" | Id: " + String.valueOf(this.intPassportId));
@@ -230,7 +241,10 @@ public class AddEditProfileActivity extends AppCompatActivity {
         intSequence = savedInstanceState.getInt(EXTRA_SEQUENCE, 0);
         tvPassportId.setText(" | Id: " + String.valueOf(intPassportId));
         tvSequence.setText(" | Seq: " + String.valueOf(intSequence));
-
+        editModeAdd = savedInstanceState.getBoolean(EXTRA_EDIT_MODE, false);
+        if (!editModeAdd) {
+            intId = savedInstanceState.getInt(EXTRA_ID, -1);
+        }
     }
 
     private boolean validateUserEmail() {
@@ -338,14 +352,17 @@ public class AddEditProfileActivity extends AppCompatActivity {
 
         data.putExtra(EXTRA_ACTVY_LONG, new Date().getTime());
 
-        int id = getIntent().getIntExtra(EXTRA_ID, -1);
-        if (id != -1) {
-            data.putExtra(EXTRA_ID, id);
+
+        if (!editModeAdd) {
+            if (intId != -1) {
+                data.putExtra(EXTRA_ID, intId);
+            }
         }
-        int passportId = getIntent().getIntExtra(EXTRA_PASSPORT_ID, 0);
-        data.putExtra(EXTRA_PASSPORT_ID, id);
-        int sequence = getIntent().getIntExtra(EXTRA_SEQUENCE, 0);
-        data.putExtra(EXTRA_SEQUENCE, sequence);
+
+//        int passportId = getIntent().getIntExtra(EXTRA_PASSPORT_ID, 0);
+        data.putExtra(EXTRA_PASSPORT_ID, intPassportId);
+//        int sequence = getIntent().getIntExtra(EXTRA_SEQUENCE, 0);
+        data.putExtra(EXTRA_SEQUENCE, intSequence);
 
         setResult(RESULT_OK, data);
         finish();
@@ -380,7 +397,10 @@ public class AddEditProfileActivity extends AppCompatActivity {
         outState.putString(EXTRA_NOTE, textInputNote.getEditText().getText().toString().trim());
         outState.putLong(EXTRA_OPEN_DATE_LONG, lngOpenDate);
         outState.putLong(EXTRA_ACTVY_LONG, lngActvDate);
+        outState.putInt(EXTRA_ID, intId);
         outState.putInt(EXTRA_PASSPORT_ID, intPassportId);
         outState.putInt(EXTRA_SEQUENCE, intSequence);
+        outState.putBoolean(EXTRA_EDIT_MODE, editModeAdd);
+
     }
 }

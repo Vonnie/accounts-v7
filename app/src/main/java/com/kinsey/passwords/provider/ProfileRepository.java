@@ -9,23 +9,22 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.kinsey.passwords.MainActivity;
 import com.kinsey.passwords.items.Profile;
-import com.kinsey.passwords.items.Suggest;
 
 import java.util.List;
-
-import io.reactivex.schedulers.Schedulers;
 
 
 public class ProfileRepository {
     private ProfileDao profileDao;
     private LiveData<List<Profile>> allProfiles;
     private MutableLiveData<Long> dbInsertId = new MediatorLiveData<>();
+    public String dbMsg;
 
 
     public ProfileRepository(Application application) {
         ProfileDatabase database = ProfileDatabase.getInstance(application);
         profileDao = database.profileDao();
         allProfiles = profileDao.getAllProfiles();
+        dbMsg = database.getOpenHelper().getDatabaseName();
     }
 
     public void insertProfile(Profile profile, Task myInterface) {
@@ -33,7 +32,7 @@ public class ProfileRepository {
     }
 
     public void insertAll(List<Profile> profiles) {
-        new InsertProfilesAsyncTask(profileDao).execute(profiles);
+        new InsertProfilesAsyncTask(profileDao, profiles).execute();
     }
 
     public void update(Profile profile) {
@@ -48,27 +47,27 @@ public class ProfileRepository {
         new DeleteAllProfilesAsyncTask(profileDao).execute();
     }
 
-    public LiveData<List<Profile>> getAllProfiles(int listsortOrder) {
-        switch (listsortOrder) {
-            case MainActivity.LISTSORT_CORP_NAME:
-                allProfiles = profileDao.getAllProfilesByCorpName();
-                break;
-            case MainActivity.LISTSORT_PASSPORT_ID:
-                allProfiles = profileDao.getAllProfilesByPassportId();
-                break;
-            case MainActivity.LISTSORT_OPEN_DATE:
-                allProfiles = profileDao.getAllProfilesByOpenDate();
-                break;
-            case MainActivity.LISTSORT_CUSTOM_SORT:
-                allProfiles = profileDao.getAllProfilesCustomSort();
-                break;
-            default:
-                allProfiles = profileDao.getAllProfilesByCorpName();
-                break;
-        }
-
-        return allProfiles;
-    }
+//    public LiveData<List<Profile>> getAllProfiles(int listsortOrder) {
+//        switch (listsortOrder) {
+//            case MainActivity.LISTSORT_CORP_NAME:
+//                allProfiles = profileDao.getAllProfilesByCorpName();
+//                break;
+//            case MainActivity.LISTSORT_PASSPORT_ID:
+//                allProfiles = profileDao.getAllProfilesByPassportId();
+//                break;
+//            case MainActivity.LISTSORT_OPEN_DATE:
+//                allProfiles = profileDao.getAllProfilesByOpenDate();
+//                break;
+//            case MainActivity.LISTSORT_CUSTOM_SORT:
+//                allProfiles = profileDao.getAllProfilesCustomSort();
+//                break;
+//            default:
+//                allProfiles = profileDao.getAllProfilesByCorpName();
+//                break;
+//        }
+//
+//        return allProfiles;
+//    }
 
     public LiveData<Profile> getProfileById(int id) {
         return profileDao.getProfileById(id);
@@ -140,17 +139,20 @@ public class ProfileRepository {
 
 //    https://stackoverflow.com/questions/56950531/how-to-make-room-database-insert-method-return-int-through-mvvm-architecture
 
-    private static class InsertProfilesAsyncTask extends AsyncTask<List<Profile>, Void, Void> {
+    private static class InsertProfilesAsyncTask extends AsyncTask<Void, Void, Void> {
         private ProfileDao profileDao;
+        private List<Profile> profiles;
 
-        private InsertProfilesAsyncTask(ProfileDao profileDao) {
+        private InsertProfilesAsyncTask(ProfileDao profileDao, List<Profile> profiles) {
+
             this.profileDao = profileDao;
+            this.profiles = profiles;
         }
 
         @Override
-        protected Void doInBackground(List<Profile>... profiles) {
+        protected Void doInBackground(Void... aVoid) {
 
-            for (Profile item : profiles[0]) {
+            for (Profile item : this.profiles) {
                 profileDao.insert(item);
             }
             return null;

@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.kinsey.passwords.MainActivity;
 import com.kinsey.passwords.R;
 import com.kinsey.passwords.items.Profile;
 
@@ -21,6 +22,10 @@ import java.util.Locale;
 
 public class ProfileAdapter extends ListAdapter<Profile, ProfileAdapter.ProfileHolder> {
 //    private List<Profile> profiles = new ArrayList<Profile>();
+
+    private static String pattern_ymd = "MM/dd/yyyy";
+    public static SimpleDateFormat format_mdy = new SimpleDateFormat(
+            pattern_ymd, Locale.US);
 
     private OnItemClickListener listener;
 
@@ -55,7 +60,25 @@ public class ProfileAdapter extends ListAdapter<Profile, ProfileAdapter.ProfileH
         holder.tvCorpName.setText(currentProfile.getCorpName());
 //        holder.tvAcctId.setText(String.valueOf(currentProfile.getId()));
 //        holder.tvAcctId.setText(String.valueOf(currentProfile.getPassportId()));
-        holder.tvAcctId.setText(String.valueOf(currentProfile.getSequence()));
+
+
+        if (MainActivity.listsortOrder == MainActivity.LISTSORT_CORP_NAME ||
+        MainActivity.listsortOrder == MainActivity.LISTSORT_PASSPORT_ID) {
+            holder.tvAcctId.setText(String.valueOf(currentProfile.getPassportId()));
+        } else {
+            if (MainActivity.listsortOrder == MainActivity.LISTSORT_OPEN_DATE) {
+                long lngActvDate = currentProfile.getOpenLong();
+                if (lngActvDate == 0) {
+                    holder.tvAcctId.setText("");
+                } else {
+                    holder.tvAcctId.setText(format_mdy.format(lngActvDate));
+                }
+            } else {
+                holder.tvAcctId.setText(String.valueOf(currentProfile.getSequence()));
+            }
+        }
+
+
     }
 
     public Profile getProfileAt(int position) {
