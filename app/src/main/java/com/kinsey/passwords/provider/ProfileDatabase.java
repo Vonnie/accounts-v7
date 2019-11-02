@@ -13,12 +13,13 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.kinsey.passwords.items.Profile;
 import com.kinsey.passwords.items.Suggest;
+import com.kinsey.passwords.tools.Converters;
 
 import java.util.Calendar;
 import java.util.Date;
 
 @Database(entities = {Profile.class, Suggest.class}, version = 2, exportSchema = false)
-//@TypeConverters(DateConverter.class)
+@TypeConverters(Converters.class)
 public abstract class ProfileDatabase extends RoomDatabase {
 
     private static ProfileDatabase instance;
@@ -31,7 +32,7 @@ public abstract class ProfileDatabase extends RoomDatabase {
         if (instance == null) {
             instance = Room.databaseBuilder(context.getApplicationContext(),
                     ProfileDatabase.class, "Passport")
-                    .addMigrations(MIGRATION_1_2)
+//                    .addMigrations(MIGRATION_1_2)
 //                    .fallbackToDestructiveMigration()
 //                    .addCallback(roomCallback)
                     .build();
@@ -89,9 +90,10 @@ public abstract class ProfileDatabase extends RoomDatabase {
             profile.setActvyLong(c1.getTimeInMillis());
             profileDao.insertProfile(profile);
 
-            suggestDao.insert(new Suggest("aaaaaa", 2, 0l));
-            suggestDao.insert(new Suggest("bbbbbb", 5, 0l));
-            suggestDao.insert(new Suggest("cccccc", 9, 0l));
+
+            suggestDao.insert(new Suggest("aaaaaa", 2, new Date()));
+            suggestDao.insert(new Suggest("bbbbbb", 5, new Date()));
+            suggestDao.insert(new Suggest("cccccc", 9, new Date()));
 
             return null;
         }

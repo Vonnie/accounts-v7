@@ -11,6 +11,8 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.kinsey.passwords.items.Suggest;
 
+import java.util.Date;
+
 //@Database(entities = {Suggest.class}, version = 2, exportSchema = false)
 public abstract class SuggestDatabase extends RoomDatabase {
 
@@ -47,9 +49,9 @@ public abstract class SuggestDatabase extends RoomDatabase {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            suggestDao.insert(new Suggest("aaaaaa", 2, 0l));
-            suggestDao.insert(new Suggest("bbbbbb", 5, 0l));
-            suggestDao.insert(new Suggest("cccccc", 9, 0l));
+            suggestDao.insert(new Suggest("aaaaaa", 2, new Date()));
+            suggestDao.insert(new Suggest("bbbbbb", 5, new Date()));
+            suggestDao.insert(new Suggest("cccccc", 9, new Date()));
             return null;
         }
     }

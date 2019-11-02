@@ -117,7 +117,7 @@ public class SuggestListActivity extends AppCompatActivity implements
                 Log.d(TAG, "max Item " + suggest);
 
                 if (suggest == null) {
-                    suggestMaxItem = new Suggest("", 0, 0l);
+                    suggestMaxItem = new Suggest();
                 } else {
                     suggestMaxItem = new Suggest(
                             suggest.getPassword(),
@@ -379,7 +379,7 @@ public class SuggestListActivity extends AppCompatActivity implements
                 intent.putExtra(AddEditSuggestActivity.EXTRA_PASSWORD, suggest.getPassword());
                 intent.putExtra(AddEditSuggestActivity.EXTRA_SEQUENCE, suggest.getSequence());
                 intent.putExtra(AddEditSuggestActivity.EXTRA_NOTE, suggest.getNote());
-                intent.putExtra(AddEditSuggestActivity.EXTRA_ACTVY_DATE, suggest.getActvyDate());
+                intent.putExtra(AddEditSuggestActivity.EXTRA_ACTVY_DATE, suggest.getActvyDate().getTime());
 
                 startActivityForResult(intent, EDIT_SUGGEST_REQUEST);
             }
@@ -400,15 +400,15 @@ public class SuggestListActivity extends AppCompatActivity implements
         if (requestCode == ADD_SUGGEST_REQUEST && resultCode == RESULT_OK) {
             String password = data.getStringExtra(AddEditSuggestActivity.EXTRA_PASSWORD);
             String note = data.getStringExtra(AddEditSuggestActivity.EXTRA_NOTE);
-            Long actvyDate = data.getLongExtra(AddEditSuggestActivity.EXTRA_ACTVY_DATE, 1);
+            Long actvyDate = data.getLongExtra(AddEditSuggestActivity.EXTRA_ACTVY_DATE, 0);
 
 //            requestAddSuggest(password, note);
 
             Log.d(TAG, "max seq " + suggestMaxItem.getSequence());
 
-            Suggest newSuggestItem = new Suggest(password, suggestMaxItem.getSequence() + 1, actvyDate);
+            Suggest newSuggestItem = new Suggest(password, suggestMaxItem.getSequence() + 1, new Date(actvyDate));
             newSuggestItem.setNote(note);
-            newSuggestItem.setActvyDate(actvyDate);
+            newSuggestItem.setActvyDate(new Date(actvyDate));
 
             suggestViewModel.insert(newSuggestItem);
 
@@ -425,13 +425,13 @@ public class SuggestListActivity extends AppCompatActivity implements
             String title = data.getStringExtra(AddEditSuggestActivity.EXTRA_PASSWORD);
             int sequence = data.getIntExtra(AddEditSuggestActivity.EXTRA_SEQUENCE, 0);
             String note = data.getStringExtra(AddEditSuggestActivity.EXTRA_NOTE);
-            Long actvyDate = data.getLongExtra(AddEditSuggestActivity.EXTRA_ACTVY_DATE, 1);
+            Long actvyDate = data.getLongExtra(AddEditSuggestActivity.EXTRA_ACTVY_DATE, 0);
 //            int priority = data.getIntExtra(AddEditSuggestActivity.EXTRA_ACTVY_DATE, 1);
 
-            Suggest suggest = new Suggest(title, sequence, new Date().getTime());
+            Suggest suggest = new Suggest(title, sequence, new Date(actvyDate));
             suggest.setId(id);
             suggest.setNote(note);
-            suggest.setActvyDate(actvyDate);
+            suggest.setActvyDate(new Date(actvyDate));
             suggestViewModel.update(suggest);
 
             Toast.makeText(this, "Suggestion updated", Toast.LENGTH_SHORT).show();
@@ -483,7 +483,7 @@ public class SuggestListActivity extends AppCompatActivity implements
             Suggest suggest = new Suggest(
                     passwordFormula.createPassword(passwordLen),
                     maxSeq,
-                    new Date().getTime());
+                    new Date());
 
             suggestViewModel.insert(suggest);
 

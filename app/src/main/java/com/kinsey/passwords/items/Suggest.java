@@ -13,8 +13,7 @@ import java.util.Date;
  */
 
 @Entity(tableName = "password_item")
-public class Suggest implements Serializable {
-    public static final long serialVersionUID = 20170222l;
+public class Suggest {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "_id")
@@ -29,7 +28,7 @@ public class Suggest implements Serializable {
     private String note = "";
 
     @ColumnInfo(name = "actvy_date")
-    private Long actvyDate = new Date().getTime();
+    private Date actvyDate;
 
     @Ignore
     private int rating = 0;
@@ -37,7 +36,11 @@ public class Suggest implements Serializable {
     @Ignore
     private int newSequence = 0;
 
-    public Suggest(String password, int sequence, Long actvyDate) {
+    @Ignore
+    public Suggest() {
+    }
+
+    public Suggest(String password, int sequence, Date actvyDate) {
 //        this.id = id;
         this.password = password;
         this.sequence = sequence;
@@ -49,9 +52,10 @@ public class Suggest implements Serializable {
         this.id = id;
     }
 
-    public Long getActvyDate() {
+    public Date getActvyDate() {
         return actvyDate;
     }
+
 
     public int getId() {
         return id;
@@ -77,10 +81,6 @@ public class Suggest implements Serializable {
         return newSequence;
     }
 
-    public void setActvyDate(Long actvyDate) {
-        this.actvyDate = actvyDate;
-    }
-
     public void setNote(String note) {
         this.note = note;
     }
@@ -99,6 +99,10 @@ public class Suggest implements Serializable {
 
     public void setNewSequence(int newSequence) {
         this.newSequence = newSequence;
+    }
+
+    public void setActvyDate(Date actvyDate) {
+        this.actvyDate = actvyDate;
     }
 
     @Override
