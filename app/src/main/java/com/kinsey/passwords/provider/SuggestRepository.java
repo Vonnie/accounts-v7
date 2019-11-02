@@ -14,7 +14,7 @@ public class SuggestRepository {
     private LiveData<List<Suggest>> allSuggests;
 
     public SuggestRepository(Application application) {
-        ProfileDatabase database = ProfileDatabase.getInstance(application);
+        SuggestDatabase database = SuggestDatabase.getInstance(application);
         suggestDao = database.suggestDao();
         allSuggests = suggestDao.getAllSuggest();
     }

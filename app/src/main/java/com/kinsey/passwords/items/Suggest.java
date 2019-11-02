@@ -30,6 +30,10 @@ public class Suggest {
     @ColumnInfo(name = "actvy_date")
     private Date actvyDate;
 
+//    @ColumnInfo(name = "actvy_long")
+//    @Ignore
+//    private long actvyLong = 0;
+
     @Ignore
     private int rating = 0;
 
@@ -40,11 +44,19 @@ public class Suggest {
     public Suggest() {
     }
 
-    public Suggest(String password, int sequence, Date actvyDate) {
+//    @Ignore
+//    public Suggest(String password, int sequence, Date actvyDate) {
+////        this.id = id;
+//        this.password = password;
+//        this.sequence = sequence;
+////        this.actvyDate = new Date();
+//        this.actvyDate = actvyDate;
+//    }
+
+    public Suggest(String password, int sequence) {
 //        this.id = id;
         this.password = password;
         this.sequence = sequence;
-        this.actvyDate = actvyDate;
     }
 
 

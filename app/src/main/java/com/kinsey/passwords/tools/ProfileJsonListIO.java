@@ -205,7 +205,7 @@ public class ProfileJsonListIO {
             if (item.getCorpWebsite() == null) {
                 writer.name("website").nullValue();
             } else {
-                writer.name("website").value(item.getCorpWebsite().toString());
+                writer.name("website").value(item.getCorpWebsite());
             }
             if (item.getOpenLong() == 0) {
                 writer.name("openDt").nullValue();

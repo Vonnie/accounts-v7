@@ -23,7 +23,7 @@ public class AboutActivity extends AppCompatActivity {
         TextView tvVerNo = findViewById(R.id.ver_no);
         TextView tvVerName = findViewById(R.id.ver_name);
         tvDatabasename.setText("DB: " + MainActivity.profileViewModel.dbMsg);
-        tvVerNo.setText("Ver#: " + String.valueOf(BuildConfig.VERSION_CODE));
+        tvVerNo.setText("Ver#: " + BuildConfig.VERSION_CODE);
         tvVerName.setText("VerName: " + BuildConfig.VERSION_NAME);
 //        Log.d(TAG, String.valueOf(BuildConfig.VERSION_CODE));
 //        Log.d(TAG, BuildConfig.VERSION_NAME);

@@ -121,9 +121,9 @@ public class SuggestListActivity extends AppCompatActivity implements
                 } else {
                     suggestMaxItem = new Suggest(
                             suggest.getPassword(),
-                            suggest.getSequence(),
-                            suggest.getActvyDate()
+                            suggest.getSequence()
                     );
+                    //            suggest.setActvyLong();
                 }
 
 //                this.maxSeq = suggestMaxItem.getSequence();
@@ -379,13 +379,13 @@ public class SuggestListActivity extends AppCompatActivity implements
                 intent.putExtra(AddEditSuggestActivity.EXTRA_PASSWORD, suggest.getPassword());
                 intent.putExtra(AddEditSuggestActivity.EXTRA_SEQUENCE, suggest.getSequence());
                 intent.putExtra(AddEditSuggestActivity.EXTRA_NOTE, suggest.getNote());
-                intent.putExtra(AddEditSuggestActivity.EXTRA_ACTVY_DATE, suggest.getActvyDate().getTime());
-
+//                intent.putExtra(AddEditSuggestActivity.EXTRA_ACTVY_DATE, suggest.getActvyDate().getTime());
+                intent.putExtra(AddEditSuggestActivity.EXTRA_ACTVY_DATE_LONG, suggest.getActvyDate().getTime());
                 startActivityForResult(intent, EDIT_SUGGEST_REQUEST);
             }
         });
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 //        getSupportActionBar().setLogo(R.mipmap.ic_launcher);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close);
@@ -400,13 +400,14 @@ public class SuggestListActivity extends AppCompatActivity implements
         if (requestCode == ADD_SUGGEST_REQUEST && resultCode == RESULT_OK) {
             String password = data.getStringExtra(AddEditSuggestActivity.EXTRA_PASSWORD);
             String note = data.getStringExtra(AddEditSuggestActivity.EXTRA_NOTE);
-            Long actvyDate = data.getLongExtra(AddEditSuggestActivity.EXTRA_ACTVY_DATE, 0);
+            Long actvyDate = data.getLongExtra(AddEditSuggestActivity.EXTRA_ACTVY_DATE_LONG, 0);
 
 //            requestAddSuggest(password, note);
 
             Log.d(TAG, "max seq " + suggestMaxItem.getSequence());
 
-            Suggest newSuggestItem = new Suggest(password, suggestMaxItem.getSequence() + 1, new Date(actvyDate));
+//            Suggest newSuggestItem = new Suggest(password, suggestMaxItem.getSequence() + 1, new Date(actvyDate));
+            Suggest newSuggestItem = new Suggest(password, suggestMaxItem.getSequence() + 1);
             newSuggestItem.setNote(note);
             newSuggestItem.setActvyDate(new Date(actvyDate));
 
@@ -425,10 +426,11 @@ public class SuggestListActivity extends AppCompatActivity implements
             String title = data.getStringExtra(AddEditSuggestActivity.EXTRA_PASSWORD);
             int sequence = data.getIntExtra(AddEditSuggestActivity.EXTRA_SEQUENCE, 0);
             String note = data.getStringExtra(AddEditSuggestActivity.EXTRA_NOTE);
-            Long actvyDate = data.getLongExtra(AddEditSuggestActivity.EXTRA_ACTVY_DATE, 0);
+            Long actvyDate = data.getLongExtra(AddEditSuggestActivity.EXTRA_ACTVY_DATE_LONG, 0);
 //            int priority = data.getIntExtra(AddEditSuggestActivity.EXTRA_ACTVY_DATE, 1);
 
-            Suggest suggest = new Suggest(title, sequence, new Date(actvyDate));
+//            Suggest suggest = new Suggest(title, sequence, new Date(actvyDate));
+            Suggest suggest = new Suggest(title, sequence);
             suggest.setId(id);
             suggest.setNote(note);
             suggest.setActvyDate(new Date(actvyDate));
@@ -482,8 +484,9 @@ public class SuggestListActivity extends AppCompatActivity implements
             maxSeq += 1;
             Suggest suggest = new Suggest(
                     passwordFormula.createPassword(passwordLen),
-                    maxSeq,
-                    new Date());
+                    maxSeq);
+//            suggest.setActvyLong();
+            suggest.setActvyDate(new Date());
 
             suggestViewModel.insert(suggest);
 

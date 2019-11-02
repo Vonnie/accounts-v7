@@ -38,8 +38,8 @@ public class FileViewActivity extends AppCompatActivity
         implements AppDialog.DialogEvents {
     private static final String TAG = "FileViewActivity";
 
-    public static ProgressBar progressBar;
-    public static WebView webView;
+    private ProgressBar progressBar;
+    private WebView webView;
     private ProfileAdapter adapter;
 //    private ProfileViewModel profileViewModel;
 
@@ -75,7 +75,7 @@ public class FileViewActivity extends AppCompatActivity
         setTitle("Backup / Restore");
 
 
-        webView = (WebView) findViewById(R.id.wv_page);
+        webView = findViewById(R.id.wv_page);
 
         webView.setWebViewClient(new WebViewClient() {
             @Override
@@ -154,9 +154,9 @@ public class FileViewActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         switch (id) {
-            case R.id.action_settings:
-                Log.d(TAG, "onOptionsItemSelected: ");
-                break;
+//            case R.id.action_settings:
+//                Log.d(TAG, "onOptionsItemSelected: ");
+//                break;
 
             case R.id.vw_show_file:
                 Log.d(TAG, "onOptionsItemSelected: Export");
@@ -276,7 +276,8 @@ public class FileViewActivity extends AppCompatActivity
                     } else {
                         htmlString = notfyMsg() +
                                 "<h4>Use menu to export data.</h4>" +
-                                "<h5>" + adapter.getItemCount() + " Account Profile items currently on db<h5>";
+                                "<h5>" + adapter.getItemCount() + " Account Profile items currently on db<h5>" +
+                                "<h5>Notify: As of Ver. 11, the backup location has moved. See menu item for filename.<h5>";
                     }
                 } else {
                     htmlString = notfyMsg() +
@@ -465,7 +466,7 @@ public class FileViewActivity extends AppCompatActivity
             String storageFilename = dirStorage.getAbsolutePath() + "/" + MainActivity.BACKUP_FILENAME;
 
 //            Log.d(TAG, "call asyncTask");
-            new UploadProfileAsyncTask(getApplicationContext()).execute(storageFilename);
+            new UploadProfileAsyncTask(getApplicationContext(), this.webView).execute(storageFilename);
 
         } catch (Exception e) {
             // TODO Auto-generated catch block
@@ -756,14 +757,17 @@ public class FileViewActivity extends AppCompatActivity
         ProfileJsonListIO profileJsonListIO = new ProfileJsonListIO();
         private List<Profile> listAccounts = new ArrayList<Profile>();
         Context context;
+        private WebView webView;
 
-        private UploadProfileAsyncTask(Context context) {
+        private UploadProfileAsyncTask(Context context, WebView webView) {
             this.context = context;
+            this.webView = webView;
         }
 
         @Override
         protected void onPreExecute() {
-            FileViewActivity.progressBar.setVisibility(View.VISIBLE);
+
+//            FileViewActivity.progressBar.setVisibility(View.VISIBLE);
         }
 
         @Override
@@ -812,7 +816,7 @@ public class FileViewActivity extends AppCompatActivity
         protected void onPostExecute(String msgDisplay) {
             super.onPostExecute(msgDisplay);
 
-            FileViewActivity.webView.loadData(msgDisplay, "text/html", null);
+            this.webView.loadData(msgDisplay, "text/html", null);
 
             MainActivity.profileViewModel.deleteAllProfiles();
             Log.d(TAG, "run: delete all complete ");
@@ -849,7 +853,8 @@ public class FileViewActivity extends AppCompatActivity
 
         @Override
         protected void onPreExecute() {
-            FileViewActivity.progressBar.setVisibility(View.VISIBLE);
+
+//            FileViewActivity.progressBar.setVisibility(View.VISIBLE);
         }
 
         @Override
@@ -926,7 +931,7 @@ public class FileViewActivity extends AppCompatActivity
         @Override
         protected void onProgressUpdate(String... values) {
             super.onProgressUpdate(values);
-            FileViewActivity.webView.loadData(values[0], "text/html", null);
+//            FileViewActivity.webView.loadData(values[0], "text/html", null);
         }
 
 

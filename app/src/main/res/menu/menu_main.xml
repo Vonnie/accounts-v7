@@ -90,12 +90,6 @@
             <!--        android:orderInCategory="103"-->
             <!--        android:title="@string/menu_add_account"-->
             <!--        app:showAsAction="ifRoom" />-->
-            <item
-                android:id="@+id/menumain_about"
-                android:icon="@drawable/ic_help_outline_black"
-                android:orderInCategory="104"
-                android:title="@string/menuacct_about"
-                app:showAsAction="ifRoom" />
             <!--android:icon="@android:drawable/ic_menu_info_details"-->
             <item
                 android:id="@+id/menumain_showSuggests"
@@ -110,6 +104,14 @@
                 android:orderInCategory="120"
                 android:title="@string/menuacct_backup_restore_accts"
                 app:showAsAction="ifRoom" />
+
+            <item
+                android:id="@+id/menumain_about"
+                android:icon="@drawable/ic_help_outline_black"
+                android:orderInCategory="124"
+                android:title="@string/menuacct_about"
+                app:showAsAction="ifRoom" />
+
 
             <!--    <item-->
             <!--        android:id="@+id/menumain_do_request"-->

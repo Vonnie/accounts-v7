@@ -1,6 +1,8 @@
 package com.kinsey.passwords;
 
 import android.content.Context;
+
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
@@ -20,6 +22,7 @@ public class ExampleInstrumentedTest {
     public void useAppContext() throws Exception {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
+//        Context appContext = ApplicationProvider.getApplicationContext();
 
         assertEquals("com.kinsey.passwords", appContext.getPackageName());
     }

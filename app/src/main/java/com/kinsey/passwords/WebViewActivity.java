@@ -51,8 +51,8 @@ public class WebViewActivity
 //        Bundle arguments = getIntent().getExtras();
 //        webAddr = (String) arguments.getSerializable(WebViewActivity.class.getSimpleName());
 
-        webAddr = (String) intent.getStringExtra(EXTRA_CORP_WEBSITE).toString();
-        corpName = (String) intent.getStringExtra(EXTRA_CORP_NAME).toString();
+        webAddr = intent.getStringExtra(EXTRA_CORP_WEBSITE);
+        corpName = intent.getStringExtra(EXTRA_CORP_NAME);
 
 //        webview = (WebView) findViewById(R.id.webview);
 

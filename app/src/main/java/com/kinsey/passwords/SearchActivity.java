@@ -77,7 +77,7 @@ public class SearchActivity extends AppCompatActivity {
 
         textInputSearchCorpName = findViewById(R.id.text_input_corp_name);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 //        getSupportActionBar().setLogo(R.mipmap.ic_launcher);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close);

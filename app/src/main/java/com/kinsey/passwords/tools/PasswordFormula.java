@@ -90,32 +90,32 @@ public class PasswordFormula {
         }
 
         if (dblPlace < 0.1) {
-            password = String.valueOf(num) + password.substring(0);
+            password = num + password;
         } else if (dblPlace < 0.2) {
-            password = password.substring(0, 1) + String.valueOf(num) + password.substring(1);
+            password = password.substring(0, 1) + num + password.substring(1);
         } else if (dblPlace < 0.3) {
-            password = password.substring(0, 2) + String.valueOf(num) + password.substring(2);
+            password = password.substring(0, 2) + num + password.substring(2);
         } else if (dblPlace < 0.4) {
-            password = password.substring(0, 3) + String.valueOf(num) + password.substring(3);
+            password = password.substring(0, 3) + num + password.substring(3);
         } else if (dblPlace < 0.5) {
-            password = password.substring(0, 4) + String.valueOf(num) + password.substring(4);
+            password = password.substring(0, 4) + num + password.substring(4);
         } else if (dblPlace < 0.6) {
-            password = password.substring(0, 5) + String.valueOf(num) + password.substring(5);
+            password = password.substring(0, 5) + num + password.substring(5);
         } else if (dblPlace < 0.7) {
-            password = password.substring(0, 6) + String.valueOf(num) + password.substring(6);
+            password = password.substring(0, 6) + num + password.substring(6);
         } else if (dblPlace < 0.8) {
-            password = password.substring(0, 7) + String.valueOf(num) + password.substring(7);
+            password = password.substring(0, 7) + num + password.substring(7);
         } else if (dblPlace < 0.9) {
 //			Log.i(TAG, "pswd8 " + password.substring(0,8));
-            password = password.substring(0, 8) + String.valueOf(num) + password.substring(8);
+            password = password.substring(0, 8) + num + password.substring(8);
         } else {
             dblPlace = Math.random();
             if (dblPlace < 0.3) {
-                password = password.substring(0, 9) + String.valueOf(num) + password.substring(9);
+                password = password.substring(0, 9) + num + password.substring(9);
             } else if (dblPlace < 0.6) {
-                password = password.substring(0, 10) + String.valueOf(num) + password.substring(10);
+                password = password.substring(0, 10) + num + password.substring(10);
             } else {
-                password = password.substring(0) + String.valueOf(num);
+                password = password + num;
             }
         }
 //		password = password.substring(0, numPlace)

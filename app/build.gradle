@@ -8,8 +8,8 @@ android {
         applicationId "com.kinsey.passwords"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 71
-        versionName "10.101"
+        versionCode 75
+        versionName "10.105"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         javaCompileOptions {
@@ -44,11 +44,15 @@ android {
         abortOnError false
     }
 
-    // used by Room, to test migrations
-    sourceSets {
-        androidTest.assets.srcDirs +=
-                files("$projectDir/schemas".toString())
-    }
+//    // used by Room, to test migrations
+//    sourceSets {
+//        androidTest.assets.srcDirs +=
+//                files("$projectDir/schemas".toString())
+//    }
+
+//    useLibrary 'android.test.runner'
+//    useLibrary 'android.test.base'
+//    useLibrary 'android.test.mock'
 }
 
 dependencies {
@@ -60,7 +64,6 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.google.android.material:material:1.2.0-alpha01'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0-alpha02'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
@@ -85,9 +88,11 @@ dependencies {
     implementation "androidx.room:room-guava:$room_version"
 
     // Test helpers
-    testImplementation "androidx.room:room-testing:$room_version"
+    testImplementation "androidx.room:room-testing:2.2.1"
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta3'
     implementation 'androidx.lifecycle:lifecycle-runtime:2.2.0-rc01'
+    implementation 'androidx.room:room-testing:2.2.1'
+    implementation 'androidx.test.ext:junit:1.1.2-alpha02'
 }
 repositories {
     mavenCentral()

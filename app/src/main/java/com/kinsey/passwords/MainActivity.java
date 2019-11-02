@@ -97,6 +97,7 @@ public class MainActivity extends AppCompatActivity
     private int frag2Pos = 1;
     private int frag3Pos = 2;
 
+    public static boolean migration2Complete = false;
 
     public static final int ACCOUNT_LOADER_ID = 1;
     public static final int SEARCH_LOADER_ID = 2;
@@ -176,14 +177,14 @@ public class MainActivity extends AppCompatActivity
         TOP10FREEAPP,
         TOP25FREEAPP,
         TOPTVEPISODE,
-        TOPTVSEASONS;
+        TOPTVSEASONS
     }
 
     ListHomeType currList = ListHomeType.LISTACCOUNTS;
 
     private enum AppFragType {
         ACCOUNTEDIT,
-        PASSWORDS;
+        PASSWORDS
     }
 
     AppFragType currFrag = AppFragType.ACCOUNTEDIT;
@@ -201,7 +202,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setLogo(R.mipmap.ic_launcher);
 //        getSupportActionBar().setTitle(getString(R.string.app_name_corpname));

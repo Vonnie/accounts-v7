@@ -99,13 +99,13 @@ public class AddEditProfileActivity extends AppCompatActivity {
         textInputCorpWebsite = findViewById(R.id.text_input_corp_website);
         textInputNote = findViewById(R.id.text_input_note);
 
-        mDtePickOpen = (DatePicker) findViewById(R.id.datePicker);
-        mImgWebView = (ImageButton) findViewById(R.id.img_website);
+        mDtePickOpen = findViewById(R.id.datePicker);
+        mImgWebView = findViewById(R.id.img_website);
         tvActvyDate = findViewById(R.id.actvy_date);
         tvPassportId = findViewById(R.id.passport_id);
         tvSequence = findViewById(R.id.sequence);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 //        getSupportActionBar().setLogo(R.mipmap.ic_launcher);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close);
@@ -156,11 +156,11 @@ public class AddEditProfileActivity extends AppCompatActivity {
 
 
     private void setEditUICols(Intent intent) {
-        textInputCorpName.getEditText().setText(intent.getStringExtra(EXTRA_CORP_NAME).toString());
-        textInputUserName.getEditText().setText(intent.getStringExtra(EXTRA_USER_NAME).toString());
-        textInputUserEmail.getEditText().setText(intent.getStringExtra(EXTRA_USER_EMAIL).toString());
-        textInputCorpWebsite.getEditText().setText(intent.getStringExtra(EXTRA_CORP_WEBSITE).toString());
-        textInputNote.getEditText().setText(intent.getStringExtra(EXTRA_NOTE).toString());
+        textInputCorpName.getEditText().setText(intent.getStringExtra(EXTRA_CORP_NAME));
+        textInputUserName.getEditText().setText(intent.getStringExtra(EXTRA_USER_NAME));
+        textInputUserEmail.getEditText().setText(intent.getStringExtra(EXTRA_USER_EMAIL));
+        textInputCorpWebsite.getEditText().setText(intent.getStringExtra(EXTRA_CORP_WEBSITE));
+        textInputNote.getEditText().setText(intent.getStringExtra(EXTRA_NOTE));
 
         lngOpenDate = intent.getLongExtra(EXTRA_OPEN_DATE_LONG, 0);
         Date dte = new Date(intent.getLongExtra(EXTRA_OPEN_DATE_LONG, 0));
@@ -177,8 +177,8 @@ public class AddEditProfileActivity extends AppCompatActivity {
         this.intId = intent.getIntExtra(EXTRA_ID, -1);
         this.intPassportId = intent.getIntExtra(EXTRA_PASSPORT_ID, 0);
         this.intSequence = intent.getIntExtra(EXTRA_SEQUENCE, 0);
-        this.tvPassportId.setText(" | Id: " + String.valueOf(this.intPassportId));
-        this.tvSequence.setText(" | Seq: " + String.valueOf(this.intSequence));
+        this.tvPassportId.setText(" | Id: " + this.intPassportId);
+        this.tvSequence.setText(" | Seq: " + this.intSequence);
     }
 
     private void setOpenDateCalendar(Date dte) {
@@ -239,8 +239,8 @@ public class AddEditProfileActivity extends AppCompatActivity {
         }
         intPassportId = savedInstanceState.getInt(EXTRA_PASSPORT_ID, 0);
         intSequence = savedInstanceState.getInt(EXTRA_SEQUENCE, 0);
-        tvPassportId.setText(" | Id: " + String.valueOf(intPassportId));
-        tvSequence.setText(" | Seq: " + String.valueOf(intSequence));
+        tvPassportId.setText(" | Id: " + intPassportId);
+        tvSequence.setText(" | Seq: " + intSequence);
         editModeAdd = savedInstanceState.getBoolean(EXTRA_EDIT_MODE, false);
         if (!editModeAdd) {
             intId = savedInstanceState.getInt(EXTRA_ID, -1);

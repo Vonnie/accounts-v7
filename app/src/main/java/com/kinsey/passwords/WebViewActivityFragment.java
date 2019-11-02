@@ -36,7 +36,7 @@ public class WebViewActivityFragment extends Fragment {
         if (webAddr == null) {
             return view;
         }
-        webview = (WebView) view.findViewById(R.id.webview);
+        webview = view.findViewById(R.id.webview);
 //        webview.setWebViewClient(new MyWebViewClient());
 
 //        setContentView(webview);
