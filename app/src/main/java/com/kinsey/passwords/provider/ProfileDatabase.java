@@ -1,10 +1,12 @@
 package com.kinsey.passwords.provider;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.os.AsyncTask;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.loader.content.Loader;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
@@ -13,6 +15,7 @@ import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.kinsey.passwords.MainActivity;
+import com.kinsey.passwords.items.AccountsContract;
 import com.kinsey.passwords.items.Profile;
 import com.kinsey.passwords.items.Suggest;
 import com.kinsey.passwords.tools.Converters;
@@ -35,10 +38,10 @@ public abstract class ProfileDatabase extends RoomDatabase {
     public static synchronized ProfileDatabase getInstance(Context context) {
         if (instance == null) {
             instance = Room.databaseBuilder(context.getApplicationContext(),
-                    ProfileDatabase.class, "Passport")
+                    ProfileDatabase.class, "PassportBook")
                     .addMigrations(MIGRATION_1_2)
-//                    .addMigrations(MIGRATION_2_1)
-//                    .addMigrations(MIGRATION_2_3)
+                    .addMigrations(MIGRATION_2_1)
+                    .addMigrations(MIGRATION_2_3)
 //                    .fallbackToDestructiveMigration()
 //                    .addCallback(roomCallback)
                     .build();
@@ -57,10 +60,13 @@ public abstract class ProfileDatabase extends RoomDatabase {
         @Override
         public void migrate(SupportSQLiteDatabase database) {
             Log.d(TAG, "about to migrate 1 TO 2");
-            if (MainActivity.migration2Complete) {
-                return;
-            }
-            MainActivity.migration2Complete = true;
+            Log.d(TAG, "about to migrate 1 TO 2 a");
+            Log.d(TAG, "about to migrate 1 TO 2 b");
+            migrateWork();
+//            if (MainActivity.migration2Complete) {
+//                return;
+//            }
+//            MainActivity.migration2Complete = true;
 //            database.execSQL("create TABLE `password_item_test` "
 //                    + "(_id INTEGER PRIMARY KEY AUTOINCREMENT, "
 //                    + "password_text text NOT NULL, "
@@ -98,6 +104,9 @@ public abstract class ProfileDatabase extends RoomDatabase {
         @Override
         public void migrate(SupportSQLiteDatabase database) {
             Log.d(TAG, "about to downgrade migrate 2 to 3");
+            Log.d(TAG, "about to downgrade migrate 2 to 3 a");
+            Log.d(TAG, "about to downgrade migrate 2 to 3 b");
+            migrateWork();
 //            database.execSQL("ALTER TABLE password_item_test "
 //                    + " ADD COLUMN actvy_date DATETIME");
         }
@@ -111,6 +120,24 @@ public abstract class ProfileDatabase extends RoomDatabase {
 //                    + " ADD COLUMN actvy_date DATETIME");
         }
     };
+
+    private static void migrateWork() {
+
+        Log.d(TAG, "about to do migrate work");
+        // Queries the user dictionary and returns results
+//        String[] projection = null;
+//        String selectionClause = null;
+//        String[] selectionArgs = {""};
+//        String sortOrder = String.format("%s COLLATE NOCASE ASC, %s COLLATE NOCASE ASC",
+//                AccountsContract.Columns.CORP_NAME_COL, AccountsContract.Columns.SEQUENCE_COL);
+//        Loader<Cursor> cursor =
+//                MainActivity.getContentResolver().query(
+//                AccountsContract.CONTENT_URI,   // The content URI of the words table
+//                projection,                        // The columns to return for each row
+//                selectionClause,                   // Selection criteria
+//                selectionArgs,                     // Selection criteria
+//                sortOrder);                        // The sort order for the returned rows
+    }
 
     private static RoomDatabase.Callback roomCallback = new RoomDatabase.Callback() {
         @Override
@@ -136,24 +163,24 @@ public abstract class ProfileDatabase extends RoomDatabase {
             Calendar c1 = Calendar.getInstance();
             c1.setTime(dte);
 
-            Profile profile = new Profile(0, "Corp 1 Sample", "user A", "aaa@xxx.com", "");
-            profile.setPassportId(1);
-            profile.setNote("Sample data only to show data");
-            profile.setOpenLong(c1.getTimeInMillis());
-            profile.setActvyLong(c1.getTimeInMillis());
-            profileDao.insertProfile(profile);
-            profile = new Profile(9, "Corp 2 Sample", "user B", "bbb@xxx.com", "");
-            profile.setPassportId(2);
-            profile.setNote("Sample data only to show data");
-            profile.setOpenLong(c1.getTimeInMillis());
-            profile.setActvyLong(c1.getTimeInMillis());
-            profileDao.insertProfile(profile);
-            profile = new Profile(0, "Corp 3 Sample", "user C", "ccc@xxx.com", "");
-            profile.setPassportId(3);
-            profile.setNote("Sample data only to show data");
-            profile.setOpenLong(c1.getTimeInMillis());
-            profile.setActvyLong(c1.getTimeInMillis());
-            profileDao.insertProfile(profile);
+//            Profile profile = new Profile(0, "Corp 1 Sample", "user A", "aaa@xxx.com", "");
+//            profile.setPassportId(1);
+//            profile.setNote("Sample data only to show data");
+//            profile.setOpenLong(c1.getTimeInMillis());
+//            profile.setActvyLong(c1.getTimeInMillis());
+//            profileDao.insertProfile(profile);
+//            profile = new Profile(9, "Corp 2 Sample", "user B", "bbb@xxx.com", "");
+//            profile.setPassportId(2);
+//            profile.setNote("Sample data only to show data");
+//            profile.setOpenLong(c1.getTimeInMillis());
+//            profile.setActvyLong(c1.getTimeInMillis());
+//            profileDao.insertProfile(profile);
+//            profile = new Profile(0, "Corp 3 Sample", "user C", "ccc@xxx.com", "");
+//            profile.setPassportId(3);
+//            profile.setNote("Sample data only to show data");
+//            profile.setOpenLong(c1.getTimeInMillis());
+//            profile.setActvyLong(c1.getTimeInMillis());
+//            profileDao.insertProfile(profile);
 
 
 //            suggestDao.insert(new Suggest("aaaaaa", 2));

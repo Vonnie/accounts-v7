@@ -7,9 +7,11 @@ import android.util.Patterns;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,6 +56,7 @@ public class AddEditProfileActivity extends AppCompatActivity {
     public static final String EXTRA_EDIT_MODE =
             "com.kinsey.passwords.EXTRA_EDIT_MODE";
 
+    private ScrollView scrollView;
     private TextInputLayout textInputCorpName;
     private TextInputLayout textInputUserName;
     private TextInputLayout textInputUserEmail;
@@ -93,6 +96,7 @@ public class AddEditProfileActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_addedit_profile);
 
+        scrollView = findViewById(R.id.scroll_view);
         textInputCorpName = findViewById(R.id.text_input_corp_name);
         textInputUserName = findViewById(R.id.text_input_user_name);
         textInputUserEmail = findViewById(R.id.text_input_user_email);
@@ -151,6 +155,28 @@ public class AddEditProfileActivity extends AppCompatActivity {
 
             }
         });
+
+//        mDtePickOpen.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//
+//
+//                switch (event.getAction()) {
+//
+//                    case MotionEvent.ACTION_DOWN:
+//                        requestDisallowInterceptTouchEvent(v, true);
+//                        break;
+//
+//                    case MotionEvent.ACTION_UP:
+//                    case MotionEvent.ACTION_CANCEL:
+//                        scrollView.requestDisallowInterceptTouchEvent(false);
+//                        break;
+//                }
+//
+//                return false;
+//
+//            }
+//        });
 
     }
 

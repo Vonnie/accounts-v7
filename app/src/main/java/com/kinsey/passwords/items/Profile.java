@@ -5,7 +5,8 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "passport_detail")
+@Entity(tableName = "profile_detail")
+//@Entity(tableName = "passport_detail")
 public class Profile {
 
     @PrimaryKey(autoGenerate = true)

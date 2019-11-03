@@ -2,8 +2,11 @@ package com.kinsey.passwords;
 
 
 import android.app.DatePickerDialog;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -34,6 +37,7 @@ import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.kinsey.passwords.items.Account;
+import com.kinsey.passwords.items.AccountsContract;
 import com.kinsey.passwords.items.Profile;
 import com.kinsey.passwords.items.Suggest;
 import com.kinsey.passwords.provider.DatePickerFragment;
@@ -41,10 +45,14 @@ import com.kinsey.passwords.provider.ProfileViewModel;
 import com.kinsey.passwords.tools.AppDialog;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
+
+import static java.util.Objects.isNull;
 
 // ====================
 // Statement to assist in debugging
@@ -136,6 +144,7 @@ public class MainActivity extends AppCompatActivity
     private GregorianCalendar mCalendar;
     private boolean appMsgSent = false;
     private boolean isResumed = false;
+    private boolean conversionStarted = false;
 
 //    private int accountMode = AccountsContract.ACCOUNT_ACTION_ADD;
 
@@ -160,12 +169,8 @@ public class MainActivity extends AppCompatActivity
 
     private LinearLayoutManager layoutManager;
 
-    //    private AccountListActivityFragment fragList;
-//    private static AccountPlaceholderFrag1 frag1;
-//    private static AccountPlaceholderFrag2 frag2;
-//    private static AccountPlaceholderFrag3 frag3;
 
-    private SearchView mSearchView;
+//    private SearchView mSearchView;
 
 
     public MainActivity() {
@@ -277,6 +282,15 @@ public class MainActivity extends AppCompatActivity
                     profileMaxItem = new Profile(0, "", "", "", "");
                 } else {
                     profileMaxItem = profile;
+//                    Log.d(TAG, profile);
+                }
+
+                Log.d(TAG, "maxSeq " + profileMaxItem.getSequence());
+                if (!conversionStarted && profileMaxItem.getSequence() == 0) {
+                    Log.d(TAG, "Seq " + profileMaxItem.getSequence());
+                    conversionStarted = true;
+//                    addSample();
+                    migratePassport();
                 }
             }
         });
@@ -379,9 +393,9 @@ public class MainActivity extends AppCompatActivity
 //        }
 
 
-        if (mSearchView != null) {
-            Log.d(TAG, "onCreate: activated " + mSearchView.isActivated());
-        }
+//        if (mSearchView != null) {
+//            Log.d(TAG, "onCreate: activated " + mSearchView.isActivated());
+//        }
 
 //        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close);
@@ -413,43 +427,7 @@ public class MainActivity extends AppCompatActivity
 
 //        resetPreferences();
 
-//        String[] projection = {AccountsContract.Columns._ID_COL,
-//                AccountsContract.Columns.PASSPORT_ID_COL,
-//                AccountsContract.Columns.SEQUENCE_COL,
-//                AccountsContract.Columns.OPEN_DATE_COL,
-//                AccountsContract.Columns.ACTVY_DATE_COL,
-//                AccountsContract.Columns.CORP_NAME_COL,
-//                AccountsContract.Columns.USER_NAME_COL,
-//                AccountsContract.Columns.USER_EMAIL_COL,
-//                AccountsContract.Columns.CORP_WEBSITE_COL,
-//                AccountsContract.Columns.REF_FROM_COL,
-//                AccountsContract.Columns.REF_TO_COL,
-//                AccountsContract.Columns.NOTE_COL
-//        };
-//
-//        Log.d(TAG, "onCreate: projection " + Arrays.toString(projection));
-//        ContentResolver contentResolver = getContentResolver();
-//
-//////        Cursor cursor = contentResolver.query(AccountsContract.buildTaskUrl(2),
-//        Cursor cursor = contentResolver.query(AccountsContract.CONTENT_URI,
-//                projection,
-//                null,
-//                null,
-//                AccountsContract.Columns.SEQUENCE_COL);
-//
-//        if (cursor == null) {
-//            Log.d(TAG, "onCreate: null cursor");
-//        } else {
-//            Log.d(TAG, "onCreate: number of rows: " + cursor.getCount());
-//            while (cursor.moveToNext()) {
-//                for (int i=0; i<cursor.getColumnCount(); i++) {
-//                    Log.d(TAG, "onCreate: " + cursor.getColumnName(i) + ": " + cursor.getString(i));
-//                }
-//                Log.d(TAG, "onCreate: ===========================================");
-//            }
-//            cursor.close();
-//        }
-//
+
 //        AccountDatabase accountDatabase = AccountDatabase.getInstance(this);
 //        final SQLiteDatabase dbAccount = accountDatabase.getReadableDatabase();
 
@@ -518,6 +496,134 @@ public class MainActivity extends AppCompatActivity
 //
 //        }
 //    };
+
+    private void migratePassport() {
+
+        String[] projection = {AccountsContract.Columns._ID_COL,
+                AccountsContract.Columns.PASSPORT_ID_COL,
+                AccountsContract.Columns.CORP_NAME_COL,
+                AccountsContract.Columns.USER_NAME_COL,
+                AccountsContract.Columns.USER_EMAIL_COL,
+                AccountsContract.Columns.CORP_WEBSITE_COL,
+                AccountsContract.Columns.NOTE_COL,
+                AccountsContract.Columns.OPEN_DATE_COL,
+                AccountsContract.Columns.ACTVY_DATE_COL,
+                AccountsContract.Columns.SEQUENCE_COL,
+                AccountsContract.Columns.REF_FROM_COL,
+                AccountsContract.Columns.REF_TO_COL
+        };
+
+        String sortOrder = String.format("%s COLLATE NOCASE ASC, %s COLLATE NOCASE ASC",
+                AccountsContract.Columns.CORP_NAME_COL,
+                AccountsContract.Columns.SEQUENCE_COL);
+        Log.d(TAG, "onCreate: projection " + Arrays.toString(projection));
+        ContentResolver contentResolver = getContentResolver();
+
+////        Cursor cursor = contentResolver.query(AccountsContract.buildTaskUrl(2),
+        Cursor cursor = contentResolver.query(AccountsContract.CONTENT_URI,
+                projection,
+                null,
+                null,
+                sortOrder);
+
+        if (cursor == null) {
+            Log.d(TAG, "onCreate: null cursor");
+        } else {
+            Log.d(TAG, "onCreate: number of rows: " + cursor.getCount());
+            List<Account> listAccounts = new ArrayList<Account>();
+            while (cursor.moveToNext()) {
+                for (int i = 0; i < cursor.getColumnCount(); i++) {
+                    Log.d(TAG, "onCreate: " + cursor.getColumnName(i) + ": " + cursor.getString(i));
+                }
+                Log.d(TAG, "onCreate: ===========================================");
+                Account item = new Account(
+                        cursor.getInt(cursor.getColumnIndex(AccountsContract.Columns._ID_COL)),
+                        cursor.getString(cursor.getColumnIndex(AccountsContract.Columns.CORP_NAME_COL)),
+                        cursor.getString(cursor.getColumnIndex(AccountsContract.Columns.USER_NAME_COL)),
+                        cursor.getString(cursor.getColumnIndex(AccountsContract.Columns.USER_EMAIL_COL)),
+                        cursor.getString(cursor.getColumnIndex(AccountsContract.Columns.CORP_WEBSITE_COL)),
+                        cursor.getInt(cursor.getColumnIndex(AccountsContract.Columns.SEQUENCE_COL)));
+                item.setPassportId(cursor.getInt(cursor.getColumnIndex(AccountsContract.Columns.PASSPORT_ID_COL)));
+                item.setOpenLong(cursor.getLong(cursor.getColumnIndex(AccountsContract.Columns.OPEN_DATE_COL)));
+                item.setActvyLong(cursor.getLong(cursor.getColumnIndex(AccountsContract.Columns.ACTVY_DATE_COL)));
+                item.setNote(cursor.getString(cursor.getColumnIndex(AccountsContract.Columns.NOTE_COL)));
+                listAccounts.add(item);
+            }
+
+
+            cursor.close();
+
+            for (Account account : listAccounts) {
+                Profile profile = new Profile(
+                        account.getSequence(),
+                        account.getCorpName(),
+                        account.getUserName(),
+                        account.getUserEmail(),
+                        account.getCorpWebsite()
+                );
+                profile.setPassportId(account.getPassportId());
+                profile.setOpenLong(account.getOpenLong());
+                profile.setActvyLong(account.getActvyLong());
+                profile.setNote(account.getNote());
+                profileViewModel.insertProfile(profile);
+            }
+
+        }
+
+    }
+
+    private void addSample() {
+        addSample("Vonnie Test 1", 100);
+        addSample("Vonnie Test 2", 101);
+        addSample("Vonnie Test 3", 102);
+    }
+    private void addSample(String corpName, int sequence) {
+        ContentResolver contentResolver = getContentResolver();
+        ContentValues values = new ContentValues();
+
+        values.put(AccountsContract.Columns.PASSPORT_ID_COL,
+                String.valueOf(1));
+        values.put(AccountsContract.Columns.CORP_NAME_COL, corpName);
+        values.put(AccountsContract.Columns.USER_NAME_COL, "Vonnie");
+        values.put(AccountsContract.Columns.USER_EMAIL_COL, "vonniekinsey@gmail.com");
+        values.put(AccountsContract.Columns.CORP_WEBSITE_COL, "");
+        values.put(AccountsContract.Columns.NOTE_COL, "");
+        values.put(AccountsContract.Columns.SEQUENCE_COL, sequence);
+        values.put(AccountsContract.Columns.REF_FROM_COL, 0);
+        values.put(AccountsContract.Columns.REF_TO_COL, 0);
+
+        long ms = System.currentTimeMillis();
+        values.put(AccountsContract.Columns.OPEN_DATE_COL, ms);
+        values.put(AccountsContract.Columns.ACTVY_DATE_COL, ms);
+
+        Uri uri = contentResolver.insert(AccountsContract.CONTENT_URI, values);
+        long id = AccountsContract.getId(uri);
+        Account account = getAccount((int)(id));
+
+        values = new ContentValues();
+
+        values.put(AccountsContract.Columns.PASSPORT_ID_COL,
+                String.valueOf(id));
+
+        contentResolver.update(AccountsContract.buildIdUri(account.getId()), values, null, null);
+    }
+
+    private Account getAccount(int id) {
+//        int iId = 0;
+        Cursor cursor = getContentResolver()
+                .query(AccountsContract.buildIdUri(id), null, null, null, null);
+        if (cursor == null) {
+            return null;
+        } else {
+            if (cursor.moveToFirst()) {
+                Account account = AccountsContract.getAccountFromCursor(cursor);
+                cursor.close();
+                return account;
+            }
+            cursor.close();
+            return null;
+        }
+    }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {

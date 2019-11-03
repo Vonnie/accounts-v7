@@ -71,9 +71,9 @@
 <!--                android:resource="@xml/searchable" />-->
         </activity>
 
-<!--        <provider-->
-<!--            android:name=".provider.AccountProvider"-->
-<!--            android:authorities="com.kinsey.passwords.provider.PassportDBProvider" />-->
+        <provider
+            android:name=".provider.AccountProvider"
+            android:authorities="com.kinsey.passwords.provider.PassportDBProvider" />
 <!--        <provider-->
 <!--            android:name=".provider.SuggestProvider"-->
 <!--            android:authorities="com.kinsey.passwords.provider.PasswordDBProvider" />-->

@@ -16,7 +16,7 @@ import com.kinsey.passwords.tools.Converters;
 
 import java.util.Date;
 
-@Database(entities = {Suggest.class}, version = 2, exportSchema = false)
+@Database(entities = {Suggest.class}, version = 1, exportSchema = false)
 @TypeConverters(Converters.class)
 public abstract class SuggestDatabase extends RoomDatabase {
 

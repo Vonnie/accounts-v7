@@ -33,31 +33,31 @@ public interface ProfileDao {
     @Delete
     void delete(Profile profile);
 
-    @Query("DELETE FROM passport_detail")
+    @Query("DELETE FROM profile_detail")
     void deleteAllProfiles();
 
-    @Query("SELECT * FROM passport_detail ORDER BY corporation_name COLLATE NOCASE ASC")
+    @Query("SELECT * FROM profile_detail ORDER BY corporation_name COLLATE NOCASE ASC")
     LiveData<List<Profile>> getAllProfiles();
 
-    @Query("SELECT * FROM passport_detail ORDER BY corporation_name COLLATE NOCASE ASC")
+    @Query("SELECT * FROM profile_detail ORDER BY corporation_name COLLATE NOCASE ASC")
     LiveData<List<Profile>> getAllProfilesByCorpName();
 
-    @Query("SELECT * FROM passport_detail ORDER BY passport_id ASC")
+    @Query("SELECT * FROM profile_detail ORDER BY passport_id ASC")
     LiveData<List<Profile>> getAllProfilesByPassportId();
 
-    @Query("SELECT * FROM passport_detail ORDER BY open_date DESC, corporation_name ASC")
+    @Query("SELECT * FROM profile_detail ORDER BY open_date DESC, corporation_name ASC")
     LiveData<List<Profile>> getAllProfilesByOpenDate();
 
-    @Query("SELECT * FROM passport_detail ORDER BY sequence ASC, corporation_name COLLATE NOCASE ASC")
+    @Query("SELECT * FROM profile_detail ORDER BY sequence ASC, corporation_name COLLATE NOCASE ASC")
     LiveData<List<Profile>> getAllProfilesCustomSort();
 
-    @Query("SELECT * FROM passport_detail where corporation_name LIKE :name or LOWER(corporation_name) like LOWER(:name) order by corporation_name COLLATE NOCASE ASC")
+    @Query("SELECT * FROM profile_detail where corporation_name LIKE :name or LOWER(corporation_name) like LOWER(:name) order by corporation_name COLLATE NOCASE ASC")
     LiveData<List<Profile>> searchCorpNameProfiles(String name);
 
-    @Query("SELECT * FROM passport_detail where _id = :id")
+    @Query("SELECT * FROM profile_detail where _id = :id")
     LiveData<Profile> getProfileById(int id);
 
-    @Query("SELECT * FROM passport_detail ORDER BY sequence DESC LIMIT 1")
+    @Query("SELECT * FROM profile_detail ORDER BY sequence DESC LIMIT 1")
     LiveData<Profile> getMaxSequence();
 
 }
