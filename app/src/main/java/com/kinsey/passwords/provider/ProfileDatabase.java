@@ -24,6 +24,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 @Database(entities = {Profile.class}, version = 2, exportSchema = false)
+@TypeConverters(Converters.class)
 public abstract class ProfileDatabase extends RoomDatabase {
     public static final String TAG = "ProfileDatabase";
 
@@ -33,12 +34,14 @@ public abstract class ProfileDatabase extends RoomDatabase {
 
 //    public abstract SuggestDao suggestDao();
 
+
     boolean converted = false;
+    static int countMig = 0;
 
     public static synchronized ProfileDatabase getInstance(Context context) {
         if (instance == null) {
             instance = Room.databaseBuilder(context.getApplicationContext(),
-                    ProfileDatabase.class, "PassportBook")
+                    ProfileDatabase.class, "Passport")
                     .addMigrations(MIGRATION_1_2)
                     .addMigrations(MIGRATION_2_1)
                     .addMigrations(MIGRATION_2_3)
@@ -62,7 +65,53 @@ public abstract class ProfileDatabase extends RoomDatabase {
             Log.d(TAG, "about to migrate 1 TO 2");
             Log.d(TAG, "about to migrate 1 TO 2 a");
             Log.d(TAG, "about to migrate 1 TO 2 b");
+            if (countMig > 0) {
+                Log.d(TAG, "only one migration");
+                return;
+            }
+            MainActivity.migrationStarted = true;
+            MainActivity.profileMigrateLevel = 2;
             migrateWork();
+
+            Log.d(TAG, "create passport_detail_mig");
+//            database.execSQL("DROP TABLE IF EXISTS passport_detail_mig");
+
+            database.execSQL("create TABLE passport_detail_mig "
+                    + "(_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL DEFAULT 0, "
+                    + "passport_id INTEGER NOT NULL DEFAULT 0, "
+                    + "sequence INTEGER NOT NULL DEFAULT 0, "
+                    + "open_date INTEGER NOT NULL DEFAULT 0, "
+                    + "actvy_date INTEGER NOT NULL DEFAULT 0, "
+                    + "corporation_name TEXT NOT NULL DEFAULT '', "
+                    + "user_name TEXT NOT NULL DEFAULT '', "
+                    + "user_email TEXT NOT NULL DEFAULT '', "
+                    + "corporation_website TEXT DEFAULT '', "
+                    + "passport_note TEXT NOT NULL DEFAULT '', "
+                    + "ref_from INTEGER NOT NULL DEFAULT 0, "
+                    + "ref_to INTEGER NOT NULL DEFAULT 0)");
+
+            Log.d(TAG, "insert into passport_detail_mig");
+            database.execSQL(
+                    "INSERT INTO passport_detail_mig"
+                    + "(passport_id, sequence, open_date, "
+                    + "actvy_date, corporation_name, user_name, "
+                    + "user_email, corporation_website, "
+                    + "passport_note, ref_from, ref_to) "
+                    + "SELECT passport_id, sequence, open_date, "
+                    + "actvy_date, corporation_name, user_name, "
+                    + "user_email, corporation_website, "
+                    + "passport_note, ref_from, "
+                    + "ref_to FROM passport_detail ");
+
+            Log.d(TAG, "drop table passport_detail_mig");
+            database.execSQL("DROP TABLE passport_detail");
+
+            Log.d(TAG, "rename passport_detail_mig");
+            database.execSQL(
+                    "ALTER TABLE passport_detail_mig RENAME to passport_detail");
+
+            countMig += 1;
+            Log.d(TAG, "migration complete " + countMig);
 //            if (MainActivity.migration2Complete) {
 //                return;
 //            }
@@ -106,6 +155,7 @@ public abstract class ProfileDatabase extends RoomDatabase {
             Log.d(TAG, "about to downgrade migrate 2 to 3");
             Log.d(TAG, "about to downgrade migrate 2 to 3 a");
             Log.d(TAG, "about to downgrade migrate 2 to 3 b");
+            MainActivity.profileMigrateLevel = 3;
             migrateWork();
 //            database.execSQL("ALTER TABLE password_item_test "
 //                    + " ADD COLUMN actvy_date DATETIME");

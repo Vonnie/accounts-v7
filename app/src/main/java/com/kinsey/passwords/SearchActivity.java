@@ -210,7 +210,8 @@ public class SearchActivity extends AppCompatActivity {
                 profile.setId(id);
                 profile.setPassportId(passporId);
                 profile.setNote(note);
-                profile.setOpenLong(data.getLongExtra(AddEditProfileActivity.EXTRA_OPEN_DATE_LONG, 0));
+                long lngDate = data.getLongExtra(AddEditProfileActivity.EXTRA_OPEN_DATE_LONG, 0);
+                profile.setOpenLong(lngDate);
                 profile.setActvyLong(System.currentTimeMillis());
 
                 MainActivity.profileViewModel.update(profile);

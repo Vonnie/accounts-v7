@@ -66,7 +66,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="User name required"
-                    android:inputType="text|textNoSuggestions" />
+                    android:inputType="text|textNoSuggestions"
+                    android:textColor="?android:attr/textColorPrimary" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -81,7 +82,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="User email required"
-                    android:inputType="textEmailAddress|textNoSuggestions" />
+                    android:inputType="textEmailAddress|textNoSuggestions"
+                    android:textColor="?android:attr/textColorPrimary" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -96,6 +98,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
                     android:contentDescription="@string/acct_show_website"
+                    android:textColor="?android:attr/textColorPrimary"
                     app:srcCompat="@drawable/ic_http" />
 
 
@@ -110,7 +113,8 @@
                         android:layout_height="wrap_content"
                         android:ems="10"
                         android:hint="@string/accedit_corp_website_hint"
-                        android:inputType="textUri|textNoSuggestions" />
+                        android:inputType="textUri|textNoSuggestions"
+                        android:textColor="?android:attr/textColorPrimary" />
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
 
@@ -132,7 +136,8 @@
                     android:scrollbarStyle="insideInset"
                     android:scrollbars="vertical"
                     android:scrollHorizontally="false"
-                    android:textAppearance="@android:style/TextAppearance.Medium" />
+                    android:textAppearance="@android:style/TextAppearance.Medium"
+                    android:textColor="?android:attr/textColorPrimary" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <Button
@@ -144,19 +149,19 @@
                 android:onClick="showDatePickerDialog"
                 android:text="@string/btn_open_date_label" />
 
-<!--            <TextView-->
-<!--                android:id="@+id/open_date_label"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:text="@string/accedit_date_open_label"-->
-<!--                android:textAppearance="@android:style/TextAppearance.Medium" />-->
+            <!--            <TextView-->
+            <!--                android:id="@+id/open_date_label"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:text="@string/accedit_date_open_label"-->
+            <!--                android:textAppearance="@android:style/TextAppearance.Medium" />-->
 
-<!--            <DatePicker-->
-<!--                android:id="@+id/datePicker"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_gravity="center_horizontal"-->
-<!--                android:spinnersShown="true" />-->
+            <!--            <DatePicker-->
+            <!--                android:id="@+id/datePicker"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_gravity="center_horizontal"-->
+            <!--                android:spinnersShown="true" />-->
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -165,17 +170,20 @@
                 <TextView
                     android:id="@+id/actvy_date"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:textColor="?android:attr/textColorPrimary" />
 
                 <TextView
                     android:id="@+id/passport_id"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:textColor="?android:attr/textColorPrimary" />
 
                 <TextView
                     android:id="@+id/sequence"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:textColor="?android:attr/textColorPrimary" />
 
             </LinearLayout>
 

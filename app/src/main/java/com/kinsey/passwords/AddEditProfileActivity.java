@@ -32,8 +32,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-import static androidx.test.InstrumentationRegistry.getContext;
-
 public class AddEditProfileActivity extends AppCompatActivity {
     public static final String TAG = "AddEditProfileActivity";
 

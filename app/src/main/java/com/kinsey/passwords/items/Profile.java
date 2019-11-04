@@ -1,48 +1,65 @@
 package com.kinsey.passwords.items;
 
+import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "profile_detail")
-//@Entity(tableName = "passport_detail")
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Date;
+
+//@Entity(tableName = "profile_detail")
+@Entity(tableName = "passport_detail")
 public class Profile {
 
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "_id")
+    @ColumnInfo(name = "_id", defaultValue = "0")
+    @NotNull
     private int id = 0;
 
-    @ColumnInfo(name = "passport_id")
+    @ColumnInfo(name = "passport_id", defaultValue = "0")
+    @Nullable
     private int passportId = 0;
 
+    @ColumnInfo(defaultValue = "0")
+    @Nullable
     private int sequence = 0;
 
-    @ColumnInfo(name = "corporation_name")
+    @ColumnInfo(name = "corporation_name", defaultValue = "")
+    @NotNull
     private String corpName = "";
 
-    @ColumnInfo(name = "user_name")
+    @ColumnInfo(name = "user_name", defaultValue = "")
+    @NotNull
     private String userName = "";
 
-    @ColumnInfo(name = "user_email")
+    @ColumnInfo(name = "user_email", defaultValue = "")
+    @NotNull
     private String userEmail = "";
 
-    @ColumnInfo(name = "passport_note")
+    @ColumnInfo(name = "passport_note", defaultValue = "")
+    @NotNull
     private String note = "";
 
-    @ColumnInfo(name = "open_date")
-    private long openLong = 0;
+    @ColumnInfo(name = "open_date", defaultValue = "0")
+    @Nullable
+    private long openLong;
 
-    @ColumnInfo(name = "actvy_date")
-    private long actvyLong = 0;
+    @ColumnInfo(name = "actvy_date", defaultValue = "0")
+    @Nullable
+    private long actvyLong;
 
-    @ColumnInfo(name = "corporation_website")
+    @ColumnInfo(name = "corporation_website", defaultValue = "")
     private String corpWebsite = "";
 
-    @ColumnInfo(name = "ref_from")
+    @ColumnInfo(name = "ref_from", defaultValue = "0")
+    @Nullable
     private int refFrom = 0;
 
-    @ColumnInfo(name = "ref_to")
+    @ColumnInfo(name = "ref_to", defaultValue = "0")
+    @Nullable
     private int refTo = 0;
 
     @Ignore

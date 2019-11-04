@@ -84,13 +84,15 @@ public class MainActivity extends AppCompatActivity
     // i.e. running in landscape on a tablet
     private boolean isLandscape = false;
     private Boolean editing = false;
+
     private static final String ACCOUNT_FRAGMENT = "AccountFragment";
 
     public static String BACKUP_FILENAME = "accounts.json";
+    public static int profileMigrateLevel = 1;
+    public static boolean migrationStarted = false;
 
-
-    private List<Profile> profileListFull;
-    private List<Profile> profileListFullCustom;
+//    private List<Profile> profileListFull;
+//    private List<Profile> profileListFullCustom;
     //    private List<Profile> profileList;
 
     private String feedUrl = "http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topTvEpisodes/xml";
@@ -288,9 +290,13 @@ public class MainActivity extends AppCompatActivity
                 Log.d(TAG, "maxSeq " + profileMaxItem.getSequence());
                 if (!conversionStarted && profileMaxItem.getSequence() == 0) {
                     Log.d(TAG, "Seq " + profileMaxItem.getSequence());
-                    conversionStarted = true;
+                    if (!migrationStarted) {
+                        Log.d(TAG, "migration not started");
+                    } else {
+                        conversionStarted = true;
 //                    addSample();
-                    migratePassport();
+//                        migratePassport();
+                    }
                 }
             }
         });
@@ -497,116 +503,117 @@ public class MainActivity extends AppCompatActivity
 //        }
 //    };
 
-    private void migratePassport() {
+//    private void migratePassport() {
+//
+//        Log.d(TAG, "migration level " + profileMigrateLevel);
+//        String[] projection = {AccountsContract.Columns._ID_COL,
+//                AccountsContract.Columns.PASSPORT_ID_COL,
+//                AccountsContract.Columns.CORP_NAME_COL,
+//                AccountsContract.Columns.USER_NAME_COL,
+//                AccountsContract.Columns.USER_EMAIL_COL,
+//                AccountsContract.Columns.CORP_WEBSITE_COL,
+//                AccountsContract.Columns.NOTE_COL,
+//                AccountsContract.Columns.OPEN_DATE_COL,
+//                AccountsContract.Columns.ACTVY_DATE_COL,
+//                AccountsContract.Columns.SEQUENCE_COL,
+//                AccountsContract.Columns.REF_FROM_COL,
+//                AccountsContract.Columns.REF_TO_COL
+//        };
+//
+//        String sortOrder = String.format("%s COLLATE NOCASE ASC, %s COLLATE NOCASE ASC",
+//                AccountsContract.Columns.CORP_NAME_COL,
+//                AccountsContract.Columns.SEQUENCE_COL);
+//        Log.d(TAG, "onCreate: projection " + Arrays.toString(projection));
+//        ContentResolver contentResolver = getContentResolver();
+//
+//////        Cursor cursor = contentResolver.query(AccountsContract.buildTaskUrl(2),
+//        Cursor cursor = contentResolver.query(AccountsContract.CONTENT_URI,
+//                projection,
+//                null,
+//                null,
+//                sortOrder);
+//
+//        if (cursor == null) {
+//            Log.d(TAG, "onCreate: null cursor");
+//        } else {
+//            Log.d(TAG, "onCreate: number of rows: " + cursor.getCount());
+//            List<Account> listAccounts = new ArrayList<Account>();
+//            while (cursor.moveToNext()) {
+//                for (int i = 0; i < cursor.getColumnCount(); i++) {
+//                    Log.d(TAG, "onCreate: " + cursor.getColumnName(i) + ": " + cursor.getString(i));
+//                }
+//                Log.d(TAG, "onCreate: ===========================================");
+//                Account item = new Account(
+//                        cursor.getInt(cursor.getColumnIndex(AccountsContract.Columns._ID_COL)),
+//                        cursor.getString(cursor.getColumnIndex(AccountsContract.Columns.CORP_NAME_COL)),
+//                        cursor.getString(cursor.getColumnIndex(AccountsContract.Columns.USER_NAME_COL)),
+//                        cursor.getString(cursor.getColumnIndex(AccountsContract.Columns.USER_EMAIL_COL)),
+//                        cursor.getString(cursor.getColumnIndex(AccountsContract.Columns.CORP_WEBSITE_COL)),
+//                        cursor.getInt(cursor.getColumnIndex(AccountsContract.Columns.SEQUENCE_COL)));
+//                item.setPassportId(cursor.getInt(cursor.getColumnIndex(AccountsContract.Columns.PASSPORT_ID_COL)));
+//                item.setOpenLong(cursor.getLong(cursor.getColumnIndex(AccountsContract.Columns.OPEN_DATE_COL)));
+//                item.setActvyLong(cursor.getLong(cursor.getColumnIndex(AccountsContract.Columns.ACTVY_DATE_COL)));
+//                item.setNote(cursor.getString(cursor.getColumnIndex(AccountsContract.Columns.NOTE_COL)));
+//                listAccounts.add(item);
+//            }
+//
+//
+//            cursor.close();
+//
+//            for (Account account : listAccounts) {
+//                Profile profile = new Profile(
+//                        account.getSequence(),
+//                        account.getCorpName(),
+//                        account.getUserName(),
+//                        account.getUserEmail(),
+//                        account.getCorpWebsite()
+//                );
+//                profile.setPassportId(account.getPassportId());
+//                profile.setOpenLong(account.getOpenLong());
+//                profile.setActvyLong(account.getActvyLong());
+//                profile.setNote(account.getNote());
+//                profileViewModel.insertProfile(profile);
+//            }
+//
+//        }
+//
+//    }
 
-        String[] projection = {AccountsContract.Columns._ID_COL,
-                AccountsContract.Columns.PASSPORT_ID_COL,
-                AccountsContract.Columns.CORP_NAME_COL,
-                AccountsContract.Columns.USER_NAME_COL,
-                AccountsContract.Columns.USER_EMAIL_COL,
-                AccountsContract.Columns.CORP_WEBSITE_COL,
-                AccountsContract.Columns.NOTE_COL,
-                AccountsContract.Columns.OPEN_DATE_COL,
-                AccountsContract.Columns.ACTVY_DATE_COL,
-                AccountsContract.Columns.SEQUENCE_COL,
-                AccountsContract.Columns.REF_FROM_COL,
-                AccountsContract.Columns.REF_TO_COL
-        };
-
-        String sortOrder = String.format("%s COLLATE NOCASE ASC, %s COLLATE NOCASE ASC",
-                AccountsContract.Columns.CORP_NAME_COL,
-                AccountsContract.Columns.SEQUENCE_COL);
-        Log.d(TAG, "onCreate: projection " + Arrays.toString(projection));
-        ContentResolver contentResolver = getContentResolver();
-
-////        Cursor cursor = contentResolver.query(AccountsContract.buildTaskUrl(2),
-        Cursor cursor = contentResolver.query(AccountsContract.CONTENT_URI,
-                projection,
-                null,
-                null,
-                sortOrder);
-
-        if (cursor == null) {
-            Log.d(TAG, "onCreate: null cursor");
-        } else {
-            Log.d(TAG, "onCreate: number of rows: " + cursor.getCount());
-            List<Account> listAccounts = new ArrayList<Account>();
-            while (cursor.moveToNext()) {
-                for (int i = 0; i < cursor.getColumnCount(); i++) {
-                    Log.d(TAG, "onCreate: " + cursor.getColumnName(i) + ": " + cursor.getString(i));
-                }
-                Log.d(TAG, "onCreate: ===========================================");
-                Account item = new Account(
-                        cursor.getInt(cursor.getColumnIndex(AccountsContract.Columns._ID_COL)),
-                        cursor.getString(cursor.getColumnIndex(AccountsContract.Columns.CORP_NAME_COL)),
-                        cursor.getString(cursor.getColumnIndex(AccountsContract.Columns.USER_NAME_COL)),
-                        cursor.getString(cursor.getColumnIndex(AccountsContract.Columns.USER_EMAIL_COL)),
-                        cursor.getString(cursor.getColumnIndex(AccountsContract.Columns.CORP_WEBSITE_COL)),
-                        cursor.getInt(cursor.getColumnIndex(AccountsContract.Columns.SEQUENCE_COL)));
-                item.setPassportId(cursor.getInt(cursor.getColumnIndex(AccountsContract.Columns.PASSPORT_ID_COL)));
-                item.setOpenLong(cursor.getLong(cursor.getColumnIndex(AccountsContract.Columns.OPEN_DATE_COL)));
-                item.setActvyLong(cursor.getLong(cursor.getColumnIndex(AccountsContract.Columns.ACTVY_DATE_COL)));
-                item.setNote(cursor.getString(cursor.getColumnIndex(AccountsContract.Columns.NOTE_COL)));
-                listAccounts.add(item);
-            }
-
-
-            cursor.close();
-
-            for (Account account : listAccounts) {
-                Profile profile = new Profile(
-                        account.getSequence(),
-                        account.getCorpName(),
-                        account.getUserName(),
-                        account.getUserEmail(),
-                        account.getCorpWebsite()
-                );
-                profile.setPassportId(account.getPassportId());
-                profile.setOpenLong(account.getOpenLong());
-                profile.setActvyLong(account.getActvyLong());
-                profile.setNote(account.getNote());
-                profileViewModel.insertProfile(profile);
-            }
-
-        }
-
-    }
-
-    private void addSample() {
-        addSample("Vonnie Test 1", 100);
-        addSample("Vonnie Test 2", 101);
-        addSample("Vonnie Test 3", 102);
-    }
-    private void addSample(String corpName, int sequence) {
-        ContentResolver contentResolver = getContentResolver();
-        ContentValues values = new ContentValues();
-
-        values.put(AccountsContract.Columns.PASSPORT_ID_COL,
-                String.valueOf(1));
-        values.put(AccountsContract.Columns.CORP_NAME_COL, corpName);
-        values.put(AccountsContract.Columns.USER_NAME_COL, "Vonnie");
-        values.put(AccountsContract.Columns.USER_EMAIL_COL, "vonniekinsey@gmail.com");
-        values.put(AccountsContract.Columns.CORP_WEBSITE_COL, "");
-        values.put(AccountsContract.Columns.NOTE_COL, "");
-        values.put(AccountsContract.Columns.SEQUENCE_COL, sequence);
-        values.put(AccountsContract.Columns.REF_FROM_COL, 0);
-        values.put(AccountsContract.Columns.REF_TO_COL, 0);
-
-        long ms = System.currentTimeMillis();
-        values.put(AccountsContract.Columns.OPEN_DATE_COL, ms);
-        values.put(AccountsContract.Columns.ACTVY_DATE_COL, ms);
-
-        Uri uri = contentResolver.insert(AccountsContract.CONTENT_URI, values);
-        long id = AccountsContract.getId(uri);
-        Account account = getAccount((int)(id));
-
-        values = new ContentValues();
-
-        values.put(AccountsContract.Columns.PASSPORT_ID_COL,
-                String.valueOf(id));
-
-        contentResolver.update(AccountsContract.buildIdUri(account.getId()), values, null, null);
-    }
+//    private void addSample() {
+//        addSample("Vonnie Test 1", 100);
+//        addSample("Vonnie Test 2", 101);
+//        addSample("Vonnie Test 3", 102);
+//    }
+//    private void addSample(String corpName, int sequence) {
+//        ContentResolver contentResolver = getContentResolver();
+//        ContentValues values = new ContentValues();
+//
+//        values.put(AccountsContract.Columns.PASSPORT_ID_COL,
+//                String.valueOf(1));
+//        values.put(AccountsContract.Columns.CORP_NAME_COL, corpName);
+//        values.put(AccountsContract.Columns.USER_NAME_COL, "Vonnie");
+//        values.put(AccountsContract.Columns.USER_EMAIL_COL, "vonniekinsey@gmail.com");
+//        values.put(AccountsContract.Columns.CORP_WEBSITE_COL, "");
+//        values.put(AccountsContract.Columns.NOTE_COL, "");
+//        values.put(AccountsContract.Columns.SEQUENCE_COL, sequence);
+//        values.put(AccountsContract.Columns.REF_FROM_COL, 0);
+//        values.put(AccountsContract.Columns.REF_TO_COL, 0);
+//
+//        long ms = System.currentTimeMillis();
+//        values.put(AccountsContract.Columns.OPEN_DATE_COL, ms);
+//        values.put(AccountsContract.Columns.ACTVY_DATE_COL, ms);
+//
+//        Uri uri = contentResolver.insert(AccountsContract.CONTENT_URI, values);
+//        long id = AccountsContract.getId(uri);
+//        Account account = getAccount((int)(id));
+//
+//        values = new ContentValues();
+//
+//        values.put(AccountsContract.Columns.PASSPORT_ID_COL,
+//                String.valueOf(id));
+//
+//        contentResolver.update(AccountsContract.buildIdUri(account.getId()), values, null, null);
+//    }
 
     private Account getAccount(int id) {
 //        int iId = 0;
@@ -2667,7 +2674,8 @@ public class MainActivity extends AppCompatActivity
                 Profile profile = new Profile(this.profileMaxItem.getSequence() + 1,
                         corpName, userName, userEmail, corpWebsite);
                 profile.setNote(note);
-                profile.setOpenLong(data.getLongExtra(AddEditProfileActivity.EXTRA_OPEN_DATE_LONG, 0));
+                long lngDate = data.getLongExtra(AddEditProfileActivity.EXTRA_OPEN_DATE_LONG, 0);
+                profile.setOpenLong(lngDate);
                 profile.setActvyLong(System.currentTimeMillis());
 
                 profileViewModel.insertProfile(profile);
@@ -2697,7 +2705,8 @@ public class MainActivity extends AppCompatActivity
                 profile.setId(id);
                 profile.setPassportId(passportId);
                 profile.setNote(note);
-                profile.setOpenLong(data.getLongExtra(AddEditProfileActivity.EXTRA_OPEN_DATE_LONG, 0));
+                long lngDate = data.getLongExtra(AddEditProfileActivity.EXTRA_OPEN_DATE_LONG, 0);
+                profile.setOpenLong(lngDate);
                 profile.setActvyLong(System.currentTimeMillis());
 
                 profileViewModel.update(profile);

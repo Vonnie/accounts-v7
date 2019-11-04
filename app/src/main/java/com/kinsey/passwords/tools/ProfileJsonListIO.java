@@ -207,13 +207,13 @@ public class ProfileJsonListIO {
             } else {
                 writer.name("website").value(item.getCorpWebsite());
             }
-            if (item.getOpenLong() == 0) {
+            if (item.getOpenLong() == 0l) {
                 writer.name("openDt").nullValue();
             } else {
                 writer.name("openDt").value(
                         format_ymdtime.format(item.getOpenLong()));
             }
-            if (item.getActvyLong() == 0) {
+            if (item.getActvyLong() == 0l) {
                 writer.name("actvyDt").nullValue();
             } else {
                 writer.name("actvyDt").value(

@@ -22,8 +22,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textColor="?android:attr/textColorPrimary" />
+            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+<!--            android:background="?attr/colorPrimary"-->
+<!--            android:textColor= "?attr/secondaryTextColor" />-->
+<!--            android:textColor="?android:attr/textColorSecondary" />-->
 
 
         <TextView
@@ -35,8 +37,8 @@
             android:layout_toStartOf="@+id/acct_id"
             android:ellipsize="end"
             android:tag="@string/tag_portrait"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textColor="?android:attr/textColorPrimary" />
+            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+<!--            android:textColor="?android:attr/textColorSecondary" />-->
 
         <!--        android:backgroundTint="?android:attr/listViewWhiteStyle"-->
         <!--        <TextView-->
