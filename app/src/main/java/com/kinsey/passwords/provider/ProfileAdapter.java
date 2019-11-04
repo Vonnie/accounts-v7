@@ -20,9 +20,9 @@ import java.util.Locale;
 public class ProfileAdapter extends ListAdapter<Profile, ProfileAdapter.ProfileHolder> {
 //    private List<Profile> profiles = new ArrayList<Profile>();
 
-    private static String pattern_ymd = "MM/dd/yyyy";
+    private static String pattern_mdy = "MM/dd/yyyy";
     public static SimpleDateFormat format_mdy = new SimpleDateFormat(
-            pattern_ymd, Locale.US);
+            pattern_mdy, Locale.US);
 
     private OnItemClickListener listener;
 
