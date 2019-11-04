@@ -73,7 +73,7 @@ public class AddEditProfileActivity extends AppCompatActivity {
 
     private DatePickerDialog picker;
 
-    private DatePicker mDtePickOpen;
+//    private DatePicker mDtePickOpen;
     private TextView tvActvyDate;
     private TextView tvPassportId;
     private TextView tvSequence;
@@ -123,7 +123,7 @@ public class AddEditProfileActivity extends AppCompatActivity {
         textInputCorpWebsite = findViewById(R.id.text_input_corp_website);
         textInputNote = findViewById(R.id.text_input_note);
 
-        mDtePickOpen = findViewById(R.id.datePicker);
+//        mDtePickOpen = findViewById(R.id.datePicker);
         mImgWebView = findViewById(R.id.img_website);
         tvActvyDate = findViewById(R.id.actvy_date);
         tvPassportId = findViewById(R.id.passport_id);
@@ -294,33 +294,36 @@ public class AddEditProfileActivity extends AppCompatActivity {
         this.tvSequence.setText(" | Seq: " + this.intSequence);
     }
 
-    private void setOpenDateCalendar(Date dte) {
-        Calendar c1 = Calendar.getInstance();
-        c1.setTime(dte);
-        lngOpenDate = c1.getTimeInMillis();
-
-        mDtePickOpen.init(c1.get(Calendar.YEAR),
-                c1.get(Calendar.MONTH),
-                c1.get(Calendar.DAY_OF_MONTH),
-                new DatePicker.OnDateChangedListener() {
-                    @Override
-                    public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-//                                Log.d(TAG, "onDateChanged: clicked ");
-                        Calendar c2 = Calendar.getInstance();
-                        c2.set(year, monthOfYear, dayOfMonth);
-                        lngOpenDate = c2.getTimeInMillis();
-//                        Log.d(TAG, "onDateChanged: lngOpenDate " + lngOpenDate);
-                    }
-                });
-
-    }
+//    private void setOpenDateCalendar(Date dte) {
+//        Calendar c1 = Calendar.getInstance();
+//        c1.setTime(dte);
+//        lngOpenDate = c1.getTimeInMillis();
+//
+//        mDtePickOpen.init(c1.get(Calendar.YEAR),
+//                c1.get(Calendar.MONTH),
+//                c1.get(Calendar.DAY_OF_MONTH),
+//                new DatePicker.OnDateChangedListener() {
+//                    @Override
+//                    public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+////                                Log.d(TAG, "onDateChanged: clicked ");
+//                        Calendar c2 = Calendar.getInstance();
+//                        c2.set(year, monthOfYear, dayOfMonth);
+//                        lngOpenDate = c2.getTimeInMillis();
+////                        Log.d(TAG, "onDateChanged: lngOpenDate " + lngOpenDate);
+//                    }
+//                });
+//
+//    }
 
     private void setAddUIDefaults(Intent intent) {
-        mDtePickOpen.setMaxDate(new Date().getTime());
-        mDtePickOpen.setMinDate(0);
+//        mDtePickOpen.setMaxDate(new Date().getTime());
+//        mDtePickOpen.setMinDate(0);
         Date dte = new Date();
 
-        setOpenDateCalendar(dte);
+        lngOpenDate = dte.getTime();
+        mtvOpenDate.setText("Default to Current Date " + format_mdy.format(lngOpenDate));
+
+        //        setOpenDateCalendar(dte);
     }
 
     private void restoreScreen(Bundle savedInstanceState) {
@@ -341,8 +344,8 @@ public class AddEditProfileActivity extends AppCompatActivity {
         );
 
         lngOpenDate = savedInstanceState.getLong(EXTRA_OPEN_DATE_LONG, 0l);
-        Date dte = new Date(lngOpenDate);
-        setOpenDateCalendar(dte);
+//        Date dte = new Date(lngOpenDate);
+//        setOpenDateCalendar(dte);
 
         lngActvDate = savedInstanceState.getLong(EXTRA_ACTVY_LONG, 0);
         if (lngActvDate == 0) {
