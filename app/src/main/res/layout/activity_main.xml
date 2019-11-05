@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     tools:context=".MainActivity">
+<!--    xmlns:app="http://schemas.android.com/apk/lib/com.kinsey.passwords"-->
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
@@ -66,8 +67,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="32dp"
-        android:backgroundTint="@color/primaryDarkColor"
-        android:src="@drawable/ic_add"
+        app:srcCompat="@drawable/ic_add"
         app:rippleColor="@color/secondaryColor" />
-
+<!--    app:backgroundTint="@color/primaryDarkColor"-->
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

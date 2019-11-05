@@ -9,6 +9,7 @@ import android.content.res.Configuration;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 
 import androidx.annotation.NonNull;
@@ -137,11 +138,11 @@ public class MainActivity extends AppCompatActivity
 
     Menu menu;
     MenuItem miActionProgressItem;
-    ProgressBar progressBar;
+    public static ProgressBar progressBar;
     private Handler mHandler = new Handler();
     Runnable mRunnable;
     boolean isUserPaging = true;
-    public static Account account = new Account();
+    private static Account account = new Account();
     private AlertDialog mDialog = null;
     private GregorianCalendar mCalendar;
     private boolean appMsgSent = false;
@@ -211,7 +212,7 @@ public class MainActivity extends AppCompatActivity
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setLogo(R.mipmap.ic_launcher);
+//        getSupportActionBar().setLogo(R.mipmap.ic_launcher);
 //        getSupportActionBar().setTitle(getString(R.string.app_name_corpname));
 
 //        Log.d(TAG, "onCreate: layout activity_mainV1");
@@ -233,6 +234,7 @@ public class MainActivity extends AppCompatActivity
 //        fragCustom.setVisibility(View.GONE);
 
         FloatingActionButton buttonAddPofile = findViewById(R.id.button_add_profile);
+//        buttonAddPofile.setImageResource(R.drawable.ic_audiotrack_light);
         buttonAddPofile.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -243,6 +245,9 @@ public class MainActivity extends AppCompatActivity
 //                startActivity(intent);
             }
         });
+
+        progressBar = findViewById(R.id.progressBar);
+
 
 //        recyclerView = findViewById(R.id.recycler_view);
 ////        recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -405,6 +410,10 @@ public class MainActivity extends AppCompatActivity
 
 //        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close);
+
+
+//        progressBar.setVisibility(View.VISIBLE);
+
 
 
 //        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());

@@ -3,7 +3,9 @@ package com.kinsey.passwords.provider;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.AsyncTask;
+import android.os.CountDownTimer;
 import android.util.Log;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.loader.content.Loader;
@@ -45,6 +47,7 @@ public abstract class ProfileDatabase extends RoomDatabase {
                     .addMigrations(MIGRATION_1_2)
                     .addMigrations(MIGRATION_2_1)
                     .addMigrations(MIGRATION_2_3)
+                    .addMigrations(MIGRATION_3_2)
 //                    .fallbackToDestructiveMigration()
 //                    .addCallback(roomCallback)
                     .build();
@@ -111,7 +114,7 @@ public abstract class ProfileDatabase extends RoomDatabase {
                     "ALTER TABLE passport_detail_mig RENAME to passport_detail");
 
             countMig += 1;
-            Log.d(TAG, "migration complete " + countMig);
+            Log.d(TAG, "migration 2 complete " + countMig);
 //            if (MainActivity.migration2Complete) {
 //                return;
 //            }
@@ -152,15 +155,35 @@ public abstract class ProfileDatabase extends RoomDatabase {
     static final Migration MIGRATION_2_3 = new Migration(2, 3) {
         @Override
         public void migrate(SupportSQLiteDatabase database) {
-            Log.d(TAG, "about to downgrade migrate 2 to 3");
-            Log.d(TAG, "about to downgrade migrate 2 to 3 a");
-            Log.d(TAG, "about to downgrade migrate 2 to 3 b");
+            Log.d(TAG, "about to upgrade migrate 2 to 3");
+            Log.d(TAG, "about to upgrade migrate 2 to 3 a");
+            Log.d(TAG, "about to upgrade migrate 2 to 3 b");
             MainActivity.profileMigrateLevel = 3;
-            migrateWork();
+
+            if (countMig > 0) {
+                Log.d(TAG, "only one migration");
+                return;
+            }
+
+//            migrateWork();
 //            database.execSQL("ALTER TABLE password_item_test "
 //                    + " ADD COLUMN actvy_date DATETIME");
+
+
+            countMig += 1;
+            Log.d(TAG, "migration 3 complete " + countMig);
         }
     };
+
+    static final Migration MIGRATION_3_2 = new Migration(3, 2) {
+        @Override
+        public void migrate(SupportSQLiteDatabase database) {
+            Log.d(TAG, "about to downgrade migrate 3 to 2");
+//            database.execSQL("CREATE TABLE `password_item` (`id` INTEGER, "
+//                    + "`name` TEXT, PRIMARY KEY(`id`))");
+        }
+    };
+
 
     static final Migration MIGRATION_3_4 = new Migration(3, 4) {
         @Override

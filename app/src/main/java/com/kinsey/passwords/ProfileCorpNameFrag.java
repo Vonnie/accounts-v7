@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -126,6 +127,19 @@ public class ProfileCorpNameFrag extends Fragment {
 
         recyclerView.scrollToPosition(0);
         adapter.notifyDataSetChanged();
+
+
+//        new CountDownTimer(30000, 100) {
+//
+//            public void onTick(long millisUntilFinished) {
+//                tvListTitle.setText("seconds remaining: " + millisUntilFinished / 1000);
+//            }
+//
+//            public void onFinish() {
+//                tvListTitle.setText("done!");
+////                progressBar.setVisibility(View.GONE);
+//            }
+//        }.start();
 
 
 

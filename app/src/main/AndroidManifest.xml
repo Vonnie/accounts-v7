@@ -74,8 +74,18 @@
         </activity>
 
         <provider
-            android:name=".provider.AccountProvider"
-            android:authorities="com.kinsey.passwords.provider.PassportDBProvider" />
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.kinsey.passwords.fileprovider"
+            android:grantUriPermissions="true"
+            android:exported="false">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+<!--        <provider-->
+<!--            android:name=".provider.AccountProvider"-->
+<!--            android:authorities="com.kinsey.passwords.provider.PassportDBProvider" />-->
         <!--        <provider-->
         <!--            android:name=".provider.SuggestProvider"-->
         <!--            android:authorities="com.kinsey.passwords.provider.PasswordDBProvider" />-->

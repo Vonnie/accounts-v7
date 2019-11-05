@@ -1,7 +1,10 @@
 package com.kinsey.passwords;
 
+import android.Manifest;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -11,11 +14,16 @@ import com.kinsey.passwords.provider.ProfileAdapter;
 import com.kinsey.passwords.tools.AppDialog;
 import com.kinsey.passwords.tools.ProfileJsonListIO;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.ShareActionProvider;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.lifecycle.Observer;
 
+import android.os.CountDownTimer;
 import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
@@ -34,6 +42,10 @@ import java.util.Formatter;
 import java.util.List;
 import java.util.Locale;
 
+import static android.telephony.MbmsDownloadSession.RESULT_CANCELLED;
+import static androidx.core.content.FileProvider.getUriForFile;
+import static androidx.test.InstrumentationRegistry.getContext;
+
 public class FileViewActivity extends AppCompatActivity
         implements AppDialog.DialogEvents {
     private static final String TAG = "FileViewActivity";
@@ -49,6 +61,7 @@ public class FileViewActivity extends AppCompatActivity
     View fileViewActivityView;
     ShareActionProvider myShareActionProvider;
     boolean onFirstReported = true;
+    private static final int BACKUP_FILE_REQUESTED = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +72,6 @@ public class FileViewActivity extends AppCompatActivity
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close);
 
         progressBar = findViewById(R.id.progressBar);
-        progressBar.setVisibility(View.VISIBLE);
 
 //        FloatingActionButton fab = findViewById(R.id.fab);
 //        fab.setOnClickListener(new View.OnClickListener() {
@@ -101,6 +113,19 @@ public class FileViewActivity extends AppCompatActivity
             }
         });
 
+
+        progressBar.setVisibility(View.INVISIBLE);
+//        new CountDownTimer(30000, 100) {
+//
+//            public void onTick(long millisUntilFinished) {
+////                tvListTitle.setText("seconds remaining: " + millisUntilFinished / 1000);
+//            }
+//
+//            public void onFinish() {
+////                tvListTitle.setText("done!");
+//                progressBar.setVisibility(View.INVISIBLE);
+//            }
+//        }.start();
 
 
     }
@@ -260,7 +285,20 @@ public class FileViewActivity extends AppCompatActivity
 //            Log.d(TAG, "reportJson: state " + Environment.getExternalStorageState());
 //            Log.d(TAG, "reportJson: system " + System.getenv());
 
-            if (dirStorage.exists()) {
+//            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+//                    android.Manifest.permission.READ_EXTERNAL_STORAGE))
+//            {
+//            }
+
+//            ActivityCompat.requestPermissions(this,
+//                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+//                    STORAGE_PERMISSION_CODE);
+
+
+            if (checkPermission()) {
+                if (!dirStorage.exists()) {
+                    dirStorage.mkdirs();
+                }
 //                Log.d(TAG, "reportJson dirExternal " + dirStorage.getAbsolutePath());
 //                Log.d(TAG, "reportJson dirExternal canRead " + dirStorage.canRead());
 //                Log.d(TAG, "reportJson dirInternal free space " + dirStorage.getFreeSpace());
@@ -285,6 +323,7 @@ public class FileViewActivity extends AppCompatActivity
                             "<h5>Use menu to export data to this file.</h5>" +
                             "<h5>" + adapter.getItemCount() + " Account Profile items to backup<h5>";
                 }
+
             } else {
                 htmlString = permissionMsg() +
                         "<h5>" + adapter.getItemCount() + " Account Profile items to backup once permission is granted<h5>";
@@ -300,6 +339,14 @@ public class FileViewActivity extends AppCompatActivity
 
     }
 
+    private boolean checkPermission() {
+        int result = ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        if (result == PackageManager.PERMISSION_GRANTED) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     private String warningMsg() {
         String htmlString = "<h1>Warning</h1>" +
@@ -426,7 +473,8 @@ public class FileViewActivity extends AppCompatActivity
 
 
 
-            new DownloadProfileAsyncTask(getApplicationContext(), file, adapter).execute();
+            new DownloadProfileAsyncTask(getApplicationContext(),
+                    file, adapter, progressBar).execute();
 
 //            JsonWriter writer = new JsonWriter(new FileWriter(file));
 //            writer.setIndent("  ");
@@ -466,7 +514,8 @@ public class FileViewActivity extends AppCompatActivity
             String storageFilename = dirStorage.getAbsolutePath() + "/" + MainActivity.BACKUP_FILENAME;
 
 //            Log.d(TAG, "call asyncTask");
-            new UploadProfileAsyncTask(getApplicationContext(), this.webView).execute(storageFilename);
+            new UploadProfileAsyncTask(getApplicationContext(),
+                    this.webView, this.progressBar).execute(storageFilename);
 
         } catch (Exception e) {
             // TODO Auto-generated catch block
@@ -529,15 +578,28 @@ public class FileViewActivity extends AppCompatActivity
 
         String[] addresses = {"vonniekinsey@gmail.com"};
         String subject = "You Account Json";
-        Uri uri = Uri.fromFile(file);
+//        Uri uri = Uri.fromFile(file);
+//        Uri uri = Uri.parse(file.getAbsolutePath());
+//        FileProvider fp = new FileProvider();
+        Uri uri = getUriForFile(getApplicationContext(),
+                "com.kinsey.passwords.fileprovider", file);
+//                Uri.parse(file.getAbsolutePath());
 
         Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType("*/*");
+//        intent.setType("text/plain");
+//        intent.setType("*/*");
+//        intent.setType("message/rfc822")
+//        intent.setType("text/json");
+        intent.setType("application/octet-stream");
         intent.putExtra(Intent.EXTRA_EMAIL, addresses);
         intent.putExtra(Intent.EXTRA_SUBJECT, subject);
         intent.putExtra(Intent.EXTRA_STREAM, uri);
-        if (intent.resolveActivity(getPackageManager()) != null) {
-            startActivity(intent);
+        intent.putExtra(Intent.EXTRA_TEXT, "Keep Accounts backup in secure place for any future restores.");
+        try {
+            startActivityForResult(intent.createChooser(intent, "Share accounts data"),
+                    BACKUP_FILE_REQUESTED);
+        } catch (ActivityNotFoundException ex) {
+            Log.e(TAG, "error: " + ex.getMessage());
         }
     }
 //    private void shareExport() {
@@ -752,22 +814,42 @@ public class FileViewActivity extends AppCompatActivity
     }
 
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == BACKUP_FILE_REQUESTED) {
+            if (resultCode == RESULT_OK) {
+                // success
+                Log.d(TAG, "file share was successful");
+            }
+            else if (resultCode == RESULT_CANCELLED) {
+                // cancelled
+                Log.d(TAG, "file share cancelled");
+            }
+        }
+    }
+
     private static class UploadProfileAsyncTask extends AsyncTask<String, Void, String> {
 //        private ProfileDao profileDao;
         ProfileJsonListIO profileJsonListIO = new ProfileJsonListIO();
         private List<Profile> listAccounts = new ArrayList<Profile>();
         Context context;
         private WebView webView;
+        private ProgressBar progressBar;
 
-        private UploadProfileAsyncTask(Context context, WebView webView) {
+        private UploadProfileAsyncTask(Context context,
+                                       WebView webView,
+                                       ProgressBar progressBar) {
             this.context = context;
             this.webView = webView;
+            this.progressBar = progressBar;
         }
 
         @Override
         protected void onPreExecute() {
 
-//            FileViewActivity.progressBar.setVisibility(View.VISIBLE);
+            this.progressBar.setVisibility(View.VISIBLE);
         }
 
         @Override
@@ -827,7 +909,7 @@ public class FileViewActivity extends AppCompatActivity
 
             Toast.makeText(context, "Upload restore complete", Toast.LENGTH_SHORT).show();
 
-//            FileViewActivity.progressBar.setVisibility(View.GONE);
+            this.progressBar.setVisibility(View.INVISIBLE);
 
         }
 
@@ -842,11 +924,16 @@ public class FileViewActivity extends AppCompatActivity
         File storageFile;
         ProfileAdapter adapter;
         String msgError;
+        private ProgressBar progressBar;
 
-        private DownloadProfileAsyncTask(Context context, File file, ProfileAdapter adapter) {
+        private DownloadProfileAsyncTask(Context context,
+                                         File file,
+                                         ProfileAdapter adapter,
+                                         ProgressBar progressBar) {
             this.context = context;
             this.storageFile = file;
             this.adapter = adapter;
+            this.progressBar = progressBar;
 
 //            File dirStorage = context.getExternalFilesDir("passport");
         }
@@ -854,7 +941,7 @@ public class FileViewActivity extends AppCompatActivity
         @Override
         protected void onPreExecute() {
 
-//            FileViewActivity.progressBar.setVisibility(View.VISIBLE);
+            this.progressBar.setVisibility(View.VISIBLE);
         }
 
         @Override
@@ -952,7 +1039,7 @@ public class FileViewActivity extends AppCompatActivity
                     count + " Exported accounts to backup file",
                     Toast.LENGTH_LONG).show();
 
-//            FileViewActivity.progressBar.setVisibility(View.GONE);
+            this.progressBar.setVisibility(View.INVISIBLE);
 
         }
 

@@ -35,10 +35,9 @@
         android:id="@+id/button_add_suggest"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_add"
+        android:src="@drawable/ic_add_white"
         android:layout_gravity="bottom|end"
-        android:backgroundTint="@color/primaryDarkColor"
         app:rippleColor="@color/secondaryColor"
         android:layout_margin="32dp"/>
-
+<!--    android:backgroundTint="@color/primaryDarkColor"-->
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
