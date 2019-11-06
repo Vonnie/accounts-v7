@@ -18,12 +18,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.ShareActionProvider;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.core.content.FileProvider;
 import androidx.lifecycle.Observer;
 
-import android.os.CountDownTimer;
 import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
@@ -44,7 +41,6 @@ import java.util.Locale;
 
 import static android.telephony.MbmsDownloadSession.RESULT_CANCELLED;
 import static androidx.core.content.FileProvider.getUriForFile;
-import static androidx.test.InstrumentationRegistry.getContext;
 
 public class FileViewActivity extends AppCompatActivity
         implements AppDialog.DialogEvents {
@@ -142,15 +138,16 @@ public class FileViewActivity extends AppCompatActivity
         File dirStorage = getExternalFilesDir("passport/");
         Log.d(TAG, "can read: " + dirStorage.canRead());
         Log.d(TAG, "storage dir: " + dirStorage.getAbsolutePath());
-        if (dirStorage.canRead()) {
+        if (checkPermission()) {
+//        if (dirStorage.canRead()) {
             item = menu.findItem(R.id.vw_show_file);
             item.setEnabled(true);
             item = menu.findItem(R.id.vw_export);
             item.setEnabled(true);
             item = menu.findItem(R.id.vw_import);
             item.setEnabled(true);
-//            item = menu.findItem(R.id.vw_shared);
-//            item.setEnabled(true);
+            item = menu.findItem(R.id.vw_shared);
+            item.setEnabled(true);
         } else {
             item = menu.findItem(R.id.vw_show_file);
             item.setEnabled(false);
@@ -158,8 +155,8 @@ public class FileViewActivity extends AppCompatActivity
             item.setEnabled(false);
             item = menu.findItem(R.id.vw_import);
             item.setEnabled(false);
-//            item = menu.findItem(R.id.vw_shared);
-//            item.setEnabled(false);
+            item = menu.findItem(R.id.vw_shared);
+            item.setEnabled(false);
         }
 
 //        MenuItem shareItem = menu.findItem(R.id.vw_shared);
@@ -375,8 +372,8 @@ public class FileViewActivity extends AppCompatActivity
                 "<h2>Unable to access App storage for backup file.</h2>" +
                 "<h3>Grant access for this App from Settings</h3>" +
                 "<h3>Select Accounts app in apps list. Select permissions. Then, set on Storage.</h3>" +
-                "<h4>Since version 10, backup storage has moved. See Filename from menu</h4>" +
-                "<h4>Once permission is granted, return to backup the db.</h4>";
+                "<h4>Once permission is granted, return to backup the db.</h4>" +
+                "<h4>Since version 10, backup storage has moved. See Filename from menu</h4>";
         return htmlString;
     }
 

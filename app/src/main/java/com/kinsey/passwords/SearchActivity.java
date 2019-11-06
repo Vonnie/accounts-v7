@@ -189,15 +189,20 @@ public class SearchActivity extends AppCompatActivity {
             return;
         }
 
+//        Log.d(TAG, "onActivityResult: requestCode " + requestCode);
+//        Log.d(TAG, "onActivityResult: resultCode " + resultCode);
+
         switch (requestCode) {
             case EDIT_PROFILE_REQUEST: {
                 int id = data.getIntExtra(AddEditProfileActivity.EXTRA_ID, -1);
 
                 if (id == -1) {
                     Toast.makeText(this, "Profile can't be updated", Toast.LENGTH_SHORT).show();
+                    Log.d(TAG, "id -1 can not update");
                     return;
                 }
 
+                Log.d(TAG, "id " + id);
                 int passporId = data.getIntExtra(AddEditProfileActivity.EXTRA_PASSPORT_ID, -1);
                 int sequence = data.getIntExtra(AddEditProfileActivity.EXTRA_SEQUENCE, 0);
                 String corpName = data.getStringExtra(AddEditProfileActivity.EXTRA_CORP_NAME);
@@ -216,6 +221,7 @@ public class SearchActivity extends AppCompatActivity {
 
                 MainActivity.profileViewModel.update(profile);
                 Toast.makeText(this, "Profile updated", Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "profile updated");
                 break;
 
             }

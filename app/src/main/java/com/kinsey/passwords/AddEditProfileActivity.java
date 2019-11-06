@@ -1,7 +1,9 @@
 package com.kinsey.passwords;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,7 +11,6 @@ import android.util.Patterns;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
@@ -21,7 +22,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.DialogFragment;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.kinsey.passwords.tools.DatePickerFragment;
@@ -33,6 +33,7 @@ import java.util.Date;
 import java.util.Locale;
 
 public class AddEditProfileActivity extends AppCompatActivity {
+//implements DatePickerDialog.OnDateSetListener {
     public static final String TAG = "AddEditProfileActivity";
 
 //    public static final Pattern PASSWORD_PATTERN =
@@ -71,12 +72,12 @@ public class AddEditProfileActivity extends AppCompatActivity {
 
     private DatePickerDialog picker;
 
-//    private DatePicker mDtePickOpen;
+    //    private DatePicker mDtePickOpen;
     private TextView tvActvyDate;
     private TextView tvPassportId;
     private TextView tvSequence;
-    private long lngOpenDate = 0l;
-    private long lngActvDate = 0l;
+    private long lngOpenDate = 0;
+    private long lngActvDate = 0;
     private int intId = -1;
     private int intPassportId = -1;
     private int intSequence = 0;
@@ -135,7 +136,6 @@ public class AddEditProfileActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-
         if (savedInstanceState != null) {
             restoreScreen(savedInstanceState);
         } else {
@@ -158,7 +158,7 @@ public class AddEditProfileActivity extends AppCompatActivity {
 
         Log.d(TAG, "onCreate");
 
-        mImgWebView.setOnClickListener(new View.OnClickListener(){
+        mImgWebView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String corpWebsiteInput = textInputCorpWebsite.getEditText().getText().toString().trim();
@@ -174,7 +174,6 @@ public class AddEditProfileActivity extends AppCompatActivity {
 
             }
         });
-
 
 
 //        mtvOpenDate.setOnClickListener(new View.OnClickListener() {
@@ -235,27 +234,82 @@ public class AddEditProfileActivity extends AppCompatActivity {
 
         customDate = format_mdy.format(lngOpenDate);
 
-        datePickerDialog.day_ = getDay();
-        datePickerDialog.month_ = getMonth();
-        datePickerDialog.year_ = getYear();
 
-        datePickerDialog.setCallbackListener(new DatePickerFragment.onDatePickerListener() {
-             @Override
-             public void onDataSet(int year, int month, int day) {
-//                 month = month + 1;
-                 mtvOpenDate.setText("OPENED " + (month + 1) + "/" + day + "/" + year);
-
-                 Calendar c2 = Calendar.getInstance();
-                 c2.set(year, month, day);
-                 lngOpenDate = c2.getTimeInMillis();
-             }
-         }
-        );
+        int year = getYear();
+        int month = getMonth();
+        int day = getDay();
+//        datePickerDialog.day_ = getDay();
+//        datePickerDialog.month_ = getMonth();
+//        datePickerDialog.year_ = getYear();
 
 
-        datePickerDialog.show(getSupportFragmentManager(), "datePicker");
+//        alertInfo(customDate);
+
+
+        // date picker dialog
+        picker = new DatePickerDialog(AddEditProfileActivity.this,
+                new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        mtvOpenDate.setText("OPENED " + (monthOfYear + 1) + "/" + dayOfMonth + "/" + year);
+                        Calendar c2 = Calendar.getInstance();
+                        c2.set(year, monthOfYear, dayOfMonth);
+                        lngOpenDate = c2.getTimeInMillis();
+                        Log.d(TAG, "callback date long " + lngOpenDate);
+                    }
+                }, year, month, day);
+
+
+        picker.setTitle("Account Profile Open Date");
+        picker.getDatePicker().setMaxDate(new Date().getTime());
+        picker.show();
+
+//        datePickerDialog.setCallbackListener(new DatePickerFragment.onDatePickerListener() {
+//                                                 @Override
+//                                                 public void onDataSet(int year, int month, int day) {
+////                 month = month + 1;
+//                                                     mtvOpenDate.setText("OPENED " + (month + 1) + "/" + day + "/" + year);
+//
+//                                                     Calendar c2 = Calendar.getInstance();
+//                                                     c2.set(year, month, day);
+//                                                     lngOpenDate = c2.getTimeInMillis();
+//                                                     Log.d(TAG, "callback date long " + lngOpenDate);
+//                                                 }
+//                                             }
+//        );
+//
+//
+//        datePickerDialog.show(getSupportFragmentManager(), "datePicker");
 
     }
+
+
+    public void alertInfo(String info) {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setMessage("Are you sure, You wanted to make decision " + info);
+        alertDialogBuilder.setPositiveButton("yes",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+//                        Toast.makeText(getApplicationContext(), "You clicked yes button", Toast.LENGTH_LONG).show();
+                    }
+                });
+//        alertDialogBuilder.setNegativeButton("No",
+//                new DialogInterface.OnClickListener() {
+//                    Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        finish();
+//                    }
+//                });
+
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+    }
+
+
+
+
 
     private void setEditUICols(Intent intent) {
         textInputCorpName.getEditText().setText(intent.getStringExtra(EXTRA_CORP_NAME));
@@ -264,7 +318,8 @@ public class AddEditProfileActivity extends AppCompatActivity {
         textInputCorpWebsite.getEditText().setText(intent.getStringExtra(EXTRA_CORP_WEBSITE));
         textInputNote.getEditText().setText(intent.getStringExtra(EXTRA_NOTE));
 
-        lngOpenDate = intent.getLongExtra(EXTRA_OPEN_DATE_LONG, 0);
+        this.lngOpenDate = intent.getLongExtra(EXTRA_OPEN_DATE_LONG, 0);
+        Log.d(TAG, String.valueOf(this.lngOpenDate));
         if (lngOpenDate == 0) {
             mtvOpenDate.setText("Click here for OpenDate");
         } else {
@@ -319,6 +374,7 @@ public class AddEditProfileActivity extends AppCompatActivity {
         Date dte = new Date();
 
         lngOpenDate = dte.getTime();
+
         mtvOpenDate.setText("Default to Current Date " + format_mdy.format(lngOpenDate));
 
         //        setOpenDateCalendar(dte);
@@ -341,11 +397,11 @@ public class AddEditProfileActivity extends AppCompatActivity {
                 savedInstanceState.getString(EXTRA_NOTE)
         );
 
-        lngOpenDate = savedInstanceState.getLong(EXTRA_OPEN_DATE_LONG, 0l);
+        lngOpenDate = savedInstanceState.getLong(EXTRA_OPEN_DATE_LONG, 0);
 //        Date dte = new Date(lngOpenDate);
 //        setOpenDateCalendar(dte);
 
-        lngActvDate = savedInstanceState.getLong(EXTRA_ACTVY_LONG, 0);
+        lngActvDate = savedInstanceState.getInt(EXTRA_ACTVY_LONG, 0);
         if (lngActvDate == 0) {
             tvActvyDate.setText("");
         } else {
@@ -425,7 +481,7 @@ public class AddEditProfileActivity extends AppCompatActivity {
             textInputCorpName.getEditText().setError(null);
             return true;
         }
-}
+    }
 
     private void saveProfile() {
         if (!validateCorpName()) {
@@ -551,11 +607,11 @@ public class AddEditProfileActivity extends AppCompatActivity {
         if (dateString == null || dateString.isEmpty())
             return "";
 
-        SimpleDateFormat inputDateFromat = new SimpleDateFormat(sourceDateFormat, Locale.US);
+        SimpleDateFormat inputDateFormat = new SimpleDateFormat(sourceDateFormat, Locale.US);
         Date date = new Date();
 
         try {
-            date = inputDateFromat.parse(dateString);
+            date = inputDateFormat.parse(dateString);
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -566,4 +622,8 @@ public class AddEditProfileActivity extends AppCompatActivity {
     }
 
 
+//    @Override
+//    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+//
+//    }
 }

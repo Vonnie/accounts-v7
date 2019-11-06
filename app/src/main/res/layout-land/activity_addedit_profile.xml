@@ -169,22 +169,22 @@
                     android:layout_weight="1"
                     android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/open_date_label"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="20dp"
-                        android:text="@string/accedit_date_open_label"
-                        android:textAppearance="@android:style/TextAppearance.Medium" />
+<!--                    <TextView-->
+<!--                        android:id="@+id/open_date_label"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:paddingLeft="20dp"-->
+<!--                        android:text="@string/accedit_date_open_label"-->
+<!--                        android:textAppearance="@android:style/TextAppearance.Medium" />-->
 
-                    <DatePicker
-                        android:id="@+id/datePicker"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:paddingLeft="20dp"
-                        android:paddingTop="5dp"
-                        android:paddingRight="5dp" />
+<!--                    <DatePicker-->
+<!--                        android:id="@+id/datePicker"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_gravity="center_horizontal"-->
+<!--                        android:paddingLeft="20dp"-->
+<!--                        android:paddingTop="5dp"-->
+<!--                        android:paddingRight="5dp" />-->
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -193,17 +193,20 @@
                         <TextView
                             android:id="@+id/actvy_date"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
+                            android:layout_height="wrap_content"
+                            android:textColor="?android:attr/textColorPrimary" />
 
                         <TextView
                             android:id="@+id/passport_id"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
+                            android:layout_height="wrap_content"
+                            android:textColor="?android:attr/textColorPrimary" />
 
                         <TextView
                             android:id="@+id/sequence"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
+                            android:layout_height="wrap_content"
+                            android:textColor="?android:attr/textColorPrimary" />
 
                     </LinearLayout>
 

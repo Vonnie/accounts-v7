@@ -42,6 +42,7 @@
                 app:showAsAction="never" />
             <item
                 android:id="@+id/vw_shared"
+                android:icon="@drawable/ic_share_black"
                 android:orderInCategory="105"
                 android:title="@string/menuvw_share"
                 app:actionProviderClass="androidx.appcompat.widget.ShareActionProvider"

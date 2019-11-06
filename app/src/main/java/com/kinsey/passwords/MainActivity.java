@@ -66,8 +66,8 @@ public class MainActivity extends AppCompatActivity
         ProfilePassportIdFrag.OnProfilePassportIdClickListener,
         ProfileOpenDateFrag.OnProfileOpenDateClickListener,
         ProfileCustomFrag.OnProfileCustomClickListener,
-        AppDialog.DialogEvents,
-        DatePickerDialog.OnDateSetListener {
+        AppDialog.DialogEvents {
+//        DatePickerDialog.OnDateSetListener {
 
 //    AddEditActivityFragment.OnListenerClicked,
 //    AccountListActivityFragment.OnAccountListClickListener,
@@ -2563,26 +2563,26 @@ public class MainActivity extends AppCompatActivity
 //    }
 
 
-    private void suggestsListRequest3() {
-//        onDateClicked(0);
-        GregorianCalendar mCalendar = new GregorianCalendar();
-//        Date dte = new Date(account.getActvyLong());
-        Date dte = new Date();
-        mCalendar.setTime(dte);
-        Log.d(TAG, "onDateClicked: " + mCalendar.toString());
+//    private void suggestsListRequest3() {
+////        onDateClicked(0);
+//        GregorianCalendar mCalendar = new GregorianCalendar();
+////        Date dte = new Date(account.getActvyLong());
+//        Date dte = new Date();
+//        mCalendar.setTime(dte);
+//        Log.d(TAG, "onDateClicked: " + mCalendar.toString());
+//
+//        showDatePickerDialog("Activity Date", 0, mCalendar);
+//    }
 
-        showDatePickerDialog("Activity Date", 0, mCalendar);
-    }
 
-
-    private void profileRequest() {
-        Log.d(TAG, "profileRequest: starts");
-
-        Intent detailIntent = new Intent(this, AddEditProfileActivity.class);
-        detailIntent.putExtra(Profile.class.getSimpleName(), "sortorder");
-        startActivity(detailIntent);
-
-    }
+//    private void profileRequest() {
+//        Log.d(TAG, "profileRequest: starts");
+//
+//        Intent detailIntent = new Intent(this, AddEditProfileActivity.class);
+//        detailIntent.putExtra(Profile.class.getSimpleName(), "sortorder");
+//        startActivity(detailIntent);
+//
+//    }
 
 //    private void downloadUrl(String feedUrl) {
 //        if (!feedUrl.equalsIgnoreCase(feedCachedUrl)) {
@@ -2684,8 +2684,10 @@ public class MainActivity extends AppCompatActivity
                         corpName, userName, userEmail, corpWebsite);
                 profile.setNote(note);
                 long lngDate = data.getLongExtra(AddEditProfileActivity.EXTRA_OPEN_DATE_LONG, 0);
+                Log.d(TAG, "add profile openDate " + lngDate);
                 profile.setOpenLong(lngDate);
                 profile.setActvyLong(System.currentTimeMillis());
+//                profile.setActvyLong((new Date()).getTime());
 
                 profileViewModel.insertProfile(profile);
 
@@ -3395,42 +3397,42 @@ public class MainActivity extends AppCompatActivity
 //    }
 
 
-    private void showDatePickerDialog(String title, int dialogId, GregorianCalendar mCalendar) {
-        Log.d(TAG, "showDatePickerDialog: " + mCalendar.toString());
-        DialogFragment dialogFragment = new DialogFragment();
+//    private void showDatePickerDialog(String title, int dialogId, GregorianCalendar mCalendar) {
+//        Log.d(TAG, "showDatePickerDialog: " + mCalendar.toString());
+//        DialogFragment dialogFragment = new DialogFragment();
+//
+//        Bundle arguments = new Bundle();
+//        arguments.putInt(DatePickerFragment.DATE_PICKER_ID, dialogId);
+//        arguments.putString(DatePickerFragment.DATE_PICKER_TITLE, title);
+//        arguments.putSerializable(DatePickerFragment.DATE_PICKER_DATE, mCalendar.getTime());
+//
+//
+//        dialogFragment.setArguments(arguments);
+//        dialogFragment.show(getSupportFragmentManager(), "datePicker");
+//        Log.d(TAG, "Exiting showDatePickerDialog");
+//
+//    }
 
-        Bundle arguments = new Bundle();
-        arguments.putInt(DatePickerFragment.DATE_PICKER_ID, dialogId);
-        arguments.putString(DatePickerFragment.DATE_PICKER_TITLE, title);
-        arguments.putSerializable(DatePickerFragment.DATE_PICKER_DATE, mCalendar.getTime());
-
-
-        dialogFragment.setArguments(arguments);
-        dialogFragment.show(getSupportFragmentManager(), "datePicker");
-        Log.d(TAG, "Exiting showDatePickerDialog");
-
-    }
-
-    @Override
-    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-        Log.d(TAG, "onDateSet: ");
-
-        // Check the id, so we know what to di wht the result
-        int dialogId = (int) view.getTag();
-        Log.d(TAG, "onDateSet: " + dialogId);
-//        switch(dialogId) {
-//            case DIALOG_FILTER:
-//                mCalendar.set(year, month, dayOfMonth, 0, 0, 0);
-//                applyFilter();
-//                getSupportLoaderManager().restartLoader(LOADER_ID, mArgs, this);
-//                break;
-//            case DIALOG_DELETE:
-//                break;
-//            default:
-//                throw new IllegalArgumentException("Invalid mode when receiving DatePickerDialog result");
-//        }
-
-    }
+//    @Override
+//    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+//        Log.d(TAG, "onDateSet: ");
+//
+//        // Check the id, so we know what to di wht the result
+//        int dialogId = (int) view.getTag();
+//        Log.d(TAG, "onDateSet: " + dialogId);
+////        switch(dialogId) {
+////            case DIALOG_FILTER:
+////                mCalendar.set(year, month, dayOfMonth, 0, 0, 0);
+////                applyFilter();
+////                getSupportLoaderManager().restartLoader(LOADER_ID, mArgs, this);
+////                break;
+////            case DIALOG_DELETE:
+////                break;
+////            default:
+////                throw new IllegalArgumentException("Invalid mode when receiving DatePickerDialog result");
+////        }
+//
+//    }
 
 //    @Override
 //    public void onBackPressed() {
@@ -3540,51 +3542,51 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    private void showConfirmationDialog(int dialogId) {
-        AppDialog dialog = new AppDialog();
-        Bundle args = new Bundle();
-        args.putInt(AppDialog.DIALOG_ID, dialogId);
-        args.putInt(AppDialog.DIALOG_TYPE, AppDialog.DIALOG_YES_NO);
-        args.putString(AppDialog.DIALOG_MESSAGE, getString(R.string.confirmdiag_leave_warning));
-        args.putString(AppDialog.DIALOG_SUB_MESSAGE, getString(R.string.confirmdiag_leave_warning_sub_message));
-        args.putInt(AppDialog.DIALOG_NEGATIVE_RID, R.string.confirmdiag_ask_abandon_negative_caption);
-        args.putInt(AppDialog.DIALOG_POSITIVE_RID, R.string.confirmdiag_ask_abandon_positive_caption);
-
-        dialog.setArguments(args);
-        dialog.show(getSupportFragmentManager(), null);
-
-    }
-
-
-    private void showAddConfirmationDialog(int dialogId) {
-        AppDialog dialog = new AppDialog();
-        Bundle args = new Bundle();
-        args.putInt(AppDialog.DIALOG_ID, dialogId);
-        args.putInt(AppDialog.DIALOG_TYPE, AppDialog.DIALOG_YES_NO);
-        args.putString(AppDialog.DIALOG_MESSAGE, getString(R.string.confirmdiag_add));
-        args.putString(AppDialog.DIALOG_SUB_MESSAGE, getString(R.string.confirmdiag_add_sub_message));
-        args.putInt(AppDialog.DIALOG_NEGATIVE_RID, R.string.confirmdiag_add_negative_caption);
-        args.putInt(AppDialog.DIALOG_POSITIVE_RID, R.string.confirmdiag_add_positive_caption);
-
-        dialog.setArguments(args);
-        dialog.show(getSupportFragmentManager(), null);
-
-    }
+//    private void showConfirmationDialog(int dialogId) {
+//        AppDialog dialog = new AppDialog();
+//        Bundle args = new Bundle();
+//        args.putInt(AppDialog.DIALOG_ID, dialogId);
+//        args.putInt(AppDialog.DIALOG_TYPE, AppDialog.DIALOG_YES_NO);
+//        args.putString(AppDialog.DIALOG_MESSAGE, getString(R.string.confirmdiag_leave_warning));
+//        args.putString(AppDialog.DIALOG_SUB_MESSAGE, getString(R.string.confirmdiag_leave_warning_sub_message));
+//        args.putInt(AppDialog.DIALOG_NEGATIVE_RID, R.string.confirmdiag_ask_abandon_negative_caption);
+//        args.putInt(AppDialog.DIALOG_POSITIVE_RID, R.string.confirmdiag_ask_abandon_positive_caption);
+//
+//        dialog.setArguments(args);
+//        dialog.show(getSupportFragmentManager(), null);
+//
+//    }
 
 
-    private void showConfirmationDialogOk(int dialogId) {
-        AppDialog dialog = new AppDialog();
-        Bundle args = new Bundle();
-        args.putInt(AppDialog.DIALOG_ID, dialogId);
-        args.putInt(AppDialog.DIALOG_TYPE, AppDialog.DIALOG_OK);
-        args.putString(AppDialog.DIALOG_MESSAGE, getString(R.string.confirmdiag_edits));
-        args.putString(AppDialog.DIALOG_SUB_MESSAGE, getString(R.string.confirmdiag_edits_sub_message));
-        args.putInt(AppDialog.DIALOG_POSITIVE_RID, R.string.ok);
+//    private void showAddConfirmationDialog(int dialogId) {
+//        AppDialog dialog = new AppDialog();
+//        Bundle args = new Bundle();
+//        args.putInt(AppDialog.DIALOG_ID, dialogId);
+//        args.putInt(AppDialog.DIALOG_TYPE, AppDialog.DIALOG_YES_NO);
+//        args.putString(AppDialog.DIALOG_MESSAGE, getString(R.string.confirmdiag_add));
+//        args.putString(AppDialog.DIALOG_SUB_MESSAGE, getString(R.string.confirmdiag_add_sub_message));
+//        args.putInt(AppDialog.DIALOG_NEGATIVE_RID, R.string.confirmdiag_add_negative_caption);
+//        args.putInt(AppDialog.DIALOG_POSITIVE_RID, R.string.confirmdiag_add_positive_caption);
+//
+//        dialog.setArguments(args);
+//        dialog.show(getSupportFragmentManager(), null);
+//
+//    }
 
-        dialog.setArguments(args);
-        dialog.show(getSupportFragmentManager(), null);
 
-    }
+//    private void showConfirmationDialogOk(int dialogId) {
+//        AppDialog dialog = new AppDialog();
+//        Bundle args = new Bundle();
+//        args.putInt(AppDialog.DIALOG_ID, dialogId);
+//        args.putInt(AppDialog.DIALOG_TYPE, AppDialog.DIALOG_OK);
+//        args.putString(AppDialog.DIALOG_MESSAGE, getString(R.string.confirmdiag_edits));
+//        args.putString(AppDialog.DIALOG_SUB_MESSAGE, getString(R.string.confirmdiag_edits_sub_message));
+//        args.putInt(AppDialog.DIALOG_POSITIVE_RID, R.string.ok);
+//
+//        dialog.setArguments(args);
+//        dialog.show(getSupportFragmentManager(), null);
+//
+//    }
 
 
 
@@ -3644,6 +3646,7 @@ public class MainActivity extends AppCompatActivity
         intent.putExtra(AddEditProfileActivity.EXTRA_CORP_WEBSITE, profile.getCorpWebsite());
         intent.putExtra(AddEditProfileActivity.EXTRA_NOTE, profile.getNote());
         intent.putExtra(AddEditProfileActivity.EXTRA_ACTVY_LONG, profile.getActvyLong());
+        Log.d(TAG, "startup " + profile.getOpenLong());
         intent.putExtra(AddEditProfileActivity.EXTRA_OPEN_DATE_LONG, profile.getOpenLong());
 
         Log.d(TAG, "edit requested");
