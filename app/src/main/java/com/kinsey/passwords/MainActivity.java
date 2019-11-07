@@ -1,20 +1,14 @@
 package com.kinsey.passwords;
 
 
-import android.app.DatePickerDialog;
-import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.os.Handler;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.appcompat.app.AlertDialog;
@@ -30,30 +24,19 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.DatePicker;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.kinsey.passwords.items.Account;
-import com.kinsey.passwords.items.AccountsContract;
 import com.kinsey.passwords.items.Profile;
 import com.kinsey.passwords.items.Suggest;
-import com.kinsey.passwords.provider.DatePickerFragment;
 import com.kinsey.passwords.provider.ProfileViewModel;
 import com.kinsey.passwords.tools.AppDialog;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.List;
 import java.util.Locale;
-
-import static java.util.Objects.isNull;
 
 // ====================
 // Statement to assist in debugging
@@ -142,7 +125,7 @@ public class MainActivity extends AppCompatActivity
     private Handler mHandler = new Handler();
     Runnable mRunnable;
     boolean isUserPaging = true;
-    private static Account account = new Account();
+//    private static Account account = new Account();
     private AlertDialog mDialog = null;
     private GregorianCalendar mCalendar;
     private boolean appMsgSent = false;
@@ -624,22 +607,22 @@ public class MainActivity extends AppCompatActivity
 //        contentResolver.update(AccountsContract.buildIdUri(account.getId()), values, null, null);
 //    }
 
-    private Account getAccount(int id) {
-//        int iId = 0;
-        Cursor cursor = getContentResolver()
-                .query(AccountsContract.buildIdUri(id), null, null, null, null);
-        if (cursor == null) {
-            return null;
-        } else {
-            if (cursor.moveToFirst()) {
-                Account account = AccountsContract.getAccountFromCursor(cursor);
-                cursor.close();
-                return account;
-            }
-            cursor.close();
-            return null;
-        }
-    }
+//    private Account getAccount(int id) {
+////        int iId = 0;
+//        Cursor cursor = getContentResolver()
+//                .query(AccountsContract.buildIdUri(id), null, null, null, null);
+//        if (cursor == null) {
+//            return null;
+//        } else {
+//            if (cursor.moveToFirst()) {
+//                Account account = AccountsContract.getAccountFromCursor(cursor);
+//                cursor.close();
+//                return account;
+//            }
+//            cursor.close();
+//            return null;
+//        }
+//    }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
@@ -2089,35 +2072,35 @@ public class MainActivity extends AppCompatActivity
 //
 //    }
 
-    private void confirmDeleteAccount(Account account) {
-//        Log.d(TAG, "deleteAccount: ");
-//        if (account == null) {
-//            Toast.makeText(this,
-//                    "No Account selected to delete",
-//                    Toast.LENGTH_LONG).show();
-//            return;
-//        }
-//        if (accountSelectedPos == -1) {
-//            Toast.makeText(this,
-//                    "Must select an account to delete",
-//                    Toast.LENGTH_LONG).show();
-//            return;
-//        }
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        AppDialog newFragment = AppDialog.newInstance();
-        Bundle args = new Bundle();
-        args.putInt(AppDialog.DIALOG_ID, AppDialog.DIALOG_ID_CONFIRM_DELETE_ACCOUNT);
-        args.putInt(AppDialog.DIALOG_TYPE, AppDialog.DIALOG_YES_NO);
-        args.putString(AppDialog.DIALOG_MESSAGE, getString(R.string.deldiag_message));
-        args.putString(AppDialog.DIALOG_SUB_MESSAGE, getString(R.string.deldiag_sub_message, account.getCorpName(), account.getPassportId()));
-        args.putInt(AppDialog.DIALOG_ACCOUNT_ID, account.getId());
-        args.putInt(AppDialog.DIALOG_POSITIVE_RID, R.string.deldiag_positive_caption);
-
-        newFragment.setArguments(args);
-        newFragment.show(fragmentManager, "dialog");
-
-
-    }
+//    private void confirmDeleteAccount(Account account) {
+////        Log.d(TAG, "deleteAccount: ");
+////        if (account == null) {
+////            Toast.makeText(this,
+////                    "No Account selected to delete",
+////                    Toast.LENGTH_LONG).show();
+////            return;
+////        }
+////        if (accountSelectedPos == -1) {
+////            Toast.makeText(this,
+////                    "Must select an account to delete",
+////                    Toast.LENGTH_LONG).show();
+////            return;
+////        }
+//        FragmentManager fragmentManager = getSupportFragmentManager();
+//        AppDialog newFragment = AppDialog.newInstance();
+//        Bundle args = new Bundle();
+//        args.putInt(AppDialog.DIALOG_ID, AppDialog.DIALOG_ID_CONFIRM_DELETE_ACCOUNT);
+//        args.putInt(AppDialog.DIALOG_TYPE, AppDialog.DIALOG_YES_NO);
+//        args.putString(AppDialog.DIALOG_MESSAGE, getString(R.string.deldiag_message));
+//        args.putString(AppDialog.DIALOG_SUB_MESSAGE, getString(R.string.deldiag_sub_message, account.getCorpName(), account.getPassportId()));
+//        args.putInt(AppDialog.DIALOG_ACCOUNT_ID, account.getId());
+//        args.putInt(AppDialog.DIALOG_POSITIVE_RID, R.string.deldiag_positive_caption);
+//
+//        newFragment.setArguments(args);
+//        newFragment.show(fragmentManager, "dialog");
+//
+//
+//    }
 
     private void confirmDeleteProfile(Profile profile, int position) {
 //        Log.d(TAG, "deleteAccount: ");

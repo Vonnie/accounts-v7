@@ -16,12 +16,7 @@ import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.kinsey.passwords.R;
-import com.kinsey.passwords.SuggestListActivity;
 import com.kinsey.passwords.items.Suggest;
-import com.kinsey.passwords.tools.ItemTouchHelperAdapter;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class SuggestAdapter extends ListAdapter<Suggest, SuggestAdapter.SuggestHolder> {
 //        implements ItemTouchHelperAdapter {

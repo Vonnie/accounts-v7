@@ -1,14 +1,10 @@
 package com.kinsey.passwords.provider;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.os.AsyncTask;
-import android.os.CountDownTimer;
 import android.util.Log;
-import android.view.View;
 
 import androidx.annotation.NonNull;
-import androidx.loader.content.Loader;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
@@ -17,9 +13,7 @@ import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.kinsey.passwords.MainActivity;
-import com.kinsey.passwords.items.AccountsContract;
 import com.kinsey.passwords.items.Profile;
-import com.kinsey.passwords.items.Suggest;
 import com.kinsey.passwords.tools.Converters;
 
 import java.util.Calendar;
@@ -85,13 +79,19 @@ public abstract class ProfileDatabase extends RoomDatabase {
                     + "sequence INTEGER NOT NULL DEFAULT 0, "
                     + "open_date INTEGER NOT NULL DEFAULT 0, "
                     + "actvy_date INTEGER NOT NULL DEFAULT 0, "
-                    + "corporation_name TEXT NOT NULL DEFAULT '', "
-                    + "user_name TEXT NOT NULL DEFAULT '', "
-                    + "user_email TEXT NOT NULL DEFAULT '', "
+                    + "corporation_name TEXT DEFAULT '', "
+                    + "user_name TEXT DEFAULT '', "
+                    + "user_email TEXT DEFAULT '', "
                     + "corporation_website TEXT DEFAULT '', "
-                    + "passport_note TEXT NOT NULL DEFAULT '', "
+                    + "passport_note TEXT DEFAULT '', "
                     + "ref_from INTEGER NOT NULL DEFAULT 0, "
                     + "ref_to INTEGER NOT NULL DEFAULT 0)");
+
+//            + "user_name TEXT NOT NULL DEFAULT '', "
+//                    + "user_email TEXT NOT NULL DEFAULT '', "
+//            + "passport_note TEXT NOT NULL DEFAULT '', "
+//            + "corporation_name TEXT NOT NULL DEFAULT '', "
+
 
             Log.d(TAG, "insert into passport_detail_mig");
             database.execSQL(

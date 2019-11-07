@@ -26,15 +26,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.kinsey.passwords.items.Profile;
 import com.kinsey.passwords.items.Suggest;
 import com.kinsey.passwords.provider.SuggestViewModel;
 import com.kinsey.passwords.provider.SuggestAdapter;
-import com.kinsey.passwords.tools.ItemTouchHelperAdapter;
 import com.kinsey.passwords.tools.PasswordFormula;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 

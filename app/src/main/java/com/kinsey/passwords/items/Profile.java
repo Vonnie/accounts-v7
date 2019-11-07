@@ -6,8 +6,6 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Date;
 
 //@Entity(tableName = "profile_detail")
@@ -16,7 +14,6 @@ public class Profile {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "_id", defaultValue = "0")
-    @NotNull
     private int id = 0;
 
     @ColumnInfo(name = "passport_id", defaultValue = "0")
@@ -28,19 +25,15 @@ public class Profile {
     private int sequence = 0;
 
     @ColumnInfo(name = "corporation_name", defaultValue = "")
-    @NotNull
     private String corpName = "";
 
     @ColumnInfo(name = "user_name", defaultValue = "")
-    @NotNull
     private String userName = "";
 
     @ColumnInfo(name = "user_email", defaultValue = "")
-    @NotNull
     private String userEmail = "";
 
     @ColumnInfo(name = "passport_note", defaultValue = "")
-    @NotNull
     private String note = "";
 
     @ColumnInfo(name = "open_date", defaultValue = "0")

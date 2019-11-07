@@ -24,7 +24,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.material.textfield.TextInputLayout;
-import com.kinsey.passwords.tools.DatePickerFragment;
+//import com.kinsey.passwords.tools.DatePickerFragment;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -229,24 +229,37 @@ public class AddEditProfileActivity extends AppCompatActivity {
     }
 
     public void showDatePickerDialog(View v) {
-        DatePickerFragment datePickerDialog = new DatePickerFragment();
+//        DatePickerFragment datePickerDialog = new DatePickerFragment();
 
 
-        customDate = format_mdy.format(lngOpenDate);
+
+        if (lngOpenDate == 0) {
+            alertInfo("No Open Date");
+            return;
+        }
+
+
+        Date dteOpen = new Date(lngOpenDate);
+        customDate = format_mdy.format(dteOpen);
 
 
         int year = getYear();
         int month = getMonth();
         int day = getDay();
+
+
+//        alertInfo("No Date Pickers Available");
+
 //        datePickerDialog.day_ = getDay();
 //        datePickerDialog.month_ = getMonth();
 //        datePickerDialog.year_ = getYear();
 
 
-//        alertInfo(customDate);
+        alertInfo(customDate);
 
 
-        // date picker dialog
+
+//         date picker dialog
         picker = new DatePickerDialog(AddEditProfileActivity.this,
                 new DatePickerDialog.OnDateSetListener() {
                     @Override
@@ -318,14 +331,16 @@ public class AddEditProfileActivity extends AppCompatActivity {
         textInputCorpWebsite.getEditText().setText(intent.getStringExtra(EXTRA_CORP_WEBSITE));
         textInputNote.getEditText().setText(intent.getStringExtra(EXTRA_NOTE));
 
-        this.lngOpenDate = intent.getLongExtra(EXTRA_OPEN_DATE_LONG, 0);
-        Log.d(TAG, String.valueOf(this.lngOpenDate));
+        lngOpenDate = intent.getLongExtra(EXTRA_OPEN_DATE_LONG, 0);
+        Log.d(TAG, String.valueOf(lngOpenDate));
         if (lngOpenDate == 0) {
             mtvOpenDate.setText("Click here for OpenDate");
+            alertInfo("No Intents Open Date");
         } else {
-            mtvOpenDate.setText("OPENED " + format_mdy.format(lngOpenDate));
             Date dteOpen = new Date(lngOpenDate);
+            mtvOpenDate.setText("OPENED " + format_mdy.format(dteOpen) + " " + lngOpenDate);
             cldrOpened.setTime(dteOpen);
+            alertInfo("Have Intents Open Date");
         }
 
 
@@ -333,18 +348,18 @@ public class AddEditProfileActivity extends AppCompatActivity {
 ////        Log.d(TAG, "onDateChanged: lngOpenDate " + lngOpenDate);
 //        setOpenDateCalendar(dte);
 
-        this.lngActvDate = intent.getLongExtra(EXTRA_ACTVY_LONG, 0);
+        lngActvDate = intent.getLongExtra(EXTRA_ACTVY_LONG, 0);
         if (lngActvDate == 0) {
             tvActvyDate.setText("");
         } else {
             tvActvyDate.setText("ActvyDate: " + format_ymdtimehm.format(lngActvDate));
         }
 
-        this.intId = intent.getIntExtra(EXTRA_ID, -1);
-        this.intPassportId = intent.getIntExtra(EXTRA_PASSPORT_ID, 0);
-        this.intSequence = intent.getIntExtra(EXTRA_SEQUENCE, 0);
-        this.tvPassportId.setText(" | Id: " + this.intPassportId);
-        this.tvSequence.setText(" | Seq: " + this.intSequence);
+        intId = intent.getIntExtra(EXTRA_ID, -1);
+        intPassportId = intent.getIntExtra(EXTRA_PASSPORT_ID, 0);
+        intSequence = intent.getIntExtra(EXTRA_SEQUENCE, 0);
+        tvPassportId.setText(" | Id: " + this.intPassportId);
+        tvSequence.setText(" | Seq: " + this.intSequence);
     }
 
 //    private void setOpenDateCalendar(Date dte) {
