@@ -143,7 +143,8 @@ public class MainActivity extends AppCompatActivity
     RecyclerView recyclerView;
     public static ProfileViewModel profileViewModel;
 //    public static ProfileAdapter adapter = new ProfileAdapter();
-    private Profile profileMaxItem;
+//    private Profile profileMaxItem;
+    private int currentMaxSeq = 0;
 
 //    public static ProfileAdapter adapterCorpName = new ProfileAdapter();
 //
@@ -269,23 +270,25 @@ public class MainActivity extends AppCompatActivity
             public void onChanged(@Nullable Profile profile) {
 
                 if (profile == null) {
-                    profileMaxItem = new Profile(0, "", "", "", "");
+//                    profileMaxItem = new Profile(0, "", "", "", "");
+                    currentMaxSeq = 0;
                 } else {
-                    profileMaxItem = profile;
+//                    profileMaxItem = profile;
+                    currentMaxSeq = profile.getSequence();
 //                    Log.d(TAG, profile);
                 }
 
-                Log.d(TAG, "maxSeq " + profileMaxItem.getSequence());
-                if (!conversionStarted && profileMaxItem.getSequence() == 0) {
-                    Log.d(TAG, "Seq " + profileMaxItem.getSequence());
-                    if (!migrationStarted) {
-                        Log.d(TAG, "migration not started");
-                    } else {
-                        conversionStarted = true;
-//                    addSample();
-//                        migratePassport();
-                    }
-                }
+//                Log.d(TAG, "maxSeq " + profileMaxItem.getSequence());
+//                if (!conversionStarted && profileMaxItem.getSequence() == 0) {
+//                    Log.d(TAG, "Seq " + profileMaxItem.getSequence());
+//                    if (!migrationStarted) {
+//                        Log.d(TAG, "migration not started");
+//                    } else {
+//                        conversionStarted = true;
+////                    addSample();
+////                        migratePassport();
+//                    }
+//                }
             }
         });
 
@@ -2663,7 +2666,7 @@ public class MainActivity extends AppCompatActivity
 //                int sequence = data.getIntExtra(AddEditProfileActivity.EXTRA_SEQUENCE, 0);
                 String note = data.getStringExtra(AddEditProfileActivity.EXTRA_NOTE);
 
-                Profile profile = new Profile(this.profileMaxItem.getSequence() + 1,
+                Profile profile = new Profile(currentMaxSeq + 1,
                         corpName, userName, userEmail, corpWebsite);
                 profile.setNote(note);
                 long lngDate = data.getLongExtra(AddEditProfileActivity.EXTRA_OPEN_DATE_LONG, 0);

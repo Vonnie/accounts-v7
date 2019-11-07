@@ -37,9 +37,10 @@ import java.util.List;
 
 import static androidx.recyclerview.widget.ItemTouchHelper.ACTION_STATE_DRAG;
 
-public class SuggestListActivity extends AppCompatActivity implements
-        GestureDetector.OnGestureListener,
-        GestureDetector.OnDoubleTapListener {
+public class SuggestListActivity extends AppCompatActivity {
+//        implements
+//        GestureDetector.OnGestureListener,
+//        GestureDetector.OnDoubleTapListener {
     public static final String TAG = "SuggestListActivity";
     public static final int ADD_SUGGEST_REQUEST = 1;
     public static final int EDIT_SUGGEST_REQUEST = 2;
@@ -494,89 +495,43 @@ public class SuggestListActivity extends AppCompatActivity implements
     }
 
 
-    private void requestAddSuggest(String password, String note) {
-//        maxSeq = 0;
-//        for (Suggest suggest: suggests) {
-//            if (suggest.getSequence() > maxSeq) {
-//                maxSeq = suggest.getSequence();
+//    private void requestAddSuggest(String password, String note) {
+////        maxSeq = 0;
+////        for (Suggest suggest: suggests) {
+////            if (suggest.getSequence() > maxSeq) {
+////                maxSeq = suggest.getSequence();
+////            }
+////        }
+////
+////        Log.d(TAG, "max " + maxSeq);
+//////        int maxSeq = suggestViewModel.getMaxSequence();
+//
+//        Suggest maxSuggest;
+//
+//        suggestViewModel.getMaxSequence().observe(this, new Observer<Suggest>() {
+//            @Override
+//            public void onChanged(@Nullable Suggest suggest) {
+////                update RecyclerView
+////                Toast.makeText(SuggestListActivity.this, "onChanged", Toast.LENGTH_SHORT).show();
+//
+//
+////                adapter.submitList(suggests);
+//
+//                Log.d(TAG, "max Item " + suggest);
+//
+////                this.maxSeq = suggest.getSequence();
+////
+////                SuggestListActivity.maxSeq = suggest.getSequence();
+////
+////                maxSuggest = suggest;
+//
 //            }
-//        }
+//        });
 //
-//        Log.d(TAG, "max " + maxSeq);
-////        int maxSeq = suggestViewModel.getMaxSequence();
-
-        Suggest maxSuggest;
-
-        suggestViewModel.getMaxSequence().observe(this, new Observer<Suggest>() {
-            @Override
-            public void onChanged(@Nullable Suggest suggest) {
-//                update RecyclerView
-//                Toast.makeText(SuggestListActivity.this, "onChanged", Toast.LENGTH_SHORT).show();
-
-
-//                adapter.submitList(suggests);
-
-                Log.d(TAG, "max Item " + suggest);
-
-//                this.maxSeq = suggest.getSequence();
+////        Log.d(TAG, "max Item " + this.maxSuggest);
 //
-//                SuggestListActivity.maxSeq = suggest.getSequence();
-//
-//                maxSuggest = suggest;
+//        Log.d(TAG, "onChg new max seq " + this.suggestMaxItem.getSequence());
+//    }
 
-            }
-        });
-
-//        Log.d(TAG, "max Item " + this.maxSuggest);
-
-        Log.d(TAG, "onChg new max seq " + this.suggestMaxItem.getSequence());
-    }
-
-    @Override
-    public boolean onSingleTapConfirmed(MotionEvent e) {
-        return false;
-    }
-
-    @Override
-    public boolean onDoubleTap(MotionEvent e) {
-        Log.d(TAG, "single tap");
-        return false;
-    }
-
-    @Override
-    public boolean onDoubleTapEvent(MotionEvent e) {
-        return false;
-    }
-
-    @Override
-    public boolean onDown(MotionEvent e) {
-        Log.d(TAG, "on down");
-        return false;
-    }
-
-    @Override
-    public void onShowPress(MotionEvent e) {
-
-    }
-
-    @Override
-    public boolean onSingleTapUp(MotionEvent e) {
-        return false;
-    }
-
-    @Override
-    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-        return false;
-    }
-
-    @Override
-    public void onLongPress(MotionEvent e) {
-
-    }
-
-    @Override
-    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-        return false;
-    }
 }
 

@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.ScrollView;
@@ -32,8 +33,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-public class AddEditProfileActivity extends AppCompatActivity {
-//implements DatePickerDialog.OnDateSetListener {
+public class AddEditProfileActivity extends AppCompatActivity
+    implements View.OnClickListener {
+        //implements DatePickerDialog.OnDateSetListener {
     public static final String TAG = "AddEditProfileActivity";
 
 //    public static final Pattern PASSWORD_PATTERN =
@@ -62,13 +64,13 @@ public class AddEditProfileActivity extends AppCompatActivity {
     public static final String EXTRA_EDIT_MODE =
             "com.kinsey.passwords.EXTRA_EDIT_MODE";
 
-    private ScrollView scrollView;
     private TextInputLayout textInputCorpName;
     private TextInputLayout textInputUserName;
     private TextInputLayout textInputUserEmail;
     private TextInputLayout textInputCorpWebsite;
     private TextInputLayout textInputNote;
-    private TextView mtvOpenDate;
+//    private TextView mtvOpenDate;
+    private Button btnOpenDate;
 
     private DatePickerDialog picker;
 
@@ -82,7 +84,7 @@ public class AddEditProfileActivity extends AppCompatActivity {
     private int intPassportId = -1;
     private int intSequence = 0;
     private boolean editModeAdd = false;
-    private ImageButton mImgWebView;
+//    private ImageButton mImgWebView;
     public static final int REQUEST_CODE = 11; // Used to identify the result
 
     private final Calendar cldrOpened = Calendar.getInstance();
@@ -115,7 +117,7 @@ public class AddEditProfileActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_addedit_profile);
 
-        scrollView = findViewById(R.id.scroll_view);
+//        scrollView = findViewById(R.id.scroll_view);
         textInputCorpName = findViewById(R.id.text_input_corp_name);
         textInputUserName = findViewById(R.id.text_input_user_name);
         textInputUserEmail = findViewById(R.id.text_input_user_email);
@@ -123,11 +125,11 @@ public class AddEditProfileActivity extends AppCompatActivity {
         textInputNote = findViewById(R.id.text_input_note);
 
 //        mDtePickOpen = findViewById(R.id.datePicker);
-        mImgWebView = findViewById(R.id.img_website);
+        ImageButton mImgWebView = findViewById(R.id.img_website);
         tvActvyDate = findViewById(R.id.actvy_date);
         tvPassportId = findViewById(R.id.passport_id);
         tvSequence = findViewById(R.id.sequence);
-        mtvOpenDate = findViewById(R.id.pick_open_date);
+        btnOpenDate = findViewById(R.id.pick_open_date);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -176,7 +178,9 @@ public class AddEditProfileActivity extends AppCompatActivity {
         });
 
 
-//        mtvOpenDate.setOnClickListener(new View.OnClickListener() {
+        btnOpenDate.setOnClickListener(this);
+
+//        btnOpenDate.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
 ////                showDatePickerDialog(account.getCorpName(), 1);
@@ -193,7 +197,7 @@ public class AddEditProfileActivity extends AppCompatActivity {
 //                        new DatePickerDialog.OnDateSetListener() {
 //                            @Override
 //                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-//                                mtvOpenDate.setText("Opened " + (monthOfYear + 1) + "/" + dayOfMonth + "/" + year);
+//                                btnOpenDate.setText("Opened " + (monthOfYear + 1) + "/" + dayOfMonth + "/" + year);
 //                                mCalendar.set(year, monthOfYear, dayOfMonth, 0, 0, 0);
 //                                lngOpenDate = mCalendar.getTimeInMillis();
 //                                Log.d(TAG, "onDateSet: " + lngOpenDate);
@@ -228,73 +232,77 @@ public class AddEditProfileActivity extends AppCompatActivity {
 
     }
 
-    public void showDatePickerDialog(View v) {
-//        DatePickerFragment datePickerDialog = new DatePickerFragment();
-
-
-
-        if (lngOpenDate == 0) {
-            alertInfo("No Open Date");
-            return;
-        }
-
-
-        Date dteOpen = new Date(lngOpenDate);
-        customDate = format_mdy.format(dteOpen);
-
-
-        int year = getYear();
-        int month = getMonth();
-        int day = getDay();
-
-
-//        alertInfo("No Date Pickers Available");
-
-//        datePickerDialog.day_ = getDay();
-//        datePickerDialog.month_ = getMonth();
-//        datePickerDialog.year_ = getYear();
-
-
-        alertInfo(customDate);
-
-
-
-//         date picker dialog
-        picker = new DatePickerDialog(AddEditProfileActivity.this,
-                new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        mtvOpenDate.setText("OPENED " + (monthOfYear + 1) + "/" + dayOfMonth + "/" + year);
-                        Calendar c2 = Calendar.getInstance();
-                        c2.set(year, monthOfYear, dayOfMonth);
-                        lngOpenDate = c2.getTimeInMillis();
-                        Log.d(TAG, "callback date long " + lngOpenDate);
-                    }
-                }, year, month, day);
-
-
-        picker.setTitle("Account Profile Open Date");
-        picker.getDatePicker().setMaxDate(new Date().getTime());
-        picker.show();
-
-//        datePickerDialog.setCallbackListener(new DatePickerFragment.onDatePickerListener() {
-//                                                 @Override
-//                                                 public void onDataSet(int year, int month, int day) {
-////                 month = month + 1;
-//                                                     mtvOpenDate.setText("OPENED " + (month + 1) + "/" + day + "/" + year);
-//
-//                                                     Calendar c2 = Calendar.getInstance();
-//                                                     c2.set(year, month, day);
-//                                                     lngOpenDate = c2.getTimeInMillis();
-//                                                     Log.d(TAG, "callback date long " + lngOpenDate);
-//                                                 }
-//                                             }
-//        );
+//    public void showDatePickerDialog(View v) {
+////        DatePickerFragment datePickerDialog = new DatePickerFragment();
 //
 //
-//        datePickerDialog.show(getSupportFragmentManager(), "datePicker");
-
-    }
+//
+//        if (lngOpenDate == 0) {
+//            alertInfo("No Open Date");
+//            return;
+//        }
+//
+//
+//        Date dteOpen = new Date(lngOpenDate);
+//        customDate = format_mdy.format(dteOpen);
+//
+//
+////        int year = getYear();
+////        int month = getMonth();
+////        int day = getDay();
+//
+//        int day = cldrOpened.get(Calendar.DAY_OF_MONTH);
+//        int month = cldrOpened.get(Calendar.MONTH);
+//        int year = cldrOpened.get(Calendar.YEAR);
+//
+//
+////        alertInfo("No Date Pickers Available");
+//
+////        datePickerDialog.day_ = getDay();
+////        datePickerDialog.month_ = getMonth();
+////        datePickerDialog.year_ = getYear();
+//
+//
+//        alertInfo(customDate);
+//
+//
+//
+////         date picker dialog
+//        picker = new DatePickerDialog(this.getApplicationContext(),
+//                new DatePickerDialog.OnDateSetListener() {
+//                    @Override
+//                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+//                        btnOpenDate.setText("OPENED " + (monthOfYear + 1) + "/" + dayOfMonth + "/" + year);
+//                        Calendar c2 = Calendar.getInstance();
+//                        c2.set(year, monthOfYear, dayOfMonth);
+//                        lngOpenDate = c2.getTimeInMillis();
+//                        Log.d(TAG, "callback date long " + lngOpenDate);
+//                    }
+//                }, year, month, day);
+//
+//
+//        picker.setTitle("Account Profile Open Date");
+//        picker.getDatePicker().setMaxDate(new Date().getTime());
+//        picker.show();
+//
+////        datePickerDialog.setCallbackListener(new DatePickerFragment.onDatePickerListener() {
+////                                                 @Override
+////                                                 public void onDataSet(int year, int month, int day) {
+//////                 month = month + 1;
+////                                                     mtvOpenDate.setText("OPENED " + (month + 1) + "/" + day + "/" + year);
+////
+////                                                     Calendar c2 = Calendar.getInstance();
+////                                                     c2.set(year, month, day);
+////                                                     lngOpenDate = c2.getTimeInMillis();
+////                                                     Log.d(TAG, "callback date long " + lngOpenDate);
+////                                                 }
+////                                             }
+////        );
+////
+////
+////        datePickerDialog.show(getSupportFragmentManager(), "datePicker");
+//
+//    }
 
 
     public void alertInfo(String info) {
@@ -334,13 +342,13 @@ public class AddEditProfileActivity extends AppCompatActivity {
         lngOpenDate = intent.getLongExtra(EXTRA_OPEN_DATE_LONG, 0);
         Log.d(TAG, String.valueOf(lngOpenDate));
         if (lngOpenDate == 0) {
-            mtvOpenDate.setText("Click here for OpenDate");
-            alertInfo("No Intents Open Date");
+            btnOpenDate.setText("Click here for OpenDate");
+//            alertInfo("No Intents Open Date");
         } else {
             Date dteOpen = new Date(lngOpenDate);
-            mtvOpenDate.setText("OPENED " + format_mdy.format(dteOpen) + " " + lngOpenDate);
+            btnOpenDate.setText("OPENED " + format_mdy.format(dteOpen));
             cldrOpened.setTime(dteOpen);
-            alertInfo("Have Intents Open Date");
+//            alertInfo("Have Intents Open Date");
         }
 
 
@@ -390,7 +398,7 @@ public class AddEditProfileActivity extends AppCompatActivity {
 
         lngOpenDate = dte.getTime();
 
-        mtvOpenDate.setText("Default to Current Date " + format_mdy.format(lngOpenDate));
+        btnOpenDate.setText("Default to Current Date " + format_mdy.format(lngOpenDate));
 
         //        setOpenDateCalendar(dte);
     }
@@ -415,8 +423,15 @@ public class AddEditProfileActivity extends AppCompatActivity {
         lngOpenDate = savedInstanceState.getLong(EXTRA_OPEN_DATE_LONG, 0);
 //        Date dte = new Date(lngOpenDate);
 //        setOpenDateCalendar(dte);
+        if (lngOpenDate == 0) {
+            btnOpenDate.setText("Click here for OpenDate");
+        } else {
+            Date dteOpen = new Date(lngOpenDate);
+            btnOpenDate.setText("OPENED " + format_mdy.format(dteOpen));
+            cldrOpened.setTime(dteOpen);
+        }
 
-        lngActvDate = savedInstanceState.getInt(EXTRA_ACTVY_LONG, 0);
+        lngActvDate = savedInstanceState.getLong(EXTRA_ACTVY_LONG, 0);
         if (lngActvDate == 0) {
             tvActvyDate.setText("");
         } else {
@@ -637,8 +652,36 @@ public class AddEditProfileActivity extends AppCompatActivity {
     }
 
 
-//    @Override
-//    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-//
-//    }
+    @Override
+    public void onClick(View v) {
+        int mYear, mMonth, mDay, mHour, mMinute;
+        if (v == btnOpenDate) {
+            // Get Current Date
+//            final Calendar c = Calendar.getInstance();
+            mYear = cldrOpened.get(Calendar.YEAR);
+            mMonth = cldrOpened.get(Calendar.MONTH);
+            mDay = cldrOpened.get(Calendar.DAY_OF_MONTH);
+
+
+            DatePickerDialog datePickerDialog = new DatePickerDialog(this,
+                    new DatePickerDialog.OnDateSetListener() {
+
+                        @Override
+                        public void onDateSet(DatePicker view, int year,
+                                              int monthOfYear, int dayOfMonth) {
+
+//                            btnOpenDate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+                            btnOpenDate.setText("OPENED " + (monthOfYear + 1) + "/" + dayOfMonth + "/" + year);
+                            Calendar c2 = Calendar.getInstance();
+                            c2.set(year, monthOfYear, dayOfMonth);
+                            lngOpenDate = c2.getTimeInMillis();
+                            Log.d(TAG, "callback date long " + lngOpenDate);
+
+                        }
+                    }, mYear, mMonth, mDay);
+            datePickerDialog.setTitle("Account Profile Open Date");
+            datePickerDialog.getDatePicker().setMaxDate(new Date().getTime());
+            datePickerDialog.show();
+        }
+    }
 }

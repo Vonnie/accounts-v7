@@ -1,22 +1,14 @@
 package com.kinsey.passwords.provider;
 
 import android.app.Application;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MediatorLiveData;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.Transformations;
 
 import com.kinsey.passwords.items.Profile;
-import com.kinsey.passwords.items.Suggest;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import io.reactivex.schedulers.Schedulers;
 
 public class ProfileViewModel extends AndroidViewModel
         implements Task {

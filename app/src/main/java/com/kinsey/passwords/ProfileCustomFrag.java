@@ -57,23 +57,64 @@ public class ProfileCustomFrag extends Fragment {
 
         recyclerView.setHasFixedSize(true);
 
-
-        boolean isLandscape = (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE);
-        if (isLandscape) {
-            GridLayoutManager layoutManager;
-            layoutManager = new GridLayoutManager(getActivity(), 2);
-            recyclerView.setLayoutManager(layoutManager);
-        } else {
-            LinearLayoutManager layoutManager;
-            layoutManager = new LinearLayoutManager(getActivity());
-            recyclerView.setLayoutManager(layoutManager);
+        GridLayoutManager gridLayoutManager;
+        LinearLayoutManager layoutManager;
+        int screenLayout = getResources().getConfiguration().screenLayout;
+        screenLayout &= Configuration.SCREENLAYOUT_SIZE_MASK;
+        int spanSize = 3;
+        Log.d(TAG, "check screen size");
+        switch (screenLayout) {
+            case Configuration.SCREENLAYOUT_SIZE_XLARGE:
+                if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                    spanSize = 4;
+                } else {
+                    spanSize = 3;
+                }
+                gridLayoutManager = new GridLayoutManager(getActivity(), spanSize);
+                recyclerView.setLayoutManager(gridLayoutManager);
+                Log.d(TAG, "screen size Xlarge");
+                break;
+            case Configuration.SCREENLAYOUT_SIZE_LARGE:
+                if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                    spanSize = 3;
+                } else {
+                    spanSize = 2;
+                }
+                gridLayoutManager = new GridLayoutManager(getActivity(), spanSize);
+                recyclerView.setLayoutManager(gridLayoutManager);
+                Log.d(TAG, "screen size large");
+                break;
+            case Configuration.SCREENLAYOUT_SIZE_NORMAL:
+                if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                    gridLayoutManager = new GridLayoutManager(getActivity(), 2);
+                    recyclerView.setLayoutManager(gridLayoutManager);
+                    Log.d(TAG, "screen size normal");
+                } else {
+                    layoutManager = new LinearLayoutManager(getActivity());
+                    recyclerView.setLayoutManager(layoutManager);
+                }
+                break;
+            default:
+                layoutManager = new LinearLayoutManager(getActivity());
+                recyclerView.setLayoutManager(layoutManager);
         }
+
+//        boolean isLandscape = (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE);
+//        if (isLandscape) {
+//            GridLayoutManager layoutManager;
+//            layoutManager = new GridLayoutManager(getActivity(), 2);
+//            recyclerView.setLayoutManager(layoutManager);
+//        } else {
+//            LinearLayoutManager layoutManager;
+//            layoutManager = new LinearLayoutManager(getActivity());
+//            recyclerView.setLayoutManager(layoutManager);
+//        }
 
 
         recyclerView.setAdapter(adapter);
 
 //        profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
-        MainActivity.profileViewModel.getAllProfilesCustomSort().observe(this, new Observer<List<Profile>>() {
+        MainActivity.profileViewModel.getAllProfilesCustomSort().observe(getViewLifecycleOwner(), new Observer<List<Profile>>() {
             @Override
             public void onChanged(List<Profile> profiles) {
 
@@ -311,7 +352,7 @@ public class ProfileCustomFrag extends Fragment {
 //                    adapterCustom.notifyDataSetChanged();
 
 //                    adapterCustom.n
-                    int scrollPos = lowPos;
+//                    int scrollPos = lowPos;
 //                    if (lowPos > 3) {
 //                        scrollPos = lowPos - 1;
 //                    }

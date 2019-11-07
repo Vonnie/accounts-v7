@@ -71,7 +71,11 @@ public class ProfileAdapter extends ListAdapter<Profile, ProfileAdapter.ProfileH
                     holder.tvAcctId.setText(format_mdy.format(lngActvDate));
                 }
             } else {
-                holder.tvAcctId.setText(String.valueOf(currentProfile.getSequence()));
+                if (MainActivity.listsortOrder == MainActivity.LISTSORT_CUSTOM_SORT) {
+                    holder.tvAcctId.setText("");
+                } else {
+                    holder.tvAcctId.setText(String.valueOf(currentProfile.getSequence()));
+                }
             }
         }
 
@@ -79,7 +83,23 @@ public class ProfileAdapter extends ListAdapter<Profile, ProfileAdapter.ProfileH
     }
 
     public Profile getProfileAt(int position) {
-        return getItem(position);
+        if (position >= getItemCount()) {
+            if (getItemCount() == 0) {
+                return null;
+            } else {
+                return getItem(getItemCount() - 1);
+            }
+        } else {
+            if (position < 0) {
+                if (getItemCount() == 0) {
+                    return null;
+                } else {
+                    return getItem(0);
+                }
+            } else {
+                return getItem(position);
+            }
+        }
     }
 
 

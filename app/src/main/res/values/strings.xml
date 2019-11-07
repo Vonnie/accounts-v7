@@ -85,24 +85,29 @@
     <string name="searchable_hint">Enter corporation name</string>
     <string name="home_message_title">List Accounts, Search Accounts, Password Suggestions</string>
     <string name="home_message_text">
-        Tracks your accounts with sorted lists, searches, edits, backup / restore data, and gives password suggestions of 8 or 10 character passwords.
-        \nTo view list in a different order, click the filter icon for four different sorted orders. Use the search, to see only accounts for your keyed in values matching the corporation name.
-        \nTo view &amp; edit details, click on item. To delete, swipe account left or right. To add an account, click plus sign at lower right corner.
-        \nTo view accounts with more interest or activity, use the custom list. Use the drag/drop to rearrange for the order. Hint: To drag, press and hold momentarily until color is changed indicating drag is started.
+        Track your accounts with sorted lists, searches, edits, backup/restore data, and select a password from list of suggestions.
+        \nTo view list in a different order, click the filter icon for four different sorted orders. Use the search menu request to see only accounts with searched for corporation names.
+        \nTo view &amp; edit account details, click on item. To delete, swipe account left or right. To add an account, click plus sign at lower right corner.
+        \nOne of the four ordered lists is a custom ordered list. Order is arranged by the user. This is a way to keep more important accounts to the top of the list. Rearrange items by a drag/drop of an item.
+        This drag/drop feature is only available in the Custom Sort list.
+        \nHint: To drag/drop, press and hold momentarily until color is changed indicating drag is started, then drag to the new position.
         \nTo backup or restore use the Backup/Restore from the menu. This backups data. If a backup exists from a previous backup, this can be used to restore.
-        \nThe file location is noted in the Backup/Restore menu item Filename. Use menu item \'Show Exported File\' to view of this previously exported file. Use the menu item share to copy the exported file onto other systems.
-        \nPassword Suggestions menu list passwords. It does not attach these to an account. Reason why is explained next.
-        \n\nDEFINITION MESSAGE
-        \nThe data db contains accounts with account Id and account info. Use paper to record the db\'s account Id and password you assigned it.
-        To add an account, add on the app, then take the auto-generated id and the new selected password to write on the paper file.
-        Later when an account it needed, couple account and password by doing a search on the app for the account, then use the id to reference into paper file for the password.
-        The data db is exported through Menu of \'Backup / Restore\', then do a Menu for Export. This exported data file is a json file representation of accounts db. Use this for backup.
-        To restore data onto the app db, select Menu Import to rebuild from a previously exported file.
-        The menu also has a selection to have suggestions for passwords. The icon for this search is a key.
-        \n\nIMPORTANT SECURITY MESSAGE
+        \nThe file location is noted in the Backup/Restore menu item Filename. Use menu item \'Show Backup File\' to view of this previously exported file. Use the menu item share to copy the exported file onto other systems.
+        \nPassword Suggestions menu list passwords. Request group of 10 passwords from the menu. Passwords are either 8 or 10 positions, depending on user request. These passwords have at least one number and one symbol. The letters of passwords are selected based on the location on keyboard.
+        This assist by keying in password with only one hand. Although, numbers and symbols are at random.
+        \nAdd, edit, or rearrange the items of the list. Passwords do not attach to an account. Reason why is explained next.
+        \n\nPrivate Account Passwords Secrecy
         \nKeeping passwords electronically, even if encrypted, may leave you open to have your credentials stolen.
-        Having an electronic copy (from a file or the app&quot;s database) with the credentials of company, user name, and password would highly exposed your accounts to hackers.
-        \nRecommend to share exported file to Dropbox or Email. Copy onto a safe space.
+        Having an electronic copy (from a file or the apps database) with the credentials of company, user name, and password would highly exposed your accounts to hackers.
+        \nThe data db contains accounts with account Id and account info. Use paper to record the db\'s account Id and password you assigned it.
+        To add an account, add on the app, then take the auto-generated id and the newly selected password to write on the paper report.
+        Later when an account it needed, couple account and password by doing a search on the app for the account. Use the account id to reference into paper report for the password. The account ids are incremented, therefore the paper report is added in order of the account id.
+        \n\nAccount Protection
+        \nExport data db through \'Backup / Restore\' menu item for Backup. This exported data file is a json file representation of accounts db. Use this for backup.
+        To restore data onto the app db, select Menu item Restore to rebuild from a previously exported file.
+        \nRecommend to share exported data file to Dropbox or Email. Copy onto a safe space, separate from the paper report. Note: Suggested passwords are not backed up.
+        \n\nAPP Security
+        \nApps are protected for access to external files. To grant permission, go to Settings for Apps. Select this app Accounts to give permission for storage.
     </string>
     <string name="home_message_text2">
         \nFor this security reason, the passwords are not saved on a file or database. This app keeps account information excluding passwords. Your action is to manually tie together using the account id from this app to the written list of account id and password value.

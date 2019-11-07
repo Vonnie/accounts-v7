@@ -1,6 +1,5 @@
 package com.kinsey.passwords;
 
-import android.Manifest;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -369,10 +368,12 @@ public class FileViewActivity extends AppCompatActivity
 
     private String permissionMsg() {
         String htmlString = "<h1>Permission Issue</h1>" +
-                "<h2>Unable to access App storage for backup file.</h2>" +
-                "<h3>Grant access for this App from Settings</h3>" +
-                "<h3>Select Accounts app in apps list. Select permissions. Then, set on Storage.</h3>" +
+                "<h2>Unable to access App storage for Backup / Restore</h2>" +
+                "<h3>Grant Permission Instruction</h3>" +
+                "<h4>Grant access for this App from Settings</h4>" +
+                "<h4>Select Accounts app in apps list. Select permissions. Then, set on Storage.</h4>" +
                 "<h4>Once permission is granted, return to backup the db.</h4>" +
+                "<h3>Notify</h3>" +
                 "<h4>Since version 10, backup storage has moved. See Filename from menu</h4>";
         return htmlString;
     }
@@ -471,7 +472,7 @@ public class FileViewActivity extends AppCompatActivity
 
 
             new DownloadProfileAsyncTask(getApplicationContext(),
-                    file, adapter, progressBar).execute();
+                    file, adapter, progressBar, webView).execute();
 
 //            JsonWriter writer = new JsonWriter(new FileWriter(file));
 //            writer.setIndent("  ");
@@ -916,21 +917,23 @@ public class FileViewActivity extends AppCompatActivity
     private static class DownloadProfileAsyncTask extends AsyncTask<Void, String, Integer> {
         //        private ProfileDao profileDao;
         ProfileJsonListIO profileJsonListIO = new ProfileJsonListIO();
-        private List<Profile> listAccounts = new ArrayList<Profile>();
         Context context;
         File storageFile;
         ProfileAdapter adapter;
         String msgError;
         private ProgressBar progressBar;
+        private WebView webView;
 
         private DownloadProfileAsyncTask(Context context,
                                          File file,
                                          ProfileAdapter adapter,
-                                         ProgressBar progressBar) {
+                                         ProgressBar progressBar,
+                                         WebView webView) {
             this.context = context;
             this.storageFile = file;
             this.adapter = adapter;
             this.progressBar = progressBar;
+            this.webView = webView;
 
 //            File dirStorage = context.getExternalFilesDir("passport");
         }
@@ -1029,6 +1032,14 @@ public class FileViewActivity extends AppCompatActivity
                         Toast.LENGTH_LONG).show();
                 return;
             }
+
+            StringBuilder sb = new StringBuilder();
+            Formatter formatter = new Formatter(sb, Locale.US);
+
+            String msgDisplay = formatter.format("<h2>%3d Account Profiles onto Backup file</h2>",
+                    count).toString();
+
+            this.webView.loadData(msgDisplay, "text/html", null);
 
 //            FileViewActivity.infoPage("Account Profiles exported");
 
