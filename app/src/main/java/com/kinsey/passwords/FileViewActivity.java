@@ -1,7 +1,9 @@
 package com.kinsey.passwords;
 
+import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -50,11 +52,11 @@ public class FileViewActivity extends AppCompatActivity
     private ProfileAdapter adapter;
 //    private ProfileViewModel profileViewModel;
 
-    private Handler mHandler = new Handler();
-    boolean importRefreshReq = false;
-    public static File dirStorage;
-    View fileViewActivityView;
-    ShareActionProvider myShareActionProvider;
+//    private Handler mHandler = new Handler();
+//    boolean importRefreshReq = false;
+//    public static File dirStorage;
+//    View fileViewActivityView;
+//    ShareActionProvider myShareActionProvider;
     boolean onFirstReported = true;
     private static final int BACKUP_FILE_REQUESTED = 1;
 
@@ -438,15 +440,16 @@ public class FileViewActivity extends AppCompatActivity
 
             if (file.exists()) {
                 Log.d(TAG, "ExportAccountDB: file exists " + file.getAbsoluteFile());
+                alertBackup(file);
             } else {
 
-                Log.d(TAG, "ExportAccountDB: file " + file.getAbsoluteFile());
-                Log.d(TAG, "ExportAccountDB: got dir " + file.getParentFile().getAbsoluteFile());
-                Log.d(TAG, "ExportAccountDB: got dir " + file.getParentFile().getParentFile().getAbsoluteFile());
-                Log.d(TAG, "ExportAccountDB: got dir " + file.getParentFile().getParentFile().getParentFile().getAbsoluteFile());
-                Log.d(TAG, "ExportAccountDB: got path " + file.getParentFile().getPath());
-                Log.d(TAG, "ExportAccountDB: got path " + file.getParentFile().getParentFile().getPath());
-                Log.d(TAG, "ExportAccountDB: got path " + file.getParentFile().getParentFile().getParentFile().getPath());
+//                Log.d(TAG, "ExportAccountDB: file " + file.getAbsoluteFile());
+//                Log.d(TAG, "ExportAccountDB: got dir " + file.getParentFile().getAbsoluteFile());
+//                Log.d(TAG, "ExportAccountDB: got dir " + file.getParentFile().getParentFile().getAbsoluteFile());
+//                Log.d(TAG, "ExportAccountDB: got dir " + file.getParentFile().getParentFile().getParentFile().getAbsoluteFile());
+//                Log.d(TAG, "ExportAccountDB: got path " + file.getParentFile().getPath());
+//                Log.d(TAG, "ExportAccountDB: got path " + file.getParentFile().getParentFile().getPath());
+//                Log.d(TAG, "ExportAccountDB: got path " + file.getParentFile().getParentFile().getParentFile().getPath());
 
 
                 try {
@@ -500,6 +503,32 @@ public class FileViewActivity extends AppCompatActivity
             Log.v(TAG, msgError);
             Toast.makeText(this, "Export has errors", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void alertBackup(File file) {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setMessage("Backup file exists. Are you sure, You wanted to write over it?");
+        alertDialogBuilder.setPositiveButton("yes",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        new DownloadProfileAsyncTask(getApplicationContext(),
+                                file, adapter, progressBar, webView).execute();
+
+                        //                        Toast.makeText(getApplicationContext(), "You clicked yes button", Toast.LENGTH_LONG).show();
+                    }
+                });
+//        alertDialogBuilder.setNegativeButton("No",
+//                new DialogInterface.OnClickListener() {
+//                    Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        finish();
+//                    }
+//                });
+
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
     }
 
 
