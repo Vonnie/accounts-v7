@@ -94,20 +94,21 @@
         \nTo backup or restore use the Backup/Restore from the menu. This backups data. If a backup exists from a previous backup, this can be used to restore.
         \nThe file location is noted in the Backup/Restore menu item Filename. Use menu item \'Show Backup File\' to view of this previously exported file. Use the menu item share to copy the exported file onto other systems.
         \nPassword Suggestions menu list passwords. Request group of 10 passwords from the menu. Passwords are either 8 or 10 positions, depending on user request. These passwords have at least one number and one symbol. The letters of passwords are selected based on the location on keyboard.
-        This assist by keying in password with only one hand. Although, numbers and symbols are at random.
-        \nAdd, edit, or rearrange the items of the list. Passwords do not attach to an account. Reason why is explained next.
+        This location arrangement assists by allowing user to key in password with only one hand. Although, numbers and symbols are at random.
+        \nAdd, edit, or rearrange password items of the list is similar to accounts maintenance. Passwords do not attach to an account. Reason why is explained next.
         \n\nPrivate Account Passwords Secrecy
         \nKeeping passwords electronically, even if encrypted, may leave you open to have your credentials stolen.
         Having an electronic copy (from a file or the apps database) with the credentials of company, user name, and password would highly exposed your accounts to hackers.
-        \nThe data db contains accounts with account Id and account info. Use paper to record the db\'s account Id and password you assigned it.
-        To add an account, add on the app, then take the auto-generated id and the newly selected password to write on the paper report.
+        \nThe data db contains accounts with account Id and account info. Use paper to record the db\'s account Id and password assigned.
+        Add on the app, then take the auto-generated id and the newly selected password to write on the paper report.
         Later when an account it needed, couple account and password by doing a search on the app for the account. Use the account id to reference into paper report for the password. The account ids are incremented, therefore the paper report is added in order of the account id.
         \n\nAccount Protection
-        \nExport data db through \'Backup / Restore\' menu item for Backup. This exported data file is a json file representation of accounts db. Use this for backup.
-        To restore data onto the app db, select Menu item Restore to rebuild from a previously exported file.
+        \nExport data db through \'Backup / Restore\' menu item for Backup. This exported data file is a Json file representation of accounts db. Use this for backup.
+        To use this app on another device, install this app; copy shared backup file to loc, shown on menu; select Menu item Restore to populate the data. Use the menu item Share to keep them in sync.
         \nRecommend to share exported data file to Dropbox or Email. Copy onto a safe space, separate from the paper report. Note: Suggested passwords are not backed up.
         \n\nAPP Security
-        \nApps are protected for access to external files. To grant permission, go to Settings for Apps. Select this app Accounts to give permission for storage.
+        \nAndroid has recently made a change to make our systems safer. It will app allow access to external files, but only if the user specifically allows it through the Settings.
+        To grant permission, go to Settings for Apps. Select this app Accounts to give permission for storage.
     </string>
     <string name="home_message_text2">
         \nFor this security reason, the passwords are not saved on a file or database. This app keeps account information excluding passwords. Your action is to manually tie together using the account id from this app to the written list of account id and password value.

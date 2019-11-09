@@ -162,8 +162,8 @@ public abstract class ProfileDatabase extends RoomDatabase {
 //                            + "passport_note, ref_from, "
 //                            + "ref_to FROM passport_detail ");
 
-            Log.d(TAG, "drop table passport_detail_mig");
             database.execSQL("DROP TABLE passport_detail");
+            Log.d(TAG, "drop table passport_detail_mig");
 
             Log.d(TAG, "rename passport_detail_mig");
             database.execSQL(

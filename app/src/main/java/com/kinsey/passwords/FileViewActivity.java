@@ -472,7 +472,8 @@ public class FileViewActivity extends AppCompatActivity
 
             if (file.exists()) {
                 Log.d(TAG, "ExportAccountDB: file exists " + file.getAbsoluteFile());
-                alertBackup(file);
+                alertBackup(file, "Backup file exists. Want to over-write it? Created: "
+                        + format_mdy.format(file.lastModified()));
             } else {
 
 //                Log.d(TAG, "ExportAccountDB: file " + file.getAbsoluteFile());
@@ -492,8 +493,9 @@ public class FileViewActivity extends AppCompatActivity
                     msgError = e1.getMessage();
                     Log.e(TAG, "ExportAccountDB error: " + e1.getMessage());
                     Toast.makeText(this,
-                            " Exported directory not exists",
+                            " unable to create Exported file",
                             Toast.LENGTH_LONG).show();
+                    return;
 //                    fvFragment.setInfoMessage("Exported directory not exists");
                 } catch (Exception e2) {
                     e2.printStackTrace();
@@ -503,8 +505,7 @@ public class FileViewActivity extends AppCompatActivity
                 }
 
 
-                new DownloadProfileAsyncTask(getApplicationContext(),
-                        file, adapter, progressBar, webView).execute();
+                alertBackup(file, "Confirm backup");
             }
 //            JsonWriter writer = new JsonWriter(new FileWriter(file));
 //            writer.setIndent("  ");
@@ -534,10 +535,9 @@ public class FileViewActivity extends AppCompatActivity
         }
     }
 
-    private void alertBackup(File file) {
+    private void alertBackup(File file, String msg) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setMessage("Backup file exists. Want to over-write it? Created: "
-        + format_mdy.format(file.lastModified()));
+        alertDialogBuilder.setMessage(msg);
         alertDialogBuilder.setPositiveButton("yes",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface arg0, int arg1) {

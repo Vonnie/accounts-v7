@@ -337,6 +337,8 @@ public class MainActivity extends AppCompatActivity
 //            setMenuItemChecked(R.id.menuacct_sort_corpname, true);
         }
 
+//        setTitle("Hi, Chuck!");
+
 //        listApps = (ListView) findViewById(R.id.xmlListView);
 //        if (savedInstanceState != null) {
 //            feedUrl = savedInstanceState.getString(STATE_URL);

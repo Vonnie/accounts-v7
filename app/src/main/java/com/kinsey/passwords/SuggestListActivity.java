@@ -74,14 +74,62 @@ public class SuggestListActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
 
-        boolean isLandscape = (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE);
-        if (isLandscape) {
-            layoutManager = new GridLayoutManager(this, 3);
-        } else {
-            layoutManager = new GridLayoutManager(this, 2);
+
+        GridLayoutManager gridLayoutManager;
+        int screenLayout = getResources().getConfiguration().screenLayout;
+        screenLayout &= Configuration.SCREENLAYOUT_SIZE_MASK;
+        int spanSize = 3;
+        switch (screenLayout) {
+            case Configuration.SCREENLAYOUT_SIZE_XLARGE:
+                if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                    spanSize = 5;
+                } else {
+                    spanSize = 4;
+                }
+                gridLayoutManager = new GridLayoutManager(this, spanSize);
+                recyclerView.setLayoutManager(gridLayoutManager);
+                Log.d(TAG, "screen size Xlarge");
+                break;
+            case Configuration.SCREENLAYOUT_SIZE_LARGE:
+                if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                    spanSize = 4;
+                } else {
+                    spanSize = 3;
+                }
+                gridLayoutManager = new GridLayoutManager(this, spanSize);
+                recyclerView.setLayoutManager(gridLayoutManager);
+                Log.d(TAG, "screen size large");
+                break;
+            case Configuration.SCREENLAYOUT_SIZE_NORMAL:
+                if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                    spanSize = 3;
+                } else {
+                    spanSize = 2;
+                }
+                gridLayoutManager = new GridLayoutManager(this, spanSize);
+                recyclerView.setLayoutManager(gridLayoutManager);
+                break;
+            default:
+                if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                    spanSize = 2;
+                } else {
+                    spanSize = 1;
+                }
+                gridLayoutManager = new GridLayoutManager(this, spanSize);
+                recyclerView.setLayoutManager(gridLayoutManager);
+                break;
         }
 
-        recyclerView.setLayoutManager(layoutManager);
+
+
+//        boolean isLandscape = (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE);
+//        if (isLandscape) {
+//            layoutManager = new GridLayoutManager(this, 3);
+//        } else {
+//            layoutManager = new GridLayoutManager(this, 2);
+//        }
+
+//        recyclerView.setLayoutManager(layoutManager);
 
 
         final SuggestAdapter adapter = new SuggestAdapter();
