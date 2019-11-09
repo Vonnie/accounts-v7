@@ -93,6 +93,38 @@ public abstract class ProfileDatabase extends RoomDatabase {
 //            + "corporation_name TEXT NOT NULL DEFAULT '', "
 
 
+            database.execSQL(
+                    "UPDATE passport_detail " +
+                            "SET corporation_website = '' " +
+                            "WHERE corporation_website IS NULL");
+
+            database.execSQL(
+                    "UPDATE passport_detail " +
+                            "SET passport_note = '' " +
+                            "WHERE passport_note IS NULL");
+
+            long currDate = new Date().getTime();
+            database.execSQL(
+                    "UPDATE passport_detail " +
+                            "SET open_date = " + currDate +
+                            " WHERE open_date IS NULL");
+            database.execSQL(
+                    "UPDATE passport_detail " +
+                            "SET actvy_date = " + currDate +
+                            " WHERE actvy_date IS NULL");
+            database.execSQL(
+                    "UPDATE passport_detail " +
+                            "SET sequence = 0 " +
+                            " WHERE sequence IS NULL");
+            database.execSQL(
+                    "UPDATE passport_detail " +
+                            "SET ref_from = 0 " +
+                            " WHERE ref_from IS NULL");
+            database.execSQL(
+                    "UPDATE passport_detail " +
+                            "SET ref_to = 0 " +
+                            " WHERE ref_to IS NULL");
+
             Log.d(TAG, "insert into passport_detail_mig");
             database.execSQL(
                     "INSERT INTO passport_detail_mig"
@@ -100,11 +132,35 @@ public abstract class ProfileDatabase extends RoomDatabase {
                     + "actvy_date, corporation_name, user_name, "
                     + "user_email, corporation_website, "
                     + "passport_note, ref_from, ref_to) "
-                    + "SELECT passport_id, sequence, open_date, "
-                    + "actvy_date, corporation_name, user_name, "
+                    + "SELECT passport_id, sequence, open_date, actvy_date, "
+                    + "corporation_name, user_name, "
                     + "user_email, corporation_website, "
-                    + "passport_note, ref_from, "
-                    + "ref_to FROM passport_detail ");
+                    + "passport_note, ref_from, ref_to "
+                    + "FROM passport_detail ");
+
+//            database.execSQL(
+//                    "INSERT INTO passport_detail_mig"
+//                    + "(passport_id, sequence, open_date, "
+//                    + "actvy_date, corporation_name, user_name, "
+//                    + "user_email, corporation_website, "
+//                    + "passport_note, ref_from, ref_to) "
+//                    + "SELECT passport_id, sequence, open_date, actvy_date, "
+//                    + "corporation_name, user_name, "
+//                    + "user_email, corporation_website, "
+//                    + "passport_note, 0, 0 "
+//                    + "FROM passport_detail ");
+
+            //            database.execSQL(
+//                    "INSERT INTO passport_detail_mig"
+//                            + "(passport_id, sequence, open_date, "
+//                            + "actvy_date, corporation_name, user_name, "
+//                            + "user_email, corporation_website, "
+//                            + "passport_note, ref_from, ref_to) "
+//                            + "SELECT passport_id, sequence, open_date, "
+//                            + "actvy_date, corporation_name, user_name, "
+//                            + "user_email, corporation_website, "
+//                            + "passport_note, ref_from, "
+//                            + "ref_to FROM passport_detail ");
 
             Log.d(TAG, "drop table passport_detail_mig");
             database.execSQL("DROP TABLE passport_detail");

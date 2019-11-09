@@ -17,13 +17,10 @@ import com.kinsey.passwords.tools.ProfileJsonListIO;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.ShareActionProvider;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
 
-import android.os.Environment;
-import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -35,7 +32,9 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Formatter;
 import java.util.List;
 import java.util.Locale;
@@ -59,6 +58,12 @@ public class FileViewActivity extends AppCompatActivity
 //    ShareActionProvider myShareActionProvider;
     boolean onFirstReported = true;
     private static final int BACKUP_FILE_REQUESTED = 1;
+
+
+    private static String pattern_mdy = "MM/dd/yyyy";
+    public static SimpleDateFormat format_mdy = new SimpleDateFormat(
+            pattern_mdy, Locale.US);
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -304,16 +309,18 @@ public class FileViewActivity extends AppCompatActivity
                 if (dirStorage.canRead()) {
                     if (fileExternal.exists()) {
                         htmlString = greetMsg() +
-                                "<h5>" + adapter.getItemCount() + " Account Profile items currently on db<h5>" +
-                                "<h5>" + accountJsonProperties(fileExternal.getAbsoluteFile().toString()) + "</h5>" +
-                                "<h5>Notify: If uninstall, the exported / backup file also is deleted.</h5>" +
-                                "<h5>Perserve file with a file copy or request to share from menu</h5>";
-
+                                "<hr><h5>" + adapter.getItemCount() + " Account Profile items currently on db<h5>" +
+                                "<h5>" + accountJsonProperties(fileExternal.getAbsoluteFile().toString()) + "</h5><hr>" +
+                                "<h5>Notify: If uninstall app, the exported / backup file also is deleted.</h5>" +
+                                "<h5>Preserve file with a file copy or share from menu</h5><hr>" +
+"<h5>Information: To setup this app to another device, use this Backup/Restore feature to populate data onto the other device.</h5>" +
+                        "<h5>Steps: 1. Backup 2. Install app to other device 3. Copy to device backup file, see loc from menu item filename 4. Restore</h5>";
                     } else {
                         htmlString = notfyMsg() +
                                 "<h4>Use menu to export data.</h4>" +
                                 "<h5>" + adapter.getItemCount() + " Account Profile items currently on db<h5>" +
-                                "<h5>Notify: As of Ver. 11, the backup location has moved. See menu item for filename.<h5>";
+                        "<h4>Notify</h4>" +
+                                "<h4>As of version name 11, backup storage has moved. See Filename from menu</h4>";
                     }
                 } else {
                     htmlString = notfyMsg() +
@@ -376,7 +383,7 @@ public class FileViewActivity extends AppCompatActivity
                 "<h4>Select Accounts app in apps list. Select permissions. Then, set on Storage.</h4>" +
                 "<h4>Once permission is granted, return to backup the db.</h4>" +
                 "<h3>Notify</h3>" +
-                "<h4>Since version 10, backup storage has moved. See Filename from menu</h4>";
+                "<h4>As of version name 11, backup storage has moved. See Filename from menu</h4>";
         return htmlString;
     }
 
@@ -394,6 +401,8 @@ public class FileViewActivity extends AppCompatActivity
             int listCount = listAccounts.size();
 
             returnValue = listCount + " Items on Accounts backup file";
+//                    + " created " + format_mdy.format(file.lastModified());
+
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -412,9 +421,32 @@ public class FileViewActivity extends AppCompatActivity
                 + MainActivity.BACKUP_FILENAME);
 
 
-        String loc = "file://" + fileExternal.getAbsolutePath();
-        Log.d(TAG, "reportJson: " + loc);
-        webView.loadUrl(loc);
+        if (fileExternal.exists()) {
+            String loc = "file://" + fileExternal.getAbsolutePath();
+            Log.d(TAG, "reportJson: " + loc);
+            webView.loadUrl(loc);
+            return;
+        }
+
+
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setMessage("Unable to show export file. File has errors.");
+        alertDialogBuilder.setPositiveButton("ok",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface arg0, int arg1) {
+                    }
+                });
+//                .setNegativeButton("No",
+//                        new DialogInterface.OnClickListener() {
+//                            public void onClick(DialogInterface dialog, int which) {
+//                            }
+//                        });
+
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+
     }
 
 
@@ -470,13 +502,10 @@ public class FileViewActivity extends AppCompatActivity
                     Log.v(TAG, msgError);
                 }
 
+
+                new DownloadProfileAsyncTask(getApplicationContext(),
+                        file, adapter, progressBar, webView).execute();
             }
-
-
-
-            new DownloadProfileAsyncTask(getApplicationContext(),
-                    file, adapter, progressBar, webView).execute();
-
 //            JsonWriter writer = new JsonWriter(new FileWriter(file));
 //            writer.setIndent("  ");
 //            count = writeMessagesArray(writer);
@@ -507,24 +536,22 @@ public class FileViewActivity extends AppCompatActivity
 
     private void alertBackup(File file) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setMessage("Backup file exists. Are you sure, You wanted to write over it?");
+        alertDialogBuilder.setMessage("Backup file exists. Want to over-write it? Created: "
+        + format_mdy.format(file.lastModified()));
         alertDialogBuilder.setPositiveButton("yes",
                 new DialogInterface.OnClickListener() {
-                    @Override
                     public void onClick(DialogInterface arg0, int arg1) {
                         new DownloadProfileAsyncTask(getApplicationContext(),
                                 file, adapter, progressBar, webView).execute();
 
                         //                        Toast.makeText(getApplicationContext(), "You clicked yes button", Toast.LENGTH_LONG).show();
                     }
+                })
+                .setNegativeButton("No",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
                 });
-//        alertDialogBuilder.setNegativeButton("No",
-//                new DialogInterface.OnClickListener() {
-//                    Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        finish();
-//                    }
-//                });
 
 
         AlertDialog alertDialog = alertDialogBuilder.create();
@@ -536,13 +563,32 @@ public class FileViewActivity extends AppCompatActivity
         Log.d(TAG, "ImportAccountDB: starts");
 
         try {
-
             File dirStorage = getExternalFilesDir("passport");
             String storageFilename = dirStorage.getAbsolutePath() + "/" + MainActivity.BACKUP_FILENAME;
 
 //            Log.d(TAG, "call asyncTask");
-            new UploadProfileAsyncTask(getApplicationContext(),
-                    this.webView, this.progressBar).execute(storageFilename);
+//            new UploadProfileAsyncTask(getApplicationContext(),
+//                    this.webView, this.progressBar).execute(storageFilename);
+
+
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+            alertDialogBuilder.setMessage("Confirm Restore of backup file onto data DB");
+            alertDialogBuilder.setPositiveButton("yes",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface arg0, int arg1) {
+                            new UploadProfileAsyncTask(getApplicationContext(),
+                                    webView, progressBar).execute(storageFilename);
+                        }
+                    })
+                    .setNegativeButton("No",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                }
+                            });
+
+
+            AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.show();
 
         } catch (Exception e) {
             // TODO Auto-generated catch block
@@ -572,18 +618,22 @@ public class FileViewActivity extends AppCompatActivity
 
 
     private void showFilename() {
-        File fileExternal = new File(getExternalFilesDir(null) + "/passport/"
-                + MainActivity.BACKUP_FILENAME);
+        File fileExternal = new File(getExternalFilesDir("passport")
+                + "/" + MainActivity.BACKUP_FILENAME);
 
-        Log.d(TAG, "showFilename: " + Environment.getDataDirectory() + "/passport/" + MainActivity.BACKUP_FILENAME);
-        Log.d(TAG, "showFilename: " + getExternalFilesDir(null) + "/passport/" + MainActivity.BACKUP_FILENAME);
-        Log.d(TAG, "showFilename: " + getExternalFilesDir("passport/") + MainActivity.BACKUP_FILENAME);
+//        Log.d(TAG, "showFilename: " + Environment.getDataDirectory() + "/passport/" + MainActivity.BACKUP_FILENAME);
+//        Log.d(TAG, "showFilename: " + getExternalFilesDir(null) + "/passport/" + MainActivity.BACKUP_FILENAME);
+//        Log.d(TAG, "showFilename: " + getExternalFilesDir("passport/") + MainActivity.BACKUP_FILENAME);
+        String displayMsg = getExternalFilesDir("passport") + MainActivity.BACKUP_FILENAME;
+        if (fileExternal.exists()) {
+            displayMsg += " \ncreated " + format_mdy.format(fileExternal.lastModified());
+        }
         AppDialog dialog = new AppDialog();
         Bundle args = new Bundle();
         args.putInt(AppDialog.DIALOG_ID, AppDialog.DIALOG_ID_EXPORT_FILENAME);
         args.putInt(AppDialog.DIALOG_TYPE, AppDialog.DIALOG_OK);
         args.putString(AppDialog.DIALOG_MESSAGE, getString(R.string.confirmdiag_export_filename));
-        args.putString(AppDialog.DIALOG_SUB_MESSAGE, getExternalFilesDir(null) + "/passport/" + MainActivity.BACKUP_FILENAME);
+        args.putString(AppDialog.DIALOG_SUB_MESSAGE, displayMsg);
         args.putInt(AppDialog.DIALOG_POSITIVE_RID, R.string.ok);
 
         dialog.setArguments(args);

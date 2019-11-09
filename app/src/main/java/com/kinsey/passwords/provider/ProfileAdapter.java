@@ -39,7 +39,8 @@ public class ProfileAdapter extends ListAdapter<Profile, ProfileAdapter.ProfileH
 
         @Override
         public boolean areContentsTheSame(@NonNull Profile oldItem, @NonNull Profile newItem) {
-            return oldItem.getCorpName().equals(newItem.getCorpName());
+            return oldItem.getCorpName().equals(newItem.getCorpName()) &&
+                    oldItem.getOpenLong() == newItem.getOpenLong();
         }
     };
 
@@ -64,11 +65,11 @@ public class ProfileAdapter extends ListAdapter<Profile, ProfileAdapter.ProfileH
             holder.tvAcctId.setText(String.valueOf(currentProfile.getPassportId()));
         } else {
             if (MainActivity.listsortOrder == MainActivity.LISTSORT_OPEN_DATE) {
-                long lngActvDate = currentProfile.getOpenLong();
-                if (lngActvDate == 0) {
+                long lngOpenDate = currentProfile.getOpenLong();
+                if (lngOpenDate == 0) {
                     holder.tvAcctId.setText("");
                 } else {
-                    holder.tvAcctId.setText(format_mdy.format(lngActvDate));
+                    holder.tvAcctId.setText(format_mdy.format(lngOpenDate));
                 }
             } else {
                 if (MainActivity.listsortOrder == MainActivity.LISTSORT_CUSTOM_SORT) {

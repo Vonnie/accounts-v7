@@ -394,11 +394,13 @@ public class ProfileCustomFrag extends Fragment {
         for ( Profile item : currentList) {
             if (item.getSequence() == 0) {
                 blnReseq = true;
+                break;
             } else {
-                if (item.getSequence() == lastSeq + 1) {
-                    lastSeq += 1;
+                if (item.getSequence() > lastSeq) {
+                    lastSeq = item.getSequence();
                 } else {
                     blnReseq = true;
+                    break;
                 }
             }
         }
