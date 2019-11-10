@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.os.CountDownTimer;
+//import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +23,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.kinsey.passwords.items.Profile;
 import com.kinsey.passwords.provider.ProfileAdapter;
-import com.kinsey.passwords.provider.ProfileViewModel;
 
 import java.util.ArrayList;
 import java.util.List;

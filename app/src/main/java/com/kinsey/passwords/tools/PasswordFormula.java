@@ -1,7 +1,5 @@
 package com.kinsey.passwords.tools;
 
-import android.util.Log;
-
 import java.util.Locale;
 import java.util.Random;
 

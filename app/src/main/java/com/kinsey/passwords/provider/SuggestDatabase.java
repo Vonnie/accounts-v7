@@ -14,8 +14,6 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 import com.kinsey.passwords.items.Suggest;
 import com.kinsey.passwords.tools.Converters;
 
-import java.util.Date;
-
 @Database(entities = {Suggest.class}, version = 1, exportSchema = false)
 @TypeConverters(Converters.class)
 public abstract class SuggestDatabase extends RoomDatabase {

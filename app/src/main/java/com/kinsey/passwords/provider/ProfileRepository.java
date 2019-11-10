@@ -7,7 +7,6 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.kinsey.passwords.MainActivity;
 import com.kinsey.passwords.items.Profile;
 
 import java.util.List;
@@ -91,6 +90,10 @@ public class ProfileRepository {
     public LiveData<List<Profile>> getAllProfilesCustomSort() {
         allProfiles = profileDao.getAllProfilesCustomSort();
         return allProfiles;
+    }
+
+    public void deleteProfileById(int id) {
+        profileDao.deleteProfileId(id);
     }
 
     public LiveData<Profile> getMaxSequence() {

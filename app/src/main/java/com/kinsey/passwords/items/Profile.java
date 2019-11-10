@@ -6,8 +6,6 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
-import java.util.Date;
-
 //@Entity(tableName = "profile_detail")
 @Entity(tableName = "passport_detail")
 public class Profile {

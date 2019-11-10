@@ -12,7 +12,6 @@ import android.os.Bundle;
 
 import com.kinsey.passwords.items.Profile;
 import com.kinsey.passwords.provider.ProfileAdapter;
-import com.kinsey.passwords.tools.AppDialog;
 import com.kinsey.passwords.tools.ProfileJsonListIO;
 
 import androidx.annotation.Nullable;
@@ -34,7 +33,6 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Formatter;
 import java.util.List;
 import java.util.Locale;
@@ -42,8 +40,8 @@ import java.util.Locale;
 import static android.telephony.MbmsDownloadSession.RESULT_CANCELLED;
 import static androidx.core.content.FileProvider.getUriForFile;
 
-public class FileViewActivity extends AppCompatActivity
-        implements AppDialog.DialogEvents {
+public class FileViewActivity extends AppCompatActivity {
+//        implements AppDialog.DialogEvents {
     private static final String TAG = "FileViewActivity";
 
     private ProgressBar progressBar;
@@ -178,9 +176,9 @@ public class FileViewActivity extends AppCompatActivity
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
+        int id = item.getItemId();
         switch (id) {
 //            case R.id.action_settings:
 //                Log.d(TAG, "onOptionsItemSelected: ");
@@ -472,8 +470,9 @@ public class FileViewActivity extends AppCompatActivity
 
             if (file.exists()) {
                 Log.d(TAG, "ExportAccountDB: file exists " + file.getAbsoluteFile());
-                alertBackup(file, "Backup file exists. Want to over-write it? Created: "
-                        + format_mdy.format(file.lastModified()));
+                alertMsg("Backup Temporaruly Unavailable");
+//                alertBackup(file, "Backup file exists. Want to over-write it? Created: "
+//                        + format_mdy.format(file.lastModified()));
             } else {
 
 //                Log.d(TAG, "ExportAccountDB: file " + file.getAbsoluteFile());
@@ -505,7 +504,8 @@ public class FileViewActivity extends AppCompatActivity
                 }
 
 
-                alertBackup(file, "Confirm backup");
+//                alertBackup(file, "Confirm backup");
+                alertMsg("Backup Temporaruly Unavailable");
             }
 //            JsonWriter writer = new JsonWriter(new FileWriter(file));
 //            writer.setIndent("  ");
@@ -535,7 +535,35 @@ public class FileViewActivity extends AppCompatActivity
         }
     }
 
+    private void alertMsg(String msg) {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setMessage(msg);
+        alertDialogBuilder.setPositiveButton("ok",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface arg0, int arg1) {
+//                        new DownloadProfileAsyncTask(getApplicationContext(),
+//                                file, adapter, progressBar, webView).execute();
+//
+                        //                        Toast.makeText(getApplicationContext(), "You clicked yes button", Toast.LENGTH_LONG).show();
+                    }
+                });
+//                .setNegativeButton("No",
+//                        new DialogInterface.OnClickListener() {
+//                            public void onClick(DialogInterface dialog, int which) {
+//                            }
+//                        });
+
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+    }
+
     private void alertBackup(File file, String msg) {
+
+
+//        new DownloadProfileAsyncTask(getApplicationContext(),
+//                file, adapter, progressBar, webView).execute();
+
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setMessage(msg);
         alertDialogBuilder.setPositiveButton("yes",
@@ -570,25 +598,29 @@ public class FileViewActivity extends AppCompatActivity
 //            new UploadProfileAsyncTask(getApplicationContext(),
 //                    this.webView, this.progressBar).execute(storageFilename);
 
+//            new UploadProfileAsyncTask(getApplicationContext(),
+//                    webView, progressBar).execute(storageFilename);
 
-            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-            alertDialogBuilder.setMessage("Confirm Restore of backup file onto data DB");
-            alertDialogBuilder.setPositiveButton("yes",
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface arg0, int arg1) {
-                            new UploadProfileAsyncTask(getApplicationContext(),
-                                    webView, progressBar).execute(storageFilename);
-                        }
-                    })
-                    .setNegativeButton("No",
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                }
-                            });
+            alertMsg("Restore Temporaruly Unavailable");
 
-
-            AlertDialog alertDialog = alertDialogBuilder.create();
-            alertDialog.show();
+//            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+//            alertDialogBuilder.setMessage("Confirm Restore of backup file onto data DB");
+//            alertDialogBuilder.setPositiveButton("yes",
+//                    new DialogInterface.OnClickListener() {
+//                        public void onClick(DialogInterface arg0, int arg1) {
+//                            new UploadProfileAsyncTask(getApplicationContext(),
+//                                    webView, progressBar).execute(storageFilename);
+//                        }
+//                    })
+//                    .setNegativeButton("No",
+//                            new DialogInterface.OnClickListener() {
+//                                public void onClick(DialogInterface dialog, int which) {
+//                                }
+//                            });
+//
+//
+//            AlertDialog alertDialog = alertDialogBuilder.create();
+//            alertDialog.show();
 
         } catch (Exception e) {
             // TODO Auto-generated catch block
@@ -624,20 +656,44 @@ public class FileViewActivity extends AppCompatActivity
 //        Log.d(TAG, "showFilename: " + Environment.getDataDirectory() + "/passport/" + MainActivity.BACKUP_FILENAME);
 //        Log.d(TAG, "showFilename: " + getExternalFilesDir(null) + "/passport/" + MainActivity.BACKUP_FILENAME);
 //        Log.d(TAG, "showFilename: " + getExternalFilesDir("passport/") + MainActivity.BACKUP_FILENAME);
-        String displayMsg = getExternalFilesDir("passport") + MainActivity.BACKUP_FILENAME;
+        String displayMsg = getExternalFilesDir("passport") + "/" + MainActivity.BACKUP_FILENAME;
         if (fileExternal.exists()) {
             displayMsg += " \ncreated " + format_mdy.format(fileExternal.lastModified());
         }
-        AppDialog dialog = new AppDialog();
-        Bundle args = new Bundle();
-        args.putInt(AppDialog.DIALOG_ID, AppDialog.DIALOG_ID_EXPORT_FILENAME);
-        args.putInt(AppDialog.DIALOG_TYPE, AppDialog.DIALOG_OK);
-        args.putString(AppDialog.DIALOG_MESSAGE, getString(R.string.confirmdiag_export_filename));
-        args.putString(AppDialog.DIALOG_SUB_MESSAGE, displayMsg);
-        args.putInt(AppDialog.DIALOG_POSITIVE_RID, R.string.ok);
 
-        dialog.setArguments(args);
-        dialog.show(getSupportFragmentManager(), null);
+
+        android.app.AlertDialog.Builder alertDialogBuilder = new android.app.AlertDialog.Builder(this);
+        alertDialogBuilder.setMessage(displayMsg);
+        alertDialogBuilder.setPositiveButton("ok",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface arg0, int arg1) {
+//                        profileViewModel.delete(profile);
+                    }
+                });
+//                .setNegativeButton("No",
+//                        new DialogInterface.OnClickListener() {
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                refreshDeletePos(position);
+//                            }
+//                        });
+
+
+        android.app.AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+
+
+
+
+//        AppDialog dialog = new AppDialog();
+//        Bundle args = new Bundle();
+//        args.putInt(AppDialog.DIALOG_ID, AppDialog.DIALOG_ID_EXPORT_FILENAME);
+//        args.putInt(AppDialog.DIALOG_TYPE, AppDialog.DIALOG_OK);
+//        args.putString(AppDialog.DIALOG_MESSAGE, getString(R.string.confirmdiag_export_filename));
+//        args.putString(AppDialog.DIALOG_SUB_MESSAGE, displayMsg);
+//        args.putInt(AppDialog.DIALOG_POSITIVE_RID, R.string.ok);
+//
+//        dialog.setArguments(args);
+//        dialog.show(getSupportFragmentManager(), null);
 
     }
 
@@ -870,25 +926,25 @@ public class FileViewActivity extends AppCompatActivity
 //        return listAccounts;
 //    }
 
-    @Override
-    public void onPositiveDialogResult(int dialogId, Bundle args) {
-
-    }
-
-    @Override
-    public void onNegativeDialogResult(int dialogId, Bundle args) {
-
-    }
-
-    @Override
-    public void onActionRequestDialogResult(int dialogId, Bundle args, int which) {
-
-    }
-
-    @Override
-    public void onDialogCancelled(int dialogId) {
-
-    }
+//    @Override
+//    public void onPositiveDialogResult(int dialogId, Bundle args) {
+//
+//    }
+//
+//    @Override
+//    public void onNegativeDialogResult(int dialogId, Bundle args) {
+//
+//    }
+//
+//    @Override
+//    public void onActionRequestDialogResult(int dialogId, Bundle args, int which) {
+//
+//    }
+//
+//    @Override
+//    public void onDialogCancelled(int dialogId) {
+//
+//    }
 
 
     @Override

@@ -1,7 +1,6 @@
 package com.kinsey.passwords.provider;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MediatorLiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -9,11 +8,8 @@ import androidx.room.Query;
 import androidx.room.Update;
 
 import com.kinsey.passwords.items.Profile;
-import com.kinsey.passwords.items.Suggest;
 
 import java.util.List;
-
-import javax.sql.DataSource;
 
 @Dao
 public interface ProfileDao {
@@ -35,6 +31,9 @@ public interface ProfileDao {
 
     @Query("DELETE FROM passport_detail")
     void deleteAllProfiles();
+
+    @Query("DELETE FROM passport_detail where _id = :id")
+    void deleteProfileId(int id);
 
     @Query("SELECT * FROM passport_detail ORDER BY corporation_name COLLATE NOCASE ASC")
     LiveData<List<Profile>> getAllProfiles();

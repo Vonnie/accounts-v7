@@ -4,9 +4,7 @@ import android.util.JsonReader;
 import android.util.JsonToken;
 import android.util.JsonWriter;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.kinsey.passwords.MainActivity;
 import com.kinsey.passwords.items.Profile;
 
 import java.io.File;

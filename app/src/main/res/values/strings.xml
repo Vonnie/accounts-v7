@@ -69,7 +69,7 @@
     <string name="confirmdiag_add_negative_caption">No, not now</string>
     <string name="confirmdiag_add_positive_caption">Yes, add setup</string>
     <string name="confirmdiag_leave_app_warning_sub_message">Do you want to leave app.</string>
-    <string name="confirmdiag_export_filename">Export Filename</string>
+    <string name="confirmdiag_export_filename">Backup File Filename</string>
     <string name="confirmdiag_leave_positive_caption">Yes, leave app</string>
     <string name="confirmdiag_leave_negative_caption">No, continue with app</string>
     <string name="confirmdiag_leave_edit_warning_sub_message">Do you want to leave editing without applying changes.</string>

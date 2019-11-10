@@ -1,12 +1,8 @@
 package com.kinsey.passwords.tools;
 
-import android.provider.SyncStateContract;
 
 import androidx.room.TypeConverter;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Converters {

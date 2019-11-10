@@ -39,11 +39,10 @@
         <uses-library
             android:name='android.test.runner'
             android:required="false" />
-
         <activity
             android:name=".AboutActivity"
             android:label="@string/title_activity_about"
-            android:theme="@style/AppTheme.NoActionBar.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar.NoActionBar" />
         <activity
             android:name=".FileViewActivity"
             android:label="@string/title_activity_file_view"

@@ -1,9 +1,9 @@
 package com.kinsey.passwords;
 
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 
@@ -32,7 +32,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.kinsey.passwords.items.Profile;
 import com.kinsey.passwords.items.Suggest;
 import com.kinsey.passwords.provider.ProfileViewModel;
-import com.kinsey.passwords.tools.AppDialog;
 
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
@@ -48,8 +47,8 @@ public class MainActivity extends AppCompatActivity
         ProfileCorpNameFrag.OnProfileCorpNameClickListener,
         ProfilePassportIdFrag.OnProfilePassportIdClickListener,
         ProfileOpenDateFrag.OnProfileOpenDateClickListener,
-        ProfileCustomFrag.OnProfileCustomClickListener,
-        AppDialog.DialogEvents {
+        ProfileCustomFrag.OnProfileCustomClickListener {
+//        AppDialog.DialogEvents {
 //        DatePickerDialog.OnDateSetListener {
 
 //    AddEditActivityFragment.OnListenerClicked,
@@ -99,10 +98,10 @@ public class MainActivity extends AppCompatActivity
 
     public static final int ADD_PROFILE_REQUEST = 1;
     public static final int EDIT_PROFILE_REQUEST = 2;
-    public static final int REQUEST_ACCOUNTS_LIST = 3;
-    public static final int REQUEST_SUGGESTS_LIST = 4;
-    public static final int REQUEST_ACCOUNT_EDIT = 5;
-    public static final int REQUEST_ACCOUNT_SEARCH = 6;
+//    public static final int REQUEST_ACCOUNTS_LIST = 3;
+//    public static final int REQUEST_SUGGESTS_LIST = 4;
+//    public static final int REQUEST_ACCOUNT_EDIT = 5;
+//    public static final int REQUEST_ACCOUNT_SEARCH = 6;
     public static final int REQUEST_VIEW_EXPORT = 7;
 
     public static int accountSelectedPos = -1;
@@ -120,25 +119,25 @@ public class MainActivity extends AppCompatActivity
     public static int listsortOrder = LISTSORT_CORP_NAME;
 
     Menu menu;
-    MenuItem miActionProgressItem;
-    public static ProgressBar progressBar;
-    private Handler mHandler = new Handler();
-    Runnable mRunnable;
-    boolean isUserPaging = true;
+//    MenuItem miActionProgressItem;
+//    public static ProgressBar progressBar;
+//    private Handler mHandler = new Handler();
+//    Runnable mRunnable;
+//    boolean isUserPaging = true;
 //    private static Account account = new Account();
     private AlertDialog mDialog = null;
     private GregorianCalendar mCalendar;
-    private boolean appMsgSent = false;
-    private boolean isResumed = false;
-    private boolean conversionStarted = false;
+//    private boolean appMsgSent = false;
+//    private boolean isResumed = false;
+//    private boolean conversionStarted = false;
 
 //    private int accountMode = AccountsContract.ACCOUNT_ACTION_ADD;
 
     //    View addEditLayout;
 //    View addEditLayoutScroll;
-    View mainFragment;
-    View fragCorpName;
-    View fragCustom;
+//    View mainFragment;
+//    View fragCorpName;
+//    View fragCustom;
 
     RecyclerView recyclerView;
     public static ProfileViewModel profileViewModel;
@@ -230,7 +229,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        progressBar = findViewById(R.id.progressBar);
+//        progressBar = findViewById(R.id.progressBar);
 
 
 //        recyclerView = findViewById(R.id.recycler_view);
@@ -903,8 +902,8 @@ public class MainActivity extends AppCompatActivity
         FragmentTransaction transaction;
         FragmentManager fragmentManager;
         Fragment profileFragment;
-        int id = item.getItemId();
         //noinspection SimplifiableIfStatement
+        int id = item.getItemId();
         switch (id) {
 //            case R.id.menumain_add:
 ////                editAccountRequest(null);
@@ -1302,12 +1301,13 @@ public class MainActivity extends AppCompatActivity
 //
 //                break;
 
-            case android.R.id.home:
-
-                showConfirmationLeaveApp();
-
-                break;
-
+//        =====================================
+//            case android.R.id.home:
+//
+//                showConfirmationLeaveApp();
+//
+//                break;
+//          ========================================
 
 //                Log.d(TAG, "onOptionsItemSelected: home button pressed");
 //
@@ -2107,36 +2107,36 @@ public class MainActivity extends AppCompatActivity
 //
 //    }
 
-    private void confirmDeleteProfile(Profile profile, int position) {
-//        Log.d(TAG, "deleteAccount: ");
-//        if (account == null) {
-//            Toast.makeText(this,
-//                    "No Account selected to delete",
-//                    Toast.LENGTH_LONG).show();
-//            return;
-//        }
-//        if (accountSelectedPos == -1) {
-//            Toast.makeText(this,
-//                    "Must select an account to delete",
-//                    Toast.LENGTH_LONG).show();
-//            return;
-//        }
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        AppDialog newFragment = AppDialog.newInstance();
-        Bundle args = new Bundle();
-        args.putInt(AppDialog.DIALOG_ID, AppDialog.DIALOG_ID_CONFIRM_DELETE_PROFILE);
-        args.putInt(AppDialog.DIALOG_TYPE, AppDialog.DIALOG_YES_NO);
-        args.putString(AppDialog.DIALOG_MESSAGE, getString(R.string.deldiag_message));
-        args.putString(AppDialog.DIALOG_SUB_MESSAGE, getString(R.string.deldiag_sub_message, profile.getCorpName(), profile.getPassportId()));
-        args.putInt(AppDialog.DIALOG_ACCOUNT_ID, profile.getPassportId());
-        args.putInt(AppDialog.DIALOG_LIST_POSITION, position);
-        args.putInt(AppDialog.DIALOG_POSITIVE_RID, R.string.deldiag_positive_caption);
-
-        newFragment.setArguments(args);
-        newFragment.show(fragmentManager, "dialog");
-
-
-    }
+//    private void confirmDeleteProfile(Profile profile, int position) {
+////        Log.d(TAG, "deleteAccount: ");
+////        if (account == null) {
+////            Toast.makeText(this,
+////                    "No Account selected to delete",
+////                    Toast.LENGTH_LONG).show();
+////            return;
+////        }
+////        if (accountSelectedPos == -1) {
+////            Toast.makeText(this,
+////                    "Must select an account to delete",
+////                    Toast.LENGTH_LONG).show();
+////            return;
+////        }
+//        FragmentManager fragmentManager = getSupportFragmentManager();
+//        AppDialog newFragment = AppDialog.newInstance();
+//        Bundle args = new Bundle();
+//        args.putInt(AppDialog.DIALOG_ID, AppDialog.DIALOG_ID_CONFIRM_DELETE_PROFILE);
+//        args.putInt(AppDialog.DIALOG_TYPE, AppDialog.DIALOG_YES_NO);
+//        args.putString(AppDialog.DIALOG_MESSAGE, getString(R.string.deldiag_message));
+//        args.putString(AppDialog.DIALOG_SUB_MESSAGE, getString(R.string.deldiag_sub_message, profile.getCorpName(), profile.getPassportId()));
+//        args.putInt(AppDialog.DIALOG_ACCOUNT_ID, profile.getPassportId());
+//        args.putInt(AppDialog.DIALOG_LIST_POSITION, position);
+//        args.putInt(AppDialog.DIALOG_POSITIVE_RID, R.string.deldiag_positive_caption);
+//
+//        newFragment.setArguments(args);
+//        newFragment.show(fragmentManager, "dialog");
+//
+//
+//    }
 
 
 //    private void linkToInternet(String webpage) {
@@ -2159,39 +2159,39 @@ public class MainActivity extends AppCompatActivity
 //        }
 //    }
 
-    private void viewInternet(String webpage) {
-//        Bundle arguments = new Bundle();
-//        arguments.putString(WebViewActivity.class.getSimpleName(),
-//                webpage);
-//        WebViewActivityFragment fragment = new WebViewActivityFragment();
-//        fragment.setArguments(arguments);
-//        getSupportFragmentManager().beginTransaction()
-//                .add(R.id.content_account_list, fragment)
-//                .commit();
-//    }
-
-////            Uri uri = Uri.parse(account.getCorpWebsite());
-////            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-////            startActivity(intent);
-////            startActivityForResult(intent, AccountsContract.ACCOUNT_ACTION_WEBPAGE);
-
-        Log.d(TAG, "vewInternet: webpage " + webpage);
-        Uri uri = Uri.parse(webpage);
-        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-        startActivity(intent);
-//        if (intent.resolveActivity(getPackageManager()) != null) {
-//            startActivity(intent);
-//        }
-
-//        Intent detailIntent = new Intent(this, WebViewActivity.class);
-//        detailIntent.putExtra(WebViewActivity.class.getSimpleName(), account.getCorpWebsite());
-////                Log.d(TAG, "onClick: website " + account.getCorpWebsite());
-////                Log.d(TAG, "onClick: wv class " + WebViewActivity.class.getSimpleName());
-//        startActivityForResult(detailIntent, AccountsContract.ACCOUNT_ACTION_WEBPAGE);
-////            startActivity(detailIntent);
-    }
-//    }
+//    private void viewInternet(String webpage) {
+////        Bundle arguments = new Bundle();
+////        arguments.putString(WebViewActivity.class.getSimpleName(),
+////                webpage);
+////        WebViewActivityFragment fragment = new WebViewActivityFragment();
+////        fragment.setArguments(arguments);
+////        getSupportFragmentManager().beginTransaction()
+////                .add(R.id.content_account_list, fragment)
+////                .commit();
+////    }
 //
+//////            Uri uri = Uri.parse(account.getCorpWebsite());
+//////            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+//////            startActivity(intent);
+//////            startActivityForResult(intent, AccountsContract.ACCOUNT_ACTION_WEBPAGE);
+//
+//        Log.d(TAG, "vewInternet: webpage " + webpage);
+//        Uri uri = Uri.parse(webpage);
+//        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+//        startActivity(intent);
+////        if (intent.resolveActivity(getPackageManager()) != null) {
+////            startActivity(intent);
+////        }
+//
+////        Intent detailIntent = new Intent(this, WebViewActivity.class);
+////        detailIntent.putExtra(WebViewActivity.class.getSimpleName(), account.getCorpWebsite());
+//////                Log.d(TAG, "onClick: website " + account.getCorpWebsite());
+//////                Log.d(TAG, "onClick: wv class " + WebViewActivity.class.getSimpleName());
+////        startActivityForResult(detailIntent, AccountsContract.ACCOUNT_ACTION_WEBPAGE);
+//////            startActivity(detailIntent);
+//    }
+////    }
+////
 
 //
 //    List<Account> loadAccountsBySeq() {
@@ -2249,23 +2249,23 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    private void searchListRequest() {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-
-        AppDialog newFragment = AppDialog.newInstance();
-        Bundle args = new Bundle();
-        args.putInt(AppDialog.DIALOG_ID, AppDialog.DIALOG_ID_ASK_REFRESH_SEARCHDB);
-        args.putInt(AppDialog.DIALOG_TYPE, AppDialog.DIALOG_YES_NO);
-        args.putString(AppDialog.DIALOG_MESSAGE, getString(R.string.searchdiag_message));
-        args.putString(AppDialog.DIALOG_SUB_MESSAGE, getString(R.string.searchdiag_sub_message));
-        args.putInt(AppDialog.DIALOG_NEGATIVE_RID, R.string.searchdiag_negative_caption);
-        args.putInt(AppDialog.DIALOG_POSITIVE_RID, R.string.searchdiag_positive_caption);
-
-
-        Log.d(TAG, "searchListRequest: ask for db copy");
-        newFragment.setArguments(args);
-        newFragment.show(fragmentManager, "dialog");
-    }
+//    private void searchListRequest() {
+//        FragmentManager fragmentManager = getSupportFragmentManager();
+//
+//        AppDialog newFragment = AppDialog.newInstance();
+//        Bundle args = new Bundle();
+//        args.putInt(AppDialog.DIALOG_ID, AppDialog.DIALOG_ID_ASK_REFRESH_SEARCHDB);
+//        args.putInt(AppDialog.DIALOG_TYPE, AppDialog.DIALOG_YES_NO);
+//        args.putString(AppDialog.DIALOG_MESSAGE, getString(R.string.searchdiag_message));
+//        args.putString(AppDialog.DIALOG_SUB_MESSAGE, getString(R.string.searchdiag_sub_message));
+//        args.putInt(AppDialog.DIALOG_NEGATIVE_RID, R.string.searchdiag_negative_caption);
+//        args.putInt(AppDialog.DIALOG_POSITIVE_RID, R.string.searchdiag_positive_caption);
+//
+//
+//        Log.d(TAG, "searchListRequest: ask for db copy");
+//        newFragment.setArguments(args);
+//        newFragment.show(fragmentManager, "dialog");
+//    }
 
 //==========================================================================================
 //    obsolete edit request manipulate
@@ -2711,39 +2711,39 @@ public class MainActivity extends AppCompatActivity
                 profileViewModel.update(profile);
                 Toast.makeText(this, "Profile updated", Toast.LENGTH_SHORT).show();
             }
-            case REQUEST_ACCOUNTS_LIST: {
-
-                // Make sure the request was successful
-                if (resultCode == RESULT_OK) {
-//                    Log.d(TAG, "onActivityResult: success");
-                    int resultWhich = data.getIntExtra("which", 0);
-//                    Log.d(TAG, "onActivityResult: which " + resultWhich);
-//                    switch (resultWhich) {
-//                        case 1:
-//                            accountsListRequest(AccountsContract.ACCOUNT_LIST_BY_CORP_NAME);
-//                            break;
-//                        case 2:
-//                            accountsListRequest(AccountsContract.ACCOUNT_LIST_BY_OPEN_DATE);
-//                            break;
-//                        case 3:
-//                            accountsListRequest(AccountsContract.ACCOUNT_LIST_BY_SEQUENCE);
-//                            break;
-//                        case 4:
-//                            accountsListRequest(AccountsContract.ACCOUNT_LIST_BY_PASSPORT_ID);
-//                            break;
-//                        case 8:
-//                            suggestsListRequest();
-//                            break;
-//                        default:
-//                            break;
-//                    }
-                    // The user picked a contact.
-                    // The Intent's data Uri identifies which contact was selected.
-
-                    // Do something with the contact here (bigger example below)
-                }
-                break;
-            }
+//            case REQUEST_ACCOUNTS_LIST: {
+//
+//                // Make sure the request was successful
+//                if (resultCode == RESULT_OK) {
+////                    Log.d(TAG, "onActivityResult: success");
+//                    int resultWhich = data.getIntExtra("which", 0);
+////                    Log.d(TAG, "onActivityResult: which " + resultWhich);
+////                    switch (resultWhich) {
+////                        case 1:
+////                            accountsListRequest(AccountsContract.ACCOUNT_LIST_BY_CORP_NAME);
+////                            break;
+////                        case 2:
+////                            accountsListRequest(AccountsContract.ACCOUNT_LIST_BY_OPEN_DATE);
+////                            break;
+////                        case 3:
+////                            accountsListRequest(AccountsContract.ACCOUNT_LIST_BY_SEQUENCE);
+////                            break;
+////                        case 4:
+////                            accountsListRequest(AccountsContract.ACCOUNT_LIST_BY_PASSPORT_ID);
+////                            break;
+////                        case 8:
+////                            suggestsListRequest();
+////                            break;
+////                        default:
+////                            break;
+////                    }
+//                    // The user picked a contact.
+//                    // The Intent's data Uri identifies which contact was selected.
+//
+//                    // Do something with the contact here (bigger example below)
+//                }
+//                break;
+//            }
 //            case REQUEST_SUGGESTS_LIST:
 //                if (resultCode == RESULT_OK) {
 //                    String result = data.getStringExtra("result");
@@ -3045,168 +3045,173 @@ public class MainActivity extends AppCompatActivity
 //        newFragment.show(fragmentManager, "dialog");
 //    }
 
-    @Override
-    public void onActionRequestDialogResult(int dialogId, Bundle args, int which) {
-//        Log.d(TAG, "onActionRequestDialogResult: starts which " + which);
-//        switch (which) {
-//            case 0:
+//    @Override
+//    public void onActionRequestDialogResult(int dialogId, Bundle args, int which) {
+////        Log.d(TAG, "onActionRequestDialogResult: starts which " + which);
+////        switch (which) {
+////            case 0:
+////                break;
+////            case 1:
+////            case 2:
+////            case 4:
+////                break;
+////            default:
+////        }
+//
+//    }
+
+//    @Override
+//    public void onPositiveDialogResult(int dialogId, Bundle args) {
+////        AccountListActivityFragment listFragment;
+//
+//        switch (dialogId) {
+//
+////            case AppDialog.DIALOG_ID_ASK_REFRESH_SEARCHDB:
+////
+////                Log.d(TAG, "onPositiveDialogResult: request to rebuild search");
+////                loadSearchDB();
+////
+////
+//////                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+//////                sharedPreferences.edit().putString(SELECTION_QUERY, "").apply();
+//////
+//////                listFragment = (AccountListActivityFragment)
+//////                        getSupportFragmentManager().findFragmentById(R.id.fragment);
+//////                listFragment.setQuery("");
+//////
+//////                Toast.makeText(this, "Long click on item for more options", Toast.LENGTH_LONG).show();
+////
+////                //                Intent detailIntent = new Intent(this, SearchActivityV1.class);
+//////                detailIntent.putExtra(SearchActivityV1.class.getSimpleName(), true);
+//////                startActivity(detailIntent);
+////                break;
+//            case AppDialog.DIALOG_ID_LEAVE_APP:
+//                finish();
 //                break;
-//            case 1:
-//            case 2:
-//            case 4:
+////            case AppDialog.DIALOG_ID_CANCEL_EDIT:
+////            case AppDialog.DIALOG_ID_CANCEL_EDIT_UP:
+////                // If we're editing, remove the fragment. Otherwise, close the app
+////                FragmentManager fragmentManager = getSupportFragmentManager();
+////                Fragment editFragment = fragmentManager.findFragmentById(R.id.task_details_container);
+////                if (editFragment != null) {
+////                    // we were not editing
+////                    getSupportFragmentManager().beginTransaction()
+////                            .remove(editFragment)
+////                            .commit();
+////                    if (isLandscape) {
+//////                        Log.d(TAG, "onPositiveDialogResult: get list");
+//////                        listFragment = (AccountListActivityFragment)
+//////                                getSupportFragmentManager().findFragmentById(R.id.fragment);
+//////                        listFragment.resetSelectItem();
+////                    } else {
+////                        // hide the edit container in single pane mode
+////                        // and make sure the left-hand container is visible
+////                        View addEditLayout = findViewById(R.id.task_details_container);
+////                        View addEditLayoutScroll = findViewById(R.id.task_details_container_scroll);
+////                        View mainFragment = findViewById(R.id.fragment);
+////                        // We're just removed the editing fragment, so hide the frame
+////                        addEditLayout.setVisibility(View.GONE);
+////                        addEditLayoutScroll.setVisibility(View.GONE);
+//////                        setMenuItemVisible(R.id.menuacct_save, false);
+////
+////                        // and make sure the MainActivityFragment is visible
+////                        mainFragment.setVisibility(View.VISIBLE);
+////
+////
+////                    }
+////                } else {
+////                    // not editing, so quit regardless of orientation
+////                    finish();
+////                }
+////                break;
+////            case AppDialog.DIALOG_ID_CONFIRM_DELETE_ACCOUNT:
+////                int acctId = args.getInt(AppDialog.DIALOG_ACCOUNT_ID);
+////                if (BuildConfig.DEBUG && acctId == 0)
+////                    throw new AssertionError("Account Id is zero");
+////                Log.d(TAG, "onPositiveDialogResult: ready to delete " + acctId);
+////                deleteAccount(acctId);
+////                break;
+//
+////            case AppDialog.DIALOG_ID_CONFIRM_DELETE_PROFILE:
+////                int profileId = args.getInt(AppDialog.DIALOG_ACCOUNT_ID);
+////                int position = args.getInt(AppDialog.DIALOG_LIST_POSITION);
+////                fragDelete(profileId);
+////                break;
+//
+//                //            case AppDialog.DIALOG_ID_CONFIRM_ADD_ACCOUNT:
+////                acctEditRequest(-1);
+////                break;
+//            case AppDialog.DIALOG_ID_EDITS_APPLIED:
 //                break;
-//            default:
 //        }
+//    }
 
-    }
 
-    @Override
-    public void onPositiveDialogResult(int dialogId, Bundle args) {
-//        AccountListActivityFragment listFragment;
+//    private void fragDelete(Profile profile) {
+//        Log.d(TAG, "fragDelete function");
+//        FragmentManager fragmentManager = getSupportFragmentManager();
+//        String stringFragmentName = fragmentManager.findFragmentById(R.id.fragment_container).getClass().getSimpleName();
+//
+//        Log.d(TAG, stringFragmentName);
+//        Fragment profileFragment = fragmentManager.findFragmentById(R.id.fragment_container);
+//        switch (stringFragmentName) {
+//            case "ProfileCorpNameFrag":
+////                ((ProfileCorpNameFrag) profileFragment).deleteFromList(profileId);
+//                profileViewModel.delete(profile);
+//                Log.d(TAG, "delete id " + profile.getId());
+//                break;
+//            case "ProfileOpenDateFrag":
+//                ((ProfileOpenDateFrag) profileFragment).deleteFromList(profileId);
+//                break;
+//            case "ProfilePassportIdFrag":
+//                ((ProfilePassportIdFrag) profileFragment).deleteFromList(profileId);
+//                break;
+//            case "ProfileCustomFrag":
+//                ((ProfileCustomFrag) profileFragment).deleteFromList(profileId);
+//                break;
+//        }
+//
+//    }
 
-        switch (dialogId) {
-
+//    @Override
+//    public void onNegativeDialogResult(int dialogId, Bundle args) {
+//        switch (dialogId) {
+//
 //            case AppDialog.DIALOG_ID_ASK_REFRESH_SEARCHDB:
 //
-//                Log.d(TAG, "onPositiveDialogResult: request to rebuild search");
-//                loadSearchDB();
-//
-//
 ////                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-////                sharedPreferences.edit().putString(SELECTION_QUERY, "").apply();
+////                String queryResult = sharedPreferences.getString(SELECTION_QUERY, "");
 ////
-////                listFragment = (AccountListActivityFragment)
+////                Log.d(TAG, "sharedPreferences: return a value " + queryResult);
+////
+////                AccountListActivityFragment listFragment = (AccountListActivityFragment)
 ////                        getSupportFragmentManager().findFragmentById(R.id.fragment);
-////                listFragment.setQuery("");
+////                listFragment.setQuery(queryResult);
 ////
-////                Toast.makeText(this, "Long click on item for more options", Toast.LENGTH_LONG).show();
+////
+////                if (queryResult.equals("")) {
+////                    Toast.makeText(this, "Long click on item for more options", Toast.LENGTH_LONG).show();
+////                } else {
+////                    Toast.makeText(this, "List from search on " + queryResult, Toast.LENGTH_LONG).show();
+////                }
 //
 //                //                Intent detailIntent = new Intent(this, SearchActivityV1.class);
-////                detailIntent.putExtra(SearchActivityV1.class.getSimpleName(), true);
+////        detailIntent.putExtra(SearchActivityV1.class.getSimpleName(), false);
 ////                startActivity(detailIntent);
 //                break;
-            case AppDialog.DIALOG_ID_LEAVE_APP:
-                finish();
-                break;
+//            case AppDialog.DIALOG_ID_LEAVE_APP:
 //            case AppDialog.DIALOG_ID_CANCEL_EDIT:
 //            case AppDialog.DIALOG_ID_CANCEL_EDIT_UP:
-//                // If we're editing, remove the fragment. Otherwise, close the app
-//                FragmentManager fragmentManager = getSupportFragmentManager();
-//                Fragment editFragment = fragmentManager.findFragmentById(R.id.task_details_container);
-//                if (editFragment != null) {
-//                    // we were not editing
-//                    getSupportFragmentManager().beginTransaction()
-//                            .remove(editFragment)
-//                            .commit();
-//                    if (isLandscape) {
-////                        Log.d(TAG, "onPositiveDialogResult: get list");
-////                        listFragment = (AccountListActivityFragment)
-////                                getSupportFragmentManager().findFragmentById(R.id.fragment);
-////                        listFragment.resetSelectItem();
-//                    } else {
-//                        // hide the edit container in single pane mode
-//                        // and make sure the left-hand container is visible
-//                        View addEditLayout = findViewById(R.id.task_details_container);
-//                        View addEditLayoutScroll = findViewById(R.id.task_details_container_scroll);
-//                        View mainFragment = findViewById(R.id.fragment);
-//                        // We're just removed the editing fragment, so hide the frame
-//                        addEditLayout.setVisibility(View.GONE);
-//                        addEditLayoutScroll.setVisibility(View.GONE);
-////                        setMenuItemVisible(R.id.menuacct_save, false);
-//
-//                        // and make sure the MainActivityFragment is visible
-//                        mainFragment.setVisibility(View.VISIBLE);
-//
-//
-//                    }
-//                } else {
-//                    // not editing, so quit regardless of orientation
-//                    finish();
-//                }
-//                break;
-//            case AppDialog.DIALOG_ID_CONFIRM_DELETE_ACCOUNT:
-//                int acctId = args.getInt(AppDialog.DIALOG_ACCOUNT_ID);
-//                if (BuildConfig.DEBUG && acctId == 0)
-//                    throw new AssertionError("Account Id is zero");
-//                Log.d(TAG, "onPositiveDialogResult: ready to delete " + acctId);
-//                deleteAccount(acctId);
-//                break;
-            case AppDialog.DIALOG_ID_CONFIRM_DELETE_PROFILE:
-                int profileId = args.getInt(AppDialog.DIALOG_ACCOUNT_ID);
-                int position = args.getInt(AppDialog.DIALOG_LIST_POSITION);
-                fragDelete(profileId);
-                break;
 //            case AppDialog.DIALOG_ID_CONFIRM_ADD_ACCOUNT:
-//                acctEditRequest(-1);
 //                break;
-            case AppDialog.DIALOG_ID_EDITS_APPLIED:
-                break;
-        }
-    }
-
-
-    private void fragDelete(int profileId) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        String stringFragmentName = fragmentManager.findFragmentById(R.id.fragment_container).getClass().getSimpleName();
-
-        Log.d(TAG, stringFragmentName);
-        Fragment profileFragment = fragmentManager.findFragmentById(R.id.fragment_container);
-        switch (stringFragmentName) {
-            case "ProfileCorpNameFrag":
-                ((ProfileCorpNameFrag) profileFragment).deleteFromList(profileId);
-                break;
-            case "ProfileOpenDateFrag":
-                ((ProfileOpenDateFrag) profileFragment).deleteFromList(profileId);
-                break;
-            case "ProfilePassportIdFrag":
-                ((ProfilePassportIdFrag) profileFragment).deleteFromList(profileId);
-                break;
-            case "ProfileCustomFrag":
-                ((ProfileCustomFrag) profileFragment).deleteFromList(profileId);
-                break;
-        }
-
-    }
-
-    @Override
-    public void onNegativeDialogResult(int dialogId, Bundle args) {
-        switch (dialogId) {
-
-            case AppDialog.DIALOG_ID_ASK_REFRESH_SEARCHDB:
-
-//                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-//                String queryResult = sharedPreferences.getString(SELECTION_QUERY, "");
+////            case AppDialog.DIALOG_ID_CONFIRM_DELETE_PROFILE:
+////                int position = args.getInt(AppDialog.DIALOG_LIST_POSITION);
+////                refreshDeletePos(position);
+//////                adapter.notifyDataSetChanged();
+////                break;
+//        }
 //
-//                Log.d(TAG, "sharedPreferences: return a value " + queryResult);
-//
-//                AccountListActivityFragment listFragment = (AccountListActivityFragment)
-//                        getSupportFragmentManager().findFragmentById(R.id.fragment);
-//                listFragment.setQuery(queryResult);
-//
-//
-//                if (queryResult.equals("")) {
-//                    Toast.makeText(this, "Long click on item for more options", Toast.LENGTH_LONG).show();
-//                } else {
-//                    Toast.makeText(this, "List from search on " + queryResult, Toast.LENGTH_LONG).show();
-//                }
-
-                //                Intent detailIntent = new Intent(this, SearchActivityV1.class);
-//        detailIntent.putExtra(SearchActivityV1.class.getSimpleName(), false);
-//                startActivity(detailIntent);
-                break;
-            case AppDialog.DIALOG_ID_LEAVE_APP:
-            case AppDialog.DIALOG_ID_CANCEL_EDIT:
-            case AppDialog.DIALOG_ID_CANCEL_EDIT_UP:
-            case AppDialog.DIALOG_ID_CONFIRM_ADD_ACCOUNT:
-                break;
-            case AppDialog.DIALOG_ID_CONFIRM_DELETE_PROFILE:
-                int position = args.getInt(AppDialog.DIALOG_LIST_POSITION);
-                refreshDeletePos(position);
-//                adapter.notifyDataSetChanged();
-                break;
-        }
-
-    }
+//    }
 
     private void refreshDeletePos(int position) {
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -3261,10 +3266,10 @@ public class MainActivity extends AppCompatActivity
 ////        searchListRequest();
 //    }
 
-    @Override
-    public void onDialogCancelled(int dialogId) {
-
-    }
+//    @Override
+//    public void onDialogCancelled(int dialogId) {
+//
+//    }
 
 
 //    private class DownloadData extends AsyncTask<String, Void, String> {
@@ -3515,20 +3520,20 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private void showConfirmationLeaveApp() {
-        AppDialog dialog = new AppDialog();
-        Bundle args = new Bundle();
-        args.putInt(AppDialog.DIALOG_ID, AppDialog.DIALOG_ID_LEAVE_APP);
-        args.putInt(AppDialog.DIALOG_TYPE, AppDialog.DIALOG_YES_NO);
-        args.putString(AppDialog.DIALOG_MESSAGE, getString(R.string.confirmdiag_leave_warning));
-        args.putString(AppDialog.DIALOG_SUB_MESSAGE, getString(R.string.confirmdiag_leave_app_warning_sub_message));
-        args.putInt(AppDialog.DIALOG_NEGATIVE_RID, R.string.confirmdiag_leave_negative_caption);
-        args.putInt(AppDialog.DIALOG_POSITIVE_RID, R.string.confirmdiag_leave_positive_caption);
-
-        dialog.setArguments(args);
-        dialog.show(getSupportFragmentManager(), null);
-
-    }
+//    private void showConfirmationLeaveApp() {
+//        AppDialog dialog = new AppDialog();
+//        Bundle args = new Bundle();
+//        args.putInt(AppDialog.DIALOG_ID, AppDialog.DIALOG_ID_LEAVE_APP);
+//        args.putInt(AppDialog.DIALOG_TYPE, AppDialog.DIALOG_YES_NO);
+//        args.putString(AppDialog.DIALOG_MESSAGE, getString(R.string.confirmdiag_leave_warning));
+//        args.putString(AppDialog.DIALOG_SUB_MESSAGE, getString(R.string.confirmdiag_leave_app_warning_sub_message));
+//        args.putInt(AppDialog.DIALOG_NEGATIVE_RID, R.string.confirmdiag_leave_negative_caption);
+//        args.putInt(AppDialog.DIALOG_POSITIVE_RID, R.string.confirmdiag_leave_positive_caption);
+//
+//        dialog.setArguments(args);
+//        dialog.show(getSupportFragmentManager(), null);
+//
+//    }
 
 //    private void showConfirmationDialog(int dialogId) {
 //        AppDialog dialog = new AppDialog();
@@ -3603,25 +3608,50 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onDeleteConfirmCustom(Profile profile, int position) {
-        confirmDeleteProfile(profile, position );
+        alertConfirmDelete(profile, position );
     }
 
     @Override
     public void onDeleteConfirmCorpName(Profile profile, int position) {
-        confirmDeleteProfile(profile, position);
+        alertConfirmDelete(profile, position);
     }
 
     @Override
     public void onDeleteConfirmOpenDate(Profile profile, int position) {
-        confirmDeleteProfile(profile, position);
+        alertConfirmDelete(profile, position);
     }
 
     @Override
     public void onDeleteConfirmPassportId(Profile profile, int position) {
-        confirmDeleteProfile(profile, position);
+        alertConfirmDelete(profile, position);
     }
 
 
+    private void alertConfirmDelete(Profile profile, int position) {
+        android.app.AlertDialog.Builder alertDialogBuilder = new android.app.AlertDialog.Builder(this);
+        alertDialogBuilder.setMessage("Delete Account\n" +
+                profile.getCorpName() +
+                "\nAcctId: " + profile.getPassportId());
+        alertDialogBuilder.setPositiveButton("yes",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        profileViewModel.delete(profile);
+//                        fragDelete(profile);
+//                        Log.d(TAG, "delete request " + profile.getId());
+                    }
+                })
+                .setNegativeButton("No",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                refreshDeletePos(position);
+                            }
+                        });
+
+
+        android.app.AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+
+    }
 
     private void startUpProfileUpdate(Profile profile) {
         Intent intent = new Intent(this, AddEditProfileActivity.class);
