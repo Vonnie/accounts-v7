@@ -470,9 +470,9 @@ public class FileViewActivity extends AppCompatActivity {
 
             if (file.exists()) {
                 Log.d(TAG, "ExportAccountDB: file exists " + file.getAbsoluteFile());
-                alertMsg("Backup Temporaruly Unavailable");
-//                alertBackup(file, "Backup file exists. Want to over-write it? Created: "
-//                        + format_mdy.format(file.lastModified()));
+//                alertMsg("Backup Temporaruly Unavailable");
+                alertBackup(file, "Backup file exists. Want to over-write it? Created: "
+                        + format_mdy.format(file.lastModified()));
             } else {
 
 //                Log.d(TAG, "ExportAccountDB: file " + file.getAbsoluteFile());
@@ -504,8 +504,8 @@ public class FileViewActivity extends AppCompatActivity {
                 }
 
 
-//                alertBackup(file, "Confirm backup");
-                alertMsg("Backup Temporaruly Unavailable");
+                alertBackup(file, "Confirm backup");
+//                alertMsg("Backup Temporaruly Unavailable");
             }
 //            JsonWriter writer = new JsonWriter(new FileWriter(file));
 //            writer.setIndent("  ");
@@ -601,26 +601,26 @@ public class FileViewActivity extends AppCompatActivity {
 //            new UploadProfileAsyncTask(getApplicationContext(),
 //                    webView, progressBar).execute(storageFilename);
 
-            alertMsg("Restore Temporaruly Unavailable");
+//            alertMsg("Restore Temporaruly Unavailable");
 
-//            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-//            alertDialogBuilder.setMessage("Confirm Restore of backup file onto data DB");
-//            alertDialogBuilder.setPositiveButton("yes",
-//                    new DialogInterface.OnClickListener() {
-//                        public void onClick(DialogInterface arg0, int arg1) {
-//                            new UploadProfileAsyncTask(getApplicationContext(),
-//                                    webView, progressBar).execute(storageFilename);
-//                        }
-//                    })
-//                    .setNegativeButton("No",
-//                            new DialogInterface.OnClickListener() {
-//                                public void onClick(DialogInterface dialog, int which) {
-//                                }
-//                            });
-//
-//
-//            AlertDialog alertDialog = alertDialogBuilder.create();
-//            alertDialog.show();
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+            alertDialogBuilder.setMessage("Confirm Restore of backup file onto data DB");
+            alertDialogBuilder.setPositiveButton("yes",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface arg0, int arg1) {
+                            new UploadProfileAsyncTask(getApplicationContext(),
+                                    webView, progressBar).execute(storageFilename);
+                        }
+                    })
+                    .setNegativeButton("No",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                }
+                            });
+
+
+            AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.show();
 
         } catch (Exception e) {
             // TODO Auto-generated catch block
@@ -1128,14 +1128,16 @@ public class FileViewActivity extends AppCompatActivity {
 
                 Log.d(TAG, "run: upload size " + count);
 
-                StringBuilder sb = new StringBuilder();
-                Formatter formatter = new Formatter(sb, Locale.US);
+//                StringBuilder sb = new StringBuilder();
+//                Formatter formatter = new Formatter(sb, Locale.US);
+//
+//                publishProgress(formatter.format("<h2>%3d Account Profiles Download to backup file</h2>" +
+//                                "<h3>See menu for export filename</h3>" +
+//                                "<h3>See menu to view exported file</h3>",
+//                        count).toString());
 
-                publishProgress(formatter.format("<h2>%3d Account Profiles Download to backup file</h2>" +
-                                "<h3>See menu for export filename</h3>" +
-                                "<h3>See menu to view exported file</h3>",
-                        count).toString());
-//            } catch (IOException e1) {
+
+                //            } catch (IOException e1) {
 //                msgError = "jsonFile Error: " + e1.getMessage();
 //                Log.e(TAG, "ExportAccountDB error: " + e1.getMessage());
 ////                    fvFragment.setInfoMessage("Exported directory not exists");
@@ -1171,7 +1173,9 @@ public class FileViewActivity extends AppCompatActivity {
             StringBuilder sb = new StringBuilder();
             Formatter formatter = new Formatter(sb, Locale.US);
 
-            String msgDisplay = formatter.format("<h2>%3d Account Profiles onto Backup file</h2>",
+            String msgDisplay = formatter.format("<h2>%3d Account Profiles onto Backup file</h2>" +
+                                "<h3>See filename thru menu item 'Filename'</h3>" +
+                                "<h3>View backup data thru menu item 'Show Backup File'</h3>",
                     count).toString();
 
             this.webView.loadData(msgDisplay, "text/html", null);
