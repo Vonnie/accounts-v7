@@ -17,12 +17,6 @@
         <!--        android:iconTintMode="#437380"-->
         <menu>
             <item
-                android:id="@+id/vw_filename"
-                android:icon="@drawable/ic_insert_drive_file_black"
-                android:orderInCategory="101"
-                android:title="@string/menuvw_show_filename"
-                app:showAsAction="ifRoom" />
-            <item
                 android:id="@+id/vw_export"
                 android:icon="@drawable/ic_file_download_black"
                 android:orderInCategory="102"
@@ -35,15 +29,21 @@
                 android:title="@string/menuvw_retore"
                 app:showAsAction="ifRoom" />
             <item
+                android:id="@+id/vw_filename"
+                android:icon="@drawable/ic_insert_drive_file_black"
+                android:orderInCategory="104"
+                android:title="@string/menuvw_show_filename"
+                app:showAsAction="ifRoom" />
+            <item
                 android:id="@+id/vw_show_file"
                 android:icon="@drawable/ic_format_align_justify_black"
-                android:orderInCategory="104"
+                android:orderInCategory="105"
                 android:title="@string/menuvw_show_file"
                 app:showAsAction="never" />
             <item
                 android:id="@+id/vw_shared"
                 android:icon="@drawable/ic_share_black"
-                android:orderInCategory="105"
+                android:orderInCategory="106"
                 android:title="@string/menuvw_share"
                 app:actionProviderClass="androidx.appcompat.widget.ShareActionProvider"
                 app:showAsAction="never" />
