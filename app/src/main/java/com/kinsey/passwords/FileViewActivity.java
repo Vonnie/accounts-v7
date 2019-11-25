@@ -1,5 +1,6 @@
 package com.kinsey.passwords;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -10,6 +11,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
+import com.google.android.material.textfield.TextInputLayout;
 import com.kinsey.passwords.items.Profile;
 import com.kinsey.passwords.provider.ProfileAdapter;
 import com.kinsey.passwords.tools.ProfileJsonListIO;
@@ -26,6 +28,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -37,7 +40,6 @@ import java.util.Formatter;
 import java.util.List;
 import java.util.Locale;
 
-import static android.telephony.MbmsDownloadSession.RESULT_CANCELLED;
 import static androidx.core.content.FileProvider.getUriForFile;
 
 public class FileViewActivity extends AppCompatActivity {
@@ -205,7 +207,7 @@ public class FileViewActivity extends AppCompatActivity {
                 break;
 
             case R.id.vw_shared:
-                composeEmail();
+                email_Dialog();
 //                shareExport();
                 Log.d(TAG, "onOptionsItemSelected: View share");
                 break;
@@ -558,6 +560,54 @@ public class FileViewActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
+
+    public void email_Dialog() {
+
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(FileViewActivity.this);
+
+        //  Inflate the Layout Resource file you created in Step 1
+        View mView = getLayoutInflater().inflate(R.layout.content_share_email, null);
+
+        //  Get View elements from Layout file. Be sure to include inflated view name (mView)
+        TextInputLayout textInputEmail = (TextInputLayout) mView.findViewById(R.id.text_input_email);
+        Button btnOk = (Button) mView.findViewById(R.id.btn_ok);
+        Button btnCancel = (Button) mView.findViewById(R.id.btn_cancel);
+
+        //  Create the AlertDialog using everything we needed from above
+        mBuilder.setView(mView);
+        final AlertDialog emailDialog = mBuilder.create();
+
+        //  Set Listener for the OK Button
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick (View view) {
+                String strEmail = textInputEmail.getEditText().getText().toString().trim();
+
+                if (!strEmail.isEmpty()) {
+                    composeEmail(strEmail);
+                    emailDialog.dismiss();
+//                    Toast.makeText(FileViewActivity.this, "You entered a Value!,", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(FileViewActivity.this, "Please enter an Email!", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        //  Set Listener for the CANCEL Button
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick (View view) {
+                emailDialog.dismiss();
+            }
+        });
+
+        //  Finally, SHOW your Dialog!
+        emailDialog.show();
+
+
+        //  END OF buttonClick_DialogTest
+    }
+
     private void alertBackup(File file, String msg) {
 
 
@@ -698,7 +748,7 @@ public class FileViewActivity extends AppCompatActivity {
     }
 
 
-    public void composeEmail() {
+    public void composeEmail(String email) {
 
         File dirStorage = getExternalFilesDir("passport/");
         File file = new File(dirStorage, MainActivity.BACKUP_FILENAME);
@@ -709,8 +759,9 @@ public class FileViewActivity extends AppCompatActivity {
             return;
         }
 
-        String[] addresses = {"vonniekinsey@gmail.com"};
-        String subject = "You Account Json";
+//        String[] addresses = {"vonniekinsey@gmail.com"};
+        String[] addresses = {email};
+        String subject = "Account Backup Json";
 //        Uri uri = Uri.fromFile(file);
 //        Uri uri = Uri.parse(file.getAbsolutePath());
 //        FileProvider fp = new FileProvider();
@@ -724,10 +775,12 @@ public class FileViewActivity extends AppCompatActivity {
 //        intent.setType("message/rfc822")
 //        intent.setType("text/json");
         intent.setType("application/octet-stream");
+//        intent.addFlags(FLAG_GRANT_READ_URI_PERMISSION | FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
         intent.putExtra(Intent.EXTRA_EMAIL, addresses);
         intent.putExtra(Intent.EXTRA_SUBJECT, subject);
         intent.putExtra(Intent.EXTRA_STREAM, uri);
         intent.putExtra(Intent.EXTRA_TEXT, "Keep Accounts backup in secure place for any future restores.");
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         try {
             startActivityForResult(intent.createChooser(intent, "Share accounts data"),
                     BACKUP_FILE_REQUESTED);
@@ -956,7 +1009,7 @@ public class FileViewActivity extends AppCompatActivity {
                 // success
                 Log.d(TAG, "file share was successful");
             }
-            else if (resultCode == RESULT_CANCELLED) {
+            else if (resultCode == Activity.RESULT_CANCELED) {
                 // cancelled
                 Log.d(TAG, "file share cancelled");
             }

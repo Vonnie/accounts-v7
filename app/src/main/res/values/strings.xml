@@ -199,5 +199,6 @@
     <string name="empty_list_subtitle">Select \'Add an account\' from menu</string>
     <string name="link_to_string_acct_show_website">Link to @string/acct_show_website</string>
     <string name="descr_save">Save account</string>
+    <string name="hint_email">Enter Email</string>
 
 </resources>
