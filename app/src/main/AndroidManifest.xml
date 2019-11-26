@@ -36,6 +36,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
         android:usesCleartextTraffic="true" >
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-6558779133930297~1798893524"/>
         <uses-library
             android:name='android.test.runner'
             android:required="false" />

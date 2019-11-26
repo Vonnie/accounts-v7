@@ -11,9 +11,11 @@
     <!--    tools:layout_editor_absoluteY="25dp">-->
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:theme="@style/AppTheme.AppBarOverlay"
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
@@ -24,20 +26,23 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view"
+    <include
+        layout="@layout/content_suggest_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:listitem="@layout/suggest_item" />
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/button_add_suggest"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_add_white"
         android:layout_gravity="bottom|end"
-        app:rippleColor="@color/secondaryColor"
-        android:layout_margin="32dp"/>
-<!--    android:backgroundTint="@color/primaryDarkColor"-->
+        android:layout_margin="32dp"
+        android:src="@drawable/ic_add_white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:rippleColor="@color/secondaryColor" />
+    <!--    android:backgroundTint="@color/primaryDarkColor"-->
+    <!--</androidx.coordinatorlayout.widget.CoordinatorLayout>-->
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
+

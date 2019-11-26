@@ -8,8 +8,8 @@ android {
         applicationId "com.kinsey.passwords"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 140
-        versionName "11.140"
+        versionCode 141
+        versionName "11.141"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         javaCompileOptions {
@@ -97,6 +97,7 @@ dependencies {
     implementation 'androidx.test.ext:junit:1.1.2-alpha02'
 //    implementation 'com.google.android.gms:play-services:12.0.1'
     implementation 'com.google.firebase:firebase-analytics:17.2.1'
+    implementation 'com.google.android.gms:play-services-ads:18.3.0'
 }
 repositories {
     mavenCentral()
