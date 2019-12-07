@@ -36,7 +36,6 @@
             android:layout_marginRight="20dp"
             android:layout_toStartOf="@+id/acct_id"
             android:ellipsize="end"
-            android:tag="@string/tag_portrait"
             android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 <!--            android:textColor="?android:attr/textColorSecondary" />-->
 

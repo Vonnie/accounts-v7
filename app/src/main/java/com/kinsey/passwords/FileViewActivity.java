@@ -187,7 +187,7 @@ public class FileViewActivity extends AppCompatActivity {
 //                break;
 
             case R.id.vw_show_file:
-                Log.d(TAG, "onOptionsItemSelected: Export");
+                Log.d(TAG, "onOptionsItemSelected: Report");
                 reportFile();
                 break;
 
@@ -431,7 +431,7 @@ public class FileViewActivity extends AppCompatActivity {
 
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setMessage("Unable to show export file. File has errors.");
+        alertDialogBuilder.setMessage("Backup File does not exist.\nMenu Backup to create a file.");
         alertDialogBuilder.setPositiveButton("ok",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface arg0, int arg1) {

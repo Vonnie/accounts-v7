@@ -1,35 +1,26 @@
 <resources>
     <string name="app_name">Accounts</string>
-    <string name="app_name_corpname"> Accounts by Corp Name</string>
+    <string name="app_name_corpname">" Accounts by Corporation Name"</string>
     <string name="app_name_opendate"> Accounts by Open Date, desc</string>
-    <string name="app_name_acctid"> Accounts by Acct Id</string>
+    <string name="app_name_acctid">" Accounts by Account Id"</string>
     <string name="app_name_custom"> Accounts by Custom Seq</string>
+    <string name="action_help">Help</string>
     <string name="action_settings">Settings</string>
     <string name="menu_accounts">Accounts List</string>
     <string name="menu_suggests">Password Suggestions</string>
-    <string name="menu_suggests_v1">Password Suggestions V1</string>
     <string name="menu_profile">Profile</string>
     <string name="menu_generate">Generate Passwords</string>
     <string name="menu_generate10">Generate 10 Char Passwords</string>
     <string name="menu_generate8">Generate 8 Char Passwords</string>
-    <string name="no_items_message">No Items</string>
     <string name="edit_description_description">Button to edit passwords</string>
     <string name="delete_button_description">Button to delete password</string>
     <string name="edit_button_description">Edit password text</string>
     <string name="generate_passwords_instruction">Request Password Generate from plus on menu</string>
-    <string name="no_account_items">Currently no accounts.\nClick plus icon above to add accounts.</string>
-    <string name="no_account_items_line2">Click plus icon to add accounts</string>
-    <string name="no_account_items_twopane_line2">Enter first account on the right</string>
-    <string name="no_search_items">No search items. May need to ask to prepare search db from account db in previous panel.</string>
-    <string name="accedit_corp_name_hint">Corporation name required</string>
-    <string name="accedit_user_name_hint">User name required</string>
-    <string name="accedit_user_email_hint">Valid user email</string>
-    <string name="accedit_corp_website_hint">Valid corp website (optional)</string>
-    <string name="accedit_save_text">Save</string>
+    <string name="corp_website_hint">Valid corp website (optional)</string>
     <string name="title_activity_account">Account Edit</string>
     <string name="menu_add_account">Add an account</string>
-    <string name="title_activity_launch">LaunchActivity</string>
-    <string name="title_activity_no_launch">NoLaunchActivity</string>
+    <string name="title_activity_launch">Launch Activity</string>
+    <string name="title_activity_no_launch">No Launch Activity</string>
     <string name="title_activity_account_list">Accounts</string>
     <string name="title_activity_suggest_list">Password Suggestions</string>
     <string name="title_activity_suggest_add">Password Suggestion Add</string>
@@ -37,79 +28,103 @@
     <string name="home_btn_suggest_text">Suggestions List</string>
     <string name="home_instruction_tex">Click function</string>
     <string name="home_btn_add_account_text">Add an account</string>
-    <string name="accedit_notes_hint">Add notes</string>
     <string name="up_button_description">Up item on list</string>
     <string name="down_button_description">Down item on list</string>
     <string name="home_btn_accounts_by_open_text">Accounts List, sorted by Open Date</string>
     <string name="home_btn_import_text">Import Accounts from a prior export</string>
     <string name="home_btn_export_text">Export Accounts</string>
     <string name="home_btn_search_text">Search Accounts</string>
-    <string name="ok">OK</string>
+    <string name="ok" translatable="false">OK</string>
     <string name="cancel">Cancel</string>
-    <string name="accedit_open_date">Open Date</string>
-    <string name="title_activity_file_view">FileViewActivity</string>
-    <string name="title_activity_about">AboutActivity</string>
-    <string name="deldiag_positive_caption">Delete</string>
-    <string name="deldiag_message">Delete account</string>
-    <string name="deldiag_sub_message">%1$s.\nAcctId:%2$d</string>
-    <string name="suggdiag_negative_caption">8</string>
-    <string name="suggdiag_positive_caption">10</string>
-    <string name="searchdiag_message">Search Setting for Search DB?</string>
-    <string name="searchdiag_sub_message">Accounts are searched from a Search DB, which is copied from Accounts DB</string>
-    <string name="searchdiag_negative_caption">No, not now</string>
-    <string name="searchdiag_positive_caption">Yes, do copy</string>
-    <string name="confirmdiag_ask_abandon_positive_caption">Yes, abandon chgs</string>
-    <string name="confirmdiag_ask_abandon_negative_caption">No, continue edit</string>
-    <string name="confirmdiag_leave_warning">Leave Warning</string>
-    <string name="confirmdiag_leave_warning_sub_message">Do you want to leave editing without applying changes.</string>
-    <string name="confirmdiag_edits">Edit Apply Complete</string>
-    <string name="confirmdiag_edits_sub_message">Edits are applied to the account</string>
-    <string name="confirmdiag_add">Add Confirmation</string>
-    <string name="confirmdiag_add_sub_message">Are you sure you want to setup new to add an account.</string>
-    <string name="confirmdiag_add_negative_caption">No, not now</string>
-    <string name="confirmdiag_add_positive_caption">Yes, add setup</string>
-    <string name="confirmdiag_leave_app_warning_sub_message">Do you want to leave app.</string>
-    <string name="confirmdiag_export_filename">Backup File Filename</string>
-    <string name="confirmdiag_leave_positive_caption">Yes, leave app</string>
-    <string name="confirmdiag_leave_negative_caption">No, continue with app</string>
-    <string name="confirmdiag_leave_edit_warning_sub_message">Do you want to leave editing without applying changes.</string>
+    <string name="title_activity_file_view">File View Activity</string>
+    <string name="title_activity_about">About Activity</string>
     <string name="listdiag_acc_message">Select account action</string>
     <string name="listdiag_acc_sub_message">Choose with click</string>
-    <string name="title_activity_search">SearchActivity</string>
+    <string name="title_activity_search">Search Activity</string>
     <string name="srch_load_search_db">Load Search DB with accounts</string>
     <string name="srch_value_hint">Enter value to search</string>
     <string name="search_label">Search</string>
-    <string name="search_hint">Type Corp Name</string>
-    <string name="settings_description">MyAccounts</string>
-    <string name="title_activity_search_list">SearchListActivity</string>
+    <string name="search_hint">Type Corporate Name</string>
+    <string name="settings_description">My Accounts</string>
+    <string name="title_activity_search_list" translatable="false">SearchListActivity</string>
     <string name="searchable_hint">Enter corporation name</string>
     <string name="home_message_title">List Accounts, Search Accounts, Password Suggestions</string>
-    <string name="home_message_text">
-        Track your accounts with sorted lists, searches, edits, backup/restore data, and select a password from list of suggestions.
-        \nTo view list in a different order, click the filter icon for four different sorted orders. Use the search menu request to see only accounts with searched for corporation names.
-        \nTo view &amp; edit account details, click on item. To delete, swipe account left or right. To add an account, click plus sign at lower right corner.
-        \nOne of the four ordered lists is a custom ordered list. Order is arranged by the user. This is a way to keep more important accounts to the top of the list. Rearrange items by a drag/drop of an item.
-        This drag/drop feature is only available in the Custom Sort list.
-        \nHint: To drag/drop, press and hold momentarily until color is changed indicating drag is started, then drag to the new position.
-        \nTo backup or restore use the Backup/Restore from the menu. This backups data. If a backup exists from a previous backup, this can be used to restore.
-        \nThe file location is noted in the Backup/Restore menu item Filename. Use menu item \'Show Backup File\' to view of this previously exported file. Use the menu item share to copy the exported file onto other systems.
-        \nPassword Suggestions menu list passwords. Request group of 10 passwords from the menu. Passwords are either 8 or 10 positions, depending on user request. These passwords have at least one number and one symbol. The letters of passwords are selected based on the location on keyboard.
-        This location arrangement assists by allowing user to key in password with only one hand. Although, numbers and symbols are at random.
-        \nAdd, edit, or rearrange password items of the list is similar to accounts maintenance. Passwords do not attach to an account. Reason why is explained next.
-        \n\nPrivate Account Passwords Secrecy
-        \nKeeping passwords electronically, even if encrypted, may leave you open to have your credentials stolen.
-        Having an electronic copy (from a file or the apps database) with the credentials of company, user name, and password would highly exposed your accounts to hackers.
-        \nThe data db contains accounts with account Id and account info. Use paper to record the db\'s account Id and password assigned.
-        Add on the app, then take the auto-generated id and the newly selected password to write on the paper report.
-        Later when an account it needed, couple account and password by doing a search on the app for the account. Use the account id to reference into paper report for the password. The account ids are incremented, therefore the paper report is added in order of the account id.
-        \n\nAccount Protection
-        \nExport data db through \'Backup / Restore\' menu item for Backup. This exported data file is a Json file representation of accounts db. Use this for backup.
-        To use this app on another device, install this app; copy shared backup file to loc, shown on menu; select Menu item Restore to populate the data. Use the menu item Share to keep them in sync.
-        \nRecommend to share exported data file to Dropbox or Email. Copy onto a safe space, separate from the paper report. Note: Suggested passwords are not backed up.
-        \n\nAPP Security
-        \nAndroid has recently made a change to make our systems safer. It will app allow access to external files, but only if the user specifically allows it through the Settings.
-        To grant permission, go to Settings for Apps. Select this app Accounts to give permission for storage.
+    <string name="home_message_text_1">
+        Track your accounts with sorted lists, searches, edits, backup/restore data, or select a password from list of suggestions.
     </string>
+    <string name="home_message_text_2">
+        To view list in a different order, click the filter icon for four different sorted orders. Use the search menu request to see only accounts with searched for corporation names.
+    </string>
+    <string name="home_message_text_3">
+        To view &amp; edit account details, click on item. To delete, swipe account left or right. To add an account, click plus sign at lower right corner.
+    </string>
+    <string name="home_message_text_4">
+    One of the four ordered lists is a custom ordered list. Order is arranged by the user. This is a way to keep more important accounts to the top of the list. Rearrange items by a drag/drop of an item.
+    </string>
+    <string name="home_message_text_5">
+        This drag/drop feature is only available in the Custom Sort list.
+    </string>
+    <string name="home_message_text_6">
+        Hint: To drag/drop, press and hold momentarily until color is changed indicating drag is started, then drag to the new position.
+    </string>
+    <string name="home_message_text_7">
+      To backup or restore use the Backup/Restore from the menu. This backups data. If a backup exists from a previous backup, this can be used to restore.
+    </string>
+    <string name="home_message_text_8">
+        The file location is noted in the Backup/Restore menu item Filename. Use menu item \'Show Backup File\' to view of this previously exported file. Use the menu item share to copy the exported file onto other systems.
+    </string>
+    <string name="home_message_text_9">
+        Password Suggestions menu list passwords. Menu Generate of passwords adds ten new passwords to the list. Passwords are either 8 or 10 character size, depending on user request. These passwords contain at least one number and one symbol. The letters of passwords are selected based on the location on keyboard, either from left-hand or right-hand.
+    </string>
+    <string name="home_message_text_10">
+        This location arrangement assists by allowing user to key in password with only one hand. Although, numbers and symbols are at random.
+    </string>
+    <string name="home_message_text_11">
+        Add, edit, or rearrange password items of the list is similar to accounts maintenance. Passwords do not attach to an account. Reason why is explained next.
+    </string>
+    <string name="home_message_text_12">
+        <h1>Private Account Passwords Secrecy</h1>
+    </string>
+    <string name="home_message_text_13">
+        Keeping passwords electronically, even if encrypted, may leave you open to have your credentials stolen.
+Having an electronic copy (from a file or the apps database) with the credentials of company, user name, and password would highly exposed your accounts to hackers.
+    </string>
+    <string name="home_message_text_14">
+        The data db contains accounts with account Id and account info. Use paper to record the db\'s account Id and password assigned.
+    </string>
+    <string name="home_message_text_15">
+        Add an account on the app, then take the auto-generated id and its newly selected password onto the paper report.
+    </string>
+    <string name="home_message_text_16">
+        Later when an account it needed, couple account and password by doing a search on the app for the account. Use the account id to reference into paper report for the password. The account ids are incremented, therefore the paper report is added in order of the account id.
+    </string>
+    <string name="home_message_text_17">
+        Account Protection
+    </string>
+    <string name="home_message_text_18">
+        Export data db through \'Backup / Restore\' menu item for Backup. This exported data file is a Json file representation of accounts db. Use this for backup.
+    </string>
+    <string name="home_message_text_19">
+        To use this app on another device, install this app; copy shared backup file to loc, shown on menu; select Menu item Restore to populate the data. Use the menu item Share to keep them in sync.
+    </string>
+    <string name="home_message_text_20">
+        Recommend to share exported data file to Dropbox or Email. Copy onto a safe space, separate from the paper report. Note: Suggested passwords are not backed up.
+    </string>
+    <string name="home_message_text_21">
+        APP Security
+    </string>
+    <string name="home_message_text_22">
+        Android has recently made a change to make our systems safer. To allow an app access to external storage, set allow storage in Settings for Apps.
+    </string>
+    <string name="home_message_text_23">
+        Select this Accounts app to give permission for storage.
+    </string>
+
+
+
+
+
+    <string name="home_message_text">"         Track your accounts with sorted lists, searches, edits, backup/restore data, and select a password from list of suggestions.          To view list in a different order, click the filter icon for four different sorted orders. Use the search menu request to see only accounts with searched for corporation names.          To view &amp; edit account details, click on item. To delete, swipe account left or right. To add an account, click plus sign at lower right corner.          One of the four ordered lists is a custom ordered list. Order is arranged by the user. This is a way to keep more important accounts to the top of the list. Rearrange items by a drag/drop of an item.         This drag/drop feature is only available in the Custom Sort list.          Hint: To drag/drop, press and hold momentarily until color is changed indicating drag is started, then drag to the new position.          To backup or restore use the Backup/Restore from the menu. This backups data. If a backup exists from a previous backup, this can be used to restore.          The file location is noted in the Backup/Restore menu item Filename. Use menu item 'Show Backup File' to view of this previously exported file. Use the menu item share to copy the exported file onto other systems.          Password Suggestions menu list passwords. Request group of 10 passwords from the menu. Passwords are either 8 or 10 positions, depending on user request. These passwords have at least one number and one symbol. The letters of passwords are selected based on the location on keyboard.         This location arrangement assists by allowing user to key in password with only one hand. Although, numbers and symbols are at random.          Add, edit, or rearrange password items of the list is similar to accounts maintenance. Passwords do not attach to an account. Reason why is explained next.           Private Account Passwords Secrecy          Keeping passwords electronically, even if encrypted, may leave you open to have your credentials stolen.         Having an electronic copy (from a file or the apps database) with the credentials of company, user name, and password would highly exposed your accounts to hackers.          The data db contains accounts with account Id and account info. Use paper to record the db's account Id and password assigned.         Add on the app, then take the auto-generated id and the newly selected password to write on the paper report.         Later when an account it needed, couple account and password by doing a search on the app for the account. Use the account id to reference into paper report for the password. The account ids are incremented, therefore the paper report is added in order of the account id.           Account Protection          Export data db through 'Backup / Restore' menu item for Backup. This exported data file is a Json file representation of accounts db. Use this for backup.         To use this app on another device, install this app; copy shared backup file to loc, shown on menu; select Menu item Restore to populate the data. Use the menu item Share to keep them in sync.          Recommend to share exported data file to Dropbox or Email. Copy onto a safe space, separate from the paper report. Note: Suggested passwords are not backed up.           APP Security          Android has recently made a change to make our systems safer. It will app allow access to external files, but only if the user specifically allows it through the Settings.         To grant permission, go to Settings for Apps. Select this app Accounts to give permission for storage.     "</string>
     <string name="home_message_text2">
         \nFor this security reason, the passwords are not saved on a file or database. This app keeps account information excluding passwords. Your action is to manually tie together using the account id from this app to the written list of account id and password value.
         \nTip: Use the export as the backup of your app data. If app is uninstalled, import exported file.
@@ -123,53 +138,23 @@
     </string>
     <string name="menu_search">Search Accounts</string>
     <string name="menu_showdate">Date</string>
-    <string name="accedit_ref_from_label">Prior closed into this account Id</string>
-    <string name="accedit_ref_to_label">This account closed to another account Id</string>
-    <string name="accedit_ref_from_hint">From Id</string>
-    <string name="accedit_ref_to_hint">To Id</string>
     <string name="menu_save">Save</string>
-    <string name="accedit_date_open_label">Open Date</string>
-    <string name="accedit_note_label">Notes:</string>
-    <string name="title_activity_web_view">WebViewActivity</string>
-    <string name="title_activity_addedit_profile">AddEditProfileActivity</string>
-    <string name="title_activity_search_profile">SearchProfileActivity</string>
-    <string name="srch_instruction_text">Search on accounts for Corp-Names</string>
-    <string name="srch_instruction_2_text">When items are found, either select search icon on keyboard or select one of the items from the dropdown list.</string>
-    <string name="accedit_seq_hint">Custom seq sort</string>
-    <string name="srch_instruction_3">Warning: Reload Search Dictionary DB when account corp names are new, deleted, or changed.\nUse button below to rebuild search dictionary.</string>
+    <string name="title_activity_web_view">Web View Activity</string>
+    <string name="title_activity_addedit_profile">Add Edit Profile Activity</string>
+    <string name="title_activity_search_profile" translatable="false">SearchProfileActivity</string>
     <string name="delete_cap">Delete</string>
     <string name="edit_acct_btn_hint">Edit Account</string>
-    <string name="tag_portrait">port</string>
-    <string name="tag_landscape">land</string>
-    <string name="tag_large">large</string>
-    <string name="tag_xlarge">xlarge</string>
     <string name="acct_show_website">Show Website</string>
-    <string name="acct_show_notes">Show Notes</string>
-    <string name="section_format">Hello World from section: %1$d</string>
-    <string name="accedit_seq_cap">Seq for custom sort</string>
     <string name="menu_link_internet">Link to Internet</string>
-    <string name="addedit_corp_name_hint">Corp/Company name: required</string>
-    <string name="addedit_corp_website_hint">Website (optional)</string>
-    <string name="addedit_user_name_hint">User name: required</string>
-    <string name="addedit_user_email_hint">User email: required</string>
-    <string name="addedit_save_text">Save</string>
-    <string name="addedit_show_website">Show</string>
-    <string name="menuacct_next">Next</string>
-    <string name="menuacct_about">About</string>
-    <string name="menuacct_rss_top_free_apps">RSS Top Free Apps</string>
-    <string name="menuacct_rss">RSS</string>
-    <string name="menuacct_rss_tv_episodes">RSS TV Episodes</string>
-    <string name="menuacct_rss_tv_season">RSS TV Seasons</string>
-    <string name="menuacct_rss_nasa">RSS NASA</string>
-    <string name="menuacct_refresh">RSS Refresh</string>
     <string name="menuacct_sort">Sort by</string>
-    <string name="menuacct_sort_corpname">Sort by Corp Name</string>
+    <string name="menuacct_sort_corpname">Sort by Corporate Name</string>
     <string name="menuacct_sort_opendate">Sort by Open Date</string>
     <string name="menuacct_sort_passport">Sort by Account Id</string>
     <string name="menuacct_sort_custom">Custom Sort</string>
     <string name="menuacct_backup_restore_accts">Backup / Restore</string>
     <string name="menuacct_external_accts">External accounts</string>
     <string name="menuacct_search">Search</string>
+    <string name="menuacct_about">About</string>
     <string name="menuvw_show_file">Show Backup File</string>
     <string name="menuvw_show_filename">Filename</string>
     <string name="menuvw_share">Share Backup File</string>
@@ -177,27 +162,15 @@
     <string name="menuvw_retore">Restore</string>
     <string name="menuvw_export">Export</string>
     <string name="menuvw_backup">Backup</string>
-    <string name="sugg_add_msg">No suggested passwords. Request Add fro list below.</string>
     <string name="about_copyright">Copyright \u00a9 2019</string>
     <string name="about_weblink">Instructions available at</string>
-    <string name="about_url"><u>http://www.learnprogramming.academy</u></string>
+    <string name="about_url" translatable="false"><u>http://www.learnprogramming.academy</u></string>
     <string name="about_weblink_21">Instructions available at www.learnprogramming.academy</string>
     <string name="about_email">For support, email vonnikinsey@gmail.com</string>
     <string name="about_credits">Icon derived from <b>analog clock</b> at openclipart.org by <b>Anonymous</b></string>
-    <string name="accedit_website_label">Website</string>
-    <string name="accedit_username_label">User Name</string>
-    <string name="accedit_user_email_label">User Email</string>
-    <string name="accedit_open_date_label">Open Date, click to chg</string>
     <string name="btn_open_date_label">Select Open Date</string>
-    <string name="accedit_sort_seq_label">Custom Sort Seq</string>
-    <string name="accedit_from_seq_label">Id from acct</string>
-    <string name="accedit_to_seq">Id to acct</string>
-    <string name="accedit_actvy_date_label">Activity Date</string>
-    <string name="accedit_corp_name_label">Corp Name</string>
-    <string name="accedit_notes_label">Notes</string>
     <string name="empty_list">Accounts List is empty</string>
     <string name="empty_list_subtitle">Select \'Add an account\' from menu</string>
-    <string name="link_to_string_acct_show_website">Link to @string/acct_show_website</string>
     <string name="descr_save">Save account</string>
     <string name="hint_email">Enter Email</string>
 

@@ -1,6 +1,5 @@
 package com.kinsey.passwords;
 
-
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -26,22 +25,39 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.ads.initialization.InitializationStatus;
-import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 import com.kinsey.passwords.items.Profile;
 import com.kinsey.passwords.items.Suggest;
 import com.kinsey.passwords.provider.ProfileViewModel;
+import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.Locale;
 
 // ====================
 // Statement to assist in debugging
 // if (BuildConfig.DEBUG && acctId == 0) throw new AssertionError("Account Id is zero");
 //
+
+// https://www.youtube.com/watch?v=FtIc5UYXeKk
+// https://www.youtube.com/watch?v=t-yZUqthDMM
+// https://square.github.io/picasso/
+// https://medium.com/fullstack-with-react-native-aws-serverless-and/google-sign-in-for-react-native-android-7d43df78c082
 
 public class MainActivity extends AppCompatActivity
         implements
@@ -71,9 +87,15 @@ public class MainActivity extends AppCompatActivity
 
     private static final String ACCOUNT_FRAGMENT = "AccountFragment";
 
+    private FirebaseAuth mAuth;
+
     public static String BACKUP_FILENAME = "accounts.json";
     public static int profileMigrateLevel = 1;
+
     public static boolean migrationStarted = false;
+
+
+//    GoogleSignInClient mGoogleSignInClient;
 
 //    private List<Profile> profileListFull;
 //    private List<Profile> profileListFullCustom;
@@ -104,6 +126,8 @@ public class MainActivity extends AppCompatActivity
 //    public static final int REQUEST_ACCOUNT_EDIT = 5;
 //    public static final int REQUEST_ACCOUNT_SEARCH = 6;
     public static final int REQUEST_VIEW_EXPORT = 7;
+    public static final int REQUEST_SIGN = 8;
+    public static final int GOOGLE_SIGN = 9;
 
     public static int accountSelectedPos = -1;
 
@@ -211,6 +235,29 @@ public class MainActivity extends AppCompatActivity
             fragmentTransaction.commit();
         }
 
+
+
+//        ================================================================================
+//        Future growth for firebase signin
+//        ================================================================================
+
+        //        mAuth = FirebaseAuth.getInstance();
+//
+//        GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions
+//                .Builder()
+//                .requestIdToken(getString(R.string.default_web_client_id))
+//                .requestEmail()
+//                .build();
+//
+//        mGoogleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions);
+
+//        btn_login.setOnClickListener(v -> SignInGoogle());
+
+//        if (mAuth.getCurrentUser() != null) {
+//            FirebaseUser user = mAuth.getCurrentUser();
+//            updateUI(user);
+//        }
+
 //        fragCorpName = findViewById(R.id.fragment_container_corpname);
 //        fragCorpName.setVisibility(View.VISIBLE);
 //
@@ -227,6 +274,8 @@ public class MainActivity extends AppCompatActivity
                 Log.d(TAG, "onCreate: start activity AddEditProfileActivity");
                 startActivityForResult(intent, ADD_PROFILE_REQUEST);
 //                startActivity(intent);
+
+//                onSignInClickedButton(v);
             }
         });
 
@@ -681,6 +730,57 @@ public class MainActivity extends AppCompatActivity
 
         return true;
     }
+
+
+
+
+    //        ================================================================================
+//        Future growth for firebase signin
+//        ================================================================================
+
+
+//    public void onSignInClickedButton2(View view) {
+////        progressBar.
+//        Intent signIntent = mGoogleSignInClient.getSignInIntent();
+//        startActivityForResult(signIntent, GOOGLE_SIGN);
+//    }
+//
+//    public void onSignInClickedButton(View view) {
+//        FirebaseAuth auth = FirebaseAuth.getInstance();
+//        if (auth.getCurrentUser() != null) {
+//            Toast.makeText(getApplicationContext(), "User already signed in, must sign out firebase", Toast.LENGTH_SHORT).show();
+//        } else {
+//
+//            Log.d(TAG, "signing in");
+//            List<AuthUI.IdpConfig> providers = Arrays.asList(
+//                    new AuthUI.IdpConfig.EmailBuilder().build());
+////                    new AuthUI.IdpConfig.PhoneBuilder().build(),
+////                    new AuthUI.IdpConfig.GoogleBuilder().build());
+//
+//            // Create and launch sign-in intent
+//            startActivityForResult(
+//                    AuthUI.getInstance()
+//                            .createSignInIntentBuilder()
+//                            .setAvailableProviders(providers)
+//                            .build(),
+//                    REQUEST_SIGN);
+//
+//        }
+//    }
+//
+//    public void onSignOut(View view) {
+//        AuthUI.getInstance()
+//                .signOut(this)
+//                .addOnCompleteListener(new OnCompleteListener<Void>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<Void> task) {
+//                        Toast.makeText(getApplication(), "User has signed out!", Toast.LENGTH_SHORT).show();
+//                    }
+//                });
+//    }
+
+//  =============================================================================================
+//  =============================================================================================
 
 
 //    ===================================================================================================
@@ -1901,339 +2001,8 @@ public class MainActivity extends AppCompatActivity
 //    }
 
 
-//    ===========================================================================================
-//    obsolete Account list manipulate
-//    ===========================================================================================
-
-//    @Override
-//    public void onListComplete() {
-//        progressBar.setVisibility(View.GONE);
-//    }
-//
-//    @Override
-//    public void onAccountLong(final Account account) {
-//        Log.d(TAG, "onAccountLong: " + account);
-////        showAboutDialog();
-//
-//        @SuppressLint("InflateParams") View messageView = getLayoutInflater().inflate(R.layout.activity_itemview, null, false);
-//
-//        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//        builder.setTitle(R.string.app_name);
-//        builder.setIcon(R.mipmap.ic_launcher);
-//
-//        builder.setView(messageView);
-//
-////            builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-////                @Override
-////                public void onClick(DialogInterface dialog, int which) {
-//////                Log.d(TAG, "onClick: Entering messageView.onClick, showing = " + mDialog.isShowing());
-////                    if(mDialog != null && mDialog.isShowing()) {
-////                        mDialog.dismiss();
-////                    }
-////                }
-////            });
-//
-//        mDialog = builder.create();
-//        mDialog.setCanceledOnTouchOutside(true);
-//
-//        final EditText tvName = messageView.findViewById(R.id.txt_corp_name);
-//        tvName.setText(account.getCorpName());
-//        TextView tvId = (TextView) messageView.findViewById(R.id.txt_id);
-////            tvId.setText(String.valueOf("AcctId " + account.getId()));
-//        tvId.setText(String.valueOf("AcctId " + account.getPassportId()));
-////            final EditText tvWebsite = messageView.findViewById(R.id.addedit_corp_website);
-////            tvWebsite.setText(account.getCorpWebsite());
-//
-//        ImageButton btnEdit = messageView.findViewById(R.id.imgbtn_edit);
-//        btnEdit.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Log.d(TAG, "onClick: for edit");
-//                acctEditRequest(account.getId());
-//                mDialog.dismiss();
-//            }
-//        });
-//
-//        ImageButton btnSave = messageView.findViewById(R.id.imgbtn_save);
-//        btnSave.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Log.d(TAG, "onClick: for edit");
-//                String prevCorpName = account.getCorpName();
-//                account.setCorpName(tvName.getText().toString());
-////                    if (!tvWebsite.getText().toString().startsWith("")) {
-////                        if (tvWebsite.getText().toString().startsWith("http://") ||
-////                                tvWebsite.getText().toString().startsWith("https://")) {
-////                            account.setCorpWebsite(tvWebsite.getText().toString());
-////                        } else {
-////                            tvWebsite.setError("website must start with http");
-////                            return;
-////                        }
-////                    }
-//                updateCorp(account);
-//                mDialog.dismiss();
-//                if (isLandscape) {
-//                    removeEditing();
-//                }
-//
-////                    if (!prevCorpName.equals(account.getCorpName())) {
-////                        Log.d(TAG, "onClick: corpname chg to refresh search");
-////                        searchListRequest();
-////                    }
-//            }
-//        });
-//
-//        ImageButton btnDelete = messageView.findViewById(R.id.imgbtn_delete);
-//        btnDelete.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Log.d(TAG, "onClick: for edit");
-//                confirmDeleteAccount(account);
-//                mDialog.dismiss();
-//            }
-//        });
-//
-////        ImageButton btnWebsite = messageView.findViewById(R.id.imgbtn_globe);
-////        btnWebsite.setOnClickListener(new View.OnClickListener() {
-////            @Override
-////            public void onClick(View v) {
-////                Log.d(TAG, "onClick: for edit");
-////                verifyEmail(tvWebsite);
-////                linkToInternet(tvWebsite.getText().toString());
-////                mDialog.dismiss();
-////            }
-////        });
-////            TextView about_url = (TextView) messageView.findViewById(R.id.about_url);
-////            if(about_url != null) {
-////                about_url.setOnClickListener(new View.OnClickListener() {
-////                    @Override
-////                    public void onClick(View v) {
-////                        Intent intent = new Intent(Intent.ACTION_VIEW);
-////                        String s = ((TextView) v).getText().toString();
-////                        intent.setData(Uri.parse(s));
-////                        try {
-////                            startActivity(intent);
-////                        } catch(ActivityNotFoundException e) {
-////                            Toast.makeText(MainActivity.this, "No browser application found, cannot visit world-wide web", Toast.LENGTH_LONG).show();
-////                        }
-////                    }
-////                });
-////            }
-//
-//        mDialog.show();
-//
-////        fragAppDialog = new AppItem();
-//////        currentFragClass = fragCurrencyCountry.getClass().toString();
-////
-////        Bundle bundle = new Bundle();
-//////            mBundle.putLong(DrawerItem.EXTRA_DRAWER_ID, idSelected);
-//////			Log.v(TAG, "bundle set");
-//////            getActivity().getActionBar().setTitle(drawerItem.getDescription());
-////        setTitle(getResources().getString(R.string.frag_title_feed));
-////        mBundle.putString(DrawerItem.EXTRA_RSS_VIEW, getResources().getString(R.string.dailyFxRss));
-////        fragDailyFxRss = new DailyFxRssFrag();
-////        addFragment(fragDailyFxRss);
-//
-//
-//    }
-
-//    private void verifyEmail(TextView tvWebsite) {
-//        if (!tvWebsite.getText().toString().equals("")) {
-//            if (tvWebsite.getText().toString().toLowerCase().startsWith("http://")
-//                    || tvWebsite.getText().toString().toLowerCase().startsWith("https://")) {
-//            } else {
-//                tvWebsite.setText("http://" + tvWebsite.getText().toString());
-//            }
-//        }
-//    }
 
 
-//    private void removeEditing() {
-//        FragmentManager fragmentManager = getSupportFragmentManager();
-//        Fragment editFragment = fragmentManager.findFragmentById(R.id.task_details_container);
-//        if (editFragment != null) {
-//
-//            getSupportFragmentManager().beginTransaction()
-//                    .remove(editFragment)
-//                    .commit();
-//            View addEditLayout = findViewById(R.id.task_details_container);
-//            View addEditLayoutScroll = findViewById(R.id.task_details_container_scroll);
-//            addEditLayout.setVisibility(View.GONE);
-//            addEditLayoutScroll.setVisibility(View.GONE);
-//        }
-//
-//    }
-
-//    private void updateCorp(Account account) {
-//
-//        ContentValues values = new ContentValues();
-//
-//        values.put(AccountsContract.Columns.CORP_NAME_COL, account.getCorpName());
-//        values.put(AccountsContract.Columns.CORP_WEBSITE_COL, account.getCorpWebsite());
-//        getContentResolver().update(AccountsContract.buildIdUri(account.getId()), values, null, null);
-//
-//
-//        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-//        sharedPreferences.edit().putBoolean(SEARCH_DICT_REFRESHED, false).apply();
-//
-//    }
-
-//    private void confirmDeleteAccount(Account account) {
-////        Log.d(TAG, "deleteAccount: ");
-////        if (account == null) {
-////            Toast.makeText(this,
-////                    "No Account selected to delete",
-////                    Toast.LENGTH_LONG).show();
-////            return;
-////        }
-////        if (accountSelectedPos == -1) {
-////            Toast.makeText(this,
-////                    "Must select an account to delete",
-////                    Toast.LENGTH_LONG).show();
-////            return;
-////        }
-//        FragmentManager fragmentManager = getSupportFragmentManager();
-//        AppDialog newFragment = AppDialog.newInstance();
-//        Bundle args = new Bundle();
-//        args.putInt(AppDialog.DIALOG_ID, AppDialog.DIALOG_ID_CONFIRM_DELETE_ACCOUNT);
-//        args.putInt(AppDialog.DIALOG_TYPE, AppDialog.DIALOG_YES_NO);
-//        args.putString(AppDialog.DIALOG_MESSAGE, getString(R.string.deldiag_message));
-//        args.putString(AppDialog.DIALOG_SUB_MESSAGE, getString(R.string.deldiag_sub_message, account.getCorpName(), account.getPassportId()));
-//        args.putInt(AppDialog.DIALOG_ACCOUNT_ID, account.getId());
-//        args.putInt(AppDialog.DIALOG_POSITIVE_RID, R.string.deldiag_positive_caption);
-//
-//        newFragment.setArguments(args);
-//        newFragment.show(fragmentManager, "dialog");
-//
-//
-//    }
-
-//    private void confirmDeleteProfile(Profile profile, int position) {
-////        Log.d(TAG, "deleteAccount: ");
-////        if (account == null) {
-////            Toast.makeText(this,
-////                    "No Account selected to delete",
-////                    Toast.LENGTH_LONG).show();
-////            return;
-////        }
-////        if (accountSelectedPos == -1) {
-////            Toast.makeText(this,
-////                    "Must select an account to delete",
-////                    Toast.LENGTH_LONG).show();
-////            return;
-////        }
-//        FragmentManager fragmentManager = getSupportFragmentManager();
-//        AppDialog newFragment = AppDialog.newInstance();
-//        Bundle args = new Bundle();
-//        args.putInt(AppDialog.DIALOG_ID, AppDialog.DIALOG_ID_CONFIRM_DELETE_PROFILE);
-//        args.putInt(AppDialog.DIALOG_TYPE, AppDialog.DIALOG_YES_NO);
-//        args.putString(AppDialog.DIALOG_MESSAGE, getString(R.string.deldiag_message));
-//        args.putString(AppDialog.DIALOG_SUB_MESSAGE, getString(R.string.deldiag_sub_message, profile.getCorpName(), profile.getPassportId()));
-//        args.putInt(AppDialog.DIALOG_ACCOUNT_ID, profile.getPassportId());
-//        args.putInt(AppDialog.DIALOG_LIST_POSITION, position);
-//        args.putInt(AppDialog.DIALOG_POSITIVE_RID, R.string.deldiag_positive_caption);
-//
-//        newFragment.setArguments(args);
-//        newFragment.show(fragmentManager, "dialog");
-//
-//
-//    }
-
-
-//    private void linkToInternet(String webpage) {
-//        Log.d(TAG, "linkToInternet: " + webpage);
-//        if (webpage.equals("")
-//                || webpage.toLowerCase().equals("http://")
-//                || webpage.toLowerCase().equals("https://")) {
-//            Toast.makeText(this,
-//                    "Selected account has no corp website to link to",
-//                    Toast.LENGTH_LONG).show();
-//        } else {
-//            if (!webpage.equals("")) {
-////                mActivityStart = true;
-//                Log.d(TAG, "linkToInternet: " + webpage);
-//                vewInternet(webpage);
-////                webview.loadUrl(account.getCorpWebsite());
-//            } else {
-//                Log.d(TAG, "linkToInternet: none");;
-//            }
-//        }
-//    }
-
-//    private void viewInternet(String webpage) {
-////        Bundle arguments = new Bundle();
-////        arguments.putString(WebViewActivity.class.getSimpleName(),
-////                webpage);
-////        WebViewActivityFragment fragment = new WebViewActivityFragment();
-////        fragment.setArguments(arguments);
-////        getSupportFragmentManager().beginTransaction()
-////                .add(R.id.content_account_list, fragment)
-////                .commit();
-////    }
-//
-//////            Uri uri = Uri.parse(account.getCorpWebsite());
-//////            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-//////            startActivity(intent);
-//////            startActivityForResult(intent, AccountsContract.ACCOUNT_ACTION_WEBPAGE);
-//
-//        Log.d(TAG, "vewInternet: webpage " + webpage);
-//        Uri uri = Uri.parse(webpage);
-//        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-//        startActivity(intent);
-////        if (intent.resolveActivity(getPackageManager()) != null) {
-////            startActivity(intent);
-////        }
-//
-////        Intent detailIntent = new Intent(this, WebViewActivity.class);
-////        detailIntent.putExtra(WebViewActivity.class.getSimpleName(), account.getCorpWebsite());
-//////                Log.d(TAG, "onClick: website " + account.getCorpWebsite());
-//////                Log.d(TAG, "onClick: wv class " + WebViewActivity.class.getSimpleName());
-////        startActivityForResult(detailIntent, AccountsContract.ACCOUNT_ACTION_WEBPAGE);
-//////            startActivity(detailIntent);
-//    }
-////    }
-////
-
-//
-//    List<Account> loadAccountsBySeq() {
-////        Log.d(TAG, "loadAccountsBySeq: starts ");
-//        String sortOrder = AccountsContract.Columns.SEQUENCE_COL + "," + AccountsContract.Columns.CORP_NAME_COL.toLowerCase() + " COLLATE NOCASE ASC";
-//        Cursor cursor = getContentResolver().query(
-//                AccountsContract.CONTENT_URI, null, null, null, sortOrder);
-//
-//        List<Account> listAccounts = new ArrayList<Account>();
-//        if (cursor != null) {
-//            while (cursor.moveToNext()) {
-////                Log.d(TAG, "loadPasswords: seq " + cursor.getInt(cursor.getColumnIndex(SuggestsContract.Columns.SEQUENCE_COL))
-////                        + ":" + cursor.getString(cursor.getColumnIndex(SuggestsContract.Columns.PASSWORD_COL)));
-//                Account item = new Account(
-//                        cursor.getInt(cursor.getColumnIndex(AccountsContract.Columns._ID_COL)),
-//                        cursor.getString(cursor.getColumnIndex(AccountsContract.Columns.CORP_NAME_COL)),
-//                        cursor.getString(cursor.getColumnIndex(AccountsContract.Columns.USER_NAME_COL)),
-//                        cursor.getString(cursor.getColumnIndex(AccountsContract.Columns.USER_EMAIL_COL)),
-//                        cursor.getString(cursor.getColumnIndex(AccountsContract.Columns.CORP_WEBSITE_COL)),
-//                        cursor.getInt(cursor.getColumnIndex(AccountsContract.Columns.SEQUENCE_COL)));
-//                item.setNewSequence(cursor.getInt(cursor.getColumnIndex(SuggestsContract.Columns.SEQUENCE_COL)));
-//                listAccounts.add(item);
-//            }
-//            cursor.close();
-//        }
-//
-//        return listAccounts;
-//    }
-
-
-//    ====================================================================================
-//    search which is obsolete
-//    ===================================================================================
-
-//    private void requestSearch() {
-//        Log.d(TAG, "onPositiveDialogResult: request to rebuild search");
-//        Intent detailIntent = new Intent(this, SearchActivityV1.class);
-//        detailIntent.putExtra(SearchActivityV1.class.getSimpleName(), true);
-//        startActivity(detailIntent);
-//    }
-//  ==========================================================================================
 
     private void searchRequestActivity() {
 
@@ -2250,277 +2019,6 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-//    private void searchListRequest() {
-//        FragmentManager fragmentManager = getSupportFragmentManager();
-//
-//        AppDialog newFragment = AppDialog.newInstance();
-//        Bundle args = new Bundle();
-//        args.putInt(AppDialog.DIALOG_ID, AppDialog.DIALOG_ID_ASK_REFRESH_SEARCHDB);
-//        args.putInt(AppDialog.DIALOG_TYPE, AppDialog.DIALOG_YES_NO);
-//        args.putString(AppDialog.DIALOG_MESSAGE, getString(R.string.searchdiag_message));
-//        args.putString(AppDialog.DIALOG_SUB_MESSAGE, getString(R.string.searchdiag_sub_message));
-//        args.putInt(AppDialog.DIALOG_NEGATIVE_RID, R.string.searchdiag_negative_caption);
-//        args.putInt(AppDialog.DIALOG_POSITIVE_RID, R.string.searchdiag_positive_caption);
-//
-//
-//        Log.d(TAG, "searchListRequest: ask for db copy");
-//        newFragment.setArguments(args);
-//        newFragment.show(fragmentManager, "dialog");
-//    }
-
-//==========================================================================================
-//    obsolete edit request manipulate
-//    ==========================================================================================
-
-//    private void acctEditRequest(int accountId) {
-//        Log.d(TAG, "taskEditRequest: starts " + accountId);
-//        Log.d(TAG, "taskEditRequest: in two-pane mode (tablet) " + isLandscape);
-//
-//        try {
-//            accountMode = AccountsContract.ACCOUNT_ACTION_CHG;
-//            //        setMenuItemVisible(R.id.menuacct_save, true);
-//            currFrag = AppFragType.ACCOUNTEDIT;
-//            AddEditActivityFragment editFragment = new AddEditActivityFragment();
-//            //        FragmentManager fragmentManager = getSupportFragmentManager();
-//            //        AddEditActivityFragment editFragment = (AddEditActivityFragment)fragmentManager.findFragmentById(R.id.task_details_container);
-//
-//            //        if (editFragment == null) {
-//            //            Log.d(TAG, "acctEditRequest: create add/edit");
-//            //            editFragment = new AddEditActivityFragment();
-//            //        }
-//            Bundle arguments = new Bundle();
-//            //        arguments.putSerializable(Account.class.getSimpleName(), accountId);
-//            arguments.putInt(Account.class.getSimpleName(), accountId);
-//            editFragment.setArguments(arguments);
-//
-//            Log.d(TAG, "taskEditRequest: twoPaneMode " + isLandscape);
-//            getSupportFragmentManager().beginTransaction()
-//                    .replace(R.id.task_details_container, editFragment)
-//                    .commit();
-//
-//
-//            Log.d(TAG, "taskEditRequest: in single-pane mode (phone)");
-//            // Hide the left hand fragment and show the right hand frame
-//            View mainFragment = findViewById(R.id.fragment);
-//            View addEditLayout = findViewById(R.id.task_details_container);
-//            View addEditLayoutScroll = findViewById(R.id.task_details_container_scroll);
-//            addEditLayout.setVisibility(View.VISIBLE);
-//            addEditLayoutScroll.setVisibility(View.VISIBLE);
-//            if (!isLandscape) {
-//                mainFragment.setVisibility(View.GONE);
-//            }
-//        } catch (Exception e) {
-//            Log.e(TAG, "Edit build: " + e.getMessage());
-//        }
-//
-//        Log.d(TAG, "Exiting taskEditRequest");
-//    }
-
-
-//    private void saveAccountEdits() {
-//        FragmentManager fragmentManager = getSupportFragmentManager();
-//        AddEditActivityFragment editFragment = (AddEditActivityFragment)fragmentManager.findFragmentById(R.id.task_details_container);
-//        if (editFragment == null) {
-//            Log.d(TAG, "saveAccountEdits: no edit frame to save");
-//            return;
-//        }
-//        editFragment.saveEdits();
-//
-//
-////        View addEditLayout = findViewById(R.id.task_details_container);
-////        View addEditLayoutScroll = findViewById(R.id.task_details_container_scroll);
-////        View mainFragment = findViewById(R.id.fragment);
-////
-////        if(!isLandscape) {
-////            if (editFragment != null) {
-////                getSupportFragmentManager().beginTransaction()
-////                        .remove(editFragment)
-////                        .commit();
-////            }
-////
-////            // We've just removed the editing fragment, so hide the frame
-////            addEditLayout.setVisibility(View.GONE);
-////            addEditLayoutScroll.setVisibility(View.GONE);
-////
-////            // and make sure the MainActivityFragment is visible.
-////            mainFragment.setVisibility(View.VISIBLE);
-////        }
-////
-////        AccountListActivityFragment listFragment = (AccountListActivityFragment)
-////                getSupportFragmentManager().findFragmentById(R.id.fragment);
-////        listFragment.setAcctId(editFragment.getAcctId());
-////
-//////        setMenuItemVisible(R.id.menuacct_save, false);
-//
-//    }
-
-//    @Override
-//    public void saveComplete() {
-//        showConfirmationDialogOk(AppDialog.DIALOG_ID_EDITS_APPLIED);
-//    }
-//
-//    @Override
-//    public void updateAccount(Account account) {
-//        this.account = account;
-//    }
-//
-//    @Override
-//    public void updateNewAccount(Account account) {
-//        this.account = account;
-//
-//        AccountListActivityFragment listFragment = (AccountListActivityFragment)
-//                getSupportFragmentManager().findFragmentById(R.id.fragment);
-//
-//        listFragment.setAcctId(account.getId());
-//
-//        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-//        sharedPreferences.edit().putString(SELECTION_QUERY, "").apply();
-//        sharedPreferences.edit().putInt(SELECTION_ONE_ITEM, account.getId()).apply();
-//
-//        listFragment.notifyItemChanged();
-//
-////        searchListRequest();
-//    }
-
-//    @Override
-//    public void updateDictCorpName() {
-////        AccountListActivityFragment listFragment = (AccountListActivityFragment)
-////                getSupportFragmentManager().findFragmentById(R.id.fragment);
-//
-////        listFragment.unselectItem();
-//
-////        searchListRequest();
-//    }
-//
-//    //    private void addAccountRequest() {
-//////        Log.d(TAG, "addAccountRequest: starts");
-//////        if (isLandscape) {
-//////            mAccountAdapter.resetSelection();
-////        accountMode = AccountsContract.ACCOUNT_ACTION_ADD;
-////        this.account = new Account();
-////        accountSelectedPos = -1;
-////        setMenuItemEnabled(R.id.menuacct_delete, false);
-//////        setMenuItemEnabled(R.id.menuacct_save, true);
-////        setMenuItemEnabled(R.id.menuacct_internet, false);
-////        updatePages(frag1Pos);
-////    }
-
-
-//    private void editAccountRequest(Account account) {
-////        Log.d(TAG, "addAccountRequest: starts");
-//        if (isLandscape) {
-////            Log.d(TAG, "addAccountRequest: in two-pane mode (tablet)");
-//        } else {
-////            Log.d(TAG, "addAccountRequest: in single-pan mode (phone)");
-//            // in single-pane mode, start the detail activity for the selected item Id.
-//            Intent detailIntent = new Intent(this, AccountActivity.class);
-//
-//            if (account != null) { // editing an account
-//                detailIntent.putExtra(Account.class.getSimpleName(), account);
-////                detailIntent.putExtra(Account.class.getSimpleName(), AccountsContract.ACCOUNT_ACTION_CHG);
-//                startActivityForResult(detailIntent, REQUEST_ACCOUNT_EDIT);
-//            } else { // adding an account
-////                detailIntent.putExtra(Account.class.getSimpleName(), AccountsContract.ACCOUNT_ACTION_ADD);
-//                startActivityForResult(detailIntent, REQUEST_ACCOUNT_EDIT);
-//            }
-//        }
-//    }
-
-
-//    private void resortList(final int sortorder) {
-//
-//        progressBar.setVisibility(View.VISIBLE);
-//
-//        switch (sortorder) {
-//            case AccountsContract.ACCOUNT_LIST_BY_CORP_NAME:
-//                getSupportActionBar().setTitle(getString(R.string.app_name_corpname));
-//                break;
-//            case AccountsContract.ACCOUNT_LIST_BY_OPEN_DATE:
-//                getSupportActionBar().setTitle(getString(R.string.app_name_opendate));
-//                break;
-//            case AccountsContract.ACCOUNT_LIST_BY_PASSPORT_ID:
-//                getSupportActionBar().setTitle(getString(R.string.app_name_acctid));
-//                break;
-//            case AccountsContract.ACCOUNT_LIST_BY_SEQUENCE:
-//                getSupportActionBar().setTitle(getString(R.string.app_name_custom));
-//                break;
-//            default:
-//                getSupportActionBar().setTitle(getString(R.string.app_name));
-//        }
-//
-//
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//
-//
-//                mHandler.post(new Runnable() {
-//                    @Override
-//                    public void run() {
-//
-//                        AccountListActivityFragment listFragment = (AccountListActivityFragment)
-//                                getSupportFragmentManager().findFragmentById(R.id.fragment);
-//                        listFragment.resortList(sortorder);
-//
-//                        progressBar.setVisibility(View.GONE);
-//                    }
-//                });
-//            }
-//        }).start();
-//
-//    }
-
-
-//    ============================================================================
-//    obsolete account list manipulate
-//    ============================================================================
-
-//    private void accountsListRequest(int sortorder) {
-////        Log.d(TAG, "accountsListRequest: starts");
-//        if (isLandscape) {
-//        } else {
-//        }
-//
-//
-//        Intent detailIntent = new Intent(this, AccountListActivity.class);
-//        detailIntent.putExtra(Account.class.getSimpleName(), sortorder);
-//        startActivityForResult(detailIntent, REQUEST_ACCOUNTS_LIST);
-//
-////        AccountListActivityFragment fragment = new AccountListActivityFragment();
-////
-//////        fragment.LOADER_ID = 1;
-////        Bundle arguments = new Bundle();
-////        arguments.putSerializable(Account.class.getSimpleName(), AccountsContract.TABLE_NAME);
-////        fragment.setArguments(arguments);
-////
-////        getSupportFragmentManager().beginTransaction()
-////                .replace(R.id.fragment, fragment)
-////                .commit();
-//    }
-//
-//    private void suggestsListRequest2() {
-//        Log.d(TAG, "suggestsListRequest2: starts");
-//        currFrag = AppFragType.PASSWORDS;
-//        if (isLandscape) {
-//        } else {
-//        }
-//
-//        Intent detailIntent = new Intent(this, SuggestListActivityV1.class);
-//        detailIntent.putExtra(Suggest.class.getSimpleName(), "sortorder");
-//        startActivity(detailIntent);
-//
-////        MainActivityFragment fragment = new MainActivityFragment();
-////
-//////        fragment.LOADER_ID = 0;
-////        Bundle arguments = new Bundle();
-////        arguments.putSerializable(MainActivityFragment.BUNDLE_TABLE_ID, SuggestsContract.TABLE_NAME);
-////        fragment.setArguments(arguments);
-////
-////        getSupportFragmentManager().beginTransaction()
-////                .replace(R.id.fragmentMain, fragment)
-////                .commit();
-//
-//    }
 
     private void suggestsListRequest4() {
         Log.d(TAG, "suggestsListRequest3: starts");
@@ -2535,116 +2033,6 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-//    private void suggestsListRequest() {
-//        Log.d(TAG, "suggestsListRequest: ");
-//        currFrag = AppFragType.PASSWORDS;
-//        SuggestListActivityFragment fragment = new SuggestListActivityFragment();
-//
-////        Bundle arguments = new Bundle();
-////        arguments.putSerializable(Account.class.getSimpleName(), acct);
-////        fragment.setArguments(arguments);
-//
-//        Log.d(TAG, "suggestsListRequest: twoPaneMode " + isLandscape);
-//        getSupportFragmentManager().beginTransaction()
-//                .replace(R.id.task_details_container, fragment)
-//                .commit();
-//
-//    }
-
-
-//    private void suggestsListRequest3() {
-////        onDateClicked(0);
-//        GregorianCalendar mCalendar = new GregorianCalendar();
-////        Date dte = new Date(account.getActvyLong());
-//        Date dte = new Date();
-//        mCalendar.setTime(dte);
-//        Log.d(TAG, "onDateClicked: " + mCalendar.toString());
-//
-//        showDatePickerDialog("Activity Date", 0, mCalendar);
-//    }
-
-
-//    private void profileRequest() {
-//        Log.d(TAG, "profileRequest: starts");
-//
-//        Intent detailIntent = new Intent(this, AddEditProfileActivity.class);
-//        detailIntent.putExtra(Profile.class.getSimpleName(), "sortorder");
-//        startActivity(detailIntent);
-//
-//    }
-
-//    private void downloadUrl(String feedUrl) {
-//        if (!feedUrl.equalsIgnoreCase(feedCachedUrl)) {
-//            Log.d(TAG, "downloadURL: " + feedUrl);
-//            DownloadData downloadData = new DownloadData();
-//            downloadData.execute(feedUrl);
-//            feedCachedUrl = feedUrl;
-//            Log.d(TAG, "downloadURL: done");
-//        } else {
-//            Log.d(TAG, "downloadUrl: URL not changed");
-//        }
-//    }
-
-//    public void showAboutDialog() {
-//        @SuppressLint("InflateParams") View messageView = getLayoutInflater().inflate(R.layout.activity_about2, null, false);
-//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//        builder.setTitle(R.string.app_name);
-//        builder.setIcon(R.mipmap.ic_launcher);
-//        builder.setView(messageView);
-//
-//        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-////                Log.d(TAG, "onClick: Entering messageView.onClick, showing = " + mDialog.isShowing());
-//                if (mDialog != null && mDialog.isShowing()) {
-//                    mDialog.dismiss();
-//                }
-//            }
-//        });
-//
-//        mDialog = builder.create();
-//        mDialog.setCanceledOnTouchOutside(true);
-//
-////        messageView.setOnClickListener(new View.OnClickListener() {
-////            @Override
-////            public void onClick(View v) {
-////                Log.d(TAG, "onClick: Entering meassageView.onClick, showing = " + mDialog.isShowing());
-////                if (mDialog != null && mDialog.isShowing()) {
-////                    mDialog.dismiss();
-////                }
-////            }
-////        });
-//
-//        TextView tv = (TextView) messageView.findViewById(R.id.about_version);
-//        tv.setText("v" + BuildConfig.VERSION_NAME);
-//
-//        TextView about_url = (TextView) messageView.findViewById(R.id.about_url);
-//        if (about_url != null) {
-//            about_url.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    Intent intent = new Intent(Intent.ACTION_VIEW);
-//                    String s = ((TextView) v).getText().toString();
-//                    intent.setData(Uri.parse(s));
-//                    try {
-//                        startActivity(intent);
-//                    } catch (ActivityNotFoundException e) {
-//                        Toast.makeText(MainActivity.this, "No browser application found, cannot visit world-wide web", Toast.LENGTH_LONG).show();
-//                    }
-//                }
-//            });
-//        }
-//
-//
-//        mDialog.show();
-//    }
-
-//    @Override
-//    protected void onSaveInstanceState(Bundle outState) {
-//        outState.putString(STATE_URL, feedUrl);
-//        outState.putInt(STATE_LIMIT, feedLimit);
-//        super.onSaveInstanceState(outState);
-//    }
 
 
     @Override
@@ -2654,6 +2042,7 @@ public class MainActivity extends AppCompatActivity
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_CANCELED) {
+            Log.d(TAG, "cancelled");
             return;
         }
 
@@ -2711,8 +2100,44 @@ public class MainActivity extends AppCompatActivity
 
                 profileViewModel.update(profile);
                 Toast.makeText(this, "Profile updated", Toast.LENGTH_SHORT).show();
+                break;
             }
-//            case REQUEST_ACCOUNTS_LIST: {
+
+            case REQUEST_SIGN: {
+                Log.d(TAG, "onActivityResult 1234");
+                if (resultCode == RESULT_OK) {
+                    Log.d(TAG, "onActivityResult Ok");
+                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                    Log.d(TAG, "onActivityResult user " + user);
+                    Toast.makeText(getApplicationContext(), "Successfully signed in", Toast.LENGTH_SHORT).show();
+                } else {
+                    Log.d(TAG, "resultCode " + resultCode + ":" + RESULT_OK);
+                    Log.d(TAG, "data " + data);
+                    Toast.makeText(getApplicationContext(), "Unable to sign in", Toast.LENGTH_SHORT).show();
+                }
+                break;
+
+            }
+//        ================================================================================
+
+//            case GOOGLE_SIGN: {
+//                Task<GoogleSignInAccount> task = GoogleSignIn
+//                        .getSignedInAccountFromIntent(data);
+//
+//
+//                try {
+//
+//                    GoogleSignInAccount account = task.getResult(ApiException.class);
+//                    if (account != null) firebaseauthWithGoogle(account);
+//                } catch (ApiException e) {
+//                    e.printStackTrace();
+//                }
+//                break;
+//            }
+//        ================================================================================
+
+
+            //            case REQUEST_ACCOUNTS_LIST: {
 //
 //                // Make sure the request was successful
 //                if (resultCode == RESULT_OK) {
@@ -2793,6 +2218,71 @@ public class MainActivity extends AppCompatActivity
 
 
     }
+
+
+    //        ================================================================================
+//        Future growth for firebase signin
+//        ================================================================================
+
+
+//    private void firebaseauthWithGoogle(GoogleSignInAccount account) {
+//        Log.d(TAG, "firebaseAuthWithGoogle: " + account.getId());
+//
+//        AuthCredential credential = GoogleAuthProvider
+//                .getCredential(account.getIdToken(), null);
+//        mAuth.signInWithCredential(credential)
+//                .addOnCompleteListener(this, task -> {
+//                    if (task.isSuccessful()) {
+////                       progressBar.setVisible(View.VISIBLE);
+//                        Log.d(TAG, "signin success");
+//
+//                        FirebaseUser user = mAuth.getCurrentUser();
+//                        updateUI(user);
+//                    } else {
+////                        progressBar.setVisibility(View.INVISIBLE);
+//                        Log.w(TAG, "signin failure", task.getException());
+//
+//                        Toast.makeText(this, "Signin Failed!", Toast.LENGTH_SHORT).show();
+//                        updateUI(null);
+//                    }
+//                });
+//    }
+//
+//    private void updateUI(FirebaseUser user) {
+//
+//        if (user != null) {
+//            String name = user.getDisplayName();
+//            String email = user.getEmail();
+//            String photo = String.valueOf(user.getPhotoUrl());
+//
+//            text("Info : \n");
+//            text.append(name + "\n");
+//            text.append(email);
+//
+//            Picasso.get().load(photo).into(image);
+//            btn_login.setVisibility(View.INVISIBLE);
+//            btn_logout.setVisibility(View.VISIBLE);
+//
+//        } else {
+//
+//            test.setText("Firebase Login");
+//            Picasso.get().load(R.drawable.ic_firebase_logo).into(image);
+//            btn_login.setVisibility(View.VISIBLE);
+//            btn_logout.setVisibility(View.INVISIBLE);
+//
+//        }
+//    }
+//
+//    void Logout() {
+//
+//        FirebaseAuth.getInstance().signOut();
+//        mGoogleSignInClient.signOut()
+//                .addOnCompleteListener(this,
+//                        task -> updateUI(null));
+//                }
+//
+//        ================================================================================
+//        ================================================================================
 
 //
 //    @Override
@@ -3344,173 +2834,8 @@ public class MainActivity extends AppCompatActivity
 //    }
 
 
-//    @Override
-//    public void setSaveIcon(boolean setting) {
-//        setMenuItemVisible(R.id.menuacct_save, setting);
-//    }
-//    @Override
-//    public void onSaveClicked(int acctId) {
-//        Log.d(TAG, "onSaveClicked: starts");
-//
-//        View addEditLayout = findViewById(R.id.task_details_container);
-//        View mainFragment = findViewById(R.id.fragment);
-//
-//        if(!isLandscape) {
-//            FragmentManager fragmentManager = getSupportFragmentManager();
-//            Fragment fragment = fragmentManager.findFragmentById(R.id.task_details_container);
-//            if (fragment != null) {
-//                getSupportFragmentManager().beginTransaction()
-//                        .remove(fragment)
-//                        .commit();
-//            }
-//
-//            // We've just removed the editing fragment, so hide the frame
-//            addEditLayout.setVisibility(View.GONE);
-//
-//            // and make sure the MainActivityFragment is visible.
-//            mainFragment.setVisibility(View.VISIBLE);
-//        }
-//
-//        AccountListActivityFragment listFragment = (AccountListActivityFragment)
-//                getSupportFragmentManager().findFragmentById(R.id.fragment);
-//        listFragment.setAcctId(acctId);
-//
-//
-//    }
-
-//    @Override
-//    public void onDateClicked(long acctActvyLong) {
-//        Calendar mCalendar = Calendar.getInstance();
-////        Date dte = new Date(account.getActvyLong());
-//        Date dte = new Date();
-//        mCalendar.setTime(dte);
-//        Log.d(TAG, "onDateClicked: " + acctActvyLong);
-//
-//
-////        showDatePickerDialog("Activity Date", 0, mCalendar);
-//    }
 
 
-//    private void showDatePickerDialog(String title, int dialogId, GregorianCalendar mCalendar) {
-//        Log.d(TAG, "showDatePickerDialog: " + mCalendar.toString());
-//        DialogFragment dialogFragment = new DialogFragment();
-//
-//        Bundle arguments = new Bundle();
-//        arguments.putInt(DatePickerFragment.DATE_PICKER_ID, dialogId);
-//        arguments.putString(DatePickerFragment.DATE_PICKER_TITLE, title);
-//        arguments.putSerializable(DatePickerFragment.DATE_PICKER_DATE, mCalendar.getTime());
-//
-//
-//        dialogFragment.setArguments(arguments);
-//        dialogFragment.show(getSupportFragmentManager(), "datePicker");
-//        Log.d(TAG, "Exiting showDatePickerDialog");
-//
-//    }
-
-//    @Override
-//    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-//        Log.d(TAG, "onDateSet: ");
-//
-//        // Check the id, so we know what to di wht the result
-//        int dialogId = (int) view.getTag();
-//        Log.d(TAG, "onDateSet: " + dialogId);
-////        switch(dialogId) {
-////            case DIALOG_FILTER:
-////                mCalendar.set(year, month, dayOfMonth, 0, 0, 0);
-////                applyFilter();
-////                getSupportLoaderManager().restartLoader(LOADER_ID, mArgs, this);
-////                break;
-////            case DIALOG_DELETE:
-////                break;
-////            default:
-////                throw new IllegalArgumentException("Invalid mode when receiving DatePickerDialog result");
-////        }
-//
-//    }
-
-//    @Override
-//    public void onBackPressed() {
-//        Log.d(TAG, "onBackPressed: ");
-//
-//        FragmentManager fragmentManager = getSupportFragmentManager();
-//        AddEditActivityFragment editFragment = (AddEditActivityFragment) fragmentManager.findFragmentById(R.id.task_details_container);
-//
-//
-//        if (editFragment == null) {
-//            showConfirmationLeaveApp();
-//            return;
-//        }
-//
-//        if (!editFragment.canClose()) {
-//            showConfirmationDialog(AppDialog.DIALOG_ID_CANCEL_EDIT_UP);
-//            return;
-//        }
-//
-//        getSupportFragmentManager().beginTransaction()
-//                .remove(editFragment)
-//                .commit();
-//        if (!isLandscape) {
-//            View addEditLayout = findViewById(R.id.task_details_container);
-//            View addEditLayoutScroll = findViewById(R.id.task_details_container_scroll);
-//            addEditLayout.setVisibility(View.GONE);
-//            addEditLayoutScroll.setVisibility(View.GONE);
-//            mainFragment.setVisibility(View.VISIBLE);
-//            Toast.makeText(this,
-//                    "Long click select for more details",
-//                    Toast.LENGTH_SHORT).show();
-//
-////            super.onBackPressed();
-//
-//        }
-//
-////
-////
-//////                    Log.d(TAG, "onBackPressed: mainFragment gone");
-//////                    super.onBackPressed();
-////            if (editFragment == null) {
-////            } else if (editFragment.canClose()) {
-//////                returnToMain();
-////                return;
-////            }
-//    }
-
-
-//            View mainFragment = findViewById(R.id.fragment);
-//
-//        if (!isLandscape) {
-//            showConfirmationLeaveApp();
-//            return;
-//        }
-//
-//        if (editFragment == null) {
-//            showConfirmationLeaveApp();
-//        } else if (editFragment.canClose()) {
-//
-//        } else {
-//            showConfirmationLeaveApp();
-////                    showConfirmationLeaveApp();
-//            return;
-//        }
-//
-////            super.onBackPressed();
-////                showConfirmationLeaveApp();
-//            return;
-////        } else {
-////            showConfirmationDialog(AppDialog.DIALOG_ID_CANCEL_EDIT);
-////            return;
-//
-//
-//
-//
-////            SuggestListActivityFragment suggestFragment = (SuggestListActivityFragment) fragmentManager.findFragmentById(R.id.task_details_container);
-////            if (suggestFragment == null) {
-//////            super.onBackPressed();
-////                showConfirmationLeaveApp();
-////            } else {
-////                showConfirmationDialog(AppDialog.DIALOG_ID_CANCEL_EDIT);
-////            }
-//
-//    }
 
 
     @Override
@@ -3521,66 +2846,6 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-//    private void showConfirmationLeaveApp() {
-//        AppDialog dialog = new AppDialog();
-//        Bundle args = new Bundle();
-//        args.putInt(AppDialog.DIALOG_ID, AppDialog.DIALOG_ID_LEAVE_APP);
-//        args.putInt(AppDialog.DIALOG_TYPE, AppDialog.DIALOG_YES_NO);
-//        args.putString(AppDialog.DIALOG_MESSAGE, getString(R.string.confirmdiag_leave_warning));
-//        args.putString(AppDialog.DIALOG_SUB_MESSAGE, getString(R.string.confirmdiag_leave_app_warning_sub_message));
-//        args.putInt(AppDialog.DIALOG_NEGATIVE_RID, R.string.confirmdiag_leave_negative_caption);
-//        args.putInt(AppDialog.DIALOG_POSITIVE_RID, R.string.confirmdiag_leave_positive_caption);
-//
-//        dialog.setArguments(args);
-//        dialog.show(getSupportFragmentManager(), null);
-//
-//    }
-
-//    private void showConfirmationDialog(int dialogId) {
-//        AppDialog dialog = new AppDialog();
-//        Bundle args = new Bundle();
-//        args.putInt(AppDialog.DIALOG_ID, dialogId);
-//        args.putInt(AppDialog.DIALOG_TYPE, AppDialog.DIALOG_YES_NO);
-//        args.putString(AppDialog.DIALOG_MESSAGE, getString(R.string.confirmdiag_leave_warning));
-//        args.putString(AppDialog.DIALOG_SUB_MESSAGE, getString(R.string.confirmdiag_leave_warning_sub_message));
-//        args.putInt(AppDialog.DIALOG_NEGATIVE_RID, R.string.confirmdiag_ask_abandon_negative_caption);
-//        args.putInt(AppDialog.DIALOG_POSITIVE_RID, R.string.confirmdiag_ask_abandon_positive_caption);
-//
-//        dialog.setArguments(args);
-//        dialog.show(getSupportFragmentManager(), null);
-//
-//    }
-
-
-//    private void showAddConfirmationDialog(int dialogId) {
-//        AppDialog dialog = new AppDialog();
-//        Bundle args = new Bundle();
-//        args.putInt(AppDialog.DIALOG_ID, dialogId);
-//        args.putInt(AppDialog.DIALOG_TYPE, AppDialog.DIALOG_YES_NO);
-//        args.putString(AppDialog.DIALOG_MESSAGE, getString(R.string.confirmdiag_add));
-//        args.putString(AppDialog.DIALOG_SUB_MESSAGE, getString(R.string.confirmdiag_add_sub_message));
-//        args.putInt(AppDialog.DIALOG_NEGATIVE_RID, R.string.confirmdiag_add_negative_caption);
-//        args.putInt(AppDialog.DIALOG_POSITIVE_RID, R.string.confirmdiag_add_positive_caption);
-//
-//        dialog.setArguments(args);
-//        dialog.show(getSupportFragmentManager(), null);
-//
-//    }
-
-
-//    private void showConfirmationDialogOk(int dialogId) {
-//        AppDialog dialog = new AppDialog();
-//        Bundle args = new Bundle();
-//        args.putInt(AppDialog.DIALOG_ID, dialogId);
-//        args.putInt(AppDialog.DIALOG_TYPE, AppDialog.DIALOG_OK);
-//        args.putString(AppDialog.DIALOG_MESSAGE, getString(R.string.confirmdiag_edits));
-//        args.putString(AppDialog.DIALOG_SUB_MESSAGE, getString(R.string.confirmdiag_edits_sub_message));
-//        args.putInt(AppDialog.DIALOG_POSITIVE_RID, R.string.ok);
-//
-//        dialog.setArguments(args);
-//        dialog.show(getSupportFragmentManager(), null);
-//
-//    }
 
 
 
