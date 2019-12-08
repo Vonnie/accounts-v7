@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
-    android:padding="16dp"
     tools:context=".AddEditProfileActivity">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/toolbar_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
@@ -24,170 +25,11 @@
     </com.google.android.material.appbar.AppBarLayout>
 
 
-    <ScrollView
-        android:id="@+id/scroll_view"
+    <include
+        layout="@layout/content_addedit"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="3dp"
-        android:clipToPadding="true"
-        android:fillViewport="true"
-        android:scrollbarStyle="outsideOverlay">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/text_input_corp_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:errorEnabled="true">
-                <!--        app:counterEnabled="true">-->
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Corporation name required"
-                    android:inputType="textCapWords|textNoSuggestions" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/text_input_user_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:errorEnabled="true">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="User name required"
-                    android:inputType="text|textNoSuggestions"
-                    android:textColor="?android:attr/textColorPrimary" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/text_input_user_email"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:errorEnabled="true">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="User email required"
-                    android:inputType="textEmailAddress|textNoSuggestions"
-                    android:textColor="?android:attr/textColorPrimary" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <ImageButton
-                    android:id="@+id/img_website"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:contentDescription="@string/acct_show_website"
-                    android:textColor="?android:attr/textColorPrimary"
-                    app:srcCompat="@drawable/ic_http" />
-
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/text_input_corp_website"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:errorEnabled="true">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:hint="@string/corp_website_hint"
-                        android:inputType="textUri|textNoSuggestions"
-                        android:textColor="?android:attr/textColorPrimary" />
-                </com.google.android.material.textfield.TextInputLayout>
-            </LinearLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/text_input_note"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:counterEnabled="true">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@null"
-                    android:gravity="top|start"
-                    android:hint="Notes"
-                    android:inputType="textMultiLine"
-                    android:maxLines="6"
-                    android:overScrollMode="always"
-                    android:scrollbarStyle="insideInset"
-                    android:scrollbars="vertical"
-                    android:scrollHorizontally="false"
-                    android:textAppearance="@android:style/TextAppearance.Medium"
-                    android:textColor="?android:attr/textColorPrimary" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <Button
-                android:id="@+id/pick_open_date"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:text="@string/btn_open_date_label" />
-
-<!--            android:onClick="showDatePickerDialog"-->
-            <!--            <TextView-->
-            <!--                android:id="@+id/open_date_label"-->
-            <!--                android:layout_width="wrap_content"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:text="@string/accedit_date_open_label"-->
-            <!--                android:textAppearance="@android:style/TextAppearance.Medium" />-->
-
-            <!--            <DatePicker-->
-            <!--                android:id="@+id/datePicker"-->
-            <!--                android:layout_width="wrap_content"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:layout_gravity="center_horizontal"-->
-            <!--                android:spinnersShown="true" />-->
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/actvy_date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="?android:attr/textColorPrimary" />
-
-                <TextView
-                    android:id="@+id/passport_id"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="?android:attr/textColorPrimary" />
-
-                <TextView
-                    android:id="@+id/sequence"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="?android:attr/textColorPrimary" />
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-    </ScrollView>
-</LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -32,7 +32,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Password"
+            android:hint="@string/suggest_password_hint"
             android:inputType="textEmailAddress" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -45,7 +45,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Note"
+            android:hint="@string/suggest_notes_hint"
             android:inputType="textMultiLine" />
     </com.google.android.material.textfield.TextInputLayout>
 

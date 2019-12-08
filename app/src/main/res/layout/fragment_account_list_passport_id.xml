@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
-        android:text="By Account Id"
+        android:text="@string/acctlist_by_account_id"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
     <androidx.recyclerview.widget.RecyclerView

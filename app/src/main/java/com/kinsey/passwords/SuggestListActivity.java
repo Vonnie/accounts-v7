@@ -134,8 +134,8 @@ public class SuggestListActivity extends AppCompatActivity {
 
         mAdView = findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder()
-//                .build();
-                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR).build();
+                .build();
+//                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR).build();
         mAdView.loadAd(adRequest);
 
 
