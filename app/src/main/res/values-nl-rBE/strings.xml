@@ -3,7 +3,7 @@
     <string name="app_name">Accounts</string>
     <string name="about_copyright">Copyright \\ u00a9 2019</string>
     <string name="about_credits">Pictogram afgeleid van <b> analoge klok </b> op openclipart.org door <b> Anoniem </b></string>
-    <string name="about_email">Stuur een e-mail naar vonnikinsey@gmail.com voor ondersteuning</string>
+    <string name="about_email">Stuur een e-mail naar vonniekinsey@gmail.com voor ondersteuning</string>
     <string name="about_weblink">Instructies beschikbaar op</string>
     <string name="about_weblink_21">Instructies beschikbaar op www.learnprogramming.academy</string>
     <string name="corp_website_hint">Geldige corp-website (optioneel)</string>
@@ -18,7 +18,7 @@
     <string name="cancel">Annuleer</string>
     <string name="delete_button_description">Knop om wachtwoord te verwijderen</string>
     <string name="descr_save">Account opslaan</string>
-    <string name="delete_cap" translatable="false">uitschrappen</string>
+    <string name="delete_cap" translatable="false">verwijderen</string>
     <string name="down_button_description">Onderaan item op lijst</string>
     <string name="edit_acct_btn_hint">Bewerk account</string>
     <string name="edit_button_description">Bewerk wachtwoordtekst</string>
@@ -86,7 +86,7 @@
     <string name="home_message_text_1">Volg uw accounts met gesorteerde lijsten, zoekopdrachten, bewerkingen, back-up / herstel van gegevens of selecteer een wachtwoord uit de lijst met suggesties.</string>
     <string name="home_message_text_10">Deze locatie-indeling helpt door de gebruiker toe te staan het wachtwoord met slechts één hand in te toetsen. Hoewel, cijfers en symbolen zijn willekeurig.</string>
     <string name="home_message_text_11">Het toevoegen, bewerken of herschikken van wachtwoorditems in de lijst is vergelijkbaar met het onderhoud van accounts. Wachtwoorden worden niet aan een account toegevoegd. Reden waarom wordt hierna uitgelegd.</string>
-    <string name="home_message_text_12"><h1> Geheimhouding privéwachtwoorden </h1></string>
+    <string name="home_message_text_12">Geheimhouding privéwachtwoorden</string>
     <string name="home_message_text_13">Als u wachtwoorden elektronisch bewaart, zelfs als deze zijn gecodeerd, kunt u ervoor zorgen dat uw inloggegevens worden gestolen. Als u een elektronische kopie (uit een bestand of de appendatabase) heeft met de gegevens van het bedrijf, de gebruikersnaam en het wachtwoord, worden uw accounts sterk blootgesteld aan hackers.</string>
     <string name="home_message_text_14">De gegevens DB bevat accounts met account-ID en accountinfo. Gebruik papier om de account-ID en het toegewezen wachtwoord van de DB op te nemen.</string>
     <string name="home_message_text_15">Voeg een account toe aan de app en neem vervolgens de automatisch gegenereerde id en het nieuw geselecteerde wachtwoord op het papieren rapport.</string>
