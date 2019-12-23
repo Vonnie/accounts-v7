@@ -90,7 +90,7 @@ public class AddEditSuggestActivity extends AppCompatActivity {
                 if (lngActvDate == 0) {
                     textActvyDate.setText("");
                 } else {
-                    textActvyDate.setText("ActvyDate: " + format_ymdtimehm.format(lngActvDate));
+                    textActvyDate.setText(R.string.activity_date + " " + format_ymdtimehm.format(lngActvDate));
                 }
 //            numberPickerPriority.setValue(intent.getIntExtra(EXTRA_PRIORITY, 1));
             } else {
@@ -99,9 +99,9 @@ public class AddEditSuggestActivity extends AppCompatActivity {
         }
 
         if (intId == -1) {
-            setTitle("Add Suggestion");
+            setTitle(R.string.add_suggestion);
         } else {
-            setTitle("Edit Suggestion");
+            setTitle(R.string.edit_suggestion);
         }
     }
 
@@ -115,7 +115,7 @@ public class AddEditSuggestActivity extends AppCompatActivity {
         if (lngActvDate == 0) {
             textActvyDate.setText("");
         } else {
-            textActvyDate.setText("ActvyDate: " + format_ymdtimehm.format(lngActvDate));
+            textActvyDate.setText(R.string.activity_date + " " + format_ymdtimehm.format(lngActvDate));
         }
 
     }
@@ -127,7 +127,7 @@ public class AddEditSuggestActivity extends AppCompatActivity {
 
 
         if (password.trim().isEmpty()) {
-            Toast.makeText(this, "Please insert a title and description", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.toast_enter_title_descr, Toast.LENGTH_SHORT).show();
             return;
         }
 

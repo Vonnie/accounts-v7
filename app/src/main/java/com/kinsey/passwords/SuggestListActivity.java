@@ -267,7 +267,7 @@ public class SuggestListActivity extends AppCompatActivity {
                 Log.d(TAG, "swipe direction " + direction);
 //                Log.d(TAG, "view " + );
                 suggestViewModel.delete(adapter.getSuggestAt(viewHolder.getAdapterPosition()));
-                Toast.makeText(SuggestListActivity.this, "Suggestion deleted", Toast.LENGTH_SHORT).show();
+                Toast.makeText(SuggestListActivity.this, R.string.toast_sugg_deleted, Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -476,13 +476,13 @@ public class SuggestListActivity extends AppCompatActivity {
 
             suggestViewModel.insert(newSuggestItem);
 
-            Toast.makeText(SuggestListActivity.this, "Suggest Added", Toast.LENGTH_SHORT).show();
+            Toast.makeText(SuggestListActivity.this, R.string.toast_sugg_added, Toast.LENGTH_SHORT).show();
 
         } else if (requestCode == EDIT_SUGGEST_REQUEST && resultCode == RESULT_OK) {
             int id = data.getIntExtra(AddEditSuggestActivity.EXTRA_ID, -1);
 
             if (id == -1) {
-                Toast.makeText(this, "Suggest can't be updated", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.toast_error_sugg_not_updated, Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -499,11 +499,11 @@ public class SuggestListActivity extends AppCompatActivity {
             suggest.setActvyDate(new Date(actvyDate));
             suggestViewModel.update(suggest);
 
-            Toast.makeText(this, "Suggestion updated", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.toast_suggest_updated, Toast.LENGTH_SHORT).show();
 
         } else {
 
-            Toast.makeText(this, "Suggest not saved", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.toast_error_suggest_not_saved, Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -526,7 +526,7 @@ public class SuggestListActivity extends AppCompatActivity {
                 return true;
             case R.id.delete_all_suggestions:
                 suggestViewModel.deleteAllSuggests();
-                Toast.makeText(this, "All suggestions deleted", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.toast_all_suggest_deleted, Toast.LENGTH_SHORT).show();
                 return true;
 
             default:
@@ -556,7 +556,7 @@ public class SuggestListActivity extends AppCompatActivity {
             nbrPasswords++;
         }
 
-        Toast.makeText(this, "10 new passwords added", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.toast_10_new_suggests_added, Toast.LENGTH_SHORT).show();
     }
 
 

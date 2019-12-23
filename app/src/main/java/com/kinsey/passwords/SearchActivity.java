@@ -187,7 +187,7 @@ public class SearchActivity extends AppCompatActivity {
                 int id = data.getIntExtra(AddEditProfileActivity.EXTRA_ID, -1);
 
                 if (id == -1) {
-                    Toast.makeText(this, "Profile can't be updated", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.toast_error_profile_not_updated), Toast.LENGTH_SHORT).show();
                     Log.d(TAG, "id -1 can not update");
                     return;
                 }
@@ -210,7 +210,7 @@ public class SearchActivity extends AppCompatActivity {
                 profile.setActvyLong(System.currentTimeMillis());
 
                 MainActivity.profileViewModel.update(profile);
-                Toast.makeText(this, "Profile updated", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.toast_profile_updated), Toast.LENGTH_SHORT).show();
                 Log.d(TAG, "profile updated");
                 break;
 

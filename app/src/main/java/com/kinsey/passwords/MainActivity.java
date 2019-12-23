@@ -685,10 +685,10 @@ public class MainActivity extends AppCompatActivity
         // Checks the orientation of the screen
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             Log.d(TAG, "onConfigurationChanged: landscape");
-            Toast.makeText(this, "landscape", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, "landscape", Toast.LENGTH_SHORT).show();
         } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
             Log.d(TAG, "onConfigurationChanged: portrait");
-            Toast.makeText(this, "portrait", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, "portrait", Toast.LENGTH_SHORT).show();
         } else {
             Log.d(TAG, "onConfigurationChanged: unk");
         }
@@ -2071,14 +2071,14 @@ public class MainActivity extends AppCompatActivity
 
 
                 Log.d(TAG, "profile added");
-                Toast.makeText(this, "Profile added", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.toast_profile_added, Toast.LENGTH_SHORT).show();
                 break;
             }
             case EDIT_PROFILE_REQUEST: {
                 int id = data.getIntExtra(AddEditProfileActivity.EXTRA_ID, -1);
 
                 if (id == -1) {
-                    Toast.makeText(this, "Profile can't be updated", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.toast_error_profile_not_updated, Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -2099,7 +2099,7 @@ public class MainActivity extends AppCompatActivity
                 profile.setActvyLong(System.currentTimeMillis());
 
                 profileViewModel.update(profile);
-                Toast.makeText(this, "Profile updated", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.toast_profile_updated, Toast.LENGTH_SHORT).show();
                 break;
             }
 
@@ -2109,11 +2109,11 @@ public class MainActivity extends AppCompatActivity
                     Log.d(TAG, "onActivityResult Ok");
                     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                     Log.d(TAG, "onActivityResult user " + user);
-                    Toast.makeText(getApplicationContext(), "Successfully signed in", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), R.string.toast_signin, Toast.LENGTH_SHORT).show();
                 } else {
                     Log.d(TAG, "resultCode " + resultCode + ":" + RESULT_OK);
                     Log.d(TAG, "data " + data);
-                    Toast.makeText(getApplicationContext(), "Unable to sign in", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), R.string.toast_unable_to_signin, Toast.LENGTH_SHORT).show();
                 }
                 break;
 
@@ -2895,10 +2895,10 @@ public class MainActivity extends AppCompatActivity
 
     private void alertConfirmDelete(Profile profile, int position) {
         android.app.AlertDialog.Builder alertDialogBuilder = new android.app.AlertDialog.Builder(this);
-        alertDialogBuilder.setMessage("Delete Account\n" +
+        alertDialogBuilder.setMessage(getString(R.string.alert_delete_acct) + "\n" +
                 profile.getCorpName() +
-                "\nAcctId: " + profile.getPassportId());
-        alertDialogBuilder.setPositiveButton("yes",
+                "\n" + getString(R.string.alert_acct_id) + profile.getPassportId());
+        alertDialogBuilder.setPositiveButton(R.string.yes,
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface arg0, int arg1) {
                         profileViewModel.delete(profile);

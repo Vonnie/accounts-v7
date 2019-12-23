@@ -525,7 +525,7 @@ public class AddEditProfileActivity extends AppCompatActivity
 
         if (corpName.trim().isEmpty() || userName.trim().isEmpty()
                 || userEmail.trim().isEmpty()) {
-            Toast.makeText(this, "Please insert corp name, user name, user email", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.toast_reqd_cols_for_save, Toast.LENGTH_SHORT).show();
             return;
         }
 

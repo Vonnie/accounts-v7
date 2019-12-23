@@ -1,5 +1,6 @@
 package com.kinsey.passwords;
 
+import android.accounts.Account;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
@@ -86,7 +87,7 @@ public class FileViewActivity extends AppCompatActivity {
 //        });
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        setTitle("Backup / Restore");
+        setTitle(R.string.menuacct_backup_restore_accts);
 
 
         webView = findViewById(R.id.wv_page);
@@ -309,29 +310,29 @@ public class FileViewActivity extends AppCompatActivity {
                 if (dirStorage.canRead()) {
                     if (fileExternal.exists()) {
                         htmlString = greetMsg() +
-                                "<hr><h5>" + adapter.getItemCount() + " Account Profile items currently on db<h5>" +
+                                "<hr><h5>" + adapter.getItemCount() + " " + getString(R.string.fv_msg_1) + "<h5>" +
                                 "<h5>" + accountJsonProperties(fileExternal.getAbsoluteFile().toString()) + "</h5><hr>" +
-                                "<h5>Notify: If uninstall app, the exported / backup file also is deleted.</h5>" +
-                                "<h5>Preserve file with a file copy or share from menu</h5><hr>" +
-"<h5>Information: To setup this app to another device, use this Backup/Restore feature to populate data onto the other device.</h5>" +
-                        "<h5>Steps: 1. Backup 2. Install app to other device 3. Copy to device backup file, see loc from menu item filename 4. Restore</h5>";
+                                "<h5>" + getString(R.string.fv_msg_2) + "</h5>" +
+                                "<h5>" + getString(R.string.fv_msg_3) + "</h5><hr>" +
+                                "<h5>" + getString(R.string.fv_msg_4) + "</h5>" +
+                                "<h5>" + getString(R.string.fv_msg_5) + "</h5>";
                     } else {
                         htmlString = notfyMsg() +
-                                "<h4>Use menu to export data.</h4>" +
-                                "<h5>" + adapter.getItemCount() + " Account Profile items currently on db<h5>" +
+                                "<h4>" + getString(R.string.fv_msg_6) + "</h4>" +
+                                "<h5>" + adapter.getItemCount() + getString(R.string.fv_msg_7) + "<h5>" +
                         "<h4>Notify</h4>" +
-                                "<h4>As of version name 11, backup storage has moved. See Filename from menu</h4>";
+                                "<h4>" + getString(R.string.fv_msg_8) + "</h4>";
                     }
                 } else {
                     htmlString = notfyMsg() +
-                            "<h4>Path storage dir does not exists " + dirStorage.getAbsoluteFile() + "</h4>" +
-                            "<h5>Use menu to export data to this file.</h5>" +
-                            "<h5>" + adapter.getItemCount() + " Account Profile items to backup<h5>";
+                            "<h4>" + getString(R.string.fv_msg_9) + dirStorage.getAbsoluteFile() + "</h4>" +
+                            "<h5>" + getString(R.string.fv_msg_10) + "</h5>" +
+                            "<h5>" + adapter.getItemCount() + " " + getString(R.string.fv_msg_11) + "<h5>";
                 }
 
             } else {
                 htmlString = permissionMsg() +
-                        "<h5>" + adapter.getItemCount() + " Account Profile items to backup once permission is granted<h5>";
+                        "<h5>" + adapter.getItemCount() + " " + getString(R.string.fv_msg_12) + "<h5>";
             }
 
             webView.loadData(htmlString, "text/html", null);
@@ -354,36 +355,36 @@ public class FileViewActivity extends AppCompatActivity {
     }
 
     private String warningMsg() {
-        String htmlString = "<h1>Warning</h1>" +
-                "<h2>Unable to acquire Exported Accounts</h2>" +
-                "<h3>Either not previously exported or file storage issue</h3>";
+        String htmlString = "<h1>" + getString(R.string.fv_msg_13) + "</h1>" +
+                "<h2>" + getString(R.string.fv_msg_14) + "</h2>" +
+                "<h3>" + getString(R.string.fv_msg_15) + "</h3>";
         return htmlString;
     }
 
     private String notfyMsg() {
-        String htmlString = "<h1>Notification</h1>" +
-                "<h2>App storage available and with permissions,</h2>" +
-                "<h2>Export file not yet created</h2>";
+        String htmlString = "<h1>" + getString(R.string.fv_msg_16) + "</h1>" +
+                "<h2>" + getString(R.string.fv_msg_17) + "</h2>" +
+                "<h2>" + getString(R.string.fv_msg_18) + "</h2>";
         return htmlString;
     }
 
     private String greetMsg() {
-        String htmlString = "<h1>Welcome</h1>" +
-                "<h2>File Offload Properties</h2>" +
-                "<h3>App storage available and export file exists.</h3>" +
-                "<h4>See menu for file location</h4>";
+        String htmlString = "<h1>" + getString(R.string.fv_msg_19) + "</h1>" +
+                "<h2>" + getString(R.string.fv_msg_20) + "</h2>" +
+                "<h3>" + getString(R.string.fv_msg_21) + "</h3>" +
+                "<h4>" + getString(R.string.fv_msg_22) + "</h4>";
         return htmlString;
     }
 
     private String permissionMsg() {
-        String htmlString = "<h1>Permission Issue</h1>" +
-                "<h2>Unable to access App storage for Backup / Restore</h2>" +
-                "<h3>Grant Permission Instruction</h3>" +
-                "<h4>Grant access for this App from Settings</h4>" +
-                "<h4>Select Accounts app in apps list. Select permissions. Then, set on Storage.</h4>" +
-                "<h4>Once permission is granted, return to backup the db.</h4>" +
-                "<h3>Notify</h3>" +
-                "<h4>As of version name 11, backup storage has moved. See Filename from menu</h4>";
+        String htmlString = "<h1>" + getString(R.string.fv_msg_23) + "</h1>" +
+                "<h2>" + getString(R.string.fv_msg_24) + "</h2>" +
+                "<h3>" + getString(R.string.fv_msg_25) + "</h3>" +
+                "<h4>" + getString(R.string.fv_msg_26) + "</h4>" +
+                "<h4>" + getString(R.string.fv_msg_27) + "</h4>" +
+                "<h4>" + getString(R.string.fv_msg_28) + "</h4>" +
+                "<h3>" + getString(R.string.fv_msg_29) + "</h3>" +
+                "<h4>" + getString(R.string.fv_msg_30) + "</h4>";
         return htmlString;
     }
 
@@ -431,7 +432,7 @@ public class FileViewActivity extends AppCompatActivity {
 
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setMessage("Backup File does not exist.\nMenu Backup to create a file.");
+        alertDialogBuilder.setMessage(getString(R.string.fv_msg_31) + "\n" + getString(R.string.fv_msg_32));
         alertDialogBuilder.setPositiveButton("ok",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface arg0, int arg1) {
@@ -473,7 +474,7 @@ public class FileViewActivity extends AppCompatActivity {
             if (file.exists()) {
                 Log.d(TAG, "ExportAccountDB: file exists " + file.getAbsoluteFile());
 //                alertMsg("Backup Temporaruly Unavailable");
-                alertBackup(file, "Backup file exists. Want to over-write it? Created: "
+                alertBackup(file, getString(R.string.fv_msg_33)
                         + format_mdy.format(file.lastModified()));
             } else {
 
@@ -494,7 +495,7 @@ public class FileViewActivity extends AppCompatActivity {
                     msgError = e1.getMessage();
                     Log.e(TAG, "ExportAccountDB error: " + e1.getMessage());
                     Toast.makeText(this,
-                            " unable to create Exported file",
+                            R.string.toast_error_backup_create,
                             Toast.LENGTH_LONG).show();
                     return;
 //                    fvFragment.setInfoMessage("Exported directory not exists");
@@ -506,7 +507,7 @@ public class FileViewActivity extends AppCompatActivity {
                 }
 
 
-                alertBackup(file, "Confirm backup");
+                alertBackup(file, getString(R.string.fv_msg_34));
 //                alertMsg("Backup Temporaruly Unavailable");
             }
 //            JsonWriter writer = new JsonWriter(new FileWriter(file));
@@ -533,7 +534,7 @@ public class FileViewActivity extends AppCompatActivity {
             System.out.println(e2.getMessage());
             msgError = "jsonError: " + e2.getMessage();
             Log.v(TAG, msgError);
-            Toast.makeText(this, "Export has errors", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.toast_export_error, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -588,7 +589,7 @@ public class FileViewActivity extends AppCompatActivity {
                     emailDialog.dismiss();
 //                    Toast.makeText(FileViewActivity.this, "You entered a Value!,", Toast.LENGTH_LONG).show();
                 } else {
-                    Toast.makeText(FileViewActivity.this, "Please enter an Email!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(FileViewActivity.this, R.string.toast_enter_email, Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -616,7 +617,7 @@ public class FileViewActivity extends AppCompatActivity {
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setMessage(msg);
-        alertDialogBuilder.setPositiveButton("yes",
+        alertDialogBuilder.setPositiveButton(R.string.yes,
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface arg0, int arg1) {
                         new DownloadProfileAsyncTask(getApplicationContext(),
@@ -625,7 +626,7 @@ public class FileViewActivity extends AppCompatActivity {
                         //                        Toast.makeText(getApplicationContext(), "You clicked yes button", Toast.LENGTH_LONG).show();
                     }
                 })
-                .setNegativeButton("No",
+                .setNegativeButton(R.string.no,
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                     }
@@ -654,8 +655,8 @@ public class FileViewActivity extends AppCompatActivity {
 //            alertMsg("Restore Temporaruly Unavailable");
 
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-            alertDialogBuilder.setMessage("Confirm Restore of backup file onto data DB");
-            alertDialogBuilder.setPositiveButton("yes",
+            alertDialogBuilder.setMessage(R.string.fv_msg_35);
+            alertDialogBuilder.setPositiveButton(R.string.yes,
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface arg0, int arg1) {
                             new UploadProfileAsyncTask(getApplicationContext(),
@@ -708,7 +709,7 @@ public class FileViewActivity extends AppCompatActivity {
 //        Log.d(TAG, "showFilename: " + getExternalFilesDir("passport/") + MainActivity.BACKUP_FILENAME);
         String displayMsg = getExternalFilesDir("passport") + "/" + MainActivity.BACKUP_FILENAME;
         if (fileExternal.exists()) {
-            displayMsg += " \ncreated " + format_mdy.format(fileExternal.lastModified());
+            displayMsg += " \n" + getString(R.string.fv_msg_36) + " " + format_mdy.format(fileExternal.lastModified());
         }
 
 
@@ -754,7 +755,7 @@ public class FileViewActivity extends AppCompatActivity {
         File file = new File(dirStorage, MainActivity.BACKUP_FILENAME);
         if (!file.exists()) {
             Toast.makeText(FileViewActivity.this,
-                    "No Exported File to share",
+                    R.string.toast_no_export_to_share,
                     Toast.LENGTH_SHORT).show();
             return;
         }
@@ -766,7 +767,7 @@ public class FileViewActivity extends AppCompatActivity {
 //        Uri uri = Uri.parse(file.getAbsolutePath());
 //        FileProvider fp = new FileProvider();
         Uri uri = getUriForFile(getApplicationContext(),
-                "com.kinsey.passwords.fileprovider", file);
+                getString(R.string.fileprovider_package), file);
 //                Uri.parse(file.getAbsolutePath());
 
         Intent intent = new Intent(Intent.ACTION_SEND);
@@ -779,10 +780,10 @@ public class FileViewActivity extends AppCompatActivity {
         intent.putExtra(Intent.EXTRA_EMAIL, addresses);
         intent.putExtra(Intent.EXTRA_SUBJECT, subject);
         intent.putExtra(Intent.EXTRA_STREAM, uri);
-        intent.putExtra(Intent.EXTRA_TEXT, "Keep Accounts backup in secure place for any future restores.");
+        intent.putExtra(Intent.EXTRA_TEXT, R.string.fv_msg_37);
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         try {
-            startActivityForResult(intent.createChooser(intent, "Share accounts data"),
+            startActivityForResult(intent.createChooser(intent, getString(R.string.fv_msg_38)),
                     BACKUP_FILE_REQUESTED);
         } catch (ActivityNotFoundException ex) {
             Log.e(TAG, "error: " + ex.getMessage());
@@ -1043,7 +1044,7 @@ public class FileViewActivity extends AppCompatActivity {
 //            profileDao.update(profiles[0]);
 //            File dirStorage = getExternalFilesDir("passport");
 
-            String msgDisplay = "No upload / updates";
+            String msgDisplay = context.getString(R.string.fv_msg_39);
             try {
 
                 Log.d(TAG, "upload file " + filename[0]);
@@ -1055,9 +1056,9 @@ public class FileViewActivity extends AppCompatActivity {
                 StringBuilder sb = new StringBuilder();
                 Formatter formatter = new Formatter(sb, Locale.US);
 
-                msgDisplay = formatter.format("<h2>%3d Account Profiles Upload</h2>",
+                msgDisplay = formatter.format("<h2>%3d " + context.getString(R.string.fv_msg_40) + "</h2>",
                         listAccounts.size()).toString() +
-                        "<h3>App DB Updated, restored from backup file</h3>";
+                        "<h3>" + context.getString(R.string.fv_msg_41) + "</h3>";
 //                publishProgress(msgDisplay);
 //
 //                publishProgress("<h2>%3d Account Profile uploaded</h2>" );
@@ -1093,7 +1094,7 @@ public class FileViewActivity extends AppCompatActivity {
             Log.d(TAG, "run: upload complete ");
 
 
-            Toast.makeText(context, "Upload restore complete", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, R.string.toast_restore_complete, Toast.LENGTH_SHORT).show();
 
             this.progressBar.setVisibility(View.INVISIBLE);
 
@@ -1226,9 +1227,9 @@ public class FileViewActivity extends AppCompatActivity {
             StringBuilder sb = new StringBuilder();
             Formatter formatter = new Formatter(sb, Locale.US);
 
-            String msgDisplay = formatter.format("<h2>%3d Account Profiles onto Backup file</h2>" +
-                                "<h3>See filename thru menu item 'Filename'</h3>" +
-                                "<h3>View backup data thru menu item 'Show Backup File'</h3>",
+            String msgDisplay = formatter.format("<h2>%3d " + context.getString(R.string.fv_msg_42) + "</h2>" +
+                                "<h3>" + context.getString(R.string.fv_msg_43) + "</h3>" +
+                                "<h3>" + context.getString(R.string.fv_msg_44) + "</h3>",
                     count).toString();
 
             this.webView.loadData(msgDisplay, "text/html", null);
@@ -1236,7 +1237,7 @@ public class FileViewActivity extends AppCompatActivity {
 //            FileViewActivity.infoPage("Account Profiles exported");
 
             Toast.makeText(context,
-                    count + " Exported accounts to backup file",
+                    count + " " + context.getString(R.string.toast_accounts_backed_up),
                     Toast.LENGTH_LONG).show();
 
             this.progressBar.setVisibility(View.INVISIBLE);
