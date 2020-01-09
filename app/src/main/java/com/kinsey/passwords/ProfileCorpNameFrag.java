@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.kinsey.passwords.items.Profile;
 import com.kinsey.passwords.provider.ProfileAdapter;
+import com.kinsey.passwords.provider.RecyclerViewPositionHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,10 +34,14 @@ public class ProfileCorpNameFrag extends Fragment {
 
     Context context;
     RecyclerView recyclerView;
+    RecyclerViewPositionHelper mRecyclerViewHelper;
+    private RecyclerView.LayoutManager mLayoutManager;
 //    ProfileViewModel profileViewModel;
     TextView tvListTitle;
     private List<Profile> profileListFull;
     private ProfileAdapter adapter = new ProfileAdapter();
+
+    private final String RECYCLER_POSITION_KEY = "recyclerViewPos";
 
     private ProfileCorpNameFrag.OnProfileCorpNameClickListener mListener;
     public interface OnProfileCorpNameClickListener {
@@ -120,6 +125,8 @@ public class ProfileCorpNameFrag extends Fragment {
 
 
         recyclerView.setAdapter(adapter);
+        mLayoutManager = recyclerView.getLayoutManager();
+        mRecyclerViewHelper = RecyclerViewPositionHelper.createHelper(recyclerView);
 
 //        MainActivity.profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
         MainActivity.profileViewModel.getAllProfilesByCorpName().observe(getViewLifecycleOwner(), new Observer<List<Profile>>() {
@@ -128,6 +135,15 @@ public class ProfileCorpNameFrag extends Fragment {
 
                 profileListFull = new ArrayList<>(profiles);
                 adapter.submitList(profiles);
+
+                if (savedInstanceState != null) {
+                    int pos = savedInstanceState.getInt(RECYCLER_POSITION_KEY);
+                    Log.d(TAG, "onCreateView: len " + recyclerView.getChildCount());
+                    recyclerView.scrollToPosition(pos);
+                    Log.d(TAG, "onCreateView: pos " + pos);
+                } else {
+                    recyclerView.scrollToPosition(0);
+                }
             }
         });
 
@@ -172,8 +188,8 @@ public class ProfileCorpNameFrag extends Fragment {
         });
 
 
-        recyclerView.scrollToPosition(0);
         adapter.notifyDataSetChanged();
+
 
 
 //        new CountDownTimer(30000, 100) {
@@ -232,6 +248,21 @@ public class ProfileCorpNameFrag extends Fragment {
             return;
         }
 
+    }
+
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        Log.d(TAG, "onSaveInstanceState: len " + adapter.getItemCount());
+        // Save RecyclerView state
+        outState.putInt(RECYCLER_POSITION_KEY,  mRecyclerViewHelper.findFirstCompletelyVisibleItemPosition());
+
+        super.onSaveInstanceState(outState);
+
+//        int pos = spinner.getSelectedItemPosition();
+//        outState.putInt("spinnerPos", pos);
+//        pos = mRecyclerViewHelper.findFirstVisibleItemPosition();
+//        outState.putInt("recyclerPos", pos);
     }
 
     @Override
