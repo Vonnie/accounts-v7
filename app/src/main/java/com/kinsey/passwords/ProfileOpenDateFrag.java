@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.kinsey.passwords.items.Profile;
 import com.kinsey.passwords.provider.ProfileAdapter;
 import com.kinsey.passwords.provider.ProfileViewModel;
+import com.kinsey.passwords.provider.RecyclerViewPositionHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,9 +37,14 @@ public class ProfileOpenDateFrag extends Fragment {
 
     Context context;
     RecyclerView recyclerView;
+    RecyclerViewPositionHelper mRecyclerViewHelper;
     ProfileViewModel profileViewModel;
     private List<Profile> profileListFull;
     private ProfileAdapter adapter = new ProfileAdapter();
+
+    private final String RECYCLER_POSITION_KEY = "recyclerViewPos";
+    private int mRecyclerViewPos = RecyclerView.NO_POSITION;
+
 
     private ProfileOpenDateFrag.OnProfileOpenDateClickListener mListener;
     public interface OnProfileOpenDateClickListener {
@@ -115,6 +121,7 @@ public class ProfileOpenDateFrag extends Fragment {
 
 
         recyclerView.setAdapter(adapter);
+        mRecyclerViewHelper = RecyclerViewPositionHelper.createHelper(recyclerView);
 
         profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
         profileViewModel.getAllProfilesByOpenDate().observe(getViewLifecycleOwner(), new Observer<List<Profile>>() {
@@ -124,7 +131,17 @@ public class ProfileOpenDateFrag extends Fragment {
                 profileListFull = new ArrayList<>(profiles);
                 adapter.submitList(profiles);
                 Log.d(TAG, "list submit");
+
+                if (savedInstanceState != null) {
+                    int pos = savedInstanceState.getInt(RECYCLER_POSITION_KEY);
+                    Log.d(TAG, "onCreateView: len " + recyclerView.getChildCount());
+                    recyclerView.scrollToPosition(pos);
+                    Log.d(TAG, "onCreateView: pos " + pos);
+                } else {
+                    recyclerView.scrollToPosition(0);
+                }
             }
+
         });
 
 
@@ -267,6 +284,16 @@ public class ProfileOpenDateFrag extends Fragment {
                 break;
         }
 
+    }
+
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        Log.d(TAG, "onSaveInstanceState: len " + adapter.getItemCount());
+        // Save RecyclerView state
+        outState.putInt(RECYCLER_POSITION_KEY,  mRecyclerViewHelper.findFirstCompletelyVisibleItemPosition());
+
+        super.onSaveInstanceState(outState);
 
     }
 

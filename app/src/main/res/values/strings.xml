@@ -102,12 +102,11 @@
     <string name="menuvw_retore">Restore</string>
     <string name="menuvw_export">Export</string>
     <string name="menuvw_backup">Backup</string>
-    <string name="about_copyright">Copyright \u00a9 2019</string>
+    <string name="about_copyright">Copyright © 2020</string>
     <string name="about_weblink">Instructions available at</string>
     <string name="about_url" translatable="false"><u>http://www.learnprogramming.academy</u></string>
     <string name="about_weblink_21">Instructions available at www.learnprogramming.academy</string>
     <string name="about_email">For support, email vonniekinsey@gmail.com</string>
-    <string name="about_credits">Icon derived from <b>analog clock</b> at openclipart.org by <b>Anonymous</b></string>
     <string name="btn_open_date_label">Select Open Date</string>
     <string name="empty_list">Accounts List is empty</string>
     <string name="empty_list_subtitle">Select \'Add an account\' from menu</string>
@@ -149,7 +148,7 @@
     <string name="fv_msg_2">Notify: If uninstall app, the exported / backup file also is deleted.</string>
     <string name="fv_msg_3">Preserve file with a file copy or share from menu</string>
     <string name="fv_msg_4">Information: To setup this app to another device, use this Backup/Restore feature to populate data onto the other device.</string>
-    <string name="fv_msg_5">Steps: 1. Backup 2. Install app to other device 3. Copy to device backup file, see loc from menu item filename 4. Restore</string>
+    <string name="fv_msg_5">Steps: 1. Backup 2. Install app to other device 3. Copy to device backup file, see physical location from menu item filename 4. Restore</string>
     <string name="fv_msg_6">Use menu to export data.</string>
     <string name="fv_msg_7">Account Profile items currently on db</string>
     <string name="fv_msg_8">As of version name 11, backup storage has moved. See Filename from menu</string>
@@ -177,7 +176,7 @@
     <string name="fv_msg_30">As of version name 11, backup storage has moved. See Filename from menu</string>
     <string name="fv_msg_31">Backup File does not exist.</string>
     <string name="fv_msg_32">Menu Backup to create a file.</string>
-    <string name="fv_msg_33">Backup file exists. Want to over-write it? Created:</string>
+    <string name="fv_msg_33">Backup file exists. Want to overwrite it? Created:</string>
     <string name="toast_error_backup_create">unable to create Export file</string>
     <string name="fv_msg_34">Confirm backup</string>
     <string name="yes">yes</string>
@@ -194,7 +193,7 @@
     <string name="fv_msg_42">Account Profiles onto Backup file</string>
     <string name="fv_msg_43">See filename thru menu item \'Filename\'</string>
     <string name="fv_msg_44">View backup data thru menu item \'Show Backup File\'</string>
-    <string name="toast_accounts_backed_up">Exported accounts to backup file</string>
+    <string name="toast_accounts_backed_up">Accounts backed up file</string>
     <string name="alert_delete_acct">Delete Account</string>
     <string name="alert_acct_id">Account Id:</string>
     <string name="add_suggestion">Add Suggestion</string>

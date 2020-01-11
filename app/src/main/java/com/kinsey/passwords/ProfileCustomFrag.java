@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.kinsey.passwords.items.Profile;
 import com.kinsey.passwords.provider.ProfileAdapter;
+import com.kinsey.passwords.provider.RecyclerViewPositionHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,11 +34,15 @@ public class ProfileCustomFrag extends Fragment {
 
     Context context;
     RecyclerView recyclerView;
+    RecyclerViewPositionHelper mRecyclerViewHelper;
 //    ProfileViewModel profileViewModel;
     private List<Profile> profileListFull;
     private ProfileAdapter adapter = new ProfileAdapter();
     boolean onFirstReported = true;
     boolean onFirstReposition = true;
+
+    private final String RECYCLER_POSITION_KEY = "recyclerViewPos";
+    private int mRecyclerViewPos = RecyclerView.NO_POSITION;
 
     private ProfileCustomFrag.OnProfileCustomClickListener mListener;
     public interface OnProfileCustomClickListener {
@@ -112,6 +117,7 @@ public class ProfileCustomFrag extends Fragment {
 
 
         recyclerView.setAdapter(adapter);
+        mRecyclerViewHelper = RecyclerViewPositionHelper.createHelper(recyclerView);
 
 //        profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
         MainActivity.profileViewModel.getAllProfilesCustomSort().observe(getViewLifecycleOwner(), new Observer<List<Profile>>() {
@@ -120,6 +126,7 @@ public class ProfileCustomFrag extends Fragment {
 
                 profileListFull = new ArrayList<>(profiles);
                 adapter.submitList(profiles);
+
                 if (onFirstReported) {
                     onFirstReported = false;
                     resequenceList();
@@ -129,6 +136,17 @@ public class ProfileCustomFrag extends Fragment {
                     recyclerView.scrollToPosition(0);
                 }
                 Log.d(TAG, "list submit");
+
+
+                if (savedInstanceState != null) {
+                    int pos = savedInstanceState.getInt(RECYCLER_POSITION_KEY);
+                    Log.d(TAG, "onCreateView: len " + recyclerView.getChildCount());
+                    recyclerView.scrollToPosition(pos);
+                    Log.d(TAG, "onCreateView: pos " + pos);
+                } else {
+                    recyclerView.scrollToPosition(0);
+                }
+
             }
         });
 
@@ -456,6 +474,17 @@ public class ProfileCustomFrag extends Fragment {
 
     public void refreshListPos(int position) {
         adapter.notifyItemChanged(position);
+    }
+
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        Log.d(TAG, "onSaveInstanceState: len " + adapter.getItemCount());
+        // Save RecyclerView state
+        outState.putInt(RECYCLER_POSITION_KEY,  mRecyclerViewHelper.findFirstCompletelyVisibleItemPosition());
+
+        super.onSaveInstanceState(outState);
+
     }
 
 

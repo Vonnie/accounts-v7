@@ -42,6 +42,7 @@ public class ProfileCorpNameFrag extends Fragment {
     private ProfileAdapter adapter = new ProfileAdapter();
 
     private final String RECYCLER_POSITION_KEY = "recyclerViewPos";
+    private int mRecyclerViewPos = RecyclerView.NO_POSITION;
 
     private ProfileCorpNameFrag.OnProfileCorpNameClickListener mListener;
     public interface OnProfileCorpNameClickListener {
@@ -57,9 +58,9 @@ public class ProfileCorpNameFrag extends Fragment {
         View view = inflater.inflate(R.layout.fragment_account_list, container, false);
         //        return super.onCreateView(inflater, container, savedInstanceState);
 
+
         recyclerView = view.findViewById(R.id.account_items_list);
         tvListTitle = view.findViewById(R.id.list_title);
-
 
         recyclerView.setHasFixedSize(true);
 

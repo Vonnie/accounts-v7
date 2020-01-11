@@ -30,6 +30,7 @@ import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.kinsey.passwords.items.Suggest;
+import com.kinsey.passwords.provider.RecyclerViewPositionHelper;
 import com.kinsey.passwords.provider.SuggestViewModel;
 import com.kinsey.passwords.provider.SuggestAdapter;
 import com.kinsey.passwords.tools.PasswordFormula;
@@ -48,11 +49,17 @@ public class SuggestListActivity extends AppCompatActivity {
     public static final int ADD_SUGGEST_REQUEST = 1;
     public static final int EDIT_SUGGEST_REQUEST = 2;
 
+    RecyclerView recyclerView;
+    RecyclerViewPositionHelper mRecyclerViewHelper;
     private SuggestViewModel suggestViewModel;
     private PasswordFormula passwordFormula = new PasswordFormula();
     private List<Suggest> suggestList;
     GridLayoutManager layoutManager;
     private GestureDetectorCompat gestureDetector;
+
+    private final String RECYCLER_POSITION_KEY = "recyclerViewPos";
+    private int mRecyclerViewPos = RecyclerView.NO_POSITION;
+
 
     //    private List<Suggest> suggestListFull;
 //    private int maxSeq = 0;
@@ -151,6 +158,7 @@ public class SuggestListActivity extends AppCompatActivity {
 
         final SuggestAdapter adapter = new SuggestAdapter();
         recyclerView.setAdapter(adapter);
+        mRecyclerViewHelper = RecyclerViewPositionHelper.createHelper(recyclerView);
 
 //        suggestViewModel = ViewModelProviders.of(this).get(SuggestViewModel.class);
         suggestViewModel = new ViewModelProvider(this).get(SuggestViewModel.class);
@@ -163,6 +171,17 @@ public class SuggestListActivity extends AppCompatActivity {
                 suggestList = new ArrayList<>(suggests);
                 adapter.submitList(suggests);
 //                Log.d(TAG, "suggests size " + suggestListFull.size());
+
+
+                if (savedInstanceState != null) {
+                    int pos = savedInstanceState.getInt(RECYCLER_POSITION_KEY);
+                    Log.d(TAG, "onCreateView: len " + recyclerView.getChildCount());
+                    recyclerView.scrollToPosition(pos);
+                    Log.d(TAG, "onCreateView: pos " + pos);
+                } else {
+                    recyclerView.scrollToPosition(0);
+                }
+
             }
         });
 
@@ -597,6 +616,17 @@ public class SuggestListActivity extends AppCompatActivity {
 //
 //        Log.d(TAG, "onChg new max seq " + this.suggestMaxItem.getSequence());
 //    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+//        Log.d(TAG, "onSaveInstanceState: len " + adapter.getItemCount());
+        // Save RecyclerView state
+        outState.putInt(RECYCLER_POSITION_KEY,  mRecyclerViewHelper.findFirstCompletelyVisibleItemPosition());
+
+        super.onSaveInstanceState(outState);
+
+    }
+
 
 }
 

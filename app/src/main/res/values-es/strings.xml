@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Accounts</string>
-    <string name="about_copyright">Copyright © 2019</string>
-    <string name="about_credits">Icono derivado de <b> reloj analógico </b> en openclipart.org por <b> Anónimo </b></string>
+    <string name="about_copyright">Copyright © 2020</string>
     <string name="about_email">Para soporte, envíe un correo electrónico a vonniekinsey@gmail.com</string>
     <string name="about_weblink">Instrucciones disponibles en</string>
     <string name="about_weblink_21">Instrucciones disponibles en www.learnprogramming.academy</string>
@@ -140,7 +139,7 @@
     <string name="toast_sugg_added">Sugerir agregado</string>
     <string name="toast_sugg_deleted">Sugerencia eliminada</string>
     <string name="toast_suggest_updated">Sugerir actualizado</string>
-    <string name="fv_msg_5">Stappen: 1. Copia de seguridad 2. Aplicación del dispositivo y instalación del dispositivo 3. Kopiëren naar apparaatback-upbestand, zie loc vanuit menu-item bestandsnaam 4. Herstellen</string>
+    <string name="fv_msg_5">Pasos: 1. Copia de seguridad 2. Instalar la aplicación en otro dispositivo 3. Copiar al archivo de copia de seguridad del dispositivo, ver la ubicación física del nombre del archivo del elemento del menú 4. Restaurar</string>
     <string name="fv_msg_4">Información: para configurar esta aplicación en otro dispositivo, use esta función de Copia de seguridad / Restauración para completar los datos en el otro dispositivo.</string>
     <string name="fv_msg_3">Preservar el archivo con una copia de archivo o compartir desde el menú</string>
     <string name="fv_msg_2">Notificar: si desinstala la aplicación, también se elimina el archivo de exportación / copia de seguridad.</string>
@@ -186,7 +185,7 @@
     <string name="toast_no_export_to_share">Ningún archivo exportado para compartir</string>
     <string name="yes">si</string>
     <string name="fv_msg_44">Ver datos de respaldo a través del elemento de menú \'Mostrar archivo de respaldo\'</string>
-    <string name="toast_accounts_backed_up">Exportar cuentas a un archivo de respaldo</string>
+    <string name="toast_accounts_backed_up">Archivo de copia de seguridad de cuentas</string>
     <string name="fv_msg_42">Perfiles de cuenta en archivo de copia de seguridad</string>
     <string name="fv_msg_43">Ver nombre de archivo a través del elemento de menú \'Nombre de archivo\'</string>
     <string name="alert_acct_id">ID de la cuenta:</string>

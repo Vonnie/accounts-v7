@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Accounts</string>
-    <string name="about_copyright">Copyright \\ u00a9 2019</string>
-    <string name="about_credits">Pictogram afgeleid van <b> analoge klok </b> op openclipart.org door <b> Anoniem </b></string>
+    <string name="about_copyright">Copyright  u00a9 2020</string>
     <string name="about_email">Stuur een e-mail naar vonniekinsey@gmail.com voor ondersteuning</string>
     <string name="about_weblink">Instructies beschikbaar op</string>
     <string name="about_weblink_21">Instructies beschikbaar op www.learnprogramming.academy</string>
@@ -144,7 +143,7 @@
     <string name="fv_msg_2">Melden: als de app wordt verwijderd, wordt ook het export- / back-upbestand verwijderd.</string>
     <string name="fv_msg_3">Bestand bewaren met een bestandskopie of delen vanuit menu</string>
     <string name="fv_msg_4">Informatie: om deze app op een ander apparaat in te stellen, gebruikt u deze back-up / herstelfunctie om gegevens op het andere apparaat in te vullen.</string>
-    <string name="fv_msg_5">Stappen: 1. Back-up 2. App op ander apparaat installeren 3. Kopiëren naar apparaatback-upbestand, zie loc vanuit menu-item bestandsnaam 4. Herstellen</string>
+    <string name="fv_msg_5">Stappen: 1. Back-up 2. App op ander apparaat installeren 3. Kopiëren naar apparaat back-upbestand, zie fysieke locatie vanuit menu-item bestandsnaam 4. Herstellen</string>
     <string name="fv_msg_10">Gebruik het menu om gegevens naar dit bestand te exporteren.</string>
     <string name="fv_msg_11">Accountprofielitems om te back-uppen</string>
     <string name="fv_msg_6">Gebruik het menu om gegevens te exporteren.</string>
@@ -188,7 +187,7 @@
     <string name="fv_msg_42">Accountprofielen in back-upbestand</string>
     <string name="fv_msg_43">Zie bestandsnaam via menu-item \'Bestandsnaam\'</string>
     <string name="fv_msg_44">Bekijk back-upgegevens via menu-item \'Back-upbestand tonen\'</string>
-    <string name="toast_accounts_backed_up">Accounts exporteren naar back-upbestand</string>
+    <string name="toast_accounts_backed_up">Back-upbestand van accounts</string>
     <string name="alert_acct_id">Account ID:</string>
     <string name="alert_delete_acct">account verwijderen</string>
     <string name="activity_date">Activiteitsdatum:</string>
