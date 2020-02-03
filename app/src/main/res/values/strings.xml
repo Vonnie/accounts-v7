@@ -44,7 +44,7 @@
     <string name="srch_load_search_db">Load Search DB with accounts</string>
     <string name="srch_value_hint">Enter value to search</string>
     <string name="search_label">Search</string>
-    <string name="search_hint">Type Corporate Name</string>
+    <string name="search_hint">Enter Corporate Name (or partial) to search</string>
     <string name="settings_description">My Accounts</string>
     <string name="title_activity_search_list" translatable="false">SearchListActivity</string>
     <string name="searchable_hint">Enter corporation name</string>
@@ -199,4 +199,13 @@
     <string name="add_suggestion">Add Suggestion</string>
     <string name="edit_suggestion">Edit Suggestion</string>
     <string name="activity_date">Activity date:</string>
+    <string name="search_title">Search Accounts</string>
+    <string name="about_title">Accounts App About</string>
+    <string name="datePickerTitle">Account Profile Open Date</string>
+    <string name="getting_started">Getting Started?</string>
+    <string name="add_first_account">Do you want to add the first account?</string>
+    <string name="if_so_direction">If so, click \'yes\' or click on the plus(+) button below to add a new account</string>
+    <string name="opened">Opened</string>
+    <string name="account_updated">Account Updated</string>
+    <string name="ask_go_to_list">Do you want to show accounts listing?</string>
 </resources>

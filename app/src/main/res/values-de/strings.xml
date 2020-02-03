@@ -193,4 +193,13 @@
     <string name="fv_msg_13">Warnung</string>
     <string name="title_activity_web_view">Webview-Aktivität</string>
     <string name="fv_msg_19">herzlich willkommen</string>
+    <string name="search_title">Konten durchsuchen</string>
+    <string name="about_title">Accounts App Über</string>
+    <string name="datePickerTitle">Konto Profil Eröffnungsdatum</string>
+    <string name="add_first_account">Möchten Sie das erste Konto hinzufügen?</string>
+    <string name="getting_started">fertig machen</string>
+    <string name="if_so_direction">Klicken Sie in diesem Fall auf \"Ja\" oder auf das Pluszeichen (+), um ein neues Konto hinzuzufügen</string>
+    <string name="account_updated">Konto aktualisiert</string>
+    <string name="ask_go_to_list">Möchten Sie die Kontenliste anzeigen?</string>
+    <string name="opened">geöffnet</string>
 </resources>

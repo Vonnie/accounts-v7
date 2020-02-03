@@ -50,7 +50,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="?attr/colorSecondary"
-            android:hint="Corporation name (or partial) to search"
+            android:hint="@string/search_hint"
             android:inputType="textNoSuggestions"
             android:textColor="?android:attr/textColorPrimary" />
 

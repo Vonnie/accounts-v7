@@ -32,12 +32,12 @@ public class ProfileCorpNameFrag extends Fragment {
 
     public static final String TAG = "ProfileCorpNameFrag";
 
-    Context context;
-    RecyclerView recyclerView;
-    RecyclerViewPositionHelper mRecyclerViewHelper;
+    private Context context;
+    private RecyclerView recyclerView;
+    private RecyclerViewPositionHelper mRecyclerViewHelper;
     private RecyclerView.LayoutManager mLayoutManager;
 //    ProfileViewModel profileViewModel;
-    TextView tvListTitle;
+    private TextView tvListTitle;
     private List<Profile> profileListFull;
     private ProfileAdapter adapter = new ProfileAdapter();
 
@@ -50,6 +50,8 @@ public class ProfileCorpNameFrag extends Fragment {
         void onProfileCorpNameListSelect(Profile profile);
 
         void onDeleteConfirmCorpName(Profile profile, int position);
+
+        void onEmptyWarning();
     }
 
     @Nullable
@@ -137,13 +139,19 @@ public class ProfileCorpNameFrag extends Fragment {
                 profileListFull = new ArrayList<>(profiles);
                 adapter.submitList(profiles);
 
+
                 if (savedInstanceState != null) {
                     int pos = savedInstanceState.getInt(RECYCLER_POSITION_KEY);
                     Log.d(TAG, "onCreateView: len " + recyclerView.getChildCount());
                     recyclerView.scrollToPosition(pos);
                     Log.d(TAG, "onCreateView: pos " + pos);
                 } else {
-                    recyclerView.scrollToPosition(0);
+                    Log.d(TAG, "onCreateView: getItemCount " +  adapter.getItemCount());
+                    if (adapter.getItemCount() == 0) {
+                            mListener.onEmptyWarning();
+                    } else {
+                        recyclerView.scrollToPosition(0);
+                    }
                 }
             }
         });

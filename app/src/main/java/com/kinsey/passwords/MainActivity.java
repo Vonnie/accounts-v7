@@ -25,28 +25,28 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.firebase.ui.auth.AuthUI;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+//import com.firebase.ui.auth.AuthUI;
+//import com.google.android.gms.auth.api.signin.GoogleSignIn;
+//import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+//import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+//import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+//import com.google.android.gms.common.api.ApiException;
+//import com.google.android.gms.tasks.OnCompleteListener;
+//import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.auth.AuthCredential;
+//import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.GoogleAuthProvider;
+//import com.google.firebase.auth.GoogleAuthProvider;
 import com.kinsey.passwords.items.Profile;
 import com.kinsey.passwords.items.Suggest;
 import com.kinsey.passwords.provider.ProfileViewModel;
-import com.squareup.picasso.Picasso;
+//import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
+//import java.util.Arrays;
 import java.util.GregorianCalendar;
-import java.util.List;
+//import java.util.List;
 import java.util.Locale;
 
 // ====================
@@ -169,6 +169,7 @@ public class MainActivity extends AppCompatActivity
 //    public static ProfileAdapter adapter = new ProfileAdapter();
 //    private Profile profileMaxItem;
     private int currentMaxSeq = 0;
+    private boolean itemAdded = false;
 
 //    public static ProfileAdapter adapterCorpName = new ProfileAdapter();
 //
@@ -447,6 +448,8 @@ public class MainActivity extends AppCompatActivity
 
 //        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close);
+
+
 
 
 //        progressBar.setVisibility(View.VISIBLE);
@@ -2069,6 +2072,7 @@ public class MainActivity extends AppCompatActivity
 
                 profileViewModel.insertProfile(profile);
 
+                itemAdded = true;
 
                 Log.d(TAG, "profile added");
                 Toast.makeText(this, R.string.toast_profile_added, Toast.LENGTH_SHORT).show();
@@ -2910,6 +2914,37 @@ public class MainActivity extends AppCompatActivity
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 refreshDeletePos(position);
+                            }
+                        });
+
+
+        android.app.AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+
+    }
+
+    @Override
+    public void onEmptyWarning() {
+        if (itemAdded) {
+            return;
+        }
+        android.app.AlertDialog.Builder alertDialogBuilder = new android.app.AlertDialog.Builder(this);
+
+        alertDialogBuilder.setMessage(getString(R.string.getting_started) + "\n" +
+                getString(R.string.add_first_account) + "\n" +
+    getString(R.string.if_so_direction));
+        alertDialogBuilder.setPositiveButton(R.string.yes,
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface arg0, int arg1) {
+
+                        Intent intent = new Intent(MainActivity.this, AddEditProfileActivity.class);
+                        startActivityForResult(intent, ADD_PROFILE_REQUEST);
+
+                    }
+                })
+                .setNegativeButton("No",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
                             }
                         });
 

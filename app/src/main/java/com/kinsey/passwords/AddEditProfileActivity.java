@@ -2,6 +2,7 @@ package com.kinsey.passwords;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -561,9 +562,33 @@ public class AddEditProfileActivity extends AppCompatActivity
 //        int sequence = getIntent().getIntExtra(EXTRA_SEQUENCE, 0);
         data.putExtra(EXTRA_SEQUENCE, intSequence);
 
-        setResult(RESULT_OK, data);
-        finish();
+
+
+        android.app.AlertDialog.Builder alertDialogBuilder = new android.app.AlertDialog.Builder(this);
+        alertDialogBuilder.setMessage(getString(R.string.account_updated) + "\n" +
+                getString(R.string.ask_go_to_list));
+        alertDialogBuilder.setPositiveButton(R.string.yes,
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface arg0, int arg1) {
+
+                        setResult(RESULT_OK, data);
+                        finish();
+
+                    }
+                })
+                .setNegativeButton("No",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        });
+
+
+        android.app.AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+
+
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -668,7 +693,7 @@ public class AddEditProfileActivity extends AppCompatActivity
                                               int monthOfYear, int dayOfMonth) {
 
 //                            btnOpenDate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
-                            btnOpenDate.setText("OPENED " + (monthOfYear + 1) + "/" + dayOfMonth + "/" + year);
+                            btnOpenDate.setText(R.string.opened + " " + (monthOfYear + 1) + "/" + dayOfMonth + "/" + year);
                             Calendar c2 = Calendar.getInstance();
                             c2.set(year, monthOfYear, dayOfMonth);
                             lngOpenDate = c2.getTimeInMillis();
@@ -676,7 +701,7 @@ public class AddEditProfileActivity extends AppCompatActivity
 
                         }
                     }, mYear, mMonth, mDay);
-            datePickerDialog.setTitle("Account Profile Open Date");
+            datePickerDialog.setTitle(getString(R.string.datePickerTitle));
             datePickerDialog.getDatePicker().setMaxDate(new Date().getTime());
             datePickerDialog.show();
         }

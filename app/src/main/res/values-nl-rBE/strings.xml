@@ -193,4 +193,13 @@
     <string name="activity_date">Activiteitsdatum:</string>
     <string name="add_suggestion">Suggestie toevoegen</string>
     <string name="edit_suggestion">Suggestie bewerken</string>
+    <string name="search_title">Doorzoek accounts</string>
+    <string name="about_title">Accounts-app Over</string>
+    <string name="datePickerTitle">Openingsdatum accountprofiel</string>
+    <string name="add_first_account">Wilt u het eerste account toevoegen?</string>
+    <string name="getting_started">Ermee beginnen?</string>
+    <string name="if_so_direction">Zo ja, klik op \'Ja\' of klik op de plusknop (+) hieronder om een nieuw account toe te voegen</string>
+    <string name="account_updated">account bijgewerkt</string>
+    <string name="ask_go_to_list">Wilt u een lijst met accounts weergeven?</string>
+    <string name="opened">geopend</string>
 </resources>

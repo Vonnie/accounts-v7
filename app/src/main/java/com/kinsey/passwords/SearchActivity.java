@@ -76,7 +76,7 @@ public class SearchActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
 
-        setTitle("Enter Corp Name to search");
+        setTitle(R.string.search_title);
 
 
 //        mImgWebView.setOnClickListener(new View.OnClickListener(){
@@ -106,7 +106,7 @@ public class SearchActivity extends AppCompatActivity {
 
         this.adapter = new SearchAdapter();
         recyclerView.setAdapter(adapter);
-        searchResults("-1-1");
+//        searchResults("");
 
 
         textInputSearchCorpName.getEditText().addTextChangedListener(new TextWatcher() {

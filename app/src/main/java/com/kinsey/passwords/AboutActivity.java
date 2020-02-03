@@ -50,7 +50,7 @@ public class AboutActivity extends AppCompatActivity {
 //        Log.d(TAG, String.valueOf(BuildConfig.VERSION_CODE));
 //        Log.d(TAG, BuildConfig.VERSION_NAME);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        setTitle("About Accounts App");
+        setTitle(R.string.about_title);
     }
 
 
