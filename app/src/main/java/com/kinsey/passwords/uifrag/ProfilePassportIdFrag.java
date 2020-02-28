@@ -46,7 +46,7 @@ public class ProfilePassportIdFrag extends Fragment {
     private ProfilePassportIdFrag.OnProfilePassportIdClickListener mListener;
     public interface OnProfilePassportIdClickListener {
 
-        void onProfilePassportIdSelect(Profile profile);
+        void onProfilePassportIdSelect(int selectedId, Profile profile);
 
         void onDeleteConfirmPassportId(Profile profile, int position);
     }
@@ -165,8 +165,8 @@ public class ProfilePassportIdFrag extends Fragment {
 
         adapter.setOnItemClickListener(new ProfileAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(Profile profile) {
-                mListener.onProfilePassportIdSelect(profile);
+            public void onItemClick(int selectedId, Profile profile) {
+                mListener.onProfilePassportIdSelect(selectedId, profile);
 //                Intent intent = new Intent(context, AddEditProfileActivity.class);
 //                intent.putExtra(AddEditProfileActivity.EXTRA_ID, profile.getId());
 //                intent.putExtra(AddEditProfileActivity.EXTRA_PASSPORT_ID, profile.getPassportId());
@@ -213,6 +213,10 @@ public class ProfilePassportIdFrag extends Fragment {
             }
         }
         refreshList();
+    }
+
+    public int getSelectedId() {
+        return this.adapter.getSelectedId();
     }
 
     public void refreshListPos(int position) {

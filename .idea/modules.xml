@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="ModuleRenamingHistory">
+    <module old-name="accounts" new-name="accounts.accounts" />
+    <module old-name="app" new-name="accounts.app.app" />
+  </component>
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/accounts.iml" filepath="$PROJECT_DIR$/accounts.iml" group="accounts" />

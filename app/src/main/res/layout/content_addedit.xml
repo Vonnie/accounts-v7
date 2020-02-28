@@ -40,6 +40,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/addedit_corp_name_hint"
+                    android:textColor="@color/secondaryTextColor"
                     android:inputType="textCapWords|textNoSuggestions" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -55,8 +56,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/addedit_name_hint"
-                    android:inputType="text|textNoSuggestions"
-                    android:textColor="?android:attr/textColorPrimary" />
+                    android:textColor="@color/secondaryTextColor"
+                    android:inputType="text|textNoSuggestions" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -71,8 +72,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/addedit_email_hint"
-                    android:inputType="textEmailAddress|textNoSuggestions"
-                    android:textColor="?android:attr/textColorPrimary" />
+                    android:textColor="@color/secondaryTextColor"
+                    android:inputType="textEmailAddress|textNoSuggestions" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -87,9 +88,10 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
                     android:contentDescription="@string/acct_show_website"
-                    android:textColor="?android:attr/textColorPrimary"
+                    android:textColor="@color/secondaryTextColor"
                     app:srcCompat="@drawable/ic_http" />
 
+<!--                    android:textColor="?android:attr/textColorPrimary"-->
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/text_input_corp_website"

@@ -180,11 +180,15 @@ public class ProfileAdapter extends ListAdapter<Profile, ProfileAdapter.ProfileH
                     int position = getAdapterPosition();
                     if (listener != null && position != RecyclerView.NO_POSITION) {
                         Profile profileItem = getItem(position);
-                        selectedId = profileItem.getPassportId();
+                        if (selectedId == profileItem.getPassportId()) {
+                            selectedId = -1;
+                        } else {
+                            selectedId = profileItem.getPassportId();
+                        }
                         Log.d(TAG, "onClick: selected Id " + selectedId +
                                 " " + profileItem.getCorpName() +
                                 " " + profileItem.getPassportId());
-                        listener.onItemClick(profileItem);
+                        listener.onItemClick(selectedId, profileItem);
                     }
                 }
             });
@@ -193,7 +197,7 @@ public class ProfileAdapter extends ListAdapter<Profile, ProfileAdapter.ProfileH
 
 
     public interface OnItemClickListener {
-        void onItemClick(Profile profile);
+        void onItemClick(int selectedId, Profile profile);
     }
 
     public void setOnItemClickListener(ProfileAdapter.OnItemClickListener listener) {

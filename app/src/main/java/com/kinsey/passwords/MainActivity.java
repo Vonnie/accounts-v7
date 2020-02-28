@@ -89,10 +89,12 @@ public class MainActivity extends AppCompatActivity
 //        MainActivityFragment.OnActionListener,
 
     public static final String TAG = "MainActivity";
+    public static final String ARG_LISTSORT = "ARG_LISTSORT";
+    public static final String ARG_SELECTED_ID = "ARG_SELECTED_ID";
 
     // whether or not the activity is i 2-pane mode
     // i.e. running in landscape on a tablet
-    private boolean isLandscape = false;
+//    private boolean isLandscape = false;
     private Boolean editing = false;
 
     private static final String ACCOUNT_FRAGMENT = "AccountFragment";
@@ -106,6 +108,7 @@ public class MainActivity extends AppCompatActivity
 
 //    private boolean isTablet = getResources().getBoolean(R.bool.isTablet);
     private boolean isTablet = false;
+    private int selectedId = -1;
 
 //    GoogleSignInClient mGoogleSignInClient;
 
@@ -296,7 +299,7 @@ public class MainActivity extends AppCompatActivity
 //        Log.d(TAG, "onCreate: layout activity_mainV1");
 
 
-//        if (savedInstanceState == null) {
+        if (savedInstanceState == null) {
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
@@ -317,9 +320,26 @@ public class MainActivity extends AppCompatActivity
 //                fragmentTransaction2.add(R.id.fragment_container2, fragment2);
 //                fragmentTransaction2.commit();
                 frame2 = findViewById(R.id.fragment_container2);
-//                frame2.setVisibility(View.GONE);
+                frame2.setVisibility(View.GONE);
             }
-//        }
+        } else {
+            this.selectedId = savedInstanceState.getInt(ARG_SELECTED_ID);
+            frame2 = findViewById(R.id.fragment_container2);
+            Log.d(TAG, "onCreate: rotate selectedId " + this.selectedId);
+            if (this.selectedId == -1) {
+                frame2.setVisibility(View.GONE);
+            } else {
+                frame2.setVisibility(View.VISIBLE);
+
+//                FragmentManager fragmentManager = getSupportFragmentManager();
+//                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//
+//                AddEditProfileFrag fragment2 = new AddEditProfileFrag();
+//                fragmentTransaction.replace(R.id.fragment_container2, fragment2, "AddEditProfileFrag");
+//                fragmentTransaction.commit();
+
+            }
+        }
 
         if (findViewById(R.id.fragment_container2) == null) {
             Log.d(TAG, "onCreate: has null 2nd container");
@@ -470,7 +490,7 @@ public class MainActivity extends AppCompatActivity
 
 //        recyclerView.onScreenStateChanged(int state);
 
-        isLandscape = (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE);
+//        isLandscape = (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE);
 //        Log.d(TAG, "onCreate: twoPane is " + isLandscape);
 
         if (savedInstanceState != null) {
@@ -791,7 +811,58 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt("listsortOrder", listsortOrder);
+        outState.putInt(ARG_LISTSORT, listsortOrder);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        Fragment profileFragment;
+//        profileFragment = fragmentManager.findFragmentByTag("ProfileCorpNameFrag");
+//        ProfileCorpNameFrag frag = (ProfileCorpNameFrag)profileFragment;
+//        if (frag == null) {
+//            profileFragment = fragmentManager.findFragmentByTag("ProfileCorpNameFrag");
+//            ProfileCorpNameFrag frag = (ProfileCorpNameFrag)profileFragment;
+//
+//        }
+
+        outState.putInt(ARG_SELECTED_ID, this.selectedId);
+
+
+
+//        if (listsortOrder == LISTSORT_CORP_NAME) {
+//            profileFragment = fragmentManager.findFragmentByTag("ProfileCorpNameFrag");
+//            ProfileCorpNameFrag frag = (ProfileCorpNameFrag)profileFragment;
+//            if (frag == null) {
+//                outState.putInt(ARG_SELECTED_ID, -1);
+//                Log.d(TAG, "onSaveInstanceState: selectedId null frag");
+//            } else {
+//                outState.putInt(ARG_SELECTED_ID, frag.getSelectedId());
+//                Log.d(TAG, "onSaveInstanceState: selectedId " + frag.getSelectedId());
+//            }
+//        } else if (listsortOrder == LISTSORT_PASSPORT_ID) {
+//            profileFragment = fragmentManager.findFragmentByTag("ProfilePassportIdFrag");
+//            ProfilePassportIdFrag frag = (ProfilePassportIdFrag)profileFragment;
+//            if (frag == null) {
+//                outState.putInt(ARG_SELECTED_ID, -1);
+//            } else {
+//                outState.putInt(ARG_SELECTED_ID, frag.getSelectedId());
+//            }
+//        } else if (listsortOrder == LISTSORT_OPEN_DATE) {
+//            profileFragment = fragmentManager.findFragmentByTag("ProfileOpenDateFrag");
+//            ProfileOpenDateFrag frag = (ProfileOpenDateFrag)profileFragment;
+//            if (frag == null) {
+//                outState.putInt(ARG_SELECTED_ID, -1);
+//            } else {
+//                outState.putInt(ARG_SELECTED_ID, frag.getSelectedId());
+//            }
+//        } else if (listsortOrder == LISTSORT_CUSTOM_SORT) {
+//            profileFragment = fragmentManager.findFragmentByTag("ProfileCustomFrag");
+//            ProfileCustomFrag frag = (ProfileCustomFrag)profileFragment;
+//            if (frag == null) {
+//                outState.putInt(ARG_SELECTED_ID, -1);
+//            } else {
+//                outState.putInt(ARG_SELECTED_ID, frag.getSelectedId());
+//            }
+//        }
+
     }
 
     //    @Override
@@ -1122,22 +1193,22 @@ public class MainActivity extends AppCompatActivity
 
                 Log.d(TAG, "request frag Corp Name");
 
-                fragmentManager = getSupportFragmentManager();
-                profileFragment = fragmentManager.findFragmentById(R.id.fragment_container);
-
-                if (profileFragment != null) {
-                    getSupportFragmentManager().beginTransaction()
-                            .remove(profileFragment)
-                            .commit();
-
-                }
+//                fragmentManager = getSupportFragmentManager();
+//                profileFragment = fragmentManager.findFragmentById(R.id.fragment_container);
+//
+//                if (profileFragment != null) {
+//                    getSupportFragmentManager().beginTransaction()
+//                            .remove(profileFragment)
+//                            .commit();
+//
+//                }
 
                 Fragment profileCorpNameFrag = new ProfileCorpNameFrag();
                 transaction = getSupportFragmentManager().beginTransaction();
 
-                transaction.add(R.id.fragment_container, profileCorpNameFrag);
-//                transaction.replace(R.id.fragment_container, profileCustomFrag);
-//                transaction.addToBackStack(null);
+//                transaction.add(R.id.fragment_container, profileCorpNameFrag);
+                transaction.replace(R.id.fragment_container, profileCorpNameFrag, "ProfileCorpNameFrag");
+                transaction.addToBackStack(null);
 
                 transaction.commit();
 
@@ -1183,21 +1254,21 @@ public class MainActivity extends AppCompatActivity
                 listsortOrder = LISTSORT_OPEN_DATE;
 
 
-                fragmentManager = getSupportFragmentManager();
-                profileFragment = fragmentManager.findFragmentById(R.id.fragment_container);
-
-                if (profileFragment != null) {
-                    getSupportFragmentManager().beginTransaction()
-                            .remove(profileFragment)
-                            .commit();
-                }
+//                fragmentManager = getSupportFragmentManager();
+//                profileFragment = fragmentManager.findFragmentById(R.id.fragment_container);
+//
+//                if (profileFragment != null) {
+//                    getSupportFragmentManager().beginTransaction()
+//                            .remove(profileFragment)
+//                            .commit();
+//                }
 
                 Fragment profileOpenDateFrag = new ProfileOpenDateFrag();
                 transaction = getSupportFragmentManager().beginTransaction();
 
-                transaction.add(R.id.fragment_container, profileOpenDateFrag);
-//                transaction.replace(R.id.fragment_container, profileCustomFrag);
-//                transaction.addToBackStack(null);
+//                transaction.add(R.id.fragment_container, profileOpenDateFrag);
+                transaction.replace(R.id.fragment_container, profileOpenDateFrag, "ProfileOpenDateFrag");
+                transaction.addToBackStack(null);
 
                 transaction.commit();
 
@@ -1228,22 +1299,22 @@ public class MainActivity extends AppCompatActivity
 
                 listsortOrder = LISTSORT_PASSPORT_ID;
 
-                fragmentManager = getSupportFragmentManager();
-                profileFragment = fragmentManager.findFragmentById(R.id.fragment_container);
-
-                if (profileFragment != null) {
-                    getSupportFragmentManager().beginTransaction()
-                            .remove(profileFragment)
-                            .commit();
-
-                }
+//                fragmentManager = getSupportFragmentManager();
+//                profileFragment = fragmentManager.findFragmentById(R.id.fragment_container);
+//
+//                if (profileFragment != null) {
+//                    getSupportFragmentManager().beginTransaction()
+//                            .remove(profileFragment)
+//                            .commit();
+//
+//                }
 
                 Fragment profilePassportIdFrag = new ProfilePassportIdFrag();
                 transaction = getSupportFragmentManager().beginTransaction();
 
-                transaction.add(R.id.fragment_container, profilePassportIdFrag);
-//                transaction.replace(R.id.fragment_container, profileCustomFrag);
-//                transaction.addToBackStack(null);
+//                transaction.add(R.id.fragment_container, profilePassportIdFrag);
+                transaction.replace(R.id.fragment_container, profilePassportIdFrag, "ProfilePassportIdFrag");
+                transaction.addToBackStack(null);
 
                 transaction.commit();
 
@@ -1287,25 +1358,22 @@ public class MainActivity extends AppCompatActivity
                 listsortOrder = LISTSORT_CUSTOM_SORT;
 
 
-//                fragCorpName.setVisibility(View.GONE);
-//                fragCustom.setVisibility(View.VISIBLE);
-
-                fragmentManager = getSupportFragmentManager();
-                profileFragment = fragmentManager.findFragmentById(R.id.fragment_container);
-
-                if (profileFragment != null) {
-                    getSupportFragmentManager().beginTransaction()
-                            .remove(profileFragment)
-                            .commit();
-
-                }
+//                fragmentManager = getSupportFragmentManager();
+//                profileFragment = fragmentManager.findFragmentById(R.id.fragment_container);
+//
+//                if (profileFragment != null) {
+//                    getSupportFragmentManager().beginTransaction()
+//                            .remove(profileFragment)
+//                            .commit();
+//
+//                }
 
                 Fragment profileCustomFrag = new ProfileCustomFrag();
                 transaction = getSupportFragmentManager().beginTransaction();
 
-                transaction.add(R.id.fragment_container, profileCustomFrag);
-//                transaction.replace(R.id.fragment_container, profileCustomFrag);
-//                transaction.addToBackStack(null);
+//                transaction.add(R.id.fragment_container, profileCustomFrag);
+                transaction.replace(R.id.fragment_container, profileCustomFrag, "ProfileCustomFrag");
+                transaction.addToBackStack(null);
 
                 transaction.commit();
 
@@ -2117,9 +2185,9 @@ public class MainActivity extends AppCompatActivity
     private void suggestsListRequest4() {
         Log.d(TAG, "suggestsListRequest3: starts");
         currFrag = AppFragType.PASSWORDS;
-        if (isLandscape) {
-        } else {
-        }
+//        if (isLandscape) {
+//        } else {
+//        }
 
         Intent detailIntent = new Intent(this, SuggestListActivity.class);
         detailIntent.putExtra(Suggest.class.getSimpleName(), "sortorder");
@@ -2945,24 +3013,24 @@ public class MainActivity extends AppCompatActivity
 
 
     @Override
-    public void onProfilePassportIdSelect(Profile profile) {
-        this.startUpProfileUpdate(profile);
+    public void onProfilePassportIdSelect(int selectedId, Profile profile) {
+        this.startUpProfileUpdate(selectedId, profile);
     }
 
     @Override
-    public void onProfileCustomListSelect(Profile profile) {
-        this.startUpProfileUpdate(profile);
+    public void onProfileCustomListSelect(int selectedId, Profile profile) {
+        this.startUpProfileUpdate(selectedId, profile);
     }
 
 
     @Override
-    public void onProfileOpenDateListSelect(Profile profile) {
-        this.startUpProfileUpdate(profile);
+    public void onProfileOpenDateListSelect(int selectedId, Profile profile) {
+        this.startUpProfileUpdate(selectedId, profile);
     }
 
     @Override
-    public void onProfileCorpNameListSelect(Profile profile) {
-        this.startUpProfileUpdate(profile);
+    public void onProfileCorpNameListSelect(int selectedId, Profile profile) {
+        this.startUpProfileUpdate(selectedId, profile);
     }
 
 
@@ -3045,21 +3113,37 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    private void startUpProfileUpdate(Profile profile) {
+    private void startUpProfileUpdate(int selectedId, Profile profile) {
+        this.selectedId = selectedId;
         if (has2ndPanel) {
-            frame2.setVisibility(View.VISIBLE);
-            frame2.removeAllViews();
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             Fragment profileFragment = fragmentManager.findFragmentById(R.id.fragment_container);
             ProfileCorpNameFrag frag = (ProfileCorpNameFrag)profileFragment;
             frag.refreshListAll();
 
+//            if (frame2 != null) {
+//                frame2.setVisibility(View.VISIBLE);
+//                frame2.removeAllViews();
+//                return;
+//            }
+
+            frame2 = findViewById(R.id.fragment_container2);
+            if (frag.getSelectedId() == -1) {
+                frame2.setVisibility(View.GONE);
+            } else {
+                frame2.setVisibility(View.VISIBLE);
+            }
+
+//            Fragment fragmentA = fragmentManager.findFragmentByTag("AddEditProfileFrag");
+
+            Log.d(TAG, "startUpProfileUpdate: replace addEdit");
+
             AddEditProfileFrag fragment2 = new AddEditProfileFrag();
             Bundle args = new Bundle();
             args.putString(AddEditProfileFrag.ARG_CORP_NAME, profile.getCorpName());
             fragment2.setArguments(args);
-            fragmentTransaction.add(R.id.fragment_container2, fragment2);
+            fragmentTransaction.replace(R.id.fragment_container2, fragment2, "AddEditProfileFrag");
             fragmentTransaction.commit();
 
             Log.d(TAG, "startUpProfileUpdate: startUp " + profile.getPassportId() +
@@ -3086,6 +3170,15 @@ public class MainActivity extends AppCompatActivity
     }
 
 
+
+
+//    public boolean isFragmentPresent(String tag) {
+//        Fragment frag = getSupportFragmentManager().findFragmentByTag(tag);
+//        if (frag instanceof HomeFragment) {
+//            return true;
+//        } else
+//            return false;
+//    }
 
 //    private void refreshList() {
 //        FragmentManager fragmentManager = getSupportFragmentManager();

@@ -49,7 +49,7 @@ public class ProfileCustomFrag extends Fragment {
     private ProfileCustomFrag.OnProfileCustomClickListener mListener;
     public interface OnProfileCustomClickListener {
 
-        void onProfileCustomListSelect(Profile profile);
+        void onProfileCustomListSelect(int selectedId, Profile profile);
 
         void onDeleteConfirmCustom(Profile profile, int position);
     }
@@ -159,8 +159,8 @@ public class ProfileCustomFrag extends Fragment {
 
         adapter.setOnItemClickListener(new ProfileAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(Profile profile) {
-                mListener.onProfileCustomListSelect(profile);
+            public void onItemClick(int selectedId, Profile profile) {
+                mListener.onProfileCustomListSelect(selectedId, profile);
 //                Intent intent = new Intent(context, AddEditProfileActivity.class);
 //                intent.putExtra(AddEditProfileActivity.EXTRA_ID, profile.getId());
 //                intent.putExtra(AddEditProfileActivity.EXTRA_PASSPORT_ID, profile.getPassportId());
@@ -473,6 +473,10 @@ public class ProfileCustomFrag extends Fragment {
         refreshList();
     }
 
+
+    public int getSelectedId() {
+        return this.adapter.getSelectedId();
+    }
 
     public void refreshListPos(int position) {
         adapter.notifyItemChanged(position);

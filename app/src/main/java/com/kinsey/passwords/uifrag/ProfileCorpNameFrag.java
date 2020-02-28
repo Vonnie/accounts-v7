@@ -46,13 +46,14 @@ public class ProfileCorpNameFrag extends Fragment {
 
     private final String RECYCLER_POSITION_KEY = "recyclerViewPos";
     private final String ARG_SELECTED_ID = "SELECTED_ID";
+    private final String ARG_SELECTED_POS = "SELECTED_POS";
     private int mRecyclerViewPos = RecyclerView.NO_POSITION;
 
 
     private ProfileCorpNameFrag.OnProfileCorpNameClickListener mListener;
     public interface OnProfileCorpNameClickListener {
 
-        void onProfileCorpNameListSelect(Profile profile);
+        void onProfileCorpNameListSelect(int selectedId, Profile profile);
 
         void onDeleteConfirmCorpName(Profile profile, int position);
 
@@ -138,10 +139,6 @@ public class ProfileCorpNameFrag extends Fragment {
         mRecyclerViewHelper = RecyclerViewPositionHelper.createHelper(recyclerView);
 
 
-        if (savedInstanceState != null) {
-            adapter.setSelectedId(savedInstanceState.getInt(ARG_SELECTED_ID, -1));
-            adapter.notifyDataSetChanged();
-        }
 
 //        MainActivity.profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
         MainActivity.profileViewModel.getAllProfilesByCorpName().observe(getViewLifecycleOwner(), new Observer<List<Profile>>() {
@@ -154,9 +151,10 @@ public class ProfileCorpNameFrag extends Fragment {
 
                 if (savedInstanceState != null) {
                     int pos = savedInstanceState.getInt(RECYCLER_POSITION_KEY);
-                    Log.d(TAG, "onCreateView: len " + recyclerView.getChildCount());
+                    Log.d(TAG, "onCreateView: len " + recyclerView.getChildCount() +
+                            " pos " + pos);
                     recyclerView.scrollToPosition(pos);
-                    Log.d(TAG, "onCreateView: pos " + pos);
+//                    Log.d(TAG, "onCreateView: pos " + pos);
                 } else {
                     Log.d(TAG, "onCreateView: getItemCount " +  adapter.getItemCount());
                     if (adapter.getItemCount() == 0) {
@@ -190,8 +188,8 @@ public class ProfileCorpNameFrag extends Fragment {
 
         adapter.setOnItemClickListener(new ProfileAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(Profile profile) {
-                mListener.onProfileCorpNameListSelect(profile);
+            public void onItemClick(int selectedId, Profile profile) {
+                mListener.onProfileCorpNameListSelect(selectedId, profile);
 //                selectedId = profile.getPassportId();
 //                adapter.notifyDataSetChanged();
 //                Intent intent = new Intent(context, AddEditProfileActivity.class);
@@ -211,6 +209,11 @@ public class ProfileCorpNameFrag extends Fragment {
         });
 
 
+        if (savedInstanceState != null) {
+            adapter.setSelectedId(savedInstanceState.getInt(ARG_SELECTED_ID, -1));
+            Log.d(TAG, "onCreateView: selectedId " + adapter.getSelectedId());
+//            adapter.notifyDataSetChanged();
+        }
         adapter.notifyDataSetChanged();
 
 
@@ -229,7 +232,6 @@ public class ProfileCorpNameFrag extends Fragment {
 
 
 
-        Log.d(TAG, "view set");
         return view;
 
     }
@@ -261,6 +263,12 @@ public class ProfileCorpNameFrag extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         context = getContext();
@@ -277,10 +285,15 @@ public class ProfileCorpNameFrag extends Fragment {
 
     }
 
+    public int getSelectedId() {
+        return this.adapter.getSelectedId();
+    }
+
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        Log.d(TAG, "onSaveInstanceState: len " + adapter.getItemCount());
+        Log.d(TAG, "onSaveInstanceState: len " + adapter.getItemCount() +
+                " id " + adapter.getSelectedId());
         // Save RecyclerView state
         outState.putInt(RECYCLER_POSITION_KEY,  mRecyclerViewHelper.findFirstCompletelyVisibleItemPosition());
 
