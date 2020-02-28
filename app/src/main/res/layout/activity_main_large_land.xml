@@ -39,13 +39,27 @@
     <!--style="?android:attr/progressBarStyle"-->
 
 
-    <FrameLayout
-        android:id="@+id/fragment_container"
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:tag="normal"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        android:orientation="horizontal"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
+        <FrameLayout
+            android:id="@+id/fragment_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:tag="main_large_land"
+            android:layout_weight="1" />
+
+        <FrameLayout
+            android:id="@+id/fragment_container2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
     <!--    android:name="com.kinsey.passwords.uifrag.ProfileCorpNameFrag"-->
     <!--    <fragment-->
     <!--        android:id="@+id/fragment_container_custom"-->
@@ -69,7 +83,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="32dp"
-        app:srcCompat="@drawable/ic_add"
-        app:rippleColor="@color/secondaryColor" />
+        app:rippleColor="@color/secondaryColor"
+        app:srcCompat="@drawable/ic_search_black" />
     <!--    app:backgroundTint="@color/primaryDarkColor"-->
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -206,6 +206,7 @@
     <string name="add_first_account">Do you want to add the first account?</string>
     <string name="if_so_direction">If so, click \'yes\' or click on the plus(+) button below to add a new account</string>
     <string name="opened">Opened</string>
+    <string name="account_added">Account Added</string>
     <string name="account_updated">Account Updated</string>
     <string name="ask_go_to_list">Do you want to show accounts listing?</string>
 </resources>

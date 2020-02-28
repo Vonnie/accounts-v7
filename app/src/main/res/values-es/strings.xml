@@ -202,4 +202,5 @@
     <string name="account_updated">cuenta actualizada</string>
     <string name="ask_go_to_list">¿Quieres mostrar el listado de cuentas?</string>
     <string name="opened">abrió</string>
+    <string name="account_added">Cuenta agregada</string>
 </resources>

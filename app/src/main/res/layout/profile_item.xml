@@ -11,11 +11,11 @@
     app:contentPadding="8dp">
 
     <RelativeLayout
+        style="@style/GreenText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
         android:padding="8dp">
-
+<!--        android:background="@android:color/transparent"-->
 
         <TextView
             android:id="@+id/acct_id"
@@ -23,9 +23,9 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:textAppearance="@style/TextAppearance.AppCompat.Large" />
-<!--            android:background="?attr/colorPrimary"-->
-<!--            android:textColor= "?attr/secondaryTextColor" />-->
-<!--            android:textColor="?android:attr/textColorSecondary" />-->
+        <!--            android:background="?attr/colorPrimary"-->
+        <!--            android:textColor= "?attr/secondaryTextColor" />-->
+        <!--            android:textColor="?android:attr/textColorSecondary" />-->
 
 
         <TextView
@@ -37,7 +37,7 @@
             android:layout_toStartOf="@+id/acct_id"
             android:ellipsize="end"
             android:textAppearance="@style/TextAppearance.AppCompat.Large" />
-<!--            android:textColor="?android:attr/textColorSecondary" />-->
+        <!--            android:textColor="?android:attr/textColorSecondary" />-->
 
         <!--        android:backgroundTint="?android:attr/listViewWhiteStyle"-->
         <!--        <TextView-->

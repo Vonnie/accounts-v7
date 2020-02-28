@@ -202,4 +202,5 @@
     <string name="account_updated">account bijgewerkt</string>
     <string name="ask_go_to_list">Wilt u een lijst met accounts weergeven?</string>
     <string name="opened">geopend</string>
+    <string name="account_added">Account toegevoegd</string>
 </resources>

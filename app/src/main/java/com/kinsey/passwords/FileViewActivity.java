@@ -102,7 +102,7 @@ public class FileViewActivity extends AppCompatActivity {
         });
 
 
-        adapter = new ProfileAdapter();
+        adapter = new ProfileAdapter(-1);
 //        profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
         MainActivity.profileViewModel.getAllProfilesByCorpName().observe(this, new Observer<List<Profile>>() {
             @Override

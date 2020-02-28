@@ -39,12 +39,28 @@
     <!--style="?android:attr/progressBarStyle"-->
 
 
-    <FrameLayout
-        android:id="@+id/fragment_container"
+
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:tag="normal"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        android:orientation="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" >
+
+        <FrameLayout
+            android:id="@+id/fragment_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:tag="large_port"
+            android:layout_weight="1" />
+
+        <FrameLayout
+            android:id="@+id/fragment_container2"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:layout_height="match_parent" />
+
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
     <!--    android:name="com.kinsey.passwords.uifrag.ProfileCorpNameFrag"-->
     <!--    <fragment-->

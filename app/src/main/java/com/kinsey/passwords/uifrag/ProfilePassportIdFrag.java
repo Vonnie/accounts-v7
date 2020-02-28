@@ -1,4 +1,4 @@
-package com.kinsey.passwords;
+package com.kinsey.passwords.uifrag;
 
 import android.app.Activity;
 import android.content.Context;
@@ -20,6 +20,8 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.kinsey.passwords.MainActivity;
+import com.kinsey.passwords.R;
 import com.kinsey.passwords.items.Profile;
 import com.kinsey.passwords.provider.ProfileAdapter;
 import com.kinsey.passwords.provider.ProfileViewModel;
@@ -36,7 +38,7 @@ public class ProfilePassportIdFrag extends Fragment {
     RecyclerView recyclerView;
     ProfileViewModel profileViewModel;
     private List<Profile> profileListFull;
-    private ProfileAdapter adapter = new ProfileAdapter();
+    private ProfileAdapter adapter = new ProfileAdapter(-1);
     RecyclerViewPositionHelper mRecyclerViewHelper;
     private final String RECYCLER_POSITION_KEY = "recyclerViewPos";
     private int mRecyclerViewPos = RecyclerView.NO_POSITION;

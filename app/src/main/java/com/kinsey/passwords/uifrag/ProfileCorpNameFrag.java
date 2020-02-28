@@ -1,4 +1,4 @@
-package com.kinsey.passwords;
+package com.kinsey.passwords.uifrag;
 
 import android.app.Activity;
 import android.content.Context;
@@ -21,6 +21,8 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.kinsey.passwords.MainActivity;
+import com.kinsey.passwords.R;
 import com.kinsey.passwords.items.Profile;
 import com.kinsey.passwords.provider.ProfileAdapter;
 import com.kinsey.passwords.provider.RecyclerViewPositionHelper;
@@ -39,10 +41,13 @@ public class ProfileCorpNameFrag extends Fragment {
 //    ProfileViewModel profileViewModel;
     private TextView tvListTitle;
     private List<Profile> profileListFull;
-    private ProfileAdapter adapter = new ProfileAdapter();
+
+    private ProfileAdapter adapter = new ProfileAdapter(-1);
 
     private final String RECYCLER_POSITION_KEY = "recyclerViewPos";
+    private final String ARG_SELECTED_ID = "SELECTED_ID";
     private int mRecyclerViewPos = RecyclerView.NO_POSITION;
+
 
     private ProfileCorpNameFrag.OnProfileCorpNameClickListener mListener;
     public interface OnProfileCorpNameClickListener {
@@ -108,6 +113,7 @@ public class ProfileCorpNameFrag extends Fragment {
         }
 
 
+
 //        if ((getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_XLARGE) {
 //            GridLayoutManager layoutManager;
 //            layoutManager = new GridLayoutManager(getActivity(), 4);
@@ -130,6 +136,12 @@ public class ProfileCorpNameFrag extends Fragment {
         recyclerView.setAdapter(adapter);
         mLayoutManager = recyclerView.getLayoutManager();
         mRecyclerViewHelper = RecyclerViewPositionHelper.createHelper(recyclerView);
+
+
+        if (savedInstanceState != null) {
+            adapter.setSelectedId(savedInstanceState.getInt(ARG_SELECTED_ID, -1));
+            adapter.notifyDataSetChanged();
+        }
 
 //        MainActivity.profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
         MainActivity.profileViewModel.getAllProfilesByCorpName().observe(getViewLifecycleOwner(), new Observer<List<Profile>>() {
@@ -180,6 +192,8 @@ public class ProfileCorpNameFrag extends Fragment {
             @Override
             public void onItemClick(Profile profile) {
                 mListener.onProfileCorpNameListSelect(profile);
+//                selectedId = profile.getPassportId();
+//                adapter.notifyDataSetChanged();
 //                Intent intent = new Intent(context, AddEditProfileActivity.class);
 //                intent.putExtra(AddEditProfileActivity.EXTRA_ID, profile.getId());
 //                intent.putExtra(AddEditProfileActivity.EXTRA_PASSPORT_ID, profile.getPassportId());
@@ -242,6 +256,10 @@ public class ProfileCorpNameFrag extends Fragment {
         adapter.notifyItemChanged(position);
     }
 
+    public void refreshListAll() {
+        adapter.notifyDataSetChanged();
+    }
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -265,6 +283,8 @@ public class ProfileCorpNameFrag extends Fragment {
         Log.d(TAG, "onSaveInstanceState: len " + adapter.getItemCount());
         // Save RecyclerView state
         outState.putInt(RECYCLER_POSITION_KEY,  mRecyclerViewHelper.findFirstCompletelyVisibleItemPosition());
+
+        outState.putInt(ARG_SELECTED_ID, this.adapter.getSelectedId());
 
         super.onSaveInstanceState(outState);
 

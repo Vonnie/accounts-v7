@@ -1,4 +1,4 @@
-package com.kinsey.passwords;
+package com.kinsey.passwords.uifrag;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
+import com.kinsey.passwords.R;
 
 public class ProfileFrag extends Fragment {
     @Nullable

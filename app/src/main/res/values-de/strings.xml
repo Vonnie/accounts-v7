@@ -202,4 +202,5 @@
     <string name="account_updated">Konto aktualisiert</string>
     <string name="ask_go_to_list">Möchten Sie die Kontenliste anzeigen?</string>
     <string name="opened">geöffnet</string>
+    <string name="account_added">Konto hinzugefügt</string>
 </resources>

@@ -13,6 +13,10 @@
     </style>
 
 
+        <style name="GreenText" parent="TextAppearance.AppCompat">
+            <item name="android:textColor">#00FF00</item>
+        </style>
+
     <!--?attr/textColorAlertDialogListItem-->
     <!--<item name="colorPrimary">@color/primaryColor</item>-->
     <!--<item name="colorPrimaryDark">@color/primaryDarkColor</item>-->

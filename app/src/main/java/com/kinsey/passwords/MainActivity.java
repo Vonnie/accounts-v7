@@ -1,5 +1,6 @@
 package com.kinsey.passwords;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -18,10 +19,12 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -41,6 +44,12 @@ import com.google.firebase.auth.FirebaseUser;
 import com.kinsey.passwords.items.Profile;
 import com.kinsey.passwords.items.Suggest;
 import com.kinsey.passwords.provider.ProfileViewModel;
+import com.kinsey.passwords.uifrag.AddEditProfileFrag;
+import com.kinsey.passwords.uifrag.ProfileCorpNameFrag;
+import com.kinsey.passwords.uifrag.ProfileCustomFrag;
+import com.kinsey.passwords.uifrag.ProfileFrag;
+import com.kinsey.passwords.uifrag.ProfileOpenDateFrag;
+import com.kinsey.passwords.uifrag.ProfilePassportIdFrag;
 //import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
@@ -48,6 +57,7 @@ import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 //import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 // ====================
 // Statement to assist in debugging
@@ -94,6 +104,8 @@ public class MainActivity extends AppCompatActivity
 
     public static boolean migrationStarted = false;
 
+//    private boolean isTablet = getResources().getBoolean(R.bool.isTablet);
+    private boolean isTablet = false;
 
 //    GoogleSignInClient mGoogleSignInClient;
 
@@ -170,6 +182,8 @@ public class MainActivity extends AppCompatActivity
 //    private Profile profileMaxItem;
     private int currentMaxSeq = 0;
     private boolean itemAdded = false;
+    FrameLayout frame2;
+    boolean has2ndPanel = false;
 
 //    public static ProfileAdapter adapterCorpName = new ProfileAdapter();
 //
@@ -216,7 +230,62 @@ public class MainActivity extends AppCompatActivity
 //        setContentView(R.layout.activity_mainV1);
 //        setContentView(R.layout.activity_account_list);
 //        setContentView(R.layout.activity_main_rss_list);
-        setContentView(R.layout.activity_main);
+
+
+        TelephonyManager manager = (TelephonyManager)getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
+        if (Objects.requireNonNull(manager).getPhoneType() == TelephonyManager.PHONE_TYPE_NONE) {
+//            Toast.makeText(MainActivity.this, "Detected... You're using a Tablet", Toast.LENGTH_LONG).show();
+            Log.d(TAG, "onCreate: isTablet");
+            this.isTablet = true;
+        } else {
+//            Toast.makeText(MainActivity.this, "Detected... You're using a Mobile Phone", Toast.LENGTH_LONG).show();
+            Log.d(TAG, "onCreate: isPhone");
+        }
+
+        int screenLayout = getResources().getConfiguration().screenLayout;
+        screenLayout &= Configuration.SCREENLAYOUT_SIZE_MASK;
+
+        switch (screenLayout) {
+            case Configuration.SCREENLAYOUT_SIZE_XLARGE:
+                if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                    setContentView(R.layout.activity_main_large_land);
+                    Toast.makeText(MainActivity.this, "Detected... XLarge Landscape", Toast.LENGTH_LONG).show();
+                    Log.d(TAG, "screen size Xlarge Landscape");
+                } else {
+                    setContentView(R.layout.activity_main);
+                    Toast.makeText(MainActivity.this, "Detected... XLarge Portrait", Toast.LENGTH_LONG).show();
+                    Log.d(TAG, "screen size Xlarge Portrait");
+                }
+                break;
+            case Configuration.SCREENLAYOUT_SIZE_LARGE:
+                if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                    setContentView(R.layout.activity_main_large_land);
+                    Toast.makeText(MainActivity.this, "Detected... Large Landscape", Toast.LENGTH_LONG).show();
+                    Log.d(TAG, "screen size Large Landscape");
+                } else {
+                    setContentView(R.layout.activity_main);
+                    Toast.makeText(MainActivity.this, "Detected... Large Portrait", Toast.LENGTH_LONG).show();
+                    Log.d(TAG, "screen size Large Portrait");
+                }
+                break;
+            case Configuration.SCREENLAYOUT_SIZE_NORMAL:
+                setContentView(R.layout.activity_main);
+                if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                    Toast.makeText(MainActivity.this, "Detected... Normal Landscape", Toast.LENGTH_LONG).show();
+                    Log.d(TAG, "screen size Normal landscape");
+                } else {
+                    Toast.makeText(MainActivity.this, "Detected... Normal Portrait", Toast.LENGTH_LONG).show();
+                    Log.d(TAG, "screen size Normal Portrait");
+                }
+                break;
+            default:
+                setContentView(R.layout.activity_main);
+                Toast.makeText(MainActivity.this, "Undetected... ", Toast.LENGTH_LONG).show();
+        }
+
+
+
+
 
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -227,16 +296,38 @@ public class MainActivity extends AppCompatActivity
 //        Log.d(TAG, "onCreate: layout activity_mainV1");
 
 
-        if (savedInstanceState == null) {
+//        if (savedInstanceState == null) {
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
             ProfileCorpNameFrag fragment = new ProfileCorpNameFrag();
             fragmentTransaction.add(R.id.fragment_container, fragment);
             fragmentTransaction.commit();
+            FrameLayout frame = findViewById(R.id.fragment_container);
+            Log.d(TAG, "onCreate: tag " + frame.getTag());
+
+            if (isTablet | frame.getTag().equals("sw600")
+                    |  frame.getTag().equals("large_land")
+                    |  frame.getTag().equals("main_large_land")) {
+//                Log.d(TAG, "onCreate: show frag2");
+//                FragmentManager fragmentManager2 = getSupportFragmentManager();
+//                FragmentTransaction fragmentTransaction2 = fragmentManager2.beginTransaction();
+//
+//                AddEditProfileFrag fragment2 = new AddEditProfileFrag();
+//                fragmentTransaction2.add(R.id.fragment_container2, fragment2);
+//                fragmentTransaction2.commit();
+                frame2 = findViewById(R.id.fragment_container2);
+//                frame2.setVisibility(View.GONE);
+            }
+//        }
+
+        if (findViewById(R.id.fragment_container2) == null) {
+            Log.d(TAG, "onCreate: has null 2nd container");
+            has2ndPanel = false;
+        } else {
+            Log.d(TAG, "onCreate: has a 2nd container");
+            has2ndPanel = true;
         }
-
-
 
 //        ================================================================================
 //        Future growth for firebase signin
@@ -2955,6 +3046,27 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void startUpProfileUpdate(Profile profile) {
+        if (has2ndPanel) {
+            frame2.setVisibility(View.VISIBLE);
+            frame2.removeAllViews();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            Fragment profileFragment = fragmentManager.findFragmentById(R.id.fragment_container);
+            ProfileCorpNameFrag frag = (ProfileCorpNameFrag)profileFragment;
+            frag.refreshListAll();
+
+            AddEditProfileFrag fragment2 = new AddEditProfileFrag();
+            Bundle args = new Bundle();
+            args.putString(AddEditProfileFrag.ARG_CORP_NAME, profile.getCorpName());
+            fragment2.setArguments(args);
+            fragmentTransaction.add(R.id.fragment_container2, fragment2);
+            fragmentTransaction.commit();
+
+            Log.d(TAG, "startUpProfileUpdate: startUp " + profile.getPassportId() +
+                    " " + profile.getCorpName());
+            return;
+        }
+
         Intent intent = new Intent(this, AddEditProfileActivity.class);
         intent.putExtra(AddEditProfileActivity.EXTRA_ID, profile.getId());
         intent.putExtra(AddEditProfileActivity.EXTRA_PASSPORT_ID, profile.getPassportId());
@@ -2972,6 +3084,8 @@ public class MainActivity extends AppCompatActivity
         startActivityForResult(intent, EDIT_PROFILE_REQUEST);
 
     }
+
+
 
 //    private void refreshList() {
 //        FragmentManager fragmentManager = getSupportFragmentManager();

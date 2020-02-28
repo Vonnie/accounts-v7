@@ -565,8 +565,13 @@ public class AddEditProfileActivity extends AppCompatActivity
 
 
         android.app.AlertDialog.Builder alertDialogBuilder = new android.app.AlertDialog.Builder(this);
-        alertDialogBuilder.setMessage(getString(R.string.account_updated) + "\n" +
-                getString(R.string.ask_go_to_list));
+        if (editModeAdd) {
+            alertDialogBuilder.setMessage(getString(R.string.account_added) + "\n" +
+                    getString(R.string.ask_go_to_list));
+        } else {
+            alertDialogBuilder.setMessage(getString(R.string.account_updated) + "\n" +
+                    getString(R.string.ask_go_to_list));
+        }
         alertDialogBuilder.setPositiveButton(R.string.yes,
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface arg0, int arg1) {
