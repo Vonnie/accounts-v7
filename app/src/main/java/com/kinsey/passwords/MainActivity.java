@@ -24,6 +24,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -892,6 +893,15 @@ public class MainActivity extends AppCompatActivity
             menu.findItem(R.id.menuacct_sort_custom).setChecked(true);
         }
 
+//        https://stackoverflow.com/questions/31231609/creating-a-button-in-android-toolbar
+        MenuItem item = menu.findItem(R.id.button_item);
+        Button btn = item.getActionView().findViewById(R.id.button);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(MainActivity.this, "Toolbar Button Clicked!", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         return true;
     }
