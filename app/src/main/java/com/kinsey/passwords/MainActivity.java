@@ -24,6 +24,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ListView;
@@ -51,6 +53,7 @@ import com.kinsey.passwords.uifrag.ProfileCustomFrag;
 import com.kinsey.passwords.uifrag.ProfileFrag;
 import com.kinsey.passwords.uifrag.ProfileOpenDateFrag;
 import com.kinsey.passwords.uifrag.ProfilePassportIdFrag;
+import com.kinsey.passwords.uifrag.SearchFrag;
 //import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
@@ -59,6 +62,8 @@ import java.util.GregorianCalendar;
 //import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+
+import static java.security.AccessController.getContext;
 
 // ====================
 // Statement to assist in debugging
@@ -323,6 +328,13 @@ public class MainActivity extends AppCompatActivity
                 frame2 = findViewById(R.id.fragment_container2);
                 frame2.setVisibility(View.GONE);
             }
+            FragmentManager fragmentManager3 = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction3 = fragmentManager3.beginTransaction();
+            SearchFrag searchFrag = new SearchFrag();
+            fragmentTransaction3.add(R.id.fragment_search_container, searchFrag);
+            fragmentTransaction3.commit();
+
+
         } else {
             this.selectedId = savedInstanceState.getInt(ARG_SELECTED_ID);
             frame2 = findViewById(R.id.fragment_container2);
@@ -391,6 +403,7 @@ public class MainActivity extends AppCompatActivity
 //                onSignInClickedButton(v);
             }
         });
+
 
 //        progressBar = findViewById(R.id.progressBar);
 
@@ -893,15 +906,34 @@ public class MainActivity extends AppCompatActivity
             menu.findItem(R.id.menuacct_sort_custom).setChecked(true);
         }
 
+        View view = menu.findItem(R.id.button_item).getActionView();
+
+        String[] ITEM_ACTIONS = new String[] {"Account Edit", "Search", "Passwords"};
+
+        ArrayAdapter adapter = new ArrayAdapter<>(this,
+                R.layout.dropdown_menu_popup_item, ITEM_ACTIONS);
+//        ArrayAdapter<String> adapter =
+//                new ArrayAdapter<String>(
+//                        getContext(),
+//                        R.layout.dropdown_menu_popup_item,
+//                        COUNTRIES);
+
+        AutoCompleteTextView editTextFilledExposedDropdown =
+                view.findViewById(R.id.filled_exposed_dropdown);
+        editTextFilledExposedDropdown.setAdapter(adapter);
+        editTextFilledExposedDropdown.setText(adapter.getItem(0).toString());
+
+
 //        https://stackoverflow.com/questions/31231609/creating-a-button-in-android-toolbar
-        MenuItem item = menu.findItem(R.id.button_item);
-        Button btn = item.getActionView().findViewById(R.id.button);
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(MainActivity.this, "Toolbar Button Clicked!", Toast.LENGTH_SHORT).show();
-            }
-        });
+//        MenuItem item = menu.findItem(R.id.button_item);
+//        Button btn = item.getActionView().findViewById(R.id.button);
+//        btn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Toast.makeText(MainActivity.this, "Toolbar Button Clicked!", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+
 
         return true;
     }

@@ -209,4 +209,5 @@
     <string name="account_added">Account Added</string>
     <string name="account_updated">Account Updated</string>
     <string name="ask_go_to_list">Do you want to show accounts listing?</string>
+    <string name="hint_text">Item Action</string>
 </resources>

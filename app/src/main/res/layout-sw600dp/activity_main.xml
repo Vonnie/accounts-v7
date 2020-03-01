@@ -43,20 +43,26 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" >
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <FrameLayout
-        android:id="@+id/fragment_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:tag="sw600"
-        android:layout_weight="1" />
+        <FrameLayout
+            android:id="@+id/fragment_search_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <FrameLayout
+            android:id="@+id/fragment_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:tag="sw600" />
 
         <FrameLayout
             android:id="@+id/fragment_container2"
             android:layout_width="match_parent"
-            android:layout_weight="1"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
 
 
     </androidx.appcompat.widget.LinearLayoutCompat>
@@ -83,7 +89,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="32dp"
-        app:srcCompat="@drawable/ic_save"
-        app:rippleColor="@color/secondaryColor" />
+        app:rippleColor="@color/secondaryColor"
+        app:srcCompat="@drawable/ic_save" />
     <!--    app:backgroundTint="@color/primaryDarkColor"-->
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

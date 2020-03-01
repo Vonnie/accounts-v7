@@ -46,13 +46,21 @@
         <!--        app:counterEnabled="true"-->
         <!--            app:layout_behavior="@string/appbar_scrolling_view_behavior">-->
 
-        <com.google.android.material.textfield.TextInputEditText
+        <AutoCompleteTextView
+            android:id="@+id/filled_exposed_dropdown"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="?attr/colorSecondary"
-            android:hint="@string/search_hint"
-            android:inputType="textNoSuggestions"
-            android:textColor="?android:attr/textColorPrimary" />
+            android:background="@color/primaryColor"
+            android:textColor="@color/primaryTextColor"
+            android:textColorHint="@color/primaryTextColor" />
+
+<!--        <com.google.android.material.textfield.TextInputEditText-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:background="?attr/colorSecondary"-->
+<!--            android:hint="@string/search_hint"-->
+<!--            android:inputType="textNoSuggestions"-->
+<!--            android:textColor="?android:attr/textColorPrimary" />-->
 
     </com.google.android.material.textfield.TextInputLayout>
 
