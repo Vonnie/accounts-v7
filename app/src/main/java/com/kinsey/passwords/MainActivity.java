@@ -110,6 +110,8 @@ public class MainActivity extends AppCompatActivity
     public static String BACKUP_FILENAME = "accounts.json";
     public static int profileMigrateLevel = 1;
 
+
+    private boolean showSearch = false;
     public static boolean migrationStarted = false;
 
 //    private boolean isTablet = getResources().getBoolean(R.bool.isTablet);
@@ -191,7 +193,7 @@ public class MainActivity extends AppCompatActivity
 //    private Profile profileMaxItem;
     private int currentMaxSeq = 0;
     private boolean itemAdded = false;
-    FrameLayout frame2;
+    FrameLayout frameSearch, frame2;
     boolean has2ndPanel = false;
 
 //    public static ProfileAdapter adapterCorpName = new ProfileAdapter();
@@ -333,8 +335,8 @@ public class MainActivity extends AppCompatActivity
             SearchFrag searchFrag = new SearchFrag();
             fragmentTransaction3.add(R.id.fragment_search_container, searchFrag);
             fragmentTransaction3.commit();
-
-
+            frameSearch = findViewById(R.id.fragment_search_container);
+            frameSearch.setVisibility(View.GONE);
         } else {
             this.selectedId = savedInstanceState.getInt(ARG_SELECTED_ID);
             frame2 = findViewById(R.id.fragment_container2);
@@ -1544,7 +1546,13 @@ public class MainActivity extends AppCompatActivity
 
 
             case R.id.menumain_search:
-                searchRequestActivity();
+                item.setChecked(!item.isChecked());
+                if (item.isChecked()) {
+                    frameSearch.setVisibility(View.VISIBLE);
+                } else {
+                    frameSearch.setVisibility(View.GONE);
+                }
+//                searchRequestActivity();
                 break;
 
 

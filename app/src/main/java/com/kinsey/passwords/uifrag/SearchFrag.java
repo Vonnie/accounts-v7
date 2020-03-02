@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -29,6 +30,7 @@ public class SearchFrag extends Fragment {
     private List<Profile> profileListFull;
     private ProfileAdapter adapter;
     private List<String> names;
+//    private List<Profile> profiles;
 
     @Nullable
     @Override
@@ -38,6 +40,9 @@ public class SearchFrag extends Fragment {
 
         AutoCompleteTextView editTextFilledExposedDropdown =
                 view.findViewById(R.id.filled_exposed_dropdown);
+        TextView tvAcctId = (TextView) view.findViewById(R.id.acct_id);
+        TextView tvCorpName = view.findViewById(R.id.corp_name);
+        TextView tvUserName = view.findViewById(R.id.user_name);
 
         adapter = new ProfileAdapter(-1);
         MainActivity.profileViewModel.getAllProfilesByCorpName().observe(getViewLifecycleOwner(), new Observer<List<Profile>>() {
@@ -46,11 +51,14 @@ public class SearchFrag extends Fragment {
 
                 List<Profile> profileListFull = new ArrayList<>(profiles);
                 names = new ArrayList<String>();
+//                this.profiles = profiles;
                 for (Profile profileItem : profileListFull) {
+//                    profiles.add(profileItem);
                     names.add(profileItem.getCorpName());
                 }
                 ArrayAdapter adapter2 = new ArrayAdapter<String>(getContext(),
-                        android.R.layout.simple_list_item_1, names);
+                        android.R.layout.simple_dropdown_item_1line, names);
+//                android.R.layout.simple_list_item_1, names);
 //                ArrayAdapter adapter2 = new ArrayAdapter<String>(getContext(),
 //                        R.layout.dropdown_menu_popup_item, names);
 
@@ -58,15 +66,29 @@ public class SearchFrag extends Fragment {
 //                editTextFilledExposedDropdown.setText(adapter2.getItem(0).toString());
 
 
+
+
                 editTextFilledExposedDropdown.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view,
                                             int position, long id) {
-                        Log.d(TAG, "onItemClick: " + adapter2.getItem(position).toString());
+                        Log.d(TAG, "onItemClick: pos:id " + position + " : " + id);
+                        Log.d(TAG, "onItemClick: id " + adapter2.getItem(position).toString());
+                        Log.d(TAG, "onItemClick: adt " + profiles.get(position).getPassportId());
+                        Log.d(TAG, "onItemClick: adt " + profiles.get(position).getCorpName());
+
 //                        Toast.makeText(MainActivity.this,
 //                                adapter.getItem(position).toString(),
 //                                Toast.LENGTH_SHORT).show();
+                        
+                        if (tvAcctId == null) {
+                            Log.d(TAG, "onItemClick: tvAcctId is null");
+                        }
+
+                        tvAcctId.setText(String.valueOf(profiles.get(position).getPassportId()));
+                        tvCorpName.setText(profiles.get(position).getCorpName());
+                        tvUserName.setText(profiles.get(position).getUserName());
                     }
                 });
 

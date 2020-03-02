@@ -62,6 +62,8 @@
         <menu>
             <item
                 android:id="@+id/menumain_search"
+                android:checkable="true"
+                android:checked="false"
                 android:icon="@drawable/ic_search_black"
                 android:orderInCategory="100"
                 android:title="@string/menu_search"
