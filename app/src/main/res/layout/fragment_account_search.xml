@@ -20,7 +20,6 @@
             android:id="@+id/filled_exposed_dropdown"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/primaryLightColor"
             android:textColor="@color/secondaryTextColor"
             android:textColorHint="@color/secondaryTextColor"
             app:layout_constraintEnd_toEndOf="parent"
@@ -30,14 +29,13 @@
     </com.google.android.material.textfield.TextInputLayout>
 
 
-    <include
-        layout="@layout/profile_item"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:background="@color/secondaryDarkColor"
-        app:layout_constraintTop_toBottomOf="@+id/textSearch" />
+<!--    <include-->
+<!--        layout="@layout/profile_item"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/textSearch" />-->
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

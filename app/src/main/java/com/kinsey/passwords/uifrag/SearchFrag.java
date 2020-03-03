@@ -1,5 +1,7 @@
 package com.kinsey.passwords.uifrag;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -32,6 +34,11 @@ public class SearchFrag extends Fragment {
     private List<String> names;
 //    private List<Profile> profiles;
 
+    private OnSearchClickListener mListener;
+    public interface OnSearchClickListener {
+        void showSearchSelected(int selectedId, Profile profile);
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -41,8 +48,8 @@ public class SearchFrag extends Fragment {
         AutoCompleteTextView editTextFilledExposedDropdown =
                 view.findViewById(R.id.filled_exposed_dropdown);
         TextView tvAcctId = (TextView) view.findViewById(R.id.acct_id);
-        TextView tvCorpName = view.findViewById(R.id.corp_name);
-        TextView tvUserName = view.findViewById(R.id.user_name);
+//        TextView tvCorpName = view.findViewById(R.id.corp_name);
+//        TextView tvUserName = view.findViewById(R.id.user_name);
 
         adapter = new ProfileAdapter(-1);
         MainActivity.profileViewModel.getAllProfilesByCorpName().observe(getViewLifecycleOwner(), new Observer<List<Profile>>() {
@@ -86,9 +93,11 @@ public class SearchFrag extends Fragment {
                             Log.d(TAG, "onItemClick: tvAcctId is null");
                         }
 
-                        tvAcctId.setText(String.valueOf(profiles.get(position).getPassportId()));
-                        tvCorpName.setText(profiles.get(position).getCorpName());
-                        tvUserName.setText(profiles.get(position).getUserName());
+                        Profile profile = profiles.get(position);
+//                        tvAcctId.setText("ID: " + String.valueOf(profile.getPassportId()));
+//                        tvCorpName.setText(profile.getCorpName());
+//                        tvUserName.setText(profile.getUserName());
+                        mListener.showSearchSelected(profile.getPassportId(), profile);
                     }
                 });
 
@@ -124,4 +133,28 @@ public class SearchFrag extends Fragment {
     }
 
 //    https://material.io/develop/android/components/menu/
+
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        // Activities containing this fragment must implement it's callbacks
+        Activity activity = getActivity();
+        if (!(activity instanceof OnSearchClickListener)) {
+            throw new ClassCastException(activity.getClass().getSimpleName()
+                    + " must implement SearchFrag interface");
+        }
+        mListener = (OnSearchClickListener) activity;
+
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+
+
 }

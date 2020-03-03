@@ -6,6 +6,7 @@
     android:layout_marginStart="8dp"
     android:layout_marginTop="8dp"
     android:layout_marginEnd="8dp"
+    android:background="@color/secondaryLightColor"
     app:cardCornerRadius="8dp"
     app:cardElevation="8dp"
     app:contentPadding="8dp">
@@ -15,15 +16,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="8dp">
-<!--        android:background="@android:color/transparent"-->
+        <!--        android:background="@android:color/transparent"-->
 
         <TextView
             android:id="@+id/acct_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:textColor="@color/primaryColor"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="@color/primaryColor" />
         <!--            android:background="?attr/colorPrimary"-->
         <!--            android:textColor= "?attr/secondaryTextColor" />-->
         <!--            android:textColor="?android:attr/textColorSecondary" />-->
@@ -36,9 +37,9 @@
             android:layout_alignParentStart="true"
             android:layout_marginEnd="20dp"
             android:layout_toStartOf="@+id/acct_id"
-            android:textColor="@color/primaryColor"
             android:ellipsize="end"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="@color/primaryColor" />
         <!--            android:textColor="?android:attr/textColorSecondary" />-->
 
         <!--        android:backgroundTint="?android:attr/listViewWhiteStyle"-->
@@ -49,14 +50,14 @@
         <!--            android:layout_below="@id/corp_name"-->
         <!--            android:text="user name" />-->
 
-        <TextView
-            android:id="@+id/user_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/corp_name"
-            android:textColor="@color/primaryColor"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+        <!--        <TextView-->
+        <!--            android:id="@+id/user_name"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_alignParentStart="true"-->
+        <!--            android:layout_below="@+id/corp_name"-->
+        <!--            android:textColor="@color/primaryColor"-->
+        <!--            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />-->
 
     </RelativeLayout>
 

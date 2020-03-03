@@ -80,7 +80,8 @@ public class MainActivity extends AppCompatActivity
         ProfileCorpNameFrag.OnProfileCorpNameClickListener,
         ProfilePassportIdFrag.OnProfilePassportIdClickListener,
         ProfileOpenDateFrag.OnProfileOpenDateClickListener,
-        ProfileCustomFrag.OnProfileCustomClickListener {
+        ProfileCustomFrag.OnProfileCustomClickListener,
+        SearchFrag.OnSearchClickListener {
 //        AppDialog.DialogEvents {
 //        DatePickerDialog.OnDateSetListener {
 
@@ -1549,8 +1550,28 @@ public class MainActivity extends AppCompatActivity
                 item.setChecked(!item.isChecked());
                 if (item.isChecked()) {
                     frameSearch.setVisibility(View.VISIBLE);
+                    FrameLayout frame = findViewById(R.id.fragment_container);
+                    frame.setVisibility(View.GONE);
                 } else {
                     frameSearch.setVisibility(View.GONE);
+                    FrameLayout frame = findViewById(R.id.fragment_container);
+                    frame.setVisibility(View.VISIBLE);
+                    fragmentManager = getSupportFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    profileFragment = fragmentManager.findFragmentById(R.id.fragment_container);
+                    if (profileFragment instanceof ProfileCorpNameFrag) {
+                        ProfileCorpNameFrag frag = (ProfileCorpNameFrag) profileFragment;
+                        frame2.setVisibility(View.GONE);
+                    } else if (profileFragment instanceof ProfileCustomFrag) {
+                        ProfileCustomFrag frag = (ProfileCustomFrag) profileFragment;
+                        frame2.setVisibility(View.GONE);
+                    } else if (profileFragment instanceof ProfileOpenDateFrag) {
+                        ProfileOpenDateFrag frag = (ProfileOpenDateFrag) profileFragment;
+                        frame2.setVisibility(View.GONE);
+                    } else if (profileFragment instanceof ProfilePassportIdFrag) {
+                        ProfilePassportIdFrag frag = (ProfilePassportIdFrag) profileFragment;
+                        frame2.setVisibility(View.GONE);
+                    }
                 }
 //                searchRequestActivity();
                 break;
@@ -3169,8 +3190,22 @@ public class MainActivity extends AppCompatActivity
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             Fragment profileFragment = fragmentManager.findFragmentById(R.id.fragment_container);
-            ProfileCorpNameFrag frag = (ProfileCorpNameFrag)profileFragment;
-            frag.refreshListAll();
+//            ProfileCorpNameFrag frag = (ProfileCorpNameFrag)profileFragment;
+//            frag.refreshListAll();
+            profileFragment = fragmentManager.findFragmentById(R.id.fragment_container);
+            if (profileFragment instanceof ProfileCorpNameFrag) {
+                ProfileCorpNameFrag frag = (ProfileCorpNameFrag) profileFragment;
+                frag.refreshListAll();
+            } else if (profileFragment instanceof ProfileCustomFrag) {
+                ProfileCustomFrag frag = (ProfileCustomFrag) profileFragment;
+                frag.refreshListAll();
+            } else if (profileFragment instanceof ProfileOpenDateFrag) {
+                ProfileOpenDateFrag frag = (ProfileOpenDateFrag) profileFragment;
+                frag.refreshListAll();
+            } else if (profileFragment instanceof ProfilePassportIdFrag) {
+                ProfilePassportIdFrag frag = (ProfilePassportIdFrag) profileFragment;
+                frag.refreshListAll();
+            }
 
 //            if (frame2 != null) {
 //                frame2.setVisibility(View.VISIBLE);
@@ -3179,7 +3214,7 @@ public class MainActivity extends AppCompatActivity
 //            }
 
             frame2 = findViewById(R.id.fragment_container2);
-            if (frag.getSelectedId() == -1) {
+            if (selectedId == -1) {
                 frame2.setVisibility(View.GONE);
             } else {
                 frame2.setVisibility(View.VISIBLE);
@@ -3219,6 +3254,25 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+
+    @Override
+    public void showSearchSelected(int selectedId, Profile profile) {
+        frame2.setVisibility(View.VISIBLE);
+        Log.d(TAG, "showSearchSelected: selectedId " + selectedId);
+//        startUpProfileUpdate(selectedId, profile);
+        AddEditProfileFrag fragment2 = new AddEditProfileFrag();
+        Bundle args = new Bundle();
+        args.putString(AddEditProfileFrag.ARG_CORP_NAME, profile.getCorpName());
+        fragment2.setArguments(args);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container2, fragment2, "AddEditProfileFrag");
+        fragmentTransaction.commit();
+//        FrameLayout frame = findViewById(R.id.fragment_container);
+//        Fragment profileFragment = fragmentManager.findFragmentById(R.id.fragment_container);
+//        profileFragment.setSe.setSelected(selectedId);
+//        frame.setVisibility(View.GONE);
+    }
 
 
 

@@ -50,7 +50,7 @@ public class ProfileCorpNameFrag extends Fragment {
     private int mRecyclerViewPos = RecyclerView.NO_POSITION;
 
 
-    private ProfileCorpNameFrag.OnProfileCorpNameClickListener mListener;
+    private OnProfileCorpNameClickListener mListener;
     public interface OnProfileCorpNameClickListener {
 
         void onProfileCorpNameListSelect(int selectedId, Profile profile);
@@ -209,7 +209,12 @@ public class ProfileCorpNameFrag extends Fragment {
         });
 
 
-        if (savedInstanceState != null) {
+        if (savedInstanceState == null) {
+            Bundle bundle = getArguments();
+            if (bundle != null) {
+                adapter.setSelectedId(bundle.getInt(ARG_SELECTED_ID, -1));
+            }
+        } else {
             adapter.setSelectedId(savedInstanceState.getInt(ARG_SELECTED_ID, -1));
             Log.d(TAG, "onCreateView: selectedId " + adapter.getSelectedId());
 //            adapter.notifyDataSetChanged();
@@ -313,11 +318,11 @@ public class ProfileCorpNameFrag extends Fragment {
 
         // Activities containing this fragment must implement it's callbacks
         Activity activity = getActivity();
-        if (!(activity instanceof ProfileCorpNameFrag.OnProfileCorpNameClickListener)) {
+        if (!(activity instanceof OnProfileCorpNameClickListener)) {
             throw new ClassCastException(activity.getClass().getSimpleName()
                     + " must implement ProfileCustomFrag interface");
         }
-        mListener = (ProfileCorpNameFrag.OnProfileCorpNameClickListener) activity;
+        mListener = (OnProfileCorpNameClickListener) activity;
 
     }
 

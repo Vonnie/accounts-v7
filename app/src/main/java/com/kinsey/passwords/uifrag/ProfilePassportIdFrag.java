@@ -203,6 +203,10 @@ public class ProfilePassportIdFrag extends Fragment {
         }
     }
 
+    public void refreshListAll() {
+        adapter.notifyDataSetChanged();
+    }
+
 
     public void deleteFromList(int profileId) {
         List<Profile> profiles = adapter.getCurrentList();
