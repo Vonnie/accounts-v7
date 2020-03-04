@@ -1559,17 +1559,22 @@ public class MainActivity extends AppCompatActivity
                     fragmentManager = getSupportFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                     profileFragment = fragmentManager.findFragmentById(R.id.fragment_container);
+                    Log.d(TAG, "onOptionsItemSelected: selectedId " + this.selectedId);
                     if (profileFragment instanceof ProfileCorpNameFrag) {
                         ProfileCorpNameFrag frag = (ProfileCorpNameFrag) profileFragment;
+                        frag.setSelectedId(this.selectedId);
                         frame2.setVisibility(View.GONE);
                     } else if (profileFragment instanceof ProfileCustomFrag) {
                         ProfileCustomFrag frag = (ProfileCustomFrag) profileFragment;
+                        frag.setSelectedId(this.selectedId);
                         frame2.setVisibility(View.GONE);
                     } else if (profileFragment instanceof ProfileOpenDateFrag) {
                         ProfileOpenDateFrag frag = (ProfileOpenDateFrag) profileFragment;
+                        frag.setSelectedId(this.selectedId);
                         frame2.setVisibility(View.GONE);
                     } else if (profileFragment instanceof ProfilePassportIdFrag) {
                         ProfilePassportIdFrag frag = (ProfilePassportIdFrag) profileFragment;
+                        frag.setSelectedId(this.selectedId);
                         frame2.setVisibility(View.GONE);
                     }
                 }
@@ -3195,15 +3200,19 @@ public class MainActivity extends AppCompatActivity
             profileFragment = fragmentManager.findFragmentById(R.id.fragment_container);
             if (profileFragment instanceof ProfileCorpNameFrag) {
                 ProfileCorpNameFrag frag = (ProfileCorpNameFrag) profileFragment;
+                frag.setSelectedId(this.selectedId);
                 frag.refreshListAll();
             } else if (profileFragment instanceof ProfileCustomFrag) {
                 ProfileCustomFrag frag = (ProfileCustomFrag) profileFragment;
+                frag.setSelectedId(this.selectedId);
                 frag.refreshListAll();
             } else if (profileFragment instanceof ProfileOpenDateFrag) {
                 ProfileOpenDateFrag frag = (ProfileOpenDateFrag) profileFragment;
+                frag.setSelectedId(this.selectedId);
                 frag.refreshListAll();
             } else if (profileFragment instanceof ProfilePassportIdFrag) {
                 ProfilePassportIdFrag frag = (ProfilePassportIdFrag) profileFragment;
+                frag.setSelectedId(this.selectedId);
                 frag.refreshListAll();
             }
 
@@ -3227,6 +3236,8 @@ public class MainActivity extends AppCompatActivity
             AddEditProfileFrag fragment2 = new AddEditProfileFrag();
             Bundle args = new Bundle();
             args.putString(AddEditProfileFrag.ARG_CORP_NAME, profile.getCorpName());
+            args.putString(AddEditProfileFrag.ARG_USER_NAME, profile.getUserName());
+            args.putString(AddEditProfileFrag.ARG_USER_EMAIL, profile.getUserEmail());
             fragment2.setArguments(args);
             fragmentTransaction.replace(R.id.fragment_container2, fragment2, "AddEditProfileFrag");
             fragmentTransaction.commit();
@@ -3258,6 +3269,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void showSearchSelected(int selectedId, Profile profile) {
         frame2.setVisibility(View.VISIBLE);
+        this.selectedId = selectedId;
         Log.d(TAG, "showSearchSelected: selectedId " + selectedId);
 //        startUpProfileUpdate(selectedId, profile);
         AddEditProfileFrag fragment2 = new AddEditProfileFrag();

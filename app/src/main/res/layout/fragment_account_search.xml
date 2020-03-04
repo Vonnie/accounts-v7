@@ -7,11 +7,12 @@
     android:background="@color/secondaryLightColor">
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textSearch"
+        android:id="@+id/text_input_corp_name"
         style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/hint_text"
+        android:textColorHint="@color/primaryColor"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -20,14 +21,24 @@
             android:id="@+id/filled_exposed_dropdown"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/secondaryTextColor"
-            android:textColorHint="@color/secondaryTextColor"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textSearch" />
+            android:background="@color/secondaryLightColor"
+            android:textColor="@color/primaryColor"
+            android:textColorHint="@color/primaryColor" />
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/textSearch" />-->
 
     </com.google.android.material.textfield.TextInputLayout>
 
+<!--    <androidx.recyclerview.widget.RecyclerView-->
+<!--        android:id="@+id/recycler_view"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="0dp"-->
+<!--        android:layout_weight="1"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/text_input_corp_name" />-->
 
 <!--    <include-->
 <!--        layout="@layout/profile_item"-->

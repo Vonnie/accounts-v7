@@ -68,7 +68,8 @@
                 android:scrollHorizontally="false"
                 android:text="@string/home_message_text_1"
                 android:textAppearance="@android:style/TextAppearance.Medium"
-                android:textColor="?android:attr/textColorSecondary" />
+                android:textColor="?android:attr/textColorSecondary"
+                android:textSize="@dimen/textSize" />
             <!--                android:textSize="14sp" />-->
 
             <TextView
@@ -80,7 +81,8 @@
                 android:scrollHorizontally="false"
                 android:text="@string/home_message_text_2"
                 android:textAppearance="@android:style/TextAppearance.Medium"
-                android:textColor="?android:attr/textColorSecondary" />
+                android:textColor="?android:attr/textColorSecondary"
+                android:textSize="@dimen/textSize" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -91,7 +93,8 @@
                 android:scrollHorizontally="false"
                 android:text="@string/home_message_text_3"
                 android:textAppearance="@android:style/TextAppearance.Medium"
-                android:textColor="?android:attr/textColorSecondary" />
+                android:textColor="?android:attr/textColorSecondary"
+                android:textSize="@dimen/textSize" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -102,7 +105,8 @@
                 android:scrollHorizontally="false"
                 android:text="@string/home_message_text_4"
                 android:textAppearance="@android:style/TextAppearance.Medium"
-                android:textColor="?android:attr/textColorSecondary" />
+                android:textColor="?android:attr/textColorSecondary"
+                android:textSize="@dimen/textSize" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -113,7 +117,8 @@
                 android:scrollHorizontally="false"
                 android:text="@string/home_message_text_5"
                 android:textAppearance="@android:style/TextAppearance.Medium"
-                android:textColor="?android:attr/textColorSecondary" />
+                android:textColor="?android:attr/textColorSecondary"
+                android:textSize="@dimen/textSize" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -124,7 +129,8 @@
                 android:scrollHorizontally="false"
                 android:text="@string/home_message_text_6"
                 android:textAppearance="@android:style/TextAppearance.Medium"
-                android:textColor="?android:attr/textColorSecondary" />
+                android:textColor="?android:attr/textColorSecondary"
+                android:textSize="@dimen/textSize" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -135,7 +141,8 @@
                 android:scrollHorizontally="false"
                 android:text="@string/home_message_text_7"
                 android:textAppearance="@android:style/TextAppearance.Medium"
-                android:textColor="?android:attr/textColorSecondary" />
+                android:textColor="?android:attr/textColorSecondary"
+                android:textSize="@dimen/textSize" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -146,7 +153,8 @@
                 android:scrollHorizontally="false"
                 android:text="@string/home_message_text_8"
                 android:textAppearance="@android:style/TextAppearance.Medium"
-                android:textColor="?android:attr/textColorSecondary" />
+                android:textColor="?android:attr/textColorSecondary"
+                android:textSize="@dimen/textSize" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -157,7 +165,8 @@
                 android:scrollHorizontally="false"
                 android:text="@string/home_message_text_9"
                 android:textAppearance="@android:style/TextAppearance.Medium"
-                android:textColor="?android:attr/textColorSecondary" />
+                android:textColor="?android:attr/textColorSecondary"
+                android:textSize="@dimen/textSize" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -168,7 +177,8 @@
                 android:scrollHorizontally="false"
                 android:text="@string/home_message_text_10"
                 android:textAppearance="@android:style/TextAppearance.Medium"
-                android:textColor="?android:attr/textColorSecondary" />
+                android:textColor="?android:attr/textColorSecondary"
+                android:textSize="@dimen/textSize" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -179,7 +189,8 @@
                 android:scrollHorizontally="false"
                 android:text="@string/home_message_text_11"
                 android:textAppearance="@android:style/TextAppearance.Medium"
-                android:textColor="?android:attr/textColorSecondary" />
+                android:textColor="?android:attr/textColorSecondary"
+                android:textSize="@dimen/textSize" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -190,7 +201,8 @@
                 android:scrollHorizontally="false"
                 android:text="@string/home_message_text_12"
                 android:textAppearance="@android:style/TextAppearance.Large"
-                android:textColor="?android:attr/textColorSecondary" />
+                android:textColor="?android:attr/textColorSecondary"
+                android:textSize="@dimen/textSize" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -201,7 +213,8 @@
                 android:scrollHorizontally="false"
                 android:text="@string/home_message_text_13"
                 android:textAppearance="@android:style/TextAppearance.Medium"
-                android:textColor="?android:attr/textColorSecondary" />
+                android:textColor="?android:attr/textColorSecondary"
+                android:textSize="@dimen/textSize" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -212,7 +225,8 @@
                 android:scrollHorizontally="false"
                 android:text="@string/home_message_text_14"
                 android:textAppearance="@android:style/TextAppearance.Medium"
-                android:textColor="?android:attr/textColorSecondary" />
+                android:textColor="?android:attr/textColorSecondary"
+                android:textSize="@dimen/textSize" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -223,7 +237,8 @@
                 android:scrollHorizontally="false"
                 android:text="@string/home_message_text_15"
                 android:textAppearance="@android:style/TextAppearance.Medium"
-                android:textColor="?android:attr/textColorSecondary" />
+                android:textColor="?android:attr/textColorSecondary"
+                android:textSize="@dimen/textSize" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -234,7 +249,8 @@
                 android:scrollHorizontally="false"
                 android:text="@string/home_message_text_16"
                 android:textAppearance="@android:style/TextAppearance.Medium"
-                android:textColor="?android:attr/textColorSecondary" />
+                android:textColor="?android:attr/textColorSecondary"
+                android:textSize="@dimen/textSize" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -245,7 +261,8 @@
                 android:scrollHorizontally="false"
                 android:text="@string/home_message_text_17"
                 android:textAppearance="@android:style/TextAppearance.Large"
-                android:textColor="?android:attr/textColorSecondary" />
+                android:textColor="?android:attr/textColorSecondary"
+                android:textSize="@dimen/textSize" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -256,7 +273,8 @@
                 android:scrollHorizontally="false"
                 android:text="@string/home_message_text_18"
                 android:textAppearance="@android:style/TextAppearance.Medium"
-                android:textColor="?android:attr/textColorSecondary" />
+                android:textColor="?android:attr/textColorSecondary"
+                android:textSize="@dimen/textSize" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -267,7 +285,8 @@
                 android:scrollHorizontally="false"
                 android:text="@string/home_message_text_19"
                 android:textAppearance="@android:style/TextAppearance.Medium"
-                android:textColor="?android:attr/textColorSecondary" />
+                android:textColor="?android:attr/textColorSecondary"
+                android:textSize="@dimen/textSize" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -278,7 +297,8 @@
                 android:scrollHorizontally="false"
                 android:text="@string/home_message_text_20"
                 android:textAppearance="@android:style/TextAppearance.Medium"
-                android:textColor="?android:attr/textColorSecondary" />
+                android:textColor="?android:attr/textColorSecondary"
+                android:textSize="@dimen/textSize" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -289,7 +309,8 @@
                 android:scrollHorizontally="false"
                 android:text="@string/home_message_text_21"
                 android:textAppearance="@android:style/TextAppearance.Large"
-                android:textColor="?android:attr/textColorSecondary" />
+                android:textColor="?android:attr/textColorSecondary"
+                android:textSize="@dimen/textSize" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -300,7 +321,8 @@
                 android:scrollHorizontally="false"
                 android:text="@string/home_message_text_22"
                 android:textAppearance="@android:style/TextAppearance.Medium"
-                android:textColor="?android:attr/textColorSecondary" />
+                android:textColor="?android:attr/textColorSecondary"
+                android:textSize="@dimen/textSize" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -311,7 +333,8 @@
                 android:scrollHorizontally="false"
                 android:text="@string/home_message_text_23"
                 android:textAppearance="@android:style/TextAppearance.Medium"
-                android:textColor="?android:attr/textColorSecondary" />
+                android:textColor="?android:attr/textColorSecondary"
+                android:textSize="@dimen/textSize" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -322,7 +345,8 @@
                 android:scrollHorizontally="false"
                 android:text="@string/home_message_text_24"
                 android:textAppearance="@android:style/TextAppearance.Medium"
-                android:textColor="?android:attr/textColorSecondary" />
+                android:textColor="?android:attr/textColorSecondary"
+                android:textSize="@dimen/textSizeInfo" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -336,7 +360,8 @@
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
                     android:layout_weight="1"
-                    android:textColor="?android:attr/textColorSecondary" />
+                    android:textColor="?android:attr/textColorSecondary"
+                    android:textSize="@dimen/textSizeInfo" />
 
                 <TextView
                     android:id="@+id/ver_no"
@@ -346,7 +371,8 @@
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
                     android:layout_weight="1"
-                    android:textColor="?android:attr/textColorSecondary" />
+                    android:textColor="?android:attr/textColorSecondary"
+                    android:textSize="@dimen/textSizeInfo" />
 
                 <TextView
                     android:id="@+id/ver_name"
@@ -356,7 +382,8 @@
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
                     android:layout_weight="1"
-                    android:textColor="?android:attr/textColorSecondary" />
+                    android:textColor="?android:attr/textColorSecondary"
+                    android:textSize="@dimen/textSizeInfo" />
 
             </LinearLayout>
 
@@ -370,7 +397,8 @@
                 android:layout_weight="1"
                 android:autoLink="email"
                 android:text="@string/about_email"
-                android:textColor="?android:attr/textColorSecondary" />
+                android:textColor="?android:attr/textColorSecondary"
+                android:textSize="@dimen/textSizeInfo" />
 
             <TextView
                 android:id="@+id/about_copyright"
@@ -381,7 +409,8 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:text="@string/about_copyright"
-                android:textColor="?android:attr/textColorSecondary" />
+                android:textColor="?android:attr/textColorSecondary"
+                android:textSize="@dimen/textSizeInfo" />
 
         </LinearLayout>
 

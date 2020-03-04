@@ -241,6 +241,26 @@ public class ProfileCorpNameFrag extends Fragment {
 
     }
 
+    public void setSelectedId(int id) {
+        Log.d(TAG, "setSelectedId: id " + id);
+        adapter.setSelectedId(id);
+        if (id == -1) {
+            recyclerView.scrollToPosition(0);
+        }
+        int pos = 0;
+        List<Profile> profiles = adapter.getCurrentList();
+        for (Profile item : profiles) {
+            if (item.getPassportId() == id) {
+//                adapter.notifyItemChanged(pos);
+                adapter.notifyDataSetChanged();
+                recyclerView.scrollToPosition(pos);
+                break;
+            }
+            pos += 1;
+        }
+        adapter.setSelectPos(id);
+    }
+
     private void refreshList() {
         if (adapter.getItemCount() > 0) {
             adapter.notifyItemRangeChanged(0, adapter.getItemCount() - 1);

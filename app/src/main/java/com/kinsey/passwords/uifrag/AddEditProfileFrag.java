@@ -17,8 +17,15 @@ public class AddEditProfileFrag extends Fragment {
     private static final String TAG = "AddEditProfileFrag";
 
     public static final String ARG_CORP_NAME = "ARG_CORP_NAME";
+    public static final String ARG_USER_NAME = "ARG_USER_NAME";
+    public static final String ARG_USER_EMAIL = "ARG_USER_EMAIL";
 
     private TextInputLayout textInputCorpName;
+    private TextInputLayout textInputUserName;
+    private TextInputLayout textInputUserEmail;
+    private TextInputLayout textInputCorpWebsite;
+    private TextInputLayout textInputNote;
+
 
     @Nullable
     @Override
@@ -27,6 +34,8 @@ public class AddEditProfileFrag extends Fragment {
         View view = inflater.inflate(R.layout.fragment_add_edit_profile, container, false);
 
         textInputCorpName = view.findViewById(R.id.text_input_corp_name);
+        textInputUserName = view.findViewById(R.id.text_input_user_name);
+        textInputUserEmail = view.findViewById(R.id.text_input_user_email);
 
 //        if(savedInstanceState != null){
 //            Log.d(TAG, "A SavedInstanceState exists, using past values");
@@ -44,6 +53,8 @@ public class AddEditProfileFrag extends Fragment {
         if (savedInstanceState == null) {
             Bundle bundle = getArguments();
             textInputCorpName.getEditText().setText(bundle.getString(ARG_CORP_NAME));
+            textInputUserName.getEditText().setText(bundle.getString(ARG_USER_NAME));
+            textInputUserEmail.getEditText().setText(bundle.getString(ARG_USER_EMAIL));
         } else {
             restoreScreen(savedInstanceState);
         }
@@ -56,12 +67,20 @@ public class AddEditProfileFrag extends Fragment {
         textInputCorpName.getEditText().setText(
                 savedInstanceState.getString(ARG_CORP_NAME)
         );
+        textInputUserName.getEditText().setText(
+                savedInstanceState.getString(ARG_USER_NAME)
+        );
+        textInputUserEmail.getEditText().setText(
+                savedInstanceState.getString(ARG_USER_EMAIL)
+        );
     }
 
         @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString(ARG_CORP_NAME, textInputCorpName.getEditText().getText().toString().trim());
+        outState.putString(ARG_USER_NAME, textInputUserName.getEditText().getText().toString().trim());
+        outState.putString(ARG_USER_EMAIL, textInputUserEmail.getEditText().getText().toString().trim());
         Log.d(TAG, "saved instance " + textInputCorpName.getEditText().getText().toString().trim());
     }
 

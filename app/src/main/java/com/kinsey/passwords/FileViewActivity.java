@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -27,6 +28,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
@@ -91,6 +93,11 @@ public class FileViewActivity extends AppCompatActivity {
 
 
         webView = findViewById(R.id.wv_page);
+        final WebSettings webSettings = webView.getSettings();
+        Resources res = getResources();
+        float fontSize = res.getInteger(R.integer.font_size);
+//        fontSize = res.getDimension(R.dimen.txtSize);
+        webSettings.setDefaultFontSize((int)fontSize);
 
         webView.setWebViewClient(new WebViewClient() {
             @Override

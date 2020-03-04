@@ -19,6 +19,7 @@ import com.kinsey.passwords.R;
 import com.kinsey.passwords.items.Profile;
 
 import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.Locale;
 
 import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
@@ -211,4 +212,18 @@ public class ProfileAdapter extends ListAdapter<Profile, ProfileAdapter.ProfileH
     public void setSelectedId(int selectedId) {
         this.selectedId = selectedId;
     }
+
+    public void setSelectPos(int selectedId) {
+        List<Profile> list = getCurrentList();
+        int pos = 0;
+        for (Profile item : list) {
+            if (item.getPassportId() == selectedId) {
+                Log.d(TAG, "setSelectPos: selected " + selectedId);
+                notifyItemChanged(pos);
+                return ;
+            }
+            pos += 1;
+        }
+    }
+
 }

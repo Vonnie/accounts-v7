@@ -7,18 +7,19 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:layout_editor_absoluteY="25dp">
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-        android:layout_width="0dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:indeterminate="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+<!--    <ProgressBar-->
+<!--        android:id="@+id/progressBar"-->
+<!--        style="@style/Widget.AppCompat.ProgressBar.Horizontal"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="40dp"-->
+<!--        android:layout_marginStart="8dp"-->
+<!--        android:layout_marginTop="8dp"-->
+<!--        android:layout_marginEnd="8dp"-->
+<!--        android:indeterminate="true"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
+
     <!--style="?android:attr/progressBarStyle"-->
 
     <!--    <LinearLayout-->
@@ -35,6 +36,7 @@
     <!--        android:baselineAligned="false"-->
 
     <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
         android:id="@+id/text_input_corp_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -50,9 +52,9 @@
             android:id="@+id/filled_exposed_dropdown"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/primaryColor"
-            android:textColor="@color/primaryTextColor"
-            android:textColorHint="@color/primaryTextColor" />
+            android:background="@color/secondaryLightColor"
+            android:textColor="@color/primaryColor"
+            android:textColorHint="@color/primaryColor" />
 
 <!--        <com.google.android.material.textfield.TextInputEditText-->
 <!--            android:layout_width="match_parent"-->
@@ -75,15 +77,15 @@
     <!--        app:layout_constraintStart_toStartOf="parent"-->
     <!--        app:layout_constraintTop_toBottomOf="@+id/text_input_corp_name" />-->
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_input_corp_name" />
+<!--    <androidx.recyclerview.widget.RecyclerView-->
+<!--        android:id="@+id/recycler_view"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="0dp"-->
+<!--        android:layout_weight="1"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/text_input_corp_name" />-->
 
     <!--    </LinearLayout>-->
 </androidx.constraintlayout.widget.ConstraintLayout>

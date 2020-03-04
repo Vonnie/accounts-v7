@@ -455,6 +455,12 @@ public class ProfileCustomFrag extends Fragment {
         onFirstReported = true;
     }
 
+
+    public void setSelectedId(int id) {
+        adapter.setSelectedId(id);
+    }
+
+
     private void refreshList() {
         if (adapter.getItemCount() > 0) {
             adapter.notifyItemRangeChanged(0, adapter.getItemCount() - 1);
