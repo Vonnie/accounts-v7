@@ -1,13 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:paddingRight="8dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
     android:paddingLeft="8dp"
     android:paddingTop="8dp"
-    android:layout_height="match_parent">
+    android:paddingRight="8dp">
 
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/button_add_profile"
+        android:layout_width="56dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|end"
+        android:layout_margin="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:rippleColor="@color/secondaryColor"
+        app:srcCompat="@drawable/ic_save" />
 
     <ScrollView
         android:id="@+id/scroll_view"
@@ -15,19 +26,18 @@
         android:layout_height="0dp"
         android:clipToPadding="true"
         android:fillViewport="true"
+        android:scrollbarStyle="outsideOverlay"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        app:layout_constraintBottom_toTopOf="@+id/adView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:scrollbarStyle="outsideOverlay">
+        app:layout_constraintTop_toTopOf="parent">
 
+<!--        app:layout_constraintBottom_toTopOf="@+id/adView"-->
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/text_input_corp_name"
@@ -40,8 +50,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/addedit_corp_name_hint"
-                    android:textColor="@color/secondaryTextColor"
-                    android:inputType="textCapWords|textNoSuggestions" />
+                    android:inputType="textCapWords|textNoSuggestions"
+                    android:textColor="@color/secondaryTextColor" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -56,8 +66,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/addedit_name_hint"
-                    android:textColor="@color/secondaryTextColor"
-                    android:inputType="text|textNoSuggestions" />
+                    android:inputType="text|textNoSuggestions"
+                    android:textColor="@color/secondaryTextColor" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -72,8 +82,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/addedit_email_hint"
-                    android:textColor="@color/secondaryTextColor"
-                    android:inputType="textEmailAddress|textNoSuggestions" />
+                    android:inputType="textEmailAddress|textNoSuggestions"
+                    android:textColor="@color/secondaryTextColor" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -91,7 +101,7 @@
                     android:textColor="@color/secondaryTextColor"
                     app:srcCompat="@drawable/ic_http" />
 
-<!--                    android:textColor="?android:attr/textColorPrimary"-->
+                <!--                    android:textColor="?android:attr/textColorPrimary"-->
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/text_input_corp_website"
@@ -178,20 +188,20 @@
 
             </LinearLayout>
 
+
         </LinearLayout>
 
     </ScrollView>
 
+<!--    <com.google.android.gms.ads.AdView-->
+<!--        android:id="@+id/adView"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:adSize="SMART_BANNER"-->
+<!--        app:adUnitId="ca-app-pub-6558779133930297/9091060189"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent">-->
 
-    <com.google.android.gms.ads.AdView
-        android:id="@+id/adView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:adSize="SMART_BANNER"
-        app:adUnitId="ca-app-pub-6558779133930297/9091060189"
-        app:layout_constraintBottom_toBottomOf="parent">
-
-    </com.google.android.gms.ads.AdView>
+<!--    </com.google.android.gms.ads.AdView>-->
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

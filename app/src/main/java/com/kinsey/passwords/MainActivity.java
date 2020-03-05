@@ -1,13 +1,16 @@
 package com.kinsey.passwords;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.appcompat.app.AlertDialog;
@@ -78,6 +81,7 @@ import static java.security.AccessController.getContext;
 public class MainActivity extends AppCompatActivity
         implements
         ProfileCorpNameFrag.OnProfileCorpNameClickListener,
+        AddEditProfileFrag.OnProfileModifyClickListener,
         ProfilePassportIdFrag.OnProfilePassportIdClickListener,
         ProfileOpenDateFrag.OnProfileOpenDateClickListener,
         ProfileCustomFrag.OnProfileCustomClickListener,
@@ -116,7 +120,7 @@ public class MainActivity extends AppCompatActivity
     public static boolean migrationStarted = false;
 
 //    private boolean isTablet = getResources().getBoolean(R.bool.isTablet);
-    private boolean isTablet = false;
+//    private boolean isTablet = false;
     private int selectedId = -1;
 
 //    GoogleSignInClient mGoogleSignInClient;
@@ -195,7 +199,7 @@ public class MainActivity extends AppCompatActivity
     private int currentMaxSeq = 0;
     private boolean itemAdded = false;
     FrameLayout frameSearch, frame2;
-    boolean has2ndPanel = false;
+//    boolean has2ndPanel = false;
 
 //    public static ProfileAdapter adapterCorpName = new ProfileAdapter();
 //
@@ -213,6 +217,7 @@ public class MainActivity extends AppCompatActivity
 
     public MainActivity() {
     }
+
 
 
     private enum ListHomeType {
@@ -244,23 +249,27 @@ public class MainActivity extends AppCompatActivity
 //        setContentView(R.layout.activity_main_rss_list);
 
 
-        TelephonyManager manager = (TelephonyManager)getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
-        if (Objects.requireNonNull(manager).getPhoneType() == TelephonyManager.PHONE_TYPE_NONE) {
-//            Toast.makeText(MainActivity.this, "Detected... You're using a Tablet", Toast.LENGTH_LONG).show();
-            Log.d(TAG, "onCreate: isTablet");
-            this.isTablet = true;
-        } else {
-//            Toast.makeText(MainActivity.this, "Detected... You're using a Mobile Phone", Toast.LENGTH_LONG).show();
-            Log.d(TAG, "onCreate: isPhone");
-        }
+//        TelephonyManager manager = (TelephonyManager)getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
+//        if (Objects.requireNonNull(manager).getPhoneType() == TelephonyManager.PHONE_TYPE_NONE) {
+////            Toast.makeText(MainActivity.this, "Detected... You're using a Tablet", Toast.LENGTH_LONG).show();
+//            Log.d(TAG, "onCreate: isTablet");
+//            this.isTablet = true;
+//        } else {
+////            Toast.makeText(MainActivity.this, "Detected... You're using a Mobile Phone", Toast.LENGTH_LONG).show();
+//            Log.d(TAG, "onCreate: isPhone");
+//        }
 
         int screenLayout = getResources().getConfiguration().screenLayout;
         screenLayout &= Configuration.SCREENLAYOUT_SIZE_MASK;
 
         switch (screenLayout) {
             case Configuration.SCREENLAYOUT_SIZE_XLARGE:
+
                 if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
                     setContentView(R.layout.activity_main_large_land);
+//                    setContentView(R.layout.activity_main);
+//                    LinearLayoutCompat layout = recyclerView.findViewById(R.id.layout);
+//                    layout.setOrientation(LinearLayoutCompat.OrientationMode());
                     Toast.makeText(MainActivity.this, "Detected... XLarge Landscape", Toast.LENGTH_LONG).show();
                     Log.d(TAG, "screen size Xlarge Landscape");
                 } else {
@@ -268,10 +277,12 @@ public class MainActivity extends AppCompatActivity
                     Toast.makeText(MainActivity.this, "Detected... XLarge Portrait", Toast.LENGTH_LONG).show();
                     Log.d(TAG, "screen size Xlarge Portrait");
                 }
+
                 break;
             case Configuration.SCREENLAYOUT_SIZE_LARGE:
                 if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
                     setContentView(R.layout.activity_main_large_land);
+//                    setContentView(R.layout.activity_main);
                     Toast.makeText(MainActivity.this, "Detected... Large Landscape", Toast.LENGTH_LONG).show();
                     Log.d(TAG, "screen size Large Landscape");
                 } else {
@@ -318,28 +329,30 @@ public class MainActivity extends AppCompatActivity
             FrameLayout frame = findViewById(R.id.fragment_container);
             Log.d(TAG, "onCreate: tag " + frame.getTag());
 
-            if (isTablet | frame.getTag().equals("sw600")
-                    |  frame.getTag().equals("large_land")
-                    |  frame.getTag().equals("main_large_land")) {
-//                Log.d(TAG, "onCreate: show frag2");
-//                FragmentManager fragmentManager2 = getSupportFragmentManager();
-//                FragmentTransaction fragmentTransaction2 = fragmentManager2.beginTransaction();
-//
-//                AddEditProfileFrag fragment2 = new AddEditProfileFrag();
-//                fragmentTransaction2.add(R.id.fragment_container2, fragment2);
-//                fragmentTransaction2.commit();
-                frame2 = findViewById(R.id.fragment_container2);
-                frame2.setVisibility(View.GONE);
-            }
+//            if (isTablet | frame.getTag().equals("sw600")
+//                    |  frame.getTag().equals("large_land")
+//                    |  frame.getTag().equals("main_large_land")) {
+////                Log.d(TAG, "onCreate: show frag2");
+////                FragmentManager fragmentManager2 = getSupportFragmentManager();
+////                FragmentTransaction fragmentTransaction2 = fragmentManager2.beginTransaction();
+////
+////                AddEditProfileFrag fragment2 = new AddEditProfileFrag();
+////                fragmentTransaction2.add(R.id.fragment_container2, fragment2);
+////                fragmentTransaction2.commit();
+//                frame2 = findViewById(R.id.fragment_container2);
+//                frame2.setVisibility(View.GONE);
+//            }
+            frame2 = findViewById(R.id.fragment_container2);
+            frame2.setVisibility(View.GONE);
             FragmentManager fragmentManager3 = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction3 = fragmentManager3.beginTransaction();
             SearchFrag searchFrag = new SearchFrag();
             fragmentTransaction3.add(R.id.fragment_search_container, searchFrag);
             fragmentTransaction3.commit();
-            frameSearch = findViewById(R.id.fragment_search_container);
-            frameSearch.setVisibility(View.GONE);
         } else {
             this.selectedId = savedInstanceState.getInt(ARG_SELECTED_ID);
+            FrameLayout frame = findViewById(R.id.fragment_container);
+            Log.d(TAG, "onCreate: tag " + frame.getTag());
             frame2 = findViewById(R.id.fragment_container2);
             Log.d(TAG, "onCreate: rotate selectedId " + this.selectedId);
             if (this.selectedId == -1) {
@@ -356,14 +369,16 @@ public class MainActivity extends AppCompatActivity
 
             }
         }
+        frameSearch = findViewById(R.id.fragment_search_container);
+        frameSearch.setVisibility(View.GONE);
 
-        if (findViewById(R.id.fragment_container2) == null) {
-            Log.d(TAG, "onCreate: has null 2nd container");
-            has2ndPanel = false;
-        } else {
-            Log.d(TAG, "onCreate: has a 2nd container");
-            has2ndPanel = true;
-        }
+//        if (findViewById(R.id.fragment_container2) == null) {
+//            Log.d(TAG, "onCreate: has null 2nd container");
+//            has2ndPanel = false;
+//        } else {
+//            Log.d(TAG, "onCreate: has a 2nd container");
+//            has2ndPanel = true;
+//        }
 
 //        ================================================================================
 //        Future growth for firebase signin
@@ -392,20 +407,20 @@ public class MainActivity extends AppCompatActivity
 //        fragCustom = findViewById(R.id.fragment_container_custom);
 //        fragCustom.setVisibility(View.GONE);
 
-        FloatingActionButton buttonAddPofile = findViewById(R.id.button_add_profile);
-//        buttonAddPofile.setImageResource(R.drawable.ic_audiotrack_light);
-        buttonAddPofile.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, AddEditProfileActivity.class);
-                Log.d(TAG, "onCreate: start activity AddEditProfileActivity");
-                startActivityForResult(intent, ADD_PROFILE_REQUEST);
-//                startActivity(intent);
-
-//                onSignInClickedButton(v);
-            }
-        });
+//        FloatingActionButton buttonAddPofile = findViewById(R.id.button_add_profile);
+////        buttonAddPofile.setImageResource(R.drawable.ic_audiotrack_light);
+//        buttonAddPofile.setOnClickListener(new View.OnClickListener() {
+//
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(MainActivity.this, AddEditProfileActivity.class);
+//                Log.d(TAG, "onCreate: start activity AddEditProfileActivity");
+//                startActivityForResult(intent, ADD_PROFILE_REQUEST);
+////                startActivity(intent);
+//
+////                onSignInClickedButton(v);
+//            }
+//        });
 
 
 //        progressBar = findViewById(R.id.progressBar);
@@ -909,22 +924,22 @@ public class MainActivity extends AppCompatActivity
             menu.findItem(R.id.menuacct_sort_custom).setChecked(true);
         }
 
-        View view = menu.findItem(R.id.button_item).getActionView();
-
-        String[] ITEM_ACTIONS = new String[] {"Account Edit", "Search", "Passwords"};
-
-        ArrayAdapter adapter = new ArrayAdapter<>(this,
-                R.layout.dropdown_menu_popup_item, ITEM_ACTIONS);
-//        ArrayAdapter<String> adapter =
-//                new ArrayAdapter<String>(
-//                        getContext(),
-//                        R.layout.dropdown_menu_popup_item,
-//                        COUNTRIES);
-
-        AutoCompleteTextView editTextFilledExposedDropdown =
-                view.findViewById(R.id.filled_exposed_dropdown);
-        editTextFilledExposedDropdown.setAdapter(adapter);
-        editTextFilledExposedDropdown.setText(adapter.getItem(0).toString());
+//        View view = menu.findItem(R.id.button_item).getActionView();
+//
+//        String[] ITEM_ACTIONS = new String[] {"Account Edit", "Search", "Passwords"};
+//
+//        ArrayAdapter adapter = new ArrayAdapter<>(this,
+//                R.layout.dropdown_menu_popup_item, ITEM_ACTIONS);
+////        ArrayAdapter<String> adapter =
+////                new ArrayAdapter<String>(
+////                        getContext(),
+////                        R.layout.dropdown_menu_popup_item,
+////                        COUNTRIES);
+//
+//        AutoCompleteTextView editTextFilledExposedDropdown =
+//                view.findViewById(R.id.filled_exposed_dropdown);
+//        editTextFilledExposedDropdown.setAdapter(adapter);
+//        editTextFilledExposedDropdown.setText(adapter.getItem(0).toString());
 
 
 //        https://stackoverflow.com/questions/31231609/creating-a-button-in-android-toolbar
@@ -3191,7 +3206,7 @@ public class MainActivity extends AppCompatActivity
 
     private void startUpProfileUpdate(int selectedId, Profile profile) {
         this.selectedId = selectedId;
-        if (has2ndPanel) {
+//        if (has2ndPanel) {
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             Fragment profileFragment = fragmentManager.findFragmentById(R.id.fragment_container);
@@ -3235,9 +3250,16 @@ public class MainActivity extends AppCompatActivity
 
             AddEditProfileFrag fragment2 = new AddEditProfileFrag();
             Bundle args = new Bundle();
-            args.putString(AddEditProfileFrag.ARG_CORP_NAME, profile.getCorpName());
-            args.putString(AddEditProfileFrag.ARG_USER_NAME, profile.getUserName());
-            args.putString(AddEditProfileFrag.ARG_USER_EMAIL, profile.getUserEmail());
+            args.putInt(AddEditProfileFrag.EXTRA_ID, profile.getId());
+            args.putInt(AddEditProfileFrag.EXTRA_PASSPORT_ID, profile.getPassportId());
+            args.putString(AddEditProfileFrag.EXTRA_CORP_NAME, profile.getCorpName());
+            args.putString(AddEditProfileFrag.EXTRA_USER_NAME, profile.getUserName());
+            args.putString(AddEditProfileFrag.EXTRA_USER_EMAIL, profile.getUserEmail());
+            args.putInt(AddEditProfileFrag.EXTRA_SEQUENCE, profile.getSequence());
+            args.putString(AddEditProfileFrag.EXTRA_CORP_WEBSITE, profile.getCorpWebsite());
+            args.putString(AddEditProfileFrag.EXTRA_NOTE, profile.getNote());
+            args.putLong(AddEditProfileFrag.EXTRA_ACTVY_LONG, profile.getActvyLong());
+            args.putLong(AddEditProfileFrag.EXTRA_OPEN_DATE_LONG, profile.getOpenLong());
             fragment2.setArguments(args);
             fragmentTransaction.replace(R.id.fragment_container2, fragment2, "AddEditProfileFrag");
             fragmentTransaction.commit();
@@ -3245,23 +3267,23 @@ public class MainActivity extends AppCompatActivity
             Log.d(TAG, "startUpProfileUpdate: startUp " + profile.getPassportId() +
                     " " + profile.getCorpName());
             return;
-        }
+//        }
 
-        Intent intent = new Intent(this, AddEditProfileActivity.class);
-        intent.putExtra(AddEditProfileActivity.EXTRA_ID, profile.getId());
-        intent.putExtra(AddEditProfileActivity.EXTRA_PASSPORT_ID, profile.getPassportId());
-        intent.putExtra(AddEditProfileActivity.EXTRA_CORP_NAME, profile.getCorpName());
-        intent.putExtra(AddEditProfileActivity.EXTRA_USER_NAME, profile.getUserName());
-        intent.putExtra(AddEditProfileActivity.EXTRA_USER_EMAIL, profile.getUserEmail());
-        intent.putExtra(AddEditProfileActivity.EXTRA_SEQUENCE, profile.getSequence());
-        intent.putExtra(AddEditProfileActivity.EXTRA_CORP_WEBSITE, profile.getCorpWebsite());
-        intent.putExtra(AddEditProfileActivity.EXTRA_NOTE, profile.getNote());
-        intent.putExtra(AddEditProfileActivity.EXTRA_ACTVY_LONG, profile.getActvyLong());
-        Log.d(TAG, "startup " + profile.getOpenLong());
-        intent.putExtra(AddEditProfileActivity.EXTRA_OPEN_DATE_LONG, profile.getOpenLong());
-
-        Log.d(TAG, "edit requested");
-        startActivityForResult(intent, EDIT_PROFILE_REQUEST);
+//        Intent intent = new Intent(this, AddEditProfileActivity.class);
+//        intent.putExtra(AddEditProfileActivity.EXTRA_ID, profile.getId());
+//        intent.putExtra(AddEditProfileActivity.EXTRA_PASSPORT_ID, profile.getPassportId());
+//        intent.putExtra(AddEditProfileActivity.EXTRA_CORP_NAME, profile.getCorpName());
+//        intent.putExtra(AddEditProfileActivity.EXTRA_USER_NAME, profile.getUserName());
+//        intent.putExtra(AddEditProfileActivity.EXTRA_USER_EMAIL, profile.getUserEmail());
+//        intent.putExtra(AddEditProfileActivity.EXTRA_SEQUENCE, profile.getSequence());
+//        intent.putExtra(AddEditProfileActivity.EXTRA_CORP_WEBSITE, profile.getCorpWebsite());
+//        intent.putExtra(AddEditProfileActivity.EXTRA_NOTE, profile.getNote());
+//        intent.putExtra(AddEditProfileActivity.EXTRA_ACTVY_LONG, profile.getActvyLong());
+//        Log.d(TAG, "startup " + profile.getOpenLong());
+//        intent.putExtra(AddEditProfileActivity.EXTRA_OPEN_DATE_LONG, profile.getOpenLong());
+//
+//        Log.d(TAG, "edit requested");
+//        startActivityForResult(intent, EDIT_PROFILE_REQUEST);
 
     }
 
@@ -3274,7 +3296,16 @@ public class MainActivity extends AppCompatActivity
 //        startUpProfileUpdate(selectedId, profile);
         AddEditProfileFrag fragment2 = new AddEditProfileFrag();
         Bundle args = new Bundle();
-        args.putString(AddEditProfileFrag.ARG_CORP_NAME, profile.getCorpName());
+        args.putInt(AddEditProfileFrag.EXTRA_ID, profile.getId());
+        args.putInt(AddEditProfileFrag.EXTRA_PASSPORT_ID, profile.getPassportId());
+        args.putString(AddEditProfileFrag.EXTRA_CORP_NAME, profile.getCorpName());
+        args.putString(AddEditProfileFrag.EXTRA_USER_NAME, profile.getUserName());
+        args.putString(AddEditProfileFrag.EXTRA_USER_EMAIL, profile.getUserEmail());
+        args.putInt(AddEditProfileFrag.EXTRA_SEQUENCE, profile.getSequence());
+        args.putString(AddEditProfileFrag.EXTRA_CORP_WEBSITE, profile.getCorpWebsite());
+        args.putString(AddEditProfileFrag.EXTRA_NOTE, profile.getNote());
+        args.putLong(AddEditProfileFrag.EXTRA_ACTVY_LONG, profile.getActvyLong());
+        args.putLong(AddEditProfileFrag.EXTRA_OPEN_DATE_LONG, profile.getOpenLong());
         fragment2.setArguments(args);
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -3287,6 +3318,11 @@ public class MainActivity extends AppCompatActivity
     }
 
 
+
+    @Override
+    public void onProfileModifyItem(Profile profile) {
+        profileViewModel.update(profile);
+    }
 
 //    public boolean isFragmentPresent(String tag) {
 //        Fragment frag = getSupportFragmentManager().findFragmentByTag(tag);

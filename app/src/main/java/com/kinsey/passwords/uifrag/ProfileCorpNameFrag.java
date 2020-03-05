@@ -48,7 +48,10 @@ public class ProfileCorpNameFrag extends Fragment {
     private final String ARG_SELECTED_ID = "SELECTED_ID";
     private final String ARG_SELECTED_POS = "SELECTED_POS";
     private int mRecyclerViewPos = RecyclerView.NO_POSITION;
-
+    private int selectedId = -1;
+    int screenLayout;
+    GridLayoutManager gridLayoutManager;
+//    LinearLayoutManager layoutManager;
 
     private OnProfileCorpNameClickListener mListener;
     public interface OnProfileCorpNameClickListener {
@@ -72,15 +75,29 @@ public class ProfileCorpNameFrag extends Fragment {
 
         recyclerView.setHasFixedSize(true);
 
-        GridLayoutManager gridLayoutManager;
-        LinearLayoutManager layoutManager;
-        int screenLayout = getResources().getConfiguration().screenLayout;
+
+        if (savedInstanceState == null) {
+            Bundle bundle = getArguments();
+            if (bundle != null) {
+                this.selectedId = bundle.getInt(ARG_SELECTED_ID, -1);
+            }
+            Log.d(TAG, "onCreateView: init selectedId " + this.selectedId);
+        } else {
+            this.selectedId = savedInstanceState.getInt(ARG_SELECTED_ID, -1);
+            Log.d(TAG, "onCreateView: selectedId " + adapter.getSelectedId());
+        }
+
+        screenLayout = getResources().getConfiguration().screenLayout;
         screenLayout &= Configuration.SCREENLAYOUT_SIZE_MASK;
         int spanSize = 3;
         switch (screenLayout) {
             case Configuration.SCREENLAYOUT_SIZE_XLARGE:
                 if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                    spanSize = 4;
+                    if (selectedId == -1) {
+                        spanSize = 4;
+                    } else {
+                        spanSize = 3;
+                    }
                 } else {
                     spanSize = 3;
                 }
@@ -90,7 +107,11 @@ public class ProfileCorpNameFrag extends Fragment {
                 break;
             case Configuration.SCREENLAYOUT_SIZE_LARGE:
                 if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                    spanSize = 3;
+                    if (selectedId == -1) {
+                        spanSize = 3;
+                    } else {
+                        spanSize = 2;
+                    }
                 } else {
                     spanSize = 2;
                 }
@@ -100,17 +121,28 @@ public class ProfileCorpNameFrag extends Fragment {
                 break;
             case Configuration.SCREENLAYOUT_SIZE_NORMAL:
                 if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                    gridLayoutManager = new GridLayoutManager(getActivity(), 2);
-                    recyclerView.setLayoutManager(gridLayoutManager);
+                    if (selectedId == -1) {
+                        gridLayoutManager = new GridLayoutManager(getActivity(), 2);
+                        recyclerView.setLayoutManager(gridLayoutManager);
+                    } else {
+                        gridLayoutManager = new GridLayoutManager(getActivity(), 1);
+                        recyclerView.setLayoutManager(gridLayoutManager);
+//                        layoutManager = new LinearLayoutManager(getActivity());
+//                        recyclerView.setLayoutManager(layoutManager);
+                    }
                     Log.d(TAG, "screen size normal");
                 } else {
-                    layoutManager = new LinearLayoutManager(getActivity());
-                    recyclerView.setLayoutManager(layoutManager);
+                    gridLayoutManager = new GridLayoutManager(getActivity(), 1);
+                    recyclerView.setLayoutManager(gridLayoutManager);
+//                    layoutManager = new LinearLayoutManager(getActivity());
+//                    recyclerView.setLayoutManager(layoutManager);
                 }
                 break;
             default:
-                layoutManager = new LinearLayoutManager(getActivity());
-                recyclerView.setLayoutManager(layoutManager);
+                gridLayoutManager = new GridLayoutManager(getActivity(), 1);
+                recyclerView.setLayoutManager(gridLayoutManager);
+//                layoutManager = new LinearLayoutManager(getActivity());
+//                recyclerView.setLayoutManager(layoutManager);
         }
 
 
@@ -190,6 +222,7 @@ public class ProfileCorpNameFrag extends Fragment {
             @Override
             public void onItemClick(int selectedId, Profile profile) {
                 mListener.onProfileCorpNameListSelect(selectedId, profile);
+                setGrid(selectedId);
 //                selectedId = profile.getPassportId();
 //                adapter.notifyDataSetChanged();
 //                Intent intent = new Intent(context, AddEditProfileActivity.class);
@@ -241,6 +274,52 @@ public class ProfileCorpNameFrag extends Fragment {
 
     }
 
+    private void setGrid(int selectedId) {
+        int spanSize;
+        switch (screenLayout) {
+            case Configuration.SCREENLAYOUT_SIZE_XLARGE:
+                if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                    if (selectedId == -1) {
+                        spanSize = 4;
+                    } else {
+                        spanSize = 3;
+                    }
+                } else {
+                    spanSize = 3;
+                }
+                break;
+            case Configuration.SCREENLAYOUT_SIZE_LARGE:
+                if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                    if (selectedId == -1) {
+                        spanSize = 3;
+                    } else {
+                        spanSize = 2;
+                    }
+                } else {
+                    spanSize = 2;
+                }
+                break;
+            case Configuration.SCREENLAYOUT_SIZE_NORMAL:
+                if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                    if (selectedId == -1) {
+                        spanSize = 2;
+                    } else {
+                        spanSize = 1;
+                    }
+                } else {
+                    spanSize = 1;
+                }
+                break;
+            default:
+                spanSize = 1;
+        }
+
+        Log.d(TAG, "setGrid: spanSize " + spanSize);
+        gridLayoutManager.setSpanCount(spanSize);
+
+    }
+
+
     public void setSelectedId(int id) {
         Log.d(TAG, "setSelectedId: id " + id);
         adapter.setSelectedId(id);
@@ -254,11 +333,11 @@ public class ProfileCorpNameFrag extends Fragment {
 //                adapter.notifyItemChanged(pos);
                 adapter.notifyDataSetChanged();
                 recyclerView.scrollToPosition(pos);
+                Log.d(TAG, "setSelectedId: pos " + pos);
                 break;
             }
             pos += 1;
         }
-        adapter.setSelectPos(id);
     }
 
     private void refreshList() {
@@ -266,6 +345,11 @@ public class ProfileCorpNameFrag extends Fragment {
             adapter.notifyItemRangeChanged(0, adapter.getItemCount() - 1);
         }
     }
+
+
+
+
+
 
 
     public void deleteFromList(int profileId) {

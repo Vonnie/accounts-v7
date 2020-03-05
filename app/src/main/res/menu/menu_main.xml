@@ -47,11 +47,19 @@
     </item>
 
     <item
-        android:id="@+id/button_item"
-        android:title=""
-        app:actionLayout="@layout/button_layout"
-        app:showAsAction="always"
-        />
+        android:id="@+id/menumain_search"
+        android:checkable="true"
+        android:checked="false"
+        android:icon="@drawable/ic_search"
+        android:title="@string/menu_search"
+        app:showAsAction="always" />
+
+<!--    <item-->
+<!--        android:id="@+id/button_item"-->
+<!--        android:title=""-->
+<!--        app:actionLayout="@layout/button_layout"-->
+<!--        app:showAsAction="always"-->
+<!--        />-->
 
     <item
         android:icon="@drawable/ic_more_vert"
@@ -60,14 +68,6 @@
         <!--        android:iconTint="@color/primaryColor"-->
         <!--        android:iconTintMode="#437380"-->
         <menu>
-            <item
-                android:id="@+id/menumain_search"
-                android:checkable="true"
-                android:checked="false"
-                android:icon="@drawable/ic_search_black"
-                android:orderInCategory="100"
-                android:title="@string/menu_search"
-                app:showAsAction="ifRoom" />
             <!--        app:actionViewClass="android.widget.SearchView"-->
             <!--        app:showAsAction="ifRoom|collapseActionView" />-->
             <!--    app:actionViewClass="androidx.appcompat.widget.SearchView"-->

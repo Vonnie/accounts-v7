@@ -213,17 +213,5 @@ public class ProfileAdapter extends ListAdapter<Profile, ProfileAdapter.ProfileH
         this.selectedId = selectedId;
     }
 
-    public void setSelectPos(int selectedId) {
-        List<Profile> list = getCurrentList();
-        int pos = 0;
-        for (Profile item : list) {
-            if (item.getPassportId() == selectedId) {
-                Log.d(TAG, "setSelectPos: selected " + selectedId);
-                notifyItemChanged(pos);
-                return ;
-            }
-            pos += 1;
-        }
-    }
 
 }
