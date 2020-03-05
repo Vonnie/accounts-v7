@@ -132,7 +132,7 @@ public class SearchFrag extends Fragment {
 //                fruitAdapter = new SearchAdapter(this, R.layout.profile_item, profiles);
 //                ListItemAdapter adapter = new ListItemAdapter(items, this);
                 ArrayAdapter adapter2 = new ArrayAdapter<String>(getContext(),
-                        android.R.layout.simple_dropdown_item_1line, names);
+                        android.R.layout.simple_list_item_1, names);
 //                android.R.layout.simple_list_item_1, names);
 //                ArrayAdapter adapter2 = new ArrayAdapter<String>(getContext(),
 //                        R.layout.dropdown_menu_popup_item, names);

@@ -21,6 +21,8 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.kinsey.passwords.MainActivity;
 import com.kinsey.passwords.R;
 import com.kinsey.passwords.items.Profile;
@@ -254,6 +256,14 @@ public class ProfileCorpNameFrag extends Fragment {
         }
         adapter.notifyDataSetChanged();
 
+        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.button_add_profile);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
 
 
 //        new CountDownTimer(30000, 100) {

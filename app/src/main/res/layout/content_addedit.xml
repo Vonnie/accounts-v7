@@ -15,9 +15,10 @@
         android:layout_height="wrap_content"
         android:layout_gravity="top|end"
         android:layout_margin="16dp"
+        app:backgroundTint="@color/secondaryColor"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:rippleColor="@color/secondaryColor"
+        app:rippleColor="@color/backgroundWhite"
         app:srcCompat="@drawable/ic_save" />
 
     <ScrollView
@@ -32,7 +33,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-<!--        app:layout_constraintBottom_toTopOf="@+id/adView"-->
+        <!--        app:layout_constraintBottom_toTopOf="@+id/adView"-->
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -47,6 +48,7 @@
                 <!--        app:counterEnabled="true">-->
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/text_input_corp_name_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/addedit_corp_name_hint"
@@ -141,7 +143,7 @@
                     android:textColor="?android:attr/textColorPrimary" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/pick_open_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -168,23 +170,26 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <TextView
+                <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/actvy_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="?android:attr/textColorPrimary" />
+                    android:layout_marginStart="8dp"
+                    android:textColor="@color/primaryColor" />
 
-                <TextView
+                <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/passport_id"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="?android:attr/textColorPrimary" />
+                    android:layout_marginStart="12dp"
+                    android:textColor="@color/primaryColor" />
 
-                <TextView
+                <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/sequence"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="?android:attr/textColorPrimary" />
+                    android:layout_marginStart="12dp"
+                    android:textColor="@color/primaryColor" />
 
             </LinearLayout>
 
@@ -193,15 +198,15 @@
 
     </ScrollView>
 
-<!--    <com.google.android.gms.ads.AdView-->
-<!--        android:id="@+id/adView"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        app:adSize="SMART_BANNER"-->
-<!--        app:adUnitId="ca-app-pub-6558779133930297/9091060189"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent">-->
+    <!--    <com.google.android.gms.ads.AdView-->
+    <!--        android:id="@+id/adView"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        app:adSize="SMART_BANNER"-->
+    <!--        app:adUnitId="ca-app-pub-6558779133930297/9091060189"-->
+    <!--        app:layout_constraintBottom_toBottomOf="parent">-->
 
-<!--    </com.google.android.gms.ads.AdView>-->
+    <!--    </com.google.android.gms.ads.AdView>-->
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

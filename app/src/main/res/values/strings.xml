@@ -181,7 +181,7 @@
     <string name="fv_msg_34">Confirm backup</string>
     <string name="yes">yes</string>
     <string name="no">No</string>
-    <string name="fv_msg_35">Confirm Restore of backup file into data DB</string>
+    <string name="fv_msg_35">Confirm Restore data DB from previous backup file</string>
     <string name="fv_msg_36">created</string>
     <string name="toast_no_export_to_share">No Exported File to share</string>
     <string name="fileprovider_package" translatable="false">com.kinsey.passwords.fileprovider</string>

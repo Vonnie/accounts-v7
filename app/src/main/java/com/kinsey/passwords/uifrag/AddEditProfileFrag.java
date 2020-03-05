@@ -2,17 +2,24 @@ package com.kinsey.passwords.uifrag;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.util.Patterns;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnKeyListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,7 +30,6 @@ import androidx.fragment.app.Fragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
 import com.kinsey.passwords.AddEditProfileActivity;
-import com.kinsey.passwords.MainActivity;
 import com.kinsey.passwords.R;
 import com.kinsey.passwords.WebViewActivity;
 import com.kinsey.passwords.items.Profile;
@@ -33,7 +39,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-public class AddEditProfileFrag extends Fragment {
+public class AddEditProfileFrag extends Fragment
+        implements View.OnClickListener {
+
     private static final String TAG = "AddEditProfileFrag";
 
     public static final String EXTRA_ID =
@@ -76,10 +84,13 @@ public class AddEditProfileFrag extends Fragment {
     private int intPassportId = -1;
     private int intSequence = 0;
     private boolean editModeAdd = false;
+    private boolean blnChangesMade = false;
     private final Calendar cldrOpened = Calendar.getInstance();
 
+    private Profile currProfile;
 
     private OnProfileModifyClickListener mListener;
+
     public interface OnProfileModifyClickListener {
 
         void onProfileModifyItem(Profile profile);
@@ -149,12 +160,50 @@ public class AddEditProfileFrag extends Fragment {
         });
 
 
-//        btnOpenDate.setOnClickListener(getContext());
+        btnOpenDate.setOnClickListener(this);
+
+        textInputCorpName.addOnEditTextAttachedListener(new TextInputLayout.OnEditTextAttachedListener() {
+            @Override
+            public void onEditTextAttached(TextInputLayout textInputLayout) {
+                Log.d(TAG, "onEditTextAttached: " + textInputLayout.getEditText());
+            }
+        });
+
+        EditText textInputCorpName_text = view.findViewById(R.id.text_input_corp_name_text);
+        textInputCorpName_text.addTextChangedListener(new TextWatcher() {
+
+            public void afterTextChanged(Editable s) {}
+
+            public void beforeTextChanged(CharSequence s, int start,
+                                          int count, int after) {
+            }
+
+            public void onTextChanged(CharSequence s, int start,
+                                      int before, int count) {
+//                field2.setText("");
+//                if (currCorpName.equal(s)) {
+
+//                }
+//                Log.d(TAG, "onTextChanged: s " + s + " : " + currCorpName);
+//                currCorpName = String.valueOf(s);
+            }
+        });
+//        textInputCorpName.setOnKeyListener(this);
+//        view.findViewById(R.id.text_input_corp_name).setOnKeyListener((OnKeyListener) this);
 
 
-        FloatingActionButton buttonAddPofile = view.findViewById(R.id.button_add_profile);
+//        textInputCorpName.setOnKeyListener(new View.OnKeyListener() {
+//            @Override
+//            public boolean onKey(View v, int keyCode, KeyEvent event) {
+//                Log.d(TAG, "onKey: " + keyCode);
+//                return false;
+//            }
+//        });
+
+
+        FloatingActionButton buttonModifyProfile = view.findViewById(R.id.button_add_profile);
 //        buttonAddPofile.setImageResource(R.drawable.ic_audiotrack_light);
-        buttonAddPofile.setOnClickListener(new View.OnClickListener() {
+        buttonModifyProfile.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -218,8 +267,13 @@ public class AddEditProfileFrag extends Fragment {
         intId = bundle.getInt(EXTRA_ID, -1);
         intPassportId = bundle.getInt(EXTRA_PASSPORT_ID, 0);
         intSequence = bundle.getInt(EXTRA_SEQUENCE, 0);
-        tvPassportId.setText(" | Id: " + this.intPassportId);
-        tvSequence.setText(" | Seq: " + this.intSequence);
+        tvPassportId.setText("Id: " + this.intPassportId);
+        tvSequence.setText("Seq: " + this.intSequence);
+
+        this.currProfile = new Profile();
+        this.currProfile.setCorpName(bundle.getString(EXTRA_CORP_NAME));
+        this.currProfile.setUserName(bundle.getString(EXTRA_USER_NAME));
+        this.currProfile.setUserEmail(bundle.getString(EXTRA_USER_EMAIL));
     }
 
     private void setAddUIDefaults() {
@@ -232,6 +286,7 @@ public class AddEditProfileFrag extends Fragment {
         btnOpenDate.setText("Default to Current Date " + format_mdy.format(lngOpenDate));
 
         //        setOpenDateCalendar(dte);
+        this.currProfile = new Profile();
     }
 
     private boolean validateUserEmail() {
@@ -300,7 +355,27 @@ public class AddEditProfileFrag extends Fragment {
         }
     }
 
+    public boolean haveChanges() {
+        if (currProfile == null) {
+            return false;
+        }
+        if (!currProfile.getCorpName().equals(textInputCorpName.getEditText().getText().toString().trim())) {
+//            Log.d(TAG, "haveChanges: " + currCorpName + " : " + textInputCorpName.getEditText().getText().toString().trim());
+            return true;
+        }
+        if (!currProfile.getUserName().equals(textInputUserName.getEditText().getText().toString().trim())) {
+            return true;
+        }
+        if (!currProfile.getUserEmail().equals(textInputUserEmail.getEditText().getText().toString().trim())) {
+            return true;
+        }
+        return false;
+    }
     private void saveProfile() {
+        if (!haveChanges()) {
+            showDialogMsg("No changes made to apply");
+            return;
+        }
         if (!validateCorpName()) {
             return;
         }
@@ -329,9 +404,14 @@ public class AddEditProfileFrag extends Fragment {
 
 //        profileViewModel.update(profile);
         mListener.onProfileModifyItem(profile);
-        Toast.makeText(getContext(), R.string.toast_profile_updated, Toast.LENGTH_SHORT).show();
+        blnChangesMade = false;
+//        Toast.makeText(getContext(), R.string.toast_profile_updated, Toast.LENGTH_SHORT).show();
 
+        showDialogMsg("Profile changes applied");
 
+        this.currProfile.setCorpName(corpName);
+        this.currProfile.setUserName(userName);
+        this.currProfile.setUserEmail(userEmail);
 
 //        Intent data = new Intent();
 //        data.putExtra(EXTRA_CORP_NAME, corpName);
@@ -395,6 +475,64 @@ public class AddEditProfileFrag extends Fragment {
 
 
     }
+
+    public void showDialogMsg(String msg) {
+        final Dialog dialog = new Dialog(getContext());
+        dialog.setContentView(R.layout.dialog_msg_ok);
+        dialog.setTitle("Account Modify Info");
+
+        TextView text = (TextView) dialog.findViewById(R.id.text);
+        text.setText(msg);
+        ImageView image = (ImageView) dialog.findViewById(R.id.image);
+        image.setImageResource(R.drawable.ic_info_black_24dp);
+
+
+        Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
+        // if button is clicked, close the custom dialog
+        dialogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+    }
+
+    @Override
+    public void onClick(View v) {
+        int mYear, mMonth, mDay, mHour, mMinute;
+        if (v == btnOpenDate) {
+            // Get Current Date
+//            final Calendar c = Calendar.getInstance();
+            mYear = cldrOpened.get(Calendar.YEAR);
+            mMonth = cldrOpened.get(Calendar.MONTH);
+            mDay = cldrOpened.get(Calendar.DAY_OF_MONTH);
+
+
+            DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(),
+                    new DatePickerDialog.OnDateSetListener() {
+
+                        @Override
+                        public void onDateSet(DatePicker view, int year,
+                                              int monthOfYear, int dayOfMonth) {
+
+//                            btnOpenDate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+                            btnOpenDate.setText(R.string.opened + " " + (monthOfYear + 1) + "/" + dayOfMonth + "/" + year);
+                            Calendar c2 = Calendar.getInstance();
+                            c2.set(year, monthOfYear, dayOfMonth);
+                            lngOpenDate = c2.getTimeInMillis();
+                            Log.d(TAG, "callback date long " + lngOpenDate);
+
+                        }
+                    }, mYear, mMonth, mDay);
+            datePickerDialog.setTitle(getString(R.string.datePickerTitle));
+            datePickerDialog.getDatePicker().setMaxDate(new Date().getTime());
+            datePickerDialog.show();
+        }
+    }
+
+
     private void restoreScreen(Bundle savedInstanceState) {
         textInputCorpName.getEditText().setText(
                 savedInstanceState.getString(EXTRA_CORP_NAME)

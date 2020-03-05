@@ -1,16 +1,13 @@
 package com.kinsey.passwords;
 
-import android.app.Activity;
-import android.content.Context;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.appcompat.app.AlertDialog;
@@ -22,16 +19,15 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 //import com.firebase.ui.auth.AuthUI;
@@ -44,6 +40,7 @@ import android.widget.Toast;
 //import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 //import com.google.firebase.auth.AuthCredential;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 //import com.google.firebase.auth.GoogleAuthProvider;
@@ -53,7 +50,6 @@ import com.kinsey.passwords.provider.ProfileViewModel;
 import com.kinsey.passwords.uifrag.AddEditProfileFrag;
 import com.kinsey.passwords.uifrag.ProfileCorpNameFrag;
 import com.kinsey.passwords.uifrag.ProfileCustomFrag;
-import com.kinsey.passwords.uifrag.ProfileFrag;
 import com.kinsey.passwords.uifrag.ProfileOpenDateFrag;
 import com.kinsey.passwords.uifrag.ProfilePassportIdFrag;
 import com.kinsey.passwords.uifrag.SearchFrag;
@@ -530,8 +526,6 @@ public class MainActivity extends AppCompatActivity
 //            setMenuItemChecked(R.id.menuacct_sort_corpname, true);
         }
 
-//        setTitle("Hi, Chuck!");
-
 //        listApps = (ListView) findViewById(R.id.xmlListView);
 //        if (savedInstanceState != null) {
 //            feedUrl = savedInstanceState.getString(STATE_URL);
@@ -665,7 +659,7 @@ public class MainActivity extends AppCompatActivity
 //        final SQLiteDatabase dbSuggest = suggestDatabase.getReadableDatabase();
 
 
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.button_add_profile);
 //        fab.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
@@ -3205,10 +3199,26 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void startUpProfileUpdate(int selectedId, Profile profile) {
-        this.selectedId = selectedId;
+
 //        if (has2ndPanel) {
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        AddEditProfileFrag addeditFrag = (AddEditProfileFrag) fragmentManager.findFragmentByTag("AddEditProfileFrag");
+        if (addeditFrag != null) {
+            if (addeditFrag.haveChanges()) {
+                askApplyCancel(selectedId, profile, "Changes not applied"+
+                        "\nDo you want to ignore these changes?");
+            } else {
+                selectAccountDetail(selectedId, profile);
+            }
+        } else {
+            selectAccountDetail(selectedId, profile);
+        }
+    }
+
+    private void selectAccountDetail(int selectedId, Profile profile) {
+            this.selectedId = selectedId;
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             Fragment profileFragment = fragmentManager.findFragmentById(R.id.fragment_container);
 //            ProfileCorpNameFrag frag = (ProfileCorpNameFrag)profileFragment;
 //            frag.refreshListAll();
@@ -3287,6 +3297,41 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    private void askApplyCancel(final int selectedId, final Profile profile, final String msg) {
+
+//        final boolean[] actionCancel = {true};
+        final Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.diamsg_yesno);
+        dialog.setTitle(msg);
+
+        TextView text = (TextView) dialog.findViewById(R.id.text);
+        text.setText(msg);
+        ImageView image = (ImageView) dialog.findViewById(R.id.image);
+        image.setImageResource(R.drawable.ic_help_outline_black);
+
+        Button dialogButton = (Button) dialog.findViewById(R.id.yes);
+        // if button is clicked, close the custom dialog
+        dialogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                actionCancel[0] = false;
+                dialog.dismiss();
+                selectAccountDetail(selectedId, profile);
+            }
+        });
+
+        Button dialogButtonNo = (Button) dialog.findViewById(R.id.no);
+        // if button is clicked, close the custom dialog
+        dialogButtonNo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                actionCancel[0] = false;
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+
+    }
 
     @Override
     public void showSearchSelected(int selectedId, Profile profile) {

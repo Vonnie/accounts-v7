@@ -3,6 +3,7 @@ package com.kinsey.passwords;
 import android.accounts.Account;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -32,7 +33,9 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
@@ -661,24 +664,58 @@ public class FileViewActivity extends AppCompatActivity {
 
 //            alertMsg("Restore Temporaruly Unavailable");
 
-            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-            alertDialogBuilder.setMessage(R.string.fv_msg_35);
-            alertDialogBuilder.setPositiveButton(R.string.yes,
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface arg0, int arg1) {
-                            new UploadProfileAsyncTask(getApplicationContext(),
-                                    webView, progressBar).execute(storageFilename);
-                        }
-                    })
-                    .setNegativeButton("No",
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                }
-                            });
+
+            final Dialog dialog = new Dialog(this);
+            dialog.setContentView(R.layout.diamsg_yesno);
+            dialog.setTitle(R.string.fv_msg_35);
 
 
-            AlertDialog alertDialog = alertDialogBuilder.create();
-            alertDialog.show();
+            TextView text = (TextView) dialog.findViewById(R.id.text);
+            text.setText(R.string.fv_msg_35);
+            ImageView image = (ImageView) dialog.findViewById(R.id.image);
+            image.setImageResource(R.drawable.ic_help_outline_black);
+
+
+            Button dialogButton = (Button) dialog.findViewById(R.id.yes);
+            // if button is clicked, close the custom dialog
+            dialogButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    new UploadProfileAsyncTask(getApplicationContext(),
+                            webView, progressBar).execute(storageFilename);
+                    dialog.dismiss();
+                }
+            });
+
+            Button dialogButtonNo = (Button) dialog.findViewById(R.id.no);
+            // if button is clicked, close the custom dialog
+            dialogButtonNo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
+
+            dialog.show();
+
+//            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+//            alertDialogBuilder.setMessage(R.string.fv_msg_35);
+//            alertDialogBuilder.setPositiveButton(R.string.yes,
+//                    new DialogInterface.OnClickListener() {
+//                        public void onClick(DialogInterface arg0, int arg1) {
+//                            new UploadProfileAsyncTask(getApplicationContext(),
+//                                    webView, progressBar).execute(storageFilename);
+//                        }
+//                    })
+//                    .setNegativeButton("No",
+//                            new DialogInterface.OnClickListener() {
+//                                public void onClick(DialogInterface dialog, int which) {
+//                                }
+//                            });
+//
+//
+//            AlertDialog alertDialog = alertDialogBuilder.create();
+//            alertDialog.show();
 
         } catch (Exception e) {
             // TODO Auto-generated catch block
@@ -707,6 +744,7 @@ public class FileViewActivity extends AppCompatActivity {
 //    }
 
 
+
     private void showFilename() {
         File fileExternal = new File(getExternalFilesDir("passport")
                 + "/" + MainActivity.BACKUP_FILENAME);
@@ -720,39 +758,64 @@ public class FileViewActivity extends AppCompatActivity {
         }
 
 
-        android.app.AlertDialog.Builder alertDialogBuilder = new android.app.AlertDialog.Builder(this);
-        alertDialogBuilder.setMessage(displayMsg);
-        alertDialogBuilder.setPositiveButton("ok",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface arg0, int arg1) {
-//                        profileViewModel.delete(profile);
-                    }
-                });
-//                .setNegativeButton("No",
-//                        new DialogInterface.OnClickListener() {
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                refreshDeletePos(position);
-//                            }
-//                        });
+        msgDialog(displayMsg);
 
-
-        android.app.AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
-
-
-
-
-//        AppDialog dialog = new AppDialog();
-//        Bundle args = new Bundle();
-//        args.putInt(AppDialog.DIALOG_ID, AppDialog.DIALOG_ID_EXPORT_FILENAME);
-//        args.putInt(AppDialog.DIALOG_TYPE, AppDialog.DIALOG_OK);
-//        args.putString(AppDialog.DIALOG_MESSAGE, getString(R.string.confirmdiag_export_filename));
-//        args.putString(AppDialog.DIALOG_SUB_MESSAGE, displayMsg);
-//        args.putInt(AppDialog.DIALOG_POSITIVE_RID, R.string.ok);
+//        android.app.AlertDialog.Builder alertDialogBuilder = new android.app.AlertDialog.Builder(this);
+//        alertDialogBuilder.setMessage(displayMsg);
+//        alertDialogBuilder.setPositiveButton("ok",
+//                new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface arg0, int arg1) {
+////                        profileViewModel.delete(profile);
+//                    }
+//                });
+////                .setNegativeButton("No",
+////                        new DialogInterface.OnClickListener() {
+////                            public void onClick(DialogInterface dialog, int which) {
+////                                refreshDeletePos(position);
+////                            }
+////                        });
 //
-//        dialog.setArguments(args);
-//        dialog.show(getSupportFragmentManager(), null);
+//
+//        android.app.AlertDialog alertDialog = alertDialogBuilder.create();
+//        alertDialog.show();
+//
+//
+//
+//
+////        AppDialog dialog = new AppDialog();
+////        Bundle args = new Bundle();
+////        args.putInt(AppDialog.DIALOG_ID, AppDialog.DIALOG_ID_EXPORT_FILENAME);
+////        args.putInt(AppDialog.DIALOG_TYPE, AppDialog.DIALOG_OK);
+////        args.putString(AppDialog.DIALOG_MESSAGE, getString(R.string.confirmdiag_export_filename));
+////        args.putString(AppDialog.DIALOG_SUB_MESSAGE, displayMsg);
+////        args.putInt(AppDialog.DIALOG_POSITIVE_RID, R.string.ok);
+////
+////        dialog.setArguments(args);
+////        dialog.show(getSupportFragmentManager(), null);
 
+    }
+
+    public void msgDialog(String msg) {
+        final Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.dialog_msg_ok);
+        dialog.setTitle("Account Modify Info");
+
+        TextView text = (TextView) dialog.findViewById(R.id.text);
+        text.setText(msg);
+        ImageView image = (ImageView) dialog.findViewById(R.id.image);
+        image.setImageResource(R.drawable.ic_info_black_24dp);
+
+
+        Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
+        // if button is clicked, close the custom dialog
+        dialogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
     }
 
 
