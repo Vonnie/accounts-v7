@@ -51,7 +51,13 @@ public class ProfileAdapter extends ListAdapter<Profile, ProfileAdapter.ProfileH
 
         @Override
         public boolean areContentsTheSame(@NonNull Profile oldItem, @NonNull Profile newItem) {
+            if (oldItem.getPassportId() != newItem.getPassportId()) {
+//                ProfileAdapter.listener.onItemClick(newItem.getPassportId(), newItem);
+            }
             return oldItem.getCorpName().equals(newItem.getCorpName()) &&
+                    oldItem.getPassportId() == newItem.getPassportId() &&
+                    oldItem.getUserName().equals(newItem.getUserName()) &&
+                    oldItem.getUserEmail().equals(newItem.getUserEmail()) &&
                     oldItem.getOpenLong() == newItem.getOpenLong();
         }
     };
@@ -150,6 +156,7 @@ public class ProfileAdapter extends ListAdapter<Profile, ProfileAdapter.ProfileH
             }
         }
     }
+
 
 //    public static int getColorWrapper(Context context, int id) {
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

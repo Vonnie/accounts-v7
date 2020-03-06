@@ -190,7 +190,7 @@
     <string name="fv_msg_43">Ver nombre de archivo a través del elemento de menú \'Nombre de archivo\'</string>
     <string name="alert_acct_id">ID de la cuenta:</string>
     <string name="alert_delete_acct">borrar cuenta</string>
-    <string name="activity_date">Fecha de actividad:</string>
+    <string name="activity_date">Fecha de actividad  %1$s</string>
     <string name="add_suggestion">Agregar sugerencia</string>
     <string name="edit_suggestion">Editar sugerencia</string>
     <string name="search_title">Buscar cuentas</string>
@@ -201,6 +201,6 @@
     <string name="if_so_direction">Si es así, haga clic en \'sí\' o haga clic en el botón más (+) a continuación para agregar una nueva cuenta</string>
     <string name="account_updated">cuenta actualizada</string>
     <string name="ask_go_to_list">¿Quieres mostrar el listado de cuentas?</string>
-    <string name="opened">abrió</string>
+    <string name="opened">abrió %1$s</string>
     <string name="account_added">Cuenta agregada</string>
 </resources>

@@ -2,6 +2,7 @@ package com.kinsey.passwords.provider;
 
 import android.app.Application;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
@@ -106,6 +107,7 @@ public class ProfileRepository {
     }
 
     private static class InsertProfileAsyncTask extends AsyncTask<Profile, Void, Profile> {
+        private static final String TAG = "InsertProfileAsyncTask";
         private ProfileDao mDao;
         private Task mTask;
 
@@ -121,6 +123,8 @@ public class ProfileRepository {
             int intId = (int)id;
             item.setId(intId);
             item.setPassportId(intId);
+            Log.d(TAG, "doInBackground: newId updated " + intId);
+//            dbInsertId.postValue();
             return item;
 //            profileDao.update(item);
 //

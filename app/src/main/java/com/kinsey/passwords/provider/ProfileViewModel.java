@@ -1,6 +1,7 @@
 package com.kinsey.passwords.provider;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -81,10 +82,11 @@ public class ProfileViewModel extends AndroidViewModel
 
     @Override
     public void processInsert(Profile profile) {
-
+        
         profile.setPassportId(profile.getId());
         repository.update(profile);
 
+        Log.d(TAG, "processInsert: newId " + profile.getPassportId());
 //        int intId = (int) id;
 //        Log.d(TAG, "new id: " + id + " int " + intId);
 //        LiveData<Profile> profile = repository.getProfileById(intId);

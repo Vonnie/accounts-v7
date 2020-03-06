@@ -24,7 +24,7 @@
     <string name="menu_accounts">Kontenliste</string>
     <string name="home_btn_accounts_by_open_text">Kontenliste, sortiert nach Eröffnungsdatum</string>
     <string name="empty_list">Die Kontenliste ist leer</string>
-    <string name="activity_date">Aktivitätsdatum:</string>
+    <string name="activity_date">Aktivitätsdatum  %1$s</string>
     <string name="home_message_text_11">Das Hinzufügen, Bearbeiten oder Neuanordnen von Kennwortelementen in der Liste ähnelt der Kontenverwaltung. Passwörter werden nicht an ein Konto angehängt. Grund warum wird als nächstes erklärt.</string>
     <string name="home_btn_add_account_text">Füge ein Konto hinzu</string>
     <string name="menu_add_account">Füge ein Konto hinzu</string>
@@ -201,6 +201,6 @@
     <string name="if_so_direction">Klicken Sie in diesem Fall auf \"Ja\" oder auf das Pluszeichen (+), um ein neues Konto hinzuzufügen</string>
     <string name="account_updated">Konto aktualisiert</string>
     <string name="ask_go_to_list">Möchten Sie die Kontenliste anzeigen?</string>
-    <string name="opened">geöffnet</string>
+    <string name="opened">geöffnet %1$s</string>
     <string name="account_added">Konto hinzugefügt</string>
 </resources>

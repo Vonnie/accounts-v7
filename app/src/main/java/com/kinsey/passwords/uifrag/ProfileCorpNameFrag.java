@@ -60,6 +60,8 @@ public class ProfileCorpNameFrag extends Fragment {
 
         void onProfileCorpNameListSelect(int selectedId, Profile profile);
 
+        void onProfileCorpNameAdd();
+
         void onDeleteConfirmCorpName(Profile profile, int position);
 
         void onEmptyWarning();
@@ -182,7 +184,6 @@ public class ProfileCorpNameFrag extends Fragment {
                 profileListFull = new ArrayList<>(profiles);
                 adapter.submitList(profiles);
 
-
                 if (savedInstanceState != null) {
                     int pos = savedInstanceState.getInt(RECYCLER_POSITION_KEY);
                     Log.d(TAG, "onCreateView: len " + recyclerView.getChildCount() +
@@ -198,6 +199,8 @@ public class ProfileCorpNameFrag extends Fragment {
                     }
                 }
             }
+
+
         });
 
 //        tvListTitle.setText(MainActivity.profileViewModel.dbMsg);
@@ -260,8 +263,9 @@ public class ProfileCorpNameFrag extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                mListener.onProfileCorpNameAdd();
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
             }
         });
 

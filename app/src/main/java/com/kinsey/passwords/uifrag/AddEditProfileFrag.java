@@ -10,10 +10,8 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.util.Patterns;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnKeyListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -95,15 +93,17 @@ public class AddEditProfileFrag extends Fragment
 
         void onProfileModifyItem(Profile profile);
 
+        void onProfileAddItem(Profile profile);
+
     }
 
 
     private static String pattern_mdy = "MM/dd/yyyy";
-    public static SimpleDateFormat format_mdy = new SimpleDateFormat(
+    private static SimpleDateFormat format_mdy = new SimpleDateFormat(
             pattern_mdy, Locale.US);
 
     private static String pattern_ymdtimehm = "yyyy-MM-dd kk:mm";
-    public static SimpleDateFormat format_ymdtimehm = new SimpleDateFormat(
+    private static SimpleDateFormat format_ymdtimehm = new SimpleDateFormat(
             pattern_ymdtimehm, Locale.US);
 
     @Nullable
@@ -162,32 +162,33 @@ public class AddEditProfileFrag extends Fragment
 
         btnOpenDate.setOnClickListener(this);
 
-        textInputCorpName.addOnEditTextAttachedListener(new TextInputLayout.OnEditTextAttachedListener() {
-            @Override
-            public void onEditTextAttached(TextInputLayout textInputLayout) {
-                Log.d(TAG, "onEditTextAttached: " + textInputLayout.getEditText());
-            }
-        });
+//        textInputCorpName.addOnEditTextAttachedListener(new TextInputLayout.OnEditTextAttachedListener() {
+//            @Override
+//            public void onEditTextAttached(TextInputLayout textInputLayout) {
+//                Log.d(TAG, "onEditTextAttached: " + textInputLayout.getEditText());
+//            }
+//        });
+//
+//        EditText textInputCorpName_text = view.findViewById(R.id.text_input_corp_name_text);
+//        textInputCorpName_text.addTextChangedListener(new TextWatcher() {
+//
+//            public void afterTextChanged(Editable s) {}
+//
+//            public void beforeTextChanged(CharSequence s, int start,
+//                                          int count, int after) {
+//            }
+//
+//            public void onTextChanged(CharSequence s, int start,
+//                                      int before, int count) {
+////                field2.setText("");
+////                if (currCorpName.equal(s)) {
+//
+////                }
+////                Log.d(TAG, "onTextChanged: s " + s + " : " + currCorpName);
+////                currCorpName = String.valueOf(s);
+//            }
+//        });
 
-        EditText textInputCorpName_text = view.findViewById(R.id.text_input_corp_name_text);
-        textInputCorpName_text.addTextChangedListener(new TextWatcher() {
-
-            public void afterTextChanged(Editable s) {}
-
-            public void beforeTextChanged(CharSequence s, int start,
-                                          int count, int after) {
-            }
-
-            public void onTextChanged(CharSequence s, int start,
-                                      int before, int count) {
-//                field2.setText("");
-//                if (currCorpName.equal(s)) {
-
-//                }
-//                Log.d(TAG, "onTextChanged: s " + s + " : " + currCorpName);
-//                currCorpName = String.valueOf(s);
-            }
-        });
 //        textInputCorpName.setOnKeyListener(this);
 //        view.findViewById(R.id.text_input_corp_name).setOnKeyListener((OnKeyListener) this);
 
@@ -224,6 +225,7 @@ public class AddEditProfileFrag extends Fragment
         Bundle bundle = getArguments();
 
         int id = bundle.getInt(EXTRA_ID, -1);
+        Log.d(TAG, "buildScreen: id " + id);
         if (id == -1) {
             editModeAdd = true;
             setAddUIDefaults();
@@ -243,11 +245,11 @@ public class AddEditProfileFrag extends Fragment
         lngOpenDate = bundle.getLong(EXTRA_OPEN_DATE_LONG, 0);
         Log.d(TAG, String.valueOf(lngOpenDate));
         if (lngOpenDate == 0) {
-            btnOpenDate.setText("Click here for OpenDate");
+            btnOpenDate.setText(R.string.openClickForCalendar);
 //            alertInfo("No Intents Open Date");
         } else {
             Date dteOpen = new Date(lngOpenDate);
-            btnOpenDate.setText("OPENED " + format_mdy.format(dteOpen));
+            btnOpenDate.setText(String.format(getString(R.string.opened), format_mdy.format(dteOpen)));
             cldrOpened.setTime(dteOpen);
 //            alertInfo("Have Intents Open Date");
         }
@@ -261,19 +263,24 @@ public class AddEditProfileFrag extends Fragment
         if (lngActvDate == 0) {
             tvActvyDate.setText("");
         } else {
-            tvActvyDate.setText("ActvyDate: " + format_ymdtimehm.format(lngActvDate));
+            tvActvyDate.setText(String.format(getString(R.string.activity_date), format_ymdtimehm.format(lngActvDate)));
         }
 
         intId = bundle.getInt(EXTRA_ID, -1);
         intPassportId = bundle.getInt(EXTRA_PASSPORT_ID, 0);
         intSequence = bundle.getInt(EXTRA_SEQUENCE, 0);
-        tvPassportId.setText("Id: " + this.intPassportId);
-        tvSequence.setText("Seq: " + this.intSequence);
+        tvPassportId.setText(String.format(getString(R.string.id_descr), String.valueOf(intPassportId)));
+        tvSequence.setText(String.format(getString(R.string.seq_descr), String.valueOf(this.intSequence)));
 
         this.currProfile = new Profile();
+        this.currProfile.setId(intId);
+        this.currProfile.setPassportId(intPassportId);
         this.currProfile.setCorpName(bundle.getString(EXTRA_CORP_NAME));
         this.currProfile.setUserName(bundle.getString(EXTRA_USER_NAME));
         this.currProfile.setUserEmail(bundle.getString(EXTRA_USER_EMAIL));
+
+
+        Log.d(TAG, "setEditUICols: ids " + intId + " : " + intPassportId);
     }
 
     private void setAddUIDefaults() {
@@ -283,7 +290,7 @@ public class AddEditProfileFrag extends Fragment
 
         lngOpenDate = dte.getTime();
 
-        btnOpenDate.setText("Default to Current Date " + format_mdy.format(lngOpenDate));
+        btnOpenDate.setText(String.format(getString(R.string.opened_button_descr), format_mdy.format(lngOpenDate)));
 
         //        setOpenDateCalendar(dte);
         this.currProfile = new Profile();
@@ -371,6 +378,7 @@ public class AddEditProfileFrag extends Fragment
         }
         return false;
     }
+
     private void saveProfile() {
         if (!haveChanges()) {
             showDialogMsg("No changes made to apply");
@@ -402,12 +410,18 @@ public class AddEditProfileFrag extends Fragment
         profile.setOpenLong(lngOpenDate);
         profile.setActvyLong(System.currentTimeMillis());
 
+        if (editModeAdd) {
+            mListener.onProfileAddItem(profile);
+            editModeAdd = false;
+            showDialogMsg("New Account added");
+        } else {
 //        profileViewModel.update(profile);
-        mListener.onProfileModifyItem(profile);
+            mListener.onProfileModifyItem(profile);
+            showDialogMsg("Account changes applied");
+        }
         blnChangesMade = false;
 //        Toast.makeText(getContext(), R.string.toast_profile_updated, Toast.LENGTH_SHORT).show();
 
-        showDialogMsg("Profile changes applied");
 
         this.currProfile.setCorpName(corpName);
         this.currProfile.setUserName(userName);

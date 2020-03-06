@@ -584,7 +584,7 @@ public class MainActivity extends AppCompatActivity
 //        }
 
 //        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_keyboard_arrow_left_black_24dp);
 
 
 
@@ -1298,7 +1298,7 @@ public class MainActivity extends AppCompatActivity
 
 
 //                resortList(AccountsContract.ACCOUNT_LIST_BY_CORP_NAME);
-                break;
+                return true;
 
             case R.id.menuacct_sort_opendate:
                 if (!item.isChecked()) {
@@ -1344,7 +1344,7 @@ public class MainActivity extends AppCompatActivity
 //                this.adapter.notifyDataSetChanged();
 
 //                resortList(AccountsContract.ACCOUNT_LIST_BY_OPEN_DATE);
-                break;
+                return true;
 
             case R.id.menuacct_sort_passport:
                 if (!item.isChecked()) {
@@ -1401,7 +1401,7 @@ public class MainActivity extends AppCompatActivity
 
 
 //                resortList(AccountsContract.ACCOUNT_LIST_BY_PASSPORT_ID);
-                break;
+                return true;
 
             case R.id.menuacct_sort_custom:
                 if (!item.isChecked()) {
@@ -1458,7 +1458,7 @@ public class MainActivity extends AppCompatActivity
 //                recyclerView.setAdapter(adapter);
 
 //                resortList(AccountsContract.ACCOUNT_LIST_BY_SEQUENCE);
-                break;
+                return true;
 
 //            case R.id.menuacct_showdate:
 //                suggestsListRequest3();
@@ -1470,7 +1470,7 @@ public class MainActivity extends AppCompatActivity
 
             case R.id.menumain_showSuggests:
                 suggestsListRequest4();
-                break;
+                return true;
 
 //            case R.id.menumain_showSuggestsV1:
 //                suggestsListRequest2();
@@ -1511,7 +1511,7 @@ public class MainActivity extends AppCompatActivity
 //                    }
 //                }
                 viewAccountsFile();
-                break;
+                return true;
 
 
             //            case R.id.menumain_refresh:
@@ -1588,7 +1588,7 @@ public class MainActivity extends AppCompatActivity
                     }
                 }
 //                searchRequestActivity();
-                break;
+                return true;
 
 
 //            case R.id.menumain_search:
@@ -1641,7 +1641,7 @@ public class MainActivity extends AppCompatActivity
 //                showAboutDialog();
                 showAboutActivity();
 
-                break;
+                return true;
 
 //            case R.id.menumain_do_request:
 //
@@ -1740,10 +1740,9 @@ public class MainActivity extends AppCompatActivity
 ////                    return true;  // indicate we are handling this
 ////                }
 ////                return true;
-
+            default:
+                return super.onOptionsItemSelected(item);
         }
-
-        return super.onOptionsItemSelected(item);
     }
 
 
@@ -3140,30 +3139,97 @@ public class MainActivity extends AppCompatActivity
         alertConfirmDelete(profile, position);
     }
 
+    @Override
+    public void onProfileCorpNameAdd() {
+        Profile profile = new Profile();
+        AddEditProfileFrag fragment2 = new AddEditProfileFrag();
+        Bundle args = new Bundle();
+//        args.putInt(AddEditProfileFrag.EXTRA_ID, profile.getId());
+        args.putInt(AddEditProfileFrag.EXTRA_ID, -1);
+//        args.putInt(AddEditProfileFrag.EXTRA_PASSPORT_ID, profile.getPassportId());
+        args.putInt(AddEditProfileFrag.EXTRA_PASSPORT_ID, -1);
+        args.putString(AddEditProfileFrag.EXTRA_CORP_NAME, profile.getCorpName());
+        args.putString(AddEditProfileFrag.EXTRA_USER_NAME, profile.getUserName());
+        args.putString(AddEditProfileFrag.EXTRA_USER_EMAIL, profile.getUserEmail());
+        args.putInt(AddEditProfileFrag.EXTRA_SEQUENCE, profile.getSequence());
+        args.putString(AddEditProfileFrag.EXTRA_CORP_WEBSITE, profile.getCorpWebsite());
+        args.putString(AddEditProfileFrag.EXTRA_NOTE, profile.getNote());
+        args.putLong(AddEditProfileFrag.EXTRA_ACTVY_LONG, profile.getActvyLong());
+        args.putLong(AddEditProfileFrag.EXTRA_OPEN_DATE_LONG, profile.getOpenLong());
+        fragment2.setArguments(args);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//        AddEditProfileFrag addeditFrag = (AddEditProfileFrag) fragmentManager.findFragmentByTag("AddEditProfileFrag");
+//        if (addeditFrag == null) {
+//            fragmentTransaction.add(R.id.fragment_container2, fragment2, "AddEditProfileFrag");
+//        } else {
+            fragmentTransaction.replace(R.id.fragment_container2, fragment2, "AddEditProfileFrag");
+//        }
+        fragmentTransaction.commit();
+        frame2 = findViewById(R.id.fragment_container2);
+        frame2.setVisibility(View.VISIBLE);
+    }
 
     private void alertConfirmDelete(Profile profile, int position) {
-        android.app.AlertDialog.Builder alertDialogBuilder = new android.app.AlertDialog.Builder(this);
-        alertDialogBuilder.setMessage(getString(R.string.alert_delete_acct) + "\n" +
+//        android.app.AlertDialog.Builder alertDialogBuilder = new android.app.AlertDialog.Builder(this);
+//        alertDialogBuilder.setMessage(getString(R.string.alert_delete_acct) + "\n" +
+//                profile.getCorpName() +
+//                "\n" + getString(R.string.alert_acct_id) + profile.getPassportId());
+        String msg = getString(R.string.alert_delete_acct) + "\n" +
                 profile.getCorpName() +
-                "\n" + getString(R.string.alert_acct_id) + profile.getPassportId());
-        alertDialogBuilder.setPositiveButton(R.string.yes,
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface arg0, int arg1) {
-                        profileViewModel.delete(profile);
-//                        fragDelete(profile);
-//                        Log.d(TAG, "delete request " + profile.getId());
-                    }
-                })
-                .setNegativeButton("No",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                refreshDeletePos(position);
-                            }
-                        });
+                "\n" + getString(R.string.alert_acct_id) + profile.getPassportId();
+
+        final Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.diamsg_yesno);
+        dialog.setTitle(msg);
+
+        TextView text = (TextView) dialog.findViewById(R.id.text);
+        text.setText(msg);
+        ImageView image = (ImageView) dialog.findViewById(R.id.image);
+        image.setImageResource(R.drawable.ic_help_outline_black);
 
 
-        android.app.AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
+        Button dialogButton = (Button) dialog.findViewById(R.id.yes);
+        // if button is clicked, close the custom dialog
+        dialogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                profileViewModel.delete(profile);
+                dialog.dismiss();
+            }
+        });
+
+        Button dialogButtonNo = (Button) dialog.findViewById(R.id.no);
+        // if button is clicked, close the custom dialog
+        dialogButtonNo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                refreshDeletePos(position);
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+
+
+//        alertDialogBuilder.setPositiveButton(R.string.yes,
+//                new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface arg0, int arg1) {
+//                        profileViewModel.delete(profile);
+////                        fragDelete(profile);
+////                        Log.d(TAG, "delete request " + profile.getId());
+//                    }
+//                })
+//                .setNegativeButton("No",
+//                        new DialogInterface.OnClickListener() {
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                refreshDeletePos(position);
+//                            }
+//                        });
+//
+//
+//        android.app.AlertDialog alertDialog = alertDialogBuilder.create();
+//        alertDialog.show();
 
     }
 
@@ -3367,6 +3433,14 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onProfileModifyItem(Profile profile) {
         profileViewModel.update(profile);
+    }
+
+
+    @Override
+    public void onProfileAddItem(Profile profile) {
+        profile.setId(0);
+        profile.setSequence(currentMaxSeq + 1);
+        profileViewModel.insertProfile(profile);
     }
 
 //    public boolean isFragmentPresent(String tag) {

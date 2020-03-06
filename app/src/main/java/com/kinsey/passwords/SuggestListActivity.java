@@ -470,7 +470,8 @@ public class SuggestListActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 //        getSupportActionBar().setLogo(R.mipmap.ic_launcher);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close);
+//        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_keyboard_arrow_left_black_24dp);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     }

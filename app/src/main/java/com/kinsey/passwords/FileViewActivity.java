@@ -14,6 +14,8 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.google.android.material.textfield.TextInputLayout;
 import com.kinsey.passwords.items.Profile;
 import com.kinsey.passwords.provider.ProfileAdapter;
@@ -65,6 +67,8 @@ public class FileViewActivity extends AppCompatActivity {
     boolean onFirstReported = true;
     private static final int BACKUP_FILE_REQUESTED = 1;
 
+    private AdView mAdView;
+
 
     private static String pattern_mdy = "MM/dd/yyyy";
     public static SimpleDateFormat format_mdy = new SimpleDateFormat(
@@ -77,7 +81,8 @@ public class FileViewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_file_view);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_keyboard_arrow_left_black_24dp);
+//        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close);
 
         progressBar = findViewById(R.id.progressBar);
 
@@ -125,6 +130,12 @@ public class FileViewActivity extends AppCompatActivity {
                 Log.d(TAG, "viewModel db count " + adapter.getItemCount());
             }
         });
+
+        mAdView = findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder()
+                .build();
+//                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR).build();
+        mAdView.loadAd(adRequest);
 
 
         progressBar.setVisibility(View.INVISIBLE);
@@ -625,26 +636,58 @@ public class FileViewActivity extends AppCompatActivity {
 //        new DownloadProfileAsyncTask(getApplicationContext(),
 //                file, adapter, progressBar, webView).execute();
 
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setMessage(msg);
-        alertDialogBuilder.setPositiveButton(R.string.yes,
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface arg0, int arg1) {
-                        new DownloadProfileAsyncTask(getApplicationContext(),
-                                file, adapter, progressBar, webView).execute();
 
-                        //                        Toast.makeText(getApplicationContext(), "You clicked yes button", Toast.LENGTH_LONG).show();
-                    }
-                })
-                .setNegativeButton(R.string.no,
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                });
+        final Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.diamsg_yesno);
+        dialog.setTitle(msg);
 
+        TextView text = (TextView) dialog.findViewById(R.id.text);
+        text.setText(msg);
+        ImageView image = (ImageView) dialog.findViewById(R.id.image);
+        image.setImageResource(R.drawable.ic_help_outline_black);
 
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
+        Button dialogButton = (Button) dialog.findViewById(R.id.yes);
+        // if button is clicked, close the custom dialog
+        dialogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new DownloadProfileAsyncTask(getApplicationContext(),
+                        file, adapter, progressBar, webView).execute();
+                dialog.dismiss();
+            }
+        });
+
+        Button dialogButtonNo = (Button) dialog.findViewById(R.id.no);
+        // if button is clicked, close the custom dialog
+        dialogButtonNo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+
+//        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+//        alertDialogBuilder.setMessage(msg);
+//        alertDialogBuilder.setPositiveButton(R.string.yes,
+//                new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface arg0, int arg1) {
+//                        new DownloadProfileAsyncTask(getApplicationContext(),
+//                                file, adapter, progressBar, webView).execute();
+//
+//                        //                        Toast.makeText(getApplicationContext(), "You clicked yes button", Toast.LENGTH_LONG).show();
+//                    }
+//                })
+//                .setNegativeButton(R.string.no,
+//                new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface dialog, int which) {
+//                    }
+//                });
+//
+//
+//        AlertDialog alertDialog = alertDialogBuilder.create();
+//        alertDialog.show();
     }
 
 
