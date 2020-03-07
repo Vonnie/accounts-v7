@@ -31,24 +31,33 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProfilePassportIdFrag extends Fragment {
-
     public static final String TAG = "ProfileCorpNameFrag";
 
-    Context context;
-    RecyclerView recyclerView;
-    ProfileViewModel profileViewModel;
-    private List<Profile> profileListFull;
+    private final String ARG_SELECTED_ID = "SELECTED_ID";
+
+    private Context context;
+    private RecyclerView recyclerView;
+    private ProfileViewModel profileViewModel;
+//    private List<Profile> profileListFull;
     private ProfileAdapter adapter = new ProfileAdapter(-1);
-    RecyclerViewPositionHelper mRecyclerViewHelper;
+    private RecyclerViewPositionHelper mRecyclerViewHelper;
     private final String RECYCLER_POSITION_KEY = "recyclerViewPos";
     private int mRecyclerViewPos = RecyclerView.NO_POSITION;
+    private int selectedId = -1;
+    int screenLayout;
+    GridLayoutManager gridLayoutManager;
 
     private ProfilePassportIdFrag.OnProfilePassportIdClickListener mListener;
     public interface OnProfilePassportIdClickListener {
 
         void onProfilePassportIdSelect(int selectedId, Profile profile);
 
+        void onProfileCorpNameAdd();
+
         void onDeleteConfirmPassportId(Profile profile, int position);
+
+        void onEmptyWarning();
+
     }
 
     @Nullable
@@ -58,12 +67,24 @@ public class ProfilePassportIdFrag extends Fragment {
         //        return super.onCreateView(inflater, container, savedInstanceState);
 
         recyclerView = view.findViewById(R.id.account_items_list_passport_id);
-
         recyclerView.setHasFixedSize(true);
 
-        GridLayoutManager gridLayoutManager;
+
+        if (savedInstanceState == null) {
+            Bundle bundle = getArguments();
+            if (bundle != null) {
+                this.selectedId = bundle.getInt(ARG_SELECTED_ID, -1);
+            }
+            Log.d(TAG, "onCreateView: init selectedId " + this.selectedId);
+        } else {
+            this.selectedId = savedInstanceState.getInt(ARG_SELECTED_ID, -1);
+            Log.d(TAG, "onCreateView: selectedId " + adapter.getSelectedId());
+        }
+
+
+
         LinearLayoutManager layoutManager;
-        int screenLayout = getResources().getConfiguration().screenLayout;
+        screenLayout = getResources().getConfiguration().screenLayout;
         screenLayout &= Configuration.SCREENLAYOUT_SIZE_MASK;
         int spanSize = 3;
         switch (screenLayout) {
@@ -93,13 +114,13 @@ public class ProfilePassportIdFrag extends Fragment {
                     recyclerView.setLayoutManager(gridLayoutManager);
                     Log.d(TAG, "screen size normal");
                 } else {
-                    layoutManager = new LinearLayoutManager(getActivity());
-                    recyclerView.setLayoutManager(layoutManager);
+                    gridLayoutManager = new GridLayoutManager(getActivity(), 1);
+                    recyclerView.setLayoutManager(gridLayoutManager);
                 }
                 break;
             default:
-                layoutManager = new LinearLayoutManager(getActivity());
-                recyclerView.setLayoutManager(layoutManager);
+                gridLayoutManager = new GridLayoutManager(getActivity(), 1);
+                recyclerView.setLayoutManager(gridLayoutManager);
         }
 
 
@@ -123,7 +144,7 @@ public class ProfilePassportIdFrag extends Fragment {
             @Override
             public void onChanged(List<Profile> profiles) {
 
-                profileListFull = new ArrayList<>(profiles);
+//                profileListFull = new ArrayList<>(profiles);
                 adapter.submitList(profiles);
                 Log.d(TAG, "list submit");
 
@@ -314,7 +335,7 @@ public class ProfilePassportIdFrag extends Fragment {
         Activity activity = getActivity();
         if (!(activity instanceof ProfilePassportIdFrag.OnProfilePassportIdClickListener)) {
             throw new ClassCastException(activity.getClass().getSimpleName()
-                    + " must implement ProfileOpenDateFrag interface");
+                    + " must implement ProfilePassportIdFrag interface");
         }
         mListener = (ProfilePassportIdFrag.OnProfilePassportIdClickListener) activity;
 
