@@ -3,8 +3,6 @@
     <string name="app_name">Accounts</string>
     <string name="about_copyright">Copyright © 2020</string>
     <string name="about_email">Para soporte, envíe un correo electrónico a vonniekinsey@gmail.com</string>
-    <string name="about_weblink">Instrucciones disponibles en</string>
-    <string name="about_weblink_21">Instrucciones disponibles en www.learnprogramming.academy</string>
     <string name="acct_show_website">Mostrar sitio web</string>
     <string name="acctlist_by_account_id">Por ID de cuenta</string>
     <string name="acctlist_by_corp_name">Por nombre corporativo</string>

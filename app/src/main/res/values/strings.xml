@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Accounts</string>
     <string name="app_name_corpname">" Accounts by Corporation Name"</string>
-    <string name="app_name_opendate"> Accounts by Open Date, desc</string>
+    <string name="app_name_opendate">" Accounts by Open Date, descending"</string>
     <string name="app_name_acctid">" Accounts by Account Id"</string>
     <string name="app_name_custom"> Accounts by Custom Seq</string>
     <string name="action_help">Help</string>
@@ -103,9 +103,6 @@
     <string name="menuvw_export">Export</string>
     <string name="menuvw_backup">Backup</string>
     <string name="about_copyright">Copyright © 2020</string>
-    <string name="about_weblink">Instructions available at</string>
-    <string name="about_url" translatable="false"><u>http://www.learnprogramming.academy</u></string>
-    <string name="about_weblink_21">Instructions available at www.learnprogramming.academy</string>
     <string name="about_email">For support, email vonniekinsey@gmail.com</string>
     <string name="btn_open_date_label">Select Open Date</string>
     <string name="empty_list">Accounts List is empty</string>
@@ -209,9 +206,8 @@
     <string name="account_added">Account Added</string>
     <string name="account_updated">Account Updated</string>
     <string name="ask_go_to_list">Do you want to show accounts listing?</string>
-    <string name="hint_text">Item Action</string>
+    <string name="hint_text">Type Search</string>
     <string name="openClickForCalendar">Click to view calendar for Open Date</string>
-    <string name="lon_lat_format">Lon/Lat %.3f / %.3f</string>
     <string name="id_descr">Id %1$s</string>
     <string name="seq_descr">Seq %1$s</string>
     <string name="opened_button_descr">Opened date, default is Current Date %1$s</string>

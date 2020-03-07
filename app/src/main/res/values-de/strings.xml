@@ -92,8 +92,6 @@
     <string name="menuvw_import">importieren</string>
     <string name="home_btn_import_text">Importieren Sie Konten aus einem vorherigen Export</string>
     <string name="fv_msg_4">Information: Um diese App auf einem anderen Gerät einzurichten, verwenden Sie diese Sicherungs- / Wiederherstellungsfunktion, um Daten auf dem anderen Gerät zu speichern.</string>
-    <string name="about_weblink">Anleitung erhältlich bei</string>
-    <string name="about_weblink_21">Anweisungen finden Sie unter www.learnprogramming.academy</string>
     <string name="fv_msg_37">Bewahren Sie die Kontosicherung für zukünftige Wiederherstellungen an einem sicheren Ort auf.</string>
     <string name="home_message_text_13">Wenn Sie Kennwörter elektronisch aufbewahren, selbst wenn diese verschlüsselt sind, können Sie Ihre Anmeldeinformationen stehlen. Wenn Sie eine elektronische Kopie (aus einer Datei oder der App-Datenbank) mit den Anmeldeinformationen des Unternehmens, des Benutzernamens und des Kennworts haben, sind Ihre Konten in hohem Maße Hackern ausgesetzt.</string>
     <string name="home_message_text_16">Wenn später ein Konto benötigt wird, koppeln Sie Konto und Passwort, indem Sie in der App nach dem Konto suchen. Verwenden Sie die Konto-ID, um das Kennwort in einem Papierbericht anzugeben. Die Konto-IDs werden inkrementiert, daher wird der Papierbericht in der Reihenfolge der Konto-ID hinzugefügt.</string>

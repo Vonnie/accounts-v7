@@ -3,8 +3,6 @@
     <string name="app_name">Accounts</string>
     <string name="about_copyright">Copyright  u00a9 2020</string>
     <string name="about_email">Stuur een e-mail naar vonniekinsey@gmail.com voor ondersteuning</string>
-    <string name="about_weblink">Instructies beschikbaar op</string>
-    <string name="about_weblink_21">Instructies beschikbaar op www.learnprogramming.academy</string>
     <string name="corp_website_hint">Geldige corp-website (optioneel)</string>
     <string name="acct_show_website">Website weergeven</string>
     <string name="action_help">Helpen</string>
