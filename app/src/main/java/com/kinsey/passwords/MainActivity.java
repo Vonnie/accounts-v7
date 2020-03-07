@@ -47,6 +47,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.kinsey.passwords.items.Profile;
 import com.kinsey.passwords.items.Suggest;
 import com.kinsey.passwords.provider.ProfileViewModel;
+import com.kinsey.passwords.provider.Task;
 import com.kinsey.passwords.uifrag.AddEditProfileFrag;
 import com.kinsey.passwords.uifrag.ProfileCorpNameFrag;
 import com.kinsey.passwords.uifrag.ProfileCustomFrag;
@@ -81,7 +82,8 @@ public class MainActivity extends AppCompatActivity
         ProfilePassportIdFrag.OnProfilePassportIdClickListener,
         ProfileOpenDateFrag.OnProfileOpenDateClickListener,
         ProfileCustomFrag.OnProfileCustomClickListener,
-        SearchFrag.OnSearchClickListener {
+        SearchFrag.OnSearchClickListener,
+        Task {
 //        AppDialog.DialogEvents {
 //        DatePickerDialog.OnDateSetListener {
 
@@ -1566,7 +1568,7 @@ public class MainActivity extends AppCompatActivity
                     FrameLayout frame = findViewById(R.id.fragment_container);
                     frame.setVisibility(View.VISIBLE);
                     fragmentManager = getSupportFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                     profileFragment = fragmentManager.findFragmentById(R.id.fragment_container);
                     Log.d(TAG, "onOptionsItemSelected: selectedId " + this.selectedId);
                     if (profileFragment instanceof ProfileCorpNameFrag) {
@@ -2313,7 +2315,7 @@ public class MainActivity extends AppCompatActivity
                 profile.setActvyLong(System.currentTimeMillis());
 //                profile.setActvyLong((new Date()).getTime());
 
-                profileViewModel.insertProfile(profile);
+                profileViewModel.insertProfile(profile, this);
 
                 itemAdded = true;
 
@@ -2349,6 +2351,38 @@ public class MainActivity extends AppCompatActivity
                 Toast.makeText(this, R.string.toast_profile_updated, Toast.LENGTH_SHORT).show();
                 break;
             }
+
+            case REQUEST_VIEW_EXPORT:
+                Log.d(TAG, "onActivityResult: fileView return");
+                boolean blnRestored = data.getBooleanExtra(FileViewActivity.EXTRA_LIST_RESTORED, false);
+                if (blnRestored) {
+                    this.selectedId = -1;
+                    frame2.setVisibility(View.GONE);
+                    frameSearch.setVisibility(View.GONE);
+                    FrameLayout frame = findViewById(R.id.fragment_container);
+                    frame.setVisibility(View.VISIBLE);
+                    FragmentManager fragmentManager = getSupportFragmentManager();
+//                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    Fragment profileFragment = fragmentManager.findFragmentById(R.id.fragment_container);
+                    if (profileFragment instanceof ProfileCorpNameFrag) {
+                        ProfileCorpNameFrag frag = (ProfileCorpNameFrag) profileFragment;
+                        frag.setSelectedId(this.selectedId);
+                        frag.refreshListAll();
+                    } else if (profileFragment instanceof ProfileCustomFrag) {
+                        ProfileCustomFrag frag = (ProfileCustomFrag) profileFragment;
+                        frag.setSelectedId(this.selectedId);
+                        frag.refreshListAll();
+                    } else if (profileFragment instanceof ProfileOpenDateFrag) {
+                        ProfileOpenDateFrag frag = (ProfileOpenDateFrag) profileFragment;
+                        frag.setSelectedId(this.selectedId);
+                        frag.refreshListAll();
+                    } else if (profileFragment instanceof ProfilePassportIdFrag) {
+                        ProfilePassportIdFrag frag = (ProfilePassportIdFrag) profileFragment;
+                        frag.setSelectedId(this.selectedId);
+                        frag.refreshListAll();
+                    }
+                }
+                break;
 
             case REQUEST_SIGN: {
                 Log.d(TAG, "onActivityResult 1234");
@@ -3440,10 +3474,32 @@ public class MainActivity extends AppCompatActivity
     public void onProfileAddItem(Profile profile) {
         profile.setId(0);
         profile.setSequence(currentMaxSeq + 1);
-        profileViewModel.insertProfile(profile);
+        profileViewModel.insertProfile(profile, this);
     }
 
-//    public boolean isFragmentPresent(String tag) {
+    @Override
+    public void processInsertComplete(Profile profile) {
+        this.selectedId = profile.getPassportId();
+        Log.d(TAG, "processInsertComplete: " + profile.getPassportId());
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        Fragment profileFragment = fragmentManager.findFragmentById(R.id.fragment_container);
+        profileFragment = fragmentManager.findFragmentById(R.id.fragment_container);
+        if (profileFragment instanceof ProfileCorpNameFrag) {
+            ProfileCorpNameFrag frag = (ProfileCorpNameFrag) profileFragment;
+            frag.selectById(this.selectedId);
+        } else if (profileFragment instanceof ProfileCustomFrag) {
+            ProfileCustomFrag frag = (ProfileCustomFrag) profileFragment;
+        } else if (profileFragment instanceof ProfileOpenDateFrag) {
+            ProfileOpenDateFrag frag = (ProfileOpenDateFrag) profileFragment;
+        } else if (profileFragment instanceof ProfilePassportIdFrag) {
+            ProfilePassportIdFrag frag = (ProfilePassportIdFrag) profileFragment;
+        }
+        showSearchSelected(this.selectedId, profile);
+
+    }
+
+    //    public boolean isFragmentPresent(String tag) {
 //        Fragment frag = getSupportFragmentManager().findFragmentByTag(tag);
 //        if (frag instanceof HomeFragment) {
 //            return true;

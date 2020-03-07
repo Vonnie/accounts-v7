@@ -201,4 +201,9 @@
     <string name="ask_go_to_list">Möchten Sie die Kontenliste anzeigen?</string>
     <string name="opened">geöffnet %1$s</string>
     <string name="account_added">Konto hinzugefügt</string>
+    <string name="hint_text">Geben Sie Search ein oder klicken Sie, um aus der Dropdown-Liste auszuwählen</string>
+    <string name="openClickForCalendar">Klicken Sie hier, um den Kalender für das Öffnungsdatum anzuzeigen</string>
+    <string name="id_descr" translatable="false">Ich würde %1$s</string>
+    <string name="seq_descr">Seq %1$s</string>
+    <string name="opened_button_descr">Öffnungsdatum, Standard ist Aktuelles Datum %1$s</string>
 </resources>

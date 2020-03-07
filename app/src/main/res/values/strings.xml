@@ -206,7 +206,7 @@
     <string name="account_added">Account Added</string>
     <string name="account_updated">Account Updated</string>
     <string name="ask_go_to_list">Do you want to show accounts listing?</string>
-    <string name="hint_text">Type Search</string>
+    <string name="hint_text">Type Search or click to select from dropdown list</string>
     <string name="openClickForCalendar">Click to view calendar for Open Date</string>
     <string name="id_descr">Id %1$s</string>
     <string name="seq_descr">Seq %1$s</string>

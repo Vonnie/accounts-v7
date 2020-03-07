@@ -201,4 +201,9 @@
     <string name="ask_go_to_list">Wilt u een lijst met accounts weergeven?</string>
     <string name="opened">geopend %1$s</string>
     <string name="account_added">Account toegevoegd</string>
+    <string name="hint_text">Typ Zoeken of klik om te selecteren in de vervolgkeuzelijst</string>
+    <string name="openClickForCalendar">Klik om de kalender voor Open datum te bekijken</string>
+    <string name="id_descr">ID kaart %1$s</string>
+    <string name="seq_descr">Seq %1$s</string>
+    <string name="opened_button_descr">Geopende datum, standaard is Huidige datum %1$s</string>
 </resources>

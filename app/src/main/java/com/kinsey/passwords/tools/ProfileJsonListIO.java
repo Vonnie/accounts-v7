@@ -46,12 +46,10 @@ public class ProfileJsonListIO {
         } catch (IOException e) {
             e.printStackTrace();
             Log.e(TAG, "ERROR: " + e.getMessage());
-        } catch (Exception e) {
-            e.printStackTrace();
-            Log.e(TAG, "ERROR: " + e.getMessage());
-        } finally {
-            return listAccounts;
         }
+
+        return listAccounts;
+
 
     }
 

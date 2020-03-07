@@ -54,6 +54,9 @@ public class FileViewActivity extends AppCompatActivity {
 //        implements AppDialog.DialogEvents {
     private static final String TAG = "FileViewActivity";
 
+    public static final String EXTRA_LIST_RESTORED =
+            "com.kinsey.passwords.EXTRA_LIST_RESTORED";
+
     private ProgressBar progressBar;
     private WebView webView;
     private ProfileAdapter adapter;
@@ -65,6 +68,7 @@ public class FileViewActivity extends AppCompatActivity {
 //    View fileViewActivityView;
 //    ShareActionProvider myShareActionProvider;
     boolean onFirstReported = true;
+    boolean blnListRestored = false;
     private static final int BACKUP_FILE_REQUESTED = 1;
 
     private AdView mAdView;
@@ -247,7 +251,9 @@ public class FileViewActivity extends AppCompatActivity {
     @Override
     public boolean onSupportNavigateUp() {
 //        return super.onSupportNavigateUp();
-        setResult(RESULT_CANCELED);
+        Intent data = new Intent();
+        data.putExtra(EXTRA_LIST_RESTORED, blnListRestored);
+        setResult(RESULT_OK, data);
         finish();
         return false;
     }
@@ -429,9 +435,9 @@ public class FileViewActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
             returnValue = "error: " + e.getMessage();
-        } finally {
-            return returnValue;
         }
+
+        return returnValue;
 
     }
 
@@ -726,6 +732,7 @@ public class FileViewActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     new UploadProfileAsyncTask(getApplicationContext(),
                             webView, progressBar).execute(storageFilename);
+                    blnListRestored = true;
                     dialog.dismiss();
                 }
             });

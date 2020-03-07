@@ -17,6 +17,7 @@ public class ProfileViewModel extends AndroidViewModel
     private ProfileRepository repository;
     private LiveData<List<Profile>> allProfiles;
     public String dbMsg;
+    private Task mNotifyTask;
 
     public ProfileViewModel(@NonNull Application application) {
         super(application);
@@ -25,7 +26,8 @@ public class ProfileViewModel extends AndroidViewModel
         dbMsg = repository.dbMsg;
     }
 
-    public void insertProfile(Profile profile) {
+    public void insertProfile(Profile profile, Task task) {
+        this.mNotifyTask = task;
         repository.insertProfile(profile, this);
     }
 
@@ -85,7 +87,7 @@ public class ProfileViewModel extends AndroidViewModel
         
         profile.setPassportId(profile.getId());
         repository.update(profile);
-
+        mNotifyTask.processInsertComplete(profile);
         Log.d(TAG, "processInsert: newId " + profile.getPassportId());
 //        int intId = (int) id;
 //        Log.d(TAG, "new id: " + id + " int " + intId);
@@ -124,5 +126,10 @@ public class ProfileViewModel extends AndroidViewModel
 //            }
 //        }
 
+    }
+
+    @Override
+    public void processInsertComplete(Profile profile) {
+        Log.d(TAG, "processInsertComplete: " + profile.getPassportId());
     }
 }

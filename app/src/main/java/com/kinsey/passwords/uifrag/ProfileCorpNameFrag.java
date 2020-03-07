@@ -340,19 +340,44 @@ public class ProfileCorpNameFrag extends Fragment {
         if (id == -1) {
             recyclerView.scrollToPosition(0);
         }
+        int pos = findIdPos(id);
+        if (pos != -1) {
+            adapter.notifyDataSetChanged();
+            recyclerView.scrollToPosition(pos);
+            Log.d(TAG, "setSelectedId: pos " + pos);
+        }
+    }
+
+
+    public void selectById(int id) {
+        adapter.setSelectedId(id);
+        int pos = findIdPos(id);
+        if (pos != -1) {
+            adapter.notifyItemInserted(pos);
+            recyclerView.scrollToPosition(pos);
+        }
+    }
+
+    public void unselectId(int id) {
+        int pos = findIdPos(id);
+        if (pos != -1) {
+        }
+    }
+
+    private int findIdPos(int id) {
         int pos = 0;
         List<Profile> profiles = adapter.getCurrentList();
         for (Profile item : profiles) {
             if (item.getPassportId() == id) {
 //                adapter.notifyItemChanged(pos);
-                adapter.notifyDataSetChanged();
-                recyclerView.scrollToPosition(pos);
-                Log.d(TAG, "setSelectedId: pos " + pos);
-                break;
+                return pos;
             }
             pos += 1;
         }
+        return -1;
     }
+
+
 
     private void refreshList() {
         if (adapter.getItemCount() > 0) {

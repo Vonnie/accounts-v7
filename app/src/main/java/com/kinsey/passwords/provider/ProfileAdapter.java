@@ -157,7 +157,6 @@ public class ProfileAdapter extends ListAdapter<Profile, ProfileAdapter.ProfileH
         }
     }
 
-
 //    public static int getColorWrapper(Context context, int id) {
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 //            return context.getColor(id);

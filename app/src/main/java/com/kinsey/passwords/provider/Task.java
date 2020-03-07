@@ -6,4 +6,8 @@ public interface Task {
     default void processInsert(Profile profile) {
 
     }
+    default void processInsertComplete(Profile profile) {
+
+    }
+
 }

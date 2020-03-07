@@ -31,6 +31,7 @@ import com.kinsey.passwords.AddEditProfileActivity;
 import com.kinsey.passwords.R;
 import com.kinsey.passwords.WebViewActivity;
 import com.kinsey.passwords.items.Profile;
+import com.kinsey.passwords.provider.Task;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -38,7 +39,7 @@ import java.util.Date;
 import java.util.Locale;
 
 public class AddEditProfileFrag extends Fragment
-        implements View.OnClickListener {
+        implements View.OnClickListener, Task {
 
     private static final String TAG = "AddEditProfileFrag";
 
@@ -77,6 +78,7 @@ public class AddEditProfileFrag extends Fragment
     private TextView tvSequence;
 
     private long lngOpenDate = 0;
+    private long lngBeginOpenDate = 0;
     private long lngActvDate = 0;
     private int intId = -1;
     private int intPassportId = -1;
@@ -243,6 +245,7 @@ public class AddEditProfileFrag extends Fragment
         textInputNote.getEditText().setText(bundle.getString(EXTRA_NOTE));
 
         lngOpenDate = bundle.getLong(EXTRA_OPEN_DATE_LONG, 0);
+        lngBeginOpenDate = lngOpenDate;
         Log.d(TAG, String.valueOf(lngOpenDate));
         if (lngOpenDate == 0) {
             btnOpenDate.setText(R.string.openClickForCalendar);
@@ -289,6 +292,7 @@ public class AddEditProfileFrag extends Fragment
         Date dte = new Date();
 
         lngOpenDate = dte.getTime();
+        lngBeginOpenDate = lngOpenDate;
 
         btnOpenDate.setText(String.format(getString(R.string.opened_button_descr), format_mdy.format(lngOpenDate)));
 
@@ -376,6 +380,15 @@ public class AddEditProfileFrag extends Fragment
         if (!currProfile.getUserEmail().equals(textInputUserEmail.getEditText().getText().toString().trim())) {
             return true;
         }
+        if (!currProfile.getCorpWebsite().equals(textInputCorpWebsite.getEditText().getText().toString().trim())) {
+            return true;
+        }
+        if (!currProfile.getNote().equals(textInputNote.getEditText().getText().toString().trim())) {
+            return true;
+        }
+        if (currProfile.getOpenLong() != lngBeginOpenDate) {
+            return true;
+        }
         return false;
     }
 
@@ -426,6 +439,10 @@ public class AddEditProfileFrag extends Fragment
         this.currProfile.setCorpName(corpName);
         this.currProfile.setUserName(userName);
         this.currProfile.setUserEmail(userEmail);
+        this.currProfile.setCorpWebsite(corpWebsite);
+        this.currProfile.setNote(note);
+        this.currProfile.setOpenLong(lngOpenDate);
+        lngBeginOpenDate = lngOpenDate;
 
 //        Intent data = new Intent();
 //        data.putExtra(EXTRA_CORP_NAME, corpName);
