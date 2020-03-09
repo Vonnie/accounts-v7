@@ -79,9 +79,9 @@ public class MainActivity extends AppCompatActivity
         implements
         ProfileCorpNameFrag.OnProfileCorpNameClickListener,
         AddEditProfileFrag.OnProfileModifyClickListener,
-        ProfilePassportIdFrag.OnProfilePassportIdClickListener,
-        ProfileOpenDateFrag.OnProfileOpenDateClickListener,
-        ProfileCustomFrag.OnProfileCustomClickListener,
+//        ProfilePassportIdFrag.OnProfilePassportIdClickListener,
+//        ProfileOpenDateFrag.OnProfileOpenDateClickListener,
+//        ProfileCustomFrag.OnProfileCustomClickListener,
         SearchFrag.OnSearchClickListener,
         Task {
 //        AppDialog.DialogEvents {
@@ -321,7 +321,7 @@ public class MainActivity extends AppCompatActivity
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-            ProfileCorpNameFrag fragment = new ProfileCorpNameFrag();
+            ProfileCorpNameFrag fragment = ProfileCorpNameFrag.newInstance(this.LISTSORT_CORP_NAME, this.selectedId);
             fragmentTransaction.add(R.id.fragment_container, fragment);
             fragmentTransaction.commit();
             FrameLayout frame = findViewById(R.id.fragment_container);
@@ -348,7 +348,9 @@ public class MainActivity extends AppCompatActivity
             fragmentTransaction3.add(R.id.fragment_search_container, searchFrag);
             fragmentTransaction3.commit();
         } else {
+            this.listsortOrder = savedInstanceState.getInt(ARG_LISTSORT, 1);
             this.selectedId = savedInstanceState.getInt(ARG_SELECTED_ID);
+            Log.d(TAG, "onCreate: listsortOrder " + this.listsortOrder);
             FrameLayout frame = findViewById(R.id.fragment_container);
             Log.d(TAG, "onCreate: tag " + frame.getTag());
             frame2 = findViewById(R.id.fragment_container2);
@@ -366,6 +368,8 @@ public class MainActivity extends AppCompatActivity
 //                fragmentTransaction.commit();
 
             }
+
+
         }
         frameSearch = findViewById(R.id.fragment_search_container);
         frameSearch.setVisibility(View.GONE);
@@ -446,7 +450,7 @@ public class MainActivity extends AppCompatActivity
 //        recyclerView.setAdapter(adapter);
 //
 
-        profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
+//        profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
 //        profileViewModel.getAllProfilesByCorpName().observe(this, new Observer<List<Profile>>() {
 //            @Override
 //            public void onChanged(List<Profile> profiles) {
@@ -455,33 +459,33 @@ public class MainActivity extends AppCompatActivity
 //                adapter.submitList(profiles);
 //            }
 //        });
-
-        profileViewModel.getMaxSequence().observe(this, new Observer<Profile>() {
-            @Override
-            public void onChanged(@Nullable Profile profile) {
-
-                if (profile == null) {
-//                    profileMaxItem = new Profile(0, "", "", "", "");
-                    currentMaxSeq = 0;
-                } else {
-//                    profileMaxItem = profile;
-                    currentMaxSeq = profile.getSequence();
-//                    Log.d(TAG, profile);
-                }
-
-//                Log.d(TAG, "maxSeq " + profileMaxItem.getSequence());
-//                if (!conversionStarted && profileMaxItem.getSequence() == 0) {
-//                    Log.d(TAG, "Seq " + profileMaxItem.getSequence());
-//                    if (!migrationStarted) {
-//                        Log.d(TAG, "migration not started");
-//                    } else {
-//                        conversionStarted = true;
-////                    addSample();
-////                        migratePassport();
-//                    }
+//
+//        profileViewModel.getMaxSequence().observe(this, new Observer<Profile>() {
+//            @Override
+//            public void onChanged(@Nullable Profile profile) {
+//
+//                if (profile == null) {
+////                    profileMaxItem = new Profile(0, "", "", "", "");
+//                    currentMaxSeq = 0;
+//                } else {
+////                    profileMaxItem = profile;
+//                    currentMaxSeq = profile.getSequence();
+////                    Log.d(TAG, profile);
 //                }
-            }
-        });
+//
+////                Log.d(TAG, "maxSeq " + profileMaxItem.getSequence());
+////                if (!conversionStarted && profileMaxItem.getSequence() == 0) {
+////                    Log.d(TAG, "Seq " + profileMaxItem.getSequence());
+////                    if (!migrationStarted) {
+////                        Log.d(TAG, "migration not started");
+////                    } else {
+////                        conversionStarted = true;
+//////                    addSample();
+//////                        migratePassport();
+////                    }
+////                }
+//            }
+//        });
 
 //
 //        profileViewModelCustom = new ViewModelProvider(this).get(ProfileViewModel.class);
@@ -523,10 +527,10 @@ public class MainActivity extends AppCompatActivity
 //        isLandscape = (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE);
 //        Log.d(TAG, "onCreate: twoPane is " + isLandscape);
 
-        if (savedInstanceState != null) {
-            listsortOrder = savedInstanceState.getInt("listsortOrder", 1);
-//            setMenuItemChecked(R.id.menuacct_sort_corpname, true);
-        }
+//        if (savedInstanceState != null) {
+//            listsortOrder = savedInstanceState.getInt("listsortOrder", 1);
+////            setMenuItemChecked(R.id.menuacct_sort_corpname, true);
+//        }
 
 //        listApps = (ListView) findViewById(R.id.xmlListView);
 //        if (savedInstanceState != null) {
@@ -840,9 +844,9 @@ public class MainActivity extends AppCompatActivity
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(ARG_LISTSORT, listsortOrder);
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        Fragment profileFragment;
+//        FragmentManager fragmentManager = getSupportFragmentManager();
+//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//        Fragment profileFragment;
 //        profileFragment = fragmentManager.findFragmentByTag("ProfileCorpNameFrag");
 //        ProfileCorpNameFrag frag = (ProfileCorpNameFrag)profileFragment;
 //        if (frag == null) {
@@ -920,6 +924,7 @@ public class MainActivity extends AppCompatActivity
             menu.findItem(R.id.menuacct_sort_custom).setChecked(true);
         }
 
+        Log.d(TAG, "onCreateOptionsMenu: listsortOrder " + this.listsortOrder);
 //        View view = menu.findItem(R.id.button_item).getActionView();
 //
 //        String[] ITEM_ACTIONS = new String[] {"Account Edit", "Search", "Passwords"};
@@ -1259,14 +1264,20 @@ public class MainActivity extends AppCompatActivity
 //
 //                }
 
-                Fragment profileCorpNameFrag = new ProfileCorpNameFrag();
+                profileFragment = ProfileCorpNameFrag.newInstance(LISTSORT_CORP_NAME, this.selectedId);
                 transaction = getSupportFragmentManager().beginTransaction();
 
 //                transaction.add(R.id.fragment_container, profileCorpNameFrag);
-                transaction.replace(R.id.fragment_container, profileCorpNameFrag, "ProfileCorpNameFrag");
+                transaction.replace(R.id.fragment_container, profileFragment, "profileFragment");
                 transaction.addToBackStack(null);
 
                 transaction.commit();
+
+                if (this.selectedId != -1) {
+                    ProfileCorpNameFrag frag = (ProfileCorpNameFrag) profileFragment;
+                    frag.refreshListAll();
+                    frag.setSelectedId(this.selectedId);
+                }
 
 //                Fragment profileCorpNameFrag = new ProfileCorpNameFrag();
 //                transaction = getSupportFragmentManager().beginTransaction();
@@ -1319,16 +1330,21 @@ public class MainActivity extends AppCompatActivity
 //                            .commit();
 //                }
 
-                Fragment profileOpenDateFrag = new ProfileOpenDateFrag();
+//                Fragment profileOpenDateFrag = new ProfileOpenDateFrag();
+                profileFragment = ProfileCorpNameFrag.newInstance(LISTSORT_OPEN_DATE, this.selectedId);
                 transaction = getSupportFragmentManager().beginTransaction();
 
 //                transaction.add(R.id.fragment_container, profileOpenDateFrag);
-                transaction.replace(R.id.fragment_container, profileOpenDateFrag, "ProfileOpenDateFrag");
+                transaction.replace(R.id.fragment_container, profileFragment, "profileFragment");
                 transaction.addToBackStack(null);
 
                 transaction.commit();
 
-
+                if (this.selectedId != -1) {
+                    ProfileCorpNameFrag frag = (ProfileCorpNameFrag) profileFragment;
+                    frag.refreshListAll();
+                    frag.setSelectedId(this.selectedId);
+                }
 
 //                //                adapter = adapterOpenDate;
 ////                recyclerView.setAdapter(adapter);
@@ -1365,14 +1381,21 @@ public class MainActivity extends AppCompatActivity
 //
 //                }
 
-                Fragment profilePassportIdFrag = new ProfilePassportIdFrag();
+//                Fragment profilePassportIdFrag = new ProfilePassportIdFrag();
+                profileFragment = ProfileCorpNameFrag.newInstance(LISTSORT_PASSPORT_ID, this.selectedId);
                 transaction = getSupportFragmentManager().beginTransaction();
 
 //                transaction.add(R.id.fragment_container, profilePassportIdFrag);
-                transaction.replace(R.id.fragment_container, profilePassportIdFrag, "ProfilePassportIdFrag");
+                transaction.replace(R.id.fragment_container, profileFragment, "profileFragment");
                 transaction.addToBackStack(null);
 
                 transaction.commit();
+
+//                if (this.selectedId != -1) {
+//                    ProfileCorpNameFrag frag = (ProfileCorpNameFrag) profileFragment;
+//                    frag.refreshListAll();
+//                    frag.setSelectedId(this.selectedId);
+//                }
 
 
 //                Fragment profileCustomFrag = new ProfileCorpNameFrag();
@@ -1424,15 +1447,22 @@ public class MainActivity extends AppCompatActivity
 //
 //                }
 
-                Fragment profileCustomFrag = new ProfileCustomFrag();
+//                Fragment profileCustomFrag = new ProfileCustomFrag();
+                profileFragment = ProfileCorpNameFrag.newInstance(LISTSORT_CUSTOM_SORT, this.selectedId);
                 transaction = getSupportFragmentManager().beginTransaction();
 
 //                transaction.add(R.id.fragment_container, profileCustomFrag);
-                transaction.replace(R.id.fragment_container, profileCustomFrag, "ProfileCustomFrag");
+                transaction.replace(R.id.fragment_container, profileFragment, "profileFragment");
                 transaction.addToBackStack(null);
 
                 transaction.commit();
 
+
+                if (this.selectedId != -1) {
+                    ProfileCorpNameFrag frag = (ProfileCorpNameFrag) profileFragment;
+                    frag.refreshListAll();
+                    frag.setSelectedId(this.selectedId);
+                }
 
                 Log.d(TAG, "new frag Custom committed");
 
@@ -1569,25 +1599,30 @@ public class MainActivity extends AppCompatActivity
                     frame.setVisibility(View.VISIBLE);
                     fragmentManager = getSupportFragmentManager();
 //                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    profileFragment = fragmentManager.findFragmentById(R.id.fragment_container);
+                    profileFragment = (ProfileCorpNameFrag) fragmentManager.findFragmentById(R.id.fragment_container);
                     Log.d(TAG, "onOptionsItemSelected: selectedId " + this.selectedId);
-                    if (profileFragment instanceof ProfileCorpNameFrag) {
+                    if (profileFragment != null) {
                         ProfileCorpNameFrag frag = (ProfileCorpNameFrag) profileFragment;
                         frag.setSelectedId(this.selectedId);
                         frame2.setVisibility(View.GONE);
-                    } else if (profileFragment instanceof ProfileCustomFrag) {
-                        ProfileCustomFrag frag = (ProfileCustomFrag) profileFragment;
-                        frag.setSelectedId(this.selectedId);
-                        frame2.setVisibility(View.GONE);
-                    } else if (profileFragment instanceof ProfileOpenDateFrag) {
-                        ProfileOpenDateFrag frag = (ProfileOpenDateFrag) profileFragment;
-                        frag.setSelectedId(this.selectedId);
-                        frame2.setVisibility(View.GONE);
-                    } else if (profileFragment instanceof ProfilePassportIdFrag) {
-                        ProfilePassportIdFrag frag = (ProfilePassportIdFrag) profileFragment;
-                        frag.setSelectedId(this.selectedId);
-                        frame2.setVisibility(View.GONE);
                     }
+//                    if (profileFragment instanceof ProfileCorpNameFrag) {
+//                        ProfileCorpNameFrag frag = (ProfileCorpNameFrag) profileFragment;
+//                        frag.setSelectedId(this.selectedId);
+//                        frame2.setVisibility(View.GONE);
+//                    } else if (profileFragment instanceof ProfileCustomFrag) {
+//                        ProfileCustomFrag frag = (ProfileCustomFrag) profileFragment;
+//                        frag.setSelectedId(this.selectedId);
+//                        frame2.setVisibility(View.GONE);
+//                    } else if (profileFragment instanceof ProfileOpenDateFrag) {
+//                        ProfileOpenDateFrag frag = (ProfileOpenDateFrag) profileFragment;
+//                        frag.setSelectedId(this.selectedId);
+//                        frame2.setVisibility(View.GONE);
+//                    } else if (profileFragment instanceof ProfilePassportIdFrag) {
+//                        ProfilePassportIdFrag frag = (ProfilePassportIdFrag) profileFragment;
+//                        frag.setSelectedId(this.selectedId);
+//                        frame2.setVisibility(View.GONE);
+//                    }
                 }
 //                searchRequestActivity();
                 return true;
@@ -2368,18 +2403,18 @@ public class MainActivity extends AppCompatActivity
                         ProfileCorpNameFrag frag = (ProfileCorpNameFrag) profileFragment;
                         frag.setSelectedId(this.selectedId);
                         frag.refreshListAll();
-                    } else if (profileFragment instanceof ProfileCustomFrag) {
-                        ProfileCustomFrag frag = (ProfileCustomFrag) profileFragment;
-                        frag.setSelectedId(this.selectedId);
-                        frag.refreshListAll();
-                    } else if (profileFragment instanceof ProfileOpenDateFrag) {
-                        ProfileOpenDateFrag frag = (ProfileOpenDateFrag) profileFragment;
-                        frag.setSelectedId(this.selectedId);
-                        frag.refreshListAll();
-                    } else if (profileFragment instanceof ProfilePassportIdFrag) {
-                        ProfilePassportIdFrag frag = (ProfilePassportIdFrag) profileFragment;
-                        frag.setSelectedId(this.selectedId);
-                        frag.refreshListAll();
+//                    } else if (profileFragment instanceof ProfileCustomFrag) {
+//                        ProfileCustomFrag frag = (ProfileCustomFrag) profileFragment;
+//                        frag.setSelectedId(this.selectedId);
+//                        frag.refreshListAll();
+//                    } else if (profileFragment instanceof ProfileOpenDateFrag) {
+//                        ProfileOpenDateFrag frag = (ProfileOpenDateFrag) profileFragment;
+//                        frag.setSelectedId(this.selectedId);
+//                        frag.refreshListAll();
+//                    } else if (profileFragment instanceof ProfilePassportIdFrag) {
+//                        ProfilePassportIdFrag frag = (ProfilePassportIdFrag) profileFragment;
+//                        frag.setSelectedId(this.selectedId);
+//                        frag.refreshListAll();
                     }
                 }
                 break;
@@ -2985,26 +3020,30 @@ public class MainActivity extends AppCompatActivity
 //
 //    }
 
-    private void refreshDeletePos(int position) {
+    private void refreshNonDeletePos(int position) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         String stringFragmentName = fragmentManager.findFragmentById(R.id.fragment_container).getClass().getSimpleName();
 
         Log.d(TAG, stringFragmentName);
         Fragment profileFragment = fragmentManager.findFragmentById(R.id.fragment_container);
-        switch (stringFragmentName) {
-            case "ProfileCorpNameFrag":
-                ((ProfileCorpNameFrag) profileFragment).refreshListPos(position);
-                break;
-            case "ProfileOpenDateFrag":
-                ((ProfileOpenDateFrag) profileFragment).refreshListPos(position);
-                break;
-            case "ProfilePassportIdFrag":
-                ((ProfilePassportIdFrag) profileFragment).refreshListPos(position);
-                break;
-            case "ProfileCustomFrag":
-                ((ProfileCustomFrag) profileFragment).refreshListPos(position);
-                break;
+        if (profileFragment instanceof ProfileCorpNameFrag) {
+            ProfileCorpNameFrag frag = (ProfileCorpNameFrag) profileFragment;
+            frag.refreshListPos(position);
         }
+//        switch (stringFragmentName) {
+//            case "ProfileCorpNameFrag":
+//                ((ProfileCorpNameFrag) profileFragment).refreshListPos(position);
+//                break;
+//            case "ProfileOpenDateFrag":
+//                ((ProfileOpenDateFrag) profileFragment).refreshListPos(position);
+//                break;
+//            case "ProfilePassportIdFrag":
+//                ((ProfilePassportIdFrag) profileFragment).refreshListPos(position);
+//                break;
+//            case "ProfileCustomFrag":
+//                ((ProfileCustomFrag) profileFragment).refreshListPos(position);
+//                break;
+//        }
 
     }
 
@@ -3130,21 +3169,21 @@ public class MainActivity extends AppCompatActivity
 
 
 
-    @Override
-    public void onProfilePassportIdSelect(int selectedId, Profile profile) {
-        this.startUpProfileUpdate(selectedId, profile);
-    }
-
-    @Override
-    public void onProfileCustomListSelect(int selectedId, Profile profile) {
-        this.startUpProfileUpdate(selectedId, profile);
-    }
-
-
-    @Override
-    public void onProfileOpenDateListSelect(int selectedId, Profile profile) {
-        this.startUpProfileUpdate(selectedId, profile);
-    }
+//    @Override
+//    public void onProfilePassportIdSelect(int selectedId, Profile profile) {
+//        this.startUpProfileUpdate(selectedId, profile);
+//    }
+//
+//    @Override
+//    public void onProfileCustomListSelect(int selectedId, Profile profile) {
+//        this.startUpProfileUpdate(selectedId, profile);
+//    }
+//
+//
+//    @Override
+//    public void onProfileOpenDateListSelect(int selectedId, Profile profile) {
+//        this.startUpProfileUpdate(selectedId, profile);
+//    }
 
     @Override
     public void onProfileCorpNameListSelect(int selectedId, Profile profile) {
@@ -3163,18 +3202,19 @@ public class MainActivity extends AppCompatActivity
         alertConfirmDelete(profile, position);
     }
 
-    @Override
-    public void onDeleteConfirmOpenDate(Profile profile, int position) {
-        alertConfirmDelete(profile, position);
-    }
-
-    @Override
-    public void onDeleteConfirmPassportId(Profile profile, int position) {
-        alertConfirmDelete(profile, position);
-    }
+//    @Override
+//    public void onDeleteConfirmOpenDate(Profile profile, int position) {
+//        alertConfirmDelete(profile, position);
+//    }
+//
+//    @Override
+//    public void onDeleteConfirmPassportId(Profile profile, int position) {
+//        alertConfirmDelete(profile, position);
+//    }
 
     @Override
     public void onProfileCorpNameAdd() {
+        this.selectedId = -1;
         Profile profile = new Profile();
         AddEditProfileFrag fragment2 = new AddEditProfileFrag();
         Bundle args = new Bundle();
@@ -3238,7 +3278,7 @@ public class MainActivity extends AppCompatActivity
         dialogButtonNo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                refreshDeletePos(position);
+                refreshNonDeletePos(position);
                 dialog.dismiss();
             }
         });
@@ -3298,6 +3338,11 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    @Override
+    public void setMaxSeq(int maxSeq) {
+        this.currentMaxSeq = maxSeq;
+    }
+
     private void startUpProfileUpdate(int selectedId, Profile profile) {
 
 //        if (has2ndPanel) {
@@ -3316,30 +3361,34 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void selectAccountDetail(int selectedId, Profile profile) {
-            this.selectedId = selectedId;
+        this.selectedId = selectedId;
+        Log.d(TAG, "selectAccountDetail: selectedId " + this.selectedId);
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             Fragment profileFragment = fragmentManager.findFragmentById(R.id.fragment_container);
 //            ProfileCorpNameFrag frag = (ProfileCorpNameFrag)profileFragment;
 //            frag.refreshListAll();
             profileFragment = fragmentManager.findFragmentById(R.id.fragment_container);
-            if (profileFragment instanceof ProfileCorpNameFrag) {
-                ProfileCorpNameFrag frag = (ProfileCorpNameFrag) profileFragment;
-                frag.setSelectedId(this.selectedId);
-                frag.refreshListAll();
-            } else if (profileFragment instanceof ProfileCustomFrag) {
-                ProfileCustomFrag frag = (ProfileCustomFrag) profileFragment;
-                frag.setSelectedId(this.selectedId);
-                frag.refreshListAll();
-            } else if (profileFragment instanceof ProfileOpenDateFrag) {
-                ProfileOpenDateFrag frag = (ProfileOpenDateFrag) profileFragment;
-                frag.setSelectedId(this.selectedId);
-                frag.refreshListAll();
-            } else if (profileFragment instanceof ProfilePassportIdFrag) {
-                ProfilePassportIdFrag frag = (ProfilePassportIdFrag) profileFragment;
-                frag.setSelectedId(this.selectedId);
-                frag.refreshListAll();
-            }
+            ProfileCorpNameFrag frag = (ProfileCorpNameFrag) profileFragment;
+            frag.setSelectedId(this.selectedId);
+            frag.refreshListAll();
+//            if (profileFragment instanceof ProfileCorpNameFrag) {
+//                ProfileCorpNameFrag frag = (ProfileCorpNameFrag) profileFragment;
+//                frag.setSelectedId(this.selectedId);
+//                frag.refreshListAll();
+//            } else if (profileFragment instanceof ProfileCustomFrag) {
+//                ProfileCustomFrag frag = (ProfileCustomFrag) profileFragment;
+//                frag.setSelectedId(this.selectedId);
+//                frag.refreshListAll();
+//            } else if (profileFragment instanceof ProfileOpenDateFrag) {
+//                ProfileOpenDateFrag frag = (ProfileOpenDateFrag) profileFragment;
+//                frag.setSelectedId(this.selectedId);
+//                frag.refreshListAll();
+//            } else if (profileFragment instanceof ProfilePassportIdFrag) {
+//                ProfilePassportIdFrag frag = (ProfilePassportIdFrag) profileFragment;
+//                frag.setSelectedId(this.selectedId);
+//                frag.refreshListAll();
+//            }
 
 //            if (frame2 != null) {
 //                frame2.setVisibility(View.VISIBLE);

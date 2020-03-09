@@ -8,8 +8,8 @@ android {
         applicationId "com.kinsey.passwords"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 147
-        versionName "11.147"
+        versionCode 152
+        versionName "12.2"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         javaCompileOptions {

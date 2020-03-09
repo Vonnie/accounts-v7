@@ -147,6 +147,10 @@ public class AddEditProfileFrag extends Fragment
         mImgWebView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (textInputCorpWebsite.getEditText().getText().toString().trim().isEmpty()) {
+                    showDialogMsg("Have no website to link");
+                    return;
+                }
                 String corpWebsiteInput = textInputCorpWebsite.getEditText().getText().toString().trim();
                 Intent detailIntent = new Intent(getContext(), WebViewActivity.class);
                 detailIntent.putExtra(WebViewActivity.class.getSimpleName(), corpWebsiteInput);
@@ -246,7 +250,7 @@ public class AddEditProfileFrag extends Fragment
 
         lngOpenDate = bundle.getLong(EXTRA_OPEN_DATE_LONG, 0);
         lngBeginOpenDate = lngOpenDate;
-        Log.d(TAG, String.valueOf(lngOpenDate));
+        Log.d(TAG, "openDate " + String.valueOf(lngOpenDate));
         if (lngOpenDate == 0) {
             btnOpenDate.setText(R.string.openClickForCalendar);
 //            alertInfo("No Intents Open Date");
@@ -281,7 +285,9 @@ public class AddEditProfileFrag extends Fragment
         this.currProfile.setCorpName(bundle.getString(EXTRA_CORP_NAME));
         this.currProfile.setUserName(bundle.getString(EXTRA_USER_NAME));
         this.currProfile.setUserEmail(bundle.getString(EXTRA_USER_EMAIL));
-
+        this.currProfile.setCorpWebsite(bundle.getString(EXTRA_CORP_WEBSITE));
+        this.currProfile.setNote(bundle.getString(EXTRA_NOTE));
+        this.currProfile.setOpenLong(bundle.getLong(EXTRA_OPEN_DATE_LONG));
 
         Log.d(TAG, "setEditUICols: ids " + intId + " : " + intPassportId);
     }
@@ -298,6 +304,7 @@ public class AddEditProfileFrag extends Fragment
 
         //        setOpenDateCalendar(dte);
         this.currProfile = new Profile();
+        this.currProfile.setOpenLong(lngOpenDate);
     }
 
     private boolean validateUserEmail() {
@@ -381,12 +388,18 @@ public class AddEditProfileFrag extends Fragment
             return true;
         }
         if (!currProfile.getCorpWebsite().equals(textInputCorpWebsite.getEditText().getText().toString().trim())) {
+            Log.d(TAG, "haveChanges: corpWebsites not equal");
             return true;
         }
         if (!currProfile.getNote().equals(textInputNote.getEditText().getText().toString().trim())) {
+            Log.d(TAG, "haveChanges: corpWebsites not equal");
             return true;
         }
-        if (currProfile.getOpenLong() != lngBeginOpenDate) {
+        if (lngOpenDate != currProfile.getOpenLong()) {
+            Log.d(TAG, "haveChanges: open date not equal");
+            Log.d(TAG, "openDate " + String.valueOf(lngOpenDate));
+            Log.d(TAG, "openDate " + String.valueOf(lngBeginOpenDate));
+            Log.d(TAG, "openDate " + String.valueOf(currProfile.getOpenLong()));
             return true;
         }
         return false;
@@ -549,7 +562,8 @@ public class AddEditProfileFrag extends Fragment
                                               int monthOfYear, int dayOfMonth) {
 
 //                            btnOpenDate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
-                            btnOpenDate.setText(R.string.opened + " " + (monthOfYear + 1) + "/" + dayOfMonth + "/" + year);
+                            String strOpenDate = (monthOfYear + 1) + "/" + dayOfMonth + "/" + year;
+                            btnOpenDate.setText(String.format(getString(R.string.opened), strOpenDate));
                             Calendar c2 = Calendar.getInstance();
                             c2.set(year, monthOfYear, dayOfMonth);
                             lngOpenDate = c2.getTimeInMillis();

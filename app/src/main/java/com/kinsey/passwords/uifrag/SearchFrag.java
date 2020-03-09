@@ -19,6 +19,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -29,6 +30,7 @@ import com.kinsey.passwords.R;
 import com.kinsey.passwords.SearchActivity;
 import com.kinsey.passwords.items.Profile;
 import com.kinsey.passwords.provider.ProfileAdapter;
+import com.kinsey.passwords.provider.ProfileViewModel;
 import com.kinsey.passwords.provider.SearchAdapter;
 
 import java.util.ArrayList;
@@ -41,7 +43,8 @@ public class SearchFrag extends Fragment {
     private SearchAdapter adapter;
     private List<String> names;
     private String searchforValue = "";
-    AutoCompleteTextView editTextFilledExposedDropdown;
+    private AutoCompleteTextView editTextFilledExposedDropdown;
+    private ProfileViewModel profileViewModel;
 
     private OnSearchClickListener mListener;
     public interface OnSearchClickListener {
@@ -118,7 +121,8 @@ public class SearchFrag extends Fragment {
 //        }
 
 //        adapter = new ProfileAdapter(-1);
-        MainActivity.profileViewModel.getAllProfilesByCorpName().observe(getViewLifecycleOwner(), new Observer<List<Profile>>() {
+        profileViewModel = new ViewModelProvider(getActivity()).get(ProfileViewModel.class);
+        profileViewModel.getAllProfilesByCorpName().observe(getViewLifecycleOwner(), new Observer<List<Profile>>() {
             @Override
             public void onChanged(List<Profile> profiles) {
 

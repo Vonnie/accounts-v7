@@ -2,6 +2,7 @@ package com.kinsey.passwords;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
 import android.widget.TextView;
@@ -11,11 +12,13 @@ import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+import com.kinsey.passwords.provider.ProfileViewModel;
 
 public class AboutActivity extends AppCompatActivity {
     public static final String TAG = "AboutActivity";
 
     private AdView mAdView;
+    private ProfileViewModel profileViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +32,8 @@ public class AboutActivity extends AppCompatActivity {
         TextView tvDatabasename = findViewById(R.id.databasename);
         TextView tvVerNo = findViewById(R.id.ver_no);
         TextView tvVerName = findViewById(R.id.ver_name);
-        tvDatabasename.setText("DB: " + MainActivity.profileViewModel.dbMsg);
+        profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
+        tvDatabasename.setText("DB: " + profileViewModel.dbMsg);
         tvVerNo.setText("Ver#: " + BuildConfig.VERSION_CODE);
         tvVerName.setText("VerName: " + BuildConfig.VERSION_NAME);
 

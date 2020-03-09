@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProfilePassportIdFrag extends Fragment {
-    public static final String TAG = "ProfileCorpNameFrag";
+    public static final String TAG = "ProfilePassportIdFrag";
 
     private final String ARG_SELECTED_ID = "SELECTED_ID";
 
@@ -68,7 +68,6 @@ public class ProfilePassportIdFrag extends Fragment {
 
         recyclerView = view.findViewById(R.id.account_items_list_passport_id);
         recyclerView.setHasFixedSize(true);
-
 
         if (savedInstanceState == null) {
             Bundle bundle = getArguments();

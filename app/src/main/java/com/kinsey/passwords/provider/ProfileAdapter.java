@@ -36,6 +36,7 @@ public class ProfileAdapter extends ListAdapter<Profile, ProfileAdapter.ProfileH
             pattern_mdy, Locale.US);
 
     private OnItemClickListener listener;
+    private int listsortOrder;
 
     public ProfileAdapter(int selectedId) {
         super(DIFF_CALLBACK);
@@ -114,11 +115,11 @@ public class ProfileAdapter extends ListAdapter<Profile, ProfileAdapter.ProfileH
 
 //        textViewcolor.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.colorPrimary));
 
-        if (MainActivity.listsortOrder == MainActivity.LISTSORT_CORP_NAME ||
-        MainActivity.listsortOrder == MainActivity.LISTSORT_PASSPORT_ID) {
+        if (listsortOrder == MainActivity.LISTSORT_CORP_NAME ||
+        listsortOrder == MainActivity.LISTSORT_PASSPORT_ID) {
             holder.tvAcctId.setText(String.valueOf(currentProfile.getPassportId()));
         } else {
-            if (MainActivity.listsortOrder == MainActivity.LISTSORT_OPEN_DATE) {
+            if (listsortOrder == MainActivity.LISTSORT_OPEN_DATE) {
                 long lngOpenDate = currentProfile.getOpenLong();
                 if (lngOpenDate == 0) {
                     holder.tvAcctId.setText("");
@@ -126,7 +127,7 @@ public class ProfileAdapter extends ListAdapter<Profile, ProfileAdapter.ProfileH
                     holder.tvAcctId.setText(format_mdy.format(lngOpenDate));
                 }
             } else {
-                if (MainActivity.listsortOrder == MainActivity.LISTSORT_CUSTOM_SORT) {
+                if (listsortOrder == MainActivity.LISTSORT_CUSTOM_SORT) {
                     holder.tvAcctId.setText("");
                 } else {
                     holder.tvAcctId.setText(String.valueOf(currentProfile.getSequence()));
@@ -219,5 +220,7 @@ public class ProfileAdapter extends ListAdapter<Profile, ProfileAdapter.ProfileH
         this.selectedId = selectedId;
     }
 
-
+    public void setListsortOrder(int listsortOrder) {
+        this.listsortOrder = listsortOrder;
+    }
 }

@@ -101,6 +101,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
                     android:contentDescription="@string/acct_show_website"
+                    android:backgroundTint="@color/secondaryColor"
                     android:textColor="@color/secondaryTextColor"
                     app:srcCompat="@drawable/ic_http" />
 
