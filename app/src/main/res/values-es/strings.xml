@@ -194,9 +194,8 @@
     <string name="search_title">Buscar cuentas</string>
     <string name="about_title">Aplicación de cuentas Acerca de</string>
     <string name="datePickerTitle">Fecha de apertura del perfil de cuenta</string>
-    <string name="add_first_account">¿Quieres agregar la primera cuenta?</string>
+    <string name="add_first_account">Agrega la primera cuenta. Ingrese la información de la cuenta, haga clic en el icono Guardar.</string>
     <string name="getting_started">¿Empezando?</string>
-    <string name="if_so_direction">Si es así, haga clic en \'sí\' o haga clic en el botón más (+) a continuación para agregar una nueva cuenta</string>
     <string name="account_updated">cuenta actualizada</string>
     <string name="ask_go_to_list">¿Quieres mostrar el listado de cuentas?</string>
     <string name="opened">abrió %1$s</string>
@@ -206,4 +205,5 @@
     <string name="id_descr">Carné de identidad %1$s</string>
     <string name="openClickForCalendar">Haga clic para ver el calendario para la fecha de apertura</string>
     <string name="hint_text">Escriba Buscar o haga clic para seleccionar de la lista desplegable</string>
+    <string name="if_so_direction">Si es así, haga clic en \'sí\' o haga clic en el botón más (+) de arriba para agregar una nueva cuenta</string>
 </resources>

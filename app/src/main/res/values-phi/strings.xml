@@ -193,8 +193,7 @@
     <string name="search_title">Mga Account sa Paghahanap</string>
     <string name="datePickerTitle">Bukas na Petsa ng Profile ng Account</string>
     <string name="getting_started">Nagsisimula?</string>
-    <string name="add_first_account">Nais mo bang magdagdag ng unang account?</string>
-    <string name="if_so_direction">Kung gayon, i-click ang \'oo\' o mag-click sa button na plus (+) sa ibaba upang magdagdag ng isang bagong account</string>
+    <string name="add_first_account">Idagdag ang unang account. Ipasok ang impormasyon sa account, i-click ang i-save ang icon.</string>
     <string name="opened">Binuksan %1$s</string>
     <string name="account_added">Idinagdag ang Account</string>
     <string name="account_updated">Nai-update ang Account</string>
@@ -204,4 +203,5 @@
     <string name="id_descr">Id %1$s</string>
     <string name="opened_button_descr">Nabuksan ang petsa, default ay Kasalukuyang Petsa %1$s</string>
     <string name="seq_descr">Seq %1$s</string>
+    <string name="if_so_direction">Kung gayon, mag-click sa \'oo\' o mag-click sa button na plus (+) sa itaas upang magdagdag ng isang bagong account</string>
 </resources>

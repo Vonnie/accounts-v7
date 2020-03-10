@@ -19,6 +19,7 @@ import com.google.android.gms.ads.AdView;
 import com.google.android.material.textfield.TextInputLayout;
 import com.kinsey.passwords.items.Profile;
 import com.kinsey.passwords.provider.ProfileAdapter;
+import com.kinsey.passwords.provider.ProfileViewModel;
 import com.kinsey.passwords.tools.ProfileJsonListIO;
 
 import androidx.annotation.Nullable;
@@ -26,6 +27,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.util.Log;
 import android.view.Menu;
@@ -60,7 +62,7 @@ public class FileViewActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private WebView webView;
     private ProfileAdapter adapter;
-//    private ProfileViewModel profileViewModel;
+    private ProfileViewModel profileViewModel;
 
 //    private Handler mHandler = new Handler();
 //    boolean importRefreshReq = false;
@@ -122,8 +124,8 @@ public class FileViewActivity extends AppCompatActivity {
 
 
         adapter = new ProfileAdapter(-1);
-//        profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
-        MainActivity.profileViewModel.getAllProfilesByCorpName().observe(this, new Observer<List<Profile>>() {
+        this.profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
+        profileViewModel.getAllProfilesByCorpName().observe(this, new Observer<List<Profile>>() {
             @Override
             public void onChanged(List<Profile> profiles) {
                 adapter.submitList(profiles);
@@ -731,7 +733,7 @@ public class FileViewActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     new UploadProfileAsyncTask(getApplicationContext(),
-                            webView, progressBar).execute(storageFilename);
+                            webView, progressBar, profileViewModel).execute(storageFilename);
                     blnListRestored = true;
                     dialog.dismiss();
                 }
@@ -1144,13 +1146,16 @@ public class FileViewActivity extends AppCompatActivity {
         Context context;
         private WebView webView;
         private ProgressBar progressBar;
+        private ProfileViewModel profileViewModel;
 
         private UploadProfileAsyncTask(Context context,
                                        WebView webView,
-                                       ProgressBar progressBar) {
+                                       ProgressBar progressBar,
+                                       ProfileViewModel profileViewModel) {
             this.context = context;
             this.webView = webView;
             this.progressBar = progressBar;
+            this.profileViewModel = profileViewModel;
         }
 
         @Override
@@ -1207,10 +1212,10 @@ public class FileViewActivity extends AppCompatActivity {
 
             this.webView.loadData(msgDisplay, "text/html", null);
 
-            MainActivity.profileViewModel.deleteAllProfiles();
+            this.profileViewModel.deleteAllProfiles();
             Log.d(TAG, "run: delete all complete ");
 
-            MainActivity.profileViewModel.insertAll(listAccounts);
+            this.profileViewModel.insertAll(listAccounts);
             Log.d(TAG, "run: upload complete ");
 
 

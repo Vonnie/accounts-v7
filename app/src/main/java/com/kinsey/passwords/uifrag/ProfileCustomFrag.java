@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -24,6 +25,7 @@ import com.kinsey.passwords.MainActivity;
 import com.kinsey.passwords.R;
 import com.kinsey.passwords.items.Profile;
 import com.kinsey.passwords.provider.ProfileAdapter;
+import com.kinsey.passwords.provider.ProfileViewModel;
 import com.kinsey.passwords.provider.RecyclerViewPositionHelper;
 
 import java.util.ArrayList;
@@ -37,7 +39,7 @@ public class ProfileCustomFrag extends Fragment {
     Context context;
     RecyclerView recyclerView;
     RecyclerViewPositionHelper mRecyclerViewHelper;
-//    ProfileViewModel profileViewModel;
+    private ProfileViewModel profileViewModel;
     private List<Profile> profileListFull;
     private ProfileAdapter adapter = new ProfileAdapter(-1);
     boolean onFirstReported = true;
@@ -121,8 +123,8 @@ public class ProfileCustomFrag extends Fragment {
         recyclerView.setAdapter(adapter);
         mRecyclerViewHelper = RecyclerViewPositionHelper.createHelper(recyclerView);
 
-//        profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
-        MainActivity.profileViewModel.getAllProfilesCustomSort().observe(getViewLifecycleOwner(), new Observer<List<Profile>>() {
+        profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
+        profileViewModel.getAllProfilesCustomSort().observe(getViewLifecycleOwner(), new Observer<List<Profile>>() {
             @Override
             public void onChanged(List<Profile> profiles) {
 
@@ -346,7 +348,7 @@ public class ProfileCustomFrag extends Fragment {
 
 
                     for (Profile item : modifyProfileList) {
-                        MainActivity.profileViewModel.update(item);
+                        profileViewModel.update(item);
                     }
 
 
@@ -437,7 +439,7 @@ public class ProfileCustomFrag extends Fragment {
             }
             newSeq += 1;
             item.setSequence(newSeq);
-            MainActivity.profileViewModel.update(item);
+            profileViewModel.update(item);
         }
         for ( Profile item : currentList) {
             if (item.getSequence() != 0) {
@@ -445,7 +447,7 @@ public class ProfileCustomFrag extends Fragment {
             }
             newSeq += 1;
             item.setSequence(newSeq);
-            MainActivity.profileViewModel.update(item);
+            profileViewModel.update(item);
         }
 
 
@@ -472,16 +474,16 @@ public class ProfileCustomFrag extends Fragment {
     }
 
 
-    public void deleteFromList(int profileId) {
-        List<Profile> profiles = adapter.getCurrentList();
-        for (Profile item : profiles) {
-            if (item.getPassportId() == profileId) {
-                MainActivity.profileViewModel.delete(item);
-                break;
-            }
-        }
-        refreshList();
-    }
+//    public void deleteFromList(int profileId) {
+//        List<Profile> profiles = adapter.getCurrentList();
+//        for (Profile item : profiles) {
+//            if (item.getPassportId() == profileId) {
+//                MainActivity.profileViewModel.delete(item);
+//                break;
+//            }
+//        }
+//        refreshList();
+//    }
 
 
     public int getSelectedId() {

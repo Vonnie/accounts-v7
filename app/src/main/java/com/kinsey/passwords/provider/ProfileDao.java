@@ -59,4 +59,7 @@ public interface ProfileDao {
     @Query("SELECT * FROM passport_detail ORDER BY sequence DESC LIMIT 1")
     LiveData<Profile> getMaxSequence();
 
+    @Query("SELECT count(*) FROM passport_detail")
+    LiveData<Integer> getCount();
+
 }

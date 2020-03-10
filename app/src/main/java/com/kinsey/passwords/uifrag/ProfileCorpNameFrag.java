@@ -31,6 +31,7 @@ import com.kinsey.passwords.items.Profile;
 import com.kinsey.passwords.provider.ProfileAdapter;
 import com.kinsey.passwords.provider.ProfileViewModel;
 import com.kinsey.passwords.provider.RecyclerViewPositionHelper;
+import com.kinsey.passwords.provider.Task;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -245,9 +246,11 @@ public class ProfileCorpNameFrag extends Fragment {
 
 //        tvListTitle.setText(MainActivity.profileViewModel.dbMsg);
 
-
-        regularTouchHelper();
-
+        if (listsortOrder == MainActivity.LISTSORT_CUSTOM_SORT) {
+            customSeqTouchHelper();
+        } else {
+            regularTouchHelper();
+        }
 
         adapter.setOnItemClickListener(new ProfileAdapter.OnItemClickListener() {
             @Override
@@ -386,15 +389,15 @@ public class ProfileCorpNameFrag extends Fragment {
 //                    return;
 //                }
 
-//                if (toViewHolder != null) {
-//                    toViewHolder.itemView.setBackgroundColor(
-//                            ContextCompat.getColor(getApplicationContext(), R.color.primaryDarkColor)
-//                    );
-//                }
+                if (toViewHolder != null) {
+                    toViewHolder.itemView.setBackgroundColor(
+                            ContextCompat.getColor(getContext(), R.color.primaryDarkColor)
+                    );
+                }
 
-//                target.itemView.setBackgroundColor(
-//                        ContextCompat.getColor(getApplicationContext(), R.color.secondaryDarkColor)
-//                );
+                target.itemView.setBackgroundColor(
+                        ContextCompat.getColor(getContext(), R.color.primaryTextColor)
+                );
 
                 toViewHolder = target;
 
@@ -495,8 +498,10 @@ public class ProfileCorpNameFrag extends Fragment {
                     }
 
 
-                    for (Profile item : modifyProfileList) {
-                        MainActivity.profileViewModel.update(item);
+                    if (modifyProfileList != null) {
+                        for (Profile item : modifyProfileList) {
+                            profileViewModel.update(item);
+                        }
                     }
 
 
@@ -572,8 +577,9 @@ public class ProfileCorpNameFrag extends Fragment {
                 } else {
                     Log.d(TAG, "onCreateView: getItemCount " +  adapter.getItemCount());
                     if (adapter.getItemCount() == 0) {
+//                        mListener.onProfileCorpNameAdd();
                         mListener.onEmptyWarning();
-                    } else {
+//                    } else {
                         if (adapter.getSelectedId() == -1) {
                             recyclerView.scrollToPosition(0);
                         } else {
@@ -798,7 +804,19 @@ public class ProfileCorpNameFrag extends Fragment {
 
 
 
+    public void deleteProfileViewModelItem(Profile profile) {
+        profileViewModel.delete(profile);
+    }
 
+
+    public void updateProfileViewModelItem(Profile profile) {
+        profileViewModel.update(profile);
+    }
+
+
+    public void insertProfileViewModelItem(Profile profile, Task task) {
+        profileViewModel.insertProfile(profile, task);
+    }
 
 
     public void deleteFromList(int profileId) {

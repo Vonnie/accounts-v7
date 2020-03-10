@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.kinsey.passwords.items.Profile;
+import com.kinsey.passwords.provider.ProfileViewModel;
 import com.kinsey.passwords.provider.SearchAdapter;
 
 import java.text.SimpleDateFormat;
@@ -43,7 +44,7 @@ public class SearchActivity extends AppCompatActivity {
     private TextInputLayout textInputSearchCorpName;
 
     private SearchAdapter adapter;
-//    private ProfileViewModel profileViewModel;
+    private ProfileViewModel profileViewModel;
 
     private TextView tvActvyDate;
     private DatePicker mDtePickOpen;
@@ -159,7 +160,7 @@ public class SearchActivity extends AppCompatActivity {
     private void searchResults(String searchfor) {
         this.searchforValue = searchfor;
         String searchforreq = "%" + searchfor + "%";
-        MainActivity.profileViewModel.searchCorpNameProfiles(searchforreq).observe(this, new Observer<List<Profile>>() {
+        profileViewModel.searchCorpNameProfiles(searchforreq).observe(this, new Observer<List<Profile>>() {
             @Override
             public void onChanged(List<Profile> profiles) {
                 Log.d(TAG, "profiles search len " + profiles.size());
@@ -209,7 +210,7 @@ public class SearchActivity extends AppCompatActivity {
                 profile.setOpenLong(lngDate);
                 profile.setActvyLong(System.currentTimeMillis());
 
-                MainActivity.profileViewModel.update(profile);
+                profileViewModel.update(profile);
                 Toast.makeText(this, getString(R.string.toast_profile_updated), Toast.LENGTH_SHORT).show();
                 Log.d(TAG, "profile updated");
                 break;

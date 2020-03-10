@@ -200,8 +200,8 @@
     <string name="about_title">Accounts App About</string>
     <string name="datePickerTitle">Account Profile Open Date</string>
     <string name="getting_started">Getting Started?</string>
-    <string name="add_first_account">Do you want to add the first account?</string>
-    <string name="if_so_direction">If so, click \'yes\' or click on the plus(+) button below to add a new account</string>
+    <string name="add_first_account">Add the first account. Enter account info, click save icon.</string>
+    <string name="if_so_direction">If so, click \'yes\' or click on the plus(+) button above to add a new account</string>
     <string name="opened">Opened %1$s</string>
     <string name="account_added">Account Added</string>
     <string name="account_updated">Account Updated</string>

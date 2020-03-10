@@ -194,9 +194,8 @@
     <string name="search_title">Konten durchsuchen</string>
     <string name="about_title">Accounts App Über</string>
     <string name="datePickerTitle">Konto Profil Eröffnungsdatum</string>
-    <string name="add_first_account">Möchten Sie das erste Konto hinzufügen?</string>
+    <string name="add_first_account">Fügen Sie das erste Konto hinzu. Geben Sie die Kontoinformationen ein und klicken Sie auf das Symbol Speichern.</string>
     <string name="getting_started">fertig machen</string>
-    <string name="if_so_direction">Klicken Sie in diesem Fall auf \"Ja\" oder auf das Pluszeichen (+), um ein neues Konto hinzuzufügen</string>
     <string name="account_updated">Konto aktualisiert</string>
     <string name="ask_go_to_list">Möchten Sie die Kontenliste anzeigen?</string>
     <string name="opened">geöffnet %1$s</string>
@@ -206,4 +205,5 @@
     <string name="id_descr" translatable="false">Ich würde %1$s</string>
     <string name="seq_descr">Seq %1$s</string>
     <string name="opened_button_descr">Öffnungsdatum, Standard ist Aktuelles Datum %1$s</string>
+    <string name="if_so_direction">Wenn ja, klicken Sie auf \"Ja\" oder auf das Pluszeichen (+) oben, um ein neues Konto hinzuzufügen</string>
 </resources>

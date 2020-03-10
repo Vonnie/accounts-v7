@@ -230,7 +230,7 @@ public class SearchFrag extends Fragment {
     private void searchResults(String searchfor) {
         this.searchforValue = searchfor;
         String searchforreq = "%" + searchfor + "%";
-        MainActivity.profileViewModel.searchCorpNameProfiles(searchforreq).observe(this, new Observer<List<Profile>>() {
+        profileViewModel.searchCorpNameProfiles(searchforreq).observe(this, new Observer<List<Profile>>() {
             @Override
             public void onChanged(List<Profile> profiles) {
                 Log.d(TAG, "profiles search len " + profiles.size());

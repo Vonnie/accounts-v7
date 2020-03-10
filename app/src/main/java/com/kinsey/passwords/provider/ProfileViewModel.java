@@ -82,6 +82,10 @@ public class ProfileViewModel extends AndroidViewModel
         return allProfiles;
     }
 
+    public LiveData<Integer> getCount() {
+        return repository.getCount();
+    }
+
     @Override
     public void processInsert(Profile profile) {
         

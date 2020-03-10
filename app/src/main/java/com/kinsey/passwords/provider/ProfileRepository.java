@@ -106,6 +106,10 @@ public class ProfileRepository {
         return allProfiles;
     }
 
+    public LiveData<Integer> getCount() {
+        return profileDao.getCount();
+    }
+
     private static class InsertProfileAsyncTask extends AsyncTask<Profile, Void, Profile> {
         private static final String TAG = "InsertProfileAsyncTask";
         private ProfileDao mDao;

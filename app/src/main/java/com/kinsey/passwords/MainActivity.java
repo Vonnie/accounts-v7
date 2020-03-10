@@ -7,15 +7,12 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -38,7 +35,6 @@ import android.widget.Toast;
 //import com.google.android.gms.common.api.ApiException;
 //import com.google.android.gms.tasks.OnCompleteListener;
 //import com.google.android.gms.tasks.Task;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 //import com.google.firebase.auth.AuthCredential;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
@@ -46,7 +42,6 @@ import com.google.firebase.auth.FirebaseUser;
 //import com.google.firebase.auth.GoogleAuthProvider;
 import com.kinsey.passwords.items.Profile;
 import com.kinsey.passwords.items.Suggest;
-import com.kinsey.passwords.provider.ProfileViewModel;
 import com.kinsey.passwords.provider.Task;
 import com.kinsey.passwords.uifrag.AddEditProfileFrag;
 import com.kinsey.passwords.uifrag.ProfileCorpNameFrag;
@@ -191,7 +186,7 @@ public class MainActivity extends AppCompatActivity
 //    View fragCustom;
 
     RecyclerView recyclerView;
-    public static ProfileViewModel profileViewModel;
+//    public static ProfileViewModel profileViewModel;
 //    public static ProfileAdapter adapter = new ProfileAdapter();
 //    private Profile profileMaxItem;
     private int currentMaxSeq = 0;
@@ -2333,59 +2328,60 @@ public class MainActivity extends AppCompatActivity
 //        Log.d(TAG, "onActivityResult: resultCode " + resultCode);
         // Check which request we're responding to
         switch (requestCode) {
-            case ADD_PROFILE_REQUEST: {
-                String corpName = data.getStringExtra(AddEditProfileActivity.EXTRA_CORP_NAME);
-                String userName = data.getStringExtra(AddEditProfileActivity.EXTRA_USER_NAME);
-                String userEmail = data.getStringExtra(AddEditProfileActivity.EXTRA_USER_EMAIL);
-                String corpWebsite = data.getStringExtra(AddEditProfileActivity.EXTRA_CORP_WEBSITE);
+//            case ADD_PROFILE_REQUEST: {
+//                String corpName = data.getStringExtra(AddEditProfileActivity.EXTRA_CORP_NAME);
+//                String userName = data.getStringExtra(AddEditProfileActivity.EXTRA_USER_NAME);
+//                String userEmail = data.getStringExtra(AddEditProfileActivity.EXTRA_USER_EMAIL);
+//                String corpWebsite = data.getStringExtra(AddEditProfileActivity.EXTRA_CORP_WEBSITE);
+////                int sequence = data.getIntExtra(AddEditProfileActivity.EXTRA_SEQUENCE, 0);
+//                String note = data.getStringExtra(AddEditProfileActivity.EXTRA_NOTE);
+//
+//                Profile profile = new Profile(currentMaxSeq + 1,
+//                        corpName, userName, userEmail, corpWebsite);
+//                profile.setNote(note);
+//                long lngDate = data.getLongExtra(AddEditProfileActivity.EXTRA_OPEN_DATE_LONG, 0);
+//                Log.d(TAG, "add profile openDate " + lngDate);
+//                profile.setOpenLong(lngDate);
+//                profile.setActvyLong(System.currentTimeMillis());
+////                profile.setActvyLong((new Date()).getTime());
+//
+//                profileViewModel.insertProfile(profile, this);
+//
+//                itemAdded = true;
+//
+//                Log.d(TAG, "profile added");
+//                Toast.makeText(this, R.string.toast_profile_added, Toast.LENGTH_SHORT).show();
+//                break;
+//            }
+
+//            case EDIT_PROFILE_REQUEST: {
+//                int id = data.getIntExtra(AddEditProfileActivity.EXTRA_ID, -1);
+//
+//                if (id == -1) {
+//                    Toast.makeText(this, R.string.toast_error_profile_not_updated, Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+//
+//                int passportId = data.getIntExtra(AddEditProfileActivity.EXTRA_PASSPORT_ID, 0);
 //                int sequence = data.getIntExtra(AddEditProfileActivity.EXTRA_SEQUENCE, 0);
-                String note = data.getStringExtra(AddEditProfileActivity.EXTRA_NOTE);
-
-                Profile profile = new Profile(currentMaxSeq + 1,
-                        corpName, userName, userEmail, corpWebsite);
-                profile.setNote(note);
-                long lngDate = data.getLongExtra(AddEditProfileActivity.EXTRA_OPEN_DATE_LONG, 0);
-                Log.d(TAG, "add profile openDate " + lngDate);
-                profile.setOpenLong(lngDate);
-                profile.setActvyLong(System.currentTimeMillis());
-//                profile.setActvyLong((new Date()).getTime());
-
-                profileViewModel.insertProfile(profile, this);
-
-                itemAdded = true;
-
-                Log.d(TAG, "profile added");
-                Toast.makeText(this, R.string.toast_profile_added, Toast.LENGTH_SHORT).show();
-                break;
-            }
-            case EDIT_PROFILE_REQUEST: {
-                int id = data.getIntExtra(AddEditProfileActivity.EXTRA_ID, -1);
-
-                if (id == -1) {
-                    Toast.makeText(this, R.string.toast_error_profile_not_updated, Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                int passportId = data.getIntExtra(AddEditProfileActivity.EXTRA_PASSPORT_ID, 0);
-                int sequence = data.getIntExtra(AddEditProfileActivity.EXTRA_SEQUENCE, 0);
-                String corpName = data.getStringExtra(AddEditProfileActivity.EXTRA_CORP_NAME);
-                String userName = data.getStringExtra(AddEditProfileActivity.EXTRA_USER_NAME);
-                String userEmail = data.getStringExtra(AddEditProfileActivity.EXTRA_USER_EMAIL);
-                String corpWebsite = data.getStringExtra(AddEditProfileActivity.EXTRA_CORP_WEBSITE);
-                String note = data.getStringExtra(AddEditProfileActivity.EXTRA_NOTE);
-
-                Profile profile = new Profile(sequence, corpName, userName, userEmail, corpWebsite);
-                profile.setId(id);
-                profile.setPassportId(passportId);
-                profile.setNote(note);
-                long lngDate = data.getLongExtra(AddEditProfileActivity.EXTRA_OPEN_DATE_LONG, 0);
-                profile.setOpenLong(lngDate);
-                profile.setActvyLong(System.currentTimeMillis());
-
-                profileViewModel.update(profile);
-                Toast.makeText(this, R.string.toast_profile_updated, Toast.LENGTH_SHORT).show();
-                break;
-            }
+//                String corpName = data.getStringExtra(AddEditProfileActivity.EXTRA_CORP_NAME);
+//                String userName = data.getStringExtra(AddEditProfileActivity.EXTRA_USER_NAME);
+//                String userEmail = data.getStringExtra(AddEditProfileActivity.EXTRA_USER_EMAIL);
+//                String corpWebsite = data.getStringExtra(AddEditProfileActivity.EXTRA_CORP_WEBSITE);
+//                String note = data.getStringExtra(AddEditProfileActivity.EXTRA_NOTE);
+//
+//                Profile profile = new Profile(sequence, corpName, userName, userEmail, corpWebsite);
+//                profile.setId(id);
+//                profile.setPassportId(passportId);
+//                profile.setNote(note);
+//                long lngDate = data.getLongExtra(AddEditProfileActivity.EXTRA_OPEN_DATE_LONG, 0);
+//                profile.setOpenLong(lngDate);
+//                profile.setActvyLong(System.currentTimeMillis());
+//
+//                profileViewModel.update(profile);
+//                Toast.makeText(this, R.string.toast_profile_updated, Toast.LENGTH_SHORT).show();
+//                break;
+//            }
 
             case REQUEST_VIEW_EXPORT:
                 Log.d(TAG, "onActivityResult: fileView return");
@@ -3268,7 +3264,9 @@ public class MainActivity extends AppCompatActivity
         dialogButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                profileViewModel.delete(profile);
+//                profileViewModel.delete(profile);
+                ProfileCorpNameFrag frag = getProfileFrag();
+                frag.deleteProfileViewModelItem(profile);
                 dialog.dismiss();
             }
         });
@@ -3309,34 +3307,103 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onEmptyWarning() {
+        FrameLayout frame = findViewById(R.id.fragment_container);
         if (itemAdded) {
+            frame.setVisibility(View.VISIBLE);
             return;
         }
-        android.app.AlertDialog.Builder alertDialogBuilder = new android.app.AlertDialog.Builder(this);
+        frame.setVisibility(View.GONE);
 
-        alertDialogBuilder.setMessage(getString(R.string.getting_started) + "\n" +
-                getString(R.string.add_first_account) + "\n" +
-    getString(R.string.if_so_direction));
-        alertDialogBuilder.setPositiveButton(R.string.yes,
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface arg0, int arg1) {
+        String msg = getString(R.string.getting_started) + "\n" +
+                getString(R.string.add_first_account);
+//        + "\n" +
+//                getString(R.string.if_so_direction);
 
-                        Intent intent = new Intent(MainActivity.this, AddEditProfileActivity.class);
-                        startActivityForResult(intent, ADD_PROFILE_REQUEST);
-
-                    }
-                })
-                .setNegativeButton("No",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                            }
-                        });
+        final Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.dialog_msg_ok);
+        dialog.setTitle("Account Modify Info");
 
 
-        android.app.AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
+        TextView text = (TextView) dialog.findViewById(R.id.text);
+        text.setText(msg);
+        ImageView image = (ImageView) dialog.findViewById(R.id.image);
+        image.setImageResource(R.drawable.ic_info_black_24dp);
+
+        Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
+        // if button is clicked, close the custom dialog
+        dialogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                dialog.dismiss();
+                itemAdded = true;
+
+                onProfileCorpNameAdd();
+
+            }
+        });
+
+        dialog.show();
+
+
+
+//        android.app.AlertDialog.Builder alertDialogBuilder = new android.app.AlertDialog.Builder(this);
+//
+//        alertDialogBuilder.setMessage(getString(R.string.getting_started) + "\n" +
+//                getString(R.string.add_first_account) + "\n" +
+//    getString(R.string.if_so_direction));
+//
+//
+//        alertDialogBuilder.setPositiveButton(R.string.yes,
+//                new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface arg0, int arg1) {
+//
+//                        itemAdded = true;
+//
+//                        onProfileCorpNameAdd();
+//
+//
+////                        Intent intent = new Intent(MainActivity.this, AddEditProfileActivity.class);
+////                        startActivityForResult(intent, ADD_PROFILE_REQUEST);
+//
+//                    }
+//                })
+//                .setNegativeButton("No",
+//                        new DialogInterface.OnClickListener() {
+//                            public void onClick(DialogInterface dialog, int which) {
+//                            }
+//                        });
+//
+//
+//        android.app.AlertDialog alertDialog = alertDialogBuilder.create();
+//        alertDialog.show();
 
     }
+
+
+
+//    public void msgDialog(String msg) {
+//        final Dialog dialog = new Dialog(this);
+//        dialog.setContentView(R.layout.dialog_msg_ok);
+//        dialog.setTitle("Account Modify Info");
+//
+//        TextView text = (TextView) dialog.findViewById(R.id.text);
+//        text.setText(msg);
+//        ImageView image = (ImageView) dialog.findViewById(R.id.image);
+//        image.setImageResource(R.drawable.ic_info_black_24dp);
+//
+//
+//        Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
+//        // if button is clicked, close the custom dialog
+//        dialogButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                dialog.dismiss();
+//            }
+//        });
+//
+//        dialog.show();
+//    }
 
     @Override
     public void setMaxSeq(int maxSeq) {
@@ -3358,6 +3425,14 @@ public class MainActivity extends AppCompatActivity
         } else {
             selectAccountDetail(selectedId, profile);
         }
+    }
+
+    private ProfileCorpNameFrag getProfileFrag() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        Fragment profileFragment = fragmentManager.findFragmentById(R.id.fragment_container);
+        ProfileCorpNameFrag frag = (ProfileCorpNameFrag) profileFragment;
+        return frag;
     }
 
     private void selectAccountDetail(int selectedId, Profile profile) {
@@ -3515,7 +3590,10 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onProfileModifyItem(Profile profile) {
-        profileViewModel.update(profile);
+        ProfileCorpNameFrag frag = getProfileFrag();
+        frag.updateProfileViewModelItem(profile);
+
+//        profileViewModel.update(profile);
     }
 
 
@@ -3523,7 +3601,9 @@ public class MainActivity extends AppCompatActivity
     public void onProfileAddItem(Profile profile) {
         profile.setId(0);
         profile.setSequence(currentMaxSeq + 1);
-        profileViewModel.insertProfile(profile, this);
+        ProfileCorpNameFrag frag = getProfileFrag();
+        frag.insertProfileViewModelItem(profile, this);
+//        profileViewModel.insertProfile(profile, this);
     }
 
     @Override

@@ -214,16 +214,16 @@ public class ProfileOpenDateFrag extends Fragment {
     }
 
 
-    public void deleteFromList(int profileId) {
-        List<Profile> profiles = adapter.getCurrentList();
-        for (Profile item : profiles) {
-            if (item.getPassportId() == profileId) {
-                MainActivity.profileViewModel.delete(item);
-                break;
-            }
-        }
-        refreshList();
-    }
+//    public void deleteFromList(int profileId) {
+//        List<Profile> profiles = adapter.getCurrentList();
+//        for (Profile item : profiles) {
+//            if (item.getPassportId() == profileId) {
+//                MainActivity.profileViewModel.delete(item);
+//                break;
+//            }
+//        }
+//        refreshList();
+//    }
 
     public int getSelectedId() {
         return this.adapter.getSelectedId();
