@@ -105,9 +105,9 @@
     <string name="home_message_text_9">Wachtwoord Suggesties menulijst wachtwoorden. Menu genereren geeft 10 wachtwoorden terug. Wachtwoorden hebben een grootte van 8 of 10 tekens, afhankelijk van het verzoek van de gebruiker. Deze wachtwoorden bevatten één cijfer, één symbool, één hoofdletter. De letters van wachtwoorden worden geselecteerd op basis van de locatie op het toetsenbord, hetzij van links of rechts.</string>
     <string name="home_message_text_25">Als deze app wordt verwijderd, worden de back-upgegevens met de installatie verwijderd. Kopiëren naar een andere ruimte of delen vanuit het menu Delen om te behouden</string>
     <string name="home_message_text_24">Speciale opmerking</string>
-    <string name="addedit_corp_name_hint">Bedrijfsnaam vereist</string>
+    <string name="addedit_corp_name_hint">Bedrijfsnaam (verplicht)</string>
     <string name="addedit_email_hint">E-mailadres gebruiker vereist</string>
-    <string name="addedit_name_hint">Gebruikersnaam (verplicht</string>
+    <string name="addedit_name_hint">gebruikersnaam (verplicht)</string>
     <string name="addedit_notes">aantekeningen</string>
     <string name="acctlist_by_account_id">Op account-ID</string>
     <string name="acctlist_by_corp_name">Op bedrijfsnaam</string>
@@ -164,7 +164,7 @@
     <string name="fv_msg_25">Verlening machtigingsinstructie</string>
     <string name="fv_msg_26">Toegang verlenen voor deze app via Instellingen</string>
     <string name="fv_msg_27">Selecteer de app Accounts in de applijst. Selecteer machtigingen. Zet vervolgens op Opslag.</string>
-    <string name="fv_msg_28">Zodra de toestemming is verleend, keert u terug naar de DB.</string>
+    <string name="fv_msg_28">Nadat toestemming is verleend, keert u terug naar deze activiteit</string>
     <string name="fv_msg_29">verwittigen</string>
     <string name="fv_msg_30">Vanaf versienaam 11 is de back-upopslag verplaatst. Zie Bestandsnaam vanuit het menu</string>
     <string name="fv_msg_31">Back-upbestand bestaat niet.</string>

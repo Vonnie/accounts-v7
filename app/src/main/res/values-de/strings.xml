@@ -55,7 +55,7 @@
     <string name="fv_msg_34">Sicherung bestätigen</string>
     <string name="fv_msg_35">Bestätigen Sie die Wiederherstellung der Sicherungsdatei in der Daten-DB</string>
     <string name="about_copyright">Copyright © 2020</string>
-    <string name="addedit_corp_name_hint">Firmenname erforderlich</string>
+    <string name="addedit_corp_name_hint">Firmenname (erforderlich)</string>
     <string name="fv_msg_36">erstellt</string>
     <string name="menuacct_sort_custom">benutzerdefinierte Sortierung</string>
     <string name="menu_showdate">Datum</string>
@@ -110,7 +110,7 @@
     <string name="fv_msg_29">benachrichtigen</string>
     <string name="fv_msg_2">Benachrichtigen: Bei der Deinstallation der App wird auch die exportierte / gesicherte Datei gelöscht.</string>
     <string name="fv_msg_39">Kein Upload / Update</string>
-    <string name="fv_msg_28">Kehren Sie nach Erteilung der Berechtigung zum Sichern der Datenbank zurück.</string>
+    <string name="fv_msg_28">Kehren Sie nach Erteilung der Berechtigung zu dieser Aktivität zurück</string>
     <string name="home_message_text_4">Eine der vier geordneten Listen ist eine benutzerdefinierte geordnete Liste. Die Bestellung wird vom Benutzer arrangiert. Auf diese Weise bleiben wichtigere Konten ganz oben auf der Liste. Elemente durch Ziehen / Ablegen eines Elements neu anordnen.</string>
     <string name="sugg_password">Passwort</string>
     <string name="suggest_password_hint">Passwort</string>
@@ -185,7 +185,7 @@
     <string name="fv_msg_6">Verwenden Sie das Menü, um Daten zu exportieren.</string>
     <string name="fv_msg_10">Verwenden Sie das Menü, um Daten in diese Datei zu exportieren.</string>
     <string name="addedit_email_hint">Benutzer E-Mail erforderlich</string>
-    <string name="addedit_name_hint">Benutzername erforderlich</string>
+    <string name="addedit_name_hint">Benutzername (erforderlich)</string>
     <string name="corp_website_hint">Gültige Unternehmens-Website (optional)</string>
     <string name="fv_msg_44">Sicherungsdaten über den Menüpunkt \'Sicherungsdatei anzeigen\' anzeigen</string>
     <string name="fv_msg_13">Warnung</string>

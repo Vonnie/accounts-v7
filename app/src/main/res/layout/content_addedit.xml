@@ -28,7 +28,8 @@
         android:layout_height="0dp"
         android:clipToPadding="true"
         android:fillViewport="true"
-        android:scrollbarStyle="outsideOverlay"
+        android:scrollbarStyle="outsideInset"
+        android:fadeScrollbars="false"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -93,24 +94,16 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:weightSum="10"
                 android:orientation="horizontal">
-
-                <ImageButton
-                    android:id="@+id/img_website"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:contentDescription="@string/acct_show_website"
-                    android:backgroundTint="@color/secondaryColor"
-                    android:textColor="@color/secondaryTextColor"
-                    app:srcCompat="@drawable/ic_http" />
 
                 <!--                    android:textColor="?android:attr/textColorPrimary"-->
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/text_input_corp_website"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_weight="9"
                     app:errorEnabled="true">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -121,6 +114,18 @@
                         android:inputType="textUri|textNoSuggestions"
                         android:textColor="?android:attr/textColorPrimary" />
                 </com.google.android.material.textfield.TextInputLayout>
+
+                <ImageButton
+                    android:id="@+id/img_website"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_weight="1"
+                    android:contentDescription="@string/acct_show_website"
+                    android:backgroundTint="@color/secondaryColor"
+                    android:textColor="@color/secondaryTextColor"
+                    app:srcCompat="@drawable/ic_http" />
+
             </LinearLayout>
 
             <com.google.android.material.textfield.TextInputLayout

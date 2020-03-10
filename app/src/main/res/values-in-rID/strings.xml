@@ -107,8 +107,8 @@
     <string name="hint_email">Masukan email</string>
     <string name="addedit_notes">Catatan</string>
     <string name="addedit_email_hint">Diperlukan email pengguna</string>
-    <string name="addedit_name_hint">Nama pengguna harus diisi</string>
-    <string name="addedit_corp_name_hint">Nama perusahaan harus diisi</string>
+    <string name="addedit_name_hint">Nama pengguna (wajib)</string>
+    <string name="addedit_corp_name_hint">Nama perusahaan (wajib)</string>
     <string name="suggest_password_hint">Kata sandi</string>
     <string name="suggest_notes_hint">Catatan</string>
     <string name="acctlist_by_corp_name">Dengan Nama Perusahaan</string>
@@ -164,7 +164,7 @@
     <string name="fv_msg_25">Berikan Instruksi Izin</string>
     <string name="fv_msg_26">Berikan akses untuk Aplikasi ini dari Pengaturan</string>
     <string name="fv_msg_27">Pilih aplikasi Akun di daftar aplikasi. Pilih izin. Kemudian, atur Storage.</string>
-    <string name="fv_msg_28">Setelah izin diberikan, kembali untuk membuat cadangan db.</string>
+    <string name="fv_msg_28">Setelah izin diberikan, kembalilah ke aktivitas ini</string>
     <string name="fv_msg_29">Memberitahu</string>
     <string name="fv_msg_30">Pada nama versi 11, penyimpanan cadangan telah dipindahkan. Lihat Nama file dari menu</string>
     <string name="fv_msg_31">File Cadangan tidak ada.</string>

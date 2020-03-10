@@ -156,8 +156,12 @@ public class AddEditProfileFrag extends Fragment
                 detailIntent.putExtra(WebViewActivity.class.getSimpleName(), corpWebsiteInput);
                 detailIntent.putExtra(WebViewActivity.EXTRA_CORP_NAME,
                         textInputCorpName.getEditText().getText().toString().trim());
-                detailIntent.putExtra(WebViewActivity.EXTRA_CORP_WEBSITE,
-                        textInputCorpWebsite.getEditText().getText().toString().trim());
+                String website = textInputCorpWebsite.getEditText().getText().toString().trim();
+                if (website.startsWith("http://") || website.startsWith("https://")) {
+                } else {
+                    website = "http://" + website;
+                }
+                detailIntent.putExtra(WebViewActivity.EXTRA_CORP_WEBSITE, website);
 //                Log.d(TAG, "onClick: website " + account.getCorpWebsite());
 //                Log.d(TAG, "onClick: wv class " + WebViewActivity.class.getSimpleName());
                 startActivity(detailIntent);

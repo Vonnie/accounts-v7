@@ -10,9 +10,9 @@
     <string name="acctlist_by_open_date_descending">Por fecha de apertura, descendente</string>
     <string name="action_help">Ayuda</string>
     <string name="action_settings">ajustes</string>
-    <string name="addedit_corp_name_hint">Nombre de la corporación requerido</string>
+    <string name="addedit_corp_name_hint">Nombre de la corporación (requerido)</string>
     <string name="addedit_email_hint">Correo electrónico del usuario requerido</string>
-    <string name="addedit_name_hint">Nombre de usuario (requerido</string>
+    <string name="addedit_name_hint">Nombre de usuario (requerido)</string>
     <string name="addedit_notes">Notas</string>
     <string name="app_name_acctid">Cuentas por ID de cuenta</string>
     <string name="app_name_corpname">Cuentas por nombre de corporación</string>
@@ -164,7 +164,7 @@
     <string name="fv_msg_25">Instrucción de permiso de subvención</string>
     <string name="fv_msg_26">Conceder acceso a esta aplicación desde Configuración</string>
     <string name="fv_msg_27">Seleccione la aplicación Cuentas en la lista de aplicaciones. Seleccionar permisos. Luego, configure Almacenamiento.</string>
-    <string name="fv_msg_28">Una vez que se concede el permiso, regrese para hacer una copia de seguridad del db.</string>
+    <string name="fv_msg_28">Una vez que se otorgue el permiso, regrese a esta actividad</string>
     <string name="fv_msg_29">notificar</string>
     <string name="fv_msg_30">A partir del nombre de la versión 11, el almacenamiento de respaldo se ha movido. Ver nombre de archivo desde el menú</string>
     <string name="fv_msg_31">El archivo de respaldo no existe.</string>

@@ -111,8 +111,8 @@
     <string name="hint_email">Enter Email</string>
     <string name="addedit_notes">Notes</string>
     <string name="addedit_email_hint">User email required</string>
-    <string name="addedit_name_hint">Username required</string>
-    <string name="addedit_corp_name_hint">Corporation name required</string>
+    <string name="addedit_name_hint">Username (required)</string>
+    <string name="addedit_corp_name_hint">Corporation name (required)</string>
     <string name="suggest_password_hint">Password</string>
     <string name="suggest_notes_hint">Note</string>
     <string name="acctlist_by_corp_name">By Corporate Name</string>
@@ -168,7 +168,7 @@
     <string name="fv_msg_25">Grant Permission Instruction</string>
     <string name="fv_msg_26">Grant access for this App from Settings</string>
     <string name="fv_msg_27">Select Accounts app in apps list. Select permissions. Then, set on Storage.</string>
-    <string name="fv_msg_28">Once permission is granted, return to backup the db.</string>
+    <string name="fv_msg_28">Once permission is granted, return to this activity</string>
     <string name="fv_msg_29">Notify</string>
     <string name="fv_msg_30">As of version name 11, backup storage has moved. See Filename from menu</string>
     <string name="fv_msg_31">Backup File does not exist.</string>

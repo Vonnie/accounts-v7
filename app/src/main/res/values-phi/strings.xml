@@ -106,8 +106,8 @@
     <string name="hint_email">Ipasok ang Email</string>
     <string name="addedit_notes">Mga Tala</string>
     <string name="addedit_email_hint">Kinakailangan ang email ng gumagamit</string>
-    <string name="addedit_name_hint">Kinakailangan ang username</string>
-    <string name="addedit_corp_name_hint">Kinakailangan ang pangalan ng Corporation</string>
+    <string name="addedit_name_hint">Username (kinakailangan)</string>
+    <string name="addedit_corp_name_hint">Pangalan ng kumpanya (kinakailangan)</string>
     <string name="suggest_password_hint">Password</string>
     <string name="suggest_notes_hint">Tandaan</string>
     <string name="acctlist_by_corp_name">Sa Pangalan ng Corporate</string>
@@ -163,7 +163,7 @@
     <string name="fv_msg_25">Pagtuturo ng Pagbibigay ng Pahintulot</string>
     <string name="fv_msg_26">Ibigay ang pag-access para sa App na ito mula sa Mga Setting</string>
     <string name="fv_msg_27">Piliin ang app ng Account sa listahan ng mga app. Piliin ang mga pahintulot. Pagkatapos, itakda sa Imbakan.</string>
-    <string name="fv_msg_28">Kapag ipinagkaloob ang pahintulot, bumalik sa backup ng db.</string>
+    <string name="fv_msg_28">Kapag nabigyan ang pahintulot, bumalik sa aktibidad na ito</string>
     <string name="fv_msg_29">Ipaalam</string>
     <string name="fv_msg_30">Tulad ng pangalan ng bersyon 11, ang backup na imbakan ay lumipat. Tingnan ang Filename mula sa menu</string>
     <string name="fv_msg_31">Ang pag-backup ng File ay hindi umiiral.</string>

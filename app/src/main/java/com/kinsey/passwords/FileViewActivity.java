@@ -1,6 +1,6 @@
 package com.kinsey.passwords;
 
-import android.accounts.Account;
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -8,6 +8,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.net.Uri;
@@ -21,6 +22,7 @@ import com.kinsey.passwords.items.Profile;
 import com.kinsey.passwords.provider.ProfileAdapter;
 import com.kinsey.passwords.provider.ProfileViewModel;
 import com.kinsey.passwords.tools.ProfileJsonListIO;
+import com.nbsp.materialfilepicker.MaterialFilePicker;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -49,6 +51,7 @@ import java.util.ArrayList;
 import java.util.Formatter;
 import java.util.List;
 import java.util.Locale;
+import java.util.regex.Pattern;
 
 import static androidx.core.content.FileProvider.getUriForFile;
 
@@ -105,7 +108,30 @@ public class FileViewActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle(R.string.menuacct_backup_restore_accts);
 
+        Log.d(TAG, "onCreate: permission " +
+                PackageInfo.REQUESTED_PERMISSION_GRANTED
+                );
+        if (PackageInfo.REQUESTED_PERMISSION_GRANTED == PackageInfo.INSTALL_LOCATION_AUTO) {
+            Log.d(TAG, "onCreate: permission auto ");
+        }
+        if (PackageInfo.REQUESTED_PERMISSION_GRANTED == PackageInfo.INSTALL_LOCATION_INTERNAL_ONLY) {
+            Log.d(TAG, "onCreate: permission internal only ");
+        }
+        if (PackageInfo.REQUESTED_PERMISSION_GRANTED == PackageInfo.INSTALL_LOCATION_PREFER_EXTERNAL) {
+            Log.d(TAG, "onCreate: permission external ");
+        }
 
+        Log.d(TAG, "onCreate: dir " + getFilesDir());
+        Log.d(TAG, "onCreate: dir " + getExternalFilesDir(""));
+
+        Log.d(TAG, "onCreate: uris " + getContentResolver().getPersistedUriPermissions());
+
+//        if (getExternalFilesDir("").exists()) {
+//            msgDialog("External Storage exists");
+//        }
+        if (!checkPermission()) {
+            msgWarningDialog("This activity requires App permission.\nSee screen for Grant Permission Instruction");
+        }
         webView = findViewById(R.id.wv_page);
         final WebSettings webSettings = webView.getSettings();
         Resources res = getResources();
@@ -159,6 +185,8 @@ public class FileViewActivity extends AppCompatActivity {
 
 
     }
+
+
 
 
     @Override
@@ -409,10 +437,18 @@ public class FileViewActivity extends AppCompatActivity {
         String htmlString = "<h1>" + getString(R.string.fv_msg_23) + "</h1>" +
                 "<h2>" + getString(R.string.fv_msg_24) + "</h2>" +
                 "<h3>" + getString(R.string.fv_msg_25) + "</h3>" +
-                "<h4>" + getString(R.string.fv_msg_26) + "</h4>" +
-                "<h4>" + getString(R.string.fv_msg_27) + "</h4>" +
-                "<h4>" + getString(R.string.fv_msg_28) + "</h4>" +
-                "<h3>" + getString(R.string.fv_msg_29) + "</h3>" +
+//                "<h3>" + getString(R.string.fv_msg_26) + "</h3>" +
+//                "<h3>" + getString(R.string.fv_msg_27) + "</h3>" +
+
+                "<ul><li>Go to Settings</li>" +
+                "<li>Select apps</li>" +
+                "<li>Select this app Accounts</li>" +
+                "<li>Select Permissions</li>" +
+                "<li>Allow Storage</li></ul>" +
+                "<h3>" + getString(R.string.fv_msg_28) + "</h3>" +
+
+
+                "<h4>" + getString(R.string.fv_msg_29) + "</h4>" +
                 "<h4>" + getString(R.string.fv_msg_30) + "</h4>";
         return htmlString;
     }
@@ -486,6 +522,7 @@ public class FileViewActivity extends AppCompatActivity {
 
 //        File path = null;
         try {
+
 
             File dirStorage = getExternalFilesDir("passport");
 
@@ -812,6 +849,11 @@ public class FileViewActivity extends AppCompatActivity {
 
         msgDialog(displayMsg);
 
+
+
+        openFileBrowser();
+
+
 //        android.app.AlertDialog.Builder alertDialogBuilder = new android.app.AlertDialog.Builder(this);
 //        alertDialogBuilder.setMessage(displayMsg);
 //        alertDialogBuilder.setPositiveButton("ok",
@@ -847,7 +889,45 @@ public class FileViewActivity extends AppCompatActivity {
 
     }
 
-    public void msgDialog(String msg) {
+    private void openFileBrowser() {
+//        UtilsRG.info("Open filechooser to read a file");
+
+
+        //Selecting the "EXAMES_APP" Folder as default
+//        File root = android.os.Environment.getExternalStorageDirectory();
+//        File dir = new File(root.getAbsolutePath() + "/Exames-App/");
+//        File dir = new File(root.getAbsolutePath());
+        File dir = getExternalFilesDir("passport") ;
+        String directoryy = dir.toString() + "/";
+        msgDialog(directoryy);
+
+        //Giving the FilePicker a custom Title:
+        String title = "Select file";
+        String readExternalStoragePermission = Manifest.permission.READ_EXTERNAL_STORAGE;
+//        if(hasPermission(PERMISSION_REQUEST_CODE, readExternalStoragePermission)) {
+            new MaterialFilePicker()
+                    .withActivity(FileViewActivity.this)
+                    .withRequestCode(1)
+                    .withFilter(Pattern.compile(".*\\.json$"))
+                    .withFilterDirectories(true) // Set directories filterable (false by default)
+                    .withHiddenFiles(false) // Show hidden files and folders
+                    .withRootPath(directoryy)
+                    .withTitle(title)
+                    .start();
+//        }
+    }
+
+
+    private void msgDialog(String msg) {
+        msgDialog(msg, R.drawable.ic_info_black_24dp);
+    }
+
+    private void msgWarningDialog(String msg) {
+        msgDialog(msg, R.drawable.ic_warning);
+    }
+
+
+    public void msgDialog(String msg, int resid) {
         final Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.dialog_msg_ok);
         dialog.setTitle("Account Modify Info");
@@ -855,8 +935,8 @@ public class FileViewActivity extends AppCompatActivity {
         TextView text = (TextView) dialog.findViewById(R.id.text);
         text.setText(msg);
         ImageView image = (ImageView) dialog.findViewById(R.id.image);
-        image.setImageResource(R.drawable.ic_info_black_24dp);
-
+//        image.setImageResource(R.drawable.ic_info_black_24dp);
+        image.setImageResource(resid);
 
         Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
         // if button is clicked, close the custom dialog

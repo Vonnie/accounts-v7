@@ -263,11 +263,11 @@ public class MainActivity extends AppCompatActivity
 //                    setContentView(R.layout.activity_main);
 //                    LinearLayoutCompat layout = recyclerView.findViewById(R.id.layout);
 //                    layout.setOrientation(LinearLayoutCompat.OrientationMode());
-                    Toast.makeText(MainActivity.this, "Detected... XLarge Landscape", Toast.LENGTH_LONG).show();
+//                    Toast.makeText(MainActivity.this, "Detected... XLarge Landscape", Toast.LENGTH_LONG).show();
                     Log.d(TAG, "screen size Xlarge Landscape");
                 } else {
                     setContentView(R.layout.activity_main);
-                    Toast.makeText(MainActivity.this, "Detected... XLarge Portrait", Toast.LENGTH_LONG).show();
+//                    Toast.makeText(MainActivity.this, "Detected... XLarge Portrait", Toast.LENGTH_LONG).show();
                     Log.d(TAG, "screen size Xlarge Portrait");
                 }
 
@@ -276,27 +276,27 @@ public class MainActivity extends AppCompatActivity
                 if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
                     setContentView(R.layout.activity_main_large_land);
 //                    setContentView(R.layout.activity_main);
-                    Toast.makeText(MainActivity.this, "Detected... Large Landscape", Toast.LENGTH_LONG).show();
+//                    Toast.makeText(MainActivity.this, "Detected... Large Landscape", Toast.LENGTH_LONG).show();
                     Log.d(TAG, "screen size Large Landscape");
                 } else {
                     setContentView(R.layout.activity_main);
-                    Toast.makeText(MainActivity.this, "Detected... Large Portrait", Toast.LENGTH_LONG).show();
+//                    Toast.makeText(MainActivity.this, "Detected... Large Portrait", Toast.LENGTH_LONG).show();
                     Log.d(TAG, "screen size Large Portrait");
                 }
                 break;
             case Configuration.SCREENLAYOUT_SIZE_NORMAL:
                 setContentView(R.layout.activity_main);
                 if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                    Toast.makeText(MainActivity.this, "Detected... Normal Landscape", Toast.LENGTH_LONG).show();
+//                    Toast.makeText(MainActivity.this, "Detected... Normal Landscape", Toast.LENGTH_LONG).show();
                     Log.d(TAG, "screen size Normal landscape");
                 } else {
-                    Toast.makeText(MainActivity.this, "Detected... Normal Portrait", Toast.LENGTH_LONG).show();
+//                    Toast.makeText(MainActivity.this, "Detected... Normal Portrait", Toast.LENGTH_LONG).show();
                     Log.d(TAG, "screen size Normal Portrait");
                 }
                 break;
             default:
                 setContentView(R.layout.activity_main);
-                Toast.makeText(MainActivity.this, "Undetected... ", Toast.LENGTH_LONG).show();
+//                Toast.makeText(MainActivity.this, "Undetected... ", Toast.LENGTH_LONG).show();
         }
 
 
@@ -342,6 +342,8 @@ public class MainActivity extends AppCompatActivity
             SearchFrag searchFrag = new SearchFrag();
             fragmentTransaction3.add(R.id.fragment_search_container, searchFrag);
             fragmentTransaction3.commit();
+            frameSearch = findViewById(R.id.fragment_search_container);
+            frameSearch.setVisibility(View.GONE);
         } else {
             this.listsortOrder = savedInstanceState.getInt(ARG_LISTSORT, 1);
             this.selectedId = savedInstanceState.getInt(ARG_SELECTED_ID);
@@ -364,10 +366,8 @@ public class MainActivity extends AppCompatActivity
 
             }
 
-
+            frameSearch = findViewById(R.id.fragment_search_container);
         }
-        frameSearch = findViewById(R.id.fragment_search_container);
-        frameSearch.setVisibility(View.GONE);
 
 //        if (findViewById(R.id.fragment_container2) == null) {
 //            Log.d(TAG, "onCreate: has null 2nd container");
@@ -1599,7 +1599,11 @@ public class MainActivity extends AppCompatActivity
                     if (profileFragment != null) {
                         ProfileCorpNameFrag frag = (ProfileCorpNameFrag) profileFragment;
                         frag.setSelectedId(this.selectedId);
-                        frame2.setVisibility(View.GONE);
+                        if (this.selectedId == -1) {
+                            frame2.setVisibility(View.GONE);
+                        } else {
+                            frame2.setVisibility(View.VISIBLE);
+                        }
                     }
 //                    if (profileFragment instanceof ProfileCorpNameFrag) {
 //                        ProfileCorpNameFrag frag = (ProfileCorpNameFrag) profileFragment;
