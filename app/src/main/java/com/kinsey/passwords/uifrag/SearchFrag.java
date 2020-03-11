@@ -2,10 +2,7 @@ package com.kinsey.passwords.uifrag;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,20 +13,12 @@ import android.widget.AutoCompleteTextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.textfield.TextInputLayout;
-import com.kinsey.passwords.AddEditProfileActivity;
-import com.kinsey.passwords.MainActivity;
 import com.kinsey.passwords.R;
-import com.kinsey.passwords.SearchActivity;
 import com.kinsey.passwords.items.Profile;
-import com.kinsey.passwords.provider.ProfileAdapter;
 import com.kinsey.passwords.provider.ProfileViewModel;
 import com.kinsey.passwords.provider.SearchAdapter;
 
@@ -225,6 +214,10 @@ public class SearchFrag extends Fragment {
 //        });
 
         return view;
+    }
+
+    public void resetSearch() {
+        editTextFilledExposedDropdown.setText("");
     }
 
     private void searchResults(String searchfor) {

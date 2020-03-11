@@ -95,6 +95,7 @@ public class MainActivity extends AppCompatActivity
     public static final String TAG = "MainActivity";
     public static final String ARG_LISTSORT = "ARG_LISTSORT";
     public static final String ARG_SELECTED_ID = "ARG_SELECTED_ID";
+    public static final String ARG_IS_SHEARCH_SHOWN = "ARG_IS_SHEARCH_SHOWN";
 
     // whether or not the activity is i 2-pane mode
     // i.e. running in landscape on a tablet
@@ -109,7 +110,7 @@ public class MainActivity extends AppCompatActivity
     public static int profileMigrateLevel = 1;
 
 
-    private boolean showSearch = false;
+    private boolean isSearchShown = false;
     public static boolean migrationStarted = false;
 
 //    private boolean isTablet = getResources().getBoolean(R.bool.isTablet);
@@ -345,6 +346,7 @@ public class MainActivity extends AppCompatActivity
             frameSearch = findViewById(R.id.fragment_search_container);
             frameSearch.setVisibility(View.GONE);
         } else {
+            this.isSearchShown = savedInstanceState.getBoolean(ARG_IS_SHEARCH_SHOWN, false);
             this.listsortOrder = savedInstanceState.getInt(ARG_LISTSORT, 1);
             this.selectedId = savedInstanceState.getInt(ARG_SELECTED_ID);
             Log.d(TAG, "onCreate: listsortOrder " + this.listsortOrder);
@@ -367,6 +369,11 @@ public class MainActivity extends AppCompatActivity
             }
 
             frameSearch = findViewById(R.id.fragment_search_container);
+            if (isSearchShown) {
+                frameSearch.setVisibility(View.VISIBLE);
+            } else {
+                frameSearch.setVisibility(View.GONE);
+            }
         }
 
 //        if (findViewById(R.id.fragment_container2) == null) {
@@ -851,7 +858,7 @@ public class MainActivity extends AppCompatActivity
 //        }
 
         outState.putInt(ARG_SELECTED_ID, this.selectedId);
-
+        outState.putBoolean(ARG_IS_SHEARCH_SHOWN, this.isSearchShown);
 
 
 //        if (listsortOrder == LISTSORT_CORP_NAME) {
@@ -1584,27 +1591,30 @@ public class MainActivity extends AppCompatActivity
 
             case R.id.menumain_search:
                 item.setChecked(!item.isChecked());
+                isSearchShown = item.isChecked();
                 if (item.isChecked()) {
                     frameSearch.setVisibility(View.VISIBLE);
-                    FrameLayout frame = findViewById(R.id.fragment_container);
-                    frame.setVisibility(View.GONE);
+//                    FrameLayout frame = findViewById(R.id.fragment_container);
+//                    frame.setVisibility(View.GONE);
                 } else {
                     frameSearch.setVisibility(View.GONE);
-                    FrameLayout frame = findViewById(R.id.fragment_container);
-                    frame.setVisibility(View.VISIBLE);
-                    fragmentManager = getSupportFragmentManager();
-//                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    profileFragment = (ProfileCorpNameFrag) fragmentManager.findFragmentById(R.id.fragment_container);
-                    Log.d(TAG, "onOptionsItemSelected: selectedId " + this.selectedId);
-                    if (profileFragment != null) {
-                        ProfileCorpNameFrag frag = (ProfileCorpNameFrag) profileFragment;
-                        frag.setSelectedId(this.selectedId);
-                        if (this.selectedId == -1) {
-                            frame2.setVisibility(View.GONE);
-                        } else {
-                            frame2.setVisibility(View.VISIBLE);
-                        }
-                    }
+////                    FrameLayout frame = findViewById(R.id.fragment_container);
+////                    frame.setVisibility(View.VISIBLE);
+//                    fragmentManager = getSupportFragmentManager();
+////                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//                    profileFragment = (ProfileCorpNameFrag) fragmentManager.findFragmentById(R.id.fragment_container);
+//                    Log.d(TAG, "onOptionsItemSelected: selectedId " + this.selectedId);
+//                    if (profileFragment != null) {
+//                        ProfileCorpNameFrag frag = (ProfileCorpNameFrag) profileFragment;
+//                        frag.setSelectedId(this.selectedId);
+//                        if (this.selectedId == -1) {
+//                            frame2.setVisibility(View.GONE);
+//                        } else {
+//                            frame2.setVisibility(View.VISIBLE);
+//                        }
+//                    }
+
+
 //                    if (profileFragment instanceof ProfileCorpNameFrag) {
 //                        ProfileCorpNameFrag frag = (ProfileCorpNameFrag) profileFragment;
 //                        frag.setSelectedId(this.selectedId);
@@ -3429,6 +3439,15 @@ public class MainActivity extends AppCompatActivity
         } else {
             selectAccountDetail(selectedId, profile);
         }
+        if (this.isSearchShown) {
+
+
+            Fragment searchFragment = fragmentManager.findFragmentById(R.id.fragment_search_container);
+            if (searchFragment instanceof SearchFrag) {
+                SearchFrag frag = (SearchFrag) searchFragment;
+                frag.resetSearch();
+            }
+        }
     }
 
     private ProfileCorpNameFrag getProfileFrag() {
@@ -3565,6 +3584,11 @@ public class MainActivity extends AppCompatActivity
     public void showSearchSelected(int selectedId, Profile profile) {
         frame2.setVisibility(View.VISIBLE);
         this.selectedId = selectedId;
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        Fragment fragment = fragmentManager.findFragmentById(R.id.fragment_container);
+        ProfileCorpNameFrag frag = (ProfileCorpNameFrag) fragment;
+        frag.setSelectedId(this.selectedId);
+        frag.refreshListAll();
         Log.d(TAG, "showSearchSelected: selectedId " + selectedId);
 //        startUpProfileUpdate(selectedId, profile);
         AddEditProfileFrag fragment2 = new AddEditProfileFrag();
@@ -3580,7 +3604,6 @@ public class MainActivity extends AppCompatActivity
         args.putLong(AddEditProfileFrag.EXTRA_ACTVY_LONG, profile.getActvyLong());
         args.putLong(AddEditProfileFrag.EXTRA_OPEN_DATE_LONG, profile.getOpenLong());
         fragment2.setArguments(args);
-        FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container2, fragment2, "AddEditProfileFrag");
         fragmentTransaction.commit();
