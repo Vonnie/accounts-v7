@@ -28,12 +28,12 @@
                 android:orderInCategory="103"
                 android:title="@string/menuvw_retore"
                 app:showAsAction="ifRoom" />
-            <item
-                android:id="@+id/vw_filename"
-                android:icon="@drawable/ic_insert_drive_file_black"
-                android:orderInCategory="104"
-                android:title="@string/menuvw_show_filename"
-                app:showAsAction="ifRoom" />
+<!--            <item-->
+<!--                android:id="@+id/vw_filename"-->
+<!--                android:icon="@drawable/ic_insert_drive_file_black"-->
+<!--                android:orderInCategory="104"-->
+<!--                android:title="@string/menuvw_show_filename"-->
+<!--                app:showAsAction="ifRoom" />-->
             <item
                 android:id="@+id/vw_show_file"
                 android:icon="@drawable/ic_format_align_justify_black"

@@ -14,7 +14,10 @@ import android.content.res.Resources;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-
+//import com.aditya.filebrowser.Constants;
+//import com.aditya.filebrowser.FileBrowser;
+//import com.aditya.filebrowser.FileChooser;
+//import com.codekidlabs.storagechooser.StorageChooser;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.material.textfield.TextInputLayout;
@@ -22,15 +25,19 @@ import com.kinsey.passwords.items.Profile;
 import com.kinsey.passwords.provider.ProfileAdapter;
 import com.kinsey.passwords.provider.ProfileViewModel;
 import com.kinsey.passwords.tools.ProfileJsonListIO;
-import com.nbsp.materialfilepicker.MaterialFilePicker;
+//import com.nbsp.materialfilepicker.MaterialFilePicker;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.fragment.app.Fragment;
 
+import android.os.Environment;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -52,6 +59,10 @@ import java.util.Formatter;
 import java.util.List;
 import java.util.Locale;
 import java.util.regex.Pattern;
+//import java.util.regex.Pattern;
+//import com.codekidlabs.storagechooser.StorageChooser;
+import com.nbsp.materialfilepicker.MaterialFilePicker;
+import com.nbsp.materialfilepicker.ui.FilePickerActivity;
 
 import static androidx.core.content.FileProvider.getUriForFile;
 
@@ -75,6 +86,7 @@ public class FileViewActivity extends AppCompatActivity {
     boolean onFirstReported = true;
     boolean blnListRestored = false;
     private static final int BACKUP_FILE_REQUESTED = 1;
+    private static final int PICK_FILE_REQUEST = 2;
 
     private AdView mAdView;
 
@@ -244,23 +256,26 @@ public class FileViewActivity extends AppCompatActivity {
 
             case R.id.vw_show_file:
                 Log.d(TAG, "onOptionsItemSelected: Report");
-                reportFile();
+//                reportFile();
+                showFilename();
                 break;
 
             case R.id.vw_export:
                 Log.d(TAG, "onOptionsItemSelected: Export");
-                ExportAccountDB();
+                backupFilename();
+//                ExportAccountDB();
                 break;
 
             case R.id.vw_import:
                 Log.d(TAG, "onOptionsItemSelected: Import");
-                ImportAccountDB();
+                restoreFilename();
+//                ImportAccountDB();
                 break;
 
-            case R.id.vw_filename:
-                Log.d(TAG, "onOptionsItemSelected: Share View filename");
-                showFilename();
-                break;
+//            case R.id.vw_filename:
+//                Log.d(TAG, "onOptionsItemSelected: Share View filename");
+//                showFilename();
+//                break;
 
             case R.id.vw_shared:
                 email_Dialog();
@@ -516,7 +531,7 @@ public class FileViewActivity extends AppCompatActivity {
     }
 
 
-    private void ExportAccountDB() {
+    private void ExportAccountDB(String strFilename) {
         String msgError = "";
         int count = -1;
 
@@ -533,7 +548,7 @@ public class FileViewActivity extends AppCompatActivity {
             }
 
 
-            File file = new File(dirStorage, MainActivity.BACKUP_FILENAME);
+            File file = new File(dirStorage, strFilename);
             Log.d(TAG, "ExportAccountDB export filename: " + file.getAbsoluteFile());
 
 
@@ -675,6 +690,61 @@ public class FileViewActivity extends AppCompatActivity {
         //  END OF buttonClick_DialogTest
     }
 
+
+
+    public void backupFilename() {
+
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(FileViewActivity.this);
+
+        //  Inflate the Layout Resource file you created in Step 1
+        View mView = getLayoutInflater().inflate(R.layout.content_req_filename, null);
+
+        //  Get View elements from Layout file. Be sure to include inflated view name (mView)
+        TextView tvTitle = mView.findViewById(R.id.title);
+        tvTitle.setText("Backup onto file");
+        TextInputLayout textInputFilename = (TextInputLayout) mView.findViewById(R.id.text_input_filename);
+        textInputFilename.getEditText().setText(MainActivity.BACKUP_FILENAME);
+        Button btnOk = (Button) mView.findViewById(R.id.btn_ok);
+        Button btnCancel = (Button) mView.findViewById(R.id.btn_cancel);
+
+        //  Create the AlertDialog using everything we needed from above
+        mBuilder.setView(mView);
+        final AlertDialog filenameDialog = mBuilder.create();
+
+        //  Set Listener for the OK Button
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick (View view) {
+                String strFilename = textInputFilename.getEditText().getText().toString().trim();
+
+                if (!strFilename.isEmpty()) {
+//                    composeEmail(strFilename);
+                    ExportAccountDB(strFilename);
+                    filenameDialog.dismiss();
+//                    Toast.makeText(FileViewActivity.this, "You entered a Value!,", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(FileViewActivity.this, R.string.toast_enter_email, Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        //  Set Listener for the CANCEL Button
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick (View view) {
+                filenameDialog.dismiss();
+            }
+        });
+
+        //  Finally, SHOW your Dialog!
+        filenameDialog.show();
+
+
+        //  END OF buttonClick_DialogTest
+    }
+
+
+
     private void alertBackup(File file, String msg) {
 
 
@@ -735,13 +805,65 @@ public class FileViewActivity extends AppCompatActivity {
 //        alertDialog.show();
     }
 
+    private void restoreFilename() {
 
-    private void ImportAccountDB() {
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(FileViewActivity.this);
+
+        //  Inflate the Layout Resource file you created in Step 1
+        View mView = getLayoutInflater().inflate(R.layout.content_req_filename, null);
+
+        //  Get View elements from Layout file. Be sure to include inflated view name (mView)
+        TextView tvTitle = mView.findViewById(R.id.title);
+        tvTitle.setText("Restore from file");
+        TextInputLayout textInputFilename = (TextInputLayout) mView.findViewById(R.id.text_input_filename);
+        textInputFilename.getEditText().setText(MainActivity.BACKUP_FILENAME);
+        Button btnOk = (Button) mView.findViewById(R.id.btn_ok);
+        Button btnCancel = (Button) mView.findViewById(R.id.btn_cancel);
+
+        //  Create the AlertDialog using everything we needed from above
+        mBuilder.setView(mView);
+        final AlertDialog filenameDialog = mBuilder.create();
+
+        //  Set Listener for the OK Button
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick (View view) {
+                String strFilename = textInputFilename.getEditText().getText().toString().trim();
+
+                if (!strFilename.isEmpty()) {
+                    ImportAccountDB(strFilename);
+//                    composeEmail(strFilename);
+//                    ExportAccountDB(strFilename);
+                    filenameDialog.dismiss();
+//                    Toast.makeText(FileViewActivity.this, "You entered a Value!,", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(FileViewActivity.this, R.string.toast_enter_email, Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        //  Set Listener for the CANCEL Button
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick (View view) {
+                filenameDialog.dismiss();
+            }
+        });
+
+        //  Finally, SHOW your Dialog!
+        filenameDialog.show();
+
+
+        //  END OF buttonClick_DialogTest
+
+    }
+
+    private void ImportAccountDB(String strFilename) {
         Log.d(TAG, "ImportAccountDB: starts");
 
         try {
             File dirStorage = getExternalFilesDir("passport");
-            String storageFilename = dirStorage.getAbsolutePath() + "/" + MainActivity.BACKUP_FILENAME;
+            String storageFilename = dirStorage.getAbsolutePath() + "/" + strFilename;
 
 //            Log.d(TAG, "call asyncTask");
 //            new UploadProfileAsyncTask(getApplicationContext(),
@@ -847,12 +969,17 @@ public class FileViewActivity extends AppCompatActivity {
         }
 
 
-        msgDialog(displayMsg);
-
+//        msgDialog(displayMsg);
 
 
         openFileBrowser();
 
+
+//        openFileChooser();
+
+//        showFileChooser();
+
+//        requestFilePicker();
 
 //        android.app.AlertDialog.Builder alertDialogBuilder = new android.app.AlertDialog.Builder(this);
 //        alertDialogBuilder.setMessage(displayMsg);
@@ -899,7 +1026,7 @@ public class FileViewActivity extends AppCompatActivity {
 //        File dir = new File(root.getAbsolutePath());
         File dir = getExternalFilesDir("passport") ;
         String directoryy = dir.toString() + "/";
-        msgDialog(directoryy);
+//        msgDialog(directoryy);
 
         //Giving the FilePicker a custom Title:
         String title = "Select file";
@@ -907,7 +1034,7 @@ public class FileViewActivity extends AppCompatActivity {
 //        if(hasPermission(PERMISSION_REQUEST_CODE, readExternalStoragePermission)) {
             new MaterialFilePicker()
                     .withActivity(FileViewActivity.this)
-                    .withRequestCode(1)
+                    .withRequestCode(PICK_FILE_REQUEST)
                     .withFilter(Pattern.compile(".*\\.json$"))
                     .withFilterDirectories(true) // Set directories filterable (false by default)
                     .withHiddenFiles(false) // Show hidden files and folders
@@ -917,6 +1044,83 @@ public class FileViewActivity extends AppCompatActivity {
 //        }
     }
 
+
+//    private void startOpenDialog() {
+//        Intent intent = new Intent(this, FilePickerActivity.class);
+//        intent.putExtra(FilePickerActivity.ARG_FILE_FILTER, Pattern.compile(".*\\.txt$"));
+//        intent.putExtra(FilePickerActivity.ARG_DIRECTORIES_FILTER, true);
+//        intent.putExtra(FilePickerActivity.ARG_SHOW_HIDDEN, true);
+//        startActivityForResult(intent, 1);
+//    }
+
+
+//    private void openFileChooser() {
+////        Intent i2 = new Intent(getApplicationContext(), FileChooser.class);
+////        i2.putExtra(Constants.SELECTION_MODE, Constants.SELECTION_MODES.SINGLE_SELECTION.ordinal());
+////        startActivityForResult(i2, PICK_FILE_REQUEST);
+//
+//        Intent i = new Intent(this, FileBrowser.class); //works for all 3 main classes (i.e FileBrowser, FileChooser, FileBrowserWithCustomHandler)
+//        i.putExtra(Constants.INITIAL_DIRECTORY, new File(Environment.getExternalStorageDirectory().getAbsolutePath(),"Movies").getAbsolutePath());
+//        i.putExtra(Constants.ALLOWED_FILE_EXTENSIONS, "json");
+//        startActivityForResult(i, PICK_FILE_REQUEST);
+//
+//    }
+
+
+//    private void openFileChooser() {
+//
+//        FragmentManager fragmentManager = getSupportFragmentManager();
+//
+//        // 1. Initialize dialog
+//        final StorageChooser chooser = new StorageChooser.Builder()
+//                // Specify context of the dialog
+//                .withActivity(this)
+//                .withFragmentManager(getSupportFragmentManager())
+//                .withMemoryBar(true)
+//                .allowCustomPath(true)
+//                // Define the mode as the FILE CHOOSER
+//                .setType(StorageChooser.FILE_PICKER)
+//                .build();
+//
+//// 2. Handle what should happend when the user selects the directory !
+//        chooser.setOnSelectListener(new StorageChooser.OnSelectListener() {
+//            @Override
+//            public void onSelect(String path) {
+//                // e.g /storage/emulated/0/Documents/file.txt
+////                Log.i(path);
+//                Log.d(TAG, "onSelect: path " + path);
+//            }
+//        });
+//
+//// 3. Display File Picker whenever you need to !
+//        chooser.show();
+//    }
+
+
+//    public void showFileChooser() {
+//        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+//
+//        // Update with mime types
+//        intent.setType("*/*");
+//        String mimeTypes = "text/json";
+//        // Update with additional mime types here using a String[].
+//        intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
+//
+//        // Only pick openable and local files. Theoretically we could pull files from google drive
+//        // or other applications that have networked files, but that's unnecessary for this example.
+//        intent.addCategory(Intent.CATEGORY_OPENABLE);
+//        intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
+//
+//        // REQUEST_CODE = <some-integer>
+//        startActivityForResult(intent, PICK_FILE_REQUEST);
+//    }
+
+//    private void requestFilePicker() {
+//        Intent chooseFile = new Intent(Intent.ACTION_GET_CONTENT);
+//        chooseFile.setType("*/*");
+//        chooseFile = Intent.createChooser(chooseFile, "Choose a file");
+//        startActivityForResult(chooseFile, PICK_FILE_REQUEST);
+//    }
 
     private void msgDialog(String msg) {
         msgDialog(msg, R.drawable.ic_info_black_24dp);
@@ -1215,6 +1419,22 @@ public class FileViewActivity extends AppCompatActivity {
             else if (resultCode == Activity.RESULT_CANCELED) {
                 // cancelled
                 Log.d(TAG, "file share cancelled");
+            }
+        } else {
+            if (requestCode == PICK_FILE_REQUEST) {
+                if (resultCode == RESULT_OK) {
+                    // success
+                    Log.d(TAG, "file share was successful");
+                    String filePath = data.getStringExtra(FilePickerActivity.RESULT_FILE_PATH);
+                    Log.d(TAG, "onActivityResult: path " + filePath);
+                    webView.loadUrl("file://" + filePath);
+//                    Uri file = data.getData();
+//                    Log.d(TAG, "onActivityResult: " + file.getPath());
+                }
+                else if (resultCode == Activity.RESULT_CANCELED) {
+                    // cancelled
+                    Log.d(TAG, "file share cancelled");
+                }
             }
         }
     }
