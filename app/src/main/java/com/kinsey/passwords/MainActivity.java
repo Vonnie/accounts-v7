@@ -3428,17 +3428,19 @@ public class MainActivity extends AppCompatActivity
 
 //        if (has2ndPanel) {
         FragmentManager fragmentManager = getSupportFragmentManager();
-        AddEditProfileFrag addeditFrag = (AddEditProfileFrag) fragmentManager.findFragmentByTag("AddEditProfileFrag");
-        if (addeditFrag != null) {
-            if (addeditFrag.haveChanges()) {
-                askApplyCancel(selectedId, profile, "Changes not applied"+
-                        "\nDo you want to ignore these changes?");
-            } else {
-                selectAccountDetail(selectedId, profile);
-            }
-        } else {
-            selectAccountDetail(selectedId, profile);
-        }
+//        AddEditProfileFrag addeditFrag = (AddEditProfileFrag) fragmentManager.findFragmentByTag("AddEditProfileFrag");
+//        if (addeditFrag != null) {
+//            if (addeditFrag.haveChanges()) {
+//                askApplyCancel(selectedId, profile, "Changes not applied"+
+//                        "\nDo you want to ignore these changes?");
+//            } else {
+//                selectAccountDetail(selectedId, profile);
+//            }
+//        } else {
+//            selectAccountDetail(selectedId, profile);
+//        }
+        selectAccountDetail(selectedId, profile);
+
         if (this.isSearchShown) {
 
 

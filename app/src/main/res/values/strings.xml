@@ -116,7 +116,7 @@
     <string name="suggest_password_hint">Password</string>
     <string name="suggest_notes_hint">Note</string>
     <string name="acctlist_by_corp_name">By Corporate Name</string>
-    <string name="acctlist_by_custom">By Custom</string>
+    <string name="acctlist_by_custom">By Custom Order</string>
     <string name="acctlist_by_open_date_descending">By Open Date, descending</string>
     <string name="acctlist_by_account_id">By Account Id</string>
     <string name="sugg_password">Password</string>
@@ -142,10 +142,10 @@
     <string name="toast_all_suggest_deleted">All suggestions deleted</string>
     <string name="toast_10_new_suggests_added">10 new suggests added</string>
     <string name="fv_msg_1">Account Profile items currently on db</string>
-    <string name="fv_msg_2">Notify: If uninstall app, the exported / backup file also is deleted.</string>
-    <string name="fv_msg_3">Preserve file with a file copy or share from menu</string>
-    <string name="fv_msg_4">Information: To setup this app to another device, use this Backup/Restore feature to populate data onto the other device.</string>
-    <string name="fv_msg_5">Steps: 1. Backup 2. Install app to other device 3. Copy to device backup file, see physical location from menu item filename 4. Restore</string>
+    <string name="fv_msg_2">Warning: If app is uninstalled, the backup file also is deleted.</string>
+    <string name="fv_msg_3">Back up data</string>
+    <string name="fv_msg_4">Share data from current device with email, oneDrive. Or, file manager transfer to save.</string>
+    <string name="fv_msg_5">Filename is</string>
     <string name="fv_msg_6">Use menu to export data.</string>
     <string name="fv_msg_7">Account Profile items currently on db</string>
     <string name="fv_msg_8">As of version name 11, backup storage has moved. See Filename from menu</string>
@@ -162,13 +162,13 @@
     <string name="fv_msg_19">Welcome</string>
     <string name="fv_msg_20">File Offload Properties</string>
     <string name="fv_msg_21">App storage available and export file exists.</string>
-    <string name="fv_msg_22">See menu for file location</string>
+    <string name="fv_msg_22">See menu for file action</string>
     <string name="fv_msg_23">Permission Issue</string>
     <string name="fv_msg_24">Unable to access App storage for Backup / Restore</string>
     <string name="fv_msg_25">Grant Permission Instruction</string>
     <string name="fv_msg_26">Grant access for this App from Settings</string>
     <string name="fv_msg_27">Select Accounts app in apps list. Select permissions. Then, set on Storage.</string>
-    <string name="fv_msg_28">Once permission is granted, return to this activity</string>
+    <string name="fv_msg_28">Once permission is granted, return to home screen, then menu request for backup / restore to return to this screen</string>
     <string name="fv_msg_29">Notify</string>
     <string name="fv_msg_30">As of version name 11, backup storage has moved. See Filename from menu</string>
     <string name="fv_msg_31">Backup File does not exist.</string>
@@ -178,7 +178,7 @@
     <string name="fv_msg_34">Confirm backup</string>
     <string name="yes">yes</string>
     <string name="no">No</string>
-    <string name="fv_msg_35">Confirm Restore data DB from previous backup file</string>
+    <string name="fv_msg_35">Confirm Restore data DB from %1$s</string>
     <string name="fv_msg_36">created</string>
     <string name="toast_no_export_to_share">No Exported File to share</string>
     <string name="fileprovider_package" translatable="false">com.kinsey.passwords.fileprovider</string>
@@ -211,4 +211,17 @@
     <string name="id_descr">Id %1$s</string>
     <string name="seq_descr">Seq %1$s</string>
     <string name="opened_button_descr">Opened date, default is Current Date %1$s</string>
+    <string name="fv_msg_45">restore database</string>
+    <string name="fv_msg_46">Install app Accounts on new device</string>
+    <string name="fv_msg_47">Transfer onto new device for same dir/file</string>
+    <string name="fv_msg_48">Menu request a restore and select for copied file</string>
+    <string name="fv_msg_49">Information on how to add data to another device</string>
+    <string name="enterfilename">Enter filename, if different</string>
+    <string name="splInstr">To re-arrange, press an account, hold momentarily, then move to the new placement</string>
+    <string name="gotoSettings">Go to Settings</string>
+    <string name="selectapps">Select apps</string>
+    <string name="selectappaccounts">Select app Accounts</string>
+    <string name="selectpermissions">Select Permissions</string>
+    <string name="allowstorage">Allow Storage</string>
+
 </resources>

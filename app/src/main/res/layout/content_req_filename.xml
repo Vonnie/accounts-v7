@@ -25,7 +25,7 @@
             android:id="@+id/input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Enter filename, if different"
+            android:hint="@string/enterfilename"
             android:inputType="textNoSuggestions">
 
 <!--            android:imeOptions="actionDone"-->

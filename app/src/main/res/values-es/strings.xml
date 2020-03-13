@@ -6,7 +6,7 @@
     <string name="acct_show_website">Mostrar sitio web</string>
     <string name="acctlist_by_account_id">Por ID de cuenta</string>
     <string name="acctlist_by_corp_name">Por nombre corporativo</string>
-    <string name="acctlist_by_custom">por encargo</string>
+    <string name="acctlist_by_custom">Por encargo</string>
     <string name="acctlist_by_open_date_descending">Por fecha de apertura, descendente</string>
     <string name="action_help">Ayuda</string>
     <string name="action_settings">ajustes</string>
@@ -137,10 +137,10 @@
     <string name="toast_sugg_added">Sugerir agregado</string>
     <string name="toast_sugg_deleted">Sugerencia eliminada</string>
     <string name="toast_suggest_updated">Sugerir actualizado</string>
-    <string name="fv_msg_5">Pasos: 1. Copia de seguridad 2. Instalar la aplicación en otro dispositivo 3. Copiar al archivo de copia de seguridad del dispositivo, ver la ubicación física del nombre del archivo del elemento del menú 4. Restaurar</string>
-    <string name="fv_msg_4">Información: para configurar esta aplicación en otro dispositivo, use esta función de Copia de seguridad / Restauración para completar los datos en el otro dispositivo.</string>
-    <string name="fv_msg_3">Preservar el archivo con una copia de archivo o compartir desde el menú</string>
-    <string name="fv_msg_2">Notificar: si desinstala la aplicación, también se elimina el archivo de exportación / copia de seguridad.</string>
+    <string name="fv_msg_5">Nombre de archivo es</string>
+    <string name="fv_msg_4">Comparta datos del dispositivo actual con el correo electrónico, oneDrive. O, transferencia de administrador de archivos para guardar.</string>
+    <string name="fv_msg_3">Los datos de copia de seguridad</string>
+    <string name="fv_msg_2">Advertencia: si la aplicación se desinstala, el archivo de copia de seguridad también se elimina.</string>
     <string name="fv_msg_1">Elementos del perfil de cuenta actualmente en db</string>
     <string name="fv_msg_10">Use el menú para exportar datos a este archivo.</string>
     <string name="fv_msg_11">Elementos del perfil de cuenta para respaldar</string>
@@ -164,14 +164,13 @@
     <string name="fv_msg_25">Instrucción de permiso de subvención</string>
     <string name="fv_msg_26">Conceder acceso a esta aplicación desde Configuración</string>
     <string name="fv_msg_27">Seleccione la aplicación Cuentas en la lista de aplicaciones. Seleccionar permisos. Luego, configure Almacenamiento.</string>
-    <string name="fv_msg_28">Una vez que se otorgue el permiso, regrese a esta actividad</string>
+    <string name="fv_msg_28">Una vez que se otorga el permiso, regrese a la pantalla de inicio, luego solicite el menú de copia de seguridad / restauración para regresar a esta pantalla</string>
     <string name="fv_msg_29">notificar</string>
     <string name="fv_msg_30">A partir del nombre de la versión 11, el almacenamiento de respaldo se ha movido. Ver nombre de archivo desde el menú</string>
     <string name="fv_msg_31">El archivo de respaldo no existe.</string>
     <string name="fv_msg_32">Copia de seguridad del menú para crear un archivo.</string>
     <string name="fv_msg_33">El archivo de respaldo existe. ¿Quieres sobreescribirlo? Creado:</string>
     <string name="fv_msg_34">Confirmar copia de seguridad</string>
-    <string name="fv_msg_35">Confirme la restauración del archivo de copia de seguridad en la base de datos</string>
     <string name="fv_msg_36">creada</string>
     <string name="fv_msg_37">Mantenga el respaldo de Cuentas en un lugar seguro para futuras restauraciones.</string>
     <string name="fv_msg_38">Compartir datos de cuentas</string>
@@ -206,4 +205,17 @@
     <string name="openClickForCalendar">Haga clic para ver el calendario para la fecha de apertura</string>
     <string name="hint_text">Escriba Buscar o haga clic para seleccionar de la lista desplegable</string>
     <string name="if_so_direction">Si es así, haga clic en \'sí\' o haga clic en el botón más (+) de arriba para agregar una nueva cuenta</string>
+    <string name="fv_msg_35" translatable="false">Confirmar Restaurar base de datos desde %1$s</string>
+    <string name="fv_msg_45">restaurar la base de datos</string>
+    <string name="enterfilename">Ingrese el nombre del archivo, si es diferente</string>
+    <string name="splInstr">Para reorganizar, presione una cuenta, sostenga momentáneamente, luego muévase a la nueva ubicación</string>
+    <string name="gotoSettings">Ir a la configuración</string>
+    <string name="selectapps">Seleccionar aplicaciones</string>
+    <string name="selectappaccounts">Seleccionar cuentas de aplicaciones</string>
+    <string name="selectpermissions">Seleccionar permisos</string>
+    <string name="allowstorage">Permitir almacenamiento</string>
+    <string name="fv_msg_46">Instalar cuentas de aplicaciones en un nuevo dispositivo</string>
+    <string name="fv_msg_47">Transfiera al nuevo dispositivo para el mismo directorio / archivo</string>
+    <string name="fv_msg_48">El menú solicita una restauración y selecciona el archivo copiado</string>
+    <string name="fv_msg_49">Información sobre cómo agregar datos a otro dispositivo</string>
 </resources>

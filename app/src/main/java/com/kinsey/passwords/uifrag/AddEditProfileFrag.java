@@ -368,9 +368,9 @@ public class AddEditProfileFrag extends Fragment
         } else if (!Patterns.WEB_URL.matcher(corpWebsiteInput).matches()) {
             textInputCorpWebsite.getEditText().setError("Please enter a valid corp website");
             return false;
-        } else if (!corpWebsiteInput.startsWith("http")) {
-            textInputCorpWebsite.getEditText().setError("Websites must start with http");
-            return false;
+//        } else if (!corpWebsiteInput.startsWith("http")) {
+//            textInputCorpWebsite.getEditText().setError("Websites must start with http");
+//            return false;
         } else {
             textInputCorpName.getEditText().setError(null);
             return true;

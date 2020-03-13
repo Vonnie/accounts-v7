@@ -111,7 +111,7 @@
     <string name="suggest_password_hint">Password</string>
     <string name="suggest_notes_hint">Tandaan</string>
     <string name="acctlist_by_corp_name">Sa Pangalan ng Corporate</string>
-    <string name="acctlist_by_custom">Sa pamamagitan ng Custom</string>
+    <string name="acctlist_by_custom">Sa pamamagitan ng Pasadyang Order</string>
     <string name="acctlist_by_open_date_descending">Sa pamamagitan ng Buksan Petsa, pababang</string>
     <string name="acctlist_by_account_id">Sa pamamagitan ng Account Id</string>
     <string name="sugg_password">Password</string>
@@ -137,10 +137,10 @@
     <string name="toast_all_suggest_deleted">Natanggal ang lahat ng mga mungkahi</string>
     <string name="toast_10_new_suggests_added">10 mga bagong nagmumungkahi na naidagdag</string>
     <string name="fv_msg_1">Mga item sa Profile ng Account na kasalukuyang nasa database</string>
-    <string name="fv_msg_2">Abisuhan: Kung i-uninstall ang app, tinanggal din ang na-export / backup file.</string>
-    <string name="fv_msg_3">Panatilihin ang file na may isang kopya ng file o ibahagi mula sa menu</string>
-    <string name="fv_msg_4">Impormasyon: Upang i-setup ang app na ito sa isa pang aparato, gamitin ang tampok na I-backup / Ibalik upang ma-populate ang data sa iba pang aparato.</string>
-    <string name="fv_msg_5">Mga Hakbang: 1. Pag-backup 2. I-install ang app sa iba pang aparato 3. Kopyahin sa backup file ng aparato, tingnan ang pisikal na lokasyon mula sa filename ng item item 4. Ibalik</string>
+    <string name="fv_msg_2">Babala: Kung ang app ay hindi mai-install, tinanggal din ang backup file.</string>
+    <string name="fv_msg_3">I-back up ang data</string>
+    <string name="fv_msg_4">Ibahagi ang data mula sa kasalukuyang aparato gamit ang email, oneDrive. O kaya, ilipat ang file manager upang makatipid.</string>
+    <string name="fv_msg_5">Ang filename ay</string>
     <string name="fv_msg_6">Gumamit ng menu upang ma-export ang data.</string>
     <string name="fv_msg_7">Mga item sa Profile ng Account na kasalukuyang nasa db</string>
     <string name="fv_msg_8">Tulad ng pangalan ng bersyon 11, ang backup na imbakan ay lumipat. Tingnan ang Filename mula sa menu</string>
@@ -163,7 +163,7 @@
     <string name="fv_msg_25">Pagtuturo ng Pagbibigay ng Pahintulot</string>
     <string name="fv_msg_26">Ibigay ang pag-access para sa App na ito mula sa Mga Setting</string>
     <string name="fv_msg_27">Piliin ang app ng Account sa listahan ng mga app. Piliin ang mga pahintulot. Pagkatapos, itakda sa Imbakan.</string>
-    <string name="fv_msg_28">Kapag nabigyan ang pahintulot, bumalik sa aktibidad na ito</string>
+    <string name="fv_msg_28">Kapag nabigyan ang pahintulot, bumalik sa home screen, pagkatapos ay humiling ng menu para sa backup / ibalik upang bumalik sa screen na ito</string>
     <string name="fv_msg_29">Ipaalam</string>
     <string name="fv_msg_30">Tulad ng pangalan ng bersyon 11, ang backup na imbakan ay lumipat. Tingnan ang Filename mula sa menu</string>
     <string name="fv_msg_31">Ang pag-backup ng File ay hindi umiiral.</string>
@@ -173,7 +173,6 @@
     <string name="fv_msg_34">Kumpirma ang backup</string>
     <string name="yes">oo</string>
     <string name="no">Hindi</string>
-    <string name="fv_msg_35">Kinumpirma ang Ibalik ang data DB mula sa nakaraang backup file</string>
     <string name="fv_msg_36">nilikha</string>
     <string name="toast_no_export_to_share">Walang mai-export na File na maibabahagi</string>
     <string name="fv_msg_37">Panatilihin ang backup ng Mga Account sa ligtas na lugar para sa anumang ibabalik sa hinaharap.</string>
@@ -204,4 +203,18 @@
     <string name="opened_button_descr">Nabuksan ang petsa, default ay Kasalukuyang Petsa %1$s</string>
     <string name="seq_descr">Seq %1$s</string>
     <string name="if_so_direction">Kung gayon, mag-click sa \'oo\' o mag-click sa button na plus (+) sa itaas upang magdagdag ng isang bagong account</string>
+    <string name="delete_cap" translatable="false">Tanggalin</string>
+    <string name="fv_msg_35" translatable="false">Kinumpirma ang Ibalik ang data DB mula sa %1$s</string>
+    <string name="fv_msg_45">ibalik ang database</string>
+    <string name="enterfilename">Ipasok ang filename, kung naiiba</string>
+    <string name="splInstr">Upang muling ayusin, pindutin ang isang account, matagal nang matagal, pagkatapos ay lumipat sa bagong pagkakalagay</string>
+    <string name="gotoSettings">Pumunta sa Mga Setting</string>
+    <string name="selectapps">Piliin ang apps</string>
+    <string name="selectappaccounts">Piliin ang Mga Account sa app</string>
+    <string name="selectpermissions">Piliin ang Mga Pahintulot</string>
+    <string name="allowstorage">Payagan ang Imbakan</string>
+    <string name="fv_msg_49">Impormasyon sa kung paano magdagdag ng data sa isa pang aparato</string>
+    <string name="fv_msg_48">Humiling ang isang menu ng pagpapanumbalik at piliin para sa kinopyang file</string>
+    <string name="fv_msg_47">Ilipat sa bagong aparato para sa parehong dir / file</string>
+    <string name="fv_msg_46">I-install ang mga Account Account sa bagong aparato</string>
 </resources>

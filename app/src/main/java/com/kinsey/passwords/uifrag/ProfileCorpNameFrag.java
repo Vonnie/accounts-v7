@@ -54,7 +54,7 @@ public class ProfileCorpNameFrag extends Fragment {
     private RecyclerViewPositionHelper mRecyclerViewHelper;
     private RecyclerView.LayoutManager mLayoutManager;
     private ProfileViewModel profileViewModel;
-    private TextView tvListTitle;
+    private TextView tvListTitle, tvSplInstr;
     private List<Profile> profileListFull;
     private int listsortOrder;
 
@@ -108,6 +108,7 @@ public class ProfileCorpNameFrag extends Fragment {
 
         recyclerView = view.findViewById(R.id.account_items_list);
         tvListTitle = view.findViewById(R.id.list_title);
+        tvSplInstr = view.findViewById(R.id.spl_instr);
 
         recyclerView.setHasFixedSize(true);
 
@@ -559,6 +560,7 @@ public class ProfileCorpNameFrag extends Fragment {
 
     private void sortDataByCorpName(Bundle savedInstanceState) {
         tvListTitle.setText(getString(R.string.acctlist_by_corp_name));
+        tvSplInstr.setVisibility(View.GONE);
         profileViewModel.getAllProfilesByCorpName().observe(getViewLifecycleOwner(), new Observer<List<Profile>>() {
             @Override
             public void onChanged(List<Profile> profiles) {
@@ -595,6 +597,7 @@ public class ProfileCorpNameFrag extends Fragment {
 
     private void sortDataByPassortId(Bundle savedInstanceState) {
         tvListTitle.setText(getString(R.string.acctlist_by_account_id));
+        tvSplInstr.setVisibility(View.GONE);
         profileViewModel.getAllProfilesByPassportId().observe(getViewLifecycleOwner(), new Observer<List<Profile>>() {
             @Override
             public void onChanged(List<Profile> profiles) {
@@ -629,6 +632,7 @@ public class ProfileCorpNameFrag extends Fragment {
 
     private void sortDataByOpenDate(Bundle savedInstanceState) {
         tvListTitle.setText(getString(R.string.acctlist_by_open_date_descending));
+        tvSplInstr.setVisibility(View.GONE);
         profileViewModel.getAllProfilesByOpenDate().observe(getViewLifecycleOwner(), new Observer<List<Profile>>() {
             @Override
             public void onChanged(List<Profile> profiles) {
@@ -664,6 +668,7 @@ public class ProfileCorpNameFrag extends Fragment {
 
     private void sortDataByCustomSort(Bundle savedInstanceState) {
         tvListTitle.setText(getString(R.string.acctlist_by_custom));
+        tvSplInstr.setVisibility(View.VISIBLE);
         profileViewModel.getAllProfilesCustomSort().observe(getViewLifecycleOwner(), new Observer<List<Profile>>() {
             @Override
             public void onChanged(List<Profile> profiles) {

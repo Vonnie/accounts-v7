@@ -15,7 +15,7 @@
     <string name="cancel">Annuleer</string>
     <string name="delete_button_description">Knop om wachtwoord te verwijderen</string>
     <string name="descr_save">Account opslaan</string>
-    <string name="delete_cap" translatable="false">verwijderen</string>
+    <string name="delete_cap" translatable="false">Verwijderen</string>
     <string name="down_button_description">Onderaan item op lijst</string>
     <string name="edit_acct_btn_hint">Bewerk account</string>
     <string name="edit_button_description">Bewerk wachtwoordtekst</string>
@@ -111,7 +111,7 @@
     <string name="addedit_notes">aantekeningen</string>
     <string name="acctlist_by_account_id">Op account-ID</string>
     <string name="acctlist_by_corp_name">Op bedrijfsnaam</string>
-    <string name="acctlist_by_custom">Door Custom</string>
+    <string name="acctlist_by_custom">Door aangepaste volgorde</string>
     <string name="acctlist_by_open_date_descending">Op open datum, aflopend</string>
     <string name="menu_addedit_save">Opslaan</string>
     <string name="menu_main_sort">Soort</string>
@@ -138,10 +138,10 @@
     <string name="toast_sugg_deleted">Suggestie verwijderd</string>
     <string name="toast_suggest_updated">Voorstellen bijgewerkt</string>
     <string name="fv_msg_1">Accountprofielitems die momenteel op db</string>
-    <string name="fv_msg_2">Melden: als de app wordt verwijderd, wordt ook het export- / back-upbestand verwijderd.</string>
-    <string name="fv_msg_3">Bestand bewaren met een bestandskopie of delen vanuit menu</string>
-    <string name="fv_msg_4">Informatie: om deze app op een ander apparaat in te stellen, gebruikt u deze back-up / herstelfunctie om gegevens op het andere apparaat in te vullen.</string>
-    <string name="fv_msg_5">Stappen: 1. Back-up 2. App op ander apparaat installeren 3. Kopiëren naar apparaat back-upbestand, zie fysieke locatie vanuit menu-item bestandsnaam 4. Herstellen</string>
+    <string name="fv_msg_2">Waarschuwing: als de app is verwijderd, wordt het back-upbestand ook verwijderd.</string>
+    <string name="fv_msg_3">Back-upgegevens</string>
+    <string name="fv_msg_4">Deel gegevens van het huidige apparaat met e-mail, oneDrive. Of, overdracht van bestandsbeheer om op te slaan.</string>
+    <string name="fv_msg_5">Bestandsnaam is</string>
     <string name="fv_msg_10">Gebruik het menu om gegevens naar dit bestand te exporteren.</string>
     <string name="fv_msg_11">Accountprofielitems om te back-uppen</string>
     <string name="fv_msg_6">Gebruik het menu om gegevens te exporteren.</string>
@@ -164,14 +164,14 @@
     <string name="fv_msg_25">Verlening machtigingsinstructie</string>
     <string name="fv_msg_26">Toegang verlenen voor deze app via Instellingen</string>
     <string name="fv_msg_27">Selecteer de app Accounts in de applijst. Selecteer machtigingen. Zet vervolgens op Opslag.</string>
-    <string name="fv_msg_28">Nadat toestemming is verleend, keert u terug naar deze activiteit</string>
+    <string name="fv_msg_28">Zodra toestemming is verleend, keert u terug naar het startscherm en vervolgens naar het menuverzoek voor back-up / herstel om terug te keren naar dit scherm</string>
     <string name="fv_msg_29">verwittigen</string>
     <string name="fv_msg_30">Vanaf versienaam 11 is de back-upopslag verplaatst. Zie Bestandsnaam vanuit het menu</string>
     <string name="fv_msg_31">Back-upbestand bestaat niet.</string>
     <string name="fv_msg_32">Menu Backup om een ​​bestand aan te maken.</string>
     <string name="fv_msg_33">Back-upbestand bestaat. Wil je het overschrijven? gemaakt:</string>
     <string name="fv_msg_34">Bevestig back-up</string>
-    <string name="fv_msg_35">Bevestig Herstel van back-upbestand in gegevens-DB</string>
+    <string name="fv_msg_35">Bevestig Gegevens herstellen van %1$s</string>
     <string name="fv_msg_36">aangemaakt</string>
     <string name="fv_msg_37">Bewaar de back-up van uw accounts op een veilige plaats voor toekomstige herstelacties.</string>
     <string name="fv_msg_38">Deel accountgegevens</string>
@@ -206,4 +206,16 @@
     <string name="id_descr">ID kaart %1$s</string>
     <string name="seq_descr">Seq %1$s</string>
     <string name="opened_button_descr">Geopende datum, standaard is Huidige datum %1$s</string>
+    <string name="fv_msg_45">database herstellen</string>
+    <string name="enterfilename">Geef een andere bestandsnaam op</string>
+    <string name="splInstr">Om opnieuw te ordenen, drukt u op een account, houdt u even vast en gaat u naar de nieuwe plaatsing</string>
+    <string name="gotoSettings">Ga naar Instellingen</string>
+    <string name="selectapps">Selecteer apps</string>
+    <string name="selectappaccounts">Selecteer app-accounts</string>
+    <string name="selectpermissions">Selecteer Machtigingen</string>
+    <string name="allowstorage">Opslag toestaan</string>
+    <string name="fv_msg_46">Installeer app-accounts op een nieuw apparaat</string>
+    <string name="fv_msg_47">Breng over naar een nieuw apparaat voor dezelfde map / bestand</string>
+    <string name="fv_msg_48">Menu vraagt om herstel en selecteert voor gekopieerd bestand</string>
+    <string name="fv_msg_49">Informatie over het toevoegen van gegevens aan een ander apparaat</string>
 </resources>

@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.util.Log;
 import android.view.KeyEvent;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 
 public class WebViewActivity
@@ -62,8 +63,6 @@ public class WebViewActivity
         myWebView = new WebView(getApplicationContext());
 
 //        if (webAddr != null | webAddr != "") {
-            setContentView(myWebView);
-            myWebView.loadUrl(webAddr);
 //        }
 
         Log.d(TAG, "onCreate: " + webAddr);
@@ -74,10 +73,14 @@ public class WebViewActivity
 //        webview.loadUrl(webAddr);
         setTitle(corpName);
 
-//        WebSettings webSettings = webview.getSettings();
-//        webSettings.setJavaScriptEnabled(true);
-//        webSettings.setDomStorageEnabled(true);
-//
+        WebSettings webSettings = myWebView.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+        webSettings.setDomStorageEnabled(true);
+
+        setContentView(myWebView);
+        myWebView.loadUrl(webAddr);
+
+        //
 //        Log.d(TAG, "onCreate: loadUrl returned");
 //        blnWebLoaded = true;
 //

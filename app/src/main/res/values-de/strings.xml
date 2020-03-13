@@ -47,13 +47,12 @@
     <string name="edit_description_description">Schaltfläche zum Bearbeiten von Passwörtern</string>
     <string name="acctlist_by_account_id">Nach Konto-ID</string>
     <string name="acctlist_by_corp_name">Nach Firmenname</string>
-    <string name="acctlist_by_custom">nach Brauch</string>
+    <string name="acctlist_by_custom">Auf Bestellung</string>
     <string name="acctlist_by_open_date_descending">Nach Eröffnungsdatum absteigend</string>
     <string name="cancel">stornieren</string>
     <string name="listdiag_acc_sub_message">Wählen Sie mit Klick</string>
     <string name="home_instruction_tex">Klickfunktion</string>
     <string name="fv_msg_34">Sicherung bestätigen</string>
-    <string name="fv_msg_35">Bestätigen Sie die Wiederherstellung der Sicherungsdatei in der Daten-DB</string>
     <string name="about_copyright">Copyright © 2020</string>
     <string name="addedit_corp_name_hint">Firmenname (erforderlich)</string>
     <string name="fv_msg_36">erstellt</string>
@@ -74,7 +73,7 @@
     <string name="home_message_text_18">Exportieren Sie die Datenbank über den Menüpunkt \'Backup / Restore\' für Backup. Diese exportierte Datendatei ist eine Json-Dateidarstellung der Konten-Datenbank. Verwenden Sie dies für die Sicherung.</string>
     <string name="toast_accounts_backed_up">Von Konten gesicherte Datei</string>
     <string name="fv_msg_18">Exportdatei noch nicht erstellt</string>
-    <string name="delete_cap">Delete</string>
+    <string name="delete_cap">Löschen</string>
     <string name="toast_export_error">Der Export hat Fehler</string>
     <string name="menuacct_external_accts">Externe Konten</string>
     <string name="menuvw_show_filename">Externe Konten</string>
@@ -91,7 +90,7 @@
     <string name="home_message_text_25">Wenn diese App deinstalliert wird, werden ihre Sicherungsdaten bei der Installation gelöscht. Kopieren Sie zum Beibehalten in einen anderen Bereich oder geben Sie sie über das Menü \"Freigeben\" frei</string>
     <string name="menuvw_import">importieren</string>
     <string name="home_btn_import_text">Importieren Sie Konten aus einem vorherigen Export</string>
-    <string name="fv_msg_4">Information: Um diese App auf einem anderen Gerät einzurichten, verwenden Sie diese Sicherungs- / Wiederherstellungsfunktion, um Daten auf dem anderen Gerät zu speichern.</string>
+    <string name="fv_msg_4">Teilen Sie Daten vom aktuellen Gerät mit E-Mail, oneDrive. Oder Dateimanager übertragen, um zu speichern.</string>
     <string name="fv_msg_37">Bewahren Sie die Kontosicherung für zukünftige Wiederherstellungen an einem sicheren Ort auf.</string>
     <string name="home_message_text_13">Wenn Sie Kennwörter elektronisch aufbewahren, selbst wenn diese verschlüsselt sind, können Sie Ihre Anmeldeinformationen stehlen. Wenn Sie eine elektronische Kopie (aus einer Datei oder der App-Datenbank) mit den Anmeldeinformationen des Unternehmens, des Benutzernamens und des Kennworts haben, sind Ihre Konten in hohem Maße Hackern ausgesetzt.</string>
     <string name="home_message_text_16">Wenn später ein Konto benötigt wird, koppeln Sie Konto und Passwort, indem Sie in der App nach dem Konto suchen. Verwenden Sie die Konto-ID, um das Kennwort in einem Papierbericht anzugeben. Die Konto-IDs werden inkrementiert, daher wird der Papierbericht in der Reihenfolge der Konto-ID hinzugefügt.</string>
@@ -108,9 +107,9 @@
     <string name="addedit_notes">Anmerkungen</string>
     <string name="fv_msg_16">Benachrichtigung</string>
     <string name="fv_msg_29">benachrichtigen</string>
-    <string name="fv_msg_2">Benachrichtigen: Bei der Deinstallation der App wird auch die exportierte / gesicherte Datei gelöscht.</string>
+    <string name="fv_msg_2">Warnung: Wenn die App deinstalliert wird, wird auch die Sicherungsdatei gelöscht.</string>
     <string name="fv_msg_39">Kein Upload / Update</string>
-    <string name="fv_msg_28">Kehren Sie nach Erteilung der Berechtigung zu dieser Aktivität zurück</string>
+    <string name="fv_msg_28">Kehren Sie nach Erteilung der Berechtigung erneut zum Startbildschirm zurück und sichern Sie das Menü</string>
     <string name="home_message_text_4">Eine der vier geordneten Listen ist eine benutzerdefinierte geordnete Liste. Die Bestellung wird vom Benutzer arrangiert. Auf diese Weise bleiben wichtigere Konten ganz oben auf der Liste. Elemente durch Ziehen / Ablegen eines Elements neu anordnen.</string>
     <string name="sugg_password">Passwort</string>
     <string name="suggest_password_hint">Passwort</string>
@@ -123,7 +122,7 @@
     <string name="toast_enter_email">Bitte geben Sie eine E-mail-Adresse ein</string>
     <string name="toast_enter_title_descr">Bitte geben Sie einen Titel und eine Beschreibung ein</string>
     <string name="toast_reqd_cols_for_save">Bitte geben Sie den Firmennamen, den Benutzernamen und die E-Mail-Adresse des Benutzers ein</string>
-    <string name="fv_msg_3">Bewahren Sie die Datei mit einer Dateikopie oder einer Freigabe aus dem Menü auf</string>
+    <string name="fv_msg_3">Backup-Daten</string>
     <string name="home_message_text_12">Geheimhaltung von Passwörtern für Privatkonten</string>
     <string name="menu_profile">Profil</string>
     <string name="toast_profile_added">Profil hinzugefügt</string>
@@ -159,7 +158,7 @@
     <string name="menuacct_sort_corpname">Sortieren nach Firmenname</string>
     <string name="menuacct_sort_opendate">Sortieren nach Eröffnungsdatum</string>
     <string name="home_message_text_24">Spezielle Notiz</string>
-    <string name="fv_msg_5">Schritte: 1. Sichern 2. App auf anderem Gerät installieren 3. In Gerätesicherungsdatei kopieren, siehe physischer Speicherort unter Menüpunkt Dateiname 4. Wiederherstellen</string>
+    <string name="fv_msg_5">Dateiname ist</string>
     <string name="toast_signin">Erfolgreich angemeldet</string>
     <string name="toast_sugg_added">Vorschlagen hinzugefügt</string>
     <string name="toast_error_sugg_not_updated">Vorschlag kann nicht aktualisiert werden</string>
@@ -206,4 +205,17 @@
     <string name="seq_descr">Seq %1$s</string>
     <string name="opened_button_descr">Öffnungsdatum, Standard ist Aktuelles Datum %1$s</string>
     <string name="if_so_direction">Wenn ja, klicken Sie auf \"Ja\" oder auf das Pluszeichen (+) oben, um ein neues Konto hinzuzufügen</string>
+    <string name="fv_msg_35" translatable="false">Bestätigen Sie Wiederherstellen der Daten-DB von %1$s</string>
+    <string name="fv_msg_45">Datenbank wiederherstellen</string>
+    <string name="enterfilename">Geben Sie den Dateinamen ein, falls abweichend</string>
+    <string name="splInstr">Drücken Sie zum Neuanordnen auf ein Konto, halten Sie es kurz gedrückt und wechseln Sie dann zur neuen Position</string>
+    <string name="gotoSettings">Gehe zu den Einstellungen</string>
+    <string name="selectapps">Apps auswählen</string>
+    <string name="selectappaccounts">Wählen Sie App-Konten</string>
+    <string name="selectpermissions">Wählen Sie Berechtigungen</string>
+    <string name="allowstorage">Speicher zulassen</string>
+    <string name="fv_msg_46">Installieren Sie die App-Konten auf einem neuen Gerät</string>
+    <string name="fv_msg_47">Für dasselbe Verzeichnis / dieselbe Datei auf ein neues Gerät übertragen</string>
+    <string name="fv_msg_48">Menü fordert eine Wiederherstellung an und wählt für kopierte Datei</string>
+    <string name="fv_msg_49">Informationen zum Hinzufügen von Daten zu einem anderen Gerät</string>
 </resources>

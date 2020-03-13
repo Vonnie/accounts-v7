@@ -112,7 +112,7 @@
     <string name="suggest_password_hint">Kata sandi</string>
     <string name="suggest_notes_hint">Catatan</string>
     <string name="acctlist_by_corp_name">Dengan Nama Perusahaan</string>
-    <string name="acctlist_by_custom">Oleh Kustom</string>
+    <string name="acctlist_by_custom">Dengan Pesanan Kustom</string>
     <string name="acctlist_by_open_date_descending">Dengan Tanggal Terbuka, turun</string>
     <string name="acctlist_by_account_id">Berdasarkan ID Akun</string>
     <string name="sugg_password">Kata sandi</string>
@@ -138,10 +138,10 @@
     <string name="toast_all_suggest_deleted">Semua saran dihapus</string>
     <string name="toast_10_new_suggests_added">10 saran baru ditambahkan</string>
     <string name="fv_msg_1">Item Profil Akun saat ini ada di basis data</string>
-    <string name="fv_msg_2">Beri tahu: Jika mencopot aplikasi, file yang diekspor / cadangan juga dihapus.</string>
-    <string name="fv_msg_3">Simpan file dengan salinan file atau bagikan dari menu</string>
-    <string name="fv_msg_4">Informasi: Untuk mengatur aplikasi ini ke perangkat lain, gunakan fitur Backup / Restore ini untuk mengisi data ke perangkat lain.</string>
-    <string name="fv_msg_5">Langkah-langkah: 1. Cadangkan 2. Pasang aplikasi ke perangkat lain 3. Salin ke file cadangan perangkat, lihat lokasi fisik dari nama item item 4. Kembalikan</string>
+    <string name="fv_msg_2">Peringatan: Jika aplikasi dihapus, file cadangan juga dihapus.</string>
+    <string name="fv_msg_3">Cadangkan data</string>
+    <string name="fv_msg_4">Bagikan data dari perangkat saat ini dengan email, oneDrive. Atau, transfer file manager untuk disimpan.</string>
+    <string name="fv_msg_5">Nama file adalah</string>
     <string name="fv_msg_6">Gunakan menu untuk mengekspor data.</string>
     <string name="fv_msg_7">Item Profil Akun saat ini ada di db</string>
     <string name="fv_msg_8">Pada nama versi 11, penyimpanan cadangan telah dipindahkan. Lihat Nama file dari menu</string>
@@ -164,7 +164,7 @@
     <string name="fv_msg_25">Berikan Instruksi Izin</string>
     <string name="fv_msg_26">Berikan akses untuk Aplikasi ini dari Pengaturan</string>
     <string name="fv_msg_27">Pilih aplikasi Akun di daftar aplikasi. Pilih izin. Kemudian, atur Storage.</string>
-    <string name="fv_msg_28">Setelah izin diberikan, kembalilah ke aktivitas ini</string>
+    <string name="fv_msg_28">Setelah izin diberikan, kembali ke layar beranda, lalu menu permintaan cadangan / pengembalian untuk kembali ke layar ini</string>
     <string name="fv_msg_29">Memberitahu</string>
     <string name="fv_msg_30">Pada nama versi 11, penyimpanan cadangan telah dipindahkan. Lihat Nama file dari menu</string>
     <string name="fv_msg_31">File Cadangan tidak ada.</string>
@@ -174,7 +174,6 @@
     <string name="fv_msg_34">Konfirmasikan pencadangan</string>
     <string name="yes">Iya</string>
     <string name="no">Tidak</string>
-    <string name="fv_msg_35">Konfirmasikan Pulihkan data DB dari file cadangan sebelumnya</string>
     <string name="fv_msg_36">dibuat</string>
     <string name="toast_no_export_to_share">Tidak Ada File yang Diekspor untuk dibagikan</string>
     <string name="fv_msg_37">Simpan cadangan Akun di tempat yang aman untuk pemulihan di masa mendatang.</string>
@@ -205,4 +204,18 @@
     <string name="opened_button_descr">Tanggal dibuka, standarnya adalah Tanggal Saat Ini %1$s</string>
     <string name="seq_descr">Seq %1$s</string>
     <string name="if_so_direction">Jika demikian, klik \'ya\' atau klik tombol tambah (+) di atas untuk menambahkan akun baru</string>
+    <string name="delete_cap" translatable="false">Menghapus</string>
+    <string name="fv_msg_35" translatable="false">Konfirmasikan Pulihkan data DB dari %1$s</string>
+    <string name="fv_msg_45">pulihkan database</string>
+    <string name="enterfilename">Masukkan nama file, jika berbeda</string>
+    <string name="splInstr">Untuk mengatur ulang, tekan akun, tahan sebentar, lalu pindah ke penempatan baru</string>
+    <string name="gotoSettings">Pergi ke pengaturan</string>
+    <string name="selectapps">Pilih aplikasi</string>
+    <string name="selectappaccounts">Pilih Akun aplikasi</string>
+    <string name="selectpermissions">Pilih Izin</string>
+    <string name="allowstorage">Izinkan Penyimpanan</string>
+    <string name="fv_msg_49">Informasi tentang cara menambahkan data ke perangkat lain</string>
+    <string name="fv_msg_48">Menu meminta pemulihan dan pilih untuk file yang disalin</string>
+    <string name="fv_msg_47">Transfer ke perangkat baru untuk dir / file yang sama</string>
+    <string name="fv_msg_46">Instal Akun aplikasi di perangkat baru</string>
 </resources>

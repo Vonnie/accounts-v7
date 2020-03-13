@@ -8,7 +8,6 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.net.Uri;
@@ -29,15 +28,11 @@ import com.kinsey.passwords.tools.ProfileJsonListIO;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.fragment.app.Fragment;
 
-import android.os.Environment;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -86,7 +81,8 @@ public class FileViewActivity extends AppCompatActivity {
     boolean onFirstReported = true;
     boolean blnListRestored = false;
     private static final int BACKUP_FILE_REQUESTED = 1;
-    private static final int PICK_FILE_REQUEST = 2;
+    private static final int PICK_FILE_SHOW = 2;
+    private static final int PICK_FILE_RESTORE = 3;
 
     private AdView mAdView;
 
@@ -120,23 +116,20 @@ public class FileViewActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle(R.string.menuacct_backup_restore_accts);
 
-        Log.d(TAG, "onCreate: permission " +
-                PackageInfo.REQUESTED_PERMISSION_GRANTED
-                );
-        if (PackageInfo.REQUESTED_PERMISSION_GRANTED == PackageInfo.INSTALL_LOCATION_AUTO) {
-            Log.d(TAG, "onCreate: permission auto ");
-        }
-        if (PackageInfo.REQUESTED_PERMISSION_GRANTED == PackageInfo.INSTALL_LOCATION_INTERNAL_ONLY) {
-            Log.d(TAG, "onCreate: permission internal only ");
-        }
-        if (PackageInfo.REQUESTED_PERMISSION_GRANTED == PackageInfo.INSTALL_LOCATION_PREFER_EXTERNAL) {
-            Log.d(TAG, "onCreate: permission external ");
-        }
-
-        Log.d(TAG, "onCreate: dir " + getFilesDir());
-        Log.d(TAG, "onCreate: dir " + getExternalFilesDir(""));
-
-        Log.d(TAG, "onCreate: uris " + getContentResolver().getPersistedUriPermissions());
+//        Log.d(TAG, "onCreate: permission " +
+//                PackageInfo.REQUESTED_PERMISSION_GRANTED
+//                );
+//        if (PackageInfo.REQUESTED_PERMISSION_GRANTED == PackageInfo.INSTALL_LOCATION_INTERNAL_ONLY) {
+//            Log.d(TAG, "onCreate: permission internal only ");
+//        }
+//        if (PackageInfo.REQUESTED_PERMISSION_GRANTED == PackageInfo.INSTALL_LOCATION_PREFER_EXTERNAL) {
+//            Log.d(TAG, "onCreate: permission external ");
+//        }
+//
+//        Log.d(TAG, "onCreate: dir " + getFilesDir());
+//        Log.d(TAG, "onCreate: dir " + getExternalFilesDir(""));
+//
+//        Log.d(TAG, "onCreate: uris " + getContentResolver().getPersistedUriPermissions());
 
 //        if (getExternalFilesDir("").exists()) {
 //            msgDialog("External Storage exists");
@@ -268,7 +261,8 @@ public class FileViewActivity extends AppCompatActivity {
 
             case R.id.vw_import:
                 Log.d(TAG, "onOptionsItemSelected: Import");
-                restoreFilename();
+                restoreByFileChooser();
+//                restoreFilename();
 //                ImportAccountDB();
                 break;
 
@@ -381,13 +375,20 @@ public class FileViewActivity extends AppCompatActivity {
 
                 if (dirStorage.canRead()) {
                     if (fileExternal.exists()) {
+                        Log.d(TAG, "infoPage: " + fileExternal.getAbsolutePath());
                         htmlString = greetMsg() +
                                 "<hr><h5>" + adapter.getItemCount() + " " + getString(R.string.fv_msg_1) + "<h5>" +
                                 "<h5>" + accountJsonProperties(fileExternal.getAbsoluteFile().toString()) + "</h5><hr>" +
-                                "<h5>" + getString(R.string.fv_msg_2) + "</h5>" +
-                                "<h5>" + getString(R.string.fv_msg_3) + "</h5><hr>" +
-                                "<h5>" + getString(R.string.fv_msg_4) + "</h5>" +
-                                "<h5>" + getString(R.string.fv_msg_5) + "</h5>";
+                                "<h5>" + getString(R.string.fv_msg_49) + "</h5>" +
+                                "<h6>" + getString(R.string.fv_msg_2) + "</h6>" +
+                                "<ul>" +
+                                        "<li>" + getString(R.string.fv_msg_3) + "</li>" +
+                                        "<li>" + getString(R.string.fv_msg_4) + "</li>" +
+                                        "<li>" + getString(R.string.fv_msg_5) + " " + fileExternal.getAbsolutePath() + "</li>" +
+                                        "<li>" + getString(R.string.fv_msg_46) + "</li>" +
+                                        "<li>" + getString(R.string.fv_msg_47) + "</li>" +
+                                        "<li>" + getString(R.string.fv_msg_48) + "</li>" +
+                                        "</ul>" ;
                     } else {
                         htmlString = notfyMsg() +
                                 "<h4>" + getString(R.string.fv_msg_6) + "</h4>" +
@@ -443,8 +444,8 @@ public class FileViewActivity extends AppCompatActivity {
     private String greetMsg() {
         String htmlString = "<h1>" + getString(R.string.fv_msg_19) + "</h1>" +
                 "<h2>" + getString(R.string.fv_msg_20) + "</h2>" +
-                "<h3>" + getString(R.string.fv_msg_21) + "</h3>" +
-                "<h4>" + getString(R.string.fv_msg_22) + "</h4>";
+                "<h3>" + getString(R.string.fv_msg_21) + "</h3>" ;
+//                "<h4>" + getString(R.string.fv_msg_22) + "</h4>";
         return htmlString;
     }
 
@@ -455,16 +456,16 @@ public class FileViewActivity extends AppCompatActivity {
 //                "<h3>" + getString(R.string.fv_msg_26) + "</h3>" +
 //                "<h3>" + getString(R.string.fv_msg_27) + "</h3>" +
 
-                "<ul><li>Go to Settings</li>" +
-                "<li>Select apps</li>" +
-                "<li>Select this app Accounts</li>" +
-                "<li>Select Permissions</li>" +
-                "<li>Allow Storage</li></ul>" +
-                "<h3>" + getString(R.string.fv_msg_28) + "</h3>" +
+                "<ul><li>" + getString(R.string.gotoSettings) + "</li>" +
+                "<li>" + getString(R.string.selectapps) + "</li>" +
+                "<li>" + getString(R.string.selectappaccounts) + "</li>" +
+                "<li>" + getString(R.string.selectpermissions) + "</li>" +
+                "<li>" + getString(R.string.allowstorage) + "</li>" +
+                "<li>" + getString(R.string.fv_msg_28) + "</li></ul>" ;
 
 
-                "<h4>" + getString(R.string.fv_msg_29) + "</h4>" +
-                "<h4>" + getString(R.string.fv_msg_30) + "</h4>";
+//                "<h4>" + getString(R.string.fv_msg_29) + "</h4>" +
+//                "<h4>" + getString(R.string.fv_msg_30) + "</h4>";
         return htmlString;
     }
 
@@ -805,6 +806,11 @@ public class FileViewActivity extends AppCompatActivity {
 //        alertDialog.show();
     }
 
+    private void restoreByFileChooser() {
+        openFileBrowser(PICK_FILE_RESTORE);
+
+    }
+
     private void restoreFilename() {
 
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(FileViewActivity.this);
@@ -862,8 +868,8 @@ public class FileViewActivity extends AppCompatActivity {
         Log.d(TAG, "ImportAccountDB: starts");
 
         try {
-            File dirStorage = getExternalFilesDir("passport");
-            String storageFilename = dirStorage.getAbsolutePath() + "/" + strFilename;
+//            File dirStorage = getExternalFilesDir("passport");
+//            String storageFilename = dirStorage.getAbsolutePath() + "/" + strFilename;
 
 //            Log.d(TAG, "call asyncTask");
 //            new UploadProfileAsyncTask(getApplicationContext(),
@@ -877,11 +883,11 @@ public class FileViewActivity extends AppCompatActivity {
 
             final Dialog dialog = new Dialog(this);
             dialog.setContentView(R.layout.diamsg_yesno);
-            dialog.setTitle(R.string.fv_msg_35);
+            dialog.setTitle(getString(R.string.fv_msg_45)) ;
 
 
             TextView text = (TextView) dialog.findViewById(R.id.text);
-            text.setText(R.string.fv_msg_35);
+            text.setText(String.format(getString(R.string.fv_msg_35), strFilename));
             ImageView image = (ImageView) dialog.findViewById(R.id.image);
             image.setImageResource(R.drawable.ic_help_outline_black);
 
@@ -892,7 +898,7 @@ public class FileViewActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     new UploadProfileAsyncTask(getApplicationContext(),
-                            webView, progressBar, profileViewModel).execute(storageFilename);
+                            webView, progressBar, profileViewModel).execute(strFilename);
                     blnListRestored = true;
                     dialog.dismiss();
                 }
@@ -972,7 +978,7 @@ public class FileViewActivity extends AppCompatActivity {
 //        msgDialog(displayMsg);
 
 
-        openFileBrowser();
+        openFileBrowser(PICK_FILE_SHOW);
 
 
 //        openFileChooser();
@@ -1016,7 +1022,7 @@ public class FileViewActivity extends AppCompatActivity {
 
     }
 
-    private void openFileBrowser() {
+    private void openFileBrowser(int requestCode) {
 //        UtilsRG.info("Open filechooser to read a file");
 
 
@@ -1034,7 +1040,7 @@ public class FileViewActivity extends AppCompatActivity {
 //        if(hasPermission(PERMISSION_REQUEST_CODE, readExternalStoragePermission)) {
             new MaterialFilePicker()
                     .withActivity(FileViewActivity.this)
-                    .withRequestCode(PICK_FILE_REQUEST)
+                    .withRequestCode(requestCode)
                     .withFilter(Pattern.compile(".*\\.json$"))
                     .withFilterDirectories(true) // Set directories filterable (false by default)
                     .withHiddenFiles(false) // Show hidden files and folders
@@ -1421,19 +1427,32 @@ public class FileViewActivity extends AppCompatActivity {
                 Log.d(TAG, "file share cancelled");
             }
         } else {
-            if (requestCode == PICK_FILE_REQUEST) {
+            if (requestCode == PICK_FILE_SHOW) {
                 if (resultCode == RESULT_OK) {
                     // success
+                    progressBar.setVisibility(View.VISIBLE);
                     Log.d(TAG, "file share was successful");
                     String filePath = data.getStringExtra(FilePickerActivity.RESULT_FILE_PATH);
                     Log.d(TAG, "onActivityResult: path " + filePath);
+//                    webView.setBackgroundColor(
+//                            ContextCompat.getColor(getApplicationContext(), R.color.backgroundTransparent)
+
                     webView.loadUrl("file://" + filePath);
+                    progressBar.setVisibility(View.INVISIBLE);
 //                    Uri file = data.getData();
 //                    Log.d(TAG, "onActivityResult: " + file.getPath());
                 }
                 else if (resultCode == Activity.RESULT_CANCELED) {
                     // cancelled
                     Log.d(TAG, "file share cancelled");
+                }
+            } else {
+                if (requestCode == PICK_FILE_RESTORE) {
+                    if (resultCode == RESULT_OK) {
+                        String strFilename = data.getStringExtra(FilePickerActivity.RESULT_FILE_PATH);
+                        Log.d(TAG, "onActivityResult: filename " + strFilename);
+                        ImportAccountDB(strFilename);
+                    }
                 }
             }
         }
