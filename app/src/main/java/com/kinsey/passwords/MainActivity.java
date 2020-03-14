@@ -3236,7 +3236,7 @@ public class MainActivity extends AppCompatActivity
 //        }
         if (editModeAdd) {
             editModeAdd = false;
-            frame2.setVisibility(View.INVISIBLE);
+            frame2.setVisibility(View.GONE);
             return;
         }
         editModeAdd = true;
