@@ -1,7 +1,6 @@
 package com.kinsey.passwords;
 
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -96,11 +95,12 @@ public class MainActivity extends AppCompatActivity
     public static final String ARG_LISTSORT = "ARG_LISTSORT";
     public static final String ARG_SELECTED_ID = "ARG_SELECTED_ID";
     public static final String ARG_IS_SHEARCH_SHOWN = "ARG_IS_SHEARCH_SHOWN";
+    public static final String ARG_EDIT_MODE_ADD = "ARG_EDIT_MODE_ADD";
 
     // whether or not the activity is i 2-pane mode
     // i.e. running in landscape on a tablet
 //    private boolean isLandscape = false;
-    private Boolean editing = false;
+    private Boolean editModeAdd = false;
 
     private static final String ACCOUNT_FRAGMENT = "AccountFragment";
 
@@ -349,6 +349,7 @@ public class MainActivity extends AppCompatActivity
             this.isSearchShown = savedInstanceState.getBoolean(ARG_IS_SHEARCH_SHOWN, false);
             this.listsortOrder = savedInstanceState.getInt(ARG_LISTSORT, 1);
             this.selectedId = savedInstanceState.getInt(ARG_SELECTED_ID);
+            this.editModeAdd = savedInstanceState.getBoolean(ARG_EDIT_MODE_ADD);
             Log.d(TAG, "onCreate: listsortOrder " + this.listsortOrder);
             FrameLayout frame = findViewById(R.id.fragment_container);
             Log.d(TAG, "onCreate: tag " + frame.getTag());
@@ -859,7 +860,7 @@ public class MainActivity extends AppCompatActivity
 
         outState.putInt(ARG_SELECTED_ID, this.selectedId);
         outState.putBoolean(ARG_IS_SHEARCH_SHOWN, this.isSearchShown);
-
+        outState.putBoolean(ARG_EDIT_MODE_ADD, this.editModeAdd);
 
 //        if (listsortOrder == LISTSORT_CORP_NAME) {
 //            profileFragment = fragmentManager.findFragmentByTag("ProfileCorpNameFrag");
@@ -3224,6 +3225,21 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onProfileCorpNameAdd() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//        Fragment addeditFragment = fragmentManager.findFragmentById(R.id.fragment_container2);
+//        if (addeditFragment instanceof AddEditProfileFrag) {
+//            AddEditProfileFrag frag = (AddEditProfileFrag) addeditFragment;
+//            if (frag.getEditModeAdd()) {
+//                return;
+//            }
+//        }
+        if (editModeAdd) {
+            editModeAdd = false;
+            frame2.setVisibility(View.INVISIBLE);
+            return;
+        }
+        editModeAdd = true;
         this.selectedId = -1;
         Profile profile = new Profile();
         AddEditProfileFrag fragment2 = new AddEditProfileFrag();
@@ -3241,8 +3257,6 @@ public class MainActivity extends AppCompatActivity
         args.putLong(AddEditProfileFrag.EXTRA_ACTVY_LONG, profile.getActvyLong());
         args.putLong(AddEditProfileFrag.EXTRA_OPEN_DATE_LONG, profile.getOpenLong());
         fragment2.setArguments(args);
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 //        AddEditProfileFrag addeditFrag = (AddEditProfileFrag) fragmentManager.findFragmentByTag("AddEditProfileFrag");
 //        if (addeditFrag == null) {
 //            fragmentTransaction.add(R.id.fragment_container2, fragment2, "AddEditProfileFrag");

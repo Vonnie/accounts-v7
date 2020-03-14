@@ -38,10 +38,9 @@
     <string name="fv_msg_21">App-Speicher verfügbar und Exportdatei vorhanden.</string>
     <string name="fv_msg_17">App-Speicher verfügbar und mit Berechtigungen,</string>
     <string name="fv_msg_30">Ab Version 11 wurde der Sicherungsspeicher verschoben. Siehe Dateiname im Menü</string>
-    <string name="fv_msg_8">Ab Version 11 wurde der Sicherungsspeicher verschoben. Siehe Dateiname im Menü</string>
     <string name="menuvw_backup">Sicherung</string>
     <string name="menuacct_backup_restore_accts">Backup wiederherstellen</string>
-    <string name="fv_msg_31">Sicherungsdatei existiert nicht.</string>
+    <string name="fv_msg_31">Sicherungsdatei %1$s existiert nicht.</string>
     <string name="fv_msg_33">Sicherungsdatei existiert. Willst du es überschreiben? Erstellt:</string>
     <string name="delete_button_description">Schaltfläche zum Löschen des Passworts</string>
     <string name="edit_description_description">Schaltfläche zum Bearbeiten von Passwörtern</string>
@@ -72,7 +71,7 @@
     <string name="home_btn_export_text">Konten exportieren</string>
     <string name="home_message_text_18">Exportieren Sie die Datenbank über den Menüpunkt \'Backup / Restore\' für Backup. Diese exportierte Datendatei ist eine Json-Dateidarstellung der Konten-Datenbank. Verwenden Sie dies für die Sicherung.</string>
     <string name="toast_accounts_backed_up">Von Konten gesicherte Datei</string>
-    <string name="fv_msg_18">Exportdatei noch nicht erstellt</string>
+    <string name="fv_msg_18">Sicherungsdatei %1$s noch nicht erstellt</string>
     <string name="delete_cap">Löschen</string>
     <string name="toast_export_error">Der Export hat Fehler</string>
     <string name="menuacct_external_accts">Externe Konten</string>
@@ -90,7 +89,7 @@
     <string name="home_message_text_25">Wenn diese App deinstalliert wird, werden ihre Sicherungsdaten bei der Installation gelöscht. Kopieren Sie zum Beibehalten in einen anderen Bereich oder geben Sie sie über das Menü \"Freigeben\" frei</string>
     <string name="menuvw_import">importieren</string>
     <string name="home_btn_import_text">Importieren Sie Konten aus einem vorherigen Export</string>
-    <string name="fv_msg_4">Teilen Sie Daten vom aktuellen Gerät mit E-Mail, oneDrive. Oder Dateimanager übertragen, um zu speichern.</string>
+    <string name="fv_msg_4">Teilen Sie Daten vom aktuellen Gerät mit E-Mail, DropBox, oneDrive. Oder Dateimanager übertragen, um zu speichern.</string>
     <string name="fv_msg_37">Bewahren Sie die Kontosicherung für zukünftige Wiederherstellungen an einem sicheren Ort auf.</string>
     <string name="home_message_text_13">Wenn Sie Kennwörter elektronisch aufbewahren, selbst wenn diese verschlüsselt sind, können Sie Ihre Anmeldeinformationen stehlen. Wenn Sie eine elektronische Kopie (aus einer Datei oder der App-Datenbank) mit den Anmeldeinformationen des Unternehmens, des Benutzernamens und des Kennworts haben, sind Ihre Konten in hohem Maße Hackern ausgesetzt.</string>
     <string name="home_message_text_16">Wenn später ein Konto benötigt wird, koppeln Sie Konto und Passwort, indem Sie in der App nach dem Konto suchen. Verwenden Sie die Konto-ID, um das Kennwort in einem Papierbericht anzugeben. Die Konto-IDs werden inkrementiert, daher wird der Papierbericht in der Reihenfolge der Konto-ID hinzugefügt.</string>
@@ -218,4 +217,6 @@
     <string name="fv_msg_47">Für dasselbe Verzeichnis / dieselbe Datei auf ein neues Gerät übertragen</string>
     <string name="fv_msg_48">Menü fordert eine Wiederherstellung an und wählt für kopierte Datei</string>
     <string name="fv_msg_49">Informationen zum Hinzufügen von Daten zu einem anderen Gerät</string>
+    <string name="splInstr2">Klicken Sie auf Karte, um Kontodetails auszuwählen. Klicken Sie erneut, um die Kontodetails zu löschen. Um ein Konto hinzuzufügen, drücken Sie erneut, um das Hinzufügen hinzuzufügen.</string>
+    <string name="splInstr3">Um die vorgeschlagenen Passwörter neu anzuordnen, drücken Sie die Karte, halten Sie sie kurz gedrückt und wechseln Sie dann zur neuen Position</string>
 </resources>

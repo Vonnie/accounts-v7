@@ -140,11 +140,10 @@
     <string name="fv_msg_1">Item Profil Akun saat ini ada di basis data</string>
     <string name="fv_msg_2">Peringatan: Jika aplikasi dihapus, file cadangan juga dihapus.</string>
     <string name="fv_msg_3">Cadangkan data</string>
-    <string name="fv_msg_4">Bagikan data dari perangkat saat ini dengan email, oneDrive. Atau, transfer file manager untuk disimpan.</string>
+    <string name="fv_msg_4">Bagikan data dari perangkat saat ini dengan email, DropBox, oneDrive. Atau, transfer file manager untuk disimpan.</string>
     <string name="fv_msg_5">Nama file adalah</string>
     <string name="fv_msg_6">Gunakan menu untuk mengekspor data.</string>
     <string name="fv_msg_7">Item Profil Akun saat ini ada di db</string>
-    <string name="fv_msg_8">Pada nama versi 11, penyimpanan cadangan telah dipindahkan. Lihat Nama file dari menu</string>
     <string name="fv_msg_9">Dir penyimpanan path tidak ada</string>
     <string name="fv_msg_10">Gunakan menu untuk mengekspor data ke file ini.</string>
     <string name="fv_msg_11">Item Profil Akun untuk dicadangkan</string>
@@ -154,7 +153,7 @@
     <string name="fv_msg_15">Entah sebelumnya tidak diekspor atau masalah penyimpanan file</string>
     <string name="fv_msg_16">Pemberitahuan</string>
     <string name="fv_msg_17">Penyimpanan aplikasi tersedia dan dengan izin,</string>
-    <string name="fv_msg_18">File ekspor belum dibuat</string>
+    <string name="fv_msg_18">File cadangan %1$s belum dibuat</string>
     <string name="fv_msg_19">Selamat datang</string>
     <string name="fv_msg_20">Properti Offload File</string>
     <string name="fv_msg_21">Penyimpanan aplikasi tersedia dan ekspor file ada.</string>
@@ -167,7 +166,7 @@
     <string name="fv_msg_28">Setelah izin diberikan, kembali ke layar beranda, lalu menu permintaan cadangan / pengembalian untuk kembali ke layar ini</string>
     <string name="fv_msg_29">Memberitahu</string>
     <string name="fv_msg_30">Pada nama versi 11, penyimpanan cadangan telah dipindahkan. Lihat Nama file dari menu</string>
-    <string name="fv_msg_31">File Cadangan tidak ada.</string>
+    <string name="fv_msg_31">File Cadangan %1$s tidak ada.</string>
     <string name="fv_msg_32">Menu Cadangan untuk membuat file.</string>
     <string name="fv_msg_33">Ada file cadangan. Ingin menimpanya? Dibuat:</string>
     <string name="toast_error_backup_create">tidak dapat membuat file Ekspor</string>
@@ -218,4 +217,6 @@
     <string name="fv_msg_48">Menu meminta pemulihan dan pilih untuk file yang disalin</string>
     <string name="fv_msg_47">Transfer ke perangkat baru untuk dir / file yang sama</string>
     <string name="fv_msg_46">Instal Akun aplikasi di perangkat baru</string>
+    <string name="splInstr2">Klik kartu untuk memilih detail akun. Klik lagi untuk menghapus detail akun. Plus untuk menambahkan akun, tekan lagi untuk menghapus tambahkan.</string>
+    <string name="splInstr3">Untuk mengatur ulang kata sandi yang disarankan, tekan kartu, tahan sebentar, lalu pindah ke penempatan baru</string>
 </resources>

@@ -139,11 +139,10 @@
     <string name="fv_msg_1">Mga item sa Profile ng Account na kasalukuyang nasa database</string>
     <string name="fv_msg_2">Babala: Kung ang app ay hindi mai-install, tinanggal din ang backup file.</string>
     <string name="fv_msg_3">I-back up ang data</string>
-    <string name="fv_msg_4">Ibahagi ang data mula sa kasalukuyang aparato gamit ang email, oneDrive. O kaya, ilipat ang file manager upang makatipid.</string>
+    <string name="fv_msg_4">Ibahagi ang data mula sa kasalukuyang aparato gamit ang email, DropBox, oneDrive. O kaya, ilipat ang file manager upang makatipid.</string>
     <string name="fv_msg_5">Ang filename ay</string>
     <string name="fv_msg_6">Gumamit ng menu upang ma-export ang data.</string>
     <string name="fv_msg_7">Mga item sa Profile ng Account na kasalukuyang nasa db</string>
-    <string name="fv_msg_8">Tulad ng pangalan ng bersyon 11, ang backup na imbakan ay lumipat. Tingnan ang Filename mula sa menu</string>
     <string name="fv_msg_9">Ang pag-iimbak ng landas ay hindi umiiral</string>
     <string name="fv_msg_10">Gumamit ng menu upang ma-export ang data sa file na ito.</string>
     <string name="fv_msg_11">Mga item sa Profile ng Account upang mai-backup</string>
@@ -153,7 +152,7 @@
     <string name="fv_msg_15">Alinman hindi nai-export o isyu sa pag-iimbak ng file</string>
     <string name="fv_msg_16">Abiso</string>
     <string name="fv_msg_17">Magagamit ang storage ng app at may mga pahintulot,</string>
-    <string name="fv_msg_18">Hindi pa nilikha ang pag-export ng file</string>
+    <string name="fv_msg_18">Hindi pa nilikha ang backup file %1$s</string>
     <string name="fv_msg_19">Maligayang pagdating</string>
     <string name="fv_msg_20">Mga Katangian ng Pag-off ng File</string>
     <string name="fv_msg_21">Magagamit ang storage ng app at umiiral ang file ng pag-export.</string>
@@ -166,7 +165,7 @@
     <string name="fv_msg_28">Kapag nabigyan ang pahintulot, bumalik sa home screen, pagkatapos ay humiling ng menu para sa backup / ibalik upang bumalik sa screen na ito</string>
     <string name="fv_msg_29">Ipaalam</string>
     <string name="fv_msg_30">Tulad ng pangalan ng bersyon 11, ang backup na imbakan ay lumipat. Tingnan ang Filename mula sa menu</string>
-    <string name="fv_msg_31">Ang pag-backup ng File ay hindi umiiral.</string>
+    <string name="fv_msg_31">Ang File ng backup na %1$s ay hindi umiiral.</string>
     <string name="fv_msg_32">Pag-backup ng menu upang lumikha ng isang file.</string>
     <string name="fv_msg_33">Mayroong backup na file. Nais mong i-overwrite ito? Nilikha:</string>
     <string name="toast_error_backup_create">hindi makalikha ng file ng Export</string>
@@ -217,4 +216,6 @@
     <string name="fv_msg_48">Humiling ang isang menu ng pagpapanumbalik at piliin para sa kinopyang file</string>
     <string name="fv_msg_47">Ilipat sa bagong aparato para sa parehong dir / file</string>
     <string name="fv_msg_46">I-install ang mga Account Account sa bagong aparato</string>
+    <string name="splInstr2">Mag-click sa card upang piliin ang detalye ng account. Mag-click muli upang i-clear ang detalye ng account. Dagdag pa upang magdagdag ng isang account, pindutin muli upang limasin.</string>
+    <string name="splInstr3">Upang muling ayusin ang mga iminungkahing password, pindutin ang card, matagal nang matagal, pagkatapos ay lumipat sa bagong pagkakalagay</string>
 </resources>

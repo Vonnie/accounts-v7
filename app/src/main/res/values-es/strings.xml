@@ -138,7 +138,7 @@
     <string name="toast_sugg_deleted">Sugerencia eliminada</string>
     <string name="toast_suggest_updated">Sugerir actualizado</string>
     <string name="fv_msg_5">Nombre de archivo es</string>
-    <string name="fv_msg_4">Comparta datos del dispositivo actual con el correo electrónico, oneDrive. O, transferencia de administrador de archivos para guardar.</string>
+    <string name="fv_msg_4">Comparta datos del dispositivo actual con correo electrónico, DropBox, oneDrive. O, transferencia de administrador de archivos para guardar.</string>
     <string name="fv_msg_3">Los datos de copia de seguridad</string>
     <string name="fv_msg_2">Advertencia: si la aplicación se desinstala, el archivo de copia de seguridad también se elimina.</string>
     <string name="fv_msg_1">Elementos del perfil de cuenta actualmente en db</string>
@@ -146,7 +146,6 @@
     <string name="fv_msg_11">Elementos del perfil de cuenta para respaldar</string>
     <string name="fv_msg_6">Use el menú para exportar datos.</string>
     <string name="fv_msg_7">Elementos del perfil de cuenta actualmente en db</string>
-    <string name="fv_msg_8">A partir del nombre de la versión 11, el almacenamiento de respaldo se ha movido. Ver nombre de archivo desde el menú</string>
     <string name="fv_msg_9">El directorio de almacenamiento de ruta no existe</string>
     <string name="fv_msg_12">Elementos del perfil de la cuenta para respaldar una vez que se otorga el permiso</string>
     <string name="fv_msg_13">advertencia</string>
@@ -154,7 +153,7 @@
     <string name="fv_msg_15">Problema de almacenamiento de archivos no exportado previamente o</string>
     <string name="fv_msg_16">notificación</string>
     <string name="fv_msg_17">Almacenamiento de aplicaciones disponible y con permisos,</string>
-    <string name="fv_msg_18">Archivo de exportación aún no creado</string>
+    <string name="fv_msg_18">El archivo de copia de seguridad %1$s aún no se creó</string>
     <string name="fv_msg_19">bienvenida</string>
     <string name="fv_msg_20">Propiedades de descarga de archivos</string>
     <string name="fv_msg_21">El almacenamiento de aplicaciones disponible y el archivo de exportación existen.</string>
@@ -167,7 +166,7 @@
     <string name="fv_msg_28">Una vez que se otorga el permiso, regrese a la pantalla de inicio, luego solicite el menú de copia de seguridad / restauración para regresar a esta pantalla</string>
     <string name="fv_msg_29">notificar</string>
     <string name="fv_msg_30">A partir del nombre de la versión 11, el almacenamiento de respaldo se ha movido. Ver nombre de archivo desde el menú</string>
-    <string name="fv_msg_31">El archivo de respaldo no existe.</string>
+    <string name="fv_msg_31">El archivo de copia de seguridad %1$s no existe.</string>
     <string name="fv_msg_32">Copia de seguridad del menú para crear un archivo.</string>
     <string name="fv_msg_33">El archivo de respaldo existe. ¿Quieres sobreescribirlo? Creado:</string>
     <string name="fv_msg_34">Confirmar copia de seguridad</string>
@@ -218,4 +217,6 @@
     <string name="fv_msg_47">Transfiera al nuevo dispositivo para el mismo directorio / archivo</string>
     <string name="fv_msg_48">El menú solicita una restauración y selecciona el archivo copiado</string>
     <string name="fv_msg_49">Información sobre cómo agregar datos a otro dispositivo</string>
+    <string name="splInstr2">Haga clic en la tarjeta para seleccionar los detalles de la cuenta. Haga clic nuevamente para borrar los detalles de la cuenta. Además para agregar una cuenta, presione nuevamente para borrar agregar.</string>
+    <string name="splInstr3">Para reorganizar las contraseñas sugeridas, presione la tarjeta, sostenga momentáneamente, luego muévase a la nueva ubicación</string>
 </resources>

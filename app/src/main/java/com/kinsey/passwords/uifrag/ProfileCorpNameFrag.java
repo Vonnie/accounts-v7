@@ -560,7 +560,8 @@ public class ProfileCorpNameFrag extends Fragment {
 
     private void sortDataByCorpName(Bundle savedInstanceState) {
         tvListTitle.setText(getString(R.string.acctlist_by_corp_name));
-        tvSplInstr.setVisibility(View.GONE);
+//        tvSplInstr.setVisibility(View.GONE);
+        tvSplInstr.setText(R.string.splInstr2);
         profileViewModel.getAllProfilesByCorpName().observe(getViewLifecycleOwner(), new Observer<List<Profile>>() {
             @Override
             public void onChanged(List<Profile> profiles) {
@@ -597,7 +598,8 @@ public class ProfileCorpNameFrag extends Fragment {
 
     private void sortDataByPassortId(Bundle savedInstanceState) {
         tvListTitle.setText(getString(R.string.acctlist_by_account_id));
-        tvSplInstr.setVisibility(View.GONE);
+//        tvSplInstr.setVisibility(View.GONE);
+        tvSplInstr.setText(R.string.splInstr2);
         profileViewModel.getAllProfilesByPassportId().observe(getViewLifecycleOwner(), new Observer<List<Profile>>() {
             @Override
             public void onChanged(List<Profile> profiles) {
@@ -632,7 +634,8 @@ public class ProfileCorpNameFrag extends Fragment {
 
     private void sortDataByOpenDate(Bundle savedInstanceState) {
         tvListTitle.setText(getString(R.string.acctlist_by_open_date_descending));
-        tvSplInstr.setVisibility(View.GONE);
+//        tvSplInstr.setVisibility(View.GONE);
+        tvSplInstr.setText(R.string.splInstr2);
         profileViewModel.getAllProfilesByOpenDate().observe(getViewLifecycleOwner(), new Observer<List<Profile>>() {
             @Override
             public void onChanged(List<Profile> profiles) {
@@ -668,7 +671,8 @@ public class ProfileCorpNameFrag extends Fragment {
 
     private void sortDataByCustomSort(Bundle savedInstanceState) {
         tvListTitle.setText(getString(R.string.acctlist_by_custom));
-        tvSplInstr.setVisibility(View.VISIBLE);
+//        tvSplInstr.setVisibility(View.VISIBLE);
+        tvSplInstr.setText(R.string.splInstr);
         profileViewModel.getAllProfilesCustomSort().observe(getViewLifecycleOwner(), new Observer<List<Profile>>() {
             @Override
             public void onChanged(List<Profile> profiles) {

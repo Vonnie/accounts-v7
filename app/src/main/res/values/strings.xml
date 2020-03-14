@@ -144,11 +144,10 @@
     <string name="fv_msg_1">Account Profile items currently on db</string>
     <string name="fv_msg_2">Warning: If app is uninstalled, the backup file also is deleted.</string>
     <string name="fv_msg_3">Back up data</string>
-    <string name="fv_msg_4">Share data from current device with email, oneDrive. Or, file manager transfer to save.</string>
+    <string name="fv_msg_4">Share data from current device with email, DropBox, oneDrive. Or, file manager transfer to save.</string>
     <string name="fv_msg_5">Filename is</string>
     <string name="fv_msg_6">Use menu to export data.</string>
     <string name="fv_msg_7">Account Profile items currently on db</string>
-    <string name="fv_msg_8">As of version name 11, backup storage has moved. See Filename from menu</string>
     <string name="fv_msg_9">Path storage dir does not exists</string>
     <string name="fv_msg_10">Use menu to export data to this file.</string>
     <string name="fv_msg_11">Account Profile items to backup</string>
@@ -158,7 +157,7 @@
     <string name="fv_msg_15">Either not previously exported or file storage issue</string>
     <string name="fv_msg_16">Notification</string>
     <string name="fv_msg_17">App storage available and with permissions,</string>
-    <string name="fv_msg_18">Export file not yet created</string>
+    <string name="fv_msg_18">Backup file %1$s not yet created</string>
     <string name="fv_msg_19">Welcome</string>
     <string name="fv_msg_20">File Offload Properties</string>
     <string name="fv_msg_21">App storage available and export file exists.</string>
@@ -170,8 +169,7 @@
     <string name="fv_msg_27">Select Accounts app in apps list. Select permissions. Then, set on Storage.</string>
     <string name="fv_msg_28">Once permission is granted, return to home screen, then menu request for backup / restore to return to this screen</string>
     <string name="fv_msg_29">Notify</string>
-    <string name="fv_msg_30">As of version name 11, backup storage has moved. See Filename from menu</string>
-    <string name="fv_msg_31">Backup File does not exist.</string>
+    <string name="fv_msg_31">Backup File %1$s does not exist.</string>
     <string name="fv_msg_32">Menu Backup to create a file.</string>
     <string name="fv_msg_33">Backup file exists. Want to overwrite it? Created:</string>
     <string name="toast_error_backup_create">unable to create Export file</string>
@@ -218,10 +216,12 @@
     <string name="fv_msg_49">Information on how to add data to another device</string>
     <string name="enterfilename">Enter filename, if different</string>
     <string name="splInstr">To re-arrange, press an account, hold momentarily, then move to the new placement</string>
+    <string name="splInstr2">Click card to select account detail. Click again to clear account detail. Plus to add an account, press again to clear add.</string>
+    <string name="splInstr3">To re-arrange suggested passwords, press card, hold momentarily, then move to the new placement</string>
     <string name="gotoSettings">Go to Settings</string>
     <string name="selectapps">Select apps</string>
     <string name="selectappaccounts">Select app Accounts</string>
     <string name="selectpermissions">Select Permissions</string>
     <string name="allowstorage">Allow Storage</string>
-
+<!--    splInstr2-->
 </resources>

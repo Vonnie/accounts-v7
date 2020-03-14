@@ -294,6 +294,7 @@ public class SuggestListActivity extends AppCompatActivity {
 //                Log.d(TAG, "onMoved");
 
                 if (toViewHolder != null) {
+//                    SuggestAdapter.SuggestHolder col = (SuggestAdapter)toViewHolder.;
                     toViewHolder.itemView.setBackgroundColor(
                             ContextCompat.getColor(getApplicationContext(), R.color.primaryDarkColor)
                     );

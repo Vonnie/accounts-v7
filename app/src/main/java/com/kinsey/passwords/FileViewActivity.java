@@ -390,15 +390,15 @@ public class FileViewActivity extends AppCompatActivity {
                                         "<li>" + getString(R.string.fv_msg_48) + "</li>" +
                                         "</ul>" ;
                     } else {
-                        htmlString = notfyMsg() +
+                        htmlString = notfyMsg(dirStorage.getAbsoluteFile().getAbsolutePath()) +
                                 "<h4>" + getString(R.string.fv_msg_6) + "</h4>" +
-                                "<h5>" + adapter.getItemCount() + getString(R.string.fv_msg_7) + "<h5>" +
-                        "<h4>Notify</h4>" +
-                                "<h4>" + getString(R.string.fv_msg_8) + "</h4>";
+                                "<h5>" + adapter.getItemCount() + " " + getString(R.string.fv_msg_7) + "<h5>";
+//                        "<h4>Notify</h4>" +
+//                                "<h4>" + getString(R.string.fv_msg_8) + "</h4>";
                     }
                 } else {
-                    htmlString = notfyMsg() +
-                            "<h4>" + getString(R.string.fv_msg_9) + dirStorage.getAbsoluteFile() + "</h4>" +
+                    htmlString = notfyMsg(dirStorage.getAbsoluteFile().getAbsolutePath()) +
+//                            "<h4>" + getString(R.string.fv_msg_9) + dirStorage.getAbsoluteFile() + "</h4>" +
                             "<h5>" + getString(R.string.fv_msg_10) + "</h5>" +
                             "<h5>" + adapter.getItemCount() + " " + getString(R.string.fv_msg_11) + "<h5>";
                 }
@@ -434,10 +434,10 @@ public class FileViewActivity extends AppCompatActivity {
         return htmlString;
     }
 
-    private String notfyMsg() {
+    private String notfyMsg(String filename) {
         String htmlString = "<h1>" + getString(R.string.fv_msg_16) + "</h1>" +
                 "<h2>" + getString(R.string.fv_msg_17) + "</h2>" +
-                "<h2>" + getString(R.string.fv_msg_18) + "</h2>";
+                "<h2>" + String.format(getString(R.string.fv_msg_18), filename) + "</h2>";
         return htmlString;
     }
 

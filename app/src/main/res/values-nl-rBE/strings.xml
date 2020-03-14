@@ -140,13 +140,12 @@
     <string name="fv_msg_1">Accountprofielitems die momenteel op db</string>
     <string name="fv_msg_2">Waarschuwing: als de app is verwijderd, wordt het back-upbestand ook verwijderd.</string>
     <string name="fv_msg_3">Back-upgegevens</string>
-    <string name="fv_msg_4">Deel gegevens van het huidige apparaat met e-mail, oneDrive. Of, overdracht van bestandsbeheer om op te slaan.</string>
+    <string name="fv_msg_4">Deel gegevens vanaf het huidige apparaat met e-mail, DropBox, oneDrive. Of, overdracht van bestandsbeheer om op te slaan.</string>
     <string name="fv_msg_5">Bestandsnaam is</string>
     <string name="fv_msg_10">Gebruik het menu om gegevens naar dit bestand te exporteren.</string>
     <string name="fv_msg_11">Accountprofielitems om te back-uppen</string>
     <string name="fv_msg_6">Gebruik het menu om gegevens te exporteren.</string>
     <string name="fv_msg_7">Accountprofielitems die momenteel op db</string>
-    <string name="fv_msg_8">Vanaf versienaam 11 is de back-upopslag verplaatst. Zie Bestandsnaam vanuit het menu</string>
     <string name="fv_msg_9">Padopslag bestaat niet</string>
     <string name="fv_msg_12">Accountprofielitems waarvan een back-up wordt gemaakt nadat toestemming is verleend</string>
     <string name="fv_msg_13">waarschuwing</string>
@@ -154,7 +153,7 @@
     <string name="fv_msg_15">Ofwel niet eerder geëxporteerd of probleem met bestandsopslag</string>
     <string name="fv_msg_16">kennisgeving</string>
     <string name="fv_msg_17">App-opslag beschikbaar en met machtigingen,</string>
-    <string name="fv_msg_18">Exportbestand nog niet gemaakt</string>
+    <string name="fv_msg_18">Back-upbestand %1$s is nog niet gemaakt</string>
     <string name="fv_msg_19">Welkom</string>
     <string name="fv_msg_20">Bestand Offload-eigenschappen</string>
     <string name="fv_msg_21">App-opslag beschikbaar en exportbestand bestaat.</string>
@@ -167,7 +166,7 @@
     <string name="fv_msg_28">Zodra toestemming is verleend, keert u terug naar het startscherm en vervolgens naar het menuverzoek voor back-up / herstel om terug te keren naar dit scherm</string>
     <string name="fv_msg_29">verwittigen</string>
     <string name="fv_msg_30">Vanaf versienaam 11 is de back-upopslag verplaatst. Zie Bestandsnaam vanuit het menu</string>
-    <string name="fv_msg_31">Back-upbestand bestaat niet.</string>
+    <string name="fv_msg_31">Back-upbestand %1$s bestaat niet.</string>
     <string name="fv_msg_32">Menu Backup om een ​​bestand aan te maken.</string>
     <string name="fv_msg_33">Back-upbestand bestaat. Wil je het overschrijven? gemaakt:</string>
     <string name="fv_msg_34">Bevestig back-up</string>
@@ -218,4 +217,6 @@
     <string name="fv_msg_47">Breng over naar een nieuw apparaat voor dezelfde map / bestand</string>
     <string name="fv_msg_48">Menu vraagt om herstel en selecteert voor gekopieerd bestand</string>
     <string name="fv_msg_49">Informatie over het toevoegen van gegevens aan een ander apparaat</string>
+    <string name="splInstr2">Klik op de kaart om accountgegevens te selecteren. Klik nogmaals om accountgegevens te wissen. Plus om een account toe te voegen, druk nogmaals om het toevoegen te wissen.</string>
+    <string name="splInstr3">Om voorgestelde wachtwoorden opnieuw in te delen, drukt u op de kaart, houdt u deze even vast en gaat u naar de nieuwe plaatsing</string>
 </resources>

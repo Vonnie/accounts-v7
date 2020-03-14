@@ -231,6 +231,10 @@ public class AddEditProfileFrag extends Fragment
         return view;
     }
 
+    public boolean getEditModeAdd() {
+        return editModeAdd;
+    }
+
     private void buildScreen() {
         Bundle bundle = getArguments();
 
