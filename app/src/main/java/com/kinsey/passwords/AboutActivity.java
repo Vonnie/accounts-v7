@@ -54,6 +54,7 @@ public class AboutActivity extends AppCompatActivity {
 //        tvDatabasename.setText("DB: " + profileViewModel.dbMsg);
         tvVerNo.setText("Ver#: " + BuildConfig.VERSION_CODE);
         tvVerName.setText("VerName: " + BuildConfig.VERSION_NAME);
+        getSupportActionBar().setLogo(R.drawable.ic_launcher_test2_foreground);
 
 
         MobileAds.initialize(this, new OnInitializationCompleteListener() {

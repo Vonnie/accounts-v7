@@ -113,9 +113,9 @@ public class SuggestListActivity extends AppCompatActivity {
                 break;
             case Configuration.SCREENLAYOUT_SIZE_NORMAL:
                 if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                    spanSize = 3;
+                    spanSize = 5;
                 } else {
-                    spanSize = 2;
+                    spanSize = 3;
                 }
                 gridLayoutManager = new GridLayoutManager(this, spanSize);
                 recyclerView.setLayoutManager(gridLayoutManager);
@@ -474,7 +474,7 @@ public class SuggestListActivity extends AppCompatActivity {
 //        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_keyboard_arrow_left_black_24dp);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+        getSupportActionBar().setLogo(R.drawable.ic_launcher_test2_foreground);
     }
 
     @Override
@@ -524,7 +524,7 @@ public class SuggestListActivity extends AppCompatActivity {
 
         } else {
 
-            Toast.makeText(this, R.string.toast_error_suggest_not_saved, Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, R.string.toast_error_suggest_not_saved, Toast.LENGTH_SHORT).show();
         }
 
     }

@@ -23,7 +23,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@color/primaryColor" />
         <!--            android:background="?attr/colorPrimary"-->
         <!--            android:textColor= "?attr/secondaryTextColor" />-->
@@ -38,7 +38,7 @@
             android:layout_marginEnd="20dp"
             android:layout_toStartOf="@+id/acct_id"
             android:ellipsize="end"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@color/primaryColor" />
         <!--            android:textColor="?android:attr/textColorSecondary" />-->
 

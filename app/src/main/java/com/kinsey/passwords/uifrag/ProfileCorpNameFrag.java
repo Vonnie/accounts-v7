@@ -723,7 +723,11 @@ public class ProfileCorpNameFrag extends Fragment {
             case Configuration.SCREENLAYOUT_SIZE_LARGE:
                 if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
                     if (selectedId == -1) {
-                        spanSize = 3;
+                        if (this.listsortOrder == MainActivity.LISTSORT_OPEN_DATE) {
+                            spanSize = 3;
+                        } else {
+                            spanSize = 4;
+                        }
                     } else {
                         spanSize = 2;
                     }
@@ -734,12 +738,16 @@ public class ProfileCorpNameFrag extends Fragment {
             case Configuration.SCREENLAYOUT_SIZE_NORMAL:
                 if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
                     if (selectedId == -1) {
-                        spanSize = 2;
+                        if (this.listsortOrder == MainActivity.LISTSORT_OPEN_DATE) {
+                            spanSize = 2;
+                        } else {
+                            spanSize = 3;
+                        }
                     } else {
-                        spanSize = 1;
+                        spanSize = 2;
                     }
                 } else {
-                    spanSize = 1;
+                    spanSize = 2;
                 }
                 break;
             default:

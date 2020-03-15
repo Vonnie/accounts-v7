@@ -309,9 +309,9 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 //        getSupportActionBar().setLogo(R.mipmap.ic_launcher);
 //        getSupportActionBar().setTitle(getString(R.string.app_name_corpname));
-
-//        Log.d(TAG, "onCreate: layout activity_mainV1");
-
+//        getSupportActionBar().setDisplayShowHomeEnabled(true);
+//        getSupportActionBar().setDisplayUseLogoEnabled(true);
+        getSupportActionBar().setLogo(R.drawable.ic_launcher_test2_foreground);
 
         if (savedInstanceState == null) {
             FragmentManager fragmentManager = getSupportFragmentManager();

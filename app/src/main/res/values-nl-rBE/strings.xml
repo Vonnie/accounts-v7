@@ -152,7 +152,7 @@
     <string name="fv_msg_14">Kan geëxporteerde accounts niet verkrijgen</string>
     <string name="fv_msg_15">Ofwel niet eerder geëxporteerd of probleem met bestandsopslag</string>
     <string name="fv_msg_16">kennisgeving</string>
-    <string name="fv_msg_17">App-opslag beschikbaar en met machtigingen,</string>
+    <string name="fv_msg_17">App-opslag beschikbaar met rechten</string>
     <string name="fv_msg_18">Back-upbestand %1$s is nog niet gemaakt</string>
     <string name="fv_msg_19">Welkom</string>
     <string name="fv_msg_20">Bestand Offload-eigenschappen</string>
@@ -219,4 +219,5 @@
     <string name="fv_msg_49">Informatie over het toevoegen van gegevens aan een ander apparaat</string>
     <string name="splInstr2">Klik op de kaart om accountgegevens te selecteren. Klik nogmaals om accountgegevens te wissen. Plus om een account toe te voegen, druk nogmaals om het toevoegen te wissen.</string>
     <string name="splInstr3">Om voorgestelde wachtwoorden opnieuw in te delen, drukt u op de kaart, houdt u deze even vast en gaat u naar de nieuwe plaatsing</string>
+    <string name="fv_msg_50">Maak een back-up van het bestand naar het pad</string>
 </resources>

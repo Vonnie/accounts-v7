@@ -152,7 +152,7 @@
     <string name="fv_msg_14">No se pueden adquirir cuentas exportadas</string>
     <string name="fv_msg_15">Problema de almacenamiento de archivos no exportado previamente o</string>
     <string name="fv_msg_16">notificación</string>
-    <string name="fv_msg_17">Almacenamiento de aplicaciones disponible y con permisos,</string>
+    <string name="fv_msg_17">Almacenamiento de aplicaciones disponible con permisos</string>
     <string name="fv_msg_18">El archivo de copia de seguridad %1$s aún no se creó</string>
     <string name="fv_msg_19">bienvenida</string>
     <string name="fv_msg_20">Propiedades de descarga de archivos</string>
@@ -219,4 +219,5 @@
     <string name="fv_msg_49">Información sobre cómo agregar datos a otro dispositivo</string>
     <string name="splInstr2">Haga clic en la tarjeta para seleccionar los detalles de la cuenta. Haga clic nuevamente para borrar los detalles de la cuenta. Además para agregar una cuenta, presione nuevamente para borrar agregar.</string>
     <string name="splInstr3">Para reorganizar las contraseñas sugeridas, presione la tarjeta, sostenga momentáneamente, luego muévase a la nueva ubicación</string>
+    <string name="fv_msg_50">Copia de seguridad en archivo en ruta</string>
 </resources>

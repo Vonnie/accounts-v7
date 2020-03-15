@@ -115,6 +115,7 @@ public class FileViewActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle(R.string.menuacct_backup_restore_accts);
+        getSupportActionBar().setLogo(R.drawable.ic_launcher_test2_foreground);
 
 //        Log.d(TAG, "onCreate: permission " +
 //                PackageInfo.REQUESTED_PERMISSION_GRANTED
@@ -384,23 +385,23 @@ public class FileViewActivity extends AppCompatActivity {
                                 "<ul>" +
                                         "<li>" + getString(R.string.fv_msg_3) + "</li>" +
                                         "<li>" + getString(R.string.fv_msg_4) + "</li>" +
-                                        "<li>" + getString(R.string.fv_msg_5) + " " + fileExternal.getAbsolutePath() + "</li>" +
+                                        "<li>" + getString(R.string.fv_msg_5) + " <small>" + fileExternal.getAbsolutePath() + "</small></li>" +
                                         "<li>" + getString(R.string.fv_msg_46) + "</li>" +
                                         "<li>" + getString(R.string.fv_msg_47) + "</li>" +
                                         "<li>" + getString(R.string.fv_msg_48) + "</li>" +
                                         "</ul>" ;
                     } else {
                         htmlString = notfyMsg(dirStorage.getAbsoluteFile().getAbsolutePath()) +
-                                "<h4>" + getString(R.string.fv_msg_6) + "</h4>" +
-                                "<h5>" + adapter.getItemCount() + " " + getString(R.string.fv_msg_7) + "<h5>";
+                                "<br><h4>" + adapter.getItemCount() + " " + getString(R.string.fv_msg_7) + "<h4>";
+//                                "<h4>" + getString(R.string.fv_msg_6) + "</h4>" +
 //                        "<h4>Notify</h4>" +
 //                                "<h4>" + getString(R.string.fv_msg_8) + "</h4>";
                     }
                 } else {
                     htmlString = notfyMsg(dirStorage.getAbsoluteFile().getAbsolutePath()) +
 //                            "<h4>" + getString(R.string.fv_msg_9) + dirStorage.getAbsoluteFile() + "</h4>" +
-                            "<h5>" + getString(R.string.fv_msg_10) + "</h5>" +
-                            "<h5>" + adapter.getItemCount() + " " + getString(R.string.fv_msg_11) + "<h5>";
+//                            "<h5>" + getString(R.string.fv_msg_10) + "</h5>" +
+                            "<br><h5>" + adapter.getItemCount() + " " + getString(R.string.fv_msg_11) + "<h5>";
                 }
 
             } else {
@@ -437,7 +438,7 @@ public class FileViewActivity extends AppCompatActivity {
     private String notfyMsg(String filename) {
         String htmlString = "<h1>" + getString(R.string.fv_msg_16) + "</h1>" +
                 "<h2>" + getString(R.string.fv_msg_17) + "</h2>" +
-                "<h2>" + String.format(getString(R.string.fv_msg_18), filename) + "</h2>";
+                "<h5>" + String.format(getString(R.string.fv_msg_18), filename) + "</h5>";
         return htmlString;
     }
 
@@ -702,7 +703,13 @@ public class FileViewActivity extends AppCompatActivity {
 
         //  Get View elements from Layout file. Be sure to include inflated view name (mView)
         TextView tvTitle = mView.findViewById(R.id.title);
-        tvTitle.setText("Backup onto file");
+        File dirStorage = getExternalFilesDir("passport");
+        // Make sure the Pictures directory exists.
+        if (dirStorage.exists()) {
+            tvTitle.setText(getString(R.string.fv_msg_50) + dirStorage.getAbsolutePath());
+        } else {
+            tvTitle.setText(getString(R.string.fv_msg_50) + "");
+        }
         TextInputLayout textInputFilename = (TextInputLayout) mView.findViewById(R.id.text_input_filename);
         textInputFilename.getEditText().setText(MainActivity.BACKUP_FILENAME);
         Button btnOk = (Button) mView.findViewById(R.id.btn_ok);

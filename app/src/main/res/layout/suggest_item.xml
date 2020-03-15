@@ -30,9 +30,10 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:ellipsize="end"
+            android:background="@color/secondaryColor"
             android:maxLines="1"
             android:text="@string/sugg_password"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@color/backgroundWhite" />
 <!--        android:textColor="@color/secondaryTextColor" />-->
         <!--            android:textColor="?android:attr/textColorSecondary" />-->

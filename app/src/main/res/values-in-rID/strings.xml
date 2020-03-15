@@ -152,7 +152,7 @@
     <string name="fv_msg_14">Tidak dapat memperoleh Akun yang Diekspor</string>
     <string name="fv_msg_15">Entah sebelumnya tidak diekspor atau masalah penyimpanan file</string>
     <string name="fv_msg_16">Pemberitahuan</string>
-    <string name="fv_msg_17">Penyimpanan aplikasi tersedia dan dengan izin,</string>
+    <string name="fv_msg_17">Penyimpanan aplikasi tersedia dengan izin</string>
     <string name="fv_msg_18">File cadangan %1$s belum dibuat</string>
     <string name="fv_msg_19">Selamat datang</string>
     <string name="fv_msg_20">Properti Offload File</string>
@@ -219,4 +219,5 @@
     <string name="fv_msg_46">Instal Akun aplikasi di perangkat baru</string>
     <string name="splInstr2">Klik kartu untuk memilih detail akun. Klik lagi untuk menghapus detail akun. Plus untuk menambahkan akun, tekan lagi untuk menghapus tambahkan.</string>
     <string name="splInstr3">Untuk mengatur ulang kata sandi yang disarankan, tekan kartu, tahan sebentar, lalu pindah ke penempatan baru</string>
+    <string name="fv_msg_50">Cadangkan ke file ke path</string>
 </resources>

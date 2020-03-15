@@ -104,6 +104,7 @@ public class AddEditSuggestActivity extends AppCompatActivity {
         } else {
             setTitle(R.string.edit_suggestion);
         }
+        getSupportActionBar().setLogo(R.drawable.ic_launcher_test2_foreground);
     }
 
 

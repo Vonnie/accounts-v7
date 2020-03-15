@@ -35,6 +35,10 @@ public class ProfileAdapter extends ListAdapter<Profile, ProfileAdapter.ProfileH
     public static SimpleDateFormat format_mdy = new SimpleDateFormat(
             pattern_mdy, Locale.US);
 
+    private static String pattern_mdy2 = "MM-dd-yy";
+    public static SimpleDateFormat format_mdy2 = new SimpleDateFormat(
+            pattern_mdy2, Locale.US);
+
     private OnItemClickListener listener;
     private int listsortOrder;
 
@@ -124,7 +128,7 @@ public class ProfileAdapter extends ListAdapter<Profile, ProfileAdapter.ProfileH
                 if (lngOpenDate == 0) {
                     holder.tvAcctId.setText("");
                 } else {
-                    holder.tvAcctId.setText(format_mdy.format(lngOpenDate));
+                    holder.tvAcctId.setText(format_mdy2.format(lngOpenDate));
                 }
             } else {
                 if (listsortOrder == MainActivity.LISTSORT_CUSTOM_SORT) {

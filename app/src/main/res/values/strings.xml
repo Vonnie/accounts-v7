@@ -156,7 +156,7 @@
     <string name="fv_msg_14">Unable to acquire Exported Accounts</string>
     <string name="fv_msg_15">Either not previously exported or file storage issue</string>
     <string name="fv_msg_16">Notification</string>
-    <string name="fv_msg_17">App storage available and with permissions,</string>
+    <string name="fv_msg_17">App storage available with permissions</string>
     <string name="fv_msg_18">Backup file %1$s not yet created</string>
     <string name="fv_msg_19">Welcome</string>
     <string name="fv_msg_20">File Offload Properties</string>
@@ -214,6 +214,7 @@
     <string name="fv_msg_47">Transfer onto new device for same dir/file</string>
     <string name="fv_msg_48">Menu request a restore and select for copied file</string>
     <string name="fv_msg_49">Information on how to add data to another device</string>
+    <string name="fv_msg_50">Backup onto file onto path\n</string>
     <string name="enterfilename">Enter filename, if different</string>
     <string name="splInstr">To re-arrange, press an account, hold momentarily, then move to the new placement</string>
     <string name="splInstr2">Click card to select account detail. Click again to clear account detail. Plus to add an account, press again to clear add.</string>
@@ -223,5 +224,5 @@
     <string name="selectappaccounts">Select app Accounts</string>
     <string name="selectpermissions">Select Permissions</string>
     <string name="allowstorage">Allow Storage</string>
-<!--    splInstr2-->
+
 </resources>

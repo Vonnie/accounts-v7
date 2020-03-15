@@ -151,7 +151,7 @@
     <string name="fv_msg_14">Hindi makuha ang nai-export na Mga Account</string>
     <string name="fv_msg_15">Alinman hindi nai-export o isyu sa pag-iimbak ng file</string>
     <string name="fv_msg_16">Abiso</string>
-    <string name="fv_msg_17">Magagamit ang storage ng app at may mga pahintulot,</string>
+    <string name="fv_msg_17">Magagamit ang imbakan ng app na may mga pahintulot</string>
     <string name="fv_msg_18">Hindi pa nilikha ang backup file %1$s</string>
     <string name="fv_msg_19">Maligayang pagdating</string>
     <string name="fv_msg_20">Mga Katangian ng Pag-off ng File</string>
@@ -218,4 +218,5 @@
     <string name="fv_msg_46">I-install ang mga Account Account sa bagong aparato</string>
     <string name="splInstr2">Mag-click sa card upang piliin ang detalye ng account. Mag-click muli upang i-clear ang detalye ng account. Dagdag pa upang magdagdag ng isang account, pindutin muli upang limasin.</string>
     <string name="splInstr3">Upang muling ayusin ang mga iminungkahing password, pindutin ang card, matagal nang matagal, pagkatapos ay lumipat sa bagong pagkakalagay</string>
+    <string name="fv_msg_50">I-backup ang file sa landas</string>
 </resources>
