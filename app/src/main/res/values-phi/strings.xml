@@ -216,7 +216,7 @@
     <string name="fv_msg_48">Humiling ang isang menu ng pagpapanumbalik at piliin para sa kinopyang file</string>
     <string name="fv_msg_47">Ilipat sa bagong aparato para sa parehong dir / file</string>
     <string name="fv_msg_46">I-install ang mga Account Account sa bagong aparato</string>
-    <string name="splInstr2">Mag-click sa card upang piliin ang detalye ng account. Mag-click muli upang i-clear ang detalye ng account. Dagdag pa upang magdagdag ng isang account, pindutin muli upang limasin.</string>
     <string name="splInstr3">Upang muling ayusin ang mga iminungkahing password, pindutin ang card, matagal nang matagal, pagkatapos ay lumipat sa bagong pagkakalagay</string>
     <string name="fv_msg_50">I-backup ang file sa landas</string>
+    <string name="splInstr2">Mag-click sa card upang piliin ang detalye ng account. I-click muli ang card upang i-clear ang detalye ng account. I-click ang Plus (+) upang magdagdag ng isang account.</string>
 </resources>

@@ -71,15 +71,15 @@ public class SuggestListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_suggest_list);
 
-        FloatingActionButton buttonAddNote = findViewById(R.id.button_add_suggest);
-        buttonAddNote.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Intent intent = new Intent(SuggestListActivity.this, AddEditSuggestActivity.class);
-                startActivityForResult(intent, ADD_SUGGEST_REQUEST);
-            }
-        });
+//        FloatingActionButton buttonAddNote = findViewById(R.id.button_add_suggest);
+//        buttonAddNote.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                Intent intent = new Intent(SuggestListActivity.this, AddEditSuggestActivity.class);
+//                startActivityForResult(intent, ADD_SUGGEST_REQUEST);
+//            }
+//        });
 
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

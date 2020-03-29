@@ -217,7 +217,7 @@
     <string name="fv_msg_50">Backup onto file onto path\n</string>
     <string name="enterfilename">Enter filename, if different</string>
     <string name="splInstr">To re-arrange, press an account, hold momentarily, then move to the new placement</string>
-    <string name="splInstr2">Click card to select account detail. Click again to clear account detail. Plus to add an account, press again to clear add.</string>
+    <string name="splInstr2">Click card to select account detail. Click card again to clear account detail. Click Plus (+) to add an account.</string>
     <string name="splInstr3">To re-arrange suggested passwords, press card, hold momentarily, then move to the new placement</string>
     <string name="gotoSettings">Go to Settings</string>
     <string name="selectapps">Select apps</string>

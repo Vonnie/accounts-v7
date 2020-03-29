@@ -46,9 +46,10 @@ public class SearchFrag extends Fragment {
 //        return super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_account_search, container, false);
 
-
+        mListener = (OnSearchClickListener) getActivity();
         editTextFilledExposedDropdown = view.findViewById(R.id.filled_exposed_dropdown);
-//        AppCompatAutoCompleteTextView editTextFilledExposedDropdown =
+
+        //        AppCompatAutoCompleteTextView editTextFilledExposedDropdown =
 //                view.findViewById(R.id.filled_exposed_dropdown);
 //        TextView tvAcctId = (TextView) view.findViewById(R.id.acct_id);
 //        TextView tvCorpName = view.findViewById(R.id.corp_name);

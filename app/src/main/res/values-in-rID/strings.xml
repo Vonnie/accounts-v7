@@ -217,7 +217,7 @@
     <string name="fv_msg_48">Menu meminta pemulihan dan pilih untuk file yang disalin</string>
     <string name="fv_msg_47">Transfer ke perangkat baru untuk dir / file yang sama</string>
     <string name="fv_msg_46">Instal Akun aplikasi di perangkat baru</string>
-    <string name="splInstr2">Klik kartu untuk memilih detail akun. Klik lagi untuk menghapus detail akun. Plus untuk menambahkan akun, tekan lagi untuk menghapus tambahkan.</string>
     <string name="splInstr3">Untuk mengatur ulang kata sandi yang disarankan, tekan kartu, tahan sebentar, lalu pindah ke penempatan baru</string>
     <string name="fv_msg_50">Cadangkan ke file ke path</string>
+    <string name="splInstr2">Klik kartu untuk memilih detail akun. Klik kartu lagi untuk menghapus detail akun. Klik Plus (+) untuk menambahkan akun.</string>
 </resources>

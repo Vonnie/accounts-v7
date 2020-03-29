@@ -106,6 +106,7 @@ public class ProfileCorpNameFrag extends Fragment {
         View view = inflater.inflate(R.layout.fragment_account_list, container, false);
         //        return super.onCreateView(inflater, container, savedInstanceState);
 
+        mListener = (OnProfileCorpNameClickListener) getActivity();
         recyclerView = view.findViewById(R.id.account_items_list);
         tvListTitle = view.findViewById(R.id.list_title);
         tvSplInstr = view.findViewById(R.id.spl_instr);

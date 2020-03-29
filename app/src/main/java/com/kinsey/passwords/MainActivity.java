@@ -355,7 +355,7 @@ public class MainActivity extends AppCompatActivity
             Log.d(TAG, "onCreate: tag " + frame.getTag());
             frame2 = findViewById(R.id.fragment_container2);
             Log.d(TAG, "onCreate: rotate selectedId " + this.selectedId);
-            if (this.selectedId == -1) {
+            if (this.selectedId == -1 && !this.editModeAdd) {
                 frame2.setVisibility(View.GONE);
             } else {
                 frame2.setVisibility(View.VISIBLE);
@@ -3234,11 +3234,11 @@ public class MainActivity extends AppCompatActivity
 //                return;
 //            }
 //        }
-        if (editModeAdd) {
-            editModeAdd = false;
-            frame2.setVisibility(View.GONE);
-            return;
-        }
+//        if (editModeAdd) {
+//            editModeAdd = false;
+//            frame2.setVisibility(View.GONE);
+//            return;
+//        }
         editModeAdd = true;
         this.selectedId = -1;
         Profile profile = new Profile();

@@ -91,7 +91,7 @@ public class AddEditSuggestActivity extends AppCompatActivity {
                 if (lngActvDate == 0) {
                     textActvyDate.setText("");
                 } else {
-                    textActvyDate.setText(R.string.activity_date + " " + format_ymdtimehm.format(lngActvDate));
+                    textActvyDate.setText(String.format(getString(R.string.activity_date), format_ymdtimehm.format(lngActvDate)));
                 }
 //            numberPickerPriority.setValue(intent.getIntExtra(EXTRA_PRIORITY, 1));
             } else {
@@ -117,7 +117,7 @@ public class AddEditSuggestActivity extends AppCompatActivity {
         if (lngActvDate == 0) {
             textActvyDate.setText("");
         } else {
-            textActvyDate.setText(R.string.activity_date + " " + format_ymdtimehm.format(lngActvDate));
+            textActvyDate.setText(String.format(getString(R.string.activity_date), format_ymdtimehm.format(lngActvDate)));
         }
 
     }

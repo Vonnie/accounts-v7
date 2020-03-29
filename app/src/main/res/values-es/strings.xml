@@ -217,7 +217,7 @@
     <string name="fv_msg_47">Transfiera al nuevo dispositivo para el mismo directorio / archivo</string>
     <string name="fv_msg_48">El menú solicita una restauración y selecciona el archivo copiado</string>
     <string name="fv_msg_49">Información sobre cómo agregar datos a otro dispositivo</string>
-    <string name="splInstr2">Haga clic en la tarjeta para seleccionar los detalles de la cuenta. Haga clic nuevamente para borrar los detalles de la cuenta. Además para agregar una cuenta, presione nuevamente para borrar agregar.</string>
     <string name="splInstr3">Para reorganizar las contraseñas sugeridas, presione la tarjeta, sostenga momentáneamente, luego muévase a la nueva ubicación</string>
     <string name="fv_msg_50">Copia de seguridad en archivo en ruta</string>
+    <string name="splInstr2">Haga clic en la tarjeta para seleccionar los detalles de la cuenta. Vuelva a hacer clic en la tarjeta para borrar los detalles de la cuenta. Haga clic en Más (+) para agregar una cuenta.</string>
 </resources>

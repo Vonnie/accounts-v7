@@ -6,8 +6,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.LayoutInflater;
@@ -15,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -65,6 +62,28 @@ public class AddEditProfileFrag extends Fragment
             "com.kinsey.passwords.EXTRA_OPEN_DATE_LONG";
     public static final String EXTRA_EDIT_MODE =
             "com.kinsey.passwords.EXTRA_EDIT_MODE";
+    public static final String EXTRA_INIT_ID =
+            "com.kinsey.passwords.EXTRA_INIT_ID";
+    public static final String EXTRA_INIT_PASSPORT_ID =
+            "com.kinsey.passwords.EXTRA_INIT_PASSPORTID";
+    public static final String EXTRA_INIT_CORP_NAME =
+            "com.kinsey.passwords.EXTRA_INIT_CORP_NAME";
+    public static final String EXTRA_INIT_USER_NAME =
+            "com.kinsey.passwords.EXTRA_INIT_USER_NAME";
+    public static final String EXTRA_INIT_USER_EMAIL =
+            "com.kinsey.passwords.EXTRA_INIT_USER_EMAIL";
+    public static final String EXTRA_INIT_SEQUENCE =
+            "com.kinsey.passwords.EXTRA_INIT_SEQUENCE";
+    public static final String EXTRA_INIT_CORP_WEBSITE =
+            "com.kinsey.passwords.EXTRA_INIT_CORP_WEBSITE";
+    public static final String EXTRA_INIT_NOTE =
+            "com.kinsey.passwords.EXTRA_INIT_NOTE";
+    public static final String EXTRA_INIT_ACTVY_LONG =
+            "com.kinsey.passwords.EXTRA_INIT_ACTVY_LONG";
+    public static final String EXTRA_INIT_OPEN_DATE_LONG =
+            "com.kinsey.passwords.EXTRA_INIT_OPEN_DATE_LONG";
+    public static final String EXTRA_INIT_EDIT_MODE =
+            "com.kinsey.passwords.EXTRA_INIT_EDIT_MODE";
 
     private TextInputLayout textInputCorpName;
     private TextInputLayout textInputUserName;
@@ -87,7 +106,7 @@ public class AddEditProfileFrag extends Fragment
     private boolean blnChangesMade = false;
     private final Calendar cldrOpened = Calendar.getInstance();
 
-    private Profile currProfile;
+    private Profile currProfile = new Profile();;
 
     private OnProfileModifyClickListener mListener;
 
@@ -124,6 +143,8 @@ public class AddEditProfileFrag extends Fragment
         tvPassportId = view.findViewById(R.id.passport_id);
         tvSequence = view.findViewById(R.id.sequence);
         btnOpenDate = view.findViewById(R.id.pick_open_date);
+
+        mListener = (OnProfileModifyClickListener) getActivity();
 
 //        if(savedInstanceState != null){
 //            Log.d(TAG, "A SavedInstanceState exists, using past values");
@@ -624,6 +645,17 @@ public class AddEditProfileFrag extends Fragment
         if (!editModeAdd) {
             intId = savedInstanceState.getInt(EXTRA_ID, -1);
         }
+        this.currProfile = new Profile();
+        this.currProfile.setId(intId);
+        this.currProfile.setPassportId(intPassportId);
+        this.currProfile.setCorpName(savedInstanceState.getString(EXTRA_INIT_CORP_NAME));
+        this.currProfile.setUserName(savedInstanceState.getString(EXTRA_INIT_USER_NAME));
+        this.currProfile.setUserEmail(savedInstanceState.getString(EXTRA_INIT_USER_EMAIL));
+        this.currProfile.setCorpWebsite(savedInstanceState.getString(EXTRA_INIT_CORP_WEBSITE));
+        this.currProfile.setNote(savedInstanceState.getString(EXTRA_INIT_NOTE));
+        this.currProfile.setOpenLong(savedInstanceState.getLong(EXTRA_INIT_OPEN_DATE_LONG));
+        this.currProfile.setActvyLong(lngActvDate);
+
 
     }
 
@@ -641,6 +673,20 @@ public class AddEditProfileFrag extends Fragment
         outState.putInt(EXTRA_PASSPORT_ID, intPassportId);
         outState.putInt(EXTRA_SEQUENCE, intSequence);
         outState.putBoolean(EXTRA_EDIT_MODE, editModeAdd);
+
+
+        outState.putString(EXTRA_INIT_CORP_NAME, currProfile.getCorpName());
+        outState.putString(EXTRA_INIT_USER_NAME, currProfile.getUserName());
+        outState.putString(EXTRA_INIT_USER_EMAIL, currProfile.getUserEmail());
+        outState.putString(EXTRA_INIT_CORP_WEBSITE, currProfile.getCorpWebsite());
+        outState.putString(EXTRA_INIT_NOTE, currProfile.getNote());
+        outState.putLong(EXTRA_INIT_OPEN_DATE_LONG, currProfile.getOpenLong());
+        outState.putLong(EXTRA_INIT_ACTVY_LONG, lngActvDate);
+        outState.putInt(EXTRA_INIT_ID, intId);
+        outState.putInt(EXTRA_INIT_PASSPORT_ID, intPassportId);
+        outState.putInt(EXTRA_INIT_SEQUENCE, intSequence);
+        outState.putBoolean(EXTRA_INIT_EDIT_MODE, editModeAdd);
+
         Log.d(TAG, "saved instance " + textInputCorpName.getEditText().getText().toString().trim());
     }
 

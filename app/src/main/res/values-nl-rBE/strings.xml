@@ -217,7 +217,7 @@
     <string name="fv_msg_47">Breng over naar een nieuw apparaat voor dezelfde map / bestand</string>
     <string name="fv_msg_48">Menu vraagt om herstel en selecteert voor gekopieerd bestand</string>
     <string name="fv_msg_49">Informatie over het toevoegen van gegevens aan een ander apparaat</string>
-    <string name="splInstr2">Klik op de kaart om accountgegevens te selecteren. Klik nogmaals om accountgegevens te wissen. Plus om een account toe te voegen, druk nogmaals om het toevoegen te wissen.</string>
     <string name="splInstr3">Om voorgestelde wachtwoorden opnieuw in te delen, drukt u op de kaart, houdt u deze even vast en gaat u naar de nieuwe plaatsing</string>
     <string name="fv_msg_50">Maak een back-up van het bestand naar het pad</string>
+    <string name="splInstr2">Klik op kaart om accountdetails te selecteren. Klik nogmaals op de kaart om de accountgegevens te wissen. Klik op Plus (+) om een account toe te voegen.</string>
 </resources>
