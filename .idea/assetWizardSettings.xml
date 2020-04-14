@@ -166,8 +166,7 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="color" value="ffffff" />
-                            <entry key="outputName" value="ic_warning" />
+                            <entry key="outputName" value="ic_warning_black_24dp2" />
                             <entry key="sourceFile" value="C:\Users\ykins" />
                           </map>
                         </option>

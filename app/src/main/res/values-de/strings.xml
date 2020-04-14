@@ -37,7 +37,6 @@
     <string name="home_message_text_21">APP-Sicherheit</string>
     <string name="fv_msg_21">App-Speicher verfügbar und Exportdatei vorhanden.</string>
     <string name="fv_msg_17">App-Speicher mit Berechtigungen verfügbar</string>
-    <string name="fv_msg_30">Ab Version 11 wurde der Sicherungsspeicher verschoben. Siehe Dateiname im Menü</string>
     <string name="menuvw_backup">Sicherung</string>
     <string name="menuacct_backup_restore_accts">Backup wiederherstellen</string>
     <string name="fv_msg_31">Sicherungsdatei %1$s existiert nicht.</string>
@@ -220,4 +219,6 @@
     <string name="splInstr3">Um die vorgeschlagenen Passwörter neu anzuordnen, drücken Sie die Karte, halten Sie sie kurz gedrückt und wechseln Sie dann zur neuen Position</string>
     <string name="fv_msg_50">Backup in Datei in Pfad</string>
     <string name="splInstr2">Klicken Sie auf Karte, um Kontodetails auszuwählen. Klicken Sie erneut auf die Karte, um die Kontodetails zu löschen. Klicken Sie auf Plus (+), um ein Konto hinzuzufügen.</string>
+    <string name="warningmsg" translatable="false">Diese App erhält eine Flut von 1-Sterne-Bewertungen.</string>
+    <string name="menuacct_notify">Benachrichtigen</string>
 </resources>

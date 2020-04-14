@@ -165,7 +165,6 @@
     <string name="fv_msg_27">Seleccione la aplicación Cuentas en la lista de aplicaciones. Seleccionar permisos. Luego, configure Almacenamiento.</string>
     <string name="fv_msg_28">Una vez que se otorga el permiso, regrese a la pantalla de inicio, luego solicite el menú de copia de seguridad / restauración para regresar a esta pantalla</string>
     <string name="fv_msg_29">notificar</string>
-    <string name="fv_msg_30">A partir del nombre de la versión 11, el almacenamiento de respaldo se ha movido. Ver nombre de archivo desde el menú</string>
     <string name="fv_msg_31">El archivo de copia de seguridad %1$s no existe.</string>
     <string name="fv_msg_32">Copia de seguridad del menú para crear un archivo.</string>
     <string name="fv_msg_33">El archivo de respaldo existe. ¿Quieres sobreescribirlo? Creado:</string>
@@ -220,4 +219,6 @@
     <string name="splInstr3">Para reorganizar las contraseñas sugeridas, presione la tarjeta, sostenga momentáneamente, luego muévase a la nueva ubicación</string>
     <string name="fv_msg_50">Copia de seguridad en archivo en ruta</string>
     <string name="splInstr2">Haga clic en la tarjeta para seleccionar los detalles de la cuenta. Vuelva a hacer clic en la tarjeta para borrar los detalles de la cuenta. Haga clic en Más (+) para agregar una cuenta.</string>
+    <string name="warningmsg" translatable="false">Esta aplicación está recibiendo una gran cantidad de calificaciones de 1 estrella.</string>
+    <string name="menuacct_notify">Notificar</string>
 </resources>

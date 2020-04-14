@@ -124,6 +124,13 @@
                 android:title="@string/menuacct_about"
                 app:showAsAction="ifRoom" />
 
+            <item
+                android:id="@+id/menumain_notify"
+                android:icon="@drawable/ic_warning_black_24dp"
+                android:orderInCategory="125"
+                android:title="@string/menuacct_notify"
+                app:showAsAction="ifRoom" />
+
 
             <!--    <item-->
             <!--        android:id="@+id/menumain_do_request"-->

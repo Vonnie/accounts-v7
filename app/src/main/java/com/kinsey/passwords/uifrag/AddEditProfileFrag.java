@@ -557,7 +557,7 @@ public class AddEditProfileFrag extends Fragment
         TextView text = (TextView) dialog.findViewById(R.id.text);
         text.setText(msg);
         ImageView image = (ImageView) dialog.findViewById(R.id.image);
-        image.setImageResource(R.drawable.ic_info_black_24dp);
+        image.setImageResource(R.drawable.ic_info_24dp);
 
 
         Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);

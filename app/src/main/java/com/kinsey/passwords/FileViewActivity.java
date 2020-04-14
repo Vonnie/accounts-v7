@@ -465,8 +465,6 @@ public class FileViewActivity extends AppCompatActivity {
                 "<li>" + getString(R.string.fv_msg_28) + "</li></ul>" ;
 
 
-//                "<h4>" + getString(R.string.fv_msg_29) + "</h4>" +
-//                "<h4>" + getString(R.string.fv_msg_30) + "</h4>";
         return htmlString;
     }
 
@@ -1136,7 +1134,7 @@ public class FileViewActivity extends AppCompatActivity {
 //    }
 
     private void msgDialog(String msg) {
-        msgDialog(msg, R.drawable.ic_info_black_24dp);
+        msgDialog(msg, R.drawable.ic_info_24dp);
     }
 
     private void msgWarningDialog(String msg) {
@@ -1152,7 +1150,7 @@ public class FileViewActivity extends AppCompatActivity {
         TextView text = (TextView) dialog.findViewById(R.id.text);
         text.setText(msg);
         ImageView image = (ImageView) dialog.findViewById(R.id.image);
-//        image.setImageResource(R.drawable.ic_info_black_24dp);
+//        image.setImageResource(R.drawable.ic_info_24dp);
         image.setImageResource(resid);
 
         Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);

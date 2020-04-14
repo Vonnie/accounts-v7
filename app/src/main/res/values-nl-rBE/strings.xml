@@ -165,7 +165,6 @@
     <string name="fv_msg_27">Selecteer de app Accounts in de applijst. Selecteer machtigingen. Zet vervolgens op Opslag.</string>
     <string name="fv_msg_28">Zodra toestemming is verleend, keert u terug naar het startscherm en vervolgens naar het menuverzoek voor back-up / herstel om terug te keren naar dit scherm</string>
     <string name="fv_msg_29">verwittigen</string>
-    <string name="fv_msg_30">Vanaf versienaam 11 is de back-upopslag verplaatst. Zie Bestandsnaam vanuit het menu</string>
     <string name="fv_msg_31">Back-upbestand %1$s bestaat niet.</string>
     <string name="fv_msg_32">Menu Backup om een ​​bestand aan te maken.</string>
     <string name="fv_msg_33">Back-upbestand bestaat. Wil je het overschrijven? gemaakt:</string>
@@ -220,4 +219,6 @@
     <string name="splInstr3">Om voorgestelde wachtwoorden opnieuw in te delen, drukt u op de kaart, houdt u deze even vast en gaat u naar de nieuwe plaatsing</string>
     <string name="fv_msg_50">Maak een back-up van het bestand naar het pad</string>
     <string name="splInstr2">Klik op kaart om accountdetails te selecteren. Klik nogmaals op de kaart om de accountgegevens te wissen. Klik op Plus (+) om een account toe te voegen.</string>
+    <string name="warningmsg">Deze app krijgt een vlaag van 1 sterbeoordelingen.</string>
+    <string name="menuacct_notify">Melden</string>
 </resources>

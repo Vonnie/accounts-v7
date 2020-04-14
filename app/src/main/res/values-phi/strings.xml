@@ -164,7 +164,6 @@
     <string name="fv_msg_27">Piliin ang app ng Account sa listahan ng mga app. Piliin ang mga pahintulot. Pagkatapos, itakda sa Imbakan.</string>
     <string name="fv_msg_28">Kapag nabigyan ang pahintulot, bumalik sa home screen, pagkatapos ay humiling ng menu para sa backup / ibalik upang bumalik sa screen na ito</string>
     <string name="fv_msg_29">Ipaalam</string>
-    <string name="fv_msg_30">Tulad ng pangalan ng bersyon 11, ang backup na imbakan ay lumipat. Tingnan ang Filename mula sa menu</string>
     <string name="fv_msg_31">Ang File ng backup na %1$s ay hindi umiiral.</string>
     <string name="fv_msg_32">Pag-backup ng menu upang lumikha ng isang file.</string>
     <string name="fv_msg_33">Mayroong backup na file. Nais mong i-overwrite ito? Nilikha:</string>
@@ -219,4 +218,6 @@
     <string name="splInstr3">Upang muling ayusin ang mga iminungkahing password, pindutin ang card, matagal nang matagal, pagkatapos ay lumipat sa bagong pagkakalagay</string>
     <string name="fv_msg_50">I-backup ang file sa landas</string>
     <string name="splInstr2">Mag-click sa card upang piliin ang detalye ng account. I-click muli ang card upang i-clear ang detalye ng account. I-click ang Plus (+) upang magdagdag ng isang account.</string>
+    <string name="warningmsg" translatable="false">Ang app na ito ay nakakakuha ng isang flury ng 1 Star Rating.</string>
+    <string name="menuacct_notify">Ipaalam</string>
 </resources>

@@ -95,6 +95,7 @@
     <string name="menuacct_external_accts">External accounts</string>
     <string name="menuacct_search">Search</string>
     <string name="menuacct_about">About</string>
+    <string name="menuacct_notify">Notify</string>
     <string name="menuvw_show_file">Show Backup File</string>
     <string name="menuvw_show_filename">Filename</string>
     <string name="menuvw_share">Share Backup File</string>
@@ -224,5 +225,12 @@
     <string name="selectappaccounts">Select app Accounts</string>
     <string name="selectpermissions">Select Permissions</string>
     <string name="allowstorage">Allow Storage</string>
+
+    <string name="warningmsg">This app is getting a flury of 1 Star Ratings.
+    \n\nThis app needs your feedback.
+        \n\nPlease respond with a rating comment or email to vonniekinsey@gmail.com
+        \n\nIf response is negative, please send information that can be used to improve the app.
+        \n\nThe testing of this app may be inadequate therefore unable to uncover problems you see.</string>
+
 
 </resources>

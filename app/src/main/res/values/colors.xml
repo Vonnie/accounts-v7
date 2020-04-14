@@ -40,6 +40,7 @@
     <color name="backgroundWhite">#FFFFFF</color>
     <color name="backgroundTransparent">#00000000</color>
     <color name="icons">#FFFFFF</color>
+    <color name="white">#FFFFFF</color>
 <!--    <color name="colorAccent">#795548</color>-->
 </resources>
 

@@ -35,7 +35,6 @@ import android.widget.Toast;
 //import com.google.android.gms.tasks.OnCompleteListener;
 //import com.google.android.gms.tasks.Task;
 //import com.google.firebase.auth.AuthCredential;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 //import com.google.firebase.auth.GoogleAuthProvider;
@@ -55,9 +54,6 @@ import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 //import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
-
-import static java.security.AccessController.getContext;
 
 // ====================
 // Statement to assist in debugging
@@ -345,6 +341,7 @@ public class MainActivity extends AppCompatActivity
             fragmentTransaction3.commit();
             frameSearch = findViewById(R.id.fragment_search_container);
             frameSearch.setVisibility(View.GONE);
+            showWarning();
         } else {
             this.isSearchShown = savedInstanceState.getBoolean(ARG_IS_SHEARCH_SHOWN, false);
             this.listsortOrder = savedInstanceState.getInt(ARG_LISTSORT, 1);
@@ -1689,6 +1686,13 @@ public class MainActivity extends AppCompatActivity
                 showAboutActivity();
 
                 return true;
+
+            case R.id.menumain_notify:
+
+                showWarning();
+
+                return true;
+
 
 //            case R.id.menumain_do_request:
 //
@@ -3355,7 +3359,7 @@ public class MainActivity extends AppCompatActivity
         TextView text = (TextView) dialog.findViewById(R.id.text);
         text.setText(msg);
         ImageView image = (ImageView) dialog.findViewById(R.id.image);
-        image.setImageResource(R.drawable.ic_info_black_24dp);
+        image.setImageResource(R.drawable.ic_info_24dp);
 
         Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
         // if button is clicked, close the custom dialog
@@ -3418,7 +3422,7 @@ public class MainActivity extends AppCompatActivity
 //        TextView text = (TextView) dialog.findViewById(R.id.text);
 //        text.setText(msg);
 //        ImageView image = (ImageView) dialog.findViewById(R.id.image);
-//        image.setImageResource(R.drawable.ic_info_black_24dp);
+//        image.setImageResource(R.drawable.ic_info_24dp);
 //
 //
 //        Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
@@ -3669,6 +3673,29 @@ public class MainActivity extends AppCompatActivity
         }
         showSearchSelected(this.selectedId, profile);
 
+    }
+
+
+    private void showWarning() {
+        final Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.dialogmsg_ok);
+        dialog.setTitle("Account Modify Info");
+
+        TextView text = (TextView) dialog.findViewById(R.id.text);
+        text.setText(getString(R.string.warningmsg));
+        ImageView image = (ImageView) dialog.findViewById(R.id.image);
+        image.setImageResource(R.drawable.ic_info_24dp);
+
+        Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
+        // if button is clicked, close the custom dialog
+        dialogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
     }
 
     //    public boolean isFragmentPresent(String tag) {
