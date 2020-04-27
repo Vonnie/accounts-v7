@@ -219,6 +219,6 @@
     <string name="splInstr3">Para reorganizar las contraseñas sugeridas, presione la tarjeta, sostenga momentáneamente, luego muévase a la nueva ubicación</string>
     <string name="fv_msg_50">Copia de seguridad en archivo en ruta</string>
     <string name="splInstr2">Haga clic en la tarjeta para seleccionar los detalles de la cuenta. Vuelva a hacer clic en la tarjeta para borrar los detalles de la cuenta. Haga clic en Más (+) para agregar una cuenta.</string>
-    <string name="warningmsg" translatable="false">Esta aplicación está recibiendo una gran cantidad de calificaciones de 1 estrella.</string>
     <string name="menuacct_notify">Notificar</string>
+    <string name="warningmsg">Bienvenido a esta aplicación de herramienta de productividad.       Mantenga sus cuentas, luego realice un seguimiento por lista en el orden seleccionado. Hacer búsquedas y hacer copias de seguridad / restaurar.           No se ingresan contraseñas. Sus contraseñas se mantienen fuera de esta aplicación. Mantenga una lista de contraseñas en papel con su ID de cuenta asignada.           Esta aplicación solo tiene contraseñas para sugerencias. Si selecciona cualquier contraseña, la aplicación no tiene conocimiento de su uso.</string>
 </resources>

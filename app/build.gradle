@@ -8,8 +8,8 @@ android {
         applicationId "com.kinsey.passwords"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 168
-        versionName "12.68"
+        versionCode 170
+        versionName "12.70"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         javaCompileOptions {
@@ -64,9 +64,9 @@ dependencies {
 
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'com.google.android.material:material:1.2.0-alpha05'
+    implementation 'com.google.android.material:material:1.2.0-alpha06'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0-alpha04'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0-beta01'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel:2.2.0'
@@ -77,35 +77,35 @@ dependencies {
 //    annotationProcessor "androidx.arch.lifecycle:compiler:2.1.0"
 
 //    implementation "androidx.room:room-runtime:$room_version"
-    implementation 'androidx.room:room-runtime:2.2.4'
-    annotationProcessor 'androidx.room:room-compiler:2.2.4'
+    implementation 'androidx.room:room-runtime:2.2.5'
+    annotationProcessor 'androidx.room:room-compiler:2.2.5'
     // For Kotlin use kapt instead of annotationProcessor
 
     // optional - Kotlin Extensions and Coroutines support for Room
-    implementation "androidx.room:room-ktx:2.2.4"
+    implementation "androidx.room:room-ktx:2.2.5"
 
     // optional - RxJava support for Room
 //    implementation "androidx.room:room-rxjava2:$room_version"
-    implementation "androidx.room:room-rxjava2:2.2.4"
+    implementation "androidx.room:room-rxjava2:2.2.5"
 
     // optional - Guava support for Room, including Optional and ListenableFuture
-    implementation 'androidx.room:room-guava:2.2.4'
+    implementation 'androidx.room:room-guava:2.2.5'
 
     // Test helpers
-    testImplementation 'androidx.room:room-testing:2.2.4'
+    testImplementation 'androidx.room:room-testing:2.2.5'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta4'
     implementation 'androidx.lifecycle:lifecycle-runtime:2.3.0-alpha01'
-    implementation 'androidx.room:room-testing:2.2.4'
-    implementation 'androidx.test.ext:junit:1.1.2-alpha04'
+    implementation 'androidx.room:room-testing:2.2.5'
+    implementation 'androidx.test.ext:junit:1.1.2-beta01'
 
 //    implementation 'com.google.android.gms:play-services:12.0.1'
-    implementation 'com.google.android.gms:play-services-ads:19.0.0'
-    implementation 'com.google.android.gms:play-services-auth:17.0.0'
+    implementation 'com.google.android.gms:play-services-ads:19.1.0'
+    implementation 'com.google.android.gms:play-services-auth:18.0.0'
     implementation 'com.google.android.gms:play-services-identity:17.0.0'
 
-    implementation 'com.google.firebase:firebase-analytics:17.2.3'
-    implementation 'com.google.firebase:firebase-core:17.2.3'
-    implementation 'com.google.firebase:firebase-auth:19.2.0'
+    implementation 'com.google.firebase:firebase-analytics:17.4.0'
+    implementation 'com.google.firebase:firebase-core:17.4.0'
+    implementation 'com.google.firebase:firebase-auth:19.3.1'
     implementation 'com.firebaseui:firebase-ui-auth:4.3.1'
     implementation 'com.squareup.picasso:picasso:2.71828'
 //    implementation 'com.github.codekidX:storage-chooser:2.0.4.4'

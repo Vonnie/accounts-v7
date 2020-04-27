@@ -341,7 +341,7 @@ public class MainActivity extends AppCompatActivity
             fragmentTransaction3.commit();
             frameSearch = findViewById(R.id.fragment_search_container);
             frameSearch.setVisibility(View.GONE);
-            showWarning();
+//            showWarning();
         } else {
             this.isSearchShown = savedInstanceState.getBoolean(ARG_IS_SHEARCH_SHOWN, false);
             this.listsortOrder = savedInstanceState.getInt(ARG_LISTSORT, 1);
@@ -3346,10 +3346,16 @@ public class MainActivity extends AppCompatActivity
         }
         frame.setVisibility(View.GONE);
 
-        String msg = getString(R.string.getting_started) + "\n" +
-                getString(R.string.add_first_account);
-//        + "\n" +
-//                getString(R.string.if_so_direction);
+//        String welcomeMsg = getString(R.string.warningmsg);
+//        String msg = String.format(String.format("{0}\n{1}\n{2}", ) ) + getString(R.string.getting_started) + "\n" +
+//                getString(R.string.add_first_account);
+////        + "\n" +
+////                getString(R.string.if_so_direction);
+
+        String msg = String.format("%s\n\n\n%s\n\n%s",
+                getString(R.string.warningmsg),
+                getString(R.string.getting_started),
+                getString(R.string.add_first_account));
 
         final Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.dialog_msg_ok);

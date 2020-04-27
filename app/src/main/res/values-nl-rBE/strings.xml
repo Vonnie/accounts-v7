@@ -219,6 +219,6 @@
     <string name="splInstr3">Om voorgestelde wachtwoorden opnieuw in te delen, drukt u op de kaart, houdt u deze even vast en gaat u naar de nieuwe plaatsing</string>
     <string name="fv_msg_50">Maak een back-up van het bestand naar het pad</string>
     <string name="splInstr2">Klik op kaart om accountdetails te selecteren. Klik nogmaals op de kaart om de accountgegevens te wissen. Klik op Plus (+) om een account toe te voegen.</string>
-    <string name="warningmsg">Deze app krijgt een vlaag van 1 sterbeoordelingen.</string>
     <string name="menuacct_notify">Melden</string>
+    <string name="warningmsg">Welkom bij deze productiviteitstool-app.       Onderhoud uw accounts en volg ze vervolgens op lijst in geselecteerde volgorde. Voer zoekopdrachten uit en maak een back-up / herstel.           Er worden geen wachtwoorden ingevoerd. Uw wachtwoorden worden buiten deze app bewaard. Houd een aparte papieren lijst met wachtwoorden bij met de toegewezen account-ID.           Deze app heeft alleen wachtwoorden voor suggesties. Als u een wachtwoord selecteert, heeft de app geen kennis van het gebruik ervan.</string>
 </resources>

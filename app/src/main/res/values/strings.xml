@@ -226,11 +226,17 @@
     <string name="selectpermissions">Select Permissions</string>
     <string name="allowstorage">Allow Storage</string>
 
-    <string name="warningmsg">This app is getting a flury of 1 Star Ratings.
-    \n\nThis app needs your feedback.
-        \n\nPlease respond with a rating comment or email to vonniekinsey@gmail.com
-        \n\nIf response is negative, please send information that can be used to improve the app.
-        \n\nThe testing of this app may be inadequate therefore unable to uncover problems you see.</string>
+<!--    <string name="warningmsg">This app is getting a flury of 1 Star Ratings.-->
+<!--    \n\nThis app needs your feedback.-->
+<!--        \n\nPlease respond with a rating comment or email to vonniekinsey@gmail.com-->
+<!--        \n\nIf response is negative, please send information that can be used to improve the app.-->
+<!--        \n\nThe testing of this app may be inadequate therefore unable to uncover problems you see.</string>-->
 
+    <string name="warningmsg">Welcome to this productivity tool app.
+    \n\nMaintain your accounts, then track them by list in selected order. Do searches and backup / restore.
+        \n\nNo passwords are inputted. Your passwords are kept outside this app. Keep a separate paper list of passwords with its assigned account id.
+        \n\nThis app has passwords only for suggestions. If you select any password, the app has no knowledge of its use.
+        </string>
+<!--    \n\nThe review feedback is based on game expectations. This is NOT a game. On Google Play, it is correctly identified as a productivity tool.-->
 
 </resources>

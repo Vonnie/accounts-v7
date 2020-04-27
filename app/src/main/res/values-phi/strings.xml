@@ -218,6 +218,6 @@
     <string name="splInstr3">Upang muling ayusin ang mga iminungkahing password, pindutin ang card, matagal nang matagal, pagkatapos ay lumipat sa bagong pagkakalagay</string>
     <string name="fv_msg_50">I-backup ang file sa landas</string>
     <string name="splInstr2">Mag-click sa card upang piliin ang detalye ng account. I-click muli ang card upang i-clear ang detalye ng account. I-click ang Plus (+) upang magdagdag ng isang account.</string>
-    <string name="warningmsg" translatable="false">Ang app na ito ay nakakakuha ng isang flury ng 1 Star Rating.</string>
     <string name="menuacct_notify">Ipaalam</string>
+    <string name="warningmsg">Maligayang pagdating sa ito app na tool sa pagiging produktibo.       Panatilihin ang iyong mga account, pagkatapos ay subaybayan ang mga ito ayon sa listahan sa napiling pagkakasunud-sunod. Gawin ang mga paghahanap at backup / ibalik.           Walang mga password ay nai-input. Ang iyong mga password ay pinananatiling nasa labas ng app na ito. Panatilihin ang isang hiwalay na listahan ng papel ng mga password gamit ang itinalagang account id.           Ang app na ito ay may mga password lamang para sa mga mungkahi. Kung pumili ka ng anumang password, ang app ay walang kaalaman sa paggamit nito.</string>
 </resources>

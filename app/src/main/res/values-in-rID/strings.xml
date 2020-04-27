@@ -219,6 +219,6 @@
     <string name="splInstr3">Untuk mengatur ulang kata sandi yang disarankan, tekan kartu, tahan sebentar, lalu pindah ke penempatan baru</string>
     <string name="fv_msg_50">Cadangkan ke file ke path</string>
     <string name="splInstr2">Klik kartu untuk memilih detail akun. Klik kartu lagi untuk menghapus detail akun. Klik Plus (+) untuk menambahkan akun.</string>
-    <string name="warningmsg" translatable="false">Aplikasi ini mendapatkan kemewahan Peringkat 1 Bintang.</string>
     <string name="menuacct_notify">Memberitahukan</string>
+    <string name="warningmsg">Selamat datang di aplikasi alat produktivitas ini.</string>
 </resources>

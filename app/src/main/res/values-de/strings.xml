@@ -219,6 +219,6 @@
     <string name="splInstr3">Um die vorgeschlagenen Passwörter neu anzuordnen, drücken Sie die Karte, halten Sie sie kurz gedrückt und wechseln Sie dann zur neuen Position</string>
     <string name="fv_msg_50">Backup in Datei in Pfad</string>
     <string name="splInstr2">Klicken Sie auf Karte, um Kontodetails auszuwählen. Klicken Sie erneut auf die Karte, um die Kontodetails zu löschen. Klicken Sie auf Plus (+), um ein Konto hinzuzufügen.</string>
-    <string name="warningmsg" translatable="false">Diese App erhält eine Flut von 1-Sterne-Bewertungen.</string>
     <string name="menuacct_notify">Benachrichtigen</string>
+    <string name="warningmsg">Willkommen zu dieser Produktivitäts-Tool-App.       Pflegen Sie Ihre Konten und verfolgen Sie sie anhand der Liste in der ausgewählten Reihenfolge. Suchen und sichern / wiederherstellen.           Es werden keine Passwörter eingegeben. Ihre Passwörter werden außerhalb dieser App gespeichert. Führen Sie eine separate Liste mit Passwörtern in Papierform mit der zugewiesenen Konto-ID.           Diese App hat Passwörter nur für Vorschläge. Wenn Sie ein Passwort auswählen, hat die App keine Kenntnis von seiner Verwendung.</string>
 </resources>

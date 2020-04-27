@@ -56,8 +56,6 @@ public class ProfilePassportIdFrag extends Fragment {
 
         void onDeleteConfirmPassportId(Profile profile, int position);
 
-        void onEmptyWarning();
-
     }
 
     @Nullable
