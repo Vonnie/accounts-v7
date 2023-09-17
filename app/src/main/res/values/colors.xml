@@ -30,6 +30,7 @@
 <!--    <color name="secondaryTextColor">#B3442B</color>-->
 
     <color name="primaryColor">#0436B3</color>
+    <color name="colorPrimary">#0436B3</color>
     <color name="primaryLightColor">#8C6653</color>
     <color name="primaryDarkColor">#2B6F80</color>
     <color name="secondaryColor">#2B6F80</color>

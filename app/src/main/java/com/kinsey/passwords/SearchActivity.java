@@ -1,5 +1,7 @@
 package com.kinsey.passwords;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -12,6 +14,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,6 +34,7 @@ import com.kinsey.passwords.provider.SearchAdapter;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 public class SearchActivity extends AppCompatActivity {
     public static final String TAG = "SearchActivity";
@@ -53,10 +60,11 @@ public class SearchActivity extends AppCompatActivity {
     ProgressBar progressBar;
     private String searchforValue = "";
 
-    private static String pattern_ymdtimehm = "yyyy-MM-dd kk:mm";
+    private static final String pattern_ymdtimehm = "yyyy-MM-dd kk:mm";
     public static SimpleDateFormat format_ymdtimehm = new SimpleDateFormat(
             pattern_ymdtimehm, Locale.US);
 
+    private ActivityResultLauncher<Intent> startForResultLauncher;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -71,7 +79,7 @@ public class SearchActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 //        getSupportActionBar().setLogo(R.mipmap.ic_launcher);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close);
+        Objects.requireNonNull(getSupportActionBar()).setHomeAsUpIndicator(R.drawable.ic_close);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
@@ -109,8 +117,23 @@ public class SearchActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
 //        searchResults("");
 
+        startForResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        if (result.getResultCode() == RESULT_OK) {
+                            // Handle the data returned from Activity B
+//                            LiveData<List<Word>> returnedData = mWordViewModel.getAllWords();
+                            // Use the returnedData as needed
+                            Intent data = result.getData();
+                            Log.d(TAG, "onActivityResult: data" + data);
+//                            mWordViewModel.insert(data);
+                        }
+                    }
+                });
 
-        textInputSearchCorpName.getEditText().addTextChangedListener(new TextWatcher() {
+
+        Objects.requireNonNull(textInputSearchCorpName.getEditText()).addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -145,7 +168,9 @@ public class SearchActivity extends AppCompatActivity {
                 intent.putExtra(AddEditProfileActivity.EXTRA_ACTVY_LONG, profile.getActvyLong());
                 intent.putExtra(AddEditProfileActivity.EXTRA_OPEN_DATE_LONG, profile.getOpenLong());
 
-                startActivityForResult(intent, EDIT_PROFILE_REQUEST);
+//                startActivityForResult(intent, EDIT_PROFILE_REQUEST);
+                startForResultLauncher.launch(intent);
+
 
             }
         });

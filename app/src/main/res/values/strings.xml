@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Accounts</string>
+    <string name="app_name">List &amp; Edit Accounts</string>
     <string name="app_name_corpname">" Accounts by Corporation Name"</string>
     <string name="app_name_opendate">" Accounts by Open Date, descending"</string>
     <string name="app_name_acctid">" Accounts by Account Id"</string>
@@ -142,23 +142,23 @@
     <string name="toast_error_suggest_not_saved">Suggest not saved</string>
     <string name="toast_all_suggest_deleted">All suggestions deleted</string>
     <string name="toast_10_new_suggests_added">10 new suggests added</string>
-    <string name="fv_msg_1">Account Profile items currently on db</string>
+    <string name="fv_msg_1">Account rows currently on db</string>
     <string name="fv_msg_2">Warning: If app is uninstalled, the backup file also is deleted.</string>
     <string name="fv_msg_3">Back up data</string>
     <string name="fv_msg_4">Share data from current device with email, DropBox, oneDrive. Or, file manager transfer to save.</string>
     <string name="fv_msg_5">Filename is</string>
     <string name="fv_msg_6">Use menu to export data.</string>
-    <string name="fv_msg_7">Account Profile items currently on db</string>
+    <string name="fv_msg_7">Account rows currently on db</string>
     <string name="fv_msg_9">Path storage dir does not exists</string>
     <string name="fv_msg_10">Use menu to export data to this file.</string>
-    <string name="fv_msg_11">Account Profile items to backup</string>
-    <string name="fv_msg_12">Account Profile items to backup once permission is granted</string>
+    <string name="fv_msg_11">Account rows to backup</string>
+    <string name="fv_msg_12">Account rows to backup once permission is granted</string>
     <string name="fv_msg_13">Warning</string>
     <string name="fv_msg_14">Unable to acquire Exported Accounts</string>
     <string name="fv_msg_15">Either not previously exported or file storage issue</string>
     <string name="fv_msg_16">Notification</string>
     <string name="fv_msg_17">App storage available with permissions</string>
-    <string name="fv_msg_18">Backup file %1$s not yet created</string>
+    <string name="fv_msg_18">Backup does not exists for filename %1$s</string>
     <string name="fv_msg_19">Welcome</string>
     <string name="fv_msg_20">File Offload Properties</string>
     <string name="fv_msg_21">App storage available and export file exists.</string>
@@ -184,9 +184,9 @@
     <string name="fv_msg_37">Keep Accounts backup in secure place for any future restores.</string>
     <string name="fv_msg_38">Share accounts data</string>
     <string name="fv_msg_39">No upload / updates</string>
-    <string name="fv_msg_40">Account Profiles Upload</string>
+    <string name="fv_msg_40">Account rows Uploaded</string>
     <string name="fv_msg_41">App DB accounts updated, restored from backup file</string>
-    <string name="fv_msg_42">Account Profiles onto Backup file</string>
+    <string name="fv_msg_42">Account rows onto Backup file</string>
     <string name="fv_msg_43">See filename thru menu item \'Filename\'</string>
     <string name="fv_msg_44">View backup data thru menu item \'Show Backup File\'</string>
     <string name="toast_accounts_backed_up">Accounts backed up file</string>
@@ -222,7 +222,7 @@
     <string name="splInstr3">To re-arrange suggested passwords, press card, hold momentarily, then move to the new placement</string>
     <string name="gotoSettings">Go to Settings</string>
     <string name="selectapps">Select apps</string>
-    <string name="selectappaccounts">Select app Accounts</string>
+    <string name="selectappaccounts">Select app \'List &amp; Edit Accounts\'</string>
     <string name="selectpermissions">Select Permissions</string>
     <string name="allowstorage">Allow Storage</string>
 

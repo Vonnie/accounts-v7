@@ -1,5 +1,7 @@
 package com.kinsey.passwords.tools;
 
+import android.util.Log;
+
 import java.util.Locale;
 import java.util.Random;
 
@@ -120,12 +122,13 @@ public class PasswordFormula {
 //				+ num
 //				+ password.substring(numPlace);
 //		return password.substring(0,8);
+        int maxSub = 7;
         if (passwordLen == 10) {
-            return insertSymbol(password, 9);
-        } else {
-
-            return insertSymbol(password, 7);
+            maxSub = 9;
         }
+        String newpassword = insertSymbol(password, maxSub);
+//        Log.d(TAG, "returned password: " + newpassword);
+        return newpassword;
     }
 
     private String insertSymbol(String password, int maxSub) {
@@ -143,6 +146,7 @@ public class PasswordFormula {
             newPassword += password.substring(randSymPos, maxSub);
 //            Log.d(TAG, "password: " + newPassword);
         }
+
         return newPassword;
     }
 

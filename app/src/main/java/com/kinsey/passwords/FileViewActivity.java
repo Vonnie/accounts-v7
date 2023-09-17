@@ -10,6 +10,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.media.tv.AdRequest;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -17,8 +18,8 @@ import android.os.Bundle;
 //import com.aditya.filebrowser.FileBrowser;
 //import com.aditya.filebrowser.FileChooser;
 //import com.codekidlabs.storagechooser.StorageChooser;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
+//import com.google.android.gms.ads.AdRequest;
+//import com.google.android.gms.ads.AdView;
 import com.google.android.material.textfield.TextInputLayout;
 import com.kinsey.passwords.items.Profile;
 import com.kinsey.passwords.provider.ProfileAdapter;
@@ -53,11 +54,12 @@ import java.util.ArrayList;
 import java.util.Formatter;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.regex.Pattern;
 //import java.util.regex.Pattern;
 //import com.codekidlabs.storagechooser.StorageChooser;
-import com.nbsp.materialfilepicker.MaterialFilePicker;
-import com.nbsp.materialfilepicker.ui.FilePickerActivity;
+//import com.nbsp.materialfilepicker.MaterialFilePicker;
+//import com.nbsp.materialfilepicker.ui.FilePickerActivity;
 
 import static androidx.core.content.FileProvider.getUriForFile;
 
@@ -84,10 +86,10 @@ public class FileViewActivity extends AppCompatActivity {
     private static final int PICK_FILE_SHOW = 2;
     private static final int PICK_FILE_RESTORE = 3;
 
-    private AdView mAdView;
+//    private AdView mAdView;
 
 
-    private static String pattern_mdy = "MM/dd/yyyy";
+    private static final String pattern_mdy = "MM/dd/yyyy";
     public static SimpleDateFormat format_mdy = new SimpleDateFormat(
             pattern_mdy, Locale.US);
 
@@ -98,7 +100,8 @@ public class FileViewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_file_view);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_keyboard_arrow_left_black_24dp);
+        Objects.requireNonNull(getSupportActionBar()).setHomeAsUpIndicator(R.drawable.ic_keyboard_arrow_left_black_24dp);
+//        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_keyboard_arrow_left_black_24dp);
 //        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close);
 
         progressBar = findViewById(R.id.progressBar);
@@ -169,11 +172,11 @@ public class FileViewActivity extends AppCompatActivity {
             }
         });
 
-        mAdView = findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder()
-                .build();
-//                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR).build();
-        mAdView.loadAd(adRequest);
+//        mAdView = findViewById(R.id.adView);
+//        AdRequest adRequest = new AdRequest.Builder()
+//                .build();
+////                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR).build();
+//        mAdView.loadAd(adRequest);
 
 
         progressBar.setVisibility(View.INVISIBLE);
@@ -374,39 +377,65 @@ public class FileViewActivity extends AppCompatActivity {
 //                Log.d(TAG, "reportJson dirExternal canRead " + dirStorage.canRead());
 //                Log.d(TAG, "reportJson dirInternal free space " + dirStorage.getFreeSpace());
 
+                String rptFilename = dirStorage.getAbsoluteFile().getAbsolutePath() + "<br>/" + MainActivity.BACKUP_FILENAME;
                 if (dirStorage.canRead()) {
                     if (fileExternal.exists()) {
                         Log.d(TAG, "infoPage: " + fileExternal.getAbsolutePath());
-                        htmlString = greetMsg() +
-                                "<hr><h5>" + adapter.getItemCount() + " " + getString(R.string.fv_msg_1) + "<h5>" +
+                        String s1Line = String.format("%1s%2d %3$s %4$s", "<h5>", adapter.getItemCount(), getString(R.string.fv_msg_1), "</h5>" );
+                        Log.d(TAG, "infoPage: " + s1Line);
+                        // Send all output to the Appendable object sb
+//                        Formatter formatter = new Formatter(sb, Locale.US);
+//                        String s1Line = String.format("<hr><h5>%1 %2</h5>", adapter.getItemCount(), getString(R.string.fv_msg_1) );
+                        Log.d(TAG, "infoPage: " + s1Line);
+//                                "<hr><h5>" + adapter.getItemCount() + " " + getString(R.string.fv_msg_1) + "<h5>" +
+//                                s1Line +
+                        htmlString = greetMsg() + "<hr>" + s1Line +
+
+//                                htmlString = greetMsg() +
+//                                "<h5>" + adapter.getItemCount() + " " + getString(R.string.fv_msg_1) + "<h5>" +
                                 "<h5>" + accountJsonProperties(fileExternal.getAbsoluteFile().toString()) + "</h5><hr>" +
                                 "<h5>" + getString(R.string.fv_msg_49) + "</h5>" +
                                 "<h6>" + getString(R.string.fv_msg_2) + "</h6>" +
                                 "<ul>" +
                                         "<li>" + getString(R.string.fv_msg_3) + "</li>" +
                                         "<li>" + getString(R.string.fv_msg_4) + "</li>" +
-                                        "<li>" + getString(R.string.fv_msg_5) + " <small>" + fileExternal.getAbsolutePath() + "</small></li>" +
+                                        "<li>" + getString(R.string.fv_msg_5) + " <small>" + rptFilename + "</small></li>" +
                                         "<li>" + getString(R.string.fv_msg_46) + "</li>" +
                                         "<li>" + getString(R.string.fv_msg_47) + "</li>" +
                                         "<li>" + getString(R.string.fv_msg_48) + "</li>" +
                                         "</ul>" ;
                     } else {
-                        htmlString = notfyMsg(dirStorage.getAbsoluteFile().getAbsolutePath()) +
-                                "<br><h4>" + adapter.getItemCount() + " " + getString(R.string.fv_msg_7) + "<h4>";
+//                        htmlString = notfyMsg(dirStorage.getAbsoluteFile().toString()) +
+                        htmlString = notfyMsg(rptFilename) +
+                                "<h4>" + adapter.getItemCount() + " " + getString(R.string.fv_msg_7) + "</h4>";
+//                        htmlString = notfyMsg(dirStorage.getAbsoluteFile().getAbsolutePath()) +
+//                                "<br><h4>" + adapter.getItemCount() + " " + getString(R.string.fv_msg_7) + "<h4>";
 //                                "<h4>" + getString(R.string.fv_msg_6) + "</h4>" +
 //                        "<h4>Notify</h4>" +
 //                                "<h4>" + getString(R.string.fv_msg_8) + "</h4>";
                     }
                 } else {
-                    htmlString = notfyMsg(dirStorage.getAbsoluteFile().getAbsolutePath()) +
+                    Log.d(TAG, "infoPage: " + rptFilename);
+                    htmlString = notfyMsg(rptFilename) +
 //                            "<h4>" + getString(R.string.fv_msg_9) + dirStorage.getAbsoluteFile() + "</h4>" +
 //                            "<h5>" + getString(R.string.fv_msg_10) + "</h5>" +
                             "<br><h5>" + adapter.getItemCount() + " " + getString(R.string.fv_msg_11) + "<h5>";
+
+//                    htmlString = notfyMsg(dirStorage.getAbsoluteFile().getAbsolutePath()) +
+////                            "<h4>" + getString(R.string.fv_msg_9) + dirStorage.getAbsoluteFile() + "</h4>" +
+////                            "<h5>" + getString(R.string.fv_msg_10) + "</h5>" +
+//                            "<br><h5>" + adapter.getItemCount() + " " + getString(R.string.fv_msg_11) + "<h5>";
                 }
 
             } else {
-                htmlString = permissionMsg() +
-                        "<h5>" + adapter.getItemCount() + " " + getString(R.string.fv_msg_12) + "<h5>";
+                Log.d(TAG, "infoPage: ");
+//                String s1Line = String.format("&lt;h5&gt;%1$d %2&lt;&#47;h5&gt;", adapter.getItemCount(), getString(R.string.fv_msg_12) );
+                String s1Line = String.format("%1s%2d %3$s %4$s", "<h5>", adapter.getItemCount(), getString(R.string.fv_msg_12), "</h5>" );
+                Log.d(TAG, "infoPage: " + s1Line);
+                htmlString = permissionMsg() + s1Line;
+
+//                htmlString = permissionMsg() +
+//                        "<h5>" + adapter.getItemCount() + " " + getString(R.string.fv_msg_12) + "<h5>";
             }
 
             webView.loadData(htmlString, "text/html", null);
@@ -414,7 +443,7 @@ public class FileViewActivity extends AppCompatActivity {
             Log.d(TAG, "db count: " + adapter.getItemCount());
 
         } catch (Exception ex) {
-            Log.d(TAG, "reportJson: " + ex.getMessage());
+            Log.d(TAG, "reportJsonError: " + ex.getMessage());
         }
 
     }
@@ -445,14 +474,14 @@ public class FileViewActivity extends AppCompatActivity {
     private String greetMsg() {
         String htmlString = "<h1>" + getString(R.string.fv_msg_19) + "</h1>" +
                 "<h2>" + getString(R.string.fv_msg_20) + "</h2>" +
-                "<h3>" + getString(R.string.fv_msg_21) + "</h3>" ;
+                "<h4>" + getString(R.string.fv_msg_21) + "</h4>" ;
 //                "<h4>" + getString(R.string.fv_msg_22) + "</h4>";
         return htmlString;
     }
 
     private String permissionMsg() {
         String htmlString = "<h1>" + getString(R.string.fv_msg_23) + "</h1>" +
-                "<h2>" + getString(R.string.fv_msg_24) + "</h2>" +
+                "<h3>" + getString(R.string.fv_msg_24) + "</h3>" +
                 "<h3>" + getString(R.string.fv_msg_25) + "</h3>" +
 //                "<h3>" + getString(R.string.fv_msg_26) + "</h3>" +
 //                "<h3>" + getString(R.string.fv_msg_27) + "</h3>" +
@@ -555,7 +584,7 @@ public class FileViewActivity extends AppCompatActivity {
             if (file.exists()) {
                 Log.d(TAG, "ExportAccountDB: file exists " + file.getAbsoluteFile());
 //                alertMsg("Backup Temporaruly Unavailable");
-                alertBackup(file, getString(R.string.fv_msg_33)
+                alertBackup(file, getString(R.string.fv_msg_33) + ' '
                         + format_mdy.format(file.lastModified()));
             } else {
 
@@ -827,7 +856,7 @@ public class FileViewActivity extends AppCompatActivity {
         TextView tvTitle = mView.findViewById(R.id.title);
         tvTitle.setText("Restore from file");
         TextInputLayout textInputFilename = (TextInputLayout) mView.findViewById(R.id.text_input_filename);
-        textInputFilename.getEditText().setText(MainActivity.BACKUP_FILENAME);
+        Objects.requireNonNull(textInputFilename.getEditText()).setText(MainActivity.BACKUP_FILENAME);
         Button btnOk = (Button) mView.findViewById(R.id.btn_ok);
         Button btnCancel = (Button) mView.findViewById(R.id.btn_cancel);
 
@@ -1041,17 +1070,20 @@ public class FileViewActivity extends AppCompatActivity {
 
         //Giving the FilePicker a custom Title:
         String title = "Select file";
-        String readExternalStoragePermission = Manifest.permission.READ_EXTERNAL_STORAGE;
+//        String readExternalStoragePermission = Manifest.permission.READ_EXTERNAL_STORAGE;
 //        if(hasPermission(PERMISSION_REQUEST_CODE, readExternalStoragePermission)) {
-            new MaterialFilePicker()
-                    .withActivity(FileViewActivity.this)
-                    .withRequestCode(requestCode)
-                    .withFilter(Pattern.compile(".*\\.json$"))
-                    .withFilterDirectories(true) // Set directories filterable (false by default)
-                    .withHiddenFiles(false) // Show hidden files and folders
-                    .withRootPath(directoryy)
-                    .withTitle(title)
-                    .start();
+
+//            new MaterialFilePicker()
+//                    .withActivity(FileViewActivity.this)
+//                    .withRequestCode(requestCode)
+//                    .withFilter(Pattern.compile(".*\\.json$"))
+//                    .withFilterDirectories(true) // Set directories filterable (false by default)
+//                    .withHiddenFiles(false) // Show hidden files and folders
+//                    .withRootPath(directoryy)
+//                    .withTitle(title)
+//                    .start();
+
+
 //        }
     }
 
@@ -1432,34 +1464,35 @@ public class FileViewActivity extends AppCompatActivity {
                 Log.d(TAG, "file share cancelled");
             }
         } else {
-            if (requestCode == PICK_FILE_SHOW) {
-                if (resultCode == RESULT_OK) {
-                    // success
-                    progressBar.setVisibility(View.VISIBLE);
-                    Log.d(TAG, "file share was successful");
-                    String filePath = data.getStringExtra(FilePickerActivity.RESULT_FILE_PATH);
-                    Log.d(TAG, "onActivityResult: path " + filePath);
-//                    webView.setBackgroundColor(
-//                            ContextCompat.getColor(getApplicationContext(), R.color.backgroundTransparent)
-
-                    webView.loadUrl("file://" + filePath);
-                    progressBar.setVisibility(View.INVISIBLE);
-//                    Uri file = data.getData();
-//                    Log.d(TAG, "onActivityResult: " + file.getPath());
-                }
-                else if (resultCode == Activity.RESULT_CANCELED) {
-                    // cancelled
-                    Log.d(TAG, "file share cancelled");
-                }
-            } else {
-                if (requestCode == PICK_FILE_RESTORE) {
-                    if (resultCode == RESULT_OK) {
-                        String strFilename = data.getStringExtra(FilePickerActivity.RESULT_FILE_PATH);
-                        Log.d(TAG, "onActivityResult: filename " + strFilename);
-                        ImportAccountDB(strFilename);
-                    }
-                }
-            }
+            Log.d(TAG, "file share temporarily cancelled");
+//            if (requestCode == PICK_FILE_SHOW) {
+//                if (resultCode == RESULT_OK) {
+//                    // success
+//                    progressBar.setVisibility(View.VISIBLE);
+//                    Log.d(TAG, "file share was successful");
+//                    String filePath = data.getStringExtra(FilePickerActivity.RESULT_FILE_PATH);
+//                    Log.d(TAG, "onActivityResult: path " + filePath);
+////                    webView.setBackgroundColor(
+////                            ContextCompat.getColor(getApplicationContext(), R.color.backgroundTransparent)
+//
+//                    webView.loadUrl("file://" + filePath);
+//                    progressBar.setVisibility(View.INVISIBLE);
+////                    Uri file = data.getData();
+////                    Log.d(TAG, "onActivityResult: " + file.getPath());
+//                }
+//                else if (resultCode == Activity.RESULT_CANCELED) {
+//                    // cancelled
+//                    Log.d(TAG, "file share cancelled");
+//                }
+//            } else {
+//                if (requestCode == PICK_FILE_RESTORE) {
+//                    if (resultCode == RESULT_OK) {
+//                        String strFilename = data.getStringExtra(FilePickerActivity.RESULT_FILE_PATH);
+//                        Log.d(TAG, "onActivityResult: filename " + strFilename);
+//                        ImportAccountDB(strFilename);
+//                    }
+//                }
+//            }
         }
     }
 
@@ -1677,8 +1710,8 @@ public class FileViewActivity extends AppCompatActivity {
             Formatter formatter = new Formatter(sb, Locale.US);
 
             String msgDisplay = formatter.format("<h2>%3d " + context.getString(R.string.fv_msg_42) + "</h2>" +
-                                "<h3>" + context.getString(R.string.fv_msg_43) + "</h3>" +
                                 "<h3>" + context.getString(R.string.fv_msg_44) + "</h3>",
+//                                "<h3>" + context.getString(R.string.fv_msg_43) + "</h3>" +
                     count).toString();
 
             this.webView.loadData(msgDisplay, "text/html", null);

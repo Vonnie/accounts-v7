@@ -14,7 +14,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="0dp"
         android:layout_marginEnd="8dp"
         android:indeterminate="true"
         android:layout_centerInParent="true"
@@ -31,20 +30,18 @@
         android:layout_marginBottom="8dp"
         android:textAlignment="viewStart"
         app:layout_constraintBottom_toTopOf="@id/adView"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/progressBar" />
 <!--        app:layout_constraintTop_toBottomOf="@+id/progressBar" />-->
 
-    <com.google.android.gms.ads.AdView
-        android:id="@+id/adView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:adSize="SMART_BANNER"
-        app:adUnitId="ca-app-pub-6558779133930297/9091060189"
-        app:layout_constraintBottom_toBottomOf="parent">
-
-    </com.google.android.gms.ads.AdView>
+<!--    <com.google.android.gms.ads.AdView-->
+<!--        android:id="@+id/adView"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:adSize="SMART_BANNER"-->
+<!--        app:adUnitId="ca-app-pub-6558779133930297/9091060189"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent">-->
+<!--    </com.google.android.gms.ads.AdView>-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Accounts</string>
     <string name="about_copyright">Copyright  u00a9 2020</string>
     <string name="about_email">Stuur een e-mail naar vonniekinsey@gmail.com voor ondersteuning</string>
     <string name="corp_website_hint">Geldige corp-website (optioneel)</string>
@@ -137,7 +136,6 @@
     <string name="toast_sugg_added">Suggest toegevoegd</string>
     <string name="toast_sugg_deleted">Suggestie verwijderd</string>
     <string name="toast_suggest_updated">Voorstellen bijgewerkt</string>
-    <string name="fv_msg_1">Accountprofielitems die momenteel op db</string>
     <string name="fv_msg_2">Waarschuwing: als de app is verwijderd, wordt het back-upbestand ook verwijderd.</string>
     <string name="fv_msg_3">Back-upgegevens</string>
     <string name="fv_msg_4">Deel gegevens vanaf het huidige apparaat met e-mail, DropBox, oneDrive. Of, overdracht van bestandsbeheer om op te slaan.</string>
@@ -145,15 +143,12 @@
     <string name="fv_msg_10">Gebruik het menu om gegevens naar dit bestand te exporteren.</string>
     <string name="fv_msg_11">Accountprofielitems om te back-uppen</string>
     <string name="fv_msg_6">Gebruik het menu om gegevens te exporteren.</string>
-    <string name="fv_msg_7">Accountprofielitems die momenteel op db</string>
     <string name="fv_msg_9">Padopslag bestaat niet</string>
-    <string name="fv_msg_12">Accountprofielitems waarvan een back-up wordt gemaakt nadat toestemming is verleend</string>
     <string name="fv_msg_13">waarschuwing</string>
     <string name="fv_msg_14">Kan geëxporteerde accounts niet verkrijgen</string>
     <string name="fv_msg_15">Ofwel niet eerder geëxporteerd of probleem met bestandsopslag</string>
     <string name="fv_msg_16">kennisgeving</string>
     <string name="fv_msg_17">App-opslag beschikbaar met rechten</string>
-    <string name="fv_msg_18">Back-upbestand %1$s is nog niet gemaakt</string>
     <string name="fv_msg_19">Welkom</string>
     <string name="fv_msg_20">Bestand Offload-eigenschappen</string>
     <string name="fv_msg_21">App-opslag beschikbaar en exportbestand bestaat.</string>
@@ -174,13 +169,11 @@
     <string name="fv_msg_37">Bewaar de back-up van uw accounts op een veilige plaats voor toekomstige herstelacties.</string>
     <string name="fv_msg_38">Deel accountgegevens</string>
     <string name="fv_msg_39">Geen upload / updates</string>
-    <string name="fv_msg_40">Accountprofielen uploaden</string>
     <string name="fv_msg_41">App DB-accounts bijgewerkt, hersteld vanuit back-upbestand</string>
     <string name="no">Nee</string>
     <string name="toast_error_backup_create">kan exportbestand niet maken</string>
     <string name="toast_no_export_to_share">Geen geëxporteerd bestand om te delen</string>
     <string name="yes">Ja</string>
-    <string name="fv_msg_42">Accountprofielen in back-upbestand</string>
     <string name="fv_msg_43">Zie bestandsnaam via menu-item \'Bestandsnaam\'</string>
     <string name="fv_msg_44">Bekijk back-upgegevens via menu-item \'Back-upbestand tonen\'</string>
     <string name="toast_accounts_backed_up">Back-upbestand van accounts</string>
@@ -209,7 +202,6 @@
     <string name="splInstr">Om opnieuw te ordenen, drukt u op een account, houdt u even vast en gaat u naar de nieuwe plaatsing</string>
     <string name="gotoSettings">Ga naar Instellingen</string>
     <string name="selectapps">Selecteer apps</string>
-    <string name="selectappaccounts">Selecteer app-accounts</string>
     <string name="selectpermissions">Selecteer Machtigingen</string>
     <string name="allowstorage">Opslag toestaan</string>
     <string name="fv_msg_46">Installeer app-accounts op een nieuw apparaat</string>
@@ -221,4 +213,12 @@
     <string name="splInstr2">Klik op kaart om accountdetails te selecteren. Klik nogmaals op de kaart om de accountgegevens te wissen. Klik op Plus (+) om een account toe te voegen.</string>
     <string name="menuacct_notify">Melden</string>
     <string name="warningmsg">Welkom bij deze productiviteitstool-app.       Onderhoud uw accounts en volg ze vervolgens op lijst in geselecteerde volgorde. Voer zoekopdrachten uit en maak een back-up / herstel.           Er worden geen wachtwoorden ingevoerd. Uw wachtwoorden worden buiten deze app bewaard. Houd een aparte papieren lijst met wachtwoorden bij met de toegewezen account-ID.           Deze app heeft alleen wachtwoorden voor suggesties. Als u een wachtwoord selecteert, heeft de app geen kennis van het gebruik ervan.</string>
+    <string name="app_name">Lijst &amp; Bewerk Accounts</string>
+    <string name="fv_msg_1">Accountrijen momenteel op db</string>
+    <string name="fv_msg_7">Mga hilera ng account na kasalukuyang nasa db</string>
+    <string name="fv_msg_12">Accountrijen om een back-up van te maken zodra toestemming is verleend</string>
+    <string name="fv_msg_18">Er bestaat geen back-up voor bestandsnaam %1$s</string>
+    <string name="fv_msg_40">Accountrijen geüpload</string>
+    <string name="fv_msg_42">Accountrijen op back-upbestand</string>
+    <string name="selectappaccounts">Selecteer app \'List &amp; Edit Accounts\'</string>
 </resources>

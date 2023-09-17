@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Accounts</string>
     <string name="app_name_corpname">Akun berdasarkan Nama Perusahaan</string>
     <string name="about_copyright">Hak Cipta © 2020</string>
     <string name="about_email">Untuk dukungan, kirim email ke vonniekinsey@gmail.com</string>
@@ -137,23 +136,19 @@
     <string name="toast_error_suggest_not_saved">Sarankan tidak disimpan</string>
     <string name="toast_all_suggest_deleted">Semua saran dihapus</string>
     <string name="toast_10_new_suggests_added">10 saran baru ditambahkan</string>
-    <string name="fv_msg_1">Item Profil Akun saat ini ada di basis data</string>
     <string name="fv_msg_2">Peringatan: Jika aplikasi dihapus, file cadangan juga dihapus.</string>
     <string name="fv_msg_3">Cadangkan data</string>
     <string name="fv_msg_4">Bagikan data dari perangkat saat ini dengan email, DropBox, oneDrive. Atau, transfer file manager untuk disimpan.</string>
     <string name="fv_msg_5">Nama file adalah</string>
     <string name="fv_msg_6">Gunakan menu untuk mengekspor data.</string>
-    <string name="fv_msg_7">Item Profil Akun saat ini ada di db</string>
     <string name="fv_msg_9">Dir penyimpanan path tidak ada</string>
     <string name="fv_msg_10">Gunakan menu untuk mengekspor data ke file ini.</string>
     <string name="fv_msg_11">Item Profil Akun untuk dicadangkan</string>
-    <string name="fv_msg_12">Item Profil Akun akan dicadangkan setelah izin diberikan</string>
     <string name="fv_msg_13">Peringatan</string>
     <string name="fv_msg_14">Tidak dapat memperoleh Akun yang Diekspor</string>
     <string name="fv_msg_15">Entah sebelumnya tidak diekspor atau masalah penyimpanan file</string>
     <string name="fv_msg_16">Pemberitahuan</string>
     <string name="fv_msg_17">Penyimpanan aplikasi tersedia dengan izin</string>
-    <string name="fv_msg_18">File cadangan %1$s belum dibuat</string>
     <string name="fv_msg_19">Selamat datang</string>
     <string name="fv_msg_20">Properti Offload File</string>
     <string name="fv_msg_21">Penyimpanan aplikasi tersedia dan ekspor file ada.</string>
@@ -177,9 +172,7 @@
     <string name="fv_msg_37">Simpan cadangan Akun di tempat yang aman untuk pemulihan di masa mendatang.</string>
     <string name="fv_msg_38">Bagikan data akun</string>
     <string name="fv_msg_39">Tidak ada unggahan / pembaruan</string>
-    <string name="fv_msg_40">Unggah Profil Akun</string>
     <string name="fv_msg_41">Akun DB aplikasi diperbarui, dipulihkan dari file cadangan</string>
-    <string name="fv_msg_42">Profil Akun ke dalam file Cadangan</string>
     <string name="fv_msg_43">Lihat nama file melalui item menu \'Nama file\'</string>
     <string name="fv_msg_44">Lihat data cadangan melalui item menu \'Tampilkan File Cadangan\'</string>
     <string name="toast_accounts_backed_up">Akun yang didukung file</string>
@@ -209,7 +202,6 @@
     <string name="splInstr">Untuk mengatur ulang, tekan akun, tahan sebentar, lalu pindah ke penempatan baru</string>
     <string name="gotoSettings">Pergi ke pengaturan</string>
     <string name="selectapps">Pilih aplikasi</string>
-    <string name="selectappaccounts">Pilih Akun aplikasi</string>
     <string name="selectpermissions">Pilih Izin</string>
     <string name="allowstorage">Izinkan Penyimpanan</string>
     <string name="fv_msg_49">Informasi tentang cara menambahkan data ke perangkat lain</string>
@@ -221,4 +213,12 @@
     <string name="splInstr2">Klik kartu untuk memilih detail akun. Klik kartu lagi untuk menghapus detail akun. Klik Plus (+) untuk menambahkan akun.</string>
     <string name="menuacct_notify">Memberitahukan</string>
     <string name="warningmsg">Selamat datang di aplikasi alat produktivitas ini.</string>
+    <string name="app_name">Daftar &amp; Edit Akun</string>
+    <string name="fv_msg_1">Baris akun saat ini di db</string>
+    <string name="fv_msg_7">Baris akun saat ini di db</string>
+    <string name="fv_msg_12">Baris akun yang akan dicadangkan setelah izin diberikan</string>
+    <string name="fv_msg_18">Pencadangan tidak ada untuk nama file %1$s</string>
+    <string name="fv_msg_40">Baris akun Diunggah</string>
+    <string name="fv_msg_42">Baris akun ke file Cadangan</string>
+    <string name="selectappaccounts">Pilih aplikasi \'Daftar &amp; Edit Akun\'</string>
 </resources>

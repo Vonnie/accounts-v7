@@ -2,6 +2,7 @@ package com.kinsey.passwords;
 
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.media.tv.AdRequest;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -23,11 +24,11 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.ads.initialization.InitializationStatus;
-import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+//import com.google.android.gms.ads.AdRequest;
+//import com.google.android.gms.ads.AdView;
+//import com.google.android.gms.ads.MobileAds;
+//import com.google.android.gms.ads.initialization.InitializationStatus;
+//import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.kinsey.passwords.items.Suggest;
 import com.kinsey.passwords.provider.RecyclerViewPositionHelper;
@@ -52,7 +53,7 @@ public class SuggestListActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     RecyclerViewPositionHelper mRecyclerViewHelper;
     private SuggestViewModel suggestViewModel;
-    private PasswordFormula passwordFormula = new PasswordFormula();
+    private final PasswordFormula passwordFormula = new PasswordFormula();
     private List<Suggest> suggestList;
     GridLayoutManager layoutManager;
     private GestureDetectorCompat gestureDetector;
@@ -64,7 +65,7 @@ public class SuggestListActivity extends AppCompatActivity {
     //    private List<Suggest> suggestListFull;
 //    private int maxSeq = 0;
     Suggest suggestMaxItem;
-    private AdView mAdView;
+//    private AdView mAdView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -88,63 +89,74 @@ public class SuggestListActivity extends AppCompatActivity {
 
         GridLayoutManager gridLayoutManager;
         int screenLayout = getResources().getConfiguration().screenLayout;
-        screenLayout &= Configuration.SCREENLAYOUT_SIZE_MASK;
+
         int spanSize = 3;
-        switch (screenLayout) {
-            case Configuration.SCREENLAYOUT_SIZE_XLARGE:
-                if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                    spanSize = 5;
-                } else {
-                    spanSize = 4;
-                }
-                gridLayoutManager = new GridLayoutManager(this, spanSize);
-                recyclerView.setLayoutManager(gridLayoutManager);
-                Log.d(TAG, "screen size Xlarge");
-                break;
-            case Configuration.SCREENLAYOUT_SIZE_LARGE:
-                if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                    spanSize = 4;
-                } else {
-                    spanSize = 3;
-                }
-                gridLayoutManager = new GridLayoutManager(this, spanSize);
-                recyclerView.setLayoutManager(gridLayoutManager);
-                Log.d(TAG, "screen size large");
-                break;
-            case Configuration.SCREENLAYOUT_SIZE_NORMAL:
-                if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                    spanSize = 5;
-                } else {
-                    spanSize = 3;
-                }
-                gridLayoutManager = new GridLayoutManager(this, spanSize);
-                recyclerView.setLayoutManager(gridLayoutManager);
-                break;
-            default:
-                if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                    spanSize = 2;
-                } else {
-                    spanSize = 1;
-                }
-                gridLayoutManager = new GridLayoutManager(this, spanSize);
-                recyclerView.setLayoutManager(gridLayoutManager);
-                break;
-        }
+        gridLayoutManager = new GridLayoutManager(this, spanSize);
+        recyclerView.setLayoutManager(gridLayoutManager);
 
 
-        MobileAds.initialize(this, new OnInitializationCompleteListener() {
-            @Override
-            public void onInitializationComplete(InitializationStatus initializationStatus) {
-            }
-        });
+//  _________________________________________________________________________
+//        Screen sizes for Screen Layouts  ==> find new way to do
+//  _________________________________________________________________________
+//        screenLayout &= Configuration.SCREENLAYOUT_SIZE_MASK;
+//        switch (screenLayout) {
+//            case Configuration.SCREENLAYOUT_SIZE_XLARGE:
+//                if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+//                    spanSize = 5;
+//                } else {
+//                    spanSize = 4;
+//                }
+//                gridLayoutManager = new GridLayoutManager(this, spanSize);
+//                recyclerView.setLayoutManager(gridLayoutManager);
+//                Log.d(TAG, "screen size Xlarge");
+//                break;
+//            case Configuration.SCREENLAYOUT_SIZE_LARGE:
+//                if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+//                    spanSize = 4;
+//                } else {
+//                    spanSize = 3;
+//                }
+//                gridLayoutManager = new GridLayoutManager(this, spanSize);
+//                recyclerView.setLayoutManager(gridLayoutManager);
+//                Log.d(TAG, "screen size large");
+//                break;
+//            case Configuration.SCREENLAYOUT_SIZE_NORMAL:
+//                if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+//                    spanSize = 5;
+//                } else {
+//                    spanSize = 3;
+//                }
+//                gridLayoutManager = new GridLayoutManager(this, spanSize);
+//                recyclerView.setLayoutManager(gridLayoutManager);
+//                break;
+//            default:
+//                if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+//                    spanSize = 2;
+//                } else {
+//                    spanSize = 1;
+//                }
+//                gridLayoutManager = new GridLayoutManager(this, spanSize);
+//                recyclerView.setLayoutManager(gridLayoutManager);
+//                break;
+//        }
+//  _________________________________________________________________________
 
-
-        mAdView = findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder()
-                .build();
-//                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR).build();
-        mAdView.loadAd(adRequest);
-
+//  _________________________________________________________________________
+//        adversiting
+//  _________________________________________________________________________
+//        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+//            @Override
+//            public void onInitializationComplete(InitializationStatus initializationStatus) {
+//            }
+//        });
+//
+//
+//        mAdView = findViewById(R.id.adView);
+//        AdRequest adRequest = new AdRequest.Builder()
+//                .build();
+////                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR).build();
+//        mAdView.loadAd(adRequest);
+//  _________________________________________________________________________
 
 //        boolean isLandscape = (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE);
 //        if (isLandscape) {
@@ -157,18 +169,24 @@ public class SuggestListActivity extends AppCompatActivity {
 
 
         final SuggestAdapter adapter = new SuggestAdapter();
+        Log.d(TAG, "onCreate: adapter acquired");
         recyclerView.setAdapter(adapter);
+        Log.d(TAG, "onCreate: adapter set");
         mRecyclerViewHelper = RecyclerViewPositionHelper.createHelper(recyclerView);
+        Log.d(TAG, "onCreate: set recyclerViewHelper");
 
 //        suggestViewModel = ViewModelProviders.of(this).get(SuggestViewModel.class);
         suggestViewModel = new ViewModelProvider(this).get(SuggestViewModel.class);
+        Log.d(TAG, "onCreate: set suggestViewModel");
         suggestViewModel.getAllSuggests().observe(this, new Observer<List<Suggest>>() {
             @Override
             public void onChanged(@Nullable List<Suggest> suggests) {
 //                update RecyclerView
 //                Toast.makeText(SuggestListActivity.this, "onChanged", Toast.LENGTH_SHORT).show();
 
+                Log.d(TAG, "onCreate: about to set suggestList array");
                 suggestList = new ArrayList<>(suggests);
+                Log.d(TAG, "onChanged: suggests count " + suggests.size());
                 adapter.submitList(suggests);
 //                Log.d(TAG, "suggests size " + suggestListFull.size());
 
@@ -196,7 +214,7 @@ public class SuggestListActivity extends AppCompatActivity {
 
 //                adapter.submitList(suggests);
 
-                Log.d(TAG, "max Item " + suggest);
+                Log.d(TAG, "max Item " + suggest.getPassword());
 
                 if (suggest == null) {
                     suggestMaxItem = new Suggest();
@@ -464,7 +482,12 @@ public class SuggestListActivity extends AppCompatActivity {
                 intent.putExtra(AddEditSuggestActivity.EXTRA_NOTE, suggest.getNote());
 //                intent.putExtra(AddEditSuggestActivity.EXTRA_ACTVY_DATE, suggest.getActvyDate().getTime());
                 intent.putExtra(AddEditSuggestActivity.EXTRA_ACTVY_DATE_LONG, suggest.getActvyDate().getTime());
-                startActivityForResult(intent, EDIT_SUGGEST_REQUEST);
+
+//                _________________________________________________________
+//                Temp Out
+//                _________________________________________________________
+//                startActivityForResult(intent, EDIT_SUGGEST_REQUEST);
+//                _________________________________________________________
             }
         });
 

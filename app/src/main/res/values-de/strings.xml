@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Accounts</string>
     <string name="yes">Ja</string>
     <string name="up_button_description">Up Item auf der Liste</string>
     <string name="toast_10_new_suggests_added">10 neue Vorschläge hinzugefügt</string>
@@ -8,12 +7,7 @@
     <string name="title_activity_about">Über Aktivität</string>
     <string name="title_activity_account">Konto bearbeiten</string>
     <string name="alert_acct_id">Konto-ID:</string>
-    <string name="fv_msg_1">Konto Profil Elemente derzeit auf DB</string>
-    <string name="fv_msg_7">Konto Profil Elemente derzeit auf DB</string>
     <string name="fv_msg_11">Zu sichernde Kontoprofilelemente</string>
-    <string name="fv_msg_12">Zu sichernde Kontoprofilelemente, sobald die Berechtigung erteilt wurde</string>
-    <string name="fv_msg_42">Kontoprofile in Sicherungsdatei</string>
-    <string name="fv_msg_40">Account-Profile hochladen</string>
     <string name="home_message_text_17">Account-Schutz</string>
     <string name="title_activity_account_list">Konten</string>
     <string name="app_name_acctid">Konten nach Konto-ID</string>
@@ -70,7 +64,6 @@
     <string name="home_btn_export_text">Konten exportieren</string>
     <string name="home_message_text_18">Exportieren Sie die Datenbank über den Menüpunkt \'Backup / Restore\' für Backup. Diese exportierte Datendatei ist eine Json-Dateidarstellung der Konten-Datenbank. Verwenden Sie dies für die Sicherung.</string>
     <string name="toast_accounts_backed_up">Von Konten gesicherte Datei</string>
-    <string name="fv_msg_18">Sicherungsdatei %1$s noch nicht erstellt</string>
     <string name="delete_cap">Löschen</string>
     <string name="toast_export_error">Der Export hat Fehler</string>
     <string name="menuacct_external_accts">Externe Konten</string>
@@ -209,7 +202,6 @@
     <string name="splInstr">Drücken Sie zum Neuanordnen auf ein Konto, halten Sie es kurz gedrückt und wechseln Sie dann zur neuen Position</string>
     <string name="gotoSettings">Gehe zu den Einstellungen</string>
     <string name="selectapps">Apps auswählen</string>
-    <string name="selectappaccounts">Wählen Sie App-Konten</string>
     <string name="selectpermissions">Wählen Sie Berechtigungen</string>
     <string name="allowstorage">Speicher zulassen</string>
     <string name="fv_msg_46">Installieren Sie die App-Konten auf einem neuen Gerät</string>
@@ -221,4 +213,12 @@
     <string name="splInstr2">Klicken Sie auf Karte, um Kontodetails auszuwählen. Klicken Sie erneut auf die Karte, um die Kontodetails zu löschen. Klicken Sie auf Plus (+), um ein Konto hinzuzufügen.</string>
     <string name="menuacct_notify">Benachrichtigen</string>
     <string name="warningmsg">Willkommen zu dieser Produktivitäts-Tool-App.       Pflegen Sie Ihre Konten und verfolgen Sie sie anhand der Liste in der ausgewählten Reihenfolge. Suchen und sichern / wiederherstellen.           Es werden keine Passwörter eingegeben. Ihre Passwörter werden außerhalb dieser App gespeichert. Führen Sie eine separate Liste mit Passwörtern in Papierform mit der zugewiesenen Konto-ID.           Diese App hat Passwörter nur für Vorschläge. Wenn Sie ein Passwort auswählen, hat die App keine Kenntnis von seiner Verwendung.</string>
+    <string name="app_name">Konten auflisten und bearbeiten</string>
+    <string name="fv_msg_1">Kontozeilen derzeit auf Datenbank</string>
+    <string name="fv_msg_7">Kontozeilen derzeit auf Datenbank</string>
+    <string name="fv_msg_12">Kontozeilen, die nach Erteilung der Berechtigung gesichert werden sollen</string>
+    <string name="fv_msg_18">Für Dateiname %1$s ist keine Sicherung vorhanden</string>
+    <string name="fv_msg_40">Kontozeilen Hochgeladen</string>
+    <string name="fv_msg_42">Kontozeilen in Sicherungsdatei</string>
+    <string name="selectappaccounts">Wählen Sie die App \"Konten auflisten und bearbeiten\".</string>
 </resources>

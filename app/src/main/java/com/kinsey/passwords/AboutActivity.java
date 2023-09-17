@@ -5,15 +5,16 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.media.tv.AdRequest;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.ads.initialization.InitializationStatus;
-import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+//import com.google.android.gms.ads.AdRequest;
+//import com.google.android.gms.ads.AdView;
+//import com.google.android.gms.ads.MobileAds;
+//import com.google.android.gms.ads.initialization.InitializationStatus;
+//import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.kinsey.passwords.items.Profile;
 import com.kinsey.passwords.provider.ProfileViewModel;
 
@@ -23,7 +24,7 @@ import java.util.List;
 public class AboutActivity extends AppCompatActivity {
     public static final String TAG = "AboutActivity";
 
-    private AdView mAdView;
+//    private AdView mAdView;
     private ProfileViewModel profileViewModel;
 
     @Override
@@ -57,18 +58,18 @@ public class AboutActivity extends AppCompatActivity {
         getSupportActionBar().setLogo(R.drawable.ic_launcher_test2_foreground);
 
 
-        MobileAds.initialize(this, new OnInitializationCompleteListener() {
-            @Override
-            public void onInitializationComplete(InitializationStatus initializationStatus) {
-            }
-        });
+//        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+//            @Override
+//            public void onInitializationComplete(InitializationStatus initializationStatus) {
+//            }
+//        });
 
 
-        mAdView = findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder()
-                .build();
-//                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR).build();
-        mAdView.loadAd(adRequest);
+//        mAdView = findViewById(R.id.adView);
+//        AdRequest adRequest = new AdRequest.Builder()
+//                .build();
+////                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR).build();
+//        mAdView.loadAd(adRequest);
 
 //        Log.d(TAG, String.valueOf(BuildConfig.VERSION_CODE));
 //        Log.d(TAG, BuildConfig.VERSION_NAME);

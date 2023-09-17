@@ -1,10 +1,15 @@
 package com.kinsey.passwords;
 
 import android.app.Dialog;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -19,6 +24,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -35,8 +41,8 @@ import android.widget.Toast;
 //import com.google.android.gms.tasks.OnCompleteListener;
 //import com.google.android.gms.tasks.Task;
 //import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+//import com.google.firebase.auth.FirebaseAuth;
+//import com.google.firebase.auth.FirebaseUser;
 //import com.google.firebase.auth.GoogleAuthProvider;
 import com.kinsey.passwords.items.Profile;
 import com.kinsey.passwords.items.Suggest;
@@ -100,7 +106,7 @@ public class MainActivity extends AppCompatActivity
 
     private static final String ACCOUNT_FRAGMENT = "AccountFragment";
 
-    private FirebaseAuth mAuth;
+//    private FirebaseAuth mAuth;
 
     public static String BACKUP_FILENAME = "accounts.json";
     public static int profileMigrateLevel = 1;
@@ -203,7 +209,7 @@ public class MainActivity extends AppCompatActivity
 
 
 //    private SearchView mSearchView;
-
+    private ActivityResultLauncher<Intent> startForResultLauncher;
 
     public MainActivity() {
     }
@@ -249,52 +255,77 @@ public class MainActivity extends AppCompatActivity
 //            Log.d(TAG, "onCreate: isPhone");
 //        }
 
-        int screenLayout = getResources().getConfiguration().screenLayout;
-        screenLayout &= Configuration.SCREENLAYOUT_SIZE_MASK;
 
-        switch (screenLayout) {
-            case Configuration.SCREENLAYOUT_SIZE_XLARGE:
+//        ______________________________________________________
+//        temp removed until find out how to change config
+//        ______________________________________________________
+//        // Replace with a known container that you can safely add a
+//        // view to where the view won't affect the layout and the view
+//        // won't be replaced.
+//        ViewGroup container = binding.container;
+//
+//        container.addView(new View(this) {
+//            @Override
+//            protected void onConfigurationChanged(Configuration newConfig) {
+//                super.onConfigurationChanged(newConfig);
+////                computeWindowSizeClasses();
+//                setContentView(R.layout.activity_main);
+//            }
+//        });
+//        ______________________________________________________
 
-                if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                    setContentView(R.layout.activity_main_large_land);
+//        computeWindowSizeClasses();
+        setContentView(R.layout.activity_main);
+
+//        _________________________________________________________
+//        Screen size not calc this way
+//        _________________________________________________________
+//        int screenLayout = getResources().getConfiguration().screenLayout;
+//        screenLayout &= Configuration.SCREENLAYOUT_SIZE_MASK;
+//
+//        switch (screenLayout) {
+//            case Configuration.SCREENLAYOUT_SIZE_XLARGE:
+//
+//                if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+//                    setContentView(R.layout.activity_main_large_land);
+////                    setContentView(R.layout.activity_main);
+////                    LinearLayoutCompat layout = recyclerView.findViewById(R.id.layout);
+////                    layout.setOrientation(LinearLayoutCompat.OrientationMode());
+////                    Toast.makeText(MainActivity.this, "Detected... XLarge Landscape", Toast.LENGTH_LONG).show();
+//                    Log.d(TAG, "screen size Xlarge Landscape");
+//                } else {
 //                    setContentView(R.layout.activity_main);
-//                    LinearLayoutCompat layout = recyclerView.findViewById(R.id.layout);
-//                    layout.setOrientation(LinearLayoutCompat.OrientationMode());
-//                    Toast.makeText(MainActivity.this, "Detected... XLarge Landscape", Toast.LENGTH_LONG).show();
-                    Log.d(TAG, "screen size Xlarge Landscape");
-                } else {
-                    setContentView(R.layout.activity_main);
-//                    Toast.makeText(MainActivity.this, "Detected... XLarge Portrait", Toast.LENGTH_LONG).show();
-                    Log.d(TAG, "screen size Xlarge Portrait");
-                }
-
-                break;
-            case Configuration.SCREENLAYOUT_SIZE_LARGE:
-                if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                    setContentView(R.layout.activity_main_large_land);
+////                    Toast.makeText(MainActivity.this, "Detected... XLarge Portrait", Toast.LENGTH_LONG).show();
+//                    Log.d(TAG, "screen size Xlarge Portrait");
+//                }
+//
+//                break;
+//            case Configuration.SCREENLAYOUT_SIZE_LARGE:
+//                if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+//                    setContentView(R.layout.activity_main_large_land);
+////                    setContentView(R.layout.activity_main);
+////                    Toast.makeText(MainActivity.this, "Detected... Large Landscape", Toast.LENGTH_LONG).show();
+//                    Log.d(TAG, "screen size Large Landscape");
+//                } else {
 //                    setContentView(R.layout.activity_main);
-//                    Toast.makeText(MainActivity.this, "Detected... Large Landscape", Toast.LENGTH_LONG).show();
-                    Log.d(TAG, "screen size Large Landscape");
-                } else {
-                    setContentView(R.layout.activity_main);
-//                    Toast.makeText(MainActivity.this, "Detected... Large Portrait", Toast.LENGTH_LONG).show();
-                    Log.d(TAG, "screen size Large Portrait");
-                }
-                break;
-            case Configuration.SCREENLAYOUT_SIZE_NORMAL:
-                setContentView(R.layout.activity_main);
-                if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-//                    Toast.makeText(MainActivity.this, "Detected... Normal Landscape", Toast.LENGTH_LONG).show();
-                    Log.d(TAG, "screen size Normal landscape");
-                } else {
-//                    Toast.makeText(MainActivity.this, "Detected... Normal Portrait", Toast.LENGTH_LONG).show();
-                    Log.d(TAG, "screen size Normal Portrait");
-                }
-                break;
-            default:
-                setContentView(R.layout.activity_main);
-//                Toast.makeText(MainActivity.this, "Undetected... ", Toast.LENGTH_LONG).show();
-        }
+////                    Toast.makeText(MainActivity.this, "Detected... Large Portrait", Toast.LENGTH_LONG).show();
+//                    Log.d(TAG, "screen size Large Portrait");
+//                }
+//                break;
+//            case Configuration.SCREENLAYOUT_SIZE_NORMAL:
+//                setContentView(R.layout.activity_main);
+//                if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+////                    Toast.makeText(MainActivity.this, "Detected... Normal Landscape", Toast.LENGTH_LONG).show();
+//                    Log.d(TAG, "screen size Normal landscape");
+//                } else {
+////                    Toast.makeText(MainActivity.this, "Detected... Normal Portrait", Toast.LENGTH_LONG).show();
+//                    Log.d(TAG, "screen size Normal Portrait");
+//                }
+//                break;
+//            default:
+//                setContentView(R.layout.activity_main);
+////                Toast.makeText(MainActivity.this, "Undetected... ", Toast.LENGTH_LONG).show();
+//        }
 
 
 
@@ -344,10 +375,10 @@ public class MainActivity extends AppCompatActivity
 //            showWarning();
         } else {
             this.isSearchShown = savedInstanceState.getBoolean(ARG_IS_SHEARCH_SHOWN, false);
-            this.listsortOrder = savedInstanceState.getInt(ARG_LISTSORT, 1);
+            listsortOrder = savedInstanceState.getInt(ARG_LISTSORT, 1);
             this.selectedId = savedInstanceState.getInt(ARG_SELECTED_ID);
             this.editModeAdd = savedInstanceState.getBoolean(ARG_EDIT_MODE_ADD);
-            Log.d(TAG, "onCreate: listsortOrder " + this.listsortOrder);
+            Log.d(TAG, "onCreate: listsortOrder " + listsortOrder);
             FrameLayout frame = findViewById(R.id.fragment_container);
             Log.d(TAG, "onCreate: tag " + frame.getTag());
             frame2 = findViewById(R.id.fragment_container2);
@@ -373,6 +404,21 @@ public class MainActivity extends AppCompatActivity
                 frameSearch.setVisibility(View.GONE);
             }
         }
+
+        startForResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        if (result.getResultCode() == RESULT_OK) {
+                            // Handle the data returned from Activity B
+//                            LiveData<List<Word>> returnedData = mWordViewModel.getAllWords();
+                            // Use the returnedData as needed
+                            Intent data = result.getData();
+                            Log.d(TAG, "onActivityResult: data" + data);
+//                            mWordViewModel.insert(data);
+                        }
+                    }
+                });
 
 //        if (findViewById(R.id.fragment_container2) == null) {
 //            Log.d(TAG, "onCreate: has null 2nd container");
@@ -1936,7 +1982,12 @@ public class MainActivity extends AppCompatActivity
 //        mActivityStart = true;
         Intent detailIntent = new Intent(this, FileViewActivity.class);
 //        startActivity(detailIntent);
-        startActivityForResult(detailIntent, REQUEST_VIEW_EXPORT);
+
+        startForResultLauncher.launch(detailIntent);
+
+//        Old way
+//        startActivityForResult(detailIntent, REQUEST_VIEW_EXPORT);
+//    __________________________________________________________
     }
 
 
@@ -2324,9 +2375,15 @@ public class MainActivity extends AppCompatActivity
 //        } else {
 //        }
 
-        Intent detailIntent = new Intent(this, SuggestListActivity.class);
-        detailIntent.putExtra(Suggest.class.getSimpleName(), "sortorder");
-        startActivity(detailIntent);
+        // Try to invoke the intent.
+        try {
+            Intent detailIntent = new Intent(this, SuggestListActivity.class);
+            detailIntent.putExtra(Suggest.class.getSimpleName(), "sortorder");
+            startActivity(detailIntent);
+        } catch (ActivityNotFoundException e) {
+            // Define what your app should do if no activity can handle the intent.
+            Log.d(TAG, "suggestsListRequest4: ActivityNotFoundException ");
+        }
 
     }
 
@@ -2433,22 +2490,24 @@ public class MainActivity extends AppCompatActivity
                     }
                 }
                 break;
-
-            case REQUEST_SIGN: {
-                Log.d(TAG, "onActivityResult 1234");
-                if (resultCode == RESULT_OK) {
-                    Log.d(TAG, "onActivityResult Ok");
-                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                    Log.d(TAG, "onActivityResult user " + user);
-                    Toast.makeText(getApplicationContext(), R.string.toast_signin, Toast.LENGTH_SHORT).show();
-                } else {
-                    Log.d(TAG, "resultCode " + resultCode + ":" + RESULT_OK);
-                    Log.d(TAG, "data " + data);
-                    Toast.makeText(getApplicationContext(), R.string.toast_unable_to_signin, Toast.LENGTH_SHORT).show();
-                }
-                break;
-
-            }
+//      ____________________________________________________________
+//            Firebase signin to remove or temp take out
+//      ____________________________________________________________
+//            case REQUEST_SIGN: {
+//                Log.d(TAG, "onActivityResult 1234");
+//                if (resultCode == RESULT_OK) {
+//                    Log.d(TAG, "onActivityResult Ok");
+//                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+//                    Log.d(TAG, "onActivityResult user " + user);
+//                    Toast.makeText(getApplicationContext(), R.string.toast_signin, Toast.LENGTH_SHORT).show();
+//                } else {
+//                    Log.d(TAG, "resultCode " + resultCode + ":" + RESULT_OK);
+//                    Log.d(TAG, "data " + data);
+//                    Toast.makeText(getApplicationContext(), R.string.toast_unable_to_signin, Toast.LENGTH_SHORT).show();
+//                }
+//                break;
+//
+//            }
 //        ================================================================================
 
 //            case GOOGLE_SIGN: {
@@ -3684,7 +3743,7 @@ public class MainActivity extends AppCompatActivity
 
     private void showWarning() {
         final Dialog dialog = new Dialog(this);
-        dialog.setContentView(R.layout.dialogmsg_ok);
+        dialog.setContentView(R.layout.dialog_msg_ok);
         dialog.setTitle("Account Modify Info");
 
         TextView text = (TextView) dialog.findViewById(R.id.text);

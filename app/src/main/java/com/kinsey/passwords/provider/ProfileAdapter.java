@@ -22,7 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 
-import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
+//import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
 
 public class ProfileAdapter extends ListAdapter<Profile, ProfileAdapter.ProfileHolder> {
     private static final String TAG = "ProfileAdapter";
