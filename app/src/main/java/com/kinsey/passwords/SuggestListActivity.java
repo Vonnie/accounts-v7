@@ -59,7 +59,7 @@ public class SuggestListActivity extends AppCompatActivity {
     private GestureDetectorCompat gestureDetector;
 
     private final String RECYCLER_POSITION_KEY = "recyclerViewPos";
-    private int mRecyclerViewPos = RecyclerView.NO_POSITION;
+    private final int mRecyclerViewPos = RecyclerView.NO_POSITION;
 
 
     //    private List<Suggest> suggestListFull;
@@ -88,11 +88,13 @@ public class SuggestListActivity extends AppCompatActivity {
 
 
         GridLayoutManager gridLayoutManager;
-        int screenLayout = getResources().getConfiguration().screenLayout;
+//        int screenLayout = getResources().getConfiguration().screenLayout;
 
         int spanSize = 3;
         gridLayoutManager = new GridLayoutManager(this, spanSize);
         recyclerView.setLayoutManager(gridLayoutManager);
+
+
 
 
 //  _________________________________________________________________________
@@ -170,26 +172,25 @@ public class SuggestListActivity extends AppCompatActivity {
 
         final SuggestAdapter adapter = new SuggestAdapter();
         Log.d(TAG, "onCreate: adapter acquired");
+
         recyclerView.setAdapter(adapter);
         Log.d(TAG, "onCreate: adapter set");
+
         mRecyclerViewHelper = RecyclerViewPositionHelper.createHelper(recyclerView);
         Log.d(TAG, "onCreate: set recyclerViewHelper");
 
-//        suggestViewModel = ViewModelProviders.of(this).get(SuggestViewModel.class);
         suggestViewModel = new ViewModelProvider(this).get(SuggestViewModel.class);
         Log.d(TAG, "onCreate: set suggestViewModel");
+
         suggestViewModel.getAllSuggests().observe(this, new Observer<List<Suggest>>() {
             @Override
             public void onChanged(@Nullable List<Suggest> suggests) {
-//                update RecyclerView
-//                Toast.makeText(SuggestListActivity.this, "onChanged", Toast.LENGTH_SHORT).show();
 
                 Log.d(TAG, "onCreate: about to set suggestList array");
                 suggestList = new ArrayList<>(suggests);
                 Log.d(TAG, "onChanged: suggests count " + suggests.size());
                 adapter.submitList(suggests);
 //                Log.d(TAG, "suggests size " + suggestListFull.size());
-
 
                 if (savedInstanceState != null) {
                     int pos = savedInstanceState.getInt(RECYCLER_POSITION_KEY);
@@ -203,7 +204,6 @@ public class SuggestListActivity extends AppCompatActivity {
             }
         });
 
-//        Log.d(TAG, "suggests size " + suggestListFull.size());
 
         suggestViewModel.getMaxSequence().observe(this, new Observer<Suggest>() {
             @Override
@@ -214,7 +214,7 @@ public class SuggestListActivity extends AppCompatActivity {
 
 //                adapter.submitList(suggests);
 
-                Log.d(TAG, "max Item " + suggest.getPassword());
+//                Log.d(TAG, "max Item " + suggest.getPassword());
 
                 if (suggest == null) {
                     suggestMaxItem = new Suggest();
@@ -240,6 +240,86 @@ public class SuggestListActivity extends AppCompatActivity {
 //                Toast.makeText(SuggestListActivity.this, "Suggest Added", Toast.LENGTH_SHORT).show();
             }
         });
+//    }
+
+//    protected void onCreate2(@Nullable Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        setContentView(R.layout.activity_suggest_list);
+//
+//        final SuggestAdapter adapter = new SuggestAdapter();
+//        Log.d(TAG, "onCreate: adapter acquired");
+//
+//        recyclerView.setAdapter(adapter);
+//        Log.d(TAG, "onCreate: adapter set");
+//
+//        mRecyclerViewHelper = RecyclerViewPositionHelper.createHelper(recyclerView);
+//        Log.d(TAG, "onCreate: set recyclerViewHelper");
+//
+////        suggestViewModel = ViewModelProviders.of(this).get(SuggestViewModel.class);
+//        suggestViewModel = new ViewModelProvider(this).get(SuggestViewModel.class);
+//        Log.d(TAG, "onCreate: set suggestViewModel");
+//        suggestViewModel.getAllSuggests().observe(this, new Observer<List<Suggest>>() {
+//            @Override
+//            public void onChanged(@Nullable List<Suggest> suggests) {
+////                update RecyclerView
+////                Toast.makeText(SuggestListActivity.this, "onChanged", Toast.LENGTH_SHORT).show();
+//
+//                Log.d(TAG, "onCreate: about to set suggestList array");
+//                suggestList = new ArrayList<>(suggests);
+//                Log.d(TAG, "onChanged: suggests count " + suggests.size());
+//                adapter.submitList(suggests);
+////                Log.d(TAG, "suggests size " + suggestListFull.size());
+//
+//
+//                if (savedInstanceState != null) {
+//                    int pos = savedInstanceState.getInt(RECYCLER_POSITION_KEY);
+//                    Log.d(TAG, "onCreateView: len " + recyclerView.getChildCount());
+//                    recyclerView.scrollToPosition(pos);
+//                    Log.d(TAG, "onCreateView: pos " + pos);
+//                } else {
+//                    recyclerView.scrollToPosition(0);
+//                }
+//
+//            }
+//        });
+//
+////        Log.d(TAG, "suggests size " + suggestListFull.size());
+//
+//        suggestViewModel.getMaxSequence().observe(this, new Observer<Suggest>() {
+//            @Override
+//            public void onChanged(@Nullable Suggest suggest) {
+////                update RecyclerView
+////                Toast.makeText(SuggestListActivity.this, "onChanged", Toast.LENGTH_SHORT).show();
+//
+//
+////                adapter.submitList(suggests);
+//
+////                Log.d(TAG, "max Item " + suggest.getPassword());
+//
+//                if (suggest == null) {
+//                    suggestMaxItem = new Suggest();
+//                } else {
+//                    suggestMaxItem = new Suggest(
+//                            suggest.getPassword(),
+//                            suggest.getSequence()
+//                    );
+//                    //            suggest.setActvyLong();
+//                }
+//
+////                this.maxSeq = suggestMaxItem.getSequence();
+//
+////                Log.d(TAG, "new seq " + this.maxSeq);
+//
+//
+////                Suggest suggestItem = new Suggest(password, suggest.getSequence() + 1, new Date().getTime());
+////                suggestItem.setNote(note);
+////
+////
+////                suggestViewModel.insert(suggestItem);
+////
+////                Toast.makeText(SuggestListActivity.this, "Suggest Added", Toast.LENGTH_SHORT).show();
+//            }
+//        });
 
 
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(
@@ -369,8 +449,8 @@ public class SuggestListActivity extends AppCompatActivity {
 
                     Suggest reposSuggest = adapter.getSuggestAt(fromViewHolder.getAdapterPosition());
 
-                    int lowPos = fromPos < toPos ? fromPos : toPos;
-                    int highPos = fromPos > toPos ? fromPos : toPos;
+                    int lowPos = Math.min(fromPos, toPos);
+                    int highPos = Math.max(fromPos, toPos);
                     Log.d(TAG, "low:high " + lowPos + ":" + highPos);
 
                     int nextSeq = -1;

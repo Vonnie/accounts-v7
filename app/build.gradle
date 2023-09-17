@@ -11,11 +11,12 @@ android {
         minSdkVersion 21
         targetSdkVersion 34
         compileSdk 34
-        versionCode 171
-        versionName "12.71"
+        versionCode 301
+        versionName "13.01"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
+// from versionCode: 17, versionNam 12.71
 //        javaCompileOptions {
 //            annotationProcessorOptions {
 //                arguments = ["room.schemaLocation":
