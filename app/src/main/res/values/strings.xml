@@ -235,7 +235,7 @@
 <!--        \n\nThe testing of this app may be inadequate therefore unable to uncover problems you see.</string>-->
 
     <string name="warningmsg">Welcome to Accounts List app.
-    \n\nMaintain your accounts. You can order items by either Corp Name, Account Id, Open Date, or custom. Do search by Corp Name.
+    \n\nMaintain your accounts. Order list by either Corp Name, Account Id, Open Date, or custom. Search by Corp Name.
         \n\nPasswords are kept outside this app. Keep a separate paper list of passwords with its assigned account id. Passwords are only suggestions, not tied to an account, nor data.
         </string>
 <!--    \n\nThe review feedback is based on game expectations. This is NOT a game. On Google Play, it is correctly identified as a productivity tool.-->

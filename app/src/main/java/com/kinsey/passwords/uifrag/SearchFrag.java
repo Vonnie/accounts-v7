@@ -31,7 +31,6 @@ public class SearchFrag extends Fragment {
     private List<Profile> profileListFull;
     private SearchAdapter adapter;
     private List<String> names;
-    private String searchforValue = "";
     private AutoCompleteTextView editTextFilledExposedDropdown;
     private ProfileViewModel profileViewModel;
 
@@ -134,7 +133,8 @@ public class SearchFrag extends Fragment {
                 editTextFilledExposedDropdown.setAdapter(adapter2);
 //                editTextFilledExposedDropdown.setText(adapter2.getItem(0).toString());
 
-                editTextFilledExposedDropdown.setThreshold(3);
+                editTextFilledExposedDropdown.setThreshold(2);
+                editTextFilledExposedDropdown.setDropDownBackgroundResource(R.color.primaryColor);
 
 
                 editTextFilledExposedDropdown.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -222,7 +222,6 @@ public class SearchFrag extends Fragment {
     }
 
     private void searchResults(String searchfor) {
-        this.searchforValue = searchfor;
         String searchforreq = "%" + searchfor + "%";
         profileViewModel.searchCorpNameProfiles(searchforreq).observe(this, new Observer<List<Profile>>() {
             @Override

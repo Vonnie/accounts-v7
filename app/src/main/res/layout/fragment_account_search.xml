@@ -12,9 +12,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/hint_text"
-        android:textColor="@color/primaryDarkColor"
-        android:background="@color/primaryDarkColor"
-        android:textColorHint="@color/primaryColor"
+        android:textColor="@color/primaryTextColor"
+        android:background="@color/secondaryColor"
+        android:textColorHint="@color/primaryTextColor"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -25,9 +25,11 @@
             android:id="@+id/filled_exposed_dropdown"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/primaryDarkColor"
-            android:textColor="@color/secondaryTextColor"
-            android:textColorHint="@color/primaryDarkColor" />
+            android:textColorHint="@color/primaryDarkColor"
+            />
+<!--            android:background="@color/primaryDarkColor"-->
+<!--            android:textColor="@color/secondaryTextColor"-->
+<!--            android:textColorHint="@color/primaryDarkColor" />-->
 <!--            app:layout_constraintEnd_toEndOf="parent"-->
 <!--            app:layout_constraintStart_toStartOf="parent"-->
 <!--            app:layout_constraintTop_toBottomOf="@+id/textSearch" />-->

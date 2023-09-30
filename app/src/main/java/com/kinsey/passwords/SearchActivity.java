@@ -77,7 +77,7 @@ public class SearchActivity extends AppCompatActivity {
 
         TextInputLayout textInputSearchCorpName = findViewById(R.id.text_input_corp_name);
         AutoCompleteTextView filledSearch = findViewById(R.id.filled_exposed_dropdown);
-
+        filledSearch.setDropDownBackgroundResource(R.color.primaryColor);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -108,6 +108,7 @@ public class SearchActivity extends AppCompatActivity {
 //            }
 //        });
 //
+
         progressBar  = findViewById(R.id.progressBar);
         progressBar.setVisibility(View.GONE);
 
@@ -121,7 +122,6 @@ public class SearchActivity extends AppCompatActivity {
 //        filledSearch.setDropDownBackgroundDrawable(
 //                ColorDrawable(ContextCompat.getColor(context, R.color.primaryColor))
 //        )
-//        filledSearch.setDropDownBackgroundResource(R.color.primaryDarkColor);
         recyclerView.setAdapter(adapter);
 //        searchResults("");
 

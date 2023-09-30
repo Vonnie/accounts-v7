@@ -153,10 +153,10 @@ public class MainActivity extends AppCompatActivity
     public static final String STATE_LIMIT = "feedLimit";
     private ListView listApps;
     //    private ViewPager mViewPager;
-    private int fragListPos = -1;
-    private int frag1Pos = 0;
-    private int frag2Pos = 1;
-    private int frag3Pos = 2;
+//    private int fragListPos = -1;
+//    private int frag1Pos = 0;
+//    private int frag2Pos = 1;
+//    private int frag3Pos = 2;
 
     public static boolean migration2Complete = false;
 
@@ -981,6 +981,8 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+
+
     //    @Override
 //    public boolean onPrepareOptionsMenu(Menu menu) {
 //        // Store instance of the menu item containing progress
@@ -1676,6 +1678,10 @@ public class MainActivity extends AppCompatActivity
                 isSearchShown = item.isChecked();
                 if (item.isChecked()) {
                     frameSearch.setVisibility(View.VISIBLE);
+                    this.editModeAdd = false;
+                    this.selectedId = -1;
+                    frame2 = findViewById(R.id.fragment_container2);
+                    frame2.setVisibility(View.GONE);
 //                    FrameLayout frame = findViewById(R.id.fragment_container);
 //                    frame.setVisibility(View.GONE);
                 } else {

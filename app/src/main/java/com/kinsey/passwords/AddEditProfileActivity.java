@@ -2,6 +2,7 @@ package com.kinsey.passwords;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
@@ -577,6 +579,7 @@ public class AddEditProfileActivity extends AppCompatActivity
                     public void onClick(DialogInterface arg0, int arg1) {
 
                         setResult(RESULT_OK, data);
+                        closeKeyboard();
                         finish();
 
                     }
@@ -594,6 +597,29 @@ public class AddEditProfileActivity extends AppCompatActivity
 
     }
 
+    private void closeKeyboard()
+    {
+        // this will give us the view
+        // which is currently focus
+        // in this layout
+        View view = this.getCurrentFocus();
+
+        // if nothing is currently
+        // focus then this will protect
+        // the app from crash
+        if (view != null) {
+
+            // now assign the system
+            // service to InputMethodManager
+            InputMethodManager manager
+                    = (InputMethodManager)
+                    getSystemService(
+                            Context.INPUT_METHOD_SERVICE);
+            manager
+                    .hideSoftInputFromWindow(
+                            view.getWindowToken(), 0);
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
