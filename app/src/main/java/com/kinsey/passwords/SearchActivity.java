@@ -8,6 +8,8 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
@@ -22,6 +24,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -48,8 +51,6 @@ public class SearchActivity extends AppCompatActivity {
     public static final int EDIT_PROFILE_REQUEST = 2;
 
 
-    private TextInputLayout textInputSearchCorpName;
-
     private SearchAdapter adapter;
     private ProfileViewModel profileViewModel;
 
@@ -74,7 +75,9 @@ public class SearchActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_search_list);
 
-        textInputSearchCorpName = findViewById(R.id.text_input_corp_name);
+        TextInputLayout textInputSearchCorpName = findViewById(R.id.text_input_corp_name);
+        AutoCompleteTextView filledSearch = findViewById(R.id.filled_exposed_dropdown);
+
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -114,6 +117,11 @@ public class SearchActivity extends AppCompatActivity {
 
 
         this.adapter = new SearchAdapter();
+//        this.adapter(new ArrayAdapter<String>(this, R.layout.autocomplete_custom, filledSearch));
+//        filledSearch.setDropDownBackgroundDrawable(
+//                ColorDrawable(ContextCompat.getColor(context, R.color.primaryColor))
+//        )
+//        filledSearch.setDropDownBackgroundResource(R.color.primaryDarkColor);
         recyclerView.setAdapter(adapter);
 //        searchResults("");
 

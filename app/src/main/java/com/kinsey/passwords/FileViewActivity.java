@@ -4,29 +4,46 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.DownloadManager;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.media.tv.AdRequest;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.DropBoxManager;
 //import com.aditya.filebrowser.Constants;
 //import com.aditya.filebrowser.FileBrowser;
 //import com.aditya.filebrowser.FileChooser;
 //import com.codekidlabs.storagechooser.StorageChooser;
 //import com.google.android.gms.ads.AdRequest;
 //import com.google.android.gms.ads.AdView;
+
+
+//import com.dropbox.core.DbxException;
+//import com.dropbox.core.DbxRequestConfig;
+//import com.dropbox.core.v2.DbxClientV2;
+//import com.dropbox.core.v2.files.FileMetadata;
+//import com.dropbox.core.v2.files.ListFolderResult;
+//import com.dropbox.core.v2.files.Metadata;
+//import com.dropbox.core.v2.users.FullAccount;
+
 import com.google.android.material.textfield.TextInputLayout;
 import com.kinsey.passwords.items.Profile;
 import com.kinsey.passwords.provider.ProfileAdapter;
 import com.kinsey.passwords.provider.ProfileViewModel;
 import com.kinsey.passwords.tools.ProfileJsonListIO;
-//import com.nbsp.materialfilepicker.MaterialFilePicker;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.ActivityResultRegistry;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -34,6 +51,7 @@ import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.os.ParcelFileDescriptor;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -48,7 +66,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Formatter;
@@ -58,8 +80,18 @@ import java.util.Objects;
 import java.util.regex.Pattern;
 //import java.util.regex.Pattern;
 //import com.codekidlabs.storagechooser.StorageChooser;
+
 //import com.nbsp.materialfilepicker.MaterialFilePicker;
 //import com.nbsp.materialfilepicker.ui.FilePickerActivity;
+//
+//import arte.programar.materialfile.MaterialFilePicker
+//import arte.programar.materialfile.sample.utils.Constants
+//import arte.programar.materialfile.sample.utils.PermissionActivity
+//import arte.programar.materialfile.ui.FilePickerActivity
+//import arte.programar.materialfile.utils.FileUtils
+//
+//import com.github.arteaprogramar.MaterialFilePicker;
+
 
 import static androidx.core.content.FileProvider.getUriForFile;
 
@@ -93,6 +125,10 @@ public class FileViewActivity extends AppCompatActivity {
     public static SimpleDateFormat format_mdy = new SimpleDateFormat(
             pattern_mdy, Locale.US);
 
+//    private final ActivityResultRegistry mRegistry
+
+
+    private static final String ACCESS_TOKEN = "d14k27w8xbyq9ex";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,15 +174,15 @@ public class FileViewActivity extends AppCompatActivity {
 //        if (getExternalFilesDir("").exists()) {
 //            msgDialog("External Storage exists");
 //        }
-        if (!checkPermission()) {
-            msgWarningDialog("This activity requires App permission.\nSee screen for Grant Permission Instruction");
-        }
+//        if (!checkPermission()) {
+//            msgWarningDialog("This activity requires App permission.\nSee screen for Grant Permission Instruction");
+//        }
         webView = findViewById(R.id.wv_page);
         final WebSettings webSettings = webView.getSettings();
         Resources res = getResources();
         float fontSize = res.getInteger(R.integer.font_size);
 //        fontSize = res.getDimension(R.dimen.txtSize);
-        webSettings.setDefaultFontSize((int)fontSize);
+        webSettings.setDefaultFontSize((int) fontSize);
 
         webView.setWebViewClient(new WebViewClient() {
             @Override
@@ -154,6 +190,7 @@ public class FileViewActivity extends AppCompatActivity {
                 web.loadUrl("javascript:(function(){ document.body.style.paddingTop = '1px'})();");
                 Log.d(TAG, "onPageFinished: ");
             }
+
 
         });
 
@@ -166,7 +203,7 @@ public class FileViewActivity extends AppCompatActivity {
                 adapter.submitList(profiles);
                 if (onFirstReported) {
                     onFirstReported = false;
-                    infoPage();
+//                    infoPage();
                 }
                 Log.d(TAG, "viewModel db count " + adapter.getItemCount());
             }
@@ -191,9 +228,26 @@ public class FileViewActivity extends AppCompatActivity {
 //                progressBar.setVisibility(View.INVISIBLE);
 //            }
 //        }.start();
-
-
     }
+
+        private final ActivityResultLauncher mFilename =
+                registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                        new ActivityResultCallback<ActivityResult>() {
+                            @Override
+                            public void onActivityResult(ActivityResult activityResult) {
+                                if (activityResult.getResultCode() == RESULT_OK) {
+                                    Intent data = activityResult.getData();
+                                    Log.d(TAG, "FileViewActivity got folder " + data);
+                                } else {
+                                    if (activityResult.getResultCode() == RESULT_CANCELED) {
+                                        Log.d(TAG, "FileViewActivity get file canceled ");
+                                    }
+                                }
+                            }
+
+                });
+
+
 
 
 
@@ -209,8 +263,8 @@ public class FileViewActivity extends AppCompatActivity {
         File dirStorage = getExternalFilesDir("passport/");
         Log.d(TAG, "can read: " + dirStorage.canRead());
         Log.d(TAG, "storage dir: " + dirStorage.getAbsolutePath());
-        if (checkPermission()) {
-//        if (dirStorage.canRead()) {
+//        if (checkPermission()) {
+        if (dirStorage.canRead()) {
             item = menu.findItem(R.id.vw_show_file);
             item.setEnabled(true);
             item = menu.findItem(R.id.vw_export);
@@ -253,7 +307,7 @@ public class FileViewActivity extends AppCompatActivity {
 
             case R.id.vw_show_file:
                 Log.d(TAG, "onOptionsItemSelected: Report");
-//                reportFile();
+////                reportFile();
                 showFilename();
                 break;
 
@@ -265,7 +319,9 @@ public class FileViewActivity extends AppCompatActivity {
 
             case R.id.vw_import:
                 Log.d(TAG, "onOptionsItemSelected: Import");
-                restoreByFileChooser();
+//                restoreByFileChooser();
+//                listDbx();
+
 //                restoreFilename();
 //                ImportAccountDB();
                 break;
@@ -300,6 +356,65 @@ public class FileViewActivity extends AppCompatActivity {
         finish();
         return false;
     }
+
+//    public static void listDbx() throws DbxException, FileNotFoundException {
+//        // Create Dropbox client
+//        DbxRequestConfig config = DbxRequestConfig.newBuilder("dropbox/java-tutorial").build();
+//        DbxClientV2 client = new DbxClientV2(config, ACCESS_TOKEN);
+//
+//        // Get current account info
+//        FullAccount account = client.users().getCurrentAccount();
+//        System.out.println(account.getName().getDisplayName());
+//
+//        // Get files and folder metadata from Dropbox root directory
+//        ListFolderResult result = client.files().listFolder("");
+//        while (true) {
+//            for (Metadata metadata : result.getEntries()) {
+//                System.out.println(metadata.getPathLower());
+//            }
+//
+//            if (!result.getHasMore()) {
+//                break;
+//            }
+//
+//            result = client.files().listFolderContinue(result.getCursor());
+//        }
+//
+//        // Upload "test.txt" to Dropbox
+//        try (InputStream in = new FileInputStream("test.txt")) {
+//            FileMetadata metadata = client.files().uploadBuilder("/test.txt")
+//                    .uploadAndFinish(in);
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
+
+//  AI Dropbox Export
+// Export a JSON file to Dropbox
+//File jsonFile = new File("path_to_your_json_file.json");
+//try {
+//        FileInputStream inputStream = new FileInputStream(jsonFile);
+//        DropboxClientFactory.getClient().files().uploadBuilder("/your_exported_file.json")
+//                .withMode(WriteMode.OVERWRITE)
+//                .uploadAndFinish(inputStream);
+//        inputStream.close();
+//    } catch (IOException | DbxException e) {
+//        e.printStackTrace();
+//    }
+
+// AI Dropbox Import
+// Import a JSON file from Dropbox
+//try {
+//        File outputFile = new File("path_to_save_downloaded_file.json");
+//        FileOutputStream outputStream = new FileOutputStream(outputFile);
+//        DbxDownloader<FileMetadata> downloader = DropboxClientFactory.getClient().files()
+//                .downloadBuilder("/your_imported_file.json")
+//                .start();
+//        downloader.download(outputStream);
+//        outputStream.close();
+//    } catch (IOException | DbxException e) {
+//        e.printStackTrace();
+//    }
 
 
 //    void createExternalStoragePrivateFile() {
@@ -801,9 +916,9 @@ public class FileViewActivity extends AppCompatActivity {
         dialogButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new DownloadProfileAsyncTask(getApplicationContext(),
-                        file, adapter, progressBar, webView).execute();
-                dialog.dismiss();
+//                new DownloadProfileAsyncTask(getApplicationContext(),
+//                        file, adapter, progressBar, webView).execute();
+//                dialog.dismiss();
             }
         });
 
@@ -842,6 +957,11 @@ public class FileViewActivity extends AppCompatActivity {
 
     private void restoreByFileChooser() {
         openFileBrowser(PICK_FILE_RESTORE);
+        Intent data = new Intent();
+//        data.putExtra(EXTRA_LIST_RESTORED, blnListRestored);
+        data.putExtra(EXTRA_LIST_RESTORED, true);
+        setResult(RESULT_OK, data);
+        finish();
 
     }
 
@@ -931,10 +1051,10 @@ public class FileViewActivity extends AppCompatActivity {
             dialogButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    new UploadProfileAsyncTask(getApplicationContext(),
-                            webView, progressBar, profileViewModel).execute(strFilename);
-                    blnListRestored = true;
-                    dialog.dismiss();
+//                    new UploadProfileAsyncTask(getApplicationContext(),
+//                            webView, progressBar, profileViewModel).execute(strFilename);
+//                    blnListRestored = true;
+//                    dialog.dismiss();
                 }
             });
 
@@ -997,22 +1117,23 @@ public class FileViewActivity extends AppCompatActivity {
 
 
     private void showFilename() {
-        File fileExternal = new File(getExternalFilesDir("passport")
-                + "/" + MainActivity.BACKUP_FILENAME);
-
-//        Log.d(TAG, "showFilename: " + Environment.getDataDirectory() + "/passport/" + MainActivity.BACKUP_FILENAME);
-//        Log.d(TAG, "showFilename: " + getExternalFilesDir(null) + "/passport/" + MainActivity.BACKUP_FILENAME);
-//        Log.d(TAG, "showFilename: " + getExternalFilesDir("passport/") + MainActivity.BACKUP_FILENAME);
-        String displayMsg = getExternalFilesDir("passport") + "/" + MainActivity.BACKUP_FILENAME;
-        if (fileExternal.exists()) {
-            displayMsg += " \n" + getString(R.string.fv_msg_36) + " " + format_mdy.format(fileExternal.lastModified());
-        }
-
-
-//        msgDialog(displayMsg);
+//        File fileExternal = new File(getExternalFilesDir("passport")
+//                + "/" + MainActivity.BACKUP_FILENAME);
+//
+////        Log.d(TAG, "showFilename: " + Environment.getDataDirectory() + "/passport/" + MainActivity.BACKUP_FILENAME);
+////        Log.d(TAG, "showFilename: " + getExternalFilesDir(null) + "/passport/" + MainActivity.BACKUP_FILENAME);
+////        Log.d(TAG, "showFilename: " + getExternalFilesDir("passport/") + MainActivity.BACKUP_FILENAME);
+//        String displayMsg = getExternalFilesDir("passport") + "/" + MainActivity.BACKUP_FILENAME;
+//        if (fileExternal.exists()) {
+//            displayMsg += " \n" + getString(R.string.fv_msg_36) + " " + format_mdy.format(fileExternal.lastModified());
+//        }
+//
+//
+////        msgDialog(displayMsg);
 
 
         openFileBrowser(PICK_FILE_SHOW);
+//        Log.d(TAG, "file " + displayMsg);
 
 
 //        openFileChooser();
@@ -1058,21 +1179,23 @@ public class FileViewActivity extends AppCompatActivity {
 
     private void openFileBrowser(int requestCode) {
 //        UtilsRG.info("Open filechooser to read a file");
+        Log.d(TAG, "openFileBrowser ");
 
 
         //Selecting the "EXAMES_APP" Folder as default
-//        File root = android.os.Environment.getExternalStorageDirectory();
-//        File dir = new File(root.getAbsolutePath() + "/Exames-App/");
-//        File dir = new File(root.getAbsolutePath());
-        File dir = getExternalFilesDir("passport") ;
-        String directoryy = dir.toString() + "/";
+////        File root = android.os.Environment.getExternalStorageDirectory();
+////        File dir = new File(root.getAbsolutePath() + "/Exames-App/");
+////        File dir = new File(root.getAbsolutePath());
+//        File dir = getExternalFilesDir("passport") ;
+//        assert dir != null;
+//        String directoryy = dir.toString() + "/";
 //        msgDialog(directoryy);
 
-        //Giving the FilePicker a custom Title:
-        String title = "Select file";
-//        String readExternalStoragePermission = Manifest.permission.READ_EXTERNAL_STORAGE;
-//        if(hasPermission(PERMISSION_REQUEST_CODE, readExternalStoragePermission)) {
-
+//        //Giving the FilePicker a custom Title:
+//        String title = "Select file";
+////        String readExternalStoragePermission = Manifest.permission.READ_EXTERNAL_STORAGE;
+////        if(hasPermission(PERMISSION_REQUEST_CODE, readExternalStoragePermission)) {
+//
 //            new MaterialFilePicker()
 //                    .withActivity(FileViewActivity.this)
 //                    .withRequestCode(requestCode)
@@ -1082,10 +1205,76 @@ public class FileViewActivity extends AppCompatActivity {
 //                    .withRootPath(directoryy)
 //                    .withTitle(title)
 //                    .start();
+//
+//
+////        }
 
 
+
+
+
+////        https://www.dropbox.com/scl/fi/qckaxmbfdi6iixr0ee1f5/accounts20230918.json?rlkey=ezk68u6hzpkre3jzaldgigscs&dl=0
+//
+//        DropBoxManager.
+//
+//
+//        // Import a JSON file from Dropbox
+//        try {
+//            File outputFile = new File("path_to_save_downloaded_file.json");
+//            FileOutputStream outputStream = new FileOutputStream(outputFile);
+//            DbxDownloader<FileMetadata> downloader = DropboxClientFactory.getClient().files()
+//                    .downloadBuilder("/your_imported_file.json")
+//                    .start();
+//            downloader.download(outputStream);
+//            outputStream.close();
+//        } catch (IOException | DbxException e) {
+//            e.printStackTrace();
 //        }
+
+
+//        try {
+//            Log.d(TAG, "FileViewActivity accounts about to get");
+//            InputStream inputStream = getAssets().open("accounts.json");
+//            int size = inputStream.available();
+//            byte[] buffer = new byte[size];
+//            inputStream.read(buffer);
+//            inputStream.close();
+//            String jsonString = new String(buffer, "UTF-8");
+//
+//            Log.d(TAG, "FileViewActivity accounts ask launched");
+//            // Now, 'jsonString' contains the contents of the JSON file.
+//
+//        } catch (IOException e) {
+//            Log.d(TAG, "FileViewActivity accounts error " + e.getMessage());
+//            e.printStackTrace();
+//
+//        }
+
+
+
+
+//        Intent requestFileIntent;
+//        ParcelFileDescriptor inputPFD;
+//
+//        requestFileIntent = new Intent(Intent.ACTION_PICK);
+//        requestFileIntent.setType("image/jpg");
+//
+//        Log.d(TAG, "FileViewActivity ask launched");
+//        mFilename.launch(requestFileIntent);
+//        Log.d(TAG, "FileViewActivity request launched");
+
+
+//        Log.d(TAG, "openFileBrowser about to send open request");
+//        // Choose a directory using the system's file picker.
+////        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+//        Intent intent = new Intent(DownloadManager.ACTION_VIEW_DOWNLOADS);
+//        mFilename.launch(intent);
+//        Log.d(TAG, "openFileBrowser request sent");
+//
+////        ParcelFileDescriptor folder =
+////        public ParcelFileDescriptor openDownloadedFile (long id)
     }
+
 
 
 //    private void startOpenDialog() {
@@ -1232,8 +1421,8 @@ public class FileViewActivity extends AppCompatActivity {
         intent.putExtra(Intent.EXTRA_TEXT, R.string.fv_msg_37);
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         try {
-            startActivityForResult(intent.createChooser(intent, getString(R.string.fv_msg_38)),
-                    BACKUP_FILE_REQUESTED);
+//            startActivityForResult(intent.createChooser(intent, getString(R.string.fv_msg_38)),
+//                    BACKUP_FILE_REQUESTED);
         } catch (ActivityNotFoundException ex) {
             Log.e(TAG, "error: " + ex.getMessage());
         }
@@ -1496,237 +1685,235 @@ public class FileViewActivity extends AppCompatActivity {
         }
     }
 
-    private static class UploadProfileAsyncTask extends AsyncTask<String, Void, String> {
-//        private ProfileDao profileDao;
-        ProfileJsonListIO profileJsonListIO = new ProfileJsonListIO();
-        private List<Profile> listAccounts = new ArrayList<Profile>();
-        Context context;
-        private WebView webView;
-        private ProgressBar progressBar;
-        private ProfileViewModel profileViewModel;
-
-        private UploadProfileAsyncTask(Context context,
-                                       WebView webView,
-                                       ProgressBar progressBar,
-                                       ProfileViewModel profileViewModel) {
-            this.context = context;
-            this.webView = webView;
-            this.progressBar = progressBar;
-            this.profileViewModel = profileViewModel;
-        }
-
-        @Override
-        protected void onPreExecute() {
-
-            this.progressBar.setVisibility(View.VISIBLE);
-        }
-
-        @Override
-        protected String doInBackground(String... filename) {
-//            profileDao.update(profiles[0]);
-//            File dirStorage = getExternalFilesDir("passport");
-
-            String msgDisplay = context.getString(R.string.fv_msg_39);
-            try {
-
-                Log.d(TAG, "upload file " + filename[0]);
-
-                listAccounts = profileJsonListIO.readProfileJson(filename[0]);
-
-                Log.d(TAG, "run: upload size " + listAccounts.size());
-
-                StringBuilder sb = new StringBuilder();
-                Formatter formatter = new Formatter(sb, Locale.US);
-
-                msgDisplay = formatter.format("<h2>%3d " + context.getString(R.string.fv_msg_40) + "</h2>",
-                        listAccounts.size()).toString() +
-                        "<h3>" + context.getString(R.string.fv_msg_41) + "</h3>";
-//                publishProgress(msgDisplay);
+//    private static class UploadProfileAsyncTask extends AsyncTask<String, Void, String> {
+////        private ProfileDao profileDao;
+//        ProfileJsonListIO profileJsonListIO = new ProfileJsonListIO();
+//        private List<Profile> listAccounts = new ArrayList<Profile>();
+//        Context context;
+//        private WebView webView;
+//        private ProgressBar progressBar;
+//        private ProfileViewModel profileViewModel;
 //
-//                publishProgress("<h2>%3d Account Profile uploaded</h2>" );
+//        private UploadProfileAsyncTask(Context context,
+//                                       WebView webView,
+//                                       ProgressBar progressBar,
+//                                       ProfileViewModel profileViewModel) {
+//            this.context = context;
+//            this.webView = webView;
+//            this.progressBar = progressBar;
+//            this.profileViewModel = profileViewModel;
+//        }
+
+//        @Override
+//        protected void onPreExecute() {
 //
-//                publishProgress(msgDisplay + "<h3>App DB Updated</h3>");
+//            this.progressBar.setVisibility(View.VISIBLE);
+//        }
+//
+//        @Override
+//        protected String doInBackground(String... filename) {
+////            profileDao.update(profiles[0]);
+////            File dirStorage = getExternalFilesDir("passport");
+//
+//            String msgDisplay = context.getString(R.string.fv_msg_39);
+//            try {
+//
+//                Log.d(TAG, "upload file " + filename[0]);
+//
+//                listAccounts = profileJsonListIO.readProfileJson(filename[0]);
+//
+//                Log.d(TAG, "run: upload size " + listAccounts.size());
+//
+//                StringBuilder sb = new StringBuilder();
+//                Formatter formatter = new Formatter(sb, Locale.US);
+//
+//                msgDisplay = formatter.format("<h2>%3d " + context.getString(R.string.fv_msg_40) + "</h2>",
+//                        listAccounts.size()).toString() +
+//                        "<h3>" + context.getString(R.string.fv_msg_41) + "</h3>";
+////                publishProgress(msgDisplay);
+////
+////                publishProgress("<h2>%3d Account Profile uploaded</h2>" );
+////
+////                publishProgress(msgDisplay + "<h3>App DB Updated</h3>");
+//
+//            } catch (Exception e) {
+//                // TODO Auto-generated catch block
+//                e.printStackTrace();
+//            }
+//
+//            return msgDisplay;
+//        }
 
-            } catch (Exception e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
+////        @Override
+////        protected void onProgressUpdate(String... values) {
+////            super.onProgressUpdate(values);
+//////            WebView webView = (WebView)FileViewActivity.this.findViewById(R.id.wv_page);
+//////            FileViewActivity.infoPage("Account Profiles exported");
+////            FileViewActivity.webView.loadData(values[0], "text/html", null);
+////        }
+//
+//        @Override
+//        protected void onPostExecute(String msgDisplay) {
+//            super.onPostExecute(msgDisplay);
+//
+//            this.webView.loadData(msgDisplay, "text/html", null);
+//
+//            this.profileViewModel.deleteAllProfiles();
+//            Log.d(TAG, "run: delete all complete ");
+//
+//            this.profileViewModel.insertAll(listAccounts);
+//            Log.d(TAG, "run: upload complete ");
+//
+//
+//            Toast.makeText(context, R.string.toast_restore_complete, Toast.LENGTH_SHORT).show();
+//
+//            this.progressBar.setVisibility(View.INVISIBLE);
+//
+//        }
+//
+//    }
 
-            return msgDisplay;
-        }
+
+//    private static class DownloadProfileAsyncTask extends AsyncTask<Void, String, Integer> {
+//        //        private ProfileDao profileDao;
+//        ProfileJsonListIO profileJsonListIO = new ProfileJsonListIO();
+//        Context context;
+//        File storageFile;
+//        ProfileAdapter adapter;
+//        String msgError;
+//        private ProgressBar progressBar;
+//        private WebView webView;
+//
+//        private DownloadProfileAsyncTask(Context context,
+//                                         File file,
+//                                         ProfileAdapter adapter,
+//                                         ProgressBar progressBar,
+//                                         WebView webView) {
+//            this.context = context;
+//            this.storageFile = file;
+//            this.adapter = adapter;
+//            this.progressBar = progressBar;
+//            this.webView = webView;
+//
+////            File dirStorage = context.getExternalFilesDir("passport");
+//        }
+
+//        @Override
+//        protected void onPreExecute() {
+//
+//            this.progressBar.setVisibility(View.VISIBLE);
+//        }
+//
+//        @Override
+//        protected Integer doInBackground(Void... voids) {
+//            int count = 0;
+////            profileDao.update(profiles[0]);
+////            File dirStorage = getExternalFilesDir("passport");
+//
+//            try {
+//
+////                Log.d(TAG, "ExportAccountDB: path found " + storageFile.getPath());
+////                // Make sure the Pictures directory exists.
+////                if (!dirStorage.exists()) {
+////                    dirStorage.mkdirs();
+////                }
+////
+////                File file = new File(dirStorage, MainActivity.BACKUP_FILENAME);
+////                Log.d(TAG, "ExportAccountDB export filename: " + file.getAbsoluteFile());
+////
+////
+////                if (file.exists()) {
+////                    Log.d(TAG, "ExportAccountDB: file exists " + file.getAbsoluteFile());
+////                } else {
+////
+////                    Log.d(TAG, "ExportAccountDB: file " + file.getAbsolutePath());
+////
+////
+////                    if (file.createNewFile()) {
+////                        Log.d(TAG, "ExportAccountDB: file created " + file.getAbsoluteFile());
+////                    }
+////
+////                }
+//
+//                Log.d(TAG, "upload file " + this.storageFile.getAbsolutePath());
+//
+//
+////                count = profileJsonListIO.writeProfileJson(this.storageFile);
+////
+////                JsonWriter writer = new JsonWriter(new FileWriter(file));
+////                writer.setIndent("  ");
+////                count = writeMessagesArray(writer);
+////                writer.flush();
+////                writer.close();
+//
+//
+//                List<Profile> profiles = adapter.getCurrentList();
+//                count = profileJsonListIO.writeProfileJson(this.storageFile, profiles);
+//
+//
+//                Log.d(TAG, "run: upload size " + count);
+//
+////                StringBuilder sb = new StringBuilder();
+////                Formatter formatter = new Formatter(sb, Locale.US);
+////
+////                publishProgress(formatter.format("<h2>%3d Account Profiles Download to backup file</h2>" +
+////                                "<h3>See menu for export filename</h3>" +
+////                                "<h3>See menu to view exported file</h3>",
+////                        count).toString());
+//
+//
+//                //            } catch (IOException e1) {
+////                msgError = "jsonFile Error: " + e1.getMessage();
+////                Log.e(TAG, "ExportAccountDB error: " + e1.getMessage());
+//////                    fvFragment.setInfoMessage("Exported directory not exists");
+//            } catch (Exception e2) {
+//                e2.printStackTrace();
+//                System.out.println(e2.getMessage());
+//                msgError = "jsonError: " + e2.getMessage();
+//                Log.v(TAG, msgError);
+//            }
+//
+//            return count;
+//        }
+
 
 //        @Override
 //        protected void onProgressUpdate(String... values) {
 //            super.onProgressUpdate(values);
-////            WebView webView = (WebView)FileViewActivity.this.findViewById(R.id.wv_page);
-////            FileViewActivity.infoPage("Account Profiles exported");
-//            FileViewActivity.webView.loadData(values[0], "text/html", null);
+////            FileViewActivity.webView.loadData(values[0], "text/html", null);
 //        }
-
-        @Override
-        protected void onPostExecute(String msgDisplay) {
-            super.onPostExecute(msgDisplay);
-
-            this.webView.loadData(msgDisplay, "text/html", null);
-
-            this.profileViewModel.deleteAllProfiles();
-            Log.d(TAG, "run: delete all complete ");
-
-            this.profileViewModel.insertAll(listAccounts);
-            Log.d(TAG, "run: upload complete ");
-
-
-            Toast.makeText(context, R.string.toast_restore_complete, Toast.LENGTH_SHORT).show();
-
-            this.progressBar.setVisibility(View.INVISIBLE);
-
-        }
-
-    }
-
-
-    private static class DownloadProfileAsyncTask extends AsyncTask<Void, String, Integer> {
-        //        private ProfileDao profileDao;
-        ProfileJsonListIO profileJsonListIO = new ProfileJsonListIO();
-        Context context;
-        File storageFile;
-        ProfileAdapter adapter;
-        String msgError;
-        private ProgressBar progressBar;
-        private WebView webView;
-
-        private DownloadProfileAsyncTask(Context context,
-                                         File file,
-                                         ProfileAdapter adapter,
-                                         ProgressBar progressBar,
-                                         WebView webView) {
-            this.context = context;
-            this.storageFile = file;
-            this.adapter = adapter;
-            this.progressBar = progressBar;
-            this.webView = webView;
-
-//            File dirStorage = context.getExternalFilesDir("passport");
-        }
-
-        @Override
-        protected void onPreExecute() {
-
-            this.progressBar.setVisibility(View.VISIBLE);
-        }
-
-        @Override
-        protected Integer doInBackground(Void... voids) {
-            int count = 0;
-//            profileDao.update(profiles[0]);
-//            File dirStorage = getExternalFilesDir("passport");
-
-            try {
-
-//                Log.d(TAG, "ExportAccountDB: path found " + storageFile.getPath());
-//                // Make sure the Pictures directory exists.
-//                if (!dirStorage.exists()) {
-//                    dirStorage.mkdirs();
-//                }
-//
-//                File file = new File(dirStorage, MainActivity.BACKUP_FILENAME);
-//                Log.d(TAG, "ExportAccountDB export filename: " + file.getAbsoluteFile());
 //
 //
-//                if (file.exists()) {
-//                    Log.d(TAG, "ExportAccountDB: file exists " + file.getAbsoluteFile());
-//                } else {
+//        @Override
+//        protected void onPostExecute(Integer count) {
+//            super.onPostExecute(count);
 //
-//                    Log.d(TAG, "ExportAccountDB: file " + file.getAbsolutePath());
+//            if (msgError != null) {
+//                Toast.makeText(context,
+//                        msgError,
+//                        Toast.LENGTH_LONG).show();
+//                return;
+//            }
 //
+//            StringBuilder sb = new StringBuilder();
+//            Formatter formatter = new Formatter(sb, Locale.US);
 //
-//                    if (file.createNewFile()) {
-//                        Log.d(TAG, "ExportAccountDB: file created " + file.getAbsoluteFile());
-//                    }
+//            String msgDisplay = formatter.format("<h2>%3d " + context.getString(R.string.fv_msg_42) + "</h2>" +
+//                                "<h3>" + context.getString(R.string.fv_msg_44) + "</h3>",
+////                                "<h3>" + context.getString(R.string.fv_msg_43) + "</h3>" +
+//                    count).toString();
 //
-//                }
-
-                Log.d(TAG, "upload file " + this.storageFile.getAbsolutePath());
-
-
-//                count = profileJsonListIO.writeProfileJson(this.storageFile);
+//            this.webView.loadData(msgDisplay, "text/html", null);
 //
-//                JsonWriter writer = new JsonWriter(new FileWriter(file));
-//                writer.setIndent("  ");
-//                count = writeMessagesArray(writer);
-//                writer.flush();
-//                writer.close();
-
-
-                List<Profile> profiles = adapter.getCurrentList();
-                count = profileJsonListIO.writeProfileJson(this.storageFile, profiles);
-
-
-                Log.d(TAG, "run: upload size " + count);
-
-//                StringBuilder sb = new StringBuilder();
-//                Formatter formatter = new Formatter(sb, Locale.US);
+////            FileViewActivity.infoPage("Account Profiles exported");
 //
-//                publishProgress(formatter.format("<h2>%3d Account Profiles Download to backup file</h2>" +
-//                                "<h3>See menu for export filename</h3>" +
-//                                "<h3>See menu to view exported file</h3>",
-//                        count).toString());
-
-
-                //            } catch (IOException e1) {
-//                msgError = "jsonFile Error: " + e1.getMessage();
-//                Log.e(TAG, "ExportAccountDB error: " + e1.getMessage());
-////                    fvFragment.setInfoMessage("Exported directory not exists");
-            } catch (Exception e2) {
-                e2.printStackTrace();
-                System.out.println(e2.getMessage());
-                msgError = "jsonError: " + e2.getMessage();
-                Log.v(TAG, msgError);
-            }
-
-            return count;
-        }
-
-
-        @Override
-        protected void onProgressUpdate(String... values) {
-            super.onProgressUpdate(values);
-//            FileViewActivity.webView.loadData(values[0], "text/html", null);
-        }
-
-
-        @Override
-        protected void onPostExecute(Integer count) {
-            super.onPostExecute(count);
-
-            if (msgError != null) {
-                Toast.makeText(context,
-                        msgError,
-                        Toast.LENGTH_LONG).show();
-                return;
-            }
-
-            StringBuilder sb = new StringBuilder();
-            Formatter formatter = new Formatter(sb, Locale.US);
-
-            String msgDisplay = formatter.format("<h2>%3d " + context.getString(R.string.fv_msg_42) + "</h2>" +
-                                "<h3>" + context.getString(R.string.fv_msg_44) + "</h3>",
-//                                "<h3>" + context.getString(R.string.fv_msg_43) + "</h3>" +
-                    count).toString();
-
-            this.webView.loadData(msgDisplay, "text/html", null);
-
-//            FileViewActivity.infoPage("Account Profiles exported");
-
-            Toast.makeText(context,
-                    count + " " + context.getString(R.string.toast_accounts_backed_up),
-                    Toast.LENGTH_LONG).show();
-
-            this.progressBar.setVisibility(View.INVISIBLE);
-
-        }
-
-    }
-
-
+//            Toast.makeText(context,
+//                    count + " " + context.getString(R.string.toast_accounts_backed_up),
+//                    Toast.LENGTH_LONG).show();
+//
+//            this.progressBar.setVisibility(View.INVISIBLE);
+//
+//        }
+//
+//    }
 }

@@ -96,6 +96,7 @@
     <string name="menuacct_search">Search</string>
     <string name="menuacct_about">About</string>
     <string name="menuacct_notify">Notify</string>
+    <string name="menuacct_dropbox">Dropbox</string>
     <string name="menuvw_show_file">Show Backup File</string>
     <string name="menuvw_show_filename">Filename</string>
     <string name="menuvw_share">Share Backup File</string>
@@ -225,6 +226,7 @@
     <string name="selectappaccounts">Select app \'List &amp; Edit Accounts\'</string>
     <string name="selectpermissions">Select Permissions</string>
     <string name="allowstorage">Allow Storage</string>
+    <string name="iconInfoDesc" translatable="false">Information Icon</string>
 
 <!--    <string name="warningmsg">This app is getting a flury of 1 Star Ratings.-->
 <!--    \n\nThis app needs your feedback.-->
@@ -232,10 +234,9 @@
 <!--        \n\nIf response is negative, please send information that can be used to improve the app.-->
 <!--        \n\nThe testing of this app may be inadequate therefore unable to uncover problems you see.</string>-->
 
-    <string name="warningmsg">Welcome to this productivity tool app.
-    \n\nMaintain your accounts, then track them by list in selected order. Do searches and backup / restore.
-        \n\nNo passwords are inputted. Your passwords are kept outside this app. Keep a separate paper list of passwords with its assigned account id.
-        \n\nThis app has passwords only for suggestions. If you select any password, the app has no knowledge of its use.
+    <string name="warningmsg">Welcome to Accounts List app.
+    \n\nMaintain your accounts. You can order items by either Corp Name, Account Id, Open Date, or custom. Do search by Corp Name.
+        \n\nPasswords are kept outside this app. Keep a separate paper list of passwords with its assigned account id. Passwords are only suggestions, not tied to an account, nor data.
         </string>
 <!--    \n\nThe review feedback is based on game expectations. This is NOT a game. On Google Play, it is correctly identified as a productivity tool.-->
 

@@ -221,4 +221,5 @@
     <string name="fv_msg_40">Accountrijen geüpload</string>
     <string name="fv_msg_42">Accountrijen op back-upbestand</string>
     <string name="selectappaccounts">Selecteer app \'List &amp; Edit Accounts\'</string>
+    <string name="menuacct_dropbox">Dropbox</string>
 </resources>

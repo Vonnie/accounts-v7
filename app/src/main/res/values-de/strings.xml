@@ -221,4 +221,5 @@
     <string name="fv_msg_40">Kontozeilen Hochgeladen</string>
     <string name="fv_msg_42">Kontozeilen in Sicherungsdatei</string>
     <string name="selectappaccounts">Wählen Sie die App \"Konten auflisten und bearbeiten\".</string>
+    <string name="menuacct_dropbox">Dropbox</string>
 </resources>

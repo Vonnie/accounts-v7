@@ -1,11 +1,17 @@
 package com.kinsey.passwords.provider;
 
 
+import static com.kinsey.passwords.provider.ProfileDatabase.TAG;
+
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Transaction;
 import androidx.room.Update;
 
 import com.kinsey.passwords.items.Profile;
@@ -15,14 +21,31 @@ import java.util.List;
 @Dao
 public interface ProfileDao {
 
-    @Insert
-    Long insert(Profile profile);
+//    @Query("SELECT * FROM passport_detail")
+//    LiveData<List<Profile>> getAllProfiles();
 
-//    @Insert
-//    Long[] insertAll(Profile[] profiles);
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    long insert(Profile profile);
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    long insertProfile(Profile profile);
+    @Update
+    void updateItem(Profile profile);
+    @Transaction
+    public default void addProfile(Profile profile) {
+        long accountId = insertProfile(profile);
+        Log.d(TAG, "inserted Profile Id " + accountId);
 
-    @Insert
-    Long insertProfile(Profile profile);
+        profile.setPassportId((int)accountId);
+        profile.setId((int)accountId);
+        updateItem(profile);
+//        Log.d(TAG, "updated Profile " + profile.getCorpName() + ":" + profile.getPassportId() + ":" + profile.getId());
+    }
+
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    Long[] insertAll(List<Profile> profiles);
+
+
 
     @Update
     void update(Profile profile);
@@ -36,8 +59,7 @@ public interface ProfileDao {
     @Query("DELETE FROM passport_detail where _id = :id")
     void deleteProfileId(int id);
 
-    @Query("SELECT * FROM passport_detail ORDER BY corporation_name COLLATE NOCASE ASC")
-    LiveData<List<Profile>> getAllProfiles();
+
 
     @Query("SELECT * FROM passport_detail ORDER BY corporation_name COLLATE NOCASE ASC")
     LiveData<List<Profile>> getAllProfilesByCorpName();
@@ -55,12 +77,14 @@ public interface ProfileDao {
     LiveData<List<Profile>> searchCorpNameProfiles(String name);
 
     @Query("SELECT * FROM passport_detail where _id = :id")
-    LiveData<Profile> getProfileById(int id);
+    public LiveData<Profile> getProfileById(int id);
 
     @Query("SELECT * FROM passport_detail ORDER BY sequence DESC LIMIT 1")
     LiveData<Profile> getMaxSequence();
 
     @Query("SELECT count(*) FROM passport_detail")
     LiveData<Integer> getCount();
+
+
 
 }

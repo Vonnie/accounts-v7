@@ -29,22 +29,46 @@
 <!--    <color name="secondaryTextColor">#B3442B</color>-->
 <!--    <color name="secondaryTextColor">#B3442B</color>-->
 
-    <color name="primaryColor">#0436B3</color>
-    <color name="colorPrimary">#0436B3</color>
+<!--    Changed 9/29/23 -->
+<!--    <color name="primaryColor">#0436B3</color>-->
+<!--    <color name="colorPrimary">#0436B3</color>-->
+<!--    <color name="primaryLightColor">#8C6653</color>-->
+<!--    <color name="primaryDarkColor">#2B6F80</color>-->
+<!--    <color name="secondaryColor">#2B6F80</color>-->
+<!--    <color name="secondaryLightColor">#8C6653</color>-->
+<!--    <color name="secondaryDarkColor">#0436B3</color>-->
+<!--    <color name="primaryTextColor">#85A0E6</color>-->
+<!--    <color name="secondaryTextColor">#0436B3</color>-->
+<!--    <color name="backgroundWhite">#FFFFFF</color>-->
+<!--    <color name="backgroundTransparent">#00000000</color>-->
+<!--    <color name="icons">#FFFFFF</color>-->
+<!--    <color name="white">#FFFFFF</color>-->
+
+
+    <color name="primaryColor">#2c51a6</color>
+    <color name="colorPrimary">#2c51a6</color>
+    <color name="primaryTextColor">#E1FFE6</color>
+
+    <color name="secondaryColor">#a69c2c</color>
+    <color name="secondaryTextColor">#04141B</color>
+
+
     <color name="primaryLightColor">#8C6653</color>
-    <color name="primaryDarkColor">#2B6F80</color>
-    <color name="secondaryColor">#2B6F80</color>
     <color name="secondaryLightColor">#8C6653</color>
-    <color name="secondaryDarkColor">#0436B3</color>
-    <color name="primaryTextColor">#85A0E6</color>
-    <color name="secondaryTextColor">#0436B3</color>
+
+
+    <color name="primaryDarkColor">#a62c3f</color>
+
+    <color name="secondaryDarkColor">#FFFF41</color>
+
     <color name="backgroundWhite">#FFFFFF</color>
     <color name="backgroundTransparent">#00000000</color>
     <color name="icons">#FFFFFF</color>
     <color name="white">#FFFFFF</color>
-<!--    <color name="colorAccent">#795548</color>-->
+
 </resources>
 
+<!--    <color name="colorAccent">#795548</color>-->
 <!--<color name="primaryTextColor">#FF4600</color>-->
 <!--<color name="secondaryTextColor">#65CC1F</color>-->
 

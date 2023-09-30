@@ -23,7 +23,8 @@ public class ProfileViewModel extends AndroidViewModel
         super(application);
         repository = new ProfileRepository(application);
 //        allProfiles = repository.getAllProfiles();
-        dbMsg = repository.dbMsg;
+//        dbMsg = repository.dbMsg;
+        allProfiles = repository.getAllProfilesByCorpName();
     }
 
     public void insertProfile(Profile profile, Task task) {
@@ -55,7 +56,7 @@ public class ProfileViewModel extends AndroidViewModel
 //    }
 
     public LiveData<List<Profile>> getAllProfilesByCorpName() {
-        allProfiles = repository.getAllProfilesByCorpName();
+//        allProfiles = repository.getAllProfilesByCorpName();
         return allProfiles;
     }
 
@@ -136,4 +137,6 @@ public class ProfileViewModel extends AndroidViewModel
     public void processInsertComplete(Profile profile) {
         Log.d(TAG, "processInsertComplete: " + profile.getPassportId());
     }
+
+
 }

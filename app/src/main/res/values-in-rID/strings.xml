@@ -221,4 +221,5 @@
     <string name="fv_msg_40">Baris akun Diunggah</string>
     <string name="fv_msg_42">Baris akun ke file Cadangan</string>
     <string name="selectappaccounts">Pilih aplikasi \'Daftar &amp; Edit Akun\'</string>
+    <string name="menuacct_dropbox">Dropbox</string>
 </resources>

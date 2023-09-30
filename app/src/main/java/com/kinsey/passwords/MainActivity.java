@@ -1,9 +1,12 @@
 package com.kinsey.passwords;
 
+import android.accounts.Account;
 import android.app.Dialog;
 import android.content.ActivityNotFoundException;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.database.Cursor;
 import android.os.Bundle;
 
 import androidx.activity.result.ActivityResult;
@@ -17,6 +20,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -44,9 +49,14 @@ import android.widget.Toast;
 //import com.google.firebase.auth.FirebaseAuth;
 //import com.google.firebase.auth.FirebaseUser;
 //import com.google.firebase.auth.GoogleAuthProvider;
+//import com.dropbox.core.v2.users.FullAccount;
+import com.google.android.material.textfield.TextInputLayout;
 import com.kinsey.passwords.items.Profile;
 import com.kinsey.passwords.items.Suggest;
+import com.kinsey.passwords.provider.ProfileAdapter;
+import com.kinsey.passwords.provider.ProfileViewModel;
 import com.kinsey.passwords.provider.Task;
+import com.kinsey.passwords.tools.ProfileJsonListIO;
 import com.kinsey.passwords.uifrag.AddEditProfileFrag;
 import com.kinsey.passwords.uifrag.ProfileCorpNameFrag;
 import com.kinsey.passwords.uifrag.ProfileCustomFrag;
@@ -55,11 +65,19 @@ import com.kinsey.passwords.uifrag.ProfilePassportIdFrag;
 import com.kinsey.passwords.uifrag.SearchFrag;
 //import com.squareup.picasso.Picasso;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 //import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.GregorianCalendar;
 //import java.util.List;
+import java.util.List;
 import java.util.Locale;
+
+//import com.dropbox.core.DbxException;
+//import com.dropbox.core.DbxRequestConfig;
+//import com.dropbox.core.v2.DbxClientV2;
 
 // ====================
 // Statement to assist in debugging
@@ -70,6 +88,7 @@ import java.util.Locale;
 // https://www.youtube.com/watch?v=t-yZUqthDMM
 // https://square.github.io/picasso/
 // https://medium.com/fullstack-with-react-native-aws-serverless-and/google-sign-in-for-react-native-android-7d43df78c082
+
 
 public class MainActivity extends AppCompatActivity
         implements
@@ -104,10 +123,12 @@ public class MainActivity extends AppCompatActivity
 //    private boolean isLandscape = false;
     private Boolean editModeAdd = false;
 
-    private static final String ACCOUNT_FRAGMENT = "AccountFragment";
+//    private static final String ACCOUNT_FRAGMENT = "AccountFragment";
 
 //    private FirebaseAuth mAuth;
-
+    private static final String pattern_mdy = "MM/dd/yyyy";
+    public static SimpleDateFormat format_mdy = new SimpleDateFormat(
+            pattern_mdy, Locale.US);
     public static String BACKUP_FILENAME = "accounts.json";
     public static int profileMigrateLevel = 1;
 
@@ -174,7 +195,7 @@ public class MainActivity extends AppCompatActivity
 //    Runnable mRunnable;
 //    boolean isUserPaging = true;
 //    private static Account account = new Account();
-    private AlertDialog mDialog = null;
+    private final AlertDialog mDialog = null;
     private GregorianCalendar mCalendar;
 //    private boolean appMsgSent = false;
 //    private boolean isResumed = false;
@@ -207,9 +228,13 @@ public class MainActivity extends AppCompatActivity
 
     private LinearLayoutManager layoutManager;
 
+    private static final String ACCESS_TOKEN = "d14k27w8xbyq9ex";
 
 //    private SearchView mSearchView;
     private ActivityResultLauncher<Intent> startForResultLauncher;
+
+    private ProfileAdapter adapter;
+    private ProfileViewModel profileViewModel;
 
     public MainActivity() {
     }
@@ -405,19 +430,32 @@ public class MainActivity extends AppCompatActivity
             }
         }
 
-        startForResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+        startForResultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
                 new ActivityResultCallback<ActivityResult>() {
                     @Override
-                    public void onActivityResult(ActivityResult result) {
-                        if (result.getResultCode() == RESULT_OK) {
+                    public void onActivityResult(ActivityResult activityResult) {
+                        if (activityResult.getResultCode() == RESULT_OK) {
                             // Handle the data returned from Activity B
 //                            LiveData<List<Word>> returnedData = mWordViewModel.getAllWords();
                             // Use the returnedData as needed
-                            Intent data = result.getData();
-                            Log.d(TAG, "onActivityResult: data" + data);
-//                            mWordViewModel.insert(data);
-                        }
+//                            Intent data = result.getData();
+//                            int result = activityResult.getResultCode();
+                            Intent data = activityResult.getData();
+
+//                            if (result == RESULT_OK) {
+                                boolean blnRestored = data.getBooleanExtra(FileViewActivity.EXTRA_LIST_RESTORED, false);
+                                if (blnRestored) {
+                                    Log.d(TAG, "onActivityResult fileView: data restored " + blnRestored);
+//                                  mWordViewModel.insert(data);
+                                } else {
+                                    Log.d(TAG, "onActivityResult fileView: data not restored " + blnRestored);
+                                }
+//                            }
+                    } else {
+                        Log.d(TAG, "onActivityResult fileView: canceled");
                     }
+                                }
                 });
 
 //        if (findViewById(R.id.fragment_container2) == null) {
@@ -1739,6 +1777,9 @@ public class MainActivity extends AppCompatActivity
 
                 return true;
 
+            case R.id.menumain_dropbox:
+                showDropbox();
+                return true;
 
 //            case R.id.menumain_do_request:
 //
@@ -1978,6 +2019,11 @@ public class MainActivity extends AppCompatActivity
 
     private void viewAccountsFile() {
         Log.d(TAG, "viewAccountsFile: request request view exports");
+
+//        // Choose a directory using the system's file picker.
+//        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+//        startActivity(intent);
+
 //        Log.d(TAG, adapter.getItemCount() + " count on db");
 //        mActivityStart = true;
         Intent detailIntent = new Intent(this, FileViewActivity.class);
@@ -2387,6 +2433,321 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    private void showDropbox() {
+        Log.d(TAG, "showDropbox: starts");
+
+//        ProfileJsonListIO profileJsonListIO = new ProfileJsonListIO();
+//        List<Account> listAccounts = profileJsonListIO.loadAccounts();
+        getAccounts();
+        Log.d(TAG, "viewModel db count " + adapter.getItemCount());
+        Log.d(TAG, "viewModel db count " + this.profileViewModel.getAllProfilesByCorpName());
+//        Log.d(TAG, "viewModel db count " + accountJsonProperties());
+//        backupFilename();
+////        currFrag = AppFragType.PASSWORDS;
+//        // Create Dropbox client
+//        DbxRequestConfig config = DbxRequestConfig.newBuilder("dropbox/java-tutorial").build();
+//        DbxClientV2 client = new DbxClientV2(config, ACCESS_TOKEN);
+//        Log.d(TAG, "showDropbox ");
+    }
+
+    private void getAccounts() {
+
+        adapter = new ProfileAdapter(-1);
+        this.profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
+        profileViewModel.getAllProfilesByCorpName().observe(this, new Observer<List<Profile>>() {
+            @Override
+            public void onChanged(List<Profile> profiles) {
+                adapter.submitList(profiles);
+//                if (onFirstReported) {
+//                    onFirstReported = false;
+////                    infoPage();
+//                }
+                Log.d(TAG, "viewModel db count " + adapter.getItemCount());
+            }
+        });
+    }
+
+    private String accountJsonProperties(String filename) {
+
+        String returnValue = "";
+        ProfileJsonListIO profileJsonListIO = new ProfileJsonListIO();
+        try {
+
+            List<Profile> listAccounts = new ArrayList<Profile>();
+
+            listAccounts = profileJsonListIO.readProfileJson(filename);
+
+            int listCount = listAccounts.size();
+
+            returnValue = listCount + " Items on Accounts backup file";
+//                    + " created " + format_mdy.format(file.lastModified());
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            returnValue = "error: " + e.getMessage();
+        }
+
+        return returnValue;
+
+    }
+
+    public void backupFilename() {
+
+        android.app.AlertDialog.Builder mBuilder = new android.app.AlertDialog.Builder(MainActivity.this);
+
+        //  Inflate the Layout Resource file you created in Step 1
+        View mView = getLayoutInflater().inflate(R.layout.content_req_filename, null);
+
+        //  Get View elements from Layout file. Be sure to include inflated view name (mView)
+        TextView tvTitle = mView.findViewById(R.id.title);
+        File dirStorage = getExternalFilesDir("passport");
+        // Make sure the Pictures directory exists.
+        if (dirStorage.exists()) {
+            tvTitle.setText(getString(R.string.fv_msg_50) + dirStorage.getAbsolutePath());
+        } else {
+            tvTitle.setText(getString(R.string.fv_msg_50) + "");
+        }
+        TextInputLayout textInputFilename = (TextInputLayout) mView.findViewById(R.id.text_input_filename);
+        textInputFilename.getEditText().setText(MainActivity.BACKUP_FILENAME);
+        Button btnOk = (Button) mView.findViewById(R.id.btn_ok);
+        Button btnCancel = (Button) mView.findViewById(R.id.btn_cancel);
+
+        //  Create the AlertDialog using everything we needed from above
+        mBuilder.setView(mView);
+        final android.app.AlertDialog filenameDialog = mBuilder.create();
+
+        //  Set Listener for the OK Button
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick (View view) {
+                String strFilename = textInputFilename.getEditText().getText().toString().trim();
+
+                if (!strFilename.isEmpty()) {
+//                    composeEmail(strFilename);
+                    ExportAccountDB(strFilename);
+                    filenameDialog.dismiss();
+//                    Toast.makeText(FileViewActivity.this, "You entered a Value!,", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(MainActivity.this, R.string.toast_enter_email, Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        //  Set Listener for the CANCEL Button
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick (View view) {
+                filenameDialog.dismiss();
+            }
+        });
+
+        //  Finally, SHOW your Dialog!
+        filenameDialog.show();
+
+
+        //  END OF buttonClick_DialogTest
+    }
+    private void ExportAccountDB(String strFilename) {
+        String msgError = "";
+        int count = -1;
+
+//        File path = null;
+        try {
+
+
+            File dirStorage = getExternalFilesDir("passport");
+
+            Log.d(TAG, "ExportAccountDB: path found " + dirStorage.getPath());
+            // Make sure the Pictures directory exists.
+            if (!dirStorage.exists()) {
+                dirStorage.mkdirs();
+            }
+
+
+            File file = new File(dirStorage, strFilename);
+            Log.d(TAG, "ExportAccountDB export filename: " + file.getAbsoluteFile());
+
+
+            if (file.exists()) {
+                Log.d(TAG, "ExportAccountDB: file exists " + file.getAbsoluteFile());
+//                alertMsg("Backup Temporaruly Unavailable");
+                alertBackup(file, getString(R.string.fv_msg_33) + ' '
+                        + format_mdy.format(file.lastModified()));
+            } else {
+
+//                Log.d(TAG, "ExportAccountDB: file " + file.getAbsoluteFile());
+//                Log.d(TAG, "ExportAccountDB: got dir " + file.getParentFile().getAbsoluteFile());
+//                Log.d(TAG, "ExportAccountDB: got dir " + file.getParentFile().getParentFile().getAbsoluteFile());
+//                Log.d(TAG, "ExportAccountDB: got dir " + file.getParentFile().getParentFile().getParentFile().getAbsoluteFile());
+//                Log.d(TAG, "ExportAccountDB: got path " + file.getParentFile().getPath());
+//                Log.d(TAG, "ExportAccountDB: got path " + file.getParentFile().getParentFile().getPath());
+//                Log.d(TAG, "ExportAccountDB: got path " + file.getParentFile().getParentFile().getParentFile().getPath());
+
+
+                try {
+                    if (file.createNewFile()) {
+                        Log.d(TAG, "ExportAccountDB: file created " + file.getAbsoluteFile());
+                    }
+                } catch (IOException e1) {
+                    msgError = e1.getMessage();
+                    Log.e(TAG, "ExportAccountDB error: " + e1.getMessage());
+                    Toast.makeText(this,
+                            R.string.toast_error_backup_create,
+                            Toast.LENGTH_LONG).show();
+                    return;
+//                    fvFragment.setInfoMessage("Exported directory not exists");
+                } catch (Exception e2) {
+                    e2.printStackTrace();
+                    System.out.println(e2.getMessage());
+                    msgError = "jsonError: " + e2.getMessage();
+                    Log.v(TAG, msgError);
+                }
+
+
+                alertBackup(file, getString(R.string.fv_msg_34));
+//                alertMsg("Backup Temporaruly Unavailable");
+            }
+//            JsonWriter writer = new JsonWriter(new FileWriter(file));
+//            writer.setIndent("  ");
+//            count = writeMessagesArray(writer);
+//            writer.flush();
+//            writer.close();
+//
+//            infoPage("Account Profiles exported");
+//
+//            Toast.makeText(this,
+//                    count + " Exported accounts",
+//                    Toast.LENGTH_LONG).show();
+
+//        } catch (IOException e1) {
+//            msgError = e1.getMessage();
+//            Log.e(TAG, "ExportAccountDB error: " + e1.getMessage());
+//            Toast.makeText(this,
+//                    " Exported file directory issues",
+//                    Toast.LENGTH_LONG).show();
+////                    fvFragment.setInfoMessage("Exported directory not exists");
+        } catch (Exception e2) {
+            e2.printStackTrace();
+            System.out.println(e2.getMessage());
+            msgError = "jsonError: " + e2.getMessage();
+            Log.v(TAG, msgError);
+            Toast.makeText(this, R.string.toast_export_error, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void alertMsg(String msg) {
+        android.app.AlertDialog.Builder alertDialogBuilder = new android.app.AlertDialog.Builder(this);
+        alertDialogBuilder.setMessage(msg);
+        alertDialogBuilder.setPositiveButton("ok",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface arg0, int arg1) {
+//                        new DownloadProfileAsyncTask(getApplicationContext(),
+//                                file, adapter, progressBar, webView).execute();
+//
+                        //                        Toast.makeText(getApplicationContext(), "You clicked yes button", Toast.LENGTH_LONG).show();
+                    }
+                });
+//                .setNegativeButton("No",
+//                        new DialogInterface.OnClickListener() {
+//                            public void onClick(DialogInterface dialog, int which) {
+//                            }
+//                        });
+
+
+        android.app.AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+    }
+    private void alertBackup(File file, String msg) {
+
+
+//        new DownloadProfileAsyncTask(getApplicationContext(),
+//                file, adapter, progressBar, webView).execute();
+
+
+        final Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.diamsg_yesno);
+        dialog.setTitle(msg);
+
+        TextView text = (TextView) dialog.findViewById(R.id.text);
+        text.setText(msg);
+        ImageView image = (ImageView) dialog.findViewById(R.id.image);
+        image.setImageResource(R.drawable.ic_help_outline_black);
+
+        Button dialogButton = (Button) dialog.findViewById(R.id.yes);
+        // if button is clicked, close the custom dialog
+        dialogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                new DownloadProfileAsyncTask(getApplicationContext(),
+//                        file, adapter, progressBar, webView).execute();
+//                dialog.dismiss();
+            }
+        });
+
+        Button dialogButtonNo = (Button) dialog.findViewById(R.id.no);
+        // if button is clicked, close the custom dialog
+        dialogButtonNo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+
+//        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+//        alertDialogBuilder.setMessage(msg);
+//        alertDialogBuilder.setPositiveButton(R.string.yes,
+//                new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface arg0, int arg1) {
+//                        new DownloadProfileAsyncTask(getApplicationContext(),
+//                                file, adapter, progressBar, webView).execute();
+//
+//                        //                        Toast.makeText(getApplicationContext(), "You clicked yes button", Toast.LENGTH_LONG).show();
+//                    }
+//                })
+//                .setNegativeButton(R.string.no,
+//                new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface dialog, int which) {
+//                    }
+//                });
+//
+//
+//        AlertDialog alertDialog = alertDialogBuilder.create();
+//        alertDialog.show();
+    }
+
+    private void shareExport() {
+        AlertDialog.Builder dlg = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = dlg.setIcon(getResources().getDrawable(R.drawable.ic_warning));
+        dlg.setTitle(getResources().getString(R.string.app_name))
+                .setMessage("Is the exported file up-to-date for this share.")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+//                        shareIntent();
+                        // finish dialog
+                        dialog.dismiss();
+                        return;
+                    }
+
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        // finish dialog
+                        dialog.dismiss();
+                        return;
+                    }
+
+                })
+                .show();
+        dlg = null;
+
+    }
 
 
     @Override
@@ -3719,7 +4080,8 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void processInsertComplete(Profile profile) {
+    public void
+    processInsertComplete(Profile profile) {
         this.selectedId = profile.getPassportId();
         Log.d(TAG, "processInsertComplete: " + profile.getPassportId());
         FragmentManager fragmentManager = getSupportFragmentManager();

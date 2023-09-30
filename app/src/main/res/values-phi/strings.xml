@@ -221,4 +221,5 @@
     <string name="fv_msg_40">Mga hilera ng Account Na-upload</string>
     <string name="fv_msg_42">Mga hilera ng account sa Backup file</string>
     <string name="selectappaccounts">Piliin ang Listahan ng Mga Listahan ng app &amp; I-edit \'</string>
+    <string name="menuacct_dropbox">Dropbox</string>
 </resources>

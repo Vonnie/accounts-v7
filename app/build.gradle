@@ -9,7 +9,7 @@ android {
     defaultConfig {
         applicationId "com.kinsey.passwords"
         minSdkVersion 21
-        targetSdkVersion 34
+        targetSdkVersion 33
         compileSdk 34
         versionCode 301
         versionName "13.01"
@@ -77,6 +77,10 @@ dependencies {
     annotationProcessor "androidx.room:room-compiler:2.5.2"
     androidTestImplementation "androidx.room:room-testing:2.5.2"
 
+//    implementation 'com.dropbox.core:dropbox-core-sdk:5.4.5'
+
+//    implementation 'androidx.activity:activity:1.7.2'
+//    implementation 'androidx.fragment:fragment:1.6.1'
 //    implementation 'com.github.arteaprogramar:Android_MaterialFilePicker:3.0.1'
 
 ////    // Lifecycle components

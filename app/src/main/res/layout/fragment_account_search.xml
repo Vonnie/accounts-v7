@@ -12,18 +12,22 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/hint_text"
+        android:textColor="@color/primaryDarkColor"
+        android:background="@color/primaryDarkColor"
         android:textColorHint="@color/primaryColor"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:boxBackgroundColor="@color/primaryDarkColor"
+        app:boxBackgroundMode="filled" >
 
         <AutoCompleteTextView
             android:id="@+id/filled_exposed_dropdown"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/secondaryLightColor"
-            android:textColor="@color/primaryColor"
-            android:textColorHint="@color/primaryColor" />
+            android:background="@color/primaryDarkColor"
+            android:textColor="@color/secondaryTextColor"
+            android:textColorHint="@color/primaryDarkColor" />
 <!--            app:layout_constraintEnd_toEndOf="parent"-->
 <!--            app:layout_constraintStart_toStartOf="parent"-->
 <!--            app:layout_constraintTop_toBottomOf="@+id/textSearch" />-->

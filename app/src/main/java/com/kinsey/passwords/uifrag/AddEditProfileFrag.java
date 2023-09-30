@@ -468,11 +468,14 @@ public class AddEditProfileFrag extends Fragment
         if (editModeAdd) {
             mListener.onProfileAddItem(profile);
             editModeAdd = false;
+            Log.d(TAG, "saveProfile add " + profile);
+//            showDialogMsg("New Account added for id " + profile.getId() + ":" + profile.getPassportId());
             showDialogMsg("New Account added");
         } else {
 //        profileViewModel.update(profile);
             mListener.onProfileModifyItem(profile);
-            showDialogMsg("Account changes applied");
+            showDialogMsg("Account changes applied " + profile.getId() + ":" + profile.getPassportId());
+            Log.d(TAG, "saveProfile " + profile);
         }
         blnChangesMade = false;
 //        Toast.makeText(getContext(), R.string.toast_profile_updated, Toast.LENGTH_SHORT).show();

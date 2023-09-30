@@ -221,4 +221,5 @@
     <string name="fv_msg_40">Filas de cuenta cargadas</string>
     <string name="fv_msg_42">Filas de cuenta en archivo de copia de seguridad</string>
     <string name="selectappaccounts">Seleccione la aplicación \'Listar y editar cuentas\'</string>
+    <string name="menuacct_dropbox">Dropbox</string>
 </resources>
