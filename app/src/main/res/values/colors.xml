@@ -66,6 +66,8 @@
     <color name="icons">#FFFFFF</color>
     <color name="white">#FFFFFF</color>
 
+    <color name="default_btn_color">#2c51a6</color>
+
 </resources>
 
 <!--    <color name="colorAccent">#795548</color>-->

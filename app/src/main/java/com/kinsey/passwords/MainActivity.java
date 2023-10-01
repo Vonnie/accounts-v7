@@ -50,6 +50,7 @@ import android.widget.Toast;
 //import com.google.firebase.auth.FirebaseUser;
 //import com.google.firebase.auth.GoogleAuthProvider;
 //import com.dropbox.core.v2.users.FullAccount;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
 import com.kinsey.passwords.items.Profile;
 import com.kinsey.passwords.items.Suggest;
@@ -501,7 +502,9 @@ public class MainActivity extends AppCompatActivity
 //            public void onClick(View v) {
 //                Intent intent = new Intent(MainActivity.this, AddEditProfileActivity.class);
 //                Log.d(TAG, "onCreate: start activity AddEditProfileActivity");
-//                startActivityForResult(intent, ADD_PROFILE_REQUEST);
+//                intent.putExtra(Profile.class.getSimpleName(), ADD_PROFILE_REQUEST);
+//                startActivity(intent);
+////                startActivityForResult(intent, ADD_PROFILE_REQUEST);
 ////                startActivity(intent);
 //
 ////                onSignInClickedButton(v);
@@ -3946,18 +3949,22 @@ public class MainActivity extends AppCompatActivity
 //                return;
 //            }
 
-            frame2 = findViewById(R.id.fragment_container2);
-            if (selectedId == -1) {
-                frame2.setVisibility(View.GONE);
-            } else {
-                frame2.setVisibility(View.VISIBLE);
-            }
+//        ___________________________________________________________
+//        in process to chg to activity
+//        ___________________________________________________________
+
+//            frame2 = findViewById(R.id.fragment_container2);
+//            if (selectedId == -1) {
+//                frame2.setVisibility(View.GONE);
+//            } else {
+//                frame2.setVisibility(View.VISIBLE);
+//            }
 
 //            Fragment fragmentA = fragmentManager.findFragmentByTag("AddEditProfileFrag");
 
             Log.d(TAG, "startUpProfileUpdate: replace addEdit");
 
-            AddEditProfileFrag fragment2 = new AddEditProfileFrag();
+//            AddEditProfileFrag fragment2 = new AddEditProfileFrag();
             Bundle args = new Bundle();
             args.putInt(AddEditProfileFrag.EXTRA_ID, profile.getId());
             args.putInt(AddEditProfileFrag.EXTRA_PASSPORT_ID, profile.getPassportId());
@@ -3969,12 +3976,16 @@ public class MainActivity extends AppCompatActivity
             args.putString(AddEditProfileFrag.EXTRA_NOTE, profile.getNote());
             args.putLong(AddEditProfileFrag.EXTRA_ACTVY_LONG, profile.getActvyLong());
             args.putLong(AddEditProfileFrag.EXTRA_OPEN_DATE_LONG, profile.getOpenLong());
-            fragment2.setArguments(args);
-            fragmentTransaction.replace(R.id.fragment_container2, fragment2, "AddEditProfileFrag");
-            fragmentTransaction.commit();
+//            fragment2.setArguments(args);
+//            fragmentTransaction.replace(R.id.fragment_container2, fragment2, "AddEditProfileFrag");
+//            fragmentTransaction.commit();
 
             Log.d(TAG, "startUpProfileUpdate: startUp " + profile.getPassportId() +
                     " " + profile.getCorpName());
+
+//        startForResultLauncher.launch(detailIntent);
+//        startActivity(detailIntent);
+
             return;
 //        }
 

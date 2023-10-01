@@ -238,6 +238,8 @@
     \n\nMaintain your accounts. Order list by either Corp Name, Account Id, Open Date, or custom. Search by Corp Name.
         \n\nPasswords are kept outside this app. Keep a separate paper list of passwords with its assigned account id. Passwords are only suggestions, not tied to an account, nor data.
         </string>
-<!--    \n\nThe review feedback is based on game expectations. This is NOT a game. On Google Play, it is correctly identified as a productivity tool.-->
+    <string name="add_a_new_account">Add a new account</string>
+    <string name="link_to_website">Link to website</string>
+    <!--    \n\nThe review feedback is based on game expectations. This is NOT a game. On Google Play, it is correctly identified as a productivity tool.-->
 
 </resources>

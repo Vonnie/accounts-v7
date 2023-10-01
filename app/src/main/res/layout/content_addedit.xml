@@ -14,9 +14,9 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:clipToPadding="true"
+        android:fadeScrollbars="false"
         android:fillViewport="true"
         android:scrollbarStyle="outsideInset"
-        android:fadeScrollbars="false"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -29,26 +29,10 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/text_input_corp_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:errorEnabled="true">
-                <!--        app:counterEnabled="true">-->
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/text_input_corp_name_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/addedit_corp_name_hint"
-                    android:inputType="textCapWords|textNoSuggestions"
-                    android:textColor="@color/secondaryTextColor" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/fab_margin">
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/passport_id"
@@ -75,6 +59,24 @@
             </LinearLayout>
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/text_input_corp_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:errorEnabled="true">
+                <!--        app:counterEnabled="true">-->
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/text_input_corp_name_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/addedit_corp_name_hint"
+                    android:inputType="textCapWords|textNoSuggestions"
+                    android:background="@color/secondaryDarkColor"
+                    android:textColor="@color/secondaryTextColor" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/text_input_user_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -84,7 +86,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/addedit_name_hint"
-                    android:inputType="text|textNoSuggestions"
+                    android:inputType="textEmailAddress|textNoSuggestions"
+                    android:background="@color/secondaryDarkColor"
                     android:textColor="@color/secondaryTextColor" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -101,6 +104,7 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/addedit_email_hint"
                     android:inputType="textEmailAddress|textNoSuggestions"
+                    android:background="@color/secondaryDarkColor"
                     android:textColor="@color/secondaryTextColor" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -108,41 +112,29 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:weightSum="10"
                 android:orientation="horizontal">
+                <!--                android:weightSum="10">-->
 
                 <!--                    android:textColor="?android:attr/textColorPrimary"-->
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/text_input_corp_website"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="9"
                     app:errorEnabled="true">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
                         android:ems="10"
                         android:hint="@string/corp_website_hint"
                         android:inputType="textUri|textNoSuggestions"
-                        android:textColor="?android:attr/textColorPrimary" />
+                        android:background="@color/secondaryDarkColor"
+                        android:textColor="@color/secondaryTextColor" />
                 </com.google.android.material.textfield.TextInputLayout>
-
-                <ImageButton
-                    android:id="@+id/img_website"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:layout_weight="1"
-                    android:backgroundTint="@color/secondaryColor"
-                    android:contentDescription="@string/acct_show_website"
-                    android:paddingLeft="4dp"
-                    android:paddingRight="4dp"
-                    android:textColor="@color/secondaryTextColor"
-                    app:srcCompat="@drawable/ic_http" />
-
             </LinearLayout>
+
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/text_input_note"
@@ -152,8 +144,7 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@null"
+                    android:layout_height="54dp"
                     android:gravity="top|start"
                     android:hint="@string/addedit_notes"
                     android:inputType="textMultiLine"
@@ -163,17 +154,11 @@
                     android:scrollbars="vertical"
                     android:scrollHorizontally="false"
                     android:textAppearance="@android:style/TextAppearance.Medium"
-                    android:textColor="?android:attr/textColorPrimary" />
+                    android:background="@color/secondaryDarkColor"
+                    android:textColor="@color/secondaryTextColor" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/pick_open_date"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:text="@string/btn_open_date_label" />
-
+            <!--                android:layout_marginBottom="@dimen/fab_margin"-->
             <!--            android:onClick="showDatePickerDialog"-->
             <!--            <TextView-->
             <!--                android:id="@+id/open_date_label"-->
@@ -190,27 +175,66 @@
             <!--                android:spinnersShown="true" />-->
 
 
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:layout_marginStart="8dp"-->
+<!--                android:layout_marginEnd="8dp"-->
+<!--                android:layout_marginBottom="8dp"-->
+<!--                android:orientation="horizontal"-->
+<!--                android:weightSum="10">-->
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/pick_open_date"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:text="@string/btn_open_date_label" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/img_website"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:background="@color/default_btn_color"
+                android:backgroundTint="@color/secondaryColor"
+                android:gravity="center"
+                android:contentDescription="@string/acct_show_website"
+                android:text="@string/link_to_website"
+                android:textStyle="bold"
+                app:backgroundTint="@color/default_btn_color"
+                app:icon="@drawable/ic_http"
+                app:iconGravity="textStart"
+                app:iconTint="@color/primaryDarkColor"
+                tools:text="@string/link_to_website" />
 
 
+<!--                android:textColor="@color/secondaryTextColor"-->
+<!--            </LinearLayout>-->
         </LinearLayout>
-
     </ScrollView>
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/button_add_profile"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="top"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:paddingLeft="20dp"
-        android:paddingTop="20dp"
+        android:layout_marginEnd="@dimen/fab_margin"
+        android:layout_marginBottom="@dimen/fab_margin"
+        android:minWidth="96dp"
+        android:minHeight="96dp"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
+        android:paddingBottom="8dp"
         app:backgroundTint="@color/primaryTextColor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:rippleColor="@color/backgroundWhite"
-        app:srcCompat="@mipmap/ic_action_save" />
+        app:srcCompat="@drawable/ic_save"
+        android:contentDescription="@string/add_a_new_account" />
+
 
     <!--    <com.google.android.gms.ads.AdView-->
     <!--        android:id="@+id/adView"-->
