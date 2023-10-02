@@ -1,6 +1,7 @@
 package com.kinsey.passwords;
 
 import android.accounts.Account;
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
@@ -126,7 +127,7 @@ public class MainActivity extends AppCompatActivity
 
 //    private static final String ACCOUNT_FRAGMENT = "AccountFragment";
 
-//    private FirebaseAuth mAuth;
+    //    private FirebaseAuth mAuth;
     private static final String pattern_mdy = "MM/dd/yyyy";
     public static SimpleDateFormat format_mdy = new SimpleDateFormat(
             pattern_mdy, Locale.US);
@@ -137,7 +138,7 @@ public class MainActivity extends AppCompatActivity
     private boolean isSearchShown = false;
     public static boolean migrationStarted = false;
 
-//    private boolean isTablet = getResources().getBoolean(R.bool.isTablet);
+    //    private boolean isTablet = getResources().getBoolean(R.bool.isTablet);
 //    private boolean isTablet = false;
     private int selectedId = -1;
 
@@ -167,7 +168,7 @@ public class MainActivity extends AppCompatActivity
 
     public static final int ADD_PROFILE_REQUEST = 1;
     public static final int EDIT_PROFILE_REQUEST = 2;
-//    public static final int REQUEST_ACCOUNTS_LIST = 3;
+    //    public static final int REQUEST_ACCOUNTS_LIST = 3;
 //    public static final int REQUEST_SUGGESTS_LIST = 4;
 //    public static final int REQUEST_ACCOUNT_EDIT = 5;
 //    public static final int REQUEST_ACCOUNT_SEARCH = 6;
@@ -190,7 +191,7 @@ public class MainActivity extends AppCompatActivity
     public static int listsortOrder = LISTSORT_CORP_NAME;
 
     Menu menu;
-//    MenuItem miActionProgressItem;
+    //    MenuItem miActionProgressItem;
 //    public static ProgressBar progressBar;
 //    private Handler mHandler = new Handler();
 //    Runnable mRunnable;
@@ -211,7 +212,7 @@ public class MainActivity extends AppCompatActivity
 //    View fragCustom;
 
     RecyclerView recyclerView;
-//    public static ProfileViewModel profileViewModel;
+    //    public static ProfileViewModel profileViewModel;
 //    public static ProfileAdapter adapter = new ProfileAdapter();
 //    private Profile profileMaxItem;
     private int currentMaxSeq = 0;
@@ -231,7 +232,8 @@ public class MainActivity extends AppCompatActivity
 
     private static final String ACCESS_TOKEN = "d14k27w8xbyq9ex";
 
-//    private SearchView mSearchView;
+    //    private SearchView mSearchView;
+    private ActivityResultLauncher<Intent> startForResultEditLauncher;
     private ActivityResultLauncher<Intent> startForResultLauncher;
 
     private ProfileAdapter adapter;
@@ -239,7 +241,6 @@ public class MainActivity extends AppCompatActivity
 
     public MainActivity() {
     }
-
 
 
     private enum ListHomeType {
@@ -354,10 +355,6 @@ public class MainActivity extends AppCompatActivity
 //        }
 
 
-
-
-
-
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 //        getSupportActionBar().setLogo(R.mipmap.ic_launcher);
@@ -431,6 +428,32 @@ public class MainActivity extends AppCompatActivity
             }
         }
 
+        startForResultEditLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult activityResult) {
+                        if (activityResult.getResultCode() == RESULT_OK) {
+                            // Handle the data returned from Activity B
+//                            LiveData<List<Word>> returnedData = mWordViewModel.getAllWords();
+                            // Use the returnedData as needed
+//                            Intent data = result.getData();
+//                            int result = activityResult.getResultCode();
+                            Intent data = activityResult.getData();
+                            applyProfileEdits(data);
+//                            boolean blnRestored = data.getBooleanExtra(FileViewActivity.EXTRA_LIST_RESTORED, false);
+//                            if (blnRestored) {
+//                                Log.d(TAG, "onActivityResult fileView: data restored " + blnRestored);
+////                                  mWordViewModel.insert(data);
+//                            } else {
+//                                Log.d(TAG, "onActivityResult fileView: data not restored " + blnRestored);
+//                            }
+                        } else {
+                            Log.d(TAG, "onActivityResult fileView: canceled");
+                        }
+                    }
+                });
+
         startForResultLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 new ActivityResultCallback<ActivityResult>() {
@@ -445,18 +468,18 @@ public class MainActivity extends AppCompatActivity
                             Intent data = activityResult.getData();
 
 //                            if (result == RESULT_OK) {
-                                boolean blnRestored = data.getBooleanExtra(FileViewActivity.EXTRA_LIST_RESTORED, false);
-                                if (blnRestored) {
-                                    Log.d(TAG, "onActivityResult fileView: data restored " + blnRestored);
+                            boolean blnRestored = data.getBooleanExtra(FileViewActivity.EXTRA_LIST_RESTORED, false);
+                            if (blnRestored) {
+                                Log.d(TAG, "onActivityResult fileView: data restored " + blnRestored);
 //                                  mWordViewModel.insert(data);
-                                } else {
-                                    Log.d(TAG, "onActivityResult fileView: data not restored " + blnRestored);
-                                }
+                            } else {
+                                Log.d(TAG, "onActivityResult fileView: data not restored " + blnRestored);
+                            }
 //                            }
-                    } else {
-                        Log.d(TAG, "onActivityResult fileView: canceled");
+                        } else {
+                            Log.d(TAG, "onActivityResult fileView: canceled");
+                        }
                     }
-                                }
                 });
 
 //        if (findViewById(R.id.fragment_container2) == null) {
@@ -586,9 +609,6 @@ public class MainActivity extends AppCompatActivity
 //        });
 
 
-
-
-
 //        adapter.setOnItemClickListener(new ProfileAdapter.OnItemClickListener() {
 //            @Override
 //            public void onItemClick(Profile profile) {
@@ -680,10 +700,7 @@ public class MainActivity extends AppCompatActivity
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_keyboard_arrow_left_black_24dp);
 
 
-
-
 //        progressBar.setVisibility(View.VISIBLE);
-
 
 
 //        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -985,7 +1002,6 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-
     //    @Override
 //    public boolean onPrepareOptionsMenu(Menu menu) {
 //        // Store instance of the menu item containing progress
@@ -1045,8 +1061,6 @@ public class MainActivity extends AppCompatActivity
 
         return true;
     }
-
-
 
 
     //        ================================================================================
@@ -1496,7 +1510,6 @@ public class MainActivity extends AppCompatActivity
 //                transaction.commit();
 
 
-
 ////                adapter = adapterPassportId;
 ////                recyclerView.setAdapter(adapter);
 //                adapter = new ProfileAdapter();
@@ -1893,6 +1906,34 @@ public class MainActivity extends AppCompatActivity
     }
 
 
+    private void applyProfileEdits(Intent data) {
+        //                int id = data.getIntExtra(AddEditProfileActivity.EXTRA_ID, -1);
+//
+//                if (id == -1) {
+//                    Toast.makeText(this, R.string.toast_error_profile_not_updated, Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+//
+//                int passportId = data.getIntExtra(AddEditProfileActivity.EXTRA_PASSPORT_ID, 0);
+//                int sequence = data.getIntExtra(AddEditProfileActivity.EXTRA_SEQUENCE, 0);
+//                String corpName = data.getStringExtra(AddEditProfileActivity.EXTRA_CORP_NAME);
+//                String userName = data.getStringExtra(AddEditProfileActivity.EXTRA_USER_NAME);
+//                String userEmail = data.getStringExtra(AddEditProfileActivity.EXTRA_USER_EMAIL);
+//                String corpWebsite = data.getStringExtra(AddEditProfileActivity.EXTRA_CORP_WEBSITE);
+//                String note = data.getStringExtra(AddEditProfileActivity.EXTRA_NOTE);
+//
+//                Profile profile = new Profile(sequence, corpName, userName, userEmail, corpWebsite);
+//                profile.setId(id);
+//                profile.setPassportId(passportId);
+//                profile.setNote(note);
+//                long lngDate = data.getLongExtra(AddEditProfileActivity.EXTRA_OPEN_DATE_LONG, 0);
+//                profile.setOpenLong(lngDate);
+//                profile.setActvyLong(System.currentTimeMillis());
+//
+//                profileViewModel.update(profile);
+//                Toast.makeText(this, R.string.toast_profile_updated, Toast.LENGTH_SHORT).show();
+
+    }
 
 //    =======================================================================================
 //    remove code Fragment 2pane technique which is no longer used
@@ -2404,9 +2445,6 @@ public class MainActivity extends AppCompatActivity
 //    }
 
 
-
-
-
     private void searchRequestActivity() {
 
         Intent detailIntent = new Intent(this, SearchActivity.class);
@@ -2529,7 +2567,7 @@ public class MainActivity extends AppCompatActivity
         //  Set Listener for the OK Button
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick (View view) {
+            public void onClick(View view) {
                 String strFilename = textInputFilename.getEditText().getText().toString().trim();
 
                 if (!strFilename.isEmpty()) {
@@ -2546,7 +2584,7 @@ public class MainActivity extends AppCompatActivity
         //  Set Listener for the CANCEL Button
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick (View view) {
+            public void onClick(View view) {
                 filenameDialog.dismiss();
             }
         });
@@ -2557,6 +2595,7 @@ public class MainActivity extends AppCompatActivity
 
         //  END OF buttonClick_DialogTest
     }
+
     private void ExportAccountDB(String strFilename) {
         String msgError = "";
         int count = -1;
@@ -2667,6 +2706,7 @@ public class MainActivity extends AppCompatActivity
         android.app.AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
     }
+
     private void alertBackup(File file, String msg) {
 
 
@@ -3598,10 +3638,6 @@ public class MainActivity extends AppCompatActivity
 //    }
 
 
-
-
-
-
     @Override
     protected void onStop() {
         super.onStop();
@@ -3609,8 +3645,6 @@ public class MainActivity extends AppCompatActivity
             mDialog.dismiss();
         }
     }
-
-
 
 
 //    @Override
@@ -3631,14 +3665,22 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onProfileCorpNameListSelect(int selectedId, Profile profile) {
-        this.startUpProfileUpdate(selectedId, profile);
-    }
+//        this.startUpProfileUpdate(selectedId, profile)
+        Log.d(TAG, "onProfileCorpNameListSelect: selectedId " + selectedId + ":" + this.selectedId);
 
+        if (selectedId == -1) {
+            ProfileCorpNameFrag frag = getProfileFrag();
+            frag.refreshListAll();
+//            frag.setSelectedId(this.selectedId);
+        } else {
+            this.launchProfileUpdate(selectedId, profile);
+        }//        else adapter.setSelectedId(-1);
+    }
 
 
     @Override
     public void onDeleteConfirmCustom(Profile profile, int position) {
-        alertConfirmDelete(profile, position );
+        alertConfirmDelete(profile, position);
     }
 
     @Override
@@ -3694,7 +3736,7 @@ public class MainActivity extends AppCompatActivity
 //        if (addeditFrag == null) {
 //            fragmentTransaction.add(R.id.fragment_container2, fragment2, "AddEditProfileFrag");
 //        } else {
-            fragmentTransaction.replace(R.id.fragment_container2, fragment2, "AddEditProfileFrag");
+        fragmentTransaction.replace(R.id.fragment_container2, fragment2, "AddEditProfileFrag");
 //        }
         fragmentTransaction.commit();
         frame2 = findViewById(R.id.fragment_container2);
@@ -3813,7 +3855,6 @@ public class MainActivity extends AppCompatActivity
         dialog.show();
 
 
-
 //        android.app.AlertDialog.Builder alertDialogBuilder = new android.app.AlertDialog.Builder(this);
 //
 //        alertDialogBuilder.setMessage(getString(R.string.getting_started) + "\n" +
@@ -3848,7 +3889,6 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-
 //    public void msgDialog(String msg) {
 //        final Dialog dialog = new Dialog(this);
 //        dialog.setContentView(R.layout.dialog_msg_ok);
@@ -3877,6 +3917,22 @@ public class MainActivity extends AppCompatActivity
         this.currentMaxSeq = maxSeq;
     }
 
+    private void launchProfileUpdate(int selectedId, Profile profile) {
+        Intent detailIntent = new Intent(this, AddEditProfileActivity.class);
+        detailIntent.putExtra(AddEditProfileFrag.EXTRA_ID, profile.getId());
+        detailIntent.putExtra(AddEditProfileFrag.EXTRA_PASSPORT_ID, profile.getPassportId());
+        detailIntent.putExtra(AddEditProfileFrag.EXTRA_CORP_NAME, profile.getCorpName());
+        detailIntent.putExtra(AddEditProfileFrag.EXTRA_USER_NAME, profile.getUserName());
+        detailIntent.putExtra(AddEditProfileFrag.EXTRA_USER_EMAIL, profile.getUserEmail());
+        detailIntent.putExtra(AddEditProfileFrag.EXTRA_SEQUENCE, profile.getSequence());
+        detailIntent.putExtra(AddEditProfileFrag.EXTRA_CORP_WEBSITE, profile.getCorpWebsite());
+        detailIntent.putExtra(AddEditProfileFrag.EXTRA_NOTE, profile.getNote());
+        detailIntent.putExtra(AddEditProfileFrag.EXTRA_ACTVY_LONG, profile.getActvyLong());
+        detailIntent.putExtra(AddEditProfileFrag.EXTRA_OPEN_DATE_LONG, profile.getOpenLong());
+
+        startForResultEditLauncher.launch(detailIntent);
+    }
+
     private void startUpProfileUpdate(int selectedId, Profile profile) {
 
 //        if (has2ndPanel) {
@@ -3895,7 +3951,6 @@ public class MainActivity extends AppCompatActivity
         selectAccountDetail(selectedId, profile);
 
         if (this.isSearchShown) {
-
 
             Fragment searchFragment = fragmentManager.findFragmentById(R.id.fragment_search_container);
             if (searchFragment instanceof SearchFrag) {
@@ -3918,13 +3973,13 @@ public class MainActivity extends AppCompatActivity
         Log.d(TAG, "selectAccountDetail: selectedId " + this.selectedId);
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            Fragment profileFragment = fragmentManager.findFragmentById(R.id.fragment_container);
+        Fragment profileFragment = fragmentManager.findFragmentById(R.id.fragment_container);
 //            ProfileCorpNameFrag frag = (ProfileCorpNameFrag)profileFragment;
 //            frag.refreshListAll();
-            profileFragment = fragmentManager.findFragmentById(R.id.fragment_container);
-            ProfileCorpNameFrag frag = (ProfileCorpNameFrag) profileFragment;
-            frag.setSelectedId(this.selectedId);
-            frag.refreshListAll();
+        profileFragment = fragmentManager.findFragmentById(R.id.fragment_container);
+        ProfileCorpNameFrag frag = (ProfileCorpNameFrag) profileFragment;
+        frag.setSelectedId(this.selectedId);
+        frag.refreshListAll();
 //            if (profileFragment instanceof ProfileCorpNameFrag) {
 //                ProfileCorpNameFrag frag = (ProfileCorpNameFrag) profileFragment;
 //                frag.setSelectedId(this.selectedId);
@@ -3950,7 +4005,7 @@ public class MainActivity extends AppCompatActivity
 //            }
 
 //        ___________________________________________________________
-//        in process to chg to activity
+//        in process to chg to activity -- put back
 //        ___________________________________________________________
 
 //            frame2 = findViewById(R.id.fragment_container2);
@@ -3962,31 +4017,31 @@ public class MainActivity extends AppCompatActivity
 
 //            Fragment fragmentA = fragmentManager.findFragmentByTag("AddEditProfileFrag");
 
-            Log.d(TAG, "startUpProfileUpdate: replace addEdit");
+        Log.d(TAG, "startUpProfileUpdate: replace addEdit");
 
-//            AddEditProfileFrag fragment2 = new AddEditProfileFrag();
-            Bundle args = new Bundle();
-            args.putInt(AddEditProfileFrag.EXTRA_ID, profile.getId());
-            args.putInt(AddEditProfileFrag.EXTRA_PASSPORT_ID, profile.getPassportId());
-            args.putString(AddEditProfileFrag.EXTRA_CORP_NAME, profile.getCorpName());
-            args.putString(AddEditProfileFrag.EXTRA_USER_NAME, profile.getUserName());
-            args.putString(AddEditProfileFrag.EXTRA_USER_EMAIL, profile.getUserEmail());
-            args.putInt(AddEditProfileFrag.EXTRA_SEQUENCE, profile.getSequence());
-            args.putString(AddEditProfileFrag.EXTRA_CORP_WEBSITE, profile.getCorpWebsite());
-            args.putString(AddEditProfileFrag.EXTRA_NOTE, profile.getNote());
-            args.putLong(AddEditProfileFrag.EXTRA_ACTVY_LONG, profile.getActvyLong());
-            args.putLong(AddEditProfileFrag.EXTRA_OPEN_DATE_LONG, profile.getOpenLong());
-//            fragment2.setArguments(args);
-//            fragmentTransaction.replace(R.id.fragment_container2, fragment2, "AddEditProfileFrag");
-//            fragmentTransaction.commit();
+        AddEditProfileFrag fragment2 = new AddEditProfileFrag();
+        Bundle args = new Bundle();
+        args.putInt(AddEditProfileFrag.EXTRA_ID, profile.getId());
+        args.putInt(AddEditProfileFrag.EXTRA_PASSPORT_ID, profile.getPassportId());
+        args.putString(AddEditProfileFrag.EXTRA_CORP_NAME, profile.getCorpName());
+        args.putString(AddEditProfileFrag.EXTRA_USER_NAME, profile.getUserName());
+        args.putString(AddEditProfileFrag.EXTRA_USER_EMAIL, profile.getUserEmail());
+        args.putInt(AddEditProfileFrag.EXTRA_SEQUENCE, profile.getSequence());
+        args.putString(AddEditProfileFrag.EXTRA_CORP_WEBSITE, profile.getCorpWebsite());
+        args.putString(AddEditProfileFrag.EXTRA_NOTE, profile.getNote());
+        args.putLong(AddEditProfileFrag.EXTRA_ACTVY_LONG, profile.getActvyLong());
+        args.putLong(AddEditProfileFrag.EXTRA_OPEN_DATE_LONG, profile.getOpenLong());
+        fragment2.setArguments(args);
+        fragmentTransaction.replace(R.id.fragment_container2, fragment2, "AddEditProfileFrag");
+        fragmentTransaction.commit();
 
-            Log.d(TAG, "startUpProfileUpdate: startUp " + profile.getPassportId() +
-                    " " + profile.getCorpName());
+        Log.d(TAG, "startUpProfileUpdate: startUp " + profile.getPassportId() +
+                " " + profile.getCorpName());
 
 //        startForResultLauncher.launch(detailIntent);
 //        startActivity(detailIntent);
 
-            return;
+        return;
 //        }
 
 //        Intent intent = new Intent(this, AddEditProfileActivity.class);
@@ -4075,7 +4130,6 @@ public class MainActivity extends AppCompatActivity
 //        profileFragment.setSe.setSelected(selectedId);
 //        frame.setVisibility(View.GONE);
     }
-
 
 
     @Override

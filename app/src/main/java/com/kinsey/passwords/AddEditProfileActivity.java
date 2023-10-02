@@ -34,8 +34,8 @@ import java.util.Date;
 import java.util.Locale;
 
 public class AddEditProfileActivity extends AppCompatActivity
-    implements View.OnClickListener {
-        //implements DatePickerDialog.OnDateSetListener {
+        implements View.OnClickListener {
+    //implements DatePickerDialog.OnDateSetListener {
     public static final String TAG = "AddEditProfileActivity";
 
 //    public static final Pattern PASSWORD_PATTERN =
@@ -69,7 +69,7 @@ public class AddEditProfileActivity extends AppCompatActivity
     private TextInputLayout textInputUserEmail;
     private TextInputLayout textInputCorpWebsite;
     private TextInputLayout textInputNote;
-//    private TextView mtvOpenDate;
+    //    private TextView mtvOpenDate;
     private Button btnOpenDate;
 
     private DatePickerDialog picker;
@@ -84,7 +84,7 @@ public class AddEditProfileActivity extends AppCompatActivity
     private int intPassportId = -1;
     private int intSequence = 0;
     private boolean editModeAdd = false;
-//    private ImageButton mImgWebView;
+    //    private ImageButton mImgWebView;
     public static final int REQUEST_CODE = 11; // Used to identify the result
 
     private final Calendar cldrOpened = Calendar.getInstance();
@@ -125,7 +125,8 @@ public class AddEditProfileActivity extends AppCompatActivity
         textInputNote = findViewById(R.id.text_input_note);
 
 //        mDtePickOpen = findViewById(R.id.datePicker);
-        ImageButton mImgWebView = findViewById(R.id.img_website);
+//        ImageButton mImgWebView = findViewById(R.id.img_website);
+        Button mbtnWebView = findViewById(R.id.img_website);
         tvActvyDate = findViewById(R.id.actvy_date);
         tvPassportId = findViewById(R.id.passport_id);
         tvSequence = findViewById(R.id.sequence);
@@ -145,9 +146,11 @@ public class AddEditProfileActivity extends AppCompatActivity
 
             if (intent.hasExtra(EXTRA_ID)) {
                 editModeAdd = false;
+                Log.d(TAG, "onCreate: edit ");
                 setEditUICols(intent);
             } else {
                 editModeAdd = true;
+                Log.d(TAG, "onCreate: add ");
                 setAddUIDefaults(intent);
             }
         }
@@ -158,9 +161,7 @@ public class AddEditProfileActivity extends AppCompatActivity
             setTitle("Profile ID: " + intPassportId);
         }
 
-        Log.d(TAG, "onCreate");
-
-        mImgWebView.setOnClickListener(new View.OnClickListener() {
+        mbtnWebView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String corpWebsiteInput = textInputCorpWebsite.getEditText().getText().toString().trim();
@@ -329,10 +330,8 @@ public class AddEditProfileActivity extends AppCompatActivity
 //    }
 
 
-
-
-
     private void setEditUICols(Intent intent) {
+        Log.d(TAG, intent.getStringExtra(EXTRA_CORP_NAME));
         textInputCorpName.getEditText().setText(intent.getStringExtra(EXTRA_CORP_NAME));
         textInputUserName.getEditText().setText(intent.getStringExtra(EXTRA_USER_NAME));
         textInputUserEmail.getEditText().setText(intent.getStringExtra(EXTRA_USER_EMAIL));
@@ -564,41 +563,42 @@ public class AddEditProfileActivity extends AppCompatActivity
 //        int sequence = getIntent().getIntExtra(EXTRA_SEQUENCE, 0);
         data.putExtra(EXTRA_SEQUENCE, intSequence);
 
+        closeKeyboard();
+        setResult(RESULT_OK, data);
+        finish();
 
-
-        android.app.AlertDialog.Builder alertDialogBuilder = new android.app.AlertDialog.Builder(this);
-        if (editModeAdd) {
-            alertDialogBuilder.setMessage(getString(R.string.account_added) + "\n" +
-                    getString(R.string.ask_go_to_list));
-        } else {
-            alertDialogBuilder.setMessage(getString(R.string.account_updated) + "\n" +
-                    getString(R.string.ask_go_to_list));
-        }
-        alertDialogBuilder.setPositiveButton(R.string.yes,
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface arg0, int arg1) {
-
-                        setResult(RESULT_OK, data);
-                        closeKeyboard();
-                        finish();
-
-                    }
-                })
-                .setNegativeButton("No",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                            }
-                        });
-
-
-        android.app.AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
+//        android.app.AlertDialog.Builder alertDialogBuilder = new android.app.AlertDialog.Builder(this);
+//        if (editModeAdd) {
+//            alertDialogBuilder.setMessage(getString(R.string.account_added) + "\n" +
+//                    getString(R.string.ask_go_to_list));
+//        } else {
+//            alertDialogBuilder.setMessage(getString(R.string.account_updated) + "\n" +
+//                    getString(R.string.ask_go_to_list));
+//        }
+//        alertDialogBuilder.setPositiveButton(R.string.yes,
+//                new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface arg0, int arg1) {
+//
+//                        setResult(RESULT_OK, data);
+//                        closeKeyboard();
+//                        finish();
+//
+//                    }
+//                })
+//                .setNegativeButton("No",
+//                        new DialogInterface.OnClickListener() {
+//                            public void onClick(DialogInterface dialog, int which) {
+//                            }
+//                        });
+//
+//
+//        android.app.AlertDialog alertDialog = alertDialogBuilder.create();
+//        alertDialog.show();
 
 
     }
 
-    private void closeKeyboard()
-    {
+    private void closeKeyboard() {
         // this will give us the view
         // which is currently focus
         // in this layout

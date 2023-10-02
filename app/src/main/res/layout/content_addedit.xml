@@ -204,12 +204,12 @@
                 android:text="@string/link_to_website"
                 android:textStyle="bold"
                 app:backgroundTint="@color/default_btn_color"
-                app:icon="@drawable/ic_http"
                 app:iconGravity="textStart"
                 app:iconTint="@color/primaryDarkColor"
                 tools:text="@string/link_to_website" />
 
 
+<!--                app:icon="@drawable/ic_http"-->
 <!--                android:textColor="@color/secondaryTextColor"-->
 <!--            </LinearLayout>-->
         </LinearLayout>

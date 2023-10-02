@@ -39,7 +39,7 @@ import static androidx.recyclerview.widget.ItemTouchHelper.ACTION_STATE_DRAG;
 public class ProfileCorpNameFrag extends Fragment {
     public static final String TAG = "ProfileCorpNameFrag";
 
-//    private final String ARG_SELECTED_ID = "SELECTED_ID";
+    //    private final String ARG_SELECTED_ID = "SELECTED_ID";
 //    private final String ARG_SELECTED_POS = "SELECTED_POS";
     public static final String EXTRA_LIST_SORTORDER =
             "com.kinsey.passwords.EXTRA_LIST_SORTORDER";
@@ -67,6 +67,7 @@ public class ProfileCorpNameFrag extends Fragment {
 //    LinearLayoutManager layoutManager;
 
     private OnProfileCorpNameClickListener mListener;
+
     public interface OnProfileCorpNameClickListener {
 
         void onProfileCorpNameListSelect(int selectedId, Profile profile);
@@ -185,7 +186,6 @@ public class ProfileCorpNameFrag extends Fragment {
 //        }
 
 
-
 //        if ((getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_XLARGE) {
 //            GridLayoutManager layoutManager;
 //            layoutManager = new GridLayoutManager(getActivity(), 4);
@@ -255,7 +255,11 @@ public class ProfileCorpNameFrag extends Fragment {
         adapter.setOnItemClickListener(new ProfileAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int selectedId, Profile profile) {
-                Log.d(TAG, "onItemClick: selectedId " + adapter.getSelectedId());
+                Log.d(TAG, "onItemClick: selectedId " + adapter.getSelectedId() + ":" + selectedId);
+                if (selectedId == -1) {
+                    unselectId(adapter.getSelectedId());
+                    adapter.setSelectedId(-1);
+                }
                 mListener.onProfileCorpNameListSelect(selectedId, profile);
                 setGrid(selectedId);
 //                selectedId = profile.getPassportId();
@@ -304,7 +308,6 @@ public class ProfileCorpNameFrag extends Fragment {
 ////                progressBar.setVisibility(View.GONE);
 //            }
 //        }.start();
-
 
 
         return view;
@@ -577,7 +580,7 @@ public class ProfileCorpNameFrag extends Fragment {
                     recyclerView.scrollToPosition(pos);
 //                    Log.d(TAG, "onCreateView: pos " + pos);
                 } else {
-                    Log.d(TAG, "onCreateView: getItemCount " +  adapter.getItemCount());
+                    Log.d(TAG, "onCreateView: getItemCount " + adapter.getItemCount());
                     if (adapter.getItemCount() == 0) {
 //                        mListener.onProfileCorpNameAdd();
                         mListener.onEmptyWarning();
@@ -615,7 +618,7 @@ public class ProfileCorpNameFrag extends Fragment {
                     recyclerView.scrollToPosition(pos);
 //                    Log.d(TAG, "onCreateView: pos " + pos);
                 } else {
-                    Log.d(TAG, "onCreateView: getItemCount " +  adapter.getItemCount());
+                    Log.d(TAG, "onCreateView: getItemCount " + adapter.getItemCount());
                     if (adapter.getItemCount() == 0) {
                         mListener.onEmptyWarning();
                     } else {
@@ -651,7 +654,7 @@ public class ProfileCorpNameFrag extends Fragment {
                     recyclerView.scrollToPosition(pos);
 //                    Log.d(TAG, "onCreateView: pos " + pos);
                 } else {
-                    Log.d(TAG, "onCreateView: getItemCount " +  adapter.getItemCount());
+                    Log.d(TAG, "onCreateView: getItemCount " + adapter.getItemCount());
                     if (adapter.getItemCount() == 0) {
                         mListener.onEmptyWarning();
                     } else {
@@ -688,7 +691,7 @@ public class ProfileCorpNameFrag extends Fragment {
                     recyclerView.scrollToPosition(pos);
 //                    Log.d(TAG, "onCreateView: pos " + pos);
                 } else {
-                    Log.d(TAG, "onCreateView: getItemCount " +  adapter.getItemCount());
+                    Log.d(TAG, "onCreateView: getItemCount " + adapter.getItemCount());
                     if (adapter.getItemCount() == 0) {
                         mListener.onEmptyWarning();
                     } else {
@@ -798,7 +801,7 @@ public class ProfileCorpNameFrag extends Fragment {
     private int findIdPos(int id) {
         int pos = 0;
         List<Profile> profiles = adapter.getCurrentList();
-        Log.d(TAG, "findIdPos: list len "+ adapter.getItemCount());
+        Log.d(TAG, "findIdPos: list len " + adapter.getItemCount());
         for (Profile item : profiles) {
             if (item.getPassportId() == id) {
 //                adapter.notifyItemChanged(pos);
@@ -810,14 +813,11 @@ public class ProfileCorpNameFrag extends Fragment {
     }
 
 
-
     private void refreshList() {
         if (adapter.getItemCount() > 0) {
             adapter.notifyItemRangeChanged(0, adapter.getItemCount() - 1);
         }
     }
-
-
 
 
     public void deleteProfileViewModelItem(Profile profile) {

@@ -91,7 +91,6 @@ public class AddEditProfileFrag extends Fragment
     private TextInputLayout textInputCorpWebsite;
     private TextInputLayout textInputNote;
     private Button btnOpenDate;
-    private Button mbtnWebView;
     private DatePickerDialog picker;
     private TextView tvActvyDate;
     private TextView tvPassportId;
@@ -140,7 +139,7 @@ public class AddEditProfileFrag extends Fragment
         textInputCorpWebsite = view.findViewById(R.id.text_input_corp_website);
         textInputNote = view.findViewById(R.id.text_input_note);
 //        ImageButton mImgWebView = view.findViewById(R.id.img_website);
-        mbtnWebView = view.findViewById(R.id.img_website);
+        Button mbtnWebView = view.findViewById(R.id.img_website);
         tvActvyDate = view.findViewById(R.id.actvy_date);
         tvPassportId = view.findViewById(R.id.passport_id);
         tvSequence = view.findViewById(R.id.sequence);
@@ -270,7 +269,6 @@ public class AddEditProfileFrag extends Fragment
             editModeAdd = false;
             setEditUICols(bundle);
         }
-
     }
     private void setEditUICols(Bundle bundle) {
         textInputCorpName.getEditText().setText(bundle.getString(EXTRA_CORP_NAME));
