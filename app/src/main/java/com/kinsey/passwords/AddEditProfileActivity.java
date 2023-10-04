@@ -1,7 +1,12 @@
 package com.kinsey.passwords;
 
+
+import static android.app.PendingIntent.getActivity;
+
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.app.AlertDialog;
+//import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -16,6 +21,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,6 +31,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.material.textfield.TextInputLayout;
+import com.kinsey.passwords.items.Profile;
 //import com.kinsey.passwords.tools.DatePickerFragment;
 
 import java.text.ParseException;
@@ -63,7 +70,7 @@ public class AddEditProfileActivity extends AppCompatActivity
             "com.kinsey.passwords.EXTRA_OPEN_DATE_LONG";
     public static final String EXTRA_EDIT_MODE =
             "com.kinsey.passwords.EXTRA_EDIT_MODE";
-
+    private Profile currProfile = new Profile();
     private TextInputLayout textInputCorpName;
     private TextInputLayout textInputUserName;
     private TextInputLayout textInputUserEmail;
@@ -79,11 +86,13 @@ public class AddEditProfileActivity extends AppCompatActivity
     private TextView tvPassportId;
     private TextView tvSequence;
     private long lngOpenDate = 0;
+    private long lngBeginOpenDate = 0;
     private long lngActvDate = 0;
     private int intId = -1;
     private int intPassportId = -1;
     private int intSequence = 0;
     private boolean editModeAdd = false;
+    private boolean blnChangesMade = false;
     //    private ImageButton mImgWebView;
     public static final int REQUEST_CODE = 11; // Used to identify the result
 
@@ -367,6 +376,20 @@ public class AddEditProfileActivity extends AppCompatActivity
         intSequence = intent.getIntExtra(EXTRA_SEQUENCE, 0);
         tvPassportId.setText(" | Id: " + this.intPassportId);
         tvSequence.setText(" | Seq: " + this.intSequence);
+
+        this.currProfile = new Profile();
+        this.currProfile.setId(intId);
+        this.currProfile.setPassportId(intPassportId);
+        this.currProfile.setCorpName(intent.getStringExtra(EXTRA_CORP_NAME));
+        this.currProfile.setUserName(intent.getStringExtra(EXTRA_USER_NAME));
+        this.currProfile.setUserEmail(intent.getStringExtra(EXTRA_USER_EMAIL));
+        this.currProfile.setCorpWebsite(intent.getStringExtra(EXTRA_CORP_WEBSITE));
+        this.currProfile.setNote(intent.getStringExtra(EXTRA_NOTE));
+        this.currProfile.setOpenLong(intent.getLongExtra(EXTRA_OPEN_DATE_LONG, 0));
+
+        Log.d(TAG, "setEditUICols: ids " + intId + " : " + intPassportId);
+
+
     }
 
 //    private void setOpenDateCalendar(Date dte) {
@@ -400,6 +423,9 @@ public class AddEditProfileActivity extends AppCompatActivity
         btnOpenDate.setText("Default to Current Date " + format_mdy.format(lngOpenDate));
 
         //        setOpenDateCalendar(dte);
+
+        this.currProfile = new Profile();
+        this.currProfile.setOpenLong(lngOpenDate);
     }
 
     private void restoreScreen(Bundle savedInstanceState) {
@@ -513,6 +539,10 @@ public class AddEditProfileActivity extends AppCompatActivity
     }
 
     private void saveProfile() {
+        if (!haveChanges()) {
+            showDialogMsg("No changes made to apply");
+            return;
+        }
         if (!validateCorpName()) {
             return;
         }
@@ -532,40 +562,67 @@ public class AddEditProfileActivity extends AppCompatActivity
         }
 
 
-        Intent data = new Intent();
-        data.putExtra(EXTRA_CORP_NAME, corpName);
-        data.putExtra(EXTRA_USER_NAME, userName);
-        data.putExtra(EXTRA_USER_EMAIL, userEmail);
-        data.putExtra(EXTRA_CORP_WEBSITE, corpWebsite);
-        data.putExtra(EXTRA_NOTE, note);
 
-
-//        Calendar c2 = Calendar.getInstance();
-//        c2.set(mDtePickOpen.getYear(), mDtePickOpen.getMonth(), mDtePickOpen.getDayOfMonth());
-//        long lngDatePickerOpenDate = c2.getTimeInMillis();
+//        Intent data = new Intent();
+//        data.putExtra(EXTRA_CORP_NAME, corpName);
+//        data.putExtra(EXTRA_USER_NAME, userName);
+//        data.putExtra(EXTRA_USER_EMAIL, userEmail);
+//        data.putExtra(EXTRA_CORP_WEBSITE, corpWebsite);
+//        data.putExtra(EXTRA_NOTE, note);
+//        lngBeginOpenDate = lngOpenDate;
 //
-//        data.putExtra(EXTRA_OPEN_DATE_LONG, lngDatePickerOpenDate);
+////        Calendar c2 = Calendar.getInstance();
+////        c2.set(mDtePickOpen.getYear(), mDtePickOpen.getMonth(), mDtePickOpen.getDayOfMonth());
+////        long lngDatePickerOpenDate = c2.getTimeInMillis();
+////
+////        data.putExtra(EXTRA_OPEN_DATE_LONG, lngDatePickerOpenDate);
+//
+//        data.putExtra(EXTRA_OPEN_DATE_LONG, lngOpenDate);
+////        Log.d(TAG, "onDateChanged: lngOpenDate " + lngOpenDate);
+//
+//        data.putExtra(EXTRA_ACTVY_LONG, new Date().getTime());
+//
+//
+//        if (!editModeAdd) {
+//            if (intId != -1) {
+//                data.putExtra(EXTRA_ID, intId);
+//            }
+//        }
+//
+////        int passportId = getIntent().getIntExtra(EXTRA_PASSPORT_ID, 0);
+//        data.putExtra(EXTRA_PASSPORT_ID, intPassportId);
+////        int sequence = getIntent().getIntExtra(EXTRA_SEQUENCE, 0);
+//        data.putExtra(EXTRA_SEQUENCE, intSequence);
 
-        data.putExtra(EXTRA_OPEN_DATE_LONG, lngOpenDate);
-//        Log.d(TAG, "onDateChanged: lngOpenDate " + lngOpenDate);
-
-        data.putExtra(EXTRA_ACTVY_LONG, new Date().getTime());
 
 
-        if (!editModeAdd) {
-            if (intId != -1) {
-                data.putExtra(EXTRA_ID, intId);
-            }
+        Profile profile = new Profile(intSequence, corpName, userName, userEmail, corpWebsite);
+        profile.setId(intId);
+        profile.setPassportId(intPassportId);
+        profile.setNote(note);
+        profile.setOpenLong(lngOpenDate);
+        profile.setActvyLong(System.currentTimeMillis());
+
+        if (editModeAdd) {
+//            mListener.onProfileAddItem(profile);
+            editModeAdd = false;
+            Log.d(TAG, "saveProfile add " + profile);
+//            showDialogMsg("New Account added for id " + profile.getId() + ":" + profile.getPassportId());
+            showDialogMsg("New Account added");
+        } else {
+//        profileViewModel.update(profile);
+//            mListener.onProfileModifyItem(profile);
+            showDialogMsg("Account changes applied " + profile.getId() + ":" + profile.getPassportId());
+            Log.d(TAG, "saveProfile " + profile);
         }
+        blnChangesMade = false;
+//        Toast.makeText(getContext(), R.string.toast_profile_updated, Toast.LENGTH_SHORT).show();
 
-//        int passportId = getIntent().getIntExtra(EXTRA_PASSPORT_ID, 0);
-        data.putExtra(EXTRA_PASSPORT_ID, intPassportId);
-//        int sequence = getIntent().getIntExtra(EXTRA_SEQUENCE, 0);
-        data.putExtra(EXTRA_SEQUENCE, intSequence);
+
 
         closeKeyboard();
-        setResult(RESULT_OK, data);
-        finish();
+//        setResult(RESULT_OK, data);
+//        finish();
 
 //        android.app.AlertDialog.Builder alertDialogBuilder = new android.app.AlertDialog.Builder(this);
 //        if (editModeAdd) {
@@ -597,6 +654,40 @@ public class AddEditProfileActivity extends AppCompatActivity
 
 
     }
+
+
+    public boolean haveChanges() {
+        if (currProfile == null) {
+            return false;
+        }
+        if (!currProfile.getCorpName().equals(textInputCorpName.getEditText().getText().toString().trim())) {
+//            Log.d(TAG, "haveChanges: " + currCorpName + " : " + textInputCorpName.getEditText().getText().toString().trim());
+            return true;
+        }
+        if (!currProfile.getUserName().equals(textInputUserName.getEditText().getText().toString().trim())) {
+            return true;
+        }
+        if (!currProfile.getUserEmail().equals(textInputUserEmail.getEditText().getText().toString().trim())) {
+            return true;
+        }
+        if (!currProfile.getCorpWebsite().equals(textInputCorpWebsite.getEditText().getText().toString().trim())) {
+            Log.d(TAG, "haveChanges: corpWebsites not equal");
+            return true;
+        }
+        if (!currProfile.getNote().equals(textInputNote.getEditText().getText().toString().trim())) {
+            Log.d(TAG, "haveChanges: corpWebsites not equal");
+            return true;
+        }
+        if (lngOpenDate != currProfile.getOpenLong()) {
+            Log.d(TAG, "haveChanges: open date not equal");
+            Log.d(TAG, "openDate " + String.valueOf(lngOpenDate));
+            Log.d(TAG, "openDate " + String.valueOf(lngBeginOpenDate));
+            Log.d(TAG, "openDate " + String.valueOf(currProfile.getOpenLong()));
+            return true;
+        }
+        return false;
+    }
+
 
     private void closeKeyboard() {
         // this will give us the view
@@ -737,4 +828,34 @@ public class AddEditProfileActivity extends AppCompatActivity
             datePickerDialog.show();
         }
     }
+
+    public void showDialogMsg(String msg) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
+        builder.setMessage(msg)
+                .setTitle(msg);
+        AlertDialog dialog = builder.create();
+
+//        final Dialog dialog = new Dialog(getActivity());
+//        dialog.setContentView(R.layout.dialog_msg_ok);
+//        dialog.setTitle("Account Modify Info");
+//
+//        TextView text = (TextView) dialog.findViewById(R.id.text);
+//        text.setText(msg);
+//        ImageView image = (ImageView) dialog.findViewById(R.id.image);
+//        image.setImageResource(R.drawable.ic_info_24dp);
+//
+//
+//        Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
+//        // if button is clicked, close the custom dialog
+//        dialogButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                dialog.dismiss();
+//            }
+//        });
+//
+//        dialog.show();
+    }
+
+
 }

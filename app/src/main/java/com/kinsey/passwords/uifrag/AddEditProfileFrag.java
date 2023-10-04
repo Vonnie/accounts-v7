@@ -106,7 +106,7 @@ public class AddEditProfileFrag extends Fragment
     private boolean blnChangesMade = false;
     private final Calendar cldrOpened = Calendar.getInstance();
 
-    private Profile currProfile = new Profile();;
+    private Profile currProfile = new Profile();
 
     private OnProfileModifyClickListener mListener;
 

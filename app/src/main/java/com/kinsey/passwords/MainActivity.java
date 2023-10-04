@@ -1907,31 +1907,31 @@ public class MainActivity extends AppCompatActivity
 
 
     private void applyProfileEdits(Intent data) {
-        //                int id = data.getIntExtra(AddEditProfileActivity.EXTRA_ID, -1);
-//
-//                if (id == -1) {
-//                    Toast.makeText(this, R.string.toast_error_profile_not_updated, Toast.LENGTH_SHORT).show();
-//                    return;
-//                }
-//
-//                int passportId = data.getIntExtra(AddEditProfileActivity.EXTRA_PASSPORT_ID, 0);
-//                int sequence = data.getIntExtra(AddEditProfileActivity.EXTRA_SEQUENCE, 0);
-//                String corpName = data.getStringExtra(AddEditProfileActivity.EXTRA_CORP_NAME);
-//                String userName = data.getStringExtra(AddEditProfileActivity.EXTRA_USER_NAME);
-//                String userEmail = data.getStringExtra(AddEditProfileActivity.EXTRA_USER_EMAIL);
-//                String corpWebsite = data.getStringExtra(AddEditProfileActivity.EXTRA_CORP_WEBSITE);
-//                String note = data.getStringExtra(AddEditProfileActivity.EXTRA_NOTE);
-//
-//                Profile profile = new Profile(sequence, corpName, userName, userEmail, corpWebsite);
-//                profile.setId(id);
-//                profile.setPassportId(passportId);
-//                profile.setNote(note);
-//                long lngDate = data.getLongExtra(AddEditProfileActivity.EXTRA_OPEN_DATE_LONG, 0);
-//                profile.setOpenLong(lngDate);
-//                profile.setActvyLong(System.currentTimeMillis());
-//
-//                profileViewModel.update(profile);
-//                Toast.makeText(this, R.string.toast_profile_updated, Toast.LENGTH_SHORT).show();
+        int id = data.getIntExtra(AddEditProfileActivity.EXTRA_ID, -1);
+
+        if (id == -1) {
+            Toast.makeText(this, R.string.toast_error_profile_not_updated, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        int passportId = data.getIntExtra(AddEditProfileActivity.EXTRA_PASSPORT_ID, 0);
+        int sequence = data.getIntExtra(AddEditProfileActivity.EXTRA_SEQUENCE, 0);
+        String corpName = data.getStringExtra(AddEditProfileActivity.EXTRA_CORP_NAME);
+        String userName = data.getStringExtra(AddEditProfileActivity.EXTRA_USER_NAME);
+        String userEmail = data.getStringExtra(AddEditProfileActivity.EXTRA_USER_EMAIL);
+        String corpWebsite = data.getStringExtra(AddEditProfileActivity.EXTRA_CORP_WEBSITE);
+        String note = data.getStringExtra(AddEditProfileActivity.EXTRA_NOTE);
+
+        Profile profile = new Profile(sequence, corpName, userName, userEmail, corpWebsite);
+        profile.setId(id);
+        profile.setPassportId(passportId);
+        profile.setNote(note);
+        long lngDate = data.getLongExtra(AddEditProfileActivity.EXTRA_OPEN_DATE_LONG, 0);
+        profile.setOpenLong(lngDate);
+        profile.setActvyLong(System.currentTimeMillis());
+
+        profileViewModel.update(profile);
+        Toast.makeText(this, R.string.toast_profile_updated, Toast.LENGTH_SHORT).show();
 
     }
 
