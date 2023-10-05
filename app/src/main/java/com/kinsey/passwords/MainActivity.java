@@ -99,8 +99,8 @@ public class MainActivity extends AppCompatActivity
 //        ProfilePassportIdFrag.OnProfilePassportIdClickListener,
 //        ProfileOpenDateFrag.OnProfileOpenDateClickListener,
 //        ProfileCustomFrag.OnProfileCustomClickListener,
-        SearchFrag.OnSearchClickListener,
-        Task {
+        SearchFrag.OnSearchClickListener {
+//        Task {
 //        AppDialog.DialogEvents {
 //        DatePickerDialog.OnDateSetListener {
 
@@ -238,9 +238,11 @@ public class MainActivity extends AppCompatActivity
 
     private ProfileAdapter adapter;
     private ProfileViewModel profileViewModel;
+    private Profile profile;
 
     public MainActivity() {
     }
+
 
 
     private enum ListHomeType {
@@ -1932,7 +1934,8 @@ public class MainActivity extends AppCompatActivity
 
         profileViewModel.update(profile);
         Toast.makeText(this, R.string.toast_profile_updated, Toast.LENGTH_SHORT).show();
-
+        ProfileCorpNameFrag frag = getProfileFrag();
+        frag.updateProfileViewModelItem(profile);
     }
 
 //    =======================================================================================
@@ -3917,18 +3920,19 @@ public class MainActivity extends AppCompatActivity
         this.currentMaxSeq = maxSeq;
     }
 
-    private void launchProfileUpdate(int selectedId, Profile profile) {
+    private void launchProfileUpdate(int selectedId, @NonNull Profile profile) {
         Intent detailIntent = new Intent(this, AddEditProfileActivity.class);
-        detailIntent.putExtra(AddEditProfileFrag.EXTRA_ID, profile.getId());
-        detailIntent.putExtra(AddEditProfileFrag.EXTRA_PASSPORT_ID, profile.getPassportId());
-        detailIntent.putExtra(AddEditProfileFrag.EXTRA_CORP_NAME, profile.getCorpName());
-        detailIntent.putExtra(AddEditProfileFrag.EXTRA_USER_NAME, profile.getUserName());
-        detailIntent.putExtra(AddEditProfileFrag.EXTRA_USER_EMAIL, profile.getUserEmail());
-        detailIntent.putExtra(AddEditProfileFrag.EXTRA_SEQUENCE, profile.getSequence());
-        detailIntent.putExtra(AddEditProfileFrag.EXTRA_CORP_WEBSITE, profile.getCorpWebsite());
-        detailIntent.putExtra(AddEditProfileFrag.EXTRA_NOTE, profile.getNote());
-        detailIntent.putExtra(AddEditProfileFrag.EXTRA_ACTVY_LONG, profile.getActvyLong());
-        detailIntent.putExtra(AddEditProfileFrag.EXTRA_OPEN_DATE_LONG, profile.getOpenLong());
+        detailIntent.putExtra(AddEditProfileActivity.EXTRA_ID, profile.getId());
+        detailIntent.putExtra(AddEditProfileActivity.EXTRA_PASSPORT_ID, profile.getPassportId());
+        detailIntent.putExtra(AddEditProfileActivity.EXTRA_CORP_NAME, profile.getCorpName());
+        detailIntent.putExtra(AddEditProfileActivity.EXTRA_USER_NAME, profile.getUserName());
+        detailIntent.putExtra(AddEditProfileActivity.EXTRA_USER_EMAIL, profile.getUserEmail());
+        detailIntent.putExtra(AddEditProfileActivity.EXTRA_SEQUENCE, profile.getSequence());
+        detailIntent.putExtra(AddEditProfileActivity.EXTRA_CORP_WEBSITE, profile.getCorpWebsite());
+        detailIntent.putExtra(AddEditProfileActivity.EXTRA_NOTE, profile.getNote());
+        detailIntent.putExtra(AddEditProfileActivity.EXTRA_ACTVY_LONG, profile.getActvyLong());
+        detailIntent.putExtra(AddEditProfileActivity.EXTRA_OPEN_DATE_LONG, profile.getOpenLong());
+        detailIntent.putExtra(AddEditProfileActivity.EXTRA_MAX_SEQUENCE, this.currentMaxSeq);
 
         startForResultEditLauncher.launch(detailIntent);
     }
@@ -4099,7 +4103,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void showSearchSelected(int selectedId, Profile profile) {
+    public void showSearchSelected(int selectedId, @NonNull Profile profile) {
         frame2.setVisibility(View.VISIBLE);
         this.selectedId = selectedId;
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -4108,27 +4112,27 @@ public class MainActivity extends AppCompatActivity
         frag.setSelectedId(this.selectedId);
         frag.refreshListAll();
         Log.d(TAG, "showSearchSelected: selectedId " + selectedId);
-//        startUpProfileUpdate(selectedId, profile);
-        AddEditProfileFrag fragment2 = new AddEditProfileFrag();
-        Bundle args = new Bundle();
-        args.putInt(AddEditProfileFrag.EXTRA_ID, profile.getId());
-        args.putInt(AddEditProfileFrag.EXTRA_PASSPORT_ID, profile.getPassportId());
-        args.putString(AddEditProfileFrag.EXTRA_CORP_NAME, profile.getCorpName());
-        args.putString(AddEditProfileFrag.EXTRA_USER_NAME, profile.getUserName());
-        args.putString(AddEditProfileFrag.EXTRA_USER_EMAIL, profile.getUserEmail());
-        args.putInt(AddEditProfileFrag.EXTRA_SEQUENCE, profile.getSequence());
-        args.putString(AddEditProfileFrag.EXTRA_CORP_WEBSITE, profile.getCorpWebsite());
-        args.putString(AddEditProfileFrag.EXTRA_NOTE, profile.getNote());
-        args.putLong(AddEditProfileFrag.EXTRA_ACTVY_LONG, profile.getActvyLong());
-        args.putLong(AddEditProfileFrag.EXTRA_OPEN_DATE_LONG, profile.getOpenLong());
-        fragment2.setArguments(args);
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container2, fragment2, "AddEditProfileFrag");
-        fragmentTransaction.commit();
-//        FrameLayout frame = findViewById(R.id.fragment_container);
-//        Fragment profileFragment = fragmentManager.findFragmentById(R.id.fragment_container);
-//        profileFragment.setSe.setSelected(selectedId);
-//        frame.setVisibility(View.GONE);
+////        startUpProfileUpdate(selectedId, profile);
+//        AddEditProfileFrag fragment2 = new AddEditProfileFrag();
+//        Bundle args = new Bundle();
+//        args.putInt(AddEditProfileFrag.EXTRA_ID, profile.getId());
+//        args.putInt(AddEditProfileFrag.EXTRA_PASSPORT_ID, profile.getPassportId());
+//        args.putString(AddEditProfileFrag.EXTRA_CORP_NAME, profile.getCorpName());
+//        args.putString(AddEditProfileFrag.EXTRA_USER_NAME, profile.getUserName());
+//        args.putString(AddEditProfileFrag.EXTRA_USER_EMAIL, profile.getUserEmail());
+//        args.putInt(AddEditProfileFrag.EXTRA_SEQUENCE, profile.getSequence());
+//        args.putString(AddEditProfileFrag.EXTRA_CORP_WEBSITE, profile.getCorpWebsite());
+//        args.putString(AddEditProfileFrag.EXTRA_NOTE, profile.getNote());
+//        args.putLong(AddEditProfileFrag.EXTRA_ACTVY_LONG, profile.getActvyLong());
+//        args.putLong(AddEditProfileFrag.EXTRA_OPEN_DATE_LONG, profile.getOpenLong());
+//        fragment2.setArguments(args);
+//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//        fragmentTransaction.replace(R.id.fragment_container2, fragment2, "AddEditProfileFrag");
+//        fragmentTransaction.commit();
+////        FrameLayout frame = findViewById(R.id.fragment_container);
+////        Fragment profileFragment = fragmentManager.findFragmentById(R.id.fragment_container);
+////        profileFragment.setSe.setSelected(selectedId);
+////        frame.setVisibility(View.GONE);
     }
 
 
@@ -4142,36 +4146,38 @@ public class MainActivity extends AppCompatActivity
 
 
     @Override
-    public void onProfileAddItem(Profile profile) {
+    public void onProfileAddItem(@NonNull Profile profile) {
+        this.profile = profile;
         profile.setId(0);
         profile.setSequence(currentMaxSeq + 1);
         ProfileCorpNameFrag frag = getProfileFrag();
-        frag.insertProfileViewModelItem(profile, this);
+//        frag.insertProfileViewModelItem(profile);
+//        frag.insertProfileViewModelItem(profile, this);
 //        profileViewModel.insertProfile(profile, this);
     }
 
-    @Override
-    public void
-    processInsertComplete(Profile profile) {
-        this.selectedId = profile.getPassportId();
-        Log.d(TAG, "processInsertComplete: " + profile.getPassportId());
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        Fragment profileFragment = fragmentManager.findFragmentById(R.id.fragment_container);
-        profileFragment = fragmentManager.findFragmentById(R.id.fragment_container);
-        if (profileFragment instanceof ProfileCorpNameFrag) {
-            ProfileCorpNameFrag frag = (ProfileCorpNameFrag) profileFragment;
-            frag.selectById(this.selectedId);
-        } else if (profileFragment instanceof ProfileCustomFrag) {
-            ProfileCustomFrag frag = (ProfileCustomFrag) profileFragment;
-        } else if (profileFragment instanceof ProfileOpenDateFrag) {
-            ProfileOpenDateFrag frag = (ProfileOpenDateFrag) profileFragment;
-        } else if (profileFragment instanceof ProfilePassportIdFrag) {
-            ProfilePassportIdFrag frag = (ProfilePassportIdFrag) profileFragment;
-        }
-        showSearchSelected(this.selectedId, profile);
-
-    }
+//    @Override
+//    public void
+//    processInsertComplete(@NonNull Profile profile) {
+//        this.selectedId = profile.getPassportId();
+//        Log.d(TAG, "processInsertComplete: " + profile.getPassportId());
+//        FragmentManager fragmentManager = getSupportFragmentManager();
+//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//        Fragment profileFragment = fragmentManager.findFragmentById(R.id.fragment_container);
+//        profileFragment = fragmentManager.findFragmentById(R.id.fragment_container);
+//        if (profileFragment instanceof ProfileCorpNameFrag) {
+//            ProfileCorpNameFrag frag = (ProfileCorpNameFrag) profileFragment;
+//            frag.selectById(this.selectedId);
+//        } else if (profileFragment instanceof ProfileCustomFrag) {
+//            ProfileCustomFrag frag = (ProfileCustomFrag) profileFragment;
+//        } else if (profileFragment instanceof ProfileOpenDateFrag) {
+//            ProfileOpenDateFrag frag = (ProfileOpenDateFrag) profileFragment;
+//        } else if (profileFragment instanceof ProfilePassportIdFrag) {
+//            ProfilePassportIdFrag frag = (ProfilePassportIdFrag) profileFragment;
+//        }
+//        showSearchSelected(this.selectedId, profile);
+//
+//    }
 
 
     private void showWarning() {

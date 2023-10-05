@@ -216,24 +216,24 @@
     </ScrollView>
 
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/button_add_profile"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="top"
-        android:layout_marginEnd="@dimen/fab_margin"
-        android:layout_marginBottom="@dimen/fab_margin"
-        android:minWidth="96dp"
-        android:minHeight="96dp"
-        android:paddingLeft="4dp"
-        android:paddingRight="4dp"
-        android:paddingBottom="8dp"
-        app:backgroundTint="@color/primaryTextColor"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:rippleColor="@color/backgroundWhite"
-        app:srcCompat="@drawable/ic_save"
-        android:contentDescription="@string/add_a_new_account" />
+<!--    <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+<!--        android:id="@+id/button_add_profile"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_gravity="top"-->
+<!--        android:layout_marginEnd="@dimen/fab_margin"-->
+<!--        android:layout_marginBottom="@dimen/fab_margin"-->
+<!--        android:minWidth="96dp"-->
+<!--        android:minHeight="96dp"-->
+<!--        android:paddingLeft="4dp"-->
+<!--        android:paddingRight="4dp"-->
+<!--        android:paddingBottom="8dp"-->
+<!--        app:backgroundTint="@color/primaryTextColor"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:rippleColor="@color/backgroundWhite"-->
+<!--        app:srcCompat="@drawable/ic_save"-->
+<!--        android:contentDescription="@string/add_a_new_account" />-->
 
 
     <!--    <com.google.android.gms.ads.AdView-->

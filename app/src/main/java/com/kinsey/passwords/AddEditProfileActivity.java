@@ -29,9 +29,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.kinsey.passwords.items.Profile;
+import com.kinsey.passwords.provider.ProfileViewModel;
+import com.kinsey.passwords.uifrag.AddEditProfileFrag;
 //import com.kinsey.passwords.tools.DatePickerFragment;
 
 import java.text.ParseException;
@@ -60,6 +65,8 @@ public class AddEditProfileActivity extends AppCompatActivity
             "com.kinsey.passwords.EXTRA_USER_EMAIL";
     public static final String EXTRA_SEQUENCE =
             "com.kinsey.passwords.EXTRA_SEQUENCE";
+    public static final String EXTRA_MAX_SEQUENCE =
+            "com.kinsey.passwords.EXTRA_MAX_SEQUENCE";
     public static final String EXTRA_CORP_WEBSITE =
             "com.kinsey.passwords.EXTRA_CORP_WEBSITE";
     public static final String EXTRA_NOTE =
@@ -91,6 +98,7 @@ public class AddEditProfileActivity extends AppCompatActivity
     private int intId = -1;
     private int intPassportId = -1;
     private int intSequence = 0;
+    private int intMaxSequence = 0;
     private boolean editModeAdd = false;
     private boolean blnChangesMade = false;
     //    private ImageButton mImgWebView;
@@ -99,6 +107,8 @@ public class AddEditProfileActivity extends AppCompatActivity
     private final Calendar cldrOpened = Calendar.getInstance();
     private Calendar mCalendar;
     private String customDate;
+
+    private ProfileViewModel profileViewModel;
 
     private static String pattern_mdy = "MM/dd/yyyy";
     public static SimpleDateFormat format_mdy = new SimpleDateFormat(
@@ -109,6 +119,15 @@ public class AddEditProfileActivity extends AppCompatActivity
     public static SimpleDateFormat format_ymdtimehm = new SimpleDateFormat(
             pattern_ymdtimehm, Locale.US);
 
+//    private AddEditProfileFrag.OnProfileModifyClickListener mListener;
+//
+//    public interface OnProfileModifyClickListener {
+//
+//        void onProfileModifyItem(Profile profile);
+//
+//        void onProfileAddItem(Profile profile);
+//
+//    }
 
     @Override
     public boolean onSupportNavigateUp() {
@@ -147,6 +166,8 @@ public class AddEditProfileActivity extends AppCompatActivity
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+//        mListener = (AddEditProfileFrag.OnProfileModifyClickListener) getApplicationContext();
+
 
         if (savedInstanceState != null) {
             restoreScreen(savedInstanceState);
@@ -169,6 +190,10 @@ public class AddEditProfileActivity extends AppCompatActivity
         } else {
             setTitle("Profile ID: " + intPassportId);
         }
+
+//        profileViewModel = new ViewModelProvider(getApplicationContext()).get(ProfileViewModel.class);
+
+        profileViewModel = new ViewModelProvider((ViewModelStoreOwner) this, (ViewModelProvider.Factory) new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(ProfileViewModel.class);
 
         mbtnWebView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -371,6 +396,7 @@ public class AddEditProfileActivity extends AppCompatActivity
             tvActvyDate.setText("ActvyDate: " + format_ymdtimehm.format(lngActvDate));
         }
 
+        intMaxSequence = intent.getIntExtra(EXTRA_MAX_SEQUENCE, 0);
         intId = intent.getIntExtra(EXTRA_ID, -1);
         intPassportId = intent.getIntExtra(EXTRA_PASSPORT_ID, 0);
         intSequence = intent.getIntExtra(EXTRA_SEQUENCE, 0);
@@ -562,7 +588,6 @@ public class AddEditProfileActivity extends AppCompatActivity
         }
 
 
-
 //        Intent data = new Intent();
 //        data.putExtra(EXTRA_CORP_NAME, corpName);
 //        data.putExtra(EXTRA_USER_NAME, userName);
@@ -595,7 +620,6 @@ public class AddEditProfileActivity extends AppCompatActivity
 //        data.putExtra(EXTRA_SEQUENCE, intSequence);
 
 
-
         Profile profile = new Profile(intSequence, corpName, userName, userEmail, corpWebsite);
         profile.setId(intId);
         profile.setPassportId(intPassportId);
@@ -603,13 +627,26 @@ public class AddEditProfileActivity extends AppCompatActivity
         profile.setOpenLong(lngOpenDate);
         profile.setActvyLong(System.currentTimeMillis());
 
+//        this.currProfile.setCorpName(corpName);
+//        this.currProfile.setUserName(userName);
+//        this.currProfile.setUserEmail(userEmail);
+//        this.currProfile.setCorpWebsite(corpWebsite);
+//        this.currProfile.setNote(note);
+//        this.currProfile.setOpenLong(lngOpenDate);
+        lngBeginOpenDate = lngOpenDate;
+
+
         if (editModeAdd) {
 //            mListener.onProfileAddItem(profile);
+            profile.setId(0);
+            profile.setSequence(intMaxSequence + 1);
+            profileViewModel.insertProfile(profile);
             editModeAdd = false;
             Log.d(TAG, "saveProfile add " + profile);
 //            showDialogMsg("New Account added for id " + profile.getId() + ":" + profile.getPassportId());
             showDialogMsg("New Account added");
         } else {
+            profileViewModel.update(profile);
 //        profileViewModel.update(profile);
 //            mListener.onProfileModifyItem(profile);
             showDialogMsg("Account changes applied " + profile.getId() + ":" + profile.getPassportId());
@@ -619,8 +656,46 @@ public class AddEditProfileActivity extends AppCompatActivity
 //        Toast.makeText(getContext(), R.string.toast_profile_updated, Toast.LENGTH_SHORT).show();
 
 
-
         closeKeyboard();
+        finish();
+
+
+//        AlertDialog.Builder builder = new AlertDialog.Builder(AddEditProfileActivity.this);
+//
+//        // Set the message show for the Alert time
+//        builder.setMessage("Do you want to exit ?");
+//
+//        // Set Alert Title
+//        builder.setTitle("Alert !");
+//
+//        // Set Cancelable false for when the user clicks on the outside the Dialog Box then it will remain show
+//        builder.setCancelable(false);
+//
+//        // Set the positive button with yes name Lambda OnClickListener method is use of DialogInterface interface.
+//        builder.setPositiveButton("Yes", (DialogInterface.OnClickListener) (dialog, which) -> {
+//            // When the user click yes button then app will close
+//            finish();
+//        });
+//
+//        // Set the Negative button with No name Lambda OnClickListener method is use of DialogInterface interface.
+//        builder.setNegativeButton("No", (DialogInterface.OnClickListener) (dialog, which) -> {
+//            // If user click no then dialog box is canceled.
+//            dialog.cancel();
+//        });
+//
+//        // Create the Alert dialog
+//        AlertDialog alertDialog = builder.create();
+//        // Show the Alert Dialog box
+//        alertDialog.show();
+
+//        if (editModeAdd) {
+//            showDialogMsg(getString(R.string.account_added) + "\n" +
+//                    getString(R.string.ask_go_to_list));
+//        } else {
+//            showDialogMsg(getString(R.string.account_updated) + "\n" +
+//                    getString(R.string.ask_go_to_list));
+//        }
+
 //        setResult(RESULT_OK, data);
 //        finish();
 
@@ -834,6 +909,8 @@ public class AddEditProfileActivity extends AppCompatActivity
         builder.setMessage(msg)
                 .setTitle(msg);
         AlertDialog dialog = builder.create();
+
+        dialog.show();
 
 //        final Dialog dialog = new Dialog(getActivity());
 //        dialog.setContentView(R.layout.dialog_msg_ok);

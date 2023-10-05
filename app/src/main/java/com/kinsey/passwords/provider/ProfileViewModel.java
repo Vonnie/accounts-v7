@@ -6,13 +6,15 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModel;
 
 import com.kinsey.passwords.items.Profile;
 
+import java.io.Closeable;
 import java.util.List;
 
-public class ProfileViewModel extends AndroidViewModel
-        implements Task {
+public class ProfileViewModel extends AndroidViewModel {
+//        implements Task {
     public static final String TAG = "ProfileViewModel";
     private ProfileRepository repository;
     private LiveData<List<Profile>> allProfiles;
@@ -29,7 +31,13 @@ public class ProfileViewModel extends AndroidViewModel
 
     public void insertProfile(Profile profile, Task task) {
         this.mNotifyTask = task;
-        repository.insertProfile(profile, this);
+        repository.insertProfile(profile);
+//        repository.insertProfile(profile, this);
+    }
+    public void insertProfile(Profile profile) {
+//        this.mNotifyTask = task;
+        repository.insertProfile(profile);
+//        repository.insertProfile(profile, this);
     }
 
     public void update(Profile profile) {
@@ -87,56 +95,56 @@ public class ProfileViewModel extends AndroidViewModel
         return repository.getCount();
     }
 
-    @Override
-    public void processInsert(Profile profile) {
-        
-        profile.setPassportId(profile.getId());
-        repository.update(profile);
-        mNotifyTask.processInsertComplete(profile);
-        Log.d(TAG, "processInsert: newId " + profile.getPassportId());
-//        int intId = (int) id;
-//        Log.d(TAG, "new id: " + id + " int " + intId);
-//        LiveData<Profile> profile = repository.getProfileById(intId);
+//    @Override
+//    public void processInsert(Profile profile) {
+//
+//        profile.setPassportId(profile.getId());
+//        repository.update(profile);
+//        mNotifyTask.processInsertComplete(profile);
+//        Log.d(TAG, "processInsert: newId " + profile.getPassportId());
+////        int intId = (int) id;
+////        Log.d(TAG, "new id: " + id + " int " + intId);
+////        LiveData<Profile> profile = repository.getProfileById(intId);
+////
+////
+////        Log.d(TAG, "profile " + profile);
+////        Log.d(TAG, "getValue " + profile.getValue().getPassportId());
+////
+////
+////        profile.getValue().setPassportId(intId);
+////        repository.update(profile.getValue());
+//
+////        LiveData<Profile> profileLiveData = repository.getProfileById(intId);
+////        LiveData<String> profileName = Transformations.map(profileLiveData, profileld -> {
+////            return profileld.getId() + " " + profileld.getPassportId();
+////        });
+////
+////        Log.d(TAG, "profileName " + profileName);
+////
+////        Log.d(TAG, "get " + profileName.observe());
 //
 //
-//        Log.d(TAG, "profile " + profile);
-//        Log.d(TAG, "getValue " + profile.getValue().getPassportId());
 //
 //
-//        profile.getValue().setPassportId(intId);
-//        repository.update(profile.getValue());
-
-//        LiveData<Profile> profileLiveData = repository.getProfileById(intId);
-//        LiveData<String> profileName = Transformations.map(profileLiveData, profileld -> {
-//            return profileld.getId() + " " + profileld.getPassportId();
-//        });
+////        Profile profileItem = profile.getValue();
+////        profileItem.setPassportId(intId);
+////        repository.update(profileItem);
 //
-//        Log.d(TAG, "profileName " + profileName);
+////        List<Profile> profileListFull = new ArrayList<Profile>(profiles);
+////        for (Profile item : profileListFull) {
+////            if (intId == item.getId()) {
+////                item.setPassportId(intId);
+////                update(item);
+////                break;
+////            }
+////        }
 //
-//        Log.d(TAG, "get " + profileName.observe());
+//    }
 
-
-
-
-//        Profile profileItem = profile.getValue();
-//        profileItem.setPassportId(intId);
-//        repository.update(profileItem);
-
-//        List<Profile> profileListFull = new ArrayList<Profile>(profiles);
-//        for (Profile item : profileListFull) {
-//            if (intId == item.getId()) {
-//                item.setPassportId(intId);
-//                update(item);
-//                break;
-//            }
-//        }
-
-    }
-
-    @Override
-    public void processInsertComplete(Profile profile) {
-        Log.d(TAG, "processInsertComplete: " + profile.getPassportId());
-    }
+//    @Override
+//    public void processInsertComplete(Profile profile) {
+//        Log.d(TAG, "processInsertComplete: " + profile.getPassportId());
+//    }
 
 
 }

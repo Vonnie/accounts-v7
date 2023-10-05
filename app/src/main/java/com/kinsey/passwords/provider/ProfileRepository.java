@@ -32,7 +32,8 @@ public class ProfileRepository {
 //        dbMsg = database.getOpenHelper().getDatabaseName();
     }
 
-    public void insertProfile(Profile profile, Task myInterface) {
+//    public void insertProfile(Profile profile, Task myInterface) {
+    public void insertProfile(Profile profile) {
 //        new InsertProfileAsyncTask(profileDao, myInterface).execute(profile);
 //        Long profileId = 0L;
         ProfileDatabase.databaseWriteExecutor.execute(() -> {
