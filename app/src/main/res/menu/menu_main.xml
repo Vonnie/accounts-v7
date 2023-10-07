@@ -37,11 +37,11 @@
                     android:orderInCategory="214"
                     android:title="@string/menuacct_sort_opendate"
                     app:showAsAction="ifRoom" />
-                <item
-                    android:id="@+id/menuacct_sort_custom"
-                    android:orderInCategory="215"
-                    android:title="@string/menuacct_sort_custom"
-                    app:showAsAction="ifRoom" />
+                <!--                <item-->
+                <!--                    android:id="@+id/menuacct_sort_custom"-->
+                <!--                    android:orderInCategory="215"-->
+                <!--                    android:title="@string/menuacct_sort_custom"-->
+                <!--                    app:showAsAction="ifRoom" />-->
             </group>
         </menu>
     </item>
@@ -54,12 +54,13 @@
         android:title="@string/menu_search"
         app:showAsAction="always" />
 
-<!--    <item-->
-<!--        android:id="@+id/button_item"-->
-<!--        android:title=""-->
-<!--        app:actionLayout="@layout/button_layout"-->
-<!--        app:showAsAction="always"-->
-<!--        />-->
+
+    <!--    <item-->
+    <!--        android:id="@+id/button_item"-->
+    <!--        android:title=""-->
+    <!--        app:actionLayout="@layout/button_layout"-->
+    <!--        app:showAsAction="always"-->
+    <!--        />-->
 
     <item
         android:icon="@drawable/ic_more_vert"
@@ -111,12 +112,12 @@
                 android:title="@string/menu_suggests"
                 app:showAsAction="ifRoom" />
 
-            <item
-                android:id="@+id/menuacct_external_accts"
-                android:icon="@drawable/ic_import_export_black"
-                android:orderInCategory="120"
-                android:title="@string/menuacct_backup_restore_accts"
-                app:showAsAction="ifRoom" />
+<!--            <item-->
+<!--                android:id="@+id/menuacct_external_accts"-->
+<!--                android:icon="@drawable/ic_import_export_black"-->
+<!--                android:orderInCategory="120"-->
+<!--                android:title="@string/menuacct_backup_restore_accts"-->
+<!--                app:showAsAction="ifRoom" />-->
             <item
                 android:id="@+id/menumain_about"
                 android:icon="@drawable/ic_help_outline_black"
@@ -128,24 +129,46 @@
                 android:id="@+id/menumain_notify"
                 android:icon="@drawable/ic_warning_black_24dp"
                 android:orderInCategory="125"
-                android:title="@string/menuacct_notify"
+                android:title="@string/welcome_message"
                 app:showAsAction="ifRoom" />
             <item
-                android:id="@+id/menumain_dropbox"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:icon="@drawable/ic_import_export_black"
-                android:orderInCategory="130"
-                android:title="@string/menuacct_dropbox"
+                android:id="@+id/vw_shared"
+                android:icon="@drawable/ic_share_black"
+                android:orderInCategory="126"
+                android:title="@string/menuvw_share"
+                app:actionProviderClass="androidx.appcompat.widget.ShareActionProvider"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/vw_shared_from"
+                android:icon="@drawable/ic_share_black"
+                android:orderInCategory="127"
+                android:title="@string/menuvw_share_from"
+                app:actionProviderClass="androidx.appcompat.widget.ShareActionProvider"
+                app:showAsAction="never" />
+
+            <item
+                android:id="@+id/action_share"
+                android:title="@string/share"
+                android:orderInCategory="128"
+                app:actionProviderClass="androidx.appcompat.widget.ShareActionProvider"
                 app:showAsAction="ifRoom" />
+
             <!--            <item-->
 <!--                android:id="@+id/menumain_dropbox"-->
 <!--                android:layout_width="wrap_content"-->
 <!--                android:layout_height="wrap_content"-->
-<!--                android:icon="@drawable/ic_warning_black_24dp"-->
-<!--                android:orderInCategory="128"-->
+<!--                android:icon="@drawable/ic_import_export_black"-->
+<!--                android:orderInCategory="130"-->
 <!--                android:title="@string/menuacct_dropbox"-->
 <!--                app:showAsAction="ifRoom" />-->
+            <!--            <item-->
+            <!--                android:id="@+id/menumain_dropbox"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:icon="@drawable/ic_warning_black_24dp"-->
+            <!--                android:orderInCategory="128"-->
+            <!--                android:title="@string/menuacct_dropbox"-->
+            <!--                app:showAsAction="ifRoom" />-->
 
             <!--    <item-->
             <!--        android:id="@+id/menumain_do_request"-->

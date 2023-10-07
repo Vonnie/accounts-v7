@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -23,8 +24,17 @@ import static com.kinsey.passwords.MainActivity.format_ymdtime;
 public class ProfileJsonListIO {
     private static final String TAG = "ProfileJsonListIO";
 
-    public List<Profile> readProfileJson(String jsonFilename) {
+    public List<Profile> readProfileUri(String uri) {
 
+//        InputStream inputStream = getContentResolver().openInputStream(uri);
+
+//        InputStream inputStream = getContentResolver().openInputStream(uri);
+        List<Profile> listAccounts = new ArrayList<Profile>();
+        return listAccounts;
+    }
+
+    public List<Profile> readProfileJson(String jsonFilename) {
+        String TABFunc = "readProfileJson:";
         List<Profile> listAccounts = new ArrayList<Profile>();
         try {
 
@@ -38,6 +48,7 @@ public class ProfileJsonListIO {
                     break;
                 } else {
                     listAccounts.add(account);
+                    Log.d(TAG, TABFunc + account.getCorpName());
 //                    int listCount = listAccounts.size();
                 }
             }

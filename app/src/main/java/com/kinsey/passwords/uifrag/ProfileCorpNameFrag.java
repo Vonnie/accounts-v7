@@ -124,9 +124,9 @@ public class ProfileCorpNameFrag extends Fragment {
             Log.d(TAG, "onCreateView: selectedId " + adapter.getSelectedId());
         }
 
-        screenLayout = getResources().getConfiguration().screenLayout;
-        screenLayout &= Configuration.SCREENLAYOUT_SIZE_MASK;
-        gridLayoutManager = new GridLayoutManager(getActivity(), 1);
+//        screenLayout = getResources().getConfiguration().screenLayout;
+//        screenLayout &= Configuration.SCREENLAYOUT_SIZE_MASK;
+        gridLayoutManager = new GridLayoutManager(getActivity(), 2);
         recyclerView.setLayoutManager(gridLayoutManager);
         setGrid(adapter.getSelectedId());
 //        int spanSize = 3;
@@ -259,6 +259,7 @@ public class ProfileCorpNameFrag extends Fragment {
                 if (selectedId == -1) {
                     unselectId(adapter.getSelectedId());
                     adapter.setSelectedId(-1);
+                    refreshListAll();
                 }
                 mListener.onProfileCorpNameListSelect(selectedId, profile);
                 setGrid(selectedId);
@@ -582,8 +583,8 @@ public class ProfileCorpNameFrag extends Fragment {
                 } else {
                     Log.d(TAG, "onCreateView: getItemCount " + adapter.getItemCount());
                     if (adapter.getItemCount() == 0) {
-//                        mListener.onProfileCorpNameAdd();
-                        mListener.onEmptyWarning();
+                        mListener.onProfileCorpNameAdd();
+//                        mListener.onEmptyWarning();
 //                    } else {
                         if (adapter.getSelectedId() == -1) {
                             recyclerView.scrollToPosition(0);
@@ -860,22 +861,22 @@ public class ProfileCorpNameFrag extends Fragment {
         adapter.notifyDataSetChanged();
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        context = getContext();
-    }
-
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (resultCode == MainActivity.RESULT_CANCELED) {
-            return;
-        }
-
-    }
+//    @Override
+//    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+//        super.onActivityCreated(savedInstanceState);
+//        context = getContext();
+//    }
+//
+//
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//
+//        if (resultCode == MainActivity.RESULT_CANCELED) {
+//            return;
+//        }
+//
+//    }
 
     public int getSelectedId() {
         return this.adapter.getSelectedId();

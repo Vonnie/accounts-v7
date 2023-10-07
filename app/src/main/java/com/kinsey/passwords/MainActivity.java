@@ -1,13 +1,16 @@
 package com.kinsey.passwords;
 
-import android.accounts.Account;
-import android.app.Activity;
+import static android.content.Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION;
+import static android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION;
+import static androidx.core.content.FileProvider.getUriForFile;
 import android.app.Dialog;
 import android.content.ActivityNotFoundException;
+import android.content.ContentResolver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.activity.result.ActivityResult;
@@ -15,22 +18,26 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.ShareActionProvider;
+import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Environment;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
+import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -65,10 +72,17 @@ import com.kinsey.passwords.uifrag.ProfileCustomFrag;
 import com.kinsey.passwords.uifrag.ProfileOpenDateFrag;
 import com.kinsey.passwords.uifrag.ProfilePassportIdFrag;
 import com.kinsey.passwords.uifrag.SearchFrag;
+import com.kinsey.passwords.tools.ProfileJsonListIO;
 //import com.squareup.picasso.Picasso;
 
+import org.json.JSONObject;
+
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 //import java.util.Arrays;
 import java.util.ArrayList;
@@ -191,6 +205,7 @@ public class MainActivity extends AppCompatActivity
     public static int listsortOrder = LISTSORT_CORP_NAME;
 
     Menu menu;
+    ShareActionProvider myShareActionProvider;
     //    MenuItem miActionProgressItem;
 //    public static ProgressBar progressBar;
 //    private Handler mHandler = new Handler();
@@ -217,7 +232,8 @@ public class MainActivity extends AppCompatActivity
 //    private Profile profileMaxItem;
     private int currentMaxSeq = 0;
     private boolean itemAdded = false;
-    FrameLayout frameSearch, frame2;
+    FrameLayout frameSearch;
+//    , frame2;
 //    boolean has2ndPanel = false;
 
 //    public static ProfileAdapter adapterCorpName = new ProfileAdapter();
@@ -235,14 +251,18 @@ public class MainActivity extends AppCompatActivity
     //    private SearchView mSearchView;
     private ActivityResultLauncher<Intent> startForResultEditLauncher;
     private ActivityResultLauncher<Intent> startForResultLauncher;
+    private ActivityResultLauncher<Intent> startForResultSendLauncher;
+    private ActivityResultLauncher<Intent> startForResultReceiveLauncher;
 
     private ProfileAdapter adapter;
     private ProfileViewModel profileViewModel;
+
+    ArrayList<Profile> listProfiles = new ArrayList<>();
+
     private Profile profile;
 
     public MainActivity() {
     }
-
 
 
     private enum ListHomeType {
@@ -388,8 +408,9 @@ public class MainActivity extends AppCompatActivity
 //                frame2 = findViewById(R.id.fragment_container2);
 //                frame2.setVisibility(View.GONE);
 //            }
-            frame2 = findViewById(R.id.fragment_container2);
-            frame2.setVisibility(View.GONE);
+
+//            frame2 = findViewById(R.id.fragment_container2);
+//            frame2.setVisibility(View.GONE);
             FragmentManager fragmentManager3 = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction3 = fragmentManager3.beginTransaction();
             SearchFrag searchFrag = new SearchFrag();
@@ -406,21 +427,21 @@ public class MainActivity extends AppCompatActivity
             Log.d(TAG, "onCreate: listsortOrder " + listsortOrder);
             FrameLayout frame = findViewById(R.id.fragment_container);
             Log.d(TAG, "onCreate: tag " + frame.getTag());
-            frame2 = findViewById(R.id.fragment_container2);
-            Log.d(TAG, "onCreate: rotate selectedId " + this.selectedId);
-            if (this.selectedId == -1 && !this.editModeAdd) {
-                frame2.setVisibility(View.GONE);
-            } else {
-                frame2.setVisibility(View.VISIBLE);
-
-//                FragmentManager fragmentManager = getSupportFragmentManager();
-//                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//            frame2 = findViewById(R.id.fragment_container2);
+//            Log.d(TAG, "onCreate: rotate selectedId " + this.selectedId);
+//            if (this.selectedId == -1 && !this.editModeAdd) {
+//                frame2.setVisibility(View.GONE);
+//            } else {
+//                frame2.setVisibility(View.VISIBLE);
 //
-//                AddEditProfileFrag fragment2 = new AddEditProfileFrag();
-//                fragmentTransaction.replace(R.id.fragment_container2, fragment2, "AddEditProfileFrag");
-//                fragmentTransaction.commit();
-
-            }
+////                FragmentManager fragmentManager = getSupportFragmentManager();
+////                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+////
+////                AddEditProfileFrag fragment2 = new AddEditProfileFrag();
+////                fragmentTransaction.replace(R.id.fragment_container2, fragment2, "AddEditProfileFrag");
+////                fragmentTransaction.commit();
+//
+//            }
 
             frameSearch = findViewById(R.id.fragment_search_container);
             if (isSearchShown) {
@@ -429,6 +450,7 @@ public class MainActivity extends AppCompatActivity
                 frameSearch.setVisibility(View.GONE);
             }
         }
+
 
         startForResultEditLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
@@ -483,6 +505,96 @@ public class MainActivity extends AppCompatActivity
                         }
                     }
                 });
+
+        startForResultSendLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult activityResult) {
+                        if (activityResult.getResultCode() == RESULT_OK) {
+                            // Handle the data returned from Activity B
+//                            LiveData<List<Word>> returnedData = mWordViewModel.getAllWords();
+                            // Use the returnedData as needed
+//                            Intent data = result.getData();
+//                            int result = activityResult.getResultCode();
+                            Intent data = activityResult.getData();
+                            Log.d(TAG, "onActivityResult sent file " + data);
+                            Toast.makeText(MainActivity.this, "account.json send complete", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Log.d(TAG, "onActivityResult sent: canceled");
+                        }
+                    }
+                });
+
+
+        startForResultReceiveLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult activityResult) {
+                        String TABFunc = "startForResultReceiveLauncher:";
+                        ProfileJsonListIO profileJsonListIO = new ProfileJsonListIO();
+                        if (activityResult.getResultCode() == RESULT_OK) {
+                            // Handle the data returned from Activity B
+//                            LiveData<List<Word>> returnedData = mWordViewModel.getAllWords();
+                            // Use the returnedData as needed
+//                            Intent data = result.getData();
+//                            int result = activityResult.getResultCode();
+                            Intent data = activityResult.getData();
+                            Log.d(TAG, TABFunc + "receive file " + data);
+                            Log.d(TAG, TABFunc + "received " + data.getData());
+                            Log.d(TAG, TABFunc + "received " + data.getData().getPath());
+//                            String fileName = new File(String.valueOf(data.getData())).getName();
+//                            String file = new File(String.valueOf(data.getData()));
+                            File file = new File(String.valueOf(data.getData()));
+                            Log.d(TAG, TABFunc + "received " + data.getData());
+                            Log.d(TAG, TABFunc + "file created ");
+                            Uri uri = Uri.parse(data.getDataString());
+                            Log.d(TAG, TABFunc + "created uri " + uri.getPath());
+                            try {
+                                String copyFilename = copyFileContent(uri);
+                                Log.d(TAG, TABFunc + "copied to filename " + copyFilename);
+                                List<Profile> listAccounts = profileJsonListIO.readProfileJson(copyFilename);
+                                Log.d(TAG, TABFunc + "new listAccounts " + listAccounts);
+                                profileViewModel.deleteAllProfiles();
+                                for(int i=0;i<listAccounts.size(); i++){
+                                    Profile profileAcct = listAccounts.get(i);
+                                    Log.d(TAG, TABFunc + "new profileAcct " + profileAcct.getCorpName());
+                                    profileViewModel.insertProfile(profileAcct);
+                                }
+//                                profileViewModel.insertAll(listAccounts);
+                                Log.d(TAG, TABFunc + "listAccounts count " + listAccounts.size());
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+//                            try {
+//                                InputStream inputStream = getContentResolver().openInputStream(uri);
+//                                /* temporary path */
+////                                String extension = getMimeType(getApplicationContext(), uri);
+//                                String temporaryFilePath = Environment.getExternalStorageDirectory().toString()
+//                                        .concat("/").concat("temporaryfile")
+//                                        .concat(".").concat("json");
+//
+//                                Log.d(TAG, TABFunc + "tempfile " + temporaryFilePath);
+//
+//                            } catch (FileNotFoundException e) {
+//                                throw new RuntimeException(e);
+//                            }
+//////                            getContentResolver().openInputStream(data.getData());
+//////                            File file = new File(data.getData());
+//////                            Uri.fromFile()
+////                            List<Profile> listAccounts = profileJsonListIO.readProfileJson(fileName);
+//////                            int size = data.getData().available();
+//////                            byte[] buffer = new byte[size]
+////                            Log.d(TAG, TABFunc + "received " + listAccounts);
+//                            Toast.makeText(MainActivity.this, "account.json receive complete", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Log.d(TAG, TABFunc + "receive canceled ");
+                        }
+                    }
+                });
+
+
 
 //        if (findViewById(R.id.fragment_container2) == null) {
 //            Log.d(TAG, "onCreate: has null 2nd container");
@@ -562,15 +674,18 @@ public class MainActivity extends AppCompatActivity
 //        recyclerView.setAdapter(adapter);
 //
 
-//        profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
-//        profileViewModel.getAllProfilesByCorpName().observe(this, new Observer<List<Profile>>() {
-//            @Override
-//            public void onChanged(List<Profile> profiles) {
-//
+        profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
+        profileViewModel.getAllProfilesByCorpName().observe(this, new Observer<List<Profile>>() {
+            @Override
+            public void onChanged(List<Profile> profiles) {
+
+                listProfiles = new ArrayList<>(profiles);
 //                profileListFull = new ArrayList<>(profiles);
 //                adapter.submitList(profiles);
-//            }
-//        });
+            }
+        });
+
+
 //
 //        profileViewModel.getMaxSequence().observe(this, new Observer<Profile>() {
 //            @Override
@@ -1027,12 +1142,18 @@ public class MainActivity extends AppCompatActivity
             menu.findItem(R.id.menuacct_sort_passport).setChecked(true);
         } else if (listsortOrder == LISTSORT_OPEN_DATE) {
             menu.findItem(R.id.menuacct_sort_opendate).setChecked(true);
-        } else if (listsortOrder == LISTSORT_CUSTOM_SORT) {
-            menu.findItem(R.id.menuacct_sort_custom).setChecked(true);
+//        } else if (listsortOrder == LISTSORT_CUSTOM_SORT) {
+//            menu.findItem(R.id.menuacct_sort_custom).setChecked(true);
         }
 
         Log.d(TAG, "onCreateOptionsMenu: listsortOrder " + this.listsortOrder);
-//        View view = menu.findItem(R.id.button_item).getActionView();
+
+
+        MenuItem shareItem = menu.findItem(R.id.action_share);
+        myShareActionProvider =
+                (ShareActionProvider) MenuItemCompat.getActionProvider(shareItem);
+
+        //        View view = menu.findItem(R.id.button_item).getActionView();
 //
 //        String[] ITEM_ACTIONS = new String[] {"Account Edit", "Search", "Passwords"};
 //
@@ -1532,69 +1653,69 @@ public class MainActivity extends AppCompatActivity
 //                resortList(AccountsContract.ACCOUNT_LIST_BY_PASSPORT_ID);
                 return true;
 
-            case R.id.menuacct_sort_custom:
-                if (!item.isChecked()) {
-                    item.setChecked(true);
-                }
-
-                Log.d(TAG, "request frag Custom");
-                listsortOrder = LISTSORT_CUSTOM_SORT;
-
-
-//                fragmentManager = getSupportFragmentManager();
-//                profileFragment = fragmentManager.findFragmentById(R.id.fragment_container);
-//
-//                if (profileFragment != null) {
-//                    getSupportFragmentManager().beginTransaction()
-//                            .remove(profileFragment)
-//                            .commit();
-//
+//            case R.id.menuacct_sort_custom:
+//                if (!item.isChecked()) {
+//                    item.setChecked(true);
 //                }
-
-//                Fragment profileCustomFrag = new ProfileCustomFrag();
-                profileFragment = ProfileCorpNameFrag.newInstance(LISTSORT_CUSTOM_SORT, this.selectedId);
-                transaction = getSupportFragmentManager().beginTransaction();
-
-//                transaction.add(R.id.fragment_container, profileCustomFrag);
-                transaction.replace(R.id.fragment_container, profileFragment, "profileFragment");
-                transaction.addToBackStack(null);
-
-                transaction.commit();
-
-
-                if (this.selectedId != -1) {
-                    ProfileCorpNameFrag frag = (ProfileCorpNameFrag) profileFragment;
-                    frag.refreshListAll();
-                    frag.setSelectedId(this.selectedId);
-                }
-
-                Log.d(TAG, "new frag Custom committed");
-
-//                this.adapterCustomSort = new ProfileAdapter();
-//                recyclerView.setAdapter(adapterCustomSort);
-
-//                adapter = new ProfileAdapter();
-//                adapter = adapterCustomSort;
-//                recyclerView.setAdapter(adapter);
-//                recyclerView.swapAdapter(adapterCustomSort, true);
-
-//                recyclerView.setAdapter(adapterCustom);
-//                profileViewModel.getAllProfilesCustomSort().observe(this, new Observer<List<Profile>>() {
-//                    @Override
-//                    public void onChanged(List<Profile> profiles) {
-//                        profileListFull = new ArrayList<>(profiles);
-//                        adapter.submitList(profiles);
-//                    }
-//                });
-
-//                recyclerView.scrollToPosition(0);
-//                this.adapter.notifyDataSetChanged();
-
-//                this.adapter = new ProfileAdapter();
-//                recyclerView.setAdapter(adapter);
-
-//                resortList(AccountsContract.ACCOUNT_LIST_BY_SEQUENCE);
-                return true;
+//
+//                Log.d(TAG, "request frag Custom");
+//                listsortOrder = LISTSORT_CUSTOM_SORT;
+//
+//
+////                fragmentManager = getSupportFragmentManager();
+////                profileFragment = fragmentManager.findFragmentById(R.id.fragment_container);
+////
+////                if (profileFragment != null) {
+////                    getSupportFragmentManager().beginTransaction()
+////                            .remove(profileFragment)
+////                            .commit();
+////
+////                }
+//
+////                Fragment profileCustomFrag = new ProfileCustomFrag();
+//                profileFragment = ProfileCorpNameFrag.newInstance(LISTSORT_CUSTOM_SORT, this.selectedId);
+//                transaction = getSupportFragmentManager().beginTransaction();
+//
+////                transaction.add(R.id.fragment_container, profileCustomFrag);
+//                transaction.replace(R.id.fragment_container, profileFragment, "profileFragment");
+//                transaction.addToBackStack(null);
+//
+//                transaction.commit();
+//
+//
+//                if (this.selectedId != -1) {
+//                    ProfileCorpNameFrag frag = (ProfileCorpNameFrag) profileFragment;
+//                    frag.refreshListAll();
+//                    frag.setSelectedId(this.selectedId);
+//                }
+//
+//                Log.d(TAG, "new frag Custom committed");
+//
+////                this.adapterCustomSort = new ProfileAdapter();
+////                recyclerView.setAdapter(adapterCustomSort);
+//
+////                adapter = new ProfileAdapter();
+////                adapter = adapterCustomSort;
+////                recyclerView.setAdapter(adapter);
+////                recyclerView.swapAdapter(adapterCustomSort, true);
+//
+////                recyclerView.setAdapter(adapterCustom);
+////                profileViewModel.getAllProfilesCustomSort().observe(this, new Observer<List<Profile>>() {
+////                    @Override
+////                    public void onChanged(List<Profile> profiles) {
+////                        profileListFull = new ArrayList<>(profiles);
+////                        adapter.submitList(profiles);
+////                    }
+////                });
+//
+////                recyclerView.scrollToPosition(0);
+////                this.adapter.notifyDataSetChanged();
+//
+////                this.adapter = new ProfileAdapter();
+////                recyclerView.setAdapter(adapter);
+//
+////                resortList(AccountsContract.ACCOUNT_LIST_BY_SEQUENCE);
+//                return true;
 
 //            case R.id.menuacct_showdate:
 //                suggestsListRequest3();
@@ -1617,7 +1738,7 @@ public class MainActivity extends AppCompatActivity
 //                break;
 
 
-            case R.id.menuacct_external_accts:
+//            case R.id.menuacct_external_accts:
 //                addEditActivityFragment = (AddEditActivityFragment)
 //                        getSupportFragmentManager().findFragmentById(R.id.task_details_container);
 //                if(addEditActivityFragment != null) {
@@ -1646,8 +1767,8 @@ public class MainActivity extends AppCompatActivity
 //                        break;
 //                    }
 //                }
-                viewAccountsFile();
-                return true;
+//                viewAccountsFile();
+//                return true;
 
 
             //            case R.id.menumain_refresh:
@@ -1698,10 +1819,10 @@ public class MainActivity extends AppCompatActivity
                     frameSearch.setVisibility(View.VISIBLE);
                     this.editModeAdd = false;
                     this.selectedId = -1;
-                    frame2 = findViewById(R.id.fragment_container2);
-                    frame2.setVisibility(View.GONE);
-//                    FrameLayout frame = findViewById(R.id.fragment_container);
-//                    frame.setVisibility(View.GONE);
+//                    frame2 = findViewById(R.id.fragment_container2);
+//                    frame2.setVisibility(View.GONE);
+////                    FrameLayout frame = findViewById(R.id.fragment_container);
+////                    frame.setVisibility(View.GONE);
                 } else {
                     frameSearch.setVisibility(View.GONE);
 ////                    FrameLayout frame = findViewById(R.id.fragment_container);
@@ -1801,9 +1922,31 @@ public class MainActivity extends AppCompatActivity
 
                 return true;
 
-            case R.id.menumain_dropbox:
-                showDropbox();
+
+            case R.id.action_share:
+
+                shareAccounts();
+
                 return true;
+
+            case R.id.vw_shared:
+
+                writeJsonAccounts();
+
+//                shareEmailAccounts();
+
+
+                return true;
+
+            case R.id.vw_shared_from:
+
+                requestFilePicker();
+                return true;
+
+
+                //            case R.id.menumain_dropbox:
+//                showDropbox();
+//                return true;
 
 //            case R.id.menumain_do_request:
 //
@@ -1907,6 +2050,13 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+//    private String getFileExtension(Context context, Uri uri) {
+//
+//            if (uri.getScheme() == ContentResolver.SCHEME_CONTENT) {
+//                MimeTypeMap.getSingleton().getExtensionFromMimeType(context.getContentResolver().getType(uri))
+//            } else {uri.getPath().let { MimeTypeMap.getFileExtensionFromUrl(Uri.fromFile(File(it)).toString())
+//            }
+//    }
 
     private void applyProfileEdits(Intent data) {
         int id = data.getIntExtra(AddEditProfileActivity.EXTRA_ID, -1);
@@ -2770,36 +2920,36 @@ public class MainActivity extends AppCompatActivity
 //        alertDialog.show();
     }
 
-    private void shareExport() {
-        AlertDialog.Builder dlg = new AlertDialog.Builder(this);
-        AlertDialog.Builder builder = dlg.setIcon(getResources().getDrawable(R.drawable.ic_warning));
-        dlg.setTitle(getResources().getString(R.string.app_name))
-                .setMessage("Is the exported file up-to-date for this share.")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-//                        shareIntent();
-                        // finish dialog
-                        dialog.dismiss();
-                        return;
-                    }
-
-                })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        // finish dialog
-                        dialog.dismiss();
-                        return;
-                    }
-
-                })
-                .show();
-        dlg = null;
-
-    }
+//    private void shareExport() {
+//        AlertDialog.Builder dlg = new AlertDialog.Builder(this);
+//        AlertDialog.Builder builder = dlg.setIcon(getResources().getDrawable(R.drawable.ic_warning));
+//        dlg.setTitle(getResources().getString(R.string.app_name))
+//                .setMessage("Is the exported file up-to-date for this share.")
+//                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//
+////                        shareIntent();
+//                        // finish dialog
+//                        dialog.dismiss();
+//                        return;
+//                    }
+//
+//                })
+//                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//
+//                        // finish dialog
+//                        dialog.dismiss();
+//                        return;
+//                    }
+//
+//                })
+//                .show();
+//        dlg = null;
+//
+//    }
 
 
     @Override
@@ -2877,7 +3027,7 @@ public class MainActivity extends AppCompatActivity
                 boolean blnRestored = data.getBooleanExtra(FileViewActivity.EXTRA_LIST_RESTORED, false);
                 if (blnRestored) {
                     this.selectedId = -1;
-                    frame2.setVisibility(View.GONE);
+//                    frame2.setVisibility(View.GONE);
                     frameSearch.setVisibility(View.GONE);
                     FrameLayout frame = findViewById(R.id.fragment_container);
                     frame.setVisibility(View.VISIBLE);
@@ -3672,10 +3822,12 @@ public class MainActivity extends AppCompatActivity
         Log.d(TAG, "onProfileCorpNameListSelect: selectedId " + selectedId + ":" + this.selectedId);
 
         if (selectedId == -1) {
-            ProfileCorpNameFrag frag = getProfileFrag();
-            frag.refreshListAll();
-//            frag.setSelectedId(this.selectedId);
+//            ProfileCorpNameFrag frag = getProfileFrag();
+//            frag.refreshListAll();
+////            frag.setSelectedId(this.selectedId);
         } else {
+//            ProfileCorpNameFrag frag = getProfileFrag();
+//            frag.refreshListAll();
             this.launchProfileUpdate(selectedId, profile);
         }//        else adapter.setSelectedId(-1);
     }
@@ -3703,47 +3855,63 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onProfileCorpNameAdd() {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//        Fragment addeditFragment = fragmentManager.findFragmentById(R.id.fragment_container2);
-//        if (addeditFragment instanceof AddEditProfileFrag) {
-//            AddEditProfileFrag frag = (AddEditProfileFrag) addeditFragment;
-//            if (frag.getEditModeAdd()) {
-//                return;
-//            }
-//        }
-//        if (editModeAdd) {
-//            editModeAdd = false;
-//            frame2.setVisibility(View.GONE);
-//            return;
-//        }
-        editModeAdd = true;
-        this.selectedId = -1;
-        Profile profile = new Profile();
-        AddEditProfileFrag fragment2 = new AddEditProfileFrag();
-        Bundle args = new Bundle();
-//        args.putInt(AddEditProfileFrag.EXTRA_ID, profile.getId());
-        args.putInt(AddEditProfileFrag.EXTRA_ID, -1);
-//        args.putInt(AddEditProfileFrag.EXTRA_PASSPORT_ID, profile.getPassportId());
-        args.putInt(AddEditProfileFrag.EXTRA_PASSPORT_ID, -1);
-        args.putString(AddEditProfileFrag.EXTRA_CORP_NAME, profile.getCorpName());
-        args.putString(AddEditProfileFrag.EXTRA_USER_NAME, profile.getUserName());
-        args.putString(AddEditProfileFrag.EXTRA_USER_EMAIL, profile.getUserEmail());
-        args.putInt(AddEditProfileFrag.EXTRA_SEQUENCE, profile.getSequence());
-        args.putString(AddEditProfileFrag.EXTRA_CORP_WEBSITE, profile.getCorpWebsite());
-        args.putString(AddEditProfileFrag.EXTRA_NOTE, profile.getNote());
-        args.putLong(AddEditProfileFrag.EXTRA_ACTVY_LONG, profile.getActvyLong());
-        args.putLong(AddEditProfileFrag.EXTRA_OPEN_DATE_LONG, profile.getOpenLong());
-        fragment2.setArguments(args);
-//        AddEditProfileFrag addeditFrag = (AddEditProfileFrag) fragmentManager.findFragmentByTag("AddEditProfileFrag");
-//        if (addeditFrag == null) {
-//            fragmentTransaction.add(R.id.fragment_container2, fragment2, "AddEditProfileFrag");
-//        } else {
-        fragmentTransaction.replace(R.id.fragment_container2, fragment2, "AddEditProfileFrag");
-//        }
-        fragmentTransaction.commit();
-        frame2 = findViewById(R.id.fragment_container2);
-        frame2.setVisibility(View.VISIBLE);
+
+        Intent detailIntent = new Intent(this, AddEditProfileActivity.class);
+//        detailIntent.putExtra(AddEditProfileActivity.EXTRA_ID, -1);
+//        detailIntent.putExtra(AddEditProfileActivity.EXTRA_PASSPORT_ID, profile.getPassportId());
+//        detailIntent.putExtra(AddEditProfileActivity.EXTRA_CORP_NAME, profile.getCorpName());
+//        detailIntent.putExtra(AddEditProfileActivity.EXTRA_USER_NAME, profile.getUserName());
+//        detailIntent.putExtra(AddEditProfileActivity.EXTRA_USER_EMAIL, profile.getUserEmail());
+//        detailIntent.putExtra(AddEditProfileActivity.EXTRA_SEQUENCE, profile.getSequence());
+//        detailIntent.putExtra(AddEditProfileActivity.EXTRA_CORP_WEBSITE, profile.getCorpWebsite());
+//        detailIntent.putExtra(AddEditProfileActivity.EXTRA_NOTE, profile.getNote());
+//        detailIntent.putExtra(AddEditProfileActivity.EXTRA_ACTVY_LONG, profile.getActvyLong());
+//        detailIntent.putExtra(AddEditProfileActivity.EXTRA_OPEN_DATE_LONG, profile.getOpenLong());
+        detailIntent.putExtra(AddEditProfileActivity.EXTRA_MAX_SEQUENCE, this.currentMaxSeq);
+
+        startForResultEditLauncher.launch(detailIntent);
+
+//        FragmentManager fragmentManager = getSupportFragmentManager();
+//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+////        Fragment addeditFragment = fragmentManager.findFragmentById(R.id.fragment_container2);
+////        if (addeditFragment instanceof AddEditProfileFrag) {
+////            AddEditProfileFrag frag = (AddEditProfileFrag) addeditFragment;
+////            if (frag.getEditModeAdd()) {
+////                return;
+////            }
+////        }
+////        if (editModeAdd) {
+////            editModeAdd = false;
+////            frame2.setVisibility(View.GONE);
+////            return;
+////        }
+//        editModeAdd = true;
+//        this.selectedId = -1;
+//        Profile profile = new Profile();
+//        AddEditProfileFrag fragment2 = new AddEditProfileFrag();
+//        Bundle args = new Bundle();
+////        args.putInt(AddEditProfileFrag.EXTRA_ID, profile.getId());
+//        args.putInt(AddEditProfileFrag.EXTRA_ID, -1);
+////        args.putInt(AddEditProfileFrag.EXTRA_PASSPORT_ID, profile.getPassportId());
+//        args.putInt(AddEditProfileFrag.EXTRA_PASSPORT_ID, -1);
+//        args.putString(AddEditProfileFrag.EXTRA_CORP_NAME, profile.getCorpName());
+//        args.putString(AddEditProfileFrag.EXTRA_USER_NAME, profile.getUserName());
+//        args.putString(AddEditProfileFrag.EXTRA_USER_EMAIL, profile.getUserEmail());
+//        args.putInt(AddEditProfileFrag.EXTRA_SEQUENCE, profile.getSequence());
+//        args.putString(AddEditProfileFrag.EXTRA_CORP_WEBSITE, profile.getCorpWebsite());
+//        args.putString(AddEditProfileFrag.EXTRA_NOTE, profile.getNote());
+//        args.putLong(AddEditProfileFrag.EXTRA_ACTVY_LONG, profile.getActvyLong());
+//        args.putLong(AddEditProfileFrag.EXTRA_OPEN_DATE_LONG, profile.getOpenLong());
+//        fragment2.setArguments(args);
+////        AddEditProfileFrag addeditFrag = (AddEditProfileFrag) fragmentManager.findFragmentByTag("AddEditProfileFrag");
+////        if (addeditFrag == null) {
+////            fragmentTransaction.add(R.id.fragment_container2, fragment2, "AddEditProfileFrag");
+////        } else {
+//        fragmentTransaction.replace(R.id.fragment_container2, fragment2, "AddEditProfileFrag");
+////        }
+//        fragmentTransaction.commit();
+//        frame2 = findViewById(R.id.fragment_container2);
+//        frame2.setVisibility(View.VISIBLE);
     }
 
     private void alertConfirmDelete(Profile profile, int position) {
@@ -4021,26 +4189,26 @@ public class MainActivity extends AppCompatActivity
 
 //            Fragment fragmentA = fragmentManager.findFragmentByTag("AddEditProfileFrag");
 
-        Log.d(TAG, "startUpProfileUpdate: replace addEdit");
+//        Log.d(TAG, "startUpProfileUpdate: replace addEdit");
 
-        AddEditProfileFrag fragment2 = new AddEditProfileFrag();
-        Bundle args = new Bundle();
-        args.putInt(AddEditProfileFrag.EXTRA_ID, profile.getId());
-        args.putInt(AddEditProfileFrag.EXTRA_PASSPORT_ID, profile.getPassportId());
-        args.putString(AddEditProfileFrag.EXTRA_CORP_NAME, profile.getCorpName());
-        args.putString(AddEditProfileFrag.EXTRA_USER_NAME, profile.getUserName());
-        args.putString(AddEditProfileFrag.EXTRA_USER_EMAIL, profile.getUserEmail());
-        args.putInt(AddEditProfileFrag.EXTRA_SEQUENCE, profile.getSequence());
-        args.putString(AddEditProfileFrag.EXTRA_CORP_WEBSITE, profile.getCorpWebsite());
-        args.putString(AddEditProfileFrag.EXTRA_NOTE, profile.getNote());
-        args.putLong(AddEditProfileFrag.EXTRA_ACTVY_LONG, profile.getActvyLong());
-        args.putLong(AddEditProfileFrag.EXTRA_OPEN_DATE_LONG, profile.getOpenLong());
-        fragment2.setArguments(args);
-        fragmentTransaction.replace(R.id.fragment_container2, fragment2, "AddEditProfileFrag");
-        fragmentTransaction.commit();
-
-        Log.d(TAG, "startUpProfileUpdate: startUp " + profile.getPassportId() +
-                " " + profile.getCorpName());
+//        AddEditProfileFrag fragment2 = new AddEditProfileFrag();
+//        Bundle args = new Bundle();
+//        args.putInt(AddEditProfileFrag.EXTRA_ID, profile.getId());
+//        args.putInt(AddEditProfileFrag.EXTRA_PASSPORT_ID, profile.getPassportId());
+//        args.putString(AddEditProfileFrag.EXTRA_CORP_NAME, profile.getCorpName());
+//        args.putString(AddEditProfileFrag.EXTRA_USER_NAME, profile.getUserName());
+//        args.putString(AddEditProfileFrag.EXTRA_USER_EMAIL, profile.getUserEmail());
+//        args.putInt(AddEditProfileFrag.EXTRA_SEQUENCE, profile.getSequence());
+//        args.putString(AddEditProfileFrag.EXTRA_CORP_WEBSITE, profile.getCorpWebsite());
+//        args.putString(AddEditProfileFrag.EXTRA_NOTE, profile.getNote());
+//        args.putLong(AddEditProfileFrag.EXTRA_ACTVY_LONG, profile.getActvyLong());
+//        args.putLong(AddEditProfileFrag.EXTRA_OPEN_DATE_LONG, profile.getOpenLong());
+//        fragment2.setArguments(args);
+//        fragmentTransaction.replace(R.id.fragment_container2, fragment2, "AddEditProfileFrag");
+//        fragmentTransaction.commit();
+//
+//        Log.d(TAG, "startUpProfileUpdate: startUp " + profile.getPassportId() +
+//                " " + profile.getCorpName());
 
 //        startForResultLauncher.launch(detailIntent);
 //        startActivity(detailIntent);
@@ -4104,7 +4272,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void showSearchSelected(int selectedId, @NonNull Profile profile) {
-        frame2.setVisibility(View.VISIBLE);
+//        frame2.setVisibility(View.VISIBLE);
         this.selectedId = selectedId;
         FragmentManager fragmentManager = getSupportFragmentManager();
         Fragment fragment = fragmentManager.findFragmentById(R.id.fragment_container);
@@ -4200,6 +4368,170 @@ public class MainActivity extends AppCompatActivity
         });
 
         dialog.show();
+    }
+
+
+    private void shareAccounts() {
+        String shareText = "vonnie";
+        Intent myShareIntent = new Intent(Intent.ACTION_SEND);
+        myShareIntent.setType("plain/text");
+//        myShareIntent.setText(shareText);
+        myShareIntent.putExtra(Intent.EXTRA_TEXT, shareText);
+//        myShareIntent.putExtra(Intent., shareText);
+//        myShareIntent.putExtra(Intent.EXTRA_STREAM, myImageUri);
+//        myShareIntent.setType("image/*");
+        myShareActionProvider.setShareIntent(myShareIntent);
+        Toast.makeText(MainActivity.this, "Share Accounts... ", Toast.LENGTH_LONG).show();
+
+    }
+
+    private void writeJsonAccounts() {
+        String TABFunc = "writeJsonAccounts";
+        String msgError = "";
+        ProfileJsonListIO profileJsonListIO = new ProfileJsonListIO();
+//        myShareActionProvider.setOnShareTargetSelectedListener();
+
+        try {
+            File dirStorage = getExternalFilesDir("passport");
+            Log.d(TAG, TABFunc + " path found " + dirStorage.getPath());
+
+            if (!dirStorage.exists()) {
+                dirStorage.mkdirs();
+                Log.d(TAG, "ExportAccountDB: dir not exists");
+            }
+
+            File file = new File(dirStorage, "accounts.json");
+            Log.d(TAG, TABFunc + " export filename: " + file.getAbsoluteFile());
+
+            if (file.exists()) {
+                Log.d(TAG, TABFunc + " file exists " + file.getAbsoluteFile());
+            } else {
+                Log.d(TAG, TABFunc + " file not exists ");
+            }
+
+            if (file.createNewFile()) {
+                Log.d(TAG, TABFunc + " file created " + file.getAbsoluteFile());
+            }
+
+//            if (profileViewModel == null) {
+//                Log.d(TAG, TABFunc + " profileViewModel null reference ");
+//            }
+
+//            List<Profile> profiles = adapter.getCurrentList();
+//            LiveData<List<Profile>> profiles = profileViewModel.getAllProfilesByCorpName();
+            Integer count = profileJsonListIO.writeProfileJson(file, listProfiles);
+
+            Log.d(TAG, TABFunc + " #Records created on file " + count);
+
+            Uri uri = getUriForFile(getApplicationContext(),
+                    getString(R.string.fileprovider_package), file);
+
+            try {
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("*/*");
+                intent.putExtra(Intent.EXTRA_STREAM, uri);
+                intent.putExtra(Intent.EXTRA_TITLE, getString(R.string.fv_msg_38));
+                intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                startForResultSendLauncher.launch(intent.createChooser(intent, getString(R.string.fv_msg_38)));
+//            startActivityForResult(intent.createChooser(intent, getString(R.string.fv_msg_38)),
+//                    BACKUP_FILE_REQUESTED);
+                Log.d(TAG, TABFunc + " file Records sent");
+            } catch (ActivityNotFoundException ex) {
+                Log.e(TAG, TABFunc + " error: " + ex.getMessage());
+            }
+
+        } catch (Exception e2) {
+            e2.printStackTrace();
+            System.out.println(e2.getMessage());
+            msgError = "jsonError: " + e2.getMessage();
+            Log.v(TAG, msgError);
+            Toast.makeText(this, R.string.toast_export_error, Toast.LENGTH_SHORT).show();
+        }
+
+
+    }
+
+    private void requestFilePicker() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("*/*");
+        intent.addFlags(FLAG_GRANT_READ_URI_PERMISSION | FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
+        Intent chooseFile = Intent.createChooser(intent, "Choose a file");
+//            startActivityForResult(chooseFile, PICK_FILE_REQUEST);
+//        startActivity(chooseFile);
+        startForResultReceiveLauncher.launch(chooseFile.createChooser(chooseFile, getString(R.string.fv_msg_38)));
+    }
+
+    private void shareJsonAccounts() {
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
+        sendIntent.setType("text/plain");
+
+        Intent shareIntent = Intent.createChooser(sendIntent, null);
+        startActivity(shareIntent);
+
+
+//        Intent shareIntent = Intent.createChooser(sendIntent, null);
+//        share.putExtra(Intent.EXTRA_CHOOSER_TARGETS, myChooserTargetArray);
+//        share.putExtra(Intent.EXTRA_INITIAL_INTENTS, myInitialIntentArray);
+//        Uri uri = getUri
+
+    }
+
+
+    @NonNull
+    private String copyFileContent(Uri uri) throws IOException {
+        String TABFunc = "copyFileContent ";
+        InputStream inputStream = getContentResolver().openInputStream(uri);
+        Log.d(TAG, TABFunc + "got inputStream ");
+
+        /* temporary path */
+//        String extension = getMimeType(getApplicationContext(), uri);
+        File dirStorage = this.getExternalFilesDir("passport/");
+        Log.d(TAG, TABFunc + "got output dir " + dirStorage.getPath() + ":" + dirStorage.getAbsolutePath());
+//        String temporaryFilePath = Environment.getExternalStorageDirectory().toString()
+        String temporaryFilePath = dirStorage.getPath()
+                .concat("/").concat("temporaryfile")
+                .concat(".").concat("json");
+        Log.d(TAG, TABFunc + "got temp filename " + temporaryFilePath);
+
+        OutputStream outStream = new FileOutputStream(temporaryFilePath);
+        Log.d(TAG, TABFunc + "got outputStream ");
+
+        final byte[] b = new byte[8192];
+        for (int r;(r = inputStream.read(b)) != -1;) outStream.write(b, 0, r);
+
+        return temporaryFilePath;
+    }
+
+    private void shareEmailAccounts() {
+//        File dirStorage = getExternalFilesDir("passport/");
+//        File file = new File(dirStorage, MainActivity.BACKUP_FILENAME);
+//        if (!file.exists()) {
+//            Toast.makeText(this,
+//                    R.string.toast_no_export_to_share,
+//                    Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+        String[] addresses = {"vonniekinsey@gmail.com"};
+        String subject = "Account Contents";
+//        Uri uri = getUriForFile(getApplicationContext(),
+//                getString(R.string.fileprovider_package), file);
+
+        Intent intent = new Intent(Intent.ACTION_SEND);
+//        intent.setType("text/plain");
+//        intent.setType("*/*");
+//        intent.setType("message/rfc822")
+//        intent.setType("text/json");
+        intent.setType("application/octet-stream");
+//        intent.addFlags(FLAG_GRANT_READ_URI_PERMISSION | FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
+        intent.putExtra(Intent.EXTRA_EMAIL, addresses);
+        intent.putExtra(Intent.EXTRA_SUBJECT, subject);
+//        intent.putExtra(Intent.EXTRA_STREAM, uri);
+        intent.putExtra(Intent.EXTRA_TEXT, R.string.fv_msg_37);
+        intent.addFlags(FLAG_GRANT_READ_URI_PERMISSION);
+
+        startActivity(intent);
     }
 
     //    public boolean isFragmentPresent(String tag) {

@@ -62,6 +62,8 @@ public class ProfileOpenDateFrag extends Fragment {
         View view = inflater.inflate(R.layout.fragment_account_list_opendate, container, false);
         //        return super.onCreateView(inflater, container, savedInstanceState);
 
+        Log.d(TAG, "onCreateView start");
+
         recyclerView = view.findViewById(R.id.account_items_list_opendate);
 
         recyclerView.setHasFixedSize(true);
@@ -103,10 +105,12 @@ public class ProfileOpenDateFrag extends Fragment {
                     layoutManager = new LinearLayoutManager(getActivity());
                     recyclerView.setLayoutManager(layoutManager);
                 }
+                Log.d(TAG, "Screen Layout Size Normal");
                 break;
             default:
                 layoutManager = new LinearLayoutManager(getActivity());
                 recyclerView.setLayoutManager(layoutManager);
+                Log.d(TAG, "Screen default");
         }
 
 

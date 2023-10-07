@@ -32,29 +32,30 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/fab_margin">
+                android:layout_marginStart="12dp"
+                android:layout_marginBottom="4dp">
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/passport_id"
                     style="@style/TextAppearance.AppCompat.Medium"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
                     android:textColor="@color/primaryTextColor" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/actvy_date"
+                    style="@style/TextAppearance.AppCompat.Medium"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:textColor="@color/primaryTextColor" />
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/sequence"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
-                    android:textColor="@color/primaryTextColor" />
+<!--                <com.google.android.material.textview.MaterialTextView-->
+<!--                    android:id="@+id/sequence"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginStart="12dp"-->
+<!--                    android:textColor="@color/primaryTextColor" />-->
 
             </LinearLayout>
 
@@ -188,7 +189,7 @@
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/pick_open_date"
                 android:layout_width="match_parent"
-                android:layout_height="108dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:text="@string/btn_open_date_label" />
@@ -196,7 +197,7 @@
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/img_website"
                 android:layout_width="match_parent"
-                android:layout_height="54dp"
+                android:layout_height="wrap_content"
                 android:background="@color/default_btn_color"
                 android:backgroundTint="@color/secondaryColor"
                 android:gravity="center"

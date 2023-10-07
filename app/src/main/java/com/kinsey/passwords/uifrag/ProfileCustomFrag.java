@@ -506,21 +506,21 @@ public class ProfileCustomFrag extends Fragment {
     }
 
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        context = getContext();
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (resultCode == MainActivity.RESULT_CANCELED) {
-            return;
-        }
-
-    }
+//    @Override
+//    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+//        super.onActivityCreated(savedInstanceState);
+//        context = getContext();
+//    }
+//
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//
+//        if (resultCode == MainActivity.RESULT_CANCELED) {
+//            return;
+//        }
+//
+//    }
 
     @Override
     public void onAttach(Context context) {

@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.AlertDialog;
 //import android.app.Dialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -91,7 +92,7 @@ public class AddEditProfileActivity extends AppCompatActivity
     //    private DatePicker mDtePickOpen;
     private TextView tvActvyDate;
     private TextView tvPassportId;
-    private TextView tvSequence;
+//    private TextView tvSequence;
     private long lngOpenDate = 0;
     private long lngBeginOpenDate = 0;
     private long lngActvDate = 0;
@@ -157,7 +158,7 @@ public class AddEditProfileActivity extends AppCompatActivity
         Button mbtnWebView = findViewById(R.id.img_website);
         tvActvyDate = findViewById(R.id.actvy_date);
         tvPassportId = findViewById(R.id.passport_id);
-        tvSequence = findViewById(R.id.sequence);
+//        tvSequence = findViewById(R.id.sequence);
         btnOpenDate = findViewById(R.id.pick_open_date);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -400,8 +401,8 @@ public class AddEditProfileActivity extends AppCompatActivity
         intId = intent.getIntExtra(EXTRA_ID, -1);
         intPassportId = intent.getIntExtra(EXTRA_PASSPORT_ID, 0);
         intSequence = intent.getIntExtra(EXTRA_SEQUENCE, 0);
-        tvPassportId.setText(" | Id: " + this.intPassportId);
-        tvSequence.setText(" | Seq: " + this.intSequence);
+        tvPassportId.setText("Id: " + this.intPassportId);
+//        tvSequence.setText(" | Seq: " + this.intSequence);
 
         this.currProfile = new Profile();
         this.currProfile.setId(intId);
@@ -442,6 +443,9 @@ public class AddEditProfileActivity extends AppCompatActivity
     private void setAddUIDefaults(Intent intent) {
 //        mDtePickOpen.setMaxDate(new Date().getTime());
 //        mDtePickOpen.setMinDate(0);
+
+        intMaxSequence = intent.getIntExtra(EXTRA_MAX_SEQUENCE, 0);
+
         Date dte = new Date();
 
         lngOpenDate = dte.getTime();
@@ -452,6 +456,7 @@ public class AddEditProfileActivity extends AppCompatActivity
 
         this.currProfile = new Profile();
         this.currProfile.setOpenLong(lngOpenDate);
+        this.currProfile.setSequence(intMaxSequence);
     }
 
     private void restoreScreen(Bundle savedInstanceState) {
@@ -490,8 +495,8 @@ public class AddEditProfileActivity extends AppCompatActivity
         }
         intPassportId = savedInstanceState.getInt(EXTRA_PASSPORT_ID, 0);
         intSequence = savedInstanceState.getInt(EXTRA_SEQUENCE, 0);
-        tvPassportId.setText(" | Id: " + intPassportId);
-        tvSequence.setText(" | Seq: " + intSequence);
+        tvPassportId.setText("Id: " + intPassportId);
+//        tvSequence.setText(" | Seq: " + intSequence);
         editModeAdd = savedInstanceState.getBoolean(EXTRA_EDIT_MODE, false);
         if (!editModeAdd) {
             intId = savedInstanceState.getInt(EXTRA_ID, -1);
@@ -566,7 +571,8 @@ public class AddEditProfileActivity extends AppCompatActivity
 
     private void saveProfile() {
         if (!haveChanges()) {
-            showDialogMsg("No changes made to apply");
+            Toast.makeText(this, "No changes to apply", Toast.LENGTH_SHORT).show();
+//            showDialogMsg("No changes made to apply");
             return;
         }
         if (!validateCorpName()) {
@@ -643,13 +649,15 @@ public class AddEditProfileActivity extends AppCompatActivity
             profileViewModel.insertProfile(profile);
             editModeAdd = false;
             Log.d(TAG, "saveProfile add " + profile);
-//            showDialogMsg("New Account added for id " + profile.getId() + ":" + profile.getPassportId());
-            showDialogMsg("New Account added");
+//            Toast.makeText(this, "New account added", Toast.LENGTH_SHORT).show();
+            //            showDialogMsg("New Account added for id " + profile.getId() + ":" + profile.getPassportId());
+//            showDialogMsg("New Account added");
         } else {
             profileViewModel.update(profile);
 //        profileViewModel.update(profile);
 //            mListener.onProfileModifyItem(profile);
-            showDialogMsg("Account changes applied " + profile.getId() + ":" + profile.getPassportId());
+//            Toast.makeText(this, "Account changes applied", Toast.LENGTH_SHORT).show();
+//            showDialogMsg("Account changes applied " + profile.getId() + ":" + profile.getPassportId());
             Log.d(TAG, "saveProfile " + profile);
         }
         blnChangesMade = false;
@@ -657,7 +665,8 @@ public class AddEditProfileActivity extends AppCompatActivity
 
 
         closeKeyboard();
-        finish();
+        Toast.makeText(this, "Account updated", Toast.LENGTH_SHORT).show();
+//        finish();
 
 
 //        AlertDialog.Builder builder = new AlertDialog.Builder(AddEditProfileActivity.this);
@@ -905,33 +914,33 @@ public class AddEditProfileActivity extends AppCompatActivity
     }
 
     public void showDialogMsg(String msg) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
-        builder.setMessage(msg)
-                .setTitle(msg);
-        AlertDialog dialog = builder.create();
-
-        dialog.show();
-
-//        final Dialog dialog = new Dialog(getActivity());
-//        dialog.setContentView(R.layout.dialog_msg_ok);
-//        dialog.setTitle("Account Modify Info");
-//
-//        TextView text = (TextView) dialog.findViewById(R.id.text);
-//        text.setText(msg);
-//        ImageView image = (ImageView) dialog.findViewById(R.id.image);
-//        image.setImageResource(R.drawable.ic_info_24dp);
-//
-//
-//        Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
-//        // if button is clicked, close the custom dialog
-//        dialogButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                dialog.dismiss();
-//            }
-//        });
+//        AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
+//        builder.setMessage(msg)
+//                .setTitle(msg);
+//        AlertDialog dialog = builder.create();
 //
 //        dialog.show();
+
+        final Dialog dialog = new Dialog(getApplicationContext());
+        dialog.setContentView(R.layout.dialog_msg_ok);
+        dialog.setTitle("Account Modify Info");
+
+        TextView text = (TextView) dialog.findViewById(R.id.text);
+        text.setText(msg);
+        ImageView image = (ImageView) dialog.findViewById(R.id.image);
+        image.setImageResource(R.drawable.ic_info_24dp);
+
+
+        Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
+        // if button is clicked, close the custom dialog
+        dialogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
     }
 
 

@@ -38,7 +38,7 @@ public interface ProfileDao {
         profile.setPassportId((int)accountId);
         profile.setId((int)accountId);
         updateItem(profile);
-//        Log.d(TAG, "updated Profile " + profile.getCorpName() + ":" + profile.getPassportId() + ":" + profile.getId());
+        Log.d(TAG, "updated Profile " + profile.getCorpName() + ":" + profile.getPassportId() + ":" + profile.getId());
     }
 
 
