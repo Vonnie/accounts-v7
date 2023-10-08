@@ -48,7 +48,7 @@ public class ProfileRepository {
     public void insertAll(List<Profile> profiles) {
 //        new InsertProfilesAsyncTask(profileDao, profiles).execute();
         ProfileDatabase.databaseWriteExecutor.execute(() -> {
-            mProfileDao.insertAll(profiles);
+            mProfileDao.insertProfiles(profiles);
         });
     }
 

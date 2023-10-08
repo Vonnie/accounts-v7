@@ -557,12 +557,20 @@ public class MainActivity extends AppCompatActivity
                                 List<Profile> listAccounts = profileJsonListIO.readProfileJson(copyFilename);
                                 Log.d(TAG, TABFunc + "new listAccounts " + listAccounts);
                                 profileViewModel.deleteAllProfiles();
-                                for(int i=0;i<listAccounts.size(); i++){
-                                    Profile profileAcct = listAccounts.get(i);
-                                    Log.d(TAG, TABFunc + "new profileAcct " + profileAcct.getCorpName());
-                                    profileViewModel.insertProfile(profileAcct);
-                                }
-//                                profileViewModel.insertAll(listAccounts);
+//                                for(int i=0;i<listAccounts.size(); i++){
+//                                    Profile profileAcct = listAccounts.get(i);
+//                                    Log.d(TAG, TABFunc + "new profileAcct " + profileAcct.getCorpName());
+//                                    profileViewModel.insertProfile(profileAcct);
+//                                }
+                                profileViewModel.insertAll(listAccounts);
+                                frameSearch.setVisibility(View.GONE);
+                                FrameLayout frame = findViewById(R.id.fragment_container);
+                                frame.setVisibility(View.VISIBLE);
+                                FragmentManager fragmentManager = getSupportFragmentManager();
+                                Fragment profileFragment = fragmentManager.findFragmentById(R.id.fragment_container);
+                                ProfileCorpNameFrag frag = (ProfileCorpNameFrag) profileFragment;
+                                frag.refreshListAll();
+                                frag.setSelectedId(-1);
                                 Log.d(TAG, TABFunc + "listAccounts count " + listAccounts.size());
                             } catch (IOException e) {
                                 throw new RuntimeException(e);

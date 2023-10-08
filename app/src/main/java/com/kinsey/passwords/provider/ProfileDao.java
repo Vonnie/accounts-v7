@@ -16,6 +16,7 @@ import androidx.room.Update;
 
 import com.kinsey.passwords.items.Profile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Dao
@@ -43,8 +44,24 @@ public interface ProfileDao {
 
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    Long[] insertAll(List<Profile> profiles);
+    Long[] insertProfiles(List<Profile> profiles);
 
+    @Transaction
+    public default Long[] addProfiles(List<Profile> profiles) {
+        Long[] acctids = new Long[profiles.size()];
+        for(int i=0;i<profiles.size(); i++){
+            Profile profileAcct = profiles.get(i);
+            long accountId = insertProfile(profileAcct);
+            Log.d(TAG, "inserted Profile Id " + accountId);
+
+            profileAcct.setPassportId((int)accountId);
+            profileAcct.setId((int)accountId);
+            updateItem(profileAcct);
+            acctids[i] = accountId;
+            Log.d(TAG, "updated Profile " + profileAcct.getCorpName() + ":" + profileAcct.getPassportId() + ":" + profileAcct.getId());
+        }
+        return acctids;
+    }
 
 
     @Update
