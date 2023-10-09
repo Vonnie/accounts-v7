@@ -102,7 +102,7 @@ public class ProfileRepository {
     }
 
     public LiveData<List<Profile>> getAllProfilesByCorpName() {
-//        allProfiles = mProfileDao.getAllProfilesByCorpName();
+        allProfiles = mProfileDao.getAllProfilesByCorpName();
         return allProfiles;
 
     }

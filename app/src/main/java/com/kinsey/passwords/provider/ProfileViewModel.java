@@ -64,7 +64,7 @@ public class ProfileViewModel extends AndroidViewModel {
 //    }
 
     public LiveData<List<Profile>> getAllProfilesByCorpName() {
-//        allProfiles = repository.getAllProfilesByCorpName();
+        allProfiles = repository.getAllProfilesByCorpName();
         return allProfiles;
     }
 

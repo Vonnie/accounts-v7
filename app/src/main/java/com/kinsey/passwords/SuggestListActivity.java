@@ -53,6 +53,7 @@ public class SuggestListActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     RecyclerViewPositionHelper mRecyclerViewHelper;
     private SuggestViewModel suggestViewModel;
+    SuggestAdapter adapter = new SuggestAdapter();
     private final PasswordFormula passwordFormula = new PasswordFormula();
     private List<Suggest> suggestList;
     GridLayoutManager layoutManager;
@@ -90,7 +91,7 @@ public class SuggestListActivity extends AppCompatActivity {
         GridLayoutManager gridLayoutManager;
 //        int screenLayout = getResources().getConfiguration().screenLayout;
 
-        int spanSize = 3;
+        int spanSize = 2;
         gridLayoutManager = new GridLayoutManager(this, spanSize);
         recyclerView.setLayoutManager(gridLayoutManager);
 
@@ -169,8 +170,7 @@ public class SuggestListActivity extends AppCompatActivity {
 
 //        recyclerView.setLayoutManager(layoutManager);
 
-
-        final SuggestAdapter adapter = new SuggestAdapter();
+//        final SuggestAdapter adapter = new SuggestAdapter();
         Log.d(TAG, "onCreate: adapter acquired");
 
         recyclerView.setAdapter(adapter);
@@ -375,6 +375,7 @@ public class SuggestListActivity extends AppCompatActivity {
                     maxPos = viewHolder.getAdapterPosition();
                 }
 
+
                 return true;
             }
 
@@ -391,17 +392,21 @@ public class SuggestListActivity extends AppCompatActivity {
             public void onMoved(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, int fromPos, @NonNull RecyclerView.ViewHolder target, int toPos, int x, int y) {
 //                Log.d(TAG, "onMoved");
 
-                if (toViewHolder != null) {
-//                    SuggestAdapter.SuggestHolder col = (SuggestAdapter)toViewHolder.;
-                    toViewHolder.itemView.setBackgroundColor(
-                            ContextCompat.getColor(getApplicationContext(), R.color.primaryDarkColor)
-                    );
-                }
+//                if (toViewHolder != null) {
+////                    SuggestAdapter.SuggestHolder col = (SuggestAdapter)toViewHolder.;
+////                    toViewHolder.itemView.setBackgroundColor(
+////                            ContextCompat.getColor(getApplicationContext(), R.color.primaryDarkColor)
+////                    );
+//                    toViewHolder.itemView.setActivated(true);
+//                }
 
-                target.itemView.setBackgroundColor(
-                        ContextCompat.getColor(getApplicationContext(), R.color.secondaryDarkColor)
-                );
 
+//                target.itemView.setBackgroundColor(
+//                        ContextCompat.getColor(getApplicationContext(), R.color.secondaryDarkColor)
+//                );
+//                target.itemView.setBackgroundColor(
+//                        ContextCompat.getColor(getApplicationContext(), R.color.secondaryDarkColor)
+//                );
                 toViewHolder = target;
                 super.onMoved(recyclerView, viewHolder, fromPos, target, toPos, x, y);
             }
@@ -410,9 +415,22 @@ public class SuggestListActivity extends AppCompatActivity {
             public void onSelectedChanged(@Nullable RecyclerView.ViewHolder viewHolder, int actionState) {
                 Log.d(TAG, "selected changed " + actionState);
                 if (actionState == ACTION_STATE_DRAG) {
+                    viewHolder.itemView.setActivated(true);
                     viewHolder.itemView.setBackgroundColor(
                             ContextCompat.getColor(getApplicationContext(), R.color.secondaryLightColor)
                     );
+
+                    if (fromViewHolder != null) {
+                        fromViewHolder.itemView.setActivated(false);
+                        fromViewHolder.itemView.setBackgroundColor(
+                                ContextCompat.getColor(getApplicationContext(), R.color.primaryDarkColor)
+                        );
+                    }
+
+                    if (toViewHolder != null) {
+                        toViewHolder.itemView.setActivated(false);
+                    }
+
                     fromViewHolder = viewHolder;
                     minPos = adapter.getItemCount();
                     maxPos = 0;
@@ -432,12 +450,12 @@ public class SuggestListActivity extends AppCompatActivity {
                     if (toViewHolder == null) {
                         return;
                     }
-                    fromViewHolder.itemView.setBackgroundColor(
-                            ContextCompat.getColor(getApplicationContext(), R.color.backgroundTransparent)
-                    );
-                    toViewHolder.itemView.setBackgroundColor(
-                            ContextCompat.getColor(getApplicationContext(), R.color.backgroundTransparent)
-                    );
+//                    fromViewHolder.itemView.setBackgroundColor(
+//                            ContextCompat.getColor(getApplicationContext(), R.color.backgroundTransparent)
+//                    );
+//                    toViewHolder.itemView.setBackgroundColor(
+//                            ContextCompat.getColor(getApplicationContext(), R.color.backgroundTransparent)
+//                    );
                     int fromPos = fromViewHolder.getAdapterPosition();
                     int toPos = toViewHolder.getAdapterPosition();
                     if (fromPos == toPos) {
@@ -506,8 +524,11 @@ public class SuggestListActivity extends AppCompatActivity {
                     Log.d(TAG, "min:max " + minPos + ":" + maxPos);
 //                        adapter.notifyItemMoved(minPos, maxPos);
 //                        adapter.notifyDataSetChanged();
-                    adapter.notifyItemRangeChanged(minPos, maxPos);
 
+                    fromViewHolder.itemView.setActivated(false);
+                    toViewHolder.itemView.setActivated(false);
+//                    adapter.notifyItemRangeChanged(minPos, maxPos);
+                    adapter.notifyItemRangeChanged(0, adapter.getItemCount() - 1);
                     fromViewHolder = null;
                 }
                 super.onSelectedChanged(viewHolder, actionState);
@@ -721,6 +742,7 @@ public class SuggestListActivity extends AppCompatActivity {
 //
 //        Log.d(TAG, "onChg new max seq " + this.suggestMaxItem.getSequence());
 //    }
+
 
     @Override
     public void onSaveInstanceState(Bundle outState) {

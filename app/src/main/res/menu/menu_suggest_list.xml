@@ -3,11 +3,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.kinsey.passwords.SuggestListActivityV1">
     <item
+        android:id="@+id/action_favorite"
+        android:checkable="true"
+        android:title="Include symbols"
+        app:actionViewClass="android.widget.CheckBox"
+        app:showAsAction="ifRoom|withText" />
+
+    <item
         android:id="@+id/menu_generate10"
         android:icon="@android:drawable/ic_menu_add"
         android:orderInCategory="100"
         android:title="@string/menu_generate10"
-
         app:showAsAction="never" />
 
     <item

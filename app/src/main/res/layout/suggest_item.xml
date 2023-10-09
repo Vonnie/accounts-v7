@@ -6,16 +6,17 @@
     android:layout_marginStart="8dp"
     android:layout_marginTop="8dp"
     android:layout_marginEnd="8dp"
-    android:background="@color/secondaryColor"
+    app:cardBackgroundColor="@color/secondaryColor"
     app:cardCornerRadius="8dp"
     app:cardElevation="8dp">
+    <!--    android:background="@color/secondaryColor"-->
 
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/secondaryColor"
         android:padding="8dp">
 
+        <!--        android:background="@color/secondaryColor"-->
         <!--        <TextView-->
         <!--            android:id="@+id/text_view_priority"-->
         <!--            android:layout_width="wrap_content"-->
@@ -26,16 +27,16 @@
 
         <TextView
             android:id="@+id/text_view_password"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
-            android:ellipsize="end"
             android:background="@color/secondaryColor"
+            android:ellipsize="end"
             android:maxLines="1"
             android:text="@string/sugg_password"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="@color/backgroundWhite" />
-<!--        android:textColor="@color/secondaryTextColor" />-->
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="@color/secondaryTextColor" />
+        <!--            android:textColor="@color/backgroundWhite" />-->
         <!--            android:textColor="?android:attr/textColorSecondary" />-->
         <!--        android:layout_toStartOf="@+id/text_view_priority"-->
 

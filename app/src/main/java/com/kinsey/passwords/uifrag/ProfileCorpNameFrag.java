@@ -225,7 +225,9 @@ public class ProfileCorpNameFrag extends Fragment {
             case MainActivity.LISTSORT_CUSTOM_SORT:
                 sortDataByCustomSort(savedInstanceState);
                 break;
-
+            default:
+                sortDataByCorpName(savedInstanceState);
+                break;
         }
 
 
