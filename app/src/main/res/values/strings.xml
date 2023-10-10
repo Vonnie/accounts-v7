@@ -243,6 +243,7 @@
     <string name="share">Share Accounts</string>
     <string name="welcome_message">Welcome Message</string>
     <string name="menuvw_share_from">Share From</string>
+    <string name="link">Link</string>
     <!--    \n\nThe review feedback is based on game expectations. This is NOT a game. On Google Play, it is correctly identified as a productivity tool.-->
 
 </resources>

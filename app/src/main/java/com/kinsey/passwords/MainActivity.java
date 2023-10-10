@@ -37,6 +37,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -448,6 +449,7 @@ public class MainActivity extends AppCompatActivity
                 frameSearch.setVisibility(View.VISIBLE);
             } else {
                 frameSearch.setVisibility(View.GONE);
+                closeKeyboard();
             }
         }
 
@@ -1833,6 +1835,7 @@ public class MainActivity extends AppCompatActivity
 ////                    frame.setVisibility(View.GONE);
                 } else {
                     frameSearch.setVisibility(View.GONE);
+                    closeKeyboard();
 ////                    FrameLayout frame = findViewById(R.id.fragment_container);
 ////                    frame.setVisibility(View.VISIBLE);
 //                    fragmentManager = getSupportFragmentManager();
@@ -2606,13 +2609,13 @@ public class MainActivity extends AppCompatActivity
 //    }
 
 
-    private void searchRequestActivity() {
-
-        Intent detailIntent = new Intent(this, SearchActivity.class);
-        detailIntent.putExtra(Profile.class.getSimpleName(), "sortorder");
-        startActivity(detailIntent);
-
-    }
+//    private void searchRequestActivity() {
+//
+//        Intent detailIntent = new Intent(this, SearchActivity.class);
+//        detailIntent.putExtra(Profile.class.getSimpleName(), "sortorder");
+//        startActivity(detailIntent);
+//
+//    }
 
     private void showAboutActivity() {
 
@@ -4616,4 +4619,29 @@ public class MainActivity extends AppCompatActivity
 ////            notifyDataSetChanged();
 //        }
 //    };
+
+    private void closeKeyboard() {
+        // this will give us the view
+        // which is currently focus
+        // in this layout
+        View view = this.getCurrentFocus();
+
+        // if nothing is currently
+        // focus then this will protect
+        // the app from crash
+        if (view != null) {
+
+            // now assign the system
+            // service to InputMethodManager
+            InputMethodManager manager
+                    = (InputMethodManager)
+                    getSystemService(
+                            Context.INPUT_METHOD_SERVICE);
+            manager
+                    .hideSoftInputFromWindow(
+                            view.getWindowToken(), 0);
+        }
+    }
+
+
 }

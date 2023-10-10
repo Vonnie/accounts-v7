@@ -1428,78 +1428,78 @@ public class FileViewActivity extends AppCompatActivity {
             Log.e(TAG, "error: " + ex.getMessage());
         }
     }
-    private void shareExport() {
-        AlertDialog.Builder dlg = new AlertDialog.Builder(this);
-        dlg.setIcon(getResources().getDrawable(android.R.drawable.ic_dialog_alert));
-        dlg.setTitle(getResources().getString(R.string.app_name))
-                .setMessage("Is the exported file up-to-date for this share.")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+//    private void shareExport() {
+//        AlertDialog.Builder dlg = new AlertDialog.Builder(this);
+//        dlg.setIcon(getResources().getDrawable(android.R.drawable.ic_dialog_alert));
+//        dlg.setTitle(getResources().getString(R.string.app_name))
+//                .setMessage("Is the exported file up-to-date for this share.")
+//                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//
+//                        shareIntent();
+//                        // finish dialog
+//                        dialog.dismiss();
+//                        return;
+//                    }
+//
+//                })
+//                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//
+//                        // finish dialog
+//                        dialog.dismiss();
+//                        return;
+//                    }
+//
+//                })
+//                .show();
+//        dlg = null;
+//
+//    }
 
-                        shareIntent();
-                        // finish dialog
-                        dialog.dismiss();
-                        return;
-                    }
-
-                })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        // finish dialog
-                        dialog.dismiss();
-                        return;
-                    }
-
-                })
-                .show();
-        dlg = null;
-
-    }
-
-    private void shareIntent() {
-
-        Intent emailintent = new Intent(Intent.ACTION_SEND);
-        emailintent.putExtra(Intent.EXTRA_SUBJECT, "My Accounts App");
-//        emailIntent.putExtra(Intent.EXTRA_TEXT, emailText);
-//        ArrayList<Uri> uris = new ArrayList<Uri>();
-        emailintent.setType("text/html");
-
-        File dirStorage = getExternalFilesDir("passport/");
-        File file = new File(dirStorage, MainActivity.BACKUP_FILENAME);
-        if (!file.exists()) {
-            Toast.makeText(FileViewActivity.this,
-                    "No Exported File to share",
-                    Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        emailintent.putExtra(Intent.EXTRA_SUBJECT, "My Accounts App - import/export file");
-//                Uri u = Uri.fromFile(file);
-//                uris.add(u);
-        emailintent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
-        emailintent.putExtra(Intent.EXTRA_TEXT, "Exported JSON file");
-
-        emailintent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-//        emailintent.putExtra(Intent.EXTRA_TEXT, "My Accounts Attachments");
-
-
-        myShareActionProvider.setShareIntent(emailintent);
-//        try {
-//            startActivity(Intent.createChooser(emailintent, "Send your accounts.json..."));
-//        } catch (ActivityNotFoundException e) {
+//    private void shareIntent() {
+//
+//        Intent emailintent = new Intent(Intent.ACTION_SEND);
+//        emailintent.putExtra(Intent.EXTRA_SUBJECT, "My Accounts App");
+////        emailIntent.putExtra(Intent.EXTRA_TEXT, emailText);
+////        ArrayList<Uri> uris = new ArrayList<Uri>();
+//        emailintent.setType("text/html");
+//
+//        File dirStorage = getExternalFilesDir("passport/");
+//        File file = new File(dirStorage, MainActivity.BACKUP_FILENAME);
+//        if (!file.exists()) {
 //            Toast.makeText(FileViewActivity.this,
-//                    "Unable to get the shared menu",
-//                    Toast.LENGTH_LONG).show();
+//                    "No Exported File to share",
+//                    Toast.LENGTH_SHORT).show();
+//            return;
 //        }
-
-//        Toast.makeText(FileViewActivityV1.this,
-//                "Exported file shared sent",
-//                Toast.LENGTH_SHORT).show();
-
-    }
+//
+//        emailintent.putExtra(Intent.EXTRA_SUBJECT, "My Accounts App - import/export file");
+////                Uri u = Uri.fromFile(file);
+////                uris.add(u);
+//        emailintent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
+//        emailintent.putExtra(Intent.EXTRA_TEXT, "Exported JSON file");
+//
+//        emailintent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+////        emailintent.putExtra(Intent.EXTRA_TEXT, "My Accounts Attachments");
+//
+//
+//        myShareActionProvider.setShareIntent(emailintent);
+////        try {
+////            startActivity(Intent.createChooser(emailintent, "Send your accounts.json..."));
+////        } catch (ActivityNotFoundException e) {
+////            Toast.makeText(FileViewActivity.this,
+////                    "Unable to get the shared menu",
+////                    Toast.LENGTH_LONG).show();
+////        }
+//
+////        Toast.makeText(FileViewActivityV1.this,
+////                "Exported file shared sent",
+////                Toast.LENGTH_SHORT).show();
+//
+//    }
 
 
 //
