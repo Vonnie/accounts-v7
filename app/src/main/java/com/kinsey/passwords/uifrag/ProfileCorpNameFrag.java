@@ -222,9 +222,9 @@ public class ProfileCorpNameFrag extends Fragment {
             case MainActivity.LISTSORT_OPEN_DATE:
                 sortDataByOpenDate(savedInstanceState);
                 break;
-            case MainActivity.LISTSORT_CUSTOM_SORT:
-                sortDataByCustomSort(savedInstanceState);
-                break;
+//            case MainActivity.LISTSORT_CUSTOM_SORT:
+//                sortDataByCustomSort(savedInstanceState);
+//                break;
             default:
                 sortDataByCorpName(savedInstanceState);
                 break;
@@ -743,6 +743,7 @@ public class ProfileCorpNameFrag extends Fragment {
                 }
                 break;
             case Configuration.SCREENLAYOUT_SIZE_NORMAL:
+                Log.d(TAG, "setGrid: SCREENLAYOUT_SIZE_NORMAL");
                 if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
                     if (selectedId == -1) {
                         if (this.listsortOrder == MainActivity.LISTSORT_OPEN_DATE) {
@@ -758,7 +759,14 @@ public class ProfileCorpNameFrag extends Fragment {
                 }
                 break;
             default:
-                spanSize = 1;
+                Log.d(TAG, "setGrid: defaults");
+                if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                    spanSize = 3;
+                    Log.d(TAG, "setGrid: landscape");
+                } else {
+                    spanSize = 1;
+                    Log.d(TAG, "setGrid: portrait");
+                }
         }
 
         Log.d(TAG, "setGrid: spanSize " + spanSize);

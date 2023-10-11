@@ -26,6 +26,7 @@ android {
     }
 
     buildTypes {
+//        viewBinding true
         debug {
             debuggable true
         }
