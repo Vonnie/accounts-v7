@@ -58,11 +58,11 @@
             android:tag="large_port"
             android:layout_weight="3" />
 
-        <FrameLayout
-            android:id="@+id/fragment_container2"
-            android:layout_width="match_parent"
-            android:layout_weight="2"
-            android:layout_height="match_parent" />
+<!--        <FrameLayout-->
+<!--            android:id="@+id/fragment_container2"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_weight="2"-->
+<!--            android:layout_height="match_parent" />-->
 
 
     </androidx.appcompat.widget.LinearLayoutCompat>
@@ -84,13 +84,13 @@
     <!--        tools:listitem="@layout/profile_item"/>-->
 
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/button_add_profile"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="32dp"
-        app:srcCompat="@drawable/ic_add"
-        app:rippleColor="@color/secondaryColor" />
+<!--    <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+<!--        android:id="@+id/button_add_profile"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_gravity="bottom|end"-->
+<!--        android:layout_margin="32dp"-->
+<!--        app:srcCompat="@drawable/ic_add"-->
+<!--        app:rippleColor="@color/secondaryColor" />-->
     <!--    app:backgroundTint="@color/primaryDarkColor"-->
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

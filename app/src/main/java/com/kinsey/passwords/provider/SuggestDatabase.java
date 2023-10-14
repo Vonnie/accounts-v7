@@ -47,23 +47,23 @@ public abstract class SuggestDatabase extends RoomDatabase {
         @Override
         public void onCreate(@NonNull SupportSQLiteDatabase db) {
             super.onCreate(db);
-            new PopulateDbAsyncTask(instance).execute();
+//            new PopulateDbAsyncTask(instance).execute();
         }
     };
 
-    private static class PopulateDbAsyncTask extends AsyncTask<Void, Void, Void> {
-        private SuggestDao suggestDao;
-
-        private PopulateDbAsyncTask(SuggestDatabase db) {
-            suggestDao = db.suggestDao();
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            suggestDao.insert(new Suggest("aaaaaa", 2));
-            suggestDao.insert(new Suggest("bbbbbb", 5));
-            suggestDao.insert(new Suggest("cccccc", 9));
-            return null;
-        }
-    }
+//    private static class PopulateDbAsyncTask extends AsyncTask<Void, Void, Void> {
+//        private SuggestDao suggestDao;
+//
+//        private PopulateDbAsyncTask(SuggestDatabase db) {
+//            suggestDao = db.suggestDao();
+//        }
+//
+//        @Override
+//        protected Void doInBackground(Void... voids) {
+//            suggestDao.insert(new Suggest("aaaaaa", 2));
+//            suggestDao.insert(new Suggest("bbbbbb", 5));
+//            suggestDao.insert(new Suggest("cccccc", 9));
+//            return null;
+//        }
+//    }
 }

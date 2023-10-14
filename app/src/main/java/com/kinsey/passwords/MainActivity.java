@@ -3,9 +3,11 @@ package com.kinsey.passwords;
 import static android.content.Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION;
 import static android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION;
 import static androidx.core.content.FileProvider.getUriForFile;
+//import static androidx.core.view.accessibility.AccessibilityWindowInfoCompat.Api21Impl.getId;
+
 import android.app.Dialog;
 import android.content.ActivityNotFoundException;
-import android.content.ContentResolver;
+//import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -59,6 +61,7 @@ import android.widget.Toast;
 //import com.google.firebase.auth.FirebaseUser;
 //import com.google.firebase.auth.GoogleAuthProvider;
 //import com.dropbox.core.v2.users.FullAccount;
+import com.google.android.gms.ads.identifier.AdvertisingIdClient;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
 import com.kinsey.passwords.items.Profile;
@@ -91,6 +94,7 @@ import java.util.GregorianCalendar;
 //import java.util.List;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 //import com.dropbox.core.DbxException;
 //import com.dropbox.core.DbxRequestConfig;
@@ -396,6 +400,7 @@ public class MainActivity extends AppCompatActivity
             FrameLayout frame = findViewById(R.id.fragment_container);
             Log.d(TAG, "onCreate: tag " + frame.getTag());
 
+
 //            if (isTablet | frame.getTag().equals("sw600")
 //                    |  frame.getTag().equals("large_land")
 //                    |  frame.getTag().equals("main_large_land")) {
@@ -452,6 +457,9 @@ public class MainActivity extends AppCompatActivity
                 closeKeyboard();
             }
         }
+
+
+//        Log.d(TAG, "onCreate: AD_ID " + getId());
 
 
         startForResultEditLauncher = registerForActivityResult(
@@ -544,8 +552,9 @@ public class MainActivity extends AppCompatActivity
 //                            int result = activityResult.getResultCode();
                             Intent data = activityResult.getData();
                             Log.d(TAG, TABFunc + "receive file " + data);
+                            assert data != null;
                             Log.d(TAG, TABFunc + "received " + data.getData());
-                            Log.d(TAG, TABFunc + "received " + data.getData().getPath());
+                            Log.d(TAG, TABFunc + "received " + Objects.requireNonNull(data.getData()).getPath());
 //                            String fileName = new File(String.valueOf(data.getData())).getName();
 //                            String file = new File(String.valueOf(data.getData()));
                             File file = new File(String.valueOf(data.getData()));
@@ -1158,10 +1167,15 @@ public class MainActivity extends AppCompatActivity
 
         Log.d(TAG, "onCreateOptionsMenu: listsortOrder " + this.listsortOrder);
 
+//          ========================================================================
+//        For future to throw an account to another device
+//          ========================================================================
+//        MenuItem shareItem = menu.findItem(R.id.action_share);
+//        myShareActionProvider =
+//                (ShareActionProvider) MenuItemCompat.getActionProvider(shareItem);
+//          ========================================================================
 
-        MenuItem shareItem = menu.findItem(R.id.action_share);
-        myShareActionProvider =
-                (ShareActionProvider) MenuItemCompat.getActionProvider(shareItem);
+
 
         //        View view = menu.findItem(R.id.button_item).getActionView();
 //
@@ -1933,12 +1947,15 @@ public class MainActivity extends AppCompatActivity
 
                 return true;
 
-
-            case R.id.action_share:
-
-                shareAccounts();
-
-                return true;
+//          ========================================================================
+//            For future throw an account to another device
+//          ========================================================================
+//            case R.id.action_share:
+//
+//                shareAccounts();
+//
+//                return true;
+//          ========================================================================
 
             case R.id.vw_shared:
 
@@ -4381,20 +4398,23 @@ public class MainActivity extends AppCompatActivity
         dialog.show();
     }
 
-
-    private void shareAccounts() {
-        String shareText = "vonnie";
-        Intent myShareIntent = new Intent(Intent.ACTION_SEND);
-        myShareIntent.setType("plain/text");
-//        myShareIntent.setText(shareText);
-        myShareIntent.putExtra(Intent.EXTRA_TEXT, shareText);
-//        myShareIntent.putExtra(Intent., shareText);
-//        myShareIntent.putExtra(Intent.EXTRA_STREAM, myImageUri);
-//        myShareIntent.setType("image/*");
-        myShareActionProvider.setShareIntent(myShareIntent);
-        Toast.makeText(MainActivity.this, "Share Accounts... ", Toast.LENGTH_LONG).show();
-
-    }
+    //          ========================================================================
+//    For future throw an account to another device
+    //          ========================================================================
+//    private void shareAccounts() {
+//        String shareText = "vonnie";
+//        Intent myShareIntent = new Intent(Intent.ACTION_SEND);
+//        myShareIntent.setType("plain/text");
+////        myShareIntent.setText(shareText);
+//        myShareIntent.putExtra(Intent.EXTRA_TEXT, shareText);
+////        myShareIntent.putExtra(Intent., shareText);
+////        myShareIntent.putExtra(Intent.EXTRA_STREAM, myImageUri);
+////        myShareIntent.setType("image/*");
+//        myShareActionProvider.setShareIntent(myShareIntent);
+//        Toast.makeText(MainActivity.this, "Share Accounts... ", Toast.LENGTH_LONG).show();
+//
+//    }
+//          ========================================================================
 
     private void writeJsonAccounts() {
         String TABFunc = "writeJsonAccounts";

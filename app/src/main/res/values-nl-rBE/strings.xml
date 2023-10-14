@@ -213,7 +213,7 @@
     <string name="splInstr2">Klik op kaart om accountdetails te selecteren. Klik nogmaals op de kaart om de accountgegevens te wissen. Klik op Plus (+) om een account toe te voegen.</string>
     <string name="menuacct_notify">Melden</string>
     <string name="warningmsg">Welkom bij deze productiviteitstool-app.       Onderhoud uw accounts en volg ze vervolgens op lijst in geselecteerde volgorde. Voer zoekopdrachten uit en maak een back-up / herstel.           Er worden geen wachtwoorden ingevoerd. Uw wachtwoorden worden buiten deze app bewaard. Houd een aparte papieren lijst met wachtwoorden bij met de toegewezen account-ID.           Deze app heeft alleen wachtwoorden voor suggesties. Als u een wachtwoord selecteert, heeft de app geen kennis van het gebruik ervan.</string>
-    <string name="app_name">Lijst &amp; Bewerk Accounts</string>
+    <string name="app_name">Accounts</string>
     <string name="fv_msg_1">Accountrijen momenteel op db</string>
     <string name="fv_msg_7">Mga hilera ng account na kasalukuyang nasa db</string>
     <string name="fv_msg_12">Accountrijen om een back-up van te maken zodra toestemming is verleend</string>

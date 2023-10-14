@@ -57,12 +57,12 @@
             android:layout_weight="1"
             android:tag="large_land" />
 
-        <FrameLayout
-            android:id="@+id/fragment_container2"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="15dp"
-            android:layout_weight="1" />
+<!--        <FrameLayout-->
+<!--            android:id="@+id/fragment_container2"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_marginTop="15dp"-->
+<!--            android:layout_weight="1" />-->
 
 
     </androidx.appcompat.widget.LinearLayoutCompat>
@@ -83,13 +83,13 @@
     <!--        tools:listitem="@layout/profile_item"/>-->
 
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/button_add_profile"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="32dp"
-        app:rippleColor="@color/secondaryColor"
-        app:srcCompat="@drawable/ic_search_black" />
+<!--    <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+<!--        android:id="@+id/button_add_profile"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_gravity="bottom|end"-->
+<!--        android:layout_margin="32dp"-->
+<!--        app:rippleColor="@color/secondaryColor"-->
+<!--        app:srcCompat="@drawable/ic_search_black" />-->
     <!--    app:backgroundTint="@color/primaryDarkColor"-->
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

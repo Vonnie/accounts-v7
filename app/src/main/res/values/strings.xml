@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">List &amp; Edit Accounts</string>
+    <string name="app_name">Accounts List</string>
     <string name="app_name_corpname">" Accounts by Corporation Name"</string>
     <string name="app_name_opendate">" Accounts by Open Date, descending"</string>
     <string name="app_name_acctid">" Accounts by Account Id"</string>
@@ -235,7 +235,7 @@
 <!--        \n\nThe testing of this app may be inadequate therefore unable to uncover problems you see.</string>-->
 
     <string name="warningmsg">Welcome to Accounts List app.
-    \n\nMaintain your accounts. Order list by either Corp Name, Account Id, Open Date, or custom. Search by Corp Name.
+    \n\nMaintain your accounts. Order accounts by either Corp Name, Account Id, or Open Date. Search by Corp Name.
         \n\nPasswords are kept outside this app. Keep a separate paper list of passwords with its assigned account id. Passwords are only suggestions, not tied to an account, nor data.
         </string>
     <string name="add_a_new_account">Add a new account</string>
