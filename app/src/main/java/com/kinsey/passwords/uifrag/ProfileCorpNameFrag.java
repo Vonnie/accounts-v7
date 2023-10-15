@@ -74,6 +74,8 @@ public class ProfileCorpNameFrag extends Fragment {
 
         void onProfileCorpNameAdd();
 
+//        void onShowWelcome();
+
         void onDeleteConfirmCorpName(Profile profile, int position);
 
         void onDeleteConfirmCustom(Profile profile, int position);
@@ -585,8 +587,9 @@ public class ProfileCorpNameFrag extends Fragment {
                 } else {
                     Log.d(TAG, "onCreateView: getItemCount " + adapter.getItemCount());
                     if (adapter.getItemCount() == 0) {
-                        mListener.onProfileCorpNameAdd();
-//                        mListener.onEmptyWarning();
+//                        mListener.onProfileCorpNameAdd();
+//                        mListener.onShowWelcome();
+                        mListener.onEmptyWarning();
 //                    } else {
                         if (adapter.getSelectedId() == -1) {
                             recyclerView.scrollToPosition(0);

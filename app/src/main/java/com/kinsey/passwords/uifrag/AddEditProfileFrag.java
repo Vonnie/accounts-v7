@@ -250,6 +250,7 @@ public class AddEditProfileFrag extends Fragment
             }
         });
 
+//        showDialogMsg("Getting started by added first account");
         return view;
     }
 

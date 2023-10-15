@@ -424,7 +424,6 @@ public class MainActivity extends AppCompatActivity
             fragmentTransaction3.commit();
             frameSearch = findViewById(R.id.fragment_search_container);
             frameSearch.setVisibility(View.GONE);
-//            showWarning();
         } else {
             this.isSearchShown = savedInstanceState.getBoolean(ARG_IS_SHEARCH_SHOWN, false);
             listsortOrder = savedInstanceState.getInt(ARG_LISTSORT, 1);
@@ -1943,7 +1942,7 @@ public class MainActivity extends AppCompatActivity
 
             case R.id.menumain_notify:
 
-                showWarning();
+                onEmptyWarning();
 
                 return true;
 
@@ -3883,7 +3882,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onProfileCorpNameAdd() {
-
         Intent detailIntent = new Intent(this, AddEditProfileActivity.class);
 //        detailIntent.putExtra(AddEditProfileActivity.EXTRA_ID, -1);
 //        detailIntent.putExtra(AddEditProfileActivity.EXTRA_PASSPORT_ID, profile.getPassportId());
@@ -3941,6 +3939,7 @@ public class MainActivity extends AppCompatActivity
 //        frame2 = findViewById(R.id.fragment_container2);
 //        frame2.setVisibility(View.VISIBLE);
     }
+
 
     private void alertConfirmDelete(Profile profile, int position) {
 //        android.app.AlertDialog.Builder alertDialogBuilder = new android.app.AlertDialog.Builder(this);
@@ -4009,31 +4008,12 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onEmptyWarning() {
-        FrameLayout frame = findViewById(R.id.fragment_container);
-        if (itemAdded) {
-            frame.setVisibility(View.VISIBLE);
-            return;
-        }
-        frame.setVisibility(View.GONE);
-
-//        String welcomeMsg = getString(R.string.warningmsg);
-//        String msg = String.format(String.format("{0}\n{1}\n{2}", ) ) + getString(R.string.getting_started) + "\n" +
-//                getString(R.string.add_first_account);
-////        + "\n" +
-////                getString(R.string.if_so_direction);
-
-        String msg = String.format("%s\n\n\n%s\n\n%s",
-                getString(R.string.warningmsg),
-                getString(R.string.getting_started),
-                getString(R.string.add_first_account));
-
         final Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.dialog_msg_ok);
         dialog.setTitle("Account Modify Info");
 
-
         TextView text = (TextView) dialog.findViewById(R.id.text);
-        text.setText(msg);
+        text.setText(getString(R.string.warningmsg));
         ImageView image = (ImageView) dialog.findViewById(R.id.image);
         image.setImageResource(R.drawable.ic_info_24dp);
 
@@ -4042,49 +4022,87 @@ public class MainActivity extends AppCompatActivity
         dialogButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 dialog.dismiss();
-                itemAdded = true;
-
-                onProfileCorpNameAdd();
-
             }
         });
 
         dialog.show();
-
-
-//        android.app.AlertDialog.Builder alertDialogBuilder = new android.app.AlertDialog.Builder(this);
+//        FrameLayout frame = findViewById(R.id.fragment_container);
+//        if (itemAdded) {
+//            frame.setVisibility(View.VISIBLE);
+//            return;
+//        }
+//        frame.setVisibility(View.GONE);
 //
-//        alertDialogBuilder.setMessage(getString(R.string.getting_started) + "\n" +
-//                getString(R.string.add_first_account) + "\n" +
-//    getString(R.string.if_so_direction));
+////        String welcomeMsg = getString(R.string.warningmsg);
+////        String msg = String.format(String.format("{0}\n{1}\n{2}", ) ) + getString(R.string.getting_started) + "\n" +
+////                getString(R.string.add_first_account);
+//////        + "\n" +
+//////                getString(R.string.if_so_direction);
 //
+//        String msg = String.format("%s\n\n\n%s\n\n%s",
+//                getString(R.string.warningmsg),
+//                getString(R.string.getting_started),
+//                getString(R.string.add_first_account));
 //
-//        alertDialogBuilder.setPositiveButton(R.string.yes,
-//                new DialogInterface.OnClickListener() {
-//                    public void onClick(DialogInterface arg0, int arg1) {
-//
-//                        itemAdded = true;
-//
-//                        onProfileCorpNameAdd();
-//
-//
-////                        Intent intent = new Intent(MainActivity.this, AddEditProfileActivity.class);
-////                        startActivityForResult(intent, ADD_PROFILE_REQUEST);
-//
-//                    }
-//                })
-//                .setNegativeButton("No",
-//                        new DialogInterface.OnClickListener() {
-//                            public void onClick(DialogInterface dialog, int which) {
-//                            }
-//                        });
+//        final Dialog dialog = new Dialog(this);
+//        dialog.setContentView(R.layout.dialog_msg_ok);
+//        dialog.setTitle("Account Modify Info");
 //
 //
-//        android.app.AlertDialog alertDialog = alertDialogBuilder.create();
-//        alertDialog.show();
-
+//        TextView text = (TextView) dialog.findViewById(R.id.text);
+//        text.setText(msg);
+//        ImageView image = (ImageView) dialog.findViewById(R.id.image);
+//        image.setImageResource(R.drawable.ic_info_24dp);
+//
+//        Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
+//        // if button is clicked, close the custom dialog
+//        dialogButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                dialog.dismiss();
+//                itemAdded = true;
+//
+//                onProfileCorpNameAdd();
+//
+//            }
+//        });
+//
+//        dialog.show();
+//
+//
+////        android.app.AlertDialog.Builder alertDialogBuilder = new android.app.AlertDialog.Builder(this);
+////
+////        alertDialogBuilder.setMessage(getString(R.string.getting_started) + "\n" +
+////                getString(R.string.add_first_account) + "\n" +
+////    getString(R.string.if_so_direction));
+////
+////
+////        alertDialogBuilder.setPositiveButton(R.string.yes,
+////                new DialogInterface.OnClickListener() {
+////                    public void onClick(DialogInterface arg0, int arg1) {
+////
+////                        itemAdded = true;
+////
+////                        onProfileCorpNameAdd();
+////
+////
+//////                        Intent intent = new Intent(MainActivity.this, AddEditProfileActivity.class);
+//////                        startActivityForResult(intent, ADD_PROFILE_REQUEST);
+////
+////                    }
+////                })
+////                .setNegativeButton("No",
+////                        new DialogInterface.OnClickListener() {
+////                            public void onClick(DialogInterface dialog, int which) {
+////                            }
+////                        });
+////
+////
+////        android.app.AlertDialog alertDialog = alertDialogBuilder.create();
+////        alertDialog.show();
+//
     }
 
 
@@ -4376,27 +4394,27 @@ public class MainActivity extends AppCompatActivity
 //    }
 
 
-    private void showWarning() {
-        final Dialog dialog = new Dialog(this);
-        dialog.setContentView(R.layout.dialog_msg_ok);
-        dialog.setTitle("Account Modify Info");
-
-        TextView text = (TextView) dialog.findViewById(R.id.text);
-        text.setText(getString(R.string.warningmsg));
-        ImageView image = (ImageView) dialog.findViewById(R.id.image);
-        image.setImageResource(R.drawable.ic_info_24dp);
-
-        Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
-        // if button is clicked, close the custom dialog
-        dialogButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-
-        dialog.show();
-    }
+//    private void showWarning() {
+//        final Dialog dialog = new Dialog(this);
+//        dialog.setContentView(R.layout.dialog_msg_ok);
+//        dialog.setTitle("Account Modify Info");
+//
+//        TextView text = (TextView) dialog.findViewById(R.id.text);
+//        text.setText(getString(R.string.warningmsg));
+//        ImageView image = (ImageView) dialog.findViewById(R.id.image);
+//        image.setImageResource(R.drawable.ic_info_24dp);
+//
+//        Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
+//        // if button is clicked, close the custom dialog
+//        dialogButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                dialog.dismiss();
+//            }
+//        });
+//
+//        dialog.show();
+//    }
 
     //          ========================================================================
 //    For future throw an account to another device

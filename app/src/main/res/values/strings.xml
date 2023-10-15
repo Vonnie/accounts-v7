@@ -236,7 +236,9 @@
 
     <string name="warningmsg">Welcome to Accounts List app.
     \n\nMaintain your accounts. Order accounts by either Corp Name, Account Id, or Open Date. Search by Corp Name.
+        \n\nPress plus icon to add a new account. Select from account list an account to see and edit account info. AccountId is shown on this account edit.
         \n\nPasswords are kept outside this app. Keep a separate paper list of passwords with its assigned account id. Passwords are only suggestions, not tied to an account, nor data.
+        \n\nGetting Started by press the plus icon at the bottom of the screen to add the first account.
         </string>
     <string name="add_a_new_account">Add a new account</string>
     <string name="link_to_website">Link to website</string>

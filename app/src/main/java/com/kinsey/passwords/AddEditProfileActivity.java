@@ -187,9 +187,9 @@ public class AddEditProfileActivity extends AppCompatActivity
         }
 
         if (editModeAdd) {
-            setTitle("Add Profile Account");
+            setTitle("Add an Account");
         } else {
-            setTitle("Profile ID: " + intPassportId);
+            setTitle("Account ID: " + intPassportId);
         }
 
 //        profileViewModel = new ViewModelProvider(getApplicationContext()).get(ProfileViewModel.class);
@@ -401,7 +401,7 @@ public class AddEditProfileActivity extends AppCompatActivity
         intId = intent.getIntExtra(EXTRA_ID, -1);
         intPassportId = intent.getIntExtra(EXTRA_PASSPORT_ID, 0);
         intSequence = intent.getIntExtra(EXTRA_SEQUENCE, 0);
-        tvPassportId.setText("Id: " + this.intPassportId);
+        tvPassportId.setText("AccountId: " + this.intPassportId);
 //        tvSequence.setText(" | Seq: " + this.intSequence);
 
         this.currProfile = new Profile();
@@ -495,7 +495,7 @@ public class AddEditProfileActivity extends AppCompatActivity
         }
         intPassportId = savedInstanceState.getInt(EXTRA_PASSPORT_ID, 0);
         intSequence = savedInstanceState.getInt(EXTRA_SEQUENCE, 0);
-        tvPassportId.setText("Id: " + intPassportId);
+        tvPassportId.setText("AccountId: " + intPassportId);
 //        tvSequence.setText(" | Seq: " + intSequence);
         editModeAdd = savedInstanceState.getBoolean(EXTRA_EDIT_MODE, false);
         if (!editModeAdd) {
