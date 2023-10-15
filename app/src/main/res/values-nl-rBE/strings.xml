@@ -111,7 +111,7 @@
     <string name="acctlist_by_account_id">Op account-ID</string>
     <string name="acctlist_by_corp_name">Op bedrijfsnaam</string>
     <string name="acctlist_by_custom">Door aangepaste volgorde</string>
-    <string name="acctlist_by_open_date_descending">Op open datum, aflopend</string>
+    <string name="acctlist_by_open_date_descending">Op opendatum, aflopend</string>
     <string name="menu_addedit_save">Opslaan</string>
     <string name="menu_main_sort">Soort</string>
     <string name="menu_share_share">Delen</string>
@@ -212,7 +212,12 @@
     <string name="fv_msg_50">Maak een back-up van het bestand naar het pad</string>
     <string name="splInstr2">Klik op kaart om accountdetails te selecteren. Klik nogmaals op de kaart om de accountgegevens te wissen. Klik op Plus (+) om een account toe te voegen.</string>
     <string name="menuacct_notify">Melden</string>
-    <string name="warningmsg">Welkom bij deze productiviteitstool-app.       Onderhoud uw accounts en volg ze vervolgens op lijst in geselecteerde volgorde. Voer zoekopdrachten uit en maak een back-up / herstel.           Er worden geen wachtwoorden ingevoerd. Uw wachtwoorden worden buiten deze app bewaard. Houd een aparte papieren lijst met wachtwoorden bij met de toegewezen account-ID.           Deze app heeft alleen wachtwoorden voor suggesties. Als u een wachtwoord selecteert, heeft de app geen kennis van het gebruik ervan.</string>
+    <string name="iconInfoDesc">Informatiepictogram</string>
+    <string name="warningmsg">Welkom bij de Accounts List-app.
+    \n\nBeheer uw accounts. Bestel accounts op naam van het bedrijf, account-ID of openingsdatum. Zoek op bedrijfsnaam.
+    \n\nDruk op het pluspictogram om een nieuw account toe te voegen. Selecteer uit de accountlijst een account om accountinformatie te bekijken en bewerken. Account-ID wordt weergegeven bij deze accountbewerking.
+    \n\nWachtwoorden worden buiten deze app bewaard. Houd een aparte papieren lijst van wachtwoorden bij met de bijbehorende account-ID. Wachtwoorden zijn slechts suggesties, niet gekoppeld aan een account of gegevens.
+    \n\nAan de slag door op het pluspictogram onderaan het scherm te drukken om het eerste account toe te voegen.</string>
     <string name="app_name">Accounts</string>
     <string name="fv_msg_1">Accountrijen momenteel op db</string>
     <string name="fv_msg_7">Mga hilera ng account na kasalukuyang nasa db</string>
@@ -222,4 +227,10 @@
     <string name="fv_msg_42">Accountrijen op back-upbestand</string>
     <string name="selectappaccounts">Selecteer app \'List &amp; Edit Accounts\'</string>
     <string name="menuacct_dropbox">Dropbox</string>
+    <string name="add_a_new_account">Voeg een nieuw account toe</string>
+    <string name="link_to_website">Koppel aan de website</string>
+    <string name="share">Accounts delen</string>
+    <string name="welcome_message">Welkomstbericht</string>
+    <string name="menuvw_share_from">Delen vanaf</string>
+    <string name="link">Link</string>
 </resources>

@@ -226,7 +226,7 @@
     <string name="selectappaccounts">Select app \'List &amp; Edit Accounts\'</string>
     <string name="selectpermissions">Select Permissions</string>
     <string name="allowstorage">Allow Storage</string>
-    <string name="iconInfoDesc" translatable="false">Information Icon</string>
+    <string name="iconInfoDesc">Information Icon</string>
 
 <!--    <string name="warningmsg">This app is getting a flury of 1 Star Ratings.-->
 <!--    \n\nThis app needs your feedback.-->

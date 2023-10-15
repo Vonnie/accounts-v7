@@ -4,7 +4,7 @@
     <string name="about_email">Para sa suporta, mag-email sa vonniekinsey@gmail.com</string>
     <string name="about_title">Tungkol sa Mga Account Tungkol sa</string>
     <string name="app_name_corpname">Mga Account sa pamamagitan ng Pangalan ng Corporation</string>
-    <string name="app_name_opendate">Mga Account sa pamamagitan ng Buksan Petsa, pababang</string>
+    <string name="app_name_opendate">Ayon sa Petsa ng Pagsilang, pababa</string>
     <string name="app_name_acctid">Mga Account sa pamamagitan ng Account Id</string>
     <string name="app_name_custom">Mga Account sa pamamagitan ng Custom Seq</string>
     <string name="action_help">Tulong</string>
@@ -212,7 +212,12 @@
     <string name="fv_msg_50">I-backup ang file sa landas</string>
     <string name="splInstr2">Mag-click sa card upang piliin ang detalye ng account. I-click muli ang card upang i-clear ang detalye ng account. I-click ang Plus (+) upang magdagdag ng isang account.</string>
     <string name="menuacct_notify">Ipaalam</string>
-    <string name="warningmsg">Maligayang pagdating sa ito app na tool sa pagiging produktibo.       Panatilihin ang iyong mga account, pagkatapos ay subaybayan ang mga ito ayon sa listahan sa napiling pagkakasunud-sunod. Gawin ang mga paghahanap at backup / ibalik.           Walang mga password ay nai-input. Ang iyong mga password ay pinananatiling nasa labas ng app na ito. Panatilihin ang isang hiwalay na listahan ng papel ng mga password gamit ang itinalagang account id.           Ang app na ito ay may mga password lamang para sa mga mungkahi. Kung pumili ka ng anumang password, ang app ay walang kaalaman sa paggamit nito.</string>
+    <string name="iconInfoDesc">Icon ng Impormasyon</string>
+    <string name="warningmsg">Maligayang pagdating sa aplikasyon ng Listahan ng mga Account.
+    \n\nPangalagaan ang iyong mga account. Iayos ang mga account ayon sa Ngalan ng Korporasyon, ID ng Account, o Petsa ng Pagbukas. Maghanap ayon sa Ngalan ng Korporasyon.
+    \n\nPindutin ang icon ng plus upang magdagdag ng isang bagong account. Pumili mula sa listahan ng account upang tingnan at baguhin ang impormasyon ng account. Ipapakita ang Account ID sa pahinang ito ng account na inyong ini-edit.
+    \n\nAng mga password ay itinatago sa labas ng aplikasyong ito. Magkaruon ng isang hiwalay na talaan ng mga password na may kaugnayan sa kanilang ID ng account. Ang mga password ay mga mungkahi lamang at hindi konektado sa isang account o data.
+    \n\nMagsimula sa pamamagitan ng pag-pindot sa icon ng plus sa ibaba ng screen upang magdagdag ng unang account.</string>
     <string name="app_name">Listahan ng &amp; Account I-edit</string>
     <string name="fv_msg_1">Mga hilera ng account na kasalukuyang nasa db</string>
     <string name="fv_msg_7">Mga hilera ng account na kasalukuyang nasa db</string>
@@ -222,4 +227,10 @@
     <string name="fv_msg_42">Mga hilera ng account sa Backup file</string>
     <string name="selectappaccounts">Piliin ang Listahan ng Mga Listahan ng app &amp; I-edit \'</string>
     <string name="menuacct_dropbox">Dropbox</string>
+    <string name="add_a_new_account">Magdagdag ng bagong account</string>
+    <string name="link_to_website">Konekta sa website</string>
+    <string name="share">Magbahagi ng mga Account</string>
+    <string name="welcome_message">Mensahe ng Pagtanggap</string>
+    <string name="menuvw_share_from">"Ibahagi mula sa "</string>
+    <string name="link">Konekta</string>
 </resources>

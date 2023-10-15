@@ -6,7 +6,7 @@
     <string name="acctlist_by_account_id">Por ID de cuenta</string>
     <string name="acctlist_by_corp_name">Por nombre corporativo</string>
     <string name="acctlist_by_custom">Por encargo</string>
-    <string name="acctlist_by_open_date_descending">Por fecha de apertura, descendente</string>
+    <string name="acctlist_by_open_date_descending">Por Fecha de Apertura, descendente</string>
     <string name="action_help">Ayuda</string>
     <string name="action_settings">ajustes</string>
     <string name="addedit_corp_name_hint">Nombre de la corporación (requerido)</string>
@@ -212,7 +212,12 @@
     <string name="fv_msg_50">Copia de seguridad en archivo en ruta</string>
     <string name="splInstr2">Haga clic en la tarjeta para seleccionar los detalles de la cuenta. Vuelva a hacer clic en la tarjeta para borrar los detalles de la cuenta. Haga clic en Más (+) para agregar una cuenta.</string>
     <string name="menuacct_notify">Notificar</string>
-    <string name="warningmsg">Bienvenido a esta aplicación de herramienta de productividad.       Mantenga sus cuentas, luego realice un seguimiento por lista en el orden seleccionado. Hacer búsquedas y hacer copias de seguridad / restaurar.           No se ingresan contraseñas. Sus contraseñas se mantienen fuera de esta aplicación. Mantenga una lista de contraseñas en papel con su ID de cuenta asignada.           Esta aplicación solo tiene contraseñas para sugerencias. Si selecciona cualquier contraseña, la aplicación no tiene conocimiento de su uso.</string>
+    <string name="iconInfoDesc">Icono de Información</string>
+    <string name="warningmsg">Bienvenido a la aplicación Lista de Cuentas.
+    \n\nMantenga sus cuentas. Ordene las cuentas por Nombre de la Empresa, ID de Cuenta o Fecha de Apertura. Busque por Nombre de la Empresa.
+    \n\nPresione el ícono de más para agregar una nueva cuenta. Seleccione una cuenta de la lista de cuentas para ver y editar la información de la cuenta. El ID de la cuenta se muestra en esta edición de cuenta.
+    \n\nLas contraseñas se mantienen fuera de esta aplicación. Mantenga una lista de contraseñas en papel separada con su ID de cuenta asignado. Las contraseñas son solo sugerencias y no están vinculadas a una cuenta ni a datos.
+    \n\nComience presionando el ícono de más en la parte inferior de la pantalla para agregar la primera cuenta.</string>
     <string name="app_name">Listar y editar cuentas</string>
     <string name="fv_msg_1">Filas de cuenta actualmente en db</string>
     <string name="fv_msg_7">Filas de cuenta actualmente en db</string>
@@ -222,4 +227,10 @@
     <string name="fv_msg_42">Filas de cuenta en archivo de copia de seguridad</string>
     <string name="selectappaccounts">Seleccione la aplicación \'Listar y editar cuentas\'</string>
     <string name="menuacct_dropbox">Dropbox</string>
+    <string name="add_a_new_account">Agregar una cuenta nueva</string>
+    <string name="link_to_website">Enlace al sitio web</string>
+    <string name="share">Compartir cuentas</string>
+    <string name="welcome_message">Mensaje de bienvenida</string>
+    <string name="menuvw_share_from">Compartir desde</string>
+    <string name="link">Enlace</string>
 </resources>

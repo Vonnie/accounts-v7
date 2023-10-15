@@ -112,7 +112,7 @@
     <string name="suggest_notes_hint">Catatan</string>
     <string name="acctlist_by_corp_name">Dengan Nama Perusahaan</string>
     <string name="acctlist_by_custom">Dengan Pesanan Kustom</string>
-    <string name="acctlist_by_open_date_descending">Dengan Tanggal Terbuka, turun</string>
+    <string name="acctlist_by_open_date_descending">Berdasarkan Tanggal Dibuka, menurun</string>
     <string name="acctlist_by_account_id">Berdasarkan ID Akun</string>
     <string name="sugg_password">Kata sandi</string>
     <string name="menu_addedit_save">Menyimpan</string>
@@ -212,7 +212,12 @@
     <string name="fv_msg_50">Cadangkan ke file ke path</string>
     <string name="splInstr2">Klik kartu untuk memilih detail akun. Klik kartu lagi untuk menghapus detail akun. Klik Plus (+) untuk menambahkan akun.</string>
     <string name="menuacct_notify">Memberitahukan</string>
-    <string name="warningmsg">Selamat datang di aplikasi alat produktivitas ini.</string>
+    <string name="iconInfoDesc">Ikon Informasi</string>
+    <string name="warningmsg">Selamat datang di aplikasi Daftar Akun.
+    \n\nKelola akun Anda. Urutkan akun berdasarkan Nama Perusahaan, ID Akun, atau Tanggal Dibuka. Cari berdasarkan Nama Perusahaan.
+    \n\nTekan ikon plus untuk menambahkan akun baru. Pilih dari daftar akun sebuah akun untuk melihat dan mengedit informasi akun. ID Akun ditampilkan pada halaman edit akun ini.
+    \n\nKata sandi disimpan di luar aplikasi ini. Buat daftar terpisah berupa kertas dengan ID akun yang sesuai. Kata sandi hanyalah saran, tidak terkait dengan akun atau data.
+    \n\nMemulai dengan menekan ikon plus di bagian bawah layar untuk menambahkan akun pertama.</string>
     <string name="app_name">Daftar &amp; Edit Akun</string>
     <string name="fv_msg_1">Baris akun saat ini di db</string>
     <string name="fv_msg_7">Baris akun saat ini di db</string>
@@ -222,4 +227,10 @@
     <string name="fv_msg_42">Baris akun ke file Cadangan</string>
     <string name="selectappaccounts">Pilih aplikasi \'Daftar &amp; Edit Akun\'</string>
     <string name="menuacct_dropbox">Dropbox</string>
+    <string name="add_a_new_account">Tambahkan akun baru</string>
+    <string name="link_to_website">Tautan ke situs web</string>
+    <string name="share">Bagikan Akun</string>
+    <string name="welcome_message">Pesan Selamat Datang</string>
+    <string name="menuvw_share_from">Bagikan Dari</string>
+    <string name="link">Tautan</string>
 </resources>
