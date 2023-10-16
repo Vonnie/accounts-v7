@@ -531,6 +531,7 @@ public class MainActivity extends AppCompatActivity
                             Toast.makeText(MainActivity.this, "account.json send complete", Toast.LENGTH_SHORT).show();
                         } else {
                             Log.d(TAG, "onActivityResult sent: canceled");
+                            Toast.makeText(MainActivity.this, "account.json send incomplete or canceled", Toast.LENGTH_LONG).show();
                         }
                     }
                 });
@@ -582,7 +583,9 @@ public class MainActivity extends AppCompatActivity
                                 frag.refreshListAll();
                                 frag.setSelectedId(-1);
                                 Log.d(TAG, TABFunc + "listAccounts count " + listAccounts.size());
+                                Toast.makeText(MainActivity.this, "Accounts receive complete", Toast.LENGTH_SHORT).show();
                             } catch (IOException e) {
+                                Toast.makeText(MainActivity.this, "Accounts receive error occurred", Toast.LENGTH_LONG).show();
                                 throw new RuntimeException(e);
                             }
 //                            try {
@@ -608,6 +611,7 @@ public class MainActivity extends AppCompatActivity
 //                            Toast.makeText(MainActivity.this, "account.json receive complete", Toast.LENGTH_SHORT).show();
                         } else {
                             Log.d(TAG, TABFunc + "receive canceled ");
+                            Toast.makeText(MainActivity.this, "Accounts receive incomplete or canceled", Toast.LENGTH_LONG).show();
                         }
                     }
                 });

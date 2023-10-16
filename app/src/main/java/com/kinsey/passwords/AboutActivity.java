@@ -36,25 +36,25 @@ public class AboutActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_keyboard_arrow_left_black_24dp);
 
-        TextView tvDatabasename = findViewById(R.id.databasename);
-        TextView tvVerNo = findViewById(R.id.ver_no);
-        TextView tvVerName = findViewById(R.id.ver_name);
-        profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
+//        TextView tvDatabasename = findViewById(R.id.databasename);
+//        TextView tvVerNo = findViewById(R.id.ver_no);
+//        TextView tvVerName = findViewById(R.id.ver_name);
+//        profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
 //        profileViewModel.getAllProfilesByCorpName().observe(this, (Observer<? super List<Integer>>) new Observer<List<Integer>>() {
-        profileViewModel.getCount().observe(this, new Observer<Integer>() {
-        @Override
-            public void onChanged(Integer count) {
-                Log.d(TAG, "onChanged: count " + count);
-                String msg = count + " rows on DB " + profileViewModel.dbMsg;
-                tvDatabasename.setText(msg);
-            }
-        });
+//        profileViewModel.getCount().observe(this, new Observer<Integer>() {
+//        @Override
+//            public void onChanged(Integer count) {
+////                Log.d(TAG, "onChanged: count " + count);
+////                String msg = count + " rows on DB " + profileViewModel.dbMsg;
+////                tvDatabasename.setText(msg);
+//            }
+//        });
 
 
-        Log.d(TAG, "onCreate: dbname " + profileViewModel.dbMsg);
-//        tvDatabasename.setText("DB: " + profileViewModel.dbMsg);
-        tvVerNo.setText("Ver#: " + BuildConfig.VERSION_CODE);
-        tvVerName.setText("VerName: " + BuildConfig.VERSION_NAME);
+//        Log.d(TAG, "onCreate: dbname " + profileViewModel.dbMsg);
+////        tvDatabasename.setText("DB: " + profileViewModel.dbMsg);
+//        tvVerNo.setText("Ver#: " + BuildConfig.VERSION_CODE);
+//        tvVerName.setText("VerName: " + BuildConfig.VERSION_NAME);
         getSupportActionBar().setLogo(R.drawable.ic_launcher_test2_foreground);
 
 

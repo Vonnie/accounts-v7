@@ -7,7 +7,7 @@
     <string name="action_help">Help</string>
     <string name="action_settings">Settings</string>
     <string name="menu_accounts">Accounts List</string>
-    <string name="menu_suggests">Password Suggestions</string>
+    <string name="menu_suggests">Suggested Passwords</string>
     <string name="menu_profile">Profile</string>
     <string name="menu_generate">Generate Passwords</string>
     <string name="menu_generate10">Generate 10 Char Passwords</string>
@@ -49,11 +49,14 @@
     <string name="title_activity_search_list" translatable="false">SearchListActivity</string>
     <string name="searchable_hint">Enter corporation name</string>
     <string name="home_message_title">List Accounts, Search Accounts, Password Suggestions</string>
-    <string name="home_message_text_1">
-        Track your accounts with sorted lists, searches, edits, backup/restore data, or select a password from list of suggestions.
-    </string>
-    <string name="home_message_text_2">"To view list in a different order, click the filter icon for four different sorted orders. Use the search menu request to see only accounts with searched for corporation names.     "</string>
-    <string name="home_message_text_3">"To view and; edit account details, click on item. To delete, swipe account left or right. To add an account, click plus sign at lower right corner.     "</string>
+    <string name="about_message_text" translatable="false">Track your accounts with sorted lists, searches, edits, backup/restore, or generate suggested passwords.
+    \n\nTo view list in a different order, click the filter icon for three different sorted orders. Use the search menu request to see only accounts with searched for corporation names.
+    \n\nClick on an account item to view and edit account details. To delete, swipe account left or right. To add an account, click plus sign at lower right corner.
+    \n\nTo backup Accounts use menu \'Backup Accounts\' option. To restore Accounts use menu \'Restore Accounts\'. Use Dropbox; it works the best. Other ways may break new Android security rules.
+    \n\nGenerate passwords thru menu option \'Suggested Passwords\'. Menu Generate returns 10 passwords. Passwords are either 8 or 10 character size, depending on user request. These passwords contain one number, one symbol, one capital letter. The letters of passwords are selected based on the location on keyboard, either from left-hand or right-hand.</string>
+    <string name="home_message_text_1">Track your accounts with sorted lists, searches, edits, backup/restore, or generate suggested passwords.</string>
+    <string name="home_message_text_2">To view list in a different order, click the filter icon for three different sorted orders. Use the search menu request to see only accounts with searched for corporation names.</string>
+    <string name="home_message_text_3">Click on an account item to view and edit account details. To delete, swipe account left or right. To add an account, click plus sign at lower right corner.</string>
     <string name="home_message_text_4">"One of the four ordered lists is a custom ordered list. Order is arranged by the user. This is a way to keep more important accounts to the top of the list. Rearrange items by a drag/drop of an item.     "</string>
     <string name="home_message_text_5">"This drag/drop feature is only available in the Custom Sort list.     "</string>
     <string name="home_message_text_6">"Hint: To drag/drop, press and hold momentarily until color is changed indicating drag is started, then drag to the new position.     "</string>
@@ -99,7 +102,7 @@
     <string name="menuacct_dropbox">Dropbox</string>
     <string name="menuvw_show_file">Show Backup File</string>
     <string name="menuvw_show_filename">Filename</string>
-    <string name="menuvw_share">Share Backup File</string>
+    <string name="menuvw_share">Backup Accounts</string>
     <string name="menuvw_import">Import</string>
     <string name="menuvw_retore">Restore</string>
     <string name="menuvw_export">Export</string>
@@ -197,7 +200,7 @@
     <string name="edit_suggestion">Edit Suggestion</string>
     <string name="activity_date">Activity date %1$s</string>
     <string name="search_title">Search Accounts</string>
-    <string name="about_title">Accounts App About</string>
+    <string name="about_title">Accounts About</string>
     <string name="datePickerTitle">Account Profile Open Date</string>
     <string name="getting_started">Getting Started?</string>
     <string name="add_first_account">Add the first account. Enter account info, click save icon.</string>
@@ -244,7 +247,7 @@
     <string name="link_to_website">Link to website</string>
     <string name="share">Share Accounts</string>
     <string name="welcome_message">Welcome Message</string>
-    <string name="menuvw_share_from">Share From</string>
+    <string name="menuvw_share_from">Restore Accounts</string>
     <string name="link">Link</string>
     <!--    \n\nThe review feedback is based on game expectations. This is NOT a game. On Google Play, it is correctly identified as a productivity tool.-->
 
