@@ -4,7 +4,7 @@
     <string name="about_email">Stuur een e-mail naar vonniekinsey@gmail.com voor ondersteuning</string>
     <string name="corp_website_hint">Geldige corp-website (optioneel)</string>
     <string name="acct_show_website">Website weergeven</string>
-    <string name="action_help">Helpen</string>
+    <string name="action_help">Hulp</string>
     <string name="action_settings">instellingen</string>
     <string name="app_name_acctid">Accounts op account-ID</string>
     <string name="app_name_corpname">Accounts op bedrijfsnaam</string>
@@ -44,7 +44,7 @@
     <string name="menu_save">Opslaan</string>
     <string name="menu_search">Doorzoek accounts</string>
     <string name="menu_showdate">Datum</string>
-    <string name="menu_suggests">Suggesties voor wachtwoorden</string>
+    <string name="menu_suggests">Voorgestelde Wachtwoorden</string>
     <string name="menuacct_about">Wat betreft</string>
     <string name="menuacct_backup_restore_accts">Back-up herstellen</string>
     <string name="menuacct_external_accts">Externe rekeningen</string>
@@ -58,7 +58,7 @@
     <string name="menuvw_export">Exporteren</string>
     <string name="menuvw_import">Importeren</string>
     <string name="menuvw_retore">Herstellen</string>
-    <string name="menuvw_share">Deel back-upbestand</string>
+    <string name="menuvw_share">Reservekopie Accounts</string>
     <string name="menuvw_show_file">Back-upbestand tonen</string>
     <string name="menuvw_show_filename">Bestandsnaam</string>
     <string name="search_hint">Type Bedrijfsnaam</string>
@@ -183,7 +183,7 @@
     <string name="add_suggestion">Suggestie toevoegen</string>
     <string name="edit_suggestion">Suggestie bewerken</string>
     <string name="search_title">Doorzoek accounts</string>
-    <string name="about_title">Accounts-app Over</string>
+    <string name="about_title">Over Accounts</string>
     <string name="datePickerTitle">Openingsdatum accountprofiel</string>
     <string name="add_first_account">Voeg het eerste account toe. Voer accountinfo in, klik op pictogram opslaan.</string>
     <string name="getting_started">Ermee beginnen?</string>
@@ -231,6 +231,13 @@
     <string name="link_to_website">Koppel aan de website</string>
     <string name="share">Accounts delen</string>
     <string name="welcome_message">Welkomstbericht</string>
-    <string name="menuvw_share_from">Delen vanaf</string>
+    <string name="menuvw_share_from">Herstel Accounts</string>
     <string name="link">Link</string>
+    <string name="about_message_text">Houd uw accounts bij met gesorteerde lijsten, zoekopdrachten, bewerkingen, back-ups, herstellen, of genereer voorgestelde wachtwoorden.
+\n\nOm de lijst op een andere volgorde te bekijken, klik op het filterpictogram voor drie verschillende gesorteerde volgordes. Gebruik het zoekmenu om alleen accounts te zien met de gezochte bedrijfsnaam.
+\n\nKlik op een accountitem om accountdetails te bekijken en bewerken. Om te verwijderen, veeg naar links of rechts. Om een account toe te voegen, klik op het plusteken rechtsonder.
+\n\nGebruik voor het maken van een reservekopie van accounts de optie \'Reservekopie Accounts\' in het menu. Gebruik voor het herstellen van accounts de optie \'Herstel Accounts\' in het menu. Gebruik Dropbox; dit werkt het beste. Andere methoden kunnen in strijd zijn met de nieuwe beveiligingsregels van Android.
+\n\nGenereer wachtwoorden via de menuoptie \'Voorgestelde Wachtwoorden\'. Het menu \'Genereren\' geeft 10 wachtwoorden terug. Wachtwoorden zijn ofwel 8 of 10 tekens groot, afhankelijk van de wens van de gebruiker. Deze wachtwoorden bevatten een cijfer, een symbool en een hoofdletter. De letters van de wachtwoorden worden geselecteerd op basis van de locatie op het toetsenbord, ofwel links of rechts.
+\n\nVerander de wachtwoordvolgorde door een wachtwoorditem ingedrukt te houden en vervolgens naar een nieuwe positie te verplaatsen. Een uitzondering is dat het niet naar het einde kan worden verplaatst. Een toekomstige upgrade zal dit oplossen. Om aan het einde te plaatsen, verplaats het naar het einde, net voor het laatste item, en trek het laatste item naar voren.
+\n\nOp de papieren lijst met wachtwoorden, verwijs naar ze op basis van het Account ID, dat wordt weergegeven in de accountbewerking.</string>
 </resources>

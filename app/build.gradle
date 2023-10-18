@@ -11,8 +11,8 @@ android {
         minSdkVersion 21
         targetSdkVersion 33
         compileSdk 34
-        versionCode 301
-        versionName "13.01"
+        versionCode 181
+        versionName "13.10"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -78,7 +78,8 @@ dependencies {
     annotationProcessor "androidx.room:room-compiler:2.5.2"
     androidTestImplementation "androidx.room:room-testing:2.5.2"
 
-    implementation 'com.google.android.gms:play-services-ads:22.4.0'
+//    implementation 'com.google.android.gms:play-services-ads-lite:22.4.0'
+//    implementation 'com.google.android.gms:play-services-ads:22.4.0'
 
 //    implementation 'com.dropbox.core:dropbox-core-sdk:5.4.5'
 

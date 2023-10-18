@@ -49,12 +49,10 @@
     <string name="title_activity_search_list" translatable="false">SearchListActivity</string>
     <string name="searchable_hint">Enter corporation name</string>
     <string name="home_message_title">List Accounts, Search Accounts, Password Suggestions</string>
-    <string name="about_message_text" translatable="false">Track your accounts with sorted lists, searches, edits, backup/restore, or generate suggested passwords.
-    \n\nTo view list in a different order, click the filter icon for three different sorted orders. Use the search menu request to see only accounts with searched for corporation names.
-    \n\nClick on an account item to view and edit account details. To delete, swipe account left or right. To add an account, click plus sign at lower right corner.
-    \n\nTo backup Accounts use menu \'Backup Accounts\' option. To restore Accounts use menu \'Restore Accounts\'. Use Dropbox; it works the best. Other ways may break new Android security rules.
-    \n\nGenerate passwords thru menu option \'Suggested Passwords\'. Menu Generate returns 10 passwords. Passwords are either 8 or 10 character size, depending on user request. These passwords contain one number, one symbol, one capital letter. The letters of passwords are selected based on the location on keyboard, either from left-hand or right-hand.</string>
-    <string name="home_message_text_1">Track your accounts with sorted lists, searches, edits, backup/restore, or generate suggested passwords.</string>
+
+    <string name="home_message_text_1">Track your accounts with sorted lists, searches, edits, backup/restore, or generate suggested passwords.
+    \n\n Change password order by press and hold a item password, then move it to a new position . Exception is it can not move to the end. A future upgrade will resolve this. To put at the end, move to the end, just before the last item, then pull the last item forward.
+    \n\nOn the paper list of passwords, reference them by Account Id, shown on the account edit info.</string>
     <string name="home_message_text_2">To view list in a different order, click the filter icon for three different sorted orders. Use the search menu request to see only accounts with searched for corporation names.</string>
     <string name="home_message_text_3">Click on an account item to view and edit account details. To delete, swipe account left or right. To add an account, click plus sign at lower right corner.</string>
     <string name="home_message_text_4">"One of the four ordered lists is a custom ordered list. Order is arranged by the user. This is a way to keep more important accounts to the top of the list. Rearrange items by a drag/drop of an item.     "</string>
@@ -249,6 +247,12 @@
     <string name="welcome_message">Welcome Message</string>
     <string name="menuvw_share_from">Restore Accounts</string>
     <string name="link">Link</string>
+    <string name="about_message_text">Track your accounts with sorted lists, searches, edits, backup, restore, or generate suggested passwords.
+        \n\nTo view list in a different order, click the filter icon for three different sorted orders. Use the search menu request to see only accounts with searched for corporation name.
+        \n\nClick on an account item to view and edit account details. To delete, swipe account left or right. To add an account, click plus sign at lower right corner.
+        \n\nTo backup Accounts use menu \'Backup Accounts\' option. To restore Accounts use menu \'Restore Accounts\'. Use Dropbox; it works the best. Other ways may break new Android security rules.
+        \n\nGenerate passwords thru menu option \'Suggested Passwords\'. Menu Generate returns 10 passwords. Passwords are either 8 or 10 character size, depending on user request. These passwords contain one number, one symbol, one capital letter. The letters of passwords are selected based on the location on keyboard, either from left-hand or right-hand.
+        \n\nOn the paper list of passwords, reference them by Account Id, shown on the account edit info.</string>
     <!--    \n\nThe review feedback is based on game expectations. This is NOT a game. On Google Play, it is correctly identified as a productivity tool.-->
 
 </resources>

@@ -2,7 +2,7 @@
 <resources>
     <string name="about_copyright">Hak Cipta © 2020</string>
     <string name="about_email">Para sa suporta, mag-email sa vonniekinsey@gmail.com</string>
-    <string name="about_title">Tungkol sa Mga Account Tungkol sa</string>
+    <string name="about_title">Tungkol sa mga Akawnt</string>
     <string name="app_name_corpname">Mga Account sa pamamagitan ng Pangalan ng Corporation</string>
     <string name="app_name_opendate">Ayon sa Petsa ng Pagsilang, pababa</string>
     <string name="app_name_acctid">Mga Account sa pamamagitan ng Account Id</string>
@@ -10,7 +10,7 @@
     <string name="action_help">Tulong</string>
     <string name="action_settings">Mga setting</string>
     <string name="menu_accounts">Listahan ng Mga Account</string>
-    <string name="menu_suggests">Mga Mungkahi sa Password</string>
+    <string name="menu_suggests">Mga Inirerekomendang Kontrasenyas</string>
     <string name="menu_profile">Profile</string>
     <string name="menu_generate">Bumuo ng mga password</string>
     <string name="menu_generate10">Bumuo ng 10 Char Password</string>
@@ -94,7 +94,7 @@
     <string name="menuacct_about">Tungkol sa</string>
     <string name="menuvw_show_file">Ipakita ang Backup File</string>
     <string name="menuvw_show_filename">Pangalan</string>
-    <string name="menuvw_share">Ibahagi ang Backup File</string>
+    <string name="menuvw_share">Mag-imbak ng mga Akawnt</string>
     <string name="menuvw_import">Angkat</string>
     <string name="menuvw_retore">Ibalik</string>
     <string name="menuvw_export">I-export</string>
@@ -233,4 +233,11 @@
     <string name="welcome_message">Mensahe ng Pagtanggap</string>
     <string name="menuvw_share_from">"Ibahagi mula sa "</string>
     <string name="link">Konekta</string>
+    <string name="about_message_text">Subaybayan ang iyong mga akawnt gamit ang mga naayos na listahan, pagsusuri, pag-eedit, pag-imbak, pag-ibalsak, o paglikha ng mga inirerekomendang kontrasenyas.
+\n\nUpang tingnan ang listahan sa iba\'t ibang pagkakasunod-sunod, pindutin ang ikon ng filter para sa tatlong magkakaibang mga naayos na pagkakasunod-sunod. Gamitin ang kahilingang sa menu ng pagsusuri upang makita lamang ang mga akawnt na may hinahanap na pangalan ng korporeyson.
+\n\nMag-click sa isang item ng akawnt upang tingnan at baguhin ang mga detalye ng akawnt. Upang alisin, mag-swipe pakanan o pakaliwa ang akawnt. Upang magdagdag ng akawnt, mag-click sa tanda ng plus sa kanang sulok sa ibaba.
+\n\nUpang mag-imbak ng mga Akawnt, gamitin ang opsiyon ng menu na \'Mag-imbak ng mga Akawnt\'. Upang mag-ibalsak ng mga Akawnt, gamitin ang opsiyon ng menu na \'Ibalsak ang mga Akawnt\'. Gamitin ang Dropbox; ito ang pinakamaganda. Maaaring magdulot ng paglabag sa mga bagong patakaran ng seguridad ng Android ang iba pang paraan.
+\n\nMaglikha ng mga kontrasenyas sa pamamagitan ng opsiyong menu na \'Mga Inirerekomendang Kontrasenyas\'. Ang Menu ng Paglikha ay nagbabalik ng 10 na kontrasenyas. Ang mga kontrasenyang ito ay may sukat na 8 o 10 na karakter, depende sa kahilingan ng tagagamit. Ang mga kontrasenya ay may kasamang isang numero, isang simbolo, at isang malaking titik. Ang mga letra ng mga kontrasenya ay pinipili batay sa lokasyon sa keyboard, mula sa kaliwa o kanan.
+\n\nBaguhin ang pagkakasunod-sunod ng mga kontrasenya sa pamamagitan ng pag-press at pananatili sa isang item ng kontrasenya, at saka ilipat ito sa isang bagong puwesto. Ang pag-exception ay hindi ito maaring ilipat sa huli. Ang isang darating na pagpapabuti ay magre-resolba nito. Upang ilagay sa huli, ilipat ito sa huli, ng kaunti bago ang huling item, at saka ilipat pakanan ang huling item.
+\n\nSa listahan sa papel ng mga kontrasenyas, tukuyin ito gamit ang Account Id, na ipinapakita sa impormasyon ng edit ng akawnt.</string>
 </resources>

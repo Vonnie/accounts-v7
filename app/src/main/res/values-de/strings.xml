@@ -37,7 +37,7 @@
     <string name="fv_msg_33">Sicherungsdatei existiert. Willst du es überschreiben? Erstellt:</string>
     <string name="delete_button_description">Schaltfläche zum Löschen des Passworts</string>
     <string name="edit_description_description">Schaltfläche zum Bearbeiten von Passwörtern</string>
-    <string name="acctlist_by_account_id">Nach Konto-ID</string>
+    <string name="acctlist_by_account_id">In der Liste der Passwörter auf Papier beziehen Sie sich auf sie anhand der Account-ID, die in der Kontobearbeitung angezeigt wird.</string>
     <string name="acctlist_by_corp_name">Nach Firmenname</string>
     <string name="acctlist_by_custom">Auf Bestellung</string>
     <string name="acctlist_by_open_date_descending">Nach Eröffnungsdatum absteigend sortiert</string>
@@ -105,7 +105,7 @@
     <string name="sugg_password">Passwort</string>
     <string name="suggest_password_hint">Passwort</string>
     <string name="title_activity_suggest_add">Passwortvorschlag Hinzufügen</string>
-    <string name="menu_suggests">Passwortvorschläge</string>
+    <string name="menu_suggests">Vorgeschlagene Passwörter</string>
     <string name="title_activity_suggest_list">Passwortvorschläge</string>
     <string name="home_message_text_9">Passwortvorschläge-Menü Liste Passwörter. Menu Generate gibt 10 Passwörter zurück. Passwörter haben je nach Benutzeranforderung eine Größe von 8 oder 10 Zeichen. Diese Passwörter enthalten eine Ziffer, ein Symbol und einen Großbuchstaben. Die Buchstaben von Passwörtern werden basierend auf der Position auf der Tastatur entweder von der linken Hand oder von der rechten Hand ausgewählt.</string>
     <string name="fv_msg_9">Pfadspeicherverzeichnis existiert nicht</string>
@@ -140,9 +140,9 @@
     <string name="action_settings">die Einstellungen</string>
     <string name="menu_share_share">Teilen</string>
     <string name="fv_msg_38">Kontodaten teilen</string>
-    <string name="menuvw_share">Sicherungsdatei freigeben</string>
+    <string name="menuvw_share">Konten sichern</string>
     <string name="menuvw_show_file">Sicherungsdatei anzeigen</string>
-    <string name="acct_show_website">Webseite anzeigen</string>
+    <string name="acct_show_website">Ändern Sie die Passwortreihenfolge, indem Sie ein Passwortelement gedrückt halten und es an eine neue Position verschieben. Eine Ausnahme besteht darin, dass es nicht ans Ende verschoben werden kann. Ein zukünftiges Upgrade wird dies beheben. Um es ans Ende zu setzen, verschieben Sie es ans Ende, kurz vor dem letzten Element, und ziehen Sie das letzte Element nach vorne.\\n\\n</string>
     <string name="menu_main_sort">Sortieren</string>
     <string name="menuacct_sort">sortiere nach</string>
     <string name="menuacct_sort_passport">Nach Konto-ID sortieren</string>
@@ -182,14 +182,14 @@
     <string name="title_activity_web_view">Webview-Aktivität</string>
     <string name="fv_msg_19">herzlich willkommen</string>
     <string name="search_title">Konten durchsuchen</string>
-    <string name="about_title">Accounts App Über</string>
+    <string name="about_title">Über Konten</string>
     <string name="datePickerTitle">Konto Profil Eröffnungsdatum</string>
     <string name="add_first_account">Fügen Sie das erste Konto hinzu. Geben Sie die Kontoinformationen ein und klicken Sie auf das Symbol Speichern.</string>
     <string name="getting_started">fertig machen</string>
-    <string name="account_updated">Konto aktualisiert</string>
+    <string name="account_updated">Generieren Sie Passwörter über die Menüoption \\\'Vorgeschlagene Passwörter\\\'. Das Menü \\\'Generieren\\\' gibt 10 Passwörter zurück. Passwörter sind entweder 8 oder 10 Zeichen lang, abhängig von der Benutzeranforderung. Diese Passwörter enthalten eine Zahl, ein Symbol und einen Großbuchstaben. Die Buchstaben der Passwörter werden aufgrund ihrer Position auf der Tastatur ausgewählt, entweder von der linken oder rechten Seite.\\n\\n</string>
     <string name="ask_go_to_list">Möchten Sie die Kontenliste anzeigen?</string>
     <string name="opened">geöffnet %1$s</string>
-    <string name="account_added">Konto hinzugefügt</string>
+    <string name="account_added">Verwenden Sie die Menüoption \\\'Konten sichern\\\', um Konten zu sichern. Verwenden Sie die Menüoption \\\'Konten wiederherstellen\\\', um Konten wiederherzustellen. Verwenden Sie Dropbox; es funktioniert am besten. Andere Methoden könnten gegen die neuen Sicherheitsrichtlinien von Android verstoßen.\\n\\n</string>
     <string name="hint_text">Geben Sie Search ein oder klicken Sie, um aus der Dropdown-Liste auszuwählen</string>
     <string name="openClickForCalendar">Klicken Sie hier, um den Kalender für das Öffnungsdatum anzuzeigen</string>
     <string name="id_descr" translatable="false">Ich würde %1$s</string>
@@ -231,6 +231,13 @@
     <string name="link_to_website">Mit der Website verknüpfen</string>
     <string name="share">Konten teilen</string>
     <string name="welcome_message">Willkommensnachricht</string>
-    <string name="menuvw_share_from">Teilen von</string>
+    <string name="menuvw_share_from">Konten wiederherstellen</string>
     <string name="link">Verknüpfen</string>
+    <string name="about_message_text">Verfolgen Sie Ihre Konten mit sortierten Listen, Suchen, Bearbeiten, Sichern, Wiederherstellen oder generieren Sie vorgeschlagene Passwörter.
+\n\nUm die Liste in einer anderen Reihenfolge anzuzeigen, klicken Sie auf das Filter-Symbol für drei verschiedene Sortieroptionen. Verwenden Sie das Suchmenü, um nur Konten mit dem gesuchten Unternehmensnamen anzuzeigen.
+\n\nKlicken Sie auf einen Kontoeintrag, um Kontodetails anzuzeigen und zu bearbeiten. Zum Löschen wischen Sie das Konto nach links oder rechts. Um ein Konto hinzuzufügen, klicken Sie auf das Pluszeichen in der unteren rechten Ecke.
+\n\nVerwenden Sie die Menüoption \'Konten sichern\', um Konten zu sichern. Verwenden Sie die Menüoption \'Konten wiederherstellen\', um Konten wiederherzustellen. Verwenden Sie Dropbox; es funktioniert am besten. Andere Methoden könnten gegen die neuen Sicherheitsrichtlinien von Android verstoßen.
+\n\nGenerieren Sie Passwörter über die Menüoption \'Vorgeschlagene Passwörter\'. Das Menü \'Generieren\' gibt 10 Passwörter zurück. Passwörter sind entweder 8 oder 10 Zeichen lang, abhängig von der Benutzeranforderung. Diese Passwörter enthalten eine Zahl, ein Symbol und einen Großbuchstaben. Die Buchstaben der Passwörter werden aufgrund ihrer Position auf der Tastatur ausgewählt, entweder von der linken oder rechten Seite.
+\n\nÄndern Sie die Passwortreihenfolge, indem Sie ein Passwortelement gedrückt halten und es an eine neue Position verschieben. Eine Ausnahme besteht darin, dass es nicht ans Ende verschoben werden kann. Ein zukünftiges Upgrade wird dies beheben. Um es ans Ende zu setzen, verschieben Sie es ans Ende, kurz vor dem letzten Element, und ziehen Sie das letzte Element nach vorne.
+\n\nIn der Liste der Passwörter auf Papier beziehen Sie sich auf sie anhand der Account-ID, die in der Kontobearbeitung angezeigt wird.</string>
 </resources>

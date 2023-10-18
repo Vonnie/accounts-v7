@@ -3,7 +3,7 @@ package com.kinsey.passwords.provider;
 import static com.kinsey.passwords.provider.ProfileDatabase.TAG;
 
 import android.app.Application;
-import android.os.AsyncTask;
+//import android.os.AsyncTask;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
@@ -12,8 +12,8 @@ import androidx.lifecycle.LiveData;
 
 import com.kinsey.passwords.items.Profile;
 
-import java.util.Collections;
-import java.util.Comparator;
+//import java.util.Collections;
+//import java.util.Comparator;
 import java.util.List;
 
 

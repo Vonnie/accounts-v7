@@ -81,7 +81,7 @@
     <string name="menu_share_share">compartir</string>
     <string name="menu_showdate">fecha</string>
     <string name="menu_sugg_del_all">Eliminar todas las sugerencias de contraseña</string>
-    <string name="menu_suggests">Sugerencias de contraseña</string>
+    <string name="menu_suggests">Contraseñas Sugeridas</string>
     <string name="menuacct_about">acerca de</string>
     <string name="menuacct_backup_restore_accts">Copia de seguridad de restauracion</string>
     <string name="menuacct_external_accts">cuentas externas</string>
@@ -95,7 +95,7 @@
     <string name="menuvw_export">exportar</string>
     <string name="menuvw_import">importar</string>
     <string name="menuvw_retore">restaurar</string>
-    <string name="menuvw_share">Compartir archivo de copia de seguridad</string>
+    <string name="menuvw_share">Respaldo de Cuentas</string>
     <string name="menuvw_show_file">Mostrar archivo de respaldo</string>
     <string name="menuvw_show_filename">el nombre de archivo</string>
     <string name="search_hint">Escriba nombre corporativo</string>
@@ -182,7 +182,7 @@
     <string name="add_suggestion">Agregar sugerencia</string>
     <string name="edit_suggestion">Editar sugerencia</string>
     <string name="search_title">Buscar cuentas</string>
-    <string name="about_title">Aplicación de cuentas Acerca de</string>
+    <string name="about_title">Acerca de las Cuentas</string>
     <string name="datePickerTitle">Fecha de apertura del perfil de cuenta</string>
     <string name="add_first_account">Agrega la primera cuenta. Ingrese la información de la cuenta, haga clic en el icono Guardar.</string>
     <string name="getting_started">¿Empezando?</string>
@@ -231,6 +231,13 @@
     <string name="link_to_website">Enlace al sitio web</string>
     <string name="share">Compartir cuentas</string>
     <string name="welcome_message">Mensaje de bienvenida</string>
-    <string name="menuvw_share_from">Compartir desde</string>
+    <string name="menuvw_share_from">Restaurar Cuentas</string>
     <string name="link">Enlace</string>
+    <string name="about_message_text">Haga un seguimiento de sus cuentas con listas ordenadas, búsquedas, ediciones, respaldos, restauraciones o genere contraseñas sugeridas.
+\n\nPara ver la lista en un orden diferente, haga clic en el ícono de filtro para tres órdenes ordenados diferentes. Utilice la opción del menú de búsqueda para ver solo cuentas con el nombre de la corporación buscada.
+\n\nHaga clic en un elemento de cuenta para ver y editar los detalles de la cuenta. Para eliminar, deslice la cuenta hacia la izquierda o hacia la derecha. Para agregar una cuenta, haga clic en el signo de más en la esquina inferior derecha.
+\n\nPara respaldar las Cuentas, utilice la opción del menú \'Respaldo de Cuentas\'. Para restaurar Cuentas, utilice la opción del menú \'Restaurar Cuentas\'. Utilice Dropbox; funciona mejor. Otras formas pueden violar las nuevas reglas de seguridad de Android.
+\n\nGenere contraseñas a través de la opción del menú \'Contraseñas Sugeridas\'. El menú de Generar devuelve 10 contraseñas. Las contraseñas tienen un tamaño de 8 o 10 caracteres, dependiendo de la solicitud del usuario. Estas contraseñas contienen un número, un símbolo y una letra mayúscula. Las letras de las contraseñas se seleccionan en función de la ubicación en el teclado, ya sea en la mano izquierda o en la mano derecha.
+\n\nCambie el orden de las contraseñas manteniendo presionado un elemento de la contraseña y luego muévalo a una nueva posición. La excepción es que no puede moverlo al final. Una futura actualización resolverá esto. Para ponerlo al final, muévalo al final, justo antes del último elemento, y luego arrastre el último elemento hacia adelante.
+\n\nEn la lista en papel de las contraseñas, haga referencia a ellas por el ID de la Cuenta, que se muestra en la información de edición de la cuenta.</string>
 </resources>

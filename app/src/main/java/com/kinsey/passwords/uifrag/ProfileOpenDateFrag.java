@@ -238,72 +238,72 @@ public class ProfileOpenDateFrag extends Fragment {
     }
 
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        context = getContext();
-    }
+//    @Override
+//    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+//        super.onActivityCreated(savedInstanceState);
+//        context = getContext();
+//    }
 
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (resultCode == MainActivity.RESULT_CANCELED) {
-            return;
-        }
-        switch (requestCode) {
-//            case ADD_PROFILE_REQUEST: {
-//                String corpName = data.getStringExtra(AddEditProfileActivity.EXTRA_CORP_NAME);
-//                String userName = data.getStringExtra(AddEditProfileActivity.EXTRA_USER_NAME);
-//                String userEmail = data.getStringExtra(AddEditProfileActivity.EXTRA_USER_EMAIL);
-//                String corpWebsite = data.getStringExtra(AddEditProfileActivity.EXTRA_CORP_WEBSITE);
-//                String note = data.getStringExtra(AddEditProfileActivity.EXTRA_NOTE);
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
 //
-//                Profile profile = new Profile(this.adapter.getItemCount() + 1,
-//                        corpName, userName, userEmail, corpWebsite);
-//                profile.setNote(note);
-//                profile.setOpenLong(data.getLongExtra(AddEditProfileActivity.EXTRA_OPEN_DATE_LONG, 0));
-//                profile.setActvyLong(System.currentTimeMillis());
+//        if (resultCode == MainActivity.RESULT_CANCELED) {
+//            return;
+//        }
+//        switch (requestCode) {
+////            case ADD_PROFILE_REQUEST: {
+////                String corpName = data.getStringExtra(AddEditProfileActivity.EXTRA_CORP_NAME);
+////                String userName = data.getStringExtra(AddEditProfileActivity.EXTRA_USER_NAME);
+////                String userEmail = data.getStringExtra(AddEditProfileActivity.EXTRA_USER_EMAIL);
+////                String corpWebsite = data.getStringExtra(AddEditProfileActivity.EXTRA_CORP_WEBSITE);
+////                String note = data.getStringExtra(AddEditProfileActivity.EXTRA_NOTE);
+////
+////                Profile profile = new Profile(this.adapter.getItemCount() + 1,
+////                        corpName, userName, userEmail, corpWebsite);
+////                profile.setNote(note);
+////                profile.setOpenLong(data.getLongExtra(AddEditProfileActivity.EXTRA_OPEN_DATE_LONG, 0));
+////                profile.setActvyLong(System.currentTimeMillis());
+////
+////                profileViewModel.insertProfile(profile);
+////
+////
+////                Log.d(TAG, "profile added");
+////                Toast.makeText(context, "Profile added", Toast.LENGTH_SHORT).show();
+////            }
+////            case EDIT_PROFILE_REQUEST: {
+////                int id = data.getIntExtra(AddEditProfileActivity.EXTRA_ID, -1);
+////
+////                if (id == -1) {
+////                    Toast.makeText(context, "Profile can't be updated", Toast.LENGTH_SHORT).show();
+////                    return;
+////                }
+////
+////                int passportId = data.getIntExtra(AddEditProfileActivity.EXTRA_PASSPORT_ID, 0);
+////                String corpName = data.getStringExtra(AddEditProfileActivity.EXTRA_CORP_NAME);
+////                String userName = data.getStringExtra(AddEditProfileActivity.EXTRA_USER_NAME);
+////                String userEmail = data.getStringExtra(AddEditProfileActivity.EXTRA_USER_EMAIL);
+////                String corpWebsite = data.getStringExtra(AddEditProfileActivity.EXTRA_CORP_WEBSITE);
+////                String note = data.getStringExtra(AddEditProfileActivity.EXTRA_NOTE);
+////
+////                Profile profile = new Profile(1, corpName, userName, userEmail, corpWebsite);
+////                profile.setId(id);
+////                profile.setPassportId(passportId);
+////                profile.setNote(note);
+////                profile.setOpenLong(data.getLongExtra(AddEditProfileActivity.EXTRA_OPEN_DATE_LONG, 0));
+////                profile.setActvyLong(System.currentTimeMillis());
+////
+////                profileViewModel.update(profile);
+////                Toast.makeText(context, "Profile updated", Toast.LENGTH_SHORT).show();
+////            }
 //
-//                profileViewModel.insertProfile(profile);
 //
+//            default:
+//                break;
+//        }
 //
-//                Log.d(TAG, "profile added");
-//                Toast.makeText(context, "Profile added", Toast.LENGTH_SHORT).show();
-//            }
-//            case EDIT_PROFILE_REQUEST: {
-//                int id = data.getIntExtra(AddEditProfileActivity.EXTRA_ID, -1);
-//
-//                if (id == -1) {
-//                    Toast.makeText(context, "Profile can't be updated", Toast.LENGTH_SHORT).show();
-//                    return;
-//                }
-//
-//                int passportId = data.getIntExtra(AddEditProfileActivity.EXTRA_PASSPORT_ID, 0);
-//                String corpName = data.getStringExtra(AddEditProfileActivity.EXTRA_CORP_NAME);
-//                String userName = data.getStringExtra(AddEditProfileActivity.EXTRA_USER_NAME);
-//                String userEmail = data.getStringExtra(AddEditProfileActivity.EXTRA_USER_EMAIL);
-//                String corpWebsite = data.getStringExtra(AddEditProfileActivity.EXTRA_CORP_WEBSITE);
-//                String note = data.getStringExtra(AddEditProfileActivity.EXTRA_NOTE);
-//
-//                Profile profile = new Profile(1, corpName, userName, userEmail, corpWebsite);
-//                profile.setId(id);
-//                profile.setPassportId(passportId);
-//                profile.setNote(note);
-//                profile.setOpenLong(data.getLongExtra(AddEditProfileActivity.EXTRA_OPEN_DATE_LONG, 0));
-//                profile.setActvyLong(System.currentTimeMillis());
-//
-//                profileViewModel.update(profile);
-//                Toast.makeText(context, "Profile updated", Toast.LENGTH_SHORT).show();
-//            }
-
-
-            default:
-                break;
-        }
-
-    }
+//    }
 
 
     @Override

@@ -3,14 +3,14 @@
     <string name="app_name_corpname">Akun berdasarkan Nama Perusahaan</string>
     <string name="about_copyright">Hak Cipta © 2020</string>
     <string name="about_email">Untuk dukungan, kirim email ke vonniekinsey@gmail.com</string>
-    <string name="about_title">Aplikasi Akun Tentang</string>
+    <string name="about_title">Tentang Akun</string>
     <string name="app_name_opendate">Akun berdasarkan Tanggal Terbuka, turun</string>
     <string name="app_name_acctid">Akun berdasarkan ID Akun</string>
     <string name="app_name_custom">Akun oleh Kustom Seq</string>
-    <string name="action_help">Tolong</string>
+    <string name="action_help">Bantuan</string>
     <string name="action_settings">Pengaturan</string>
     <string name="menu_accounts">Daftar Akun</string>
-    <string name="menu_suggests">Saran Kata Sandi</string>
+    <string name="menu_suggests">Kata Sandi yang Disarankan</string>
     <string name="menu_profile">Profil</string>
     <string name="menu_generate">Buat Kata Sandi</string>
     <string name="menu_generate10">Hasilkan 10 Kata Sandi Char</string>
@@ -94,7 +94,7 @@
     <string name="menuacct_about">Tentang</string>
     <string name="menuvw_show_file">Tampilkan File Cadangan</string>
     <string name="menuvw_show_filename">Nama file</string>
-    <string name="menuvw_share">Bagikan File Cadangan</string>
+    <string name="menuvw_share">Cadangkan Akun</string>
     <string name="menuvw_import">Impor</string>
     <string name="menuvw_retore">Mengembalikan</string>
     <string name="menuvw_export">Ekspor</string>
@@ -231,6 +231,13 @@
     <string name="link_to_website">Tautan ke situs web</string>
     <string name="share">Bagikan Akun</string>
     <string name="welcome_message">Pesan Selamat Datang</string>
-    <string name="menuvw_share_from">Bagikan Dari</string>
+    <string name="menuvw_share_from">Pulihkan Akun</string>
     <string name="link">Tautan</string>
+    <string name="about_message_text">Lacak akun Anda dengan daftar yang disortir, pencarian, pengeditan, pencadangan, pemulihan, atau hasilkan kata sandi yang disarankan.
+\n\nUntuk melihat daftar dalam urutan yang berbeda, klik ikon penyaring untuk tiga urutan yang berbeda. Gunakan menu pencarian untuk melihat hanya akun dengan nama perusahaan yang dicari.
+\n\nKlik pada item akun untuk melihat dan mengedit rincian akun. Untuk menghapus, geser akun ke kiri atau kanan. Untuk menambahkan akun, klik tanda plus di sudut kanan bawah.
+\n\nUntuk mencadangkan Akun, gunakan opsi menu \'Cadangkan Akun\'. Untuk memulihkan Akun, gunakan opsi menu \'Pulihkan Akun\'. Gunakan Dropbox; ini yang paling baik. Cara lain mungkin melanggar aturan keamanan Android yang baru.
+\n\nHasilkan kata sandi melalui opsi menu \'Kata Sandi yang Disarankan\'. Menu Hasilkan mengembalikan 10 kata sandi. Kata sandi tersebut berukuran 8 atau 10 karakter, tergantung pada permintaan pengguna. Kata sandi ini mengandung satu angka, satu simbol, satu huruf kapital. Huruf-huruf kata sandi dipilih berdasarkan lokasi di keyboard, entah dari sisi kiri atau sisi kanan.
+\n\nUbah urutan kata sandi dengan menekan dan menahan item kata sandi, lalu memindahkannya ke posisi baru. Pengecualian adalah tidak dapat dipindahkan ke akhir. Pembaruan di masa depan akan menyelesaikan hal ini. Untuk memindahkannya ke akhir, geser ke akhir, tepat sebelum item terakhir, lalu tarik item terakhir ke depan.
+\n\nPada daftar kata sandi kertas, sebutkan mereka berdasarkan ID Akun, yang ditampilkan pada informasi edit akun.</string>
 </resources>
