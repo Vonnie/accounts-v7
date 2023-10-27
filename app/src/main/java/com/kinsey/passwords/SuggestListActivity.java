@@ -1,5 +1,7 @@
 package com.kinsey.passwords;
 
+import static android.app.PendingIntent.getActivity;
+
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.media.tv.AdRequest;
@@ -56,7 +58,7 @@ public class SuggestListActivity extends AppCompatActivity {
     SuggestAdapter adapter = new SuggestAdapter();
     private final PasswordFormula passwordFormula = new PasswordFormula();
     private List<Suggest> suggestList;
-    GridLayoutManager layoutManager;
+    GridLayoutManager gridLayoutManager;
     private GestureDetectorCompat gestureDetector;
 
     private final String RECYCLER_POSITION_KEY = "recyclerViewPos";
@@ -88,12 +90,55 @@ public class SuggestListActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
 
 
-        GridLayoutManager gridLayoutManager;
+//        GridLayoutManager gridLayoutManager;
 //        int screenLayout = getResources().getConfiguration().screenLayout;
+//        LinearLayoutManager layoutManager;
+//        int screenLayout = getResources().getConfiguration().screenLayout;
+//        screenLayout &= Configuration.SCREENLAYOUT_SIZE_MASK;
+//        int spanSize = 3;
+//        Log.d(TAG, "check screen size");
+//        switch (screenLayout) {
+//            case Configuration.SCREENLAYOUT_SIZE_XLARGE:
+//                if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+//                    spanSize = 4;
+//                } else {
+//                    spanSize = 3;
+//                }
+//                gridLayoutManager = new GridLayoutManager(this, spanSize);
+//                recyclerView.setLayoutManager(gridLayoutManager);
+//                Log.d(TAG, "screen size Xlarge");
+//                break;
+//            case Configuration.SCREENLAYOUT_SIZE_LARGE:
+//                if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+//                    spanSize = 3;
+//                } else {
+//                    spanSize = 2;
+//                }
+//                gridLayoutManager = new GridLayoutManager(this, spanSize);
+//                recyclerView.setLayoutManager(gridLayoutManager);
+//                Log.d(TAG, "screen size large");
+//                break;
+//            case Configuration.SCREENLAYOUT_SIZE_NORMAL:
+//                if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+//                    gridLayoutManager = new GridLayoutManager(this, 2);
+//                    recyclerView.setLayoutManager(gridLayoutManager);
+//                    Log.d(TAG, "screen size normal");
+//                } else {
+//                    layoutManager = new LinearLayoutManager(this);
+//                    recyclerView.setLayoutManager(layoutManager);
+//                }
+//                break;
+//            default:
+//                layoutManager = new LinearLayoutManager(this);
+//                recyclerView.setLayoutManager(layoutManager);
+//        }
 
-        int spanSize = 2;
+        Log.d(TAG, "onCreate: start grid");
+        int spanSize = 4;
         gridLayoutManager = new GridLayoutManager(this, spanSize);
         recyclerView.setLayoutManager(gridLayoutManager);
+
+        setGrid();
 
 
 
@@ -186,11 +231,11 @@ public class SuggestListActivity extends AppCompatActivity {
             @Override
             public void onChanged(@Nullable List<Suggest> suggests) {
 
-                Log.d(TAG, "onCreate: about to set suggestList array");
+                Log.d(TAG, "onChanged: about to set suggestList array");
                 suggestList = new ArrayList<>(suggests);
                 Log.d(TAG, "onChanged: suggests count " + suggests.size());
                 adapter.submitList(suggests);
-//                Log.d(TAG, "suggests size " + suggestListFull.size());
+                Log.d(TAG, "suggests size " + suggests.size());
 
                 if (savedInstanceState != null) {
                     int pos = savedInstanceState.getInt(RECYCLER_POSITION_KEY);
@@ -599,6 +644,48 @@ public class SuggestListActivity extends AppCompatActivity {
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_keyboard_arrow_left_black_24dp);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setLogo(R.drawable.ic_launcher_test2_foreground);
+    }
+    private void setGrid() {
+        int screenLayout = getResources().getConfiguration().screenLayout;
+        screenLayout &= Configuration.SCREENLAYOUT_SIZE_MASK;
+        int spanSize;
+        switch (screenLayout) {
+            case Configuration.SCREENLAYOUT_SIZE_XLARGE:
+                if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                    spanSize = 4;
+                } else {
+                    spanSize = 3;
+                }
+                break;
+            case Configuration.SCREENLAYOUT_SIZE_LARGE:
+                if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                    spanSize = 4;
+                } else {
+                    spanSize = 2;
+                }
+                break;
+            case Configuration.SCREENLAYOUT_SIZE_NORMAL:
+                Log.d(TAG, "setGrid: SCREENLAYOUT_SIZE_NORMAL");
+                if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                    spanSize = 4;
+                } else {
+                    spanSize = 2;
+                }
+                break;
+            default:
+                Log.d(TAG, "setGrid: defaults");
+                if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                    spanSize = 3;
+                    Log.d(TAG, "setGrid: landscape");
+                } else {
+                    spanSize = 1;
+                    Log.d(TAG, "setGrid: portrait");
+                }
+        }
+
+        Log.d(TAG, "setGrid: spanSize " + spanSize);
+        gridLayoutManager.setSpanCount(spanSize);
+
     }
 
     @Override

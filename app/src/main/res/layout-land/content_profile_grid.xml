@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="0dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:columnCount="4"
+    android:columnCount="6"
     android:alignmentMode="alignMargins"
     android:layout_weight="8"
     android:padding="14dp">

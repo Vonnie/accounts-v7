@@ -12,13 +12,13 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/spl_instr"
-        tools:listitem="@layout/suggest_item" />
+        app:layout_constraintBottom_toTopOf="@+id/spl_instr" />
+<!--        tools:listitem="@layout/suggest_item" />-->
 
     <TextView
         android:id="@+id/spl_instr"
