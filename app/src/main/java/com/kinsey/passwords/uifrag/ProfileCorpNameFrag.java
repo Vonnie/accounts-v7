@@ -206,6 +206,7 @@ public class ProfileCorpNameFrag extends Fragment {
 //            }
 //        }
 
+
         recyclerView.setAdapter(adapter);
         mLayoutManager = recyclerView.getLayoutManager();
         mRecyclerViewHelper = RecyclerViewPositionHelper.createHelper(recyclerView);
@@ -296,6 +297,7 @@ public class ProfileCorpNameFrag extends Fragment {
                 unselectId(adapter.getSelectedId());
                 adapter.setSelectedId(-1);
                 mListener.onProfileCorpNameAdd();
+//                adapter.notifyItemChanged(0);
 //                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
 //                        .setAction("Action", null).show();
             }
@@ -577,6 +579,10 @@ public class ProfileCorpNameFrag extends Fragment {
 
                 profileListFull = new ArrayList<>(profiles);
                 adapter.submitList(profiles);
+                Log.d(TAG, "onChanged: profiles len " + profiles.size());
+                if (profiles.size() == 0) {
+                    mListener.onEmptyWarning();
+                }
 
                 if (savedInstanceState != null) {
                     int pos = savedInstanceState.getInt(RECYCLER_POSITION_KEY);
@@ -585,18 +591,18 @@ public class ProfileCorpNameFrag extends Fragment {
                     recyclerView.scrollToPosition(pos);
 //                    Log.d(TAG, "onCreateView: pos " + pos);
                 } else {
-                    Log.d(TAG, "onCreateView: getItemCount " + adapter.getItemCount());
-                    if (adapter.getItemCount() == 0) {
+                    Log.d(TAG, "onChanged: getItemCount " + adapter.getItemCount() + "; " + adapter.getSelectedId());
+//                    if (adapter.getItemCount() == 0) {
 //                        mListener.onProfileCorpNameAdd();
 //                        mListener.onShowWelcome();
-                        mListener.onEmptyWarning();
+//                        mListener.onEmptyWarning();
 //                    } else {
                         if (adapter.getSelectedId() == -1) {
                             recyclerView.scrollToPosition(0);
                         } else {
                             setSelectedId(adapter.getSelectedId());
                         }
-                    }
+//                    }
                 }
             }
 

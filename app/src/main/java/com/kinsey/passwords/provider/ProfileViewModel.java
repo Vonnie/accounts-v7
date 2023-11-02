@@ -57,6 +57,10 @@ public class ProfileViewModel extends AndroidViewModel {
         repository.insertAll(profiles);
     }
 
+    public void replaceAll(List<Profile> profiles) {
+
+        repository.replaceAll(profiles);
+    }
 
 //    public LiveData<List<Profile>> getAllProfiles(int listsortOrder) {
 //        allProfiles = repository.getAllProfiles(listsortOrder);

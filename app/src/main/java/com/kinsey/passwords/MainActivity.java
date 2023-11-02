@@ -5,12 +5,15 @@ import static android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION;
 import static androidx.core.content.FileProvider.getUriForFile;
 //import static androidx.core.view.accessibility.AccessibilityWindowInfoCompat.Api21Impl.getId;
 
+import android.accounts.AccountManager;
 import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 //import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
@@ -86,7 +89,10 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InvalidObjectException;
 import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 //import java.util.Arrays;
 import java.util.ArrayList;
@@ -482,7 +488,7 @@ public class MainActivity extends AppCompatActivity
 //                                Log.d(TAG, "onActivityResult fileView: data not restored " + blnRestored);
 //                            }
                         } else {
-                            Log.d(TAG, "onActivityResult fileView: canceled");
+                            Log.d(TAG, "onActivityResult addEditProfileActivity: canceled");
                         }
                     }
                 });
@@ -520,6 +526,7 @@ public class MainActivity extends AppCompatActivity
                 new ActivityResultCallback<ActivityResult>() {
                     @Override
                     public void onActivityResult(ActivityResult activityResult) {
+//                        Log.d(TAG, "startForResultSendLauncher sent file " + activityResult.describeContents());
                         if (activityResult.getResultCode() == RESULT_OK) {
                             // Handle the data returned from Activity B
 //                            LiveData<List<Word>> returnedData = mWordViewModel.getAllWords();
@@ -530,8 +537,9 @@ public class MainActivity extends AppCompatActivity
                             Log.d(TAG, "onActivityResult sent file " + data);
                             Toast.makeText(MainActivity.this, "account.json send complete", Toast.LENGTH_SHORT).show();
                         } else {
-                            Log.d(TAG, "onActivityResult sent: canceled");
-                            Toast.makeText(MainActivity.this, "account.json send incomplete or canceled", Toast.LENGTH_LONG).show();
+                            Log.d(TAG, "onActivityResult sent: canceled " + activityResult.describeContents() + "; " + activityResult.getResultCode());
+//                            Toast.makeText(MainActivity.this, "account.json send incomplete, canceled, incompatible format, or slow response (verify if sent)", Toast.LENGTH_LONG).show();
+                            msgDialog("account.json send incomplete, canceled, incompatible format, or slow response (verify if sent)");
                         }
                     }
                 });
@@ -550,44 +558,63 @@ public class MainActivity extends AppCompatActivity
                             // Use the returnedData as needed
 //                            Intent data = result.getData();
 //                            int result = activityResult.getResultCode();
-                            Intent data = activityResult.getData();
-                            Log.d(TAG, TABFunc + "receive file " + data);
-                            assert data != null;
-                            Log.d(TAG, TABFunc + "received " + data.getData());
-                            Log.d(TAG, TABFunc + "received " + Objects.requireNonNull(data.getData()).getPath());
+                            try {
+                                Intent data = activityResult.getData();
+//                                Log.d(TAG, TABFunc + "receive file " + data);
+                                assert data != null;
+//                                Log.d(TAG, TABFunc + "received " + data.getData());
+//                                Log.d(TAG, TABFunc + "received " + Objects.requireNonNull(data.getData()).getPath());
 //                            String fileName = new File(String.valueOf(data.getData())).getName();
 //                            String file = new File(String.valueOf(data.getData()));
-                            File file = new File(String.valueOf(data.getData()));
-                            Log.d(TAG, TABFunc + "received " + data.getData());
-                            Log.d(TAG, TABFunc + "file created ");
-                            Uri uri = Uri.parse(data.getDataString());
-                            Log.d(TAG, TABFunc + "created uri " + uri.getPath());
-                            try {
+                                File file = new File(String.valueOf(data.getData()));
+//                                Log.d(TAG, TABFunc + "received " + data.getData());
+//                                Log.d(TAG, TABFunc + "file created ");
+                                Uri uri = Uri.parse(data.getDataString());
+//                                Log.d(TAG, TABFunc + "created uri " + uri.getPath());
                                 String copyFilename = copyFileContent(uri);
-                                Log.d(TAG, TABFunc + "copied to filename " + copyFilename);
+//                                Log.d(TAG, TABFunc + "copied to filename " + copyFilename);
                                 List<Profile> listAccounts = profileJsonListIO.readProfileJson(copyFilename);
-                                Log.d(TAG, TABFunc + "new listAccounts " + listAccounts);
-                                profileViewModel.deleteAllProfiles();
+                                if (listAccounts.get(0).getPassportId() == -99) {
+                                    Log.d(TAG, TABFunc + "listAccounts is null ");
+                                    msgDialog("Received data incompativle for accounts");
+//                                    Toast.makeText(MainActivity.this, "Received incompativle for accounts", Toast.LENGTH_LONG).show();
+                                    return;
+                                }
+                                ;
+//                                Log.d(TAG, TABFunc + "new listAccounts " + listAccounts);
+//                                profileViewModel.deleteAllProfiles();
 //                                for(int i=0;i<listAccounts.size(); i++){
 //                                    Profile profileAcct = listAccounts.get(i);
 //                                    Log.d(TAG, TABFunc + "new profileAcct " + profileAcct.getCorpName());
 //                                    profileViewModel.insertProfile(profileAcct);
 //                                }
-                                profileViewModel.insertAll(listAccounts);
-                                frameSearch.setVisibility(View.GONE);
-                                FrameLayout frame = findViewById(R.id.fragment_container);
-                                frame.setVisibility(View.VISIBLE);
-                                FragmentManager fragmentManager = getSupportFragmentManager();
-                                Fragment profileFragment = fragmentManager.findFragmentById(R.id.fragment_container);
-                                ProfileCorpNameFrag frag = (ProfileCorpNameFrag) profileFragment;
-                                frag.refreshListAll();
-                                frag.setSelectedId(-1);
+                                profileViewModel.replaceAll(listAccounts);
+//                                FrameLayout frame = findViewById(R.id.fragment_container);
+//                                frame.setVisibility(View.VISIBLE);
+//                                FragmentManager fragmentManager = getSupportFragmentManager();
+//                                Fragment profileFragment = fragmentManager.findFragmentById(R.id.fragment_container);
+//                                ProfileCorpNameFrag frag = (ProfileCorpNameFrag) profileFragment;
+//                                frag.setSelectedId(-1);
+//                                frag.refreshListAll();
+//                                frameSearch.setVisibility(View.GONE);
                                 Log.d(TAG, TABFunc + "listAccounts count " + listAccounts.size());
-                                Toast.makeText(MainActivity.this, "Accounts receive complete", Toast.LENGTH_SHORT).show();
+//                                Toast.makeText(MainActivity.this, listAccounts.size() + " Accounts receive complete", Toast.LENGTH_LONG).show();
+//                                frag.refreshListAll();
+                                msgDialog(listAccounts.size() + " Accounts receive complete");
+                            } catch (android.util.MalformedJsonException e) {
+                                Log.d(TAG, TABFunc + "Get listAccounts has Malformed Exception");
+                                Toast.makeText(MainActivity.this, "Accounts receive error malformed data error occurred", Toast.LENGTH_LONG).show();
+//                                throw new RuntimeException(e);
                             } catch (IOException e) {
                                 Toast.makeText(MainActivity.this, "Accounts receive error occurred", Toast.LENGTH_LONG).show();
-                                throw new RuntimeException(e);
+//                                throw new RuntimeException(e);
+                            } catch (Exception e) {
+                                Log.d(TAG, TABFunc + "listAccounts error ");
+                                Toast.makeText(MainActivity.this, "Accounts received in error", Toast.LENGTH_LONG).show();
+//                                throw new RuntimeException(e);
                             }
+
+
 //                            try {
 //                                InputStream inputStream = getContentResolver().openInputStream(uri);
 //                                /* temporary path */
@@ -615,7 +642,6 @@ public class MainActivity extends AppCompatActivity
                         }
                     }
                 });
-
 
 
 //        if (findViewById(R.id.fragment_container2) == null) {
@@ -696,16 +722,22 @@ public class MainActivity extends AppCompatActivity
 //        recyclerView.setAdapter(adapter);
 //
 
-        profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
-        profileViewModel.getAllProfilesByCorpName().observe(this, new Observer<List<Profile>>() {
-            @Override
-            public void onChanged(List<Profile> profiles) {
+        profileViewModel = new
 
-                listProfiles = new ArrayList<>(profiles);
+                ViewModelProvider(this).
+
+                get(ProfileViewModel.class);
+        profileViewModel.getAllProfilesByCorpName().
+
+                observe(this, new Observer<List<Profile>>() {
+                    @Override
+                    public void onChanged(List<Profile> profiles) {
+
+                        listProfiles = new ArrayList<>(profiles);
 //                profileListFull = new ArrayList<>(profiles);
 //                adapter.submitList(profiles);
-            }
-        });
+                    }
+                });
 
 
 //
@@ -835,8 +867,10 @@ public class MainActivity extends AppCompatActivity
 //            Log.d(TAG, "onCreate: activated " + mSearchView.isActivated());
 //        }
 
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_keyboard_arrow_left_black_24dp);
+        //        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().
+
+                setHomeAsUpIndicator(R.drawable.ic_keyboard_arrow_left_black_24dp);
 
 
 //        progressBar.setVisibility(View.VISIBLE);
@@ -1177,7 +1211,6 @@ public class MainActivity extends AppCompatActivity
 //        myShareActionProvider =
 //                (ShareActionProvider) MenuItemCompat.getActionProvider(shareItem);
 //          ========================================================================
-
 
 
         //        View view = menu.findItem(R.id.button_item).getActionView();
@@ -1975,7 +2008,7 @@ public class MainActivity extends AppCompatActivity
                 return true;
 
 
-                //            case R.id.menumain_dropbox:
+            //            case R.id.menumain_dropbox:
 //                showDropbox();
 //                return true;
 
@@ -2639,6 +2672,7 @@ public class MainActivity extends AppCompatActivity
 
     private void showAboutActivity() {
 
+//        profileViewModel.deleteAllProfiles();
         Intent detailIntent = new Intent(this, AboutActivity.class);
         startActivity(detailIntent);
 
@@ -4110,28 +4144,28 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-//    public void msgDialog(String msg) {
-//        final Dialog dialog = new Dialog(this);
-//        dialog.setContentView(R.layout.dialog_msg_ok);
-//        dialog.setTitle("Account Modify Info");
-//
-//        TextView text = (TextView) dialog.findViewById(R.id.text);
-//        text.setText(msg);
-//        ImageView image = (ImageView) dialog.findViewById(R.id.image);
-//        image.setImageResource(R.drawable.ic_info_24dp);
-//
-//
-//        Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
-//        // if button is clicked, close the custom dialog
-//        dialogButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                dialog.dismiss();
-//            }
-//        });
-//
-//        dialog.show();
-//    }
+    private void msgDialog(String msg) {
+        final Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.dialog_msg_ok);
+        dialog.setTitle("Account Information");
+
+        TextView text = (TextView) dialog.findViewById(R.id.text);
+        text.setText(msg);
+        ImageView image = (ImageView) dialog.findViewById(R.id.image);
+        image.setImageResource(R.drawable.ic_info_24dp);
+
+
+        Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
+        // if button is clicked, close the custom dialog
+        dialogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+    }
 
     @Override
     public void setMaxSeq(int maxSeq) {
@@ -4444,6 +4478,17 @@ public class MainActivity extends AppCompatActivity
         ProfileJsonListIO profileJsonListIO = new ProfileJsonListIO();
 //        myShareActionProvider.setOnShareTargetSelectedListener();
 
+//        Intent googlePicker = AccountPicker.newChooseAccountIntent(null, null, new String[]{GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE}, true, null, null, null, null);
+//        startActivityForResult(googlePicker, REQUEST_CODE);
+//
+//
+//        protected void onActivityResult(final int requestCode, final int resultCode,
+//        final Intent data) {
+//            if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
+//                String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
+//            }
+
+
         try {
             File dirStorage = getExternalFilesDir("passport");
             Log.d(TAG, TABFunc + " path found " + dirStorage.getPath());
@@ -4480,17 +4525,40 @@ public class MainActivity extends AppCompatActivity
                     getString(R.string.fileprovider_package), file);
 
             try {
+//                String[] addresses = {"vonniekinsey@gmail.com"};
+                String[] addresses = null;
                 Intent intent = new Intent(Intent.ACTION_SEND);
-                intent.setType("*/*");
+                intent.setType("application/json");
+//                intent.setType("*/*");
                 intent.putExtra(Intent.EXTRA_STREAM, uri);
                 intent.putExtra(Intent.EXTRA_TITLE, getString(R.string.fv_msg_38));
+                intent.putExtra(Intent.EXTRA_EMAIL, addresses);
+                intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-                startForResultSendLauncher.launch(intent.createChooser(intent, getString(R.string.fv_msg_38)));
+//                startForResultSendLauncher.launch(intent.createChooser(intent, getString(R.string.fv_msg_38)));
+
+                Intent chooser = Intent.createChooser(intent, getString(R.string.fv_msg_38));
+
+                List<ResolveInfo> resInfoList = this.getPackageManager().queryIntentActivities(chooser, PackageManager.MATCH_DEFAULT_ONLY);
+
+                for (ResolveInfo resolveInfo : resInfoList) {
+                    String packageName = resolveInfo.activityInfo.packageName;
+                    Log.d(TAG, TABFunc + " packageName " + packageName);
+                    this.grantUriPermission(packageName, uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                }
+
+                startForResultSendLauncher.launch(chooser);
 //            startActivityForResult(intent.createChooser(intent, getString(R.string.fv_msg_38)),
 //                    BACKUP_FILE_REQUESTED);
                 Log.d(TAG, TABFunc + " file Records sent");
-            } catch (ActivityNotFoundException ex) {
-                Log.e(TAG, TABFunc + " error: " + ex.getMessage());
+//            } catch (ActivityNotFoundException ex) {
+            } catch (Exception ex) {
+                ;
+                ex.printStackTrace();
+                System.out.println(ex.getMessage());
+                msgError = "jsonError: " + ex.getMessage();
+                Log.v(TAG, msgError);
+                Toast.makeText(this, ex.getMessage(), Toast.LENGTH_LONG).show();
             }
 
         } catch (Exception e2) {
@@ -4535,26 +4603,44 @@ public class MainActivity extends AppCompatActivity
     @NonNull
     private String copyFileContent(Uri uri) throws IOException {
         String TABFunc = "copyFileContent ";
-        InputStream inputStream = getContentResolver().openInputStream(uri);
-        Log.d(TAG, TABFunc + "got inputStream ");
+        String temporaryFilePath = "";
+        try {
+            InputStream inputStream = getContentResolver().openInputStream(uri);
+            Log.d(TAG, TABFunc + "got inputStream ");
 
-        /* temporary path */
+            /* temporary path */
 //        String extension = getMimeType(getApplicationContext(), uri);
-        File dirStorage = this.getExternalFilesDir("passport/");
-        Log.d(TAG, TABFunc + "got output dir " + dirStorage.getPath() + ":" + dirStorage.getAbsolutePath());
+            File dirStorage = this.getExternalFilesDir("passport/");
+            Log.d(TAG, TABFunc + "got output dir " + dirStorage.getPath() + ":" + dirStorage.getAbsolutePath());
 //        String temporaryFilePath = Environment.getExternalStorageDirectory().toString()
-        String temporaryFilePath = dirStorage.getPath()
-                .concat("/").concat("temporaryfile")
-                .concat(".").concat("json");
-        Log.d(TAG, TABFunc + "got temp filename " + temporaryFilePath);
+            temporaryFilePath = dirStorage.getPath()
+                    .concat("/").concat("temporaryfile")
+                    .concat(".").concat("json");
+            Log.d(TAG, TABFunc + "got temp filename " + temporaryFilePath);
 
-        OutputStream outStream = new FileOutputStream(temporaryFilePath);
-        Log.d(TAG, TABFunc + "got outputStream ");
+            OutputStream outStream = null;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                outStream = Files.newOutputStream(Paths.get(temporaryFilePath));
+            }
+            Log.d(TAG, TABFunc + "got outputStream ");
 
-        final byte[] b = new byte[8192];
-        for (int r;(r = inputStream.read(b)) != -1;) outStream.write(b, 0, r);
+            final byte[] b = new byte[8192];
+            for (int r; (r = inputStream.read(b)) != -1; ) outStream.write(b, 0, r);
+            Log.d(TAG, TABFunc + "accept inpputStream ");
+        } catch (android.util.MalformedJsonException e) {
+            e.printStackTrace();
+            Log.e(TAG, "Malformed Object ERROR: " + e.getMessage());
+            throw new Exception("Maliformed Object");
+        } catch (InvalidObjectException e) {
+            e.printStackTrace();
+            Log.e(TAG, "Invalid Object ERROR: " + e.getMessage());
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.e(TAG, "ERROR: " + e.getMessage());
+        } finally {
 
-        return temporaryFilePath;
+            return temporaryFilePath;
+        }
     }
 
     private void shareEmailAccounts() {

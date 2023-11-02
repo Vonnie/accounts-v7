@@ -48,11 +48,11 @@
 
     <item
         android:id="@+id/menumain_search"
-        android:checkable="true"
-        android:checked="false"
         android:icon="@drawable/ic_search"
         android:title="@string/menu_search"
-        app:showAsAction="always" />
+        android:checkable="true"
+        android:checked="false"
+        app:showAsAction="ifRoom" />
 
 
     <!--    <item-->

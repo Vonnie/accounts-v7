@@ -26,7 +26,8 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:scrollbarStyle="outsideOverlay">
             <!--            android:clipToPadding="true"-->
             <!--            android:fillViewport="true"-->
             <!--            android:scrollbarStyle="insideInset">-->
@@ -45,7 +46,7 @@
 
                 <TextView
                     android:id="@+id/text"
-                    style="@style/TextAppearance.AppCompat.Large"
+                    style="@style/TextAppearance.AppCompat.Medium"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="4dp"

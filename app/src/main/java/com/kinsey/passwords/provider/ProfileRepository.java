@@ -52,6 +52,14 @@ public class ProfileRepository {
         });
     }
 
+    public void replaceAll(List<Profile> profiles) {
+//        new InsertProfilesAsyncTask(profileDao, profiles).execute();
+        ProfileDatabase.databaseWriteExecutor.execute(() -> {
+            mProfileDao.deleteAllProfiles();
+            mProfileDao.insertProfiles(profiles);
+        });
+    }
+
     public void update(Profile profile) {
 //        new UpdateProfileAsyncTask(profileDao).execute(profile);
         Log.d(TAG, "update Profile " + profile);

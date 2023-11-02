@@ -27,7 +27,8 @@
         <ScrollView
             android:layout_width="700dp"
             android:layout_height="match_parent"
-            android:fillViewport="true" >
+            android:fillViewport="true"
+            android:scrollbarStyle="outsideOverlay">
 <!--            android:layout_gravity="center"-->
 <!--            android:clipToPadding="true"-->
 <!--            android:layout_marginEnd="8dp">-->

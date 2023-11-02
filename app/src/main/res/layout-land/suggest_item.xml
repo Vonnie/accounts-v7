@@ -15,14 +15,14 @@
     android:layout_height="wrap_content"
     android:layout_rowWeight="1"
     android:layout_columnWeight="1"
-    android:layout_marginStart="16dp"
-    android:layout_marginTop="16dp"
-    android:layout_marginEnd="16dp"
-    android:layout_marginBottom="16dp"
+    android:layout_marginStart="4dp"
+    android:layout_marginTop="4dp"
+    android:layout_marginEnd="4dp"
+    android:layout_marginBottom="4dp"
     app:cardBackgroundColor="@color/secondaryColor"
     app:cardCornerRadius="8dp"
     app:cardElevation="8dp"
-    app:contentPadding="8dp" >
+    app:contentPadding="2dp" >
 <!--    app:layout_constraintBottom_toBottomOf="parent"-->
 <!--    app:layout_constraintEnd_toEndOf="parent"-->
 <!--    app:layout_constraintStart_toStartOf="parent"-->
@@ -36,7 +36,7 @@
         android:layout_margin="16dp"
         android:background="@color/secondaryColor"
         android:orientation="horizontal"
-        android:padding="8dp"
+        android:padding="4dp"
         android:weightSum="1">
 
         <!--            android:orientation="horizontal"-->
@@ -53,11 +53,11 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:ellipsize="end"
             android:maxLines="1"
             android:text="@string/sugg_password"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@color/secondaryTextColor" />
+<!--            android:ellipsize="end"-->
         <!--        android:textColor="@color/secondaryTextColor" />-->
         <!--            android:textColor="?android:attr/textColorSecondary" />-->
         <!--        android:layout_toStartOf="@+id/text_view_priority"-->

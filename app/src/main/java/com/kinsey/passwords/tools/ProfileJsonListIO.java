@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InvalidObjectException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -34,11 +35,12 @@ public class ProfileJsonListIO {
     }
 
     public List<Profile> readProfileJson(String jsonFilename) {
-        String TABFunc = "readProfileJson:";
+        String TABFunc = "readProfileJson: " + jsonFilename;
         List<Profile> listAccounts = new ArrayList<Profile>();
         try {
 
-            final JsonReader reader = new JsonReader(new FileReader(jsonFilename));
+            FileReader readerFile = new FileReader(jsonFilename);
+            final JsonReader reader = new JsonReader(readerFile);
 
             reader.beginArray();
             while (reader.hasNext()) {
@@ -48,7 +50,7 @@ public class ProfileJsonListIO {
                     break;
                 } else {
                     listAccounts.add(account);
-                    Log.d(TAG, TABFunc + account.getCorpName());
+//                    Log.d(TAG, TABFunc + account.getCorpName());
 //                    int listCount = listAccounts.size();
                 }
             }
@@ -56,12 +58,28 @@ public class ProfileJsonListIO {
             reader.endArray();
             reader.close();
             Log.d(TAG, "run: upload complete " + jsonFilename);
+        } catch (android.util.MalformedJsonException e) {
+//            e.printStackTrace();
+            Log.e(TAG, "*** Malformed Object ERROR: " + e.getMessage());
+//            listAccounts = null;
+//            throw new android.util.MalformedJsonException(e.getMessage());
+            Profile errProfile = new Profile();
+            errProfile.setCorpName("Malformed Restore File");
+            errProfile.setPassportId(-99);
+            listAccounts.add(errProfile);
+
+
+        } catch (InvalidObjectException e) {
+            e.printStackTrace();
+            Log.e(TAG, "*** Invalid Object ERROR: " + e.getMessage());
         } catch (IOException e) {
             e.printStackTrace();
-            Log.e(TAG, "ERROR: " + e.getMessage());
+            Log.e(TAG, "*** ERROR: " + e.getMessage());
+        } finally {
+
+            return listAccounts;
         }
 
-        return listAccounts;
 
 
     }
