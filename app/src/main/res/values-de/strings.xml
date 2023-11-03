@@ -233,11 +233,12 @@
     <string name="welcome_message">Willkommensnachricht</string>
     <string name="menuvw_share_from">Konten wiederherstellen</string>
     <string name="link">Verknüpfen</string>
-    <string name="about_message_text">Verfolgen Sie Ihre Konten mit sortierten Listen, Suchen, Bearbeiten, Sichern, Wiederherstellen oder generieren Sie vorgeschlagene Passwörter.
-\n\nUm die Liste in einer anderen Reihenfolge anzuzeigen, klicken Sie auf das Filter-Symbol für drei verschiedene Sortieroptionen. Verwenden Sie das Suchmenü, um nur Konten mit dem gesuchten Unternehmensnamen anzuzeigen.
-\n\nKlicken Sie auf einen Kontoeintrag, um Kontodetails anzuzeigen und zu bearbeiten. Zum Löschen wischen Sie das Konto nach links oder rechts. Um ein Konto hinzuzufügen, klicken Sie auf das Pluszeichen in der unteren rechten Ecke.
-\n\nVerwenden Sie die Menüoption \'Konten sichern\', um Konten zu sichern. Verwenden Sie die Menüoption \'Konten wiederherstellen\', um Konten wiederherzustellen. Verwenden Sie Dropbox; es funktioniert am besten. Andere Methoden könnten gegen die neuen Sicherheitsrichtlinien von Android verstoßen.
-\n\nGenerieren Sie Passwörter über die Menüoption \'Vorgeschlagene Passwörter\'. Das Menü \'Generieren\' gibt 10 Passwörter zurück. Passwörter sind entweder 8 oder 10 Zeichen lang, abhängig von der Benutzeranforderung. Diese Passwörter enthalten eine Zahl, ein Symbol und einen Großbuchstaben. Die Buchstaben der Passwörter werden aufgrund ihrer Position auf der Tastatur ausgewählt, entweder von der linken oder rechten Seite.
-\n\nÄndern Sie die Passwortreihenfolge, indem Sie ein Passwortelement gedrückt halten und es an eine neue Position verschieben. Eine Ausnahme besteht darin, dass es nicht ans Ende verschoben werden kann. Ein zukünftiges Upgrade wird dies beheben. Um es ans Ende zu setzen, verschieben Sie es ans Ende, kurz vor dem letzten Element, und ziehen Sie das letzte Element nach vorne.
-\n\nIn der Liste der Passwörter auf Papier beziehen Sie sich auf sie anhand der Account-ID, die in der Kontobearbeitung angezeigt wird.</string>
+    <string name="about_message_text">Verfolgen Sie Ihre Konten mit sortierten Listen, Suchen, Bearbeitungen, Backups, Wiederherstellungen oder generieren Sie vorgeschlagene Passwörter.
+    \n\nUm die Liste in einer anderen Reihenfolge anzuzeigen, klicken Sie auf das Filter-Symbol für drei verschiedene sortierte Reihenfolgen. Verwenden Sie das Suchmenü, um nur Konten mit dem gesuchten Unternehmensnamen anzuzeigen.
+    \n\nKlicken Sie auf einen Kontoeintrag, um Kontodetails anzuzeigen und zu bearbeiten. Zum Löschen wischen Sie das Konto nach links oder rechts. Um ein Konto hinzuzufügen, klicken Sie auf das Pluszeichen in der unteren rechten Ecke.
+    \n\nVerwenden Sie die Option \'Konten sichern\' im Menü, um Konten zu sichern. Verwenden Sie die Option \'Konten wiederherstellen\' im Menü, um Konten wiederherzustellen. Verwenden Sie Shared Software, die kompatibel ist mit JSON-Dateien.
+    \n\nGenerieren Sie Passwörter über die Menüoption \'Vorgeschlagene Passwörter\'. Das Menü \'Generieren\' gibt 10 Passwörter zurück. Passwörter haben entweder eine Größe von 8 oder 10 Zeichen, abhängig von der Benutzeranforderung. Diese Passwörter enthalten eine Nummer, ein Symbol und einen Großbuchstaben. Die Buchstaben der Passwörter werden aufgrund ihrer Position auf der Tastatur ausgewählt, entweder von der linken oder rechten Seite.
+    \n\nIn der Liste der Passwörter auf Papier beziehen Sie sich auf diese anhand der Account-ID, die in der Kontobearbeitung angezeigt wird.</string>
+    <string name="list_of_accounts">Liste der Konten</string>
+    <string name="main_toolbar_menu">Hauptwerkzeugleiste Menü</string>
 </resources>

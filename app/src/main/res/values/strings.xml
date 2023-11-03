@@ -250,9 +250,12 @@
     <string name="about_message_text">Track your accounts with sorted lists, searches, edits, backup, restore, or generate suggested passwords.
         \n\nTo view list in a different order, click the filter icon for three different sorted orders. Use the search menu request to see only accounts with searched for corporation name.
         \n\nClick on an account item to view and edit account details. To delete, swipe account left or right. To add an account, click plus sign at lower right corner.
-        \n\nTo backup Accounts use menu \'Backup Accounts\' option. To restore Accounts use menu \'Restore Accounts\'. Use Dropbox; it works the best. Other ways may break new Android security rules.
-        \n\nGenerate passwords thru menu option \'Suggested Passwords\'. Menu Generate returns 10 passwords. Passwords are either 8 or 10 character size, depending on user request. These passwords contain one number, one symbol, one capital letter. The letters of passwords are selected based on the location on keyboard, either from left-hand or right-hand.
+        \n\nTo backup Accounts use menu \'Backup Accounts\' option. To restore Accounts use menu \'Restore Accounts\'. Use Shared Software compatible for json files.
+        \n\nGenerate passwords thru menu option \'Suggested Passwords\'. Menu \'Generate\' returns 10 passwords. Passwords are either 8 or 10 character size, depending on user request. These passwords contain one number, one symbol, one capital letter. The letters of passwords are selected based on the location on keyboard, either from left-hand or right-hand.
         \n\nOn the paper list of passwords, reference them by Account Id, shown on the account edit info.</string>
+    <string name="list_of_accounts">List of Accounts</string>
+    <string name="main_toolbar_menu">Main Toolbar Menu</string>
+    <string name="account_item_open_date">Account Item Open Date</string>
     <!--    \n\nThe review feedback is based on game expectations. This is NOT a game. On Google Play, it is correctly identified as a productivity tool.-->
 
 </resources>

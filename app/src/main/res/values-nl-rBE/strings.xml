@@ -233,11 +233,12 @@
     <string name="welcome_message">Welkomstbericht</string>
     <string name="menuvw_share_from">Herstel Accounts</string>
     <string name="link">Link</string>
-    <string name="about_message_text">Houd uw accounts bij met gesorteerde lijsten, zoekopdrachten, bewerkingen, back-ups, herstellen, of genereer voorgestelde wachtwoorden.
-\n\nOm de lijst op een andere volgorde te bekijken, klik op het filterpictogram voor drie verschillende gesorteerde volgordes. Gebruik het zoekmenu om alleen accounts te zien met de gezochte bedrijfsnaam.
-\n\nKlik op een accountitem om accountdetails te bekijken en bewerken. Om te verwijderen, veeg naar links of rechts. Om een account toe te voegen, klik op het plusteken rechtsonder.
-\n\nGebruik voor het maken van een reservekopie van accounts de optie \'Reservekopie Accounts\' in het menu. Gebruik voor het herstellen van accounts de optie \'Herstel Accounts\' in het menu. Gebruik Dropbox; dit werkt het beste. Andere methoden kunnen in strijd zijn met de nieuwe beveiligingsregels van Android.
-\n\nGenereer wachtwoorden via de menuoptie \'Voorgestelde Wachtwoorden\'. Het menu \'Genereren\' geeft 10 wachtwoorden terug. Wachtwoorden zijn ofwel 8 of 10 tekens groot, afhankelijk van de wens van de gebruiker. Deze wachtwoorden bevatten een cijfer, een symbool en een hoofdletter. De letters van de wachtwoorden worden geselecteerd op basis van de locatie op het toetsenbord, ofwel links of rechts.
-\n\nVerander de wachtwoordvolgorde door een wachtwoorditem ingedrukt te houden en vervolgens naar een nieuwe positie te verplaatsen. Een uitzondering is dat het niet naar het einde kan worden verplaatst. Een toekomstige upgrade zal dit oplossen. Om aan het einde te plaatsen, verplaats het naar het einde, net voor het laatste item, en trek het laatste item naar voren.
-\n\nOp de papieren lijst met wachtwoorden, verwijs naar ze op basis van het Account ID, dat wordt weergegeven in de accountbewerking.</string>
+    <string name="about_message_text">Houd uw accounts bij met gesorteerde lijsten, zoekopdrachten, bewerkingen, back-up, herstel of genereer voorgestelde wachtwoorden.
+    \n\nOm de lijst in een andere volgorde te bekijken, klik op het filterpictogram voor drie verschillende gesorteerde volgordes. Gebruik het zoekmenu om alleen accounts te zien met de gezochte bedrijfsnaam.
+    \n\nKlik op een accountitem om accountgegevens te bekijken en bewerken. Om te verwijderen, veeg het account naar links of rechts. Om een account toe te voegen, klik op het pluspictogram rechtsonder.
+    \n\nGebruik de menuoptie \'Backup Accounts\' om accounts te backuppen. Gebruik de menuoptie \'Restore Accounts\' om accounts te herstellen. Gebruik gedeelde software die compatibel is met JSON-bestanden.
+    \n\nGenereer wachtwoorden via de menuoptie \'Voorgestelde Wachtwoorden\'. Het menu \'Genereren\' geeft 10 wachtwoorden terug. Wachtwoorden zijn ofwel 8 of 10 tekens groot, afhankelijk van de wens van de gebruiker. Deze wachtwoorden bevatten één cijfer, één symbool en één hoofdletter. De letters van de wachtwoorden worden geselecteerd op basis van de locatie op het toetsenbord, ofwel links of rechts.
+    \n\nOp de papieren lijst van wachtwoorden, refereer eraan via het Account ID, dat wordt getoond in de accountbewerking.</string>
+    <string name="list_of_accounts">Lijst van Accounts</string>
+    <string name="main_toolbar_menu">Hoofdwerkbalkmenu</string>
 </resources>

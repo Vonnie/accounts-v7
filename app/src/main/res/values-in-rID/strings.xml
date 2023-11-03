@@ -234,10 +234,11 @@
     <string name="menuvw_share_from">Pulihkan Akun</string>
     <string name="link">Tautan</string>
     <string name="about_message_text">Lacak akun Anda dengan daftar yang disortir, pencarian, pengeditan, pencadangan, pemulihan, atau hasilkan kata sandi yang disarankan.
-\n\nUntuk melihat daftar dalam urutan yang berbeda, klik ikon penyaring untuk tiga urutan yang berbeda. Gunakan menu pencarian untuk melihat hanya akun dengan nama perusahaan yang dicari.
-\n\nKlik pada item akun untuk melihat dan mengedit rincian akun. Untuk menghapus, geser akun ke kiri atau kanan. Untuk menambahkan akun, klik tanda plus di sudut kanan bawah.
-\n\nUntuk mencadangkan Akun, gunakan opsi menu \'Cadangkan Akun\'. Untuk memulihkan Akun, gunakan opsi menu \'Pulihkan Akun\'. Gunakan Dropbox; ini yang paling baik. Cara lain mungkin melanggar aturan keamanan Android yang baru.
-\n\nHasilkan kata sandi melalui opsi menu \'Kata Sandi yang Disarankan\'. Menu Hasilkan mengembalikan 10 kata sandi. Kata sandi tersebut berukuran 8 atau 10 karakter, tergantung pada permintaan pengguna. Kata sandi ini mengandung satu angka, satu simbol, satu huruf kapital. Huruf-huruf kata sandi dipilih berdasarkan lokasi di keyboard, entah dari sisi kiri atau sisi kanan.
-\n\nUbah urutan kata sandi dengan menekan dan menahan item kata sandi, lalu memindahkannya ke posisi baru. Pengecualian adalah tidak dapat dipindahkan ke akhir. Pembaruan di masa depan akan menyelesaikan hal ini. Untuk memindahkannya ke akhir, geser ke akhir, tepat sebelum item terakhir, lalu tarik item terakhir ke depan.
-\n\nPada daftar kata sandi kertas, sebutkan mereka berdasarkan ID Akun, yang ditampilkan pada informasi edit akun.</string>
+    \n\nUntuk melihat daftar dalam urutan yang berbeda, klik ikon penyaring untuk tiga urutan yang berbeda. Gunakan permintaan menu pencarian untuk melihat hanya akun dengan nama perusahaan yang dicari.
+    \n\nKlik pada item akun untuk melihat dan mengedit rincian akun. Untuk menghapus, geser akun ke kiri atau ke kanan. Untuk menambahkan akun, klik tanda plus di sudut kanan bawah.
+    \n\nUntuk mencadangkan Akun, gunakan opsi menu \'Cadangkan Akun\'. Untuk memulihkan Akun, gunakan opsi menu \'Pulihkan Akun\'. Gunakan Perangkat Lunak Bersama yang kompatibel dengan berkas JSON.
+    \n\nHasilkan kata sandi melalui opsi menu \'Kata Sandi yang Disarankan\'. Menu Hasilkan mengembalikan 10 kata sandi. Kata sandi tersebut memiliki ukuran 8 atau 10 karakter, tergantung pada permintaan pengguna. Kata sandi ini mengandung satu angka, satu simbol, dan satu huruf kapital. Huruf-huruf kata sandi dipilih berdasarkan lokasi di keyboard, baik dari tangan kiri atau tangan kanan.
+    \n\nPada daftar kertas kata sandi, rujuk mereka dengan ID Akun, yang ditampilkan pada informasi pengeditan akun.</string>
+    <string name="list_of_accounts">Daftar Akun</string>
+    <string name="main_toolbar_menu">Menu Toolbar Utama</string>
 </resources>

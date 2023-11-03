@@ -19,6 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
+            android:contentDescription="@string/main_toolbar_menu"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -39,12 +40,11 @@
     <!--style="?android:attr/progressBarStyle"-->
 
 
-
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" >
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <FrameLayout
             android:id="@+id/fragment_search_container"
@@ -55,14 +55,15 @@
             android:id="@+id/fragment_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:tag="large_port"
-            android:layout_weight="3" />
+            android:layout_weight="3"
+            android:contentDescription="@string/list_of_accounts"
+            android:tag="large_port" />
 
-<!--        <FrameLayout-->
-<!--            android:id="@+id/fragment_container2"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_weight="2"-->
-<!--            android:layout_height="match_parent" />-->
+        <!--        <FrameLayout-->
+        <!--            android:id="@+id/fragment_container2"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_weight="2"-->
+        <!--            android:layout_height="match_parent" />-->
 
 
     </androidx.appcompat.widget.LinearLayoutCompat>
@@ -84,13 +85,13 @@
     <!--        tools:listitem="@layout/profile_item"/>-->
 
 
-<!--    <com.google.android.material.floatingactionbutton.FloatingActionButton-->
-<!--        android:id="@+id/button_add_profile"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_gravity="bottom|end"-->
-<!--        android:layout_margin="32dp"-->
-<!--        app:srcCompat="@drawable/ic_add"-->
-<!--        app:rippleColor="@color/secondaryColor" />-->
+    <!--    <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+    <!--        android:id="@+id/button_add_profile"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_gravity="bottom|end"-->
+    <!--        android:layout_margin="32dp"-->
+    <!--        app:srcCompat="@drawable/ic_add"-->
+    <!--        app:rippleColor="@color/secondaryColor" />-->
     <!--    app:backgroundTint="@color/primaryDarkColor"-->
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

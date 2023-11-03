@@ -233,11 +233,12 @@
     <string name="welcome_message">Mensaje de bienvenida</string>
     <string name="menuvw_share_from">Restaurar Cuentas</string>
     <string name="link">Enlace</string>
-    <string name="about_message_text">Haga un seguimiento de sus cuentas con listas ordenadas, búsquedas, ediciones, respaldos, restauraciones o genere contraseñas sugeridas.
-\n\nPara ver la lista en un orden diferente, haga clic en el ícono de filtro para tres órdenes ordenados diferentes. Utilice la opción del menú de búsqueda para ver solo cuentas con el nombre de la corporación buscada.
-\n\nHaga clic en un elemento de cuenta para ver y editar los detalles de la cuenta. Para eliminar, deslice la cuenta hacia la izquierda o hacia la derecha. Para agregar una cuenta, haga clic en el signo de más en la esquina inferior derecha.
-\n\nPara respaldar las Cuentas, utilice la opción del menú \'Respaldo de Cuentas\'. Para restaurar Cuentas, utilice la opción del menú \'Restaurar Cuentas\'. Utilice Dropbox; funciona mejor. Otras formas pueden violar las nuevas reglas de seguridad de Android.
-\n\nGenere contraseñas a través de la opción del menú \'Contraseñas Sugeridas\'. El menú de Generar devuelve 10 contraseñas. Las contraseñas tienen un tamaño de 8 o 10 caracteres, dependiendo de la solicitud del usuario. Estas contraseñas contienen un número, un símbolo y una letra mayúscula. Las letras de las contraseñas se seleccionan en función de la ubicación en el teclado, ya sea en la mano izquierda o en la mano derecha.
-\n\nCambie el orden de las contraseñas manteniendo presionado un elemento de la contraseña y luego muévalo a una nueva posición. La excepción es que no puede moverlo al final. Una futura actualización resolverá esto. Para ponerlo al final, muévalo al final, justo antes del último elemento, y luego arrastre el último elemento hacia adelante.
-\n\nEn la lista en papel de las contraseñas, haga referencia a ellas por el ID de la Cuenta, que se muestra en la información de edición de la cuenta.</string>
+    <string name="about_message_text">Realiza un seguimiento de tus cuentas con listas ordenadas, búsquedas, ediciones, copias de seguridad, restauraciones o genera contraseñas sugeridas.
+    \n\nPara ver la lista en un orden diferente, haz clic en el icono de filtro para tres órdenes diferentes. Utiliza la solicitud del menú de búsqueda para ver solo cuentas con el nombre de la corporación buscada.
+    \n\nHaz clic en un elemento de cuenta para ver y editar los detalles de la cuenta. Para eliminar, desliza la cuenta hacia la izquierda o hacia la derecha. Para añadir una cuenta, haz clic en el signo de más en la esquina inferior derecha.
+    \n\nPara respaldar las cuentas, utiliza la opción del menú \'Respaldo de Cuentas\'. Para restaurar las cuentas, utiliza la opción del menú \'Restaurar Cuentas\'. Utiliza el software compartido compatible con archivos JSON.
+    \n\nGenera contraseñas a través de la opción del menú \'Contraseñas Sugeridas\'. El menú Generar devuelve 10 contraseñas. Las contraseñas tienen un tamaño de 8 o 10 caracteres, dependiendo de la solicitud del usuario. Estas contraseñas contienen un número, un símbolo y una letra mayúscula. Las letras de las contraseñas se seleccionan en función de la ubicación en el teclado, ya sea en la mano izquierda o en la mano derecha.
+    \n\nEn la lista de contraseñas en papel, referencia a ellas mediante el ID de.</string>
+    <string name="list_of_accounts">Lista de Cuentas</string>
+    <string name="main_toolbar_menu">Menú de la Barra de Herramientas Principal</string>
 </resources>

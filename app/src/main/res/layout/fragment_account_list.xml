@@ -49,6 +49,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="3"
+            android:contentDescription="@string/list_of_accounts"
             android:scrollbarSize="8dp"
             android:scrollbars="vertical" />
 
