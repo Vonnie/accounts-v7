@@ -59,7 +59,8 @@
 
     <color name="primaryDarkColor">#a62c3f</color>
 
-    <color name="secondaryDarkColor">#FFFF41</color>
+    <color name="secondaryDarkColor">#F2F5FD</color>
+<!--    <color name="secondaryDarkColor">#FFFF41</color>-->
 
     <color name="backgroundWhite">#FFFFFF</color>
     <color name="backgroundTransparent">#00000000</color>

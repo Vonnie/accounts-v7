@@ -91,7 +91,7 @@ public class AddEditProfileFrag extends Fragment
     private TextInputLayout textInputCorpWebsite;
     private TextInputLayout textInputNote;
     private Button btnOpenDate;
-    private DatePickerDialog picker;
+//    private DatePickerDialog picker;
     private TextView tvActvyDate;
     private TextView tvPassportId;
     private TextView tvSequence;

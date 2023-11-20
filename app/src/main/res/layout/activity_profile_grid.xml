@@ -34,6 +34,7 @@
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:contentDescription="@string/list_of_passwords"
             tools:listitem="@layout/suggest_item" />
 
 
@@ -46,6 +47,7 @@
         android:layout_height="wrap_content"
         android:src="@drawable/ic_add"
         android:layout_gravity="bottom|end"
+        android:contentDescription="Add password"
         android:layout_margin="32dp"/>
 
 

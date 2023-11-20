@@ -255,7 +255,18 @@
         \n\nOn the paper list of passwords, reference them by Account Id, shown on the account edit info.</string>
     <string name="list_of_accounts">List of Accounts</string>
     <string name="main_toolbar_menu">Main Toolbar Menu</string>
-    <string name="account_item_open_date">Account Item Open Date</string>
+    <string name="searched_accounts_list">" Search for Accounts on Accounts List"</string>
+    <string name="list_of_passwords">List of suggested passwords</string>
+    <string name="sort_accounts_list_by_corporation_name">Sort Accounts List by Corporation Name</string>
+    <string name="sort_accounts_list_by_account_id">Sort Accounts List by Account Id</string>
+    <string name="sort_accounts_list_by_open_date">Sort Accounts List by Open Date</string>
+    <string name="show_welcome_message">Show Welcome Message</string>
+    <string name="show_about_screen">Show About Screen</string>
+    <string name="show_suggested_passwords">Show Suggested Passwords</string>
+    <string name="backup_accounts_thru_shared_options">Backup Accounts thru shared options</string>
+    <string name="restore_accounts_from_shared_options">Restore Accounts from shared options</string>
+    <string name="search_for_accounts_from_account_list">Search for accounts from Account List</string>
+    <string name="choose_sort_order_for_accounts_list">Choose sort order for Accounts List</string>
     <!--    \n\nThe review feedback is based on game expectations. This is NOT a game. On Google Play, it is correctly identified as a productivity tool.-->
 
 </resources>

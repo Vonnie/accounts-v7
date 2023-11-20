@@ -76,8 +76,8 @@ public class SearchActivity extends AppCompatActivity {
         setContentView(R.layout.activity_search_list);
 
         TextInputLayout textInputSearchCorpName = findViewById(R.id.text_input_corp_name);
-        AutoCompleteTextView filledSearch = findViewById(R.id.filled_exposed_dropdown);
-        filledSearch.setDropDownBackgroundResource(R.color.primaryColor);
+//        AutoCompleteTextView filledSearch = findViewById(R.id.filled_exposed_dropdown);
+//        filledSearch.setDropDownBackgroundResource(R.color.primaryColor);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

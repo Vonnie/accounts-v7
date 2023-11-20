@@ -241,4 +241,16 @@
     \n\nEn la lista de contraseñas en papel, referencia a ellas mediante el ID de.</string>
     <string name="list_of_accounts">Lista de Cuentas</string>
     <string name="main_toolbar_menu">Menú de la Barra de Herramientas Principal</string>
+    <string name="searched_accounts_list">Buscar Cuentas en la Lista de Cuentas</string>
+    <string name="list_of_passwords">Lista de contraseñas sugeridas</string>
+    <string name="sort_accounts_list_by_corporation_name">Ordenar Lista de Cuentas por Nombre de la Corporación</string>
+    <string name="sort_accounts_list_by_account_id">Ordenar Lista de Cuentas por ID de Cuenta</string>
+    <string name="sort_accounts_list_by_open_date">Ordenar Lista de Cuentas por Fecha de Apertura</string>
+    <string name="show_welcome_message">Mostrar Mensaje de Bienvenida</string>
+    <string name="show_about_screen">Mostrar Pantalla Acerca de</string>
+    <string name="show_suggested_passwords">Mostrar Contraseñas Sugeridas</string>
+    <string name="backup_accounts_thru_shared_options">Hacer una copia de seguridad de las cuentas a través de opciones compartidas</string>
+    <string name="restore_accounts_from_shared_options">Restaurar cuentas desde opciones compartidas</string>
+    <string name="search_for_accounts_from_account_list">Buscar cuentas desde la Lista de Cuentas</string>
+    <string name="choose_sort_order_for_accounts_list">Elegir el orden de clasificación para la Lista de Cuentas</string>
 </resources>

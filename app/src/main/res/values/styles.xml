@@ -5,17 +5,17 @@
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
         <item name="colorPrimary">@color/primaryColor</item>
         <item name="colorPrimaryDark">@color/primaryDarkColor</item>
-        <item name="colorAccent">@color/secondaryColor</item>
+        <item name="colorAccent">@color/primaryColor</item>
         <item name="android:textColorTertiary">@color/secondaryDarkColor</item>
-        <item name="android:textColorPrimary">@color/primaryTextColor</item>
+        <item name="android:textColorPrimary">@color/primaryDarkColor</item>
         <item name="android:textColorSecondary">@color/secondaryTextColor</item>
         <item name="android:windowBackground">@color/primaryLightColor</item>
     </style>
 
 
-        <style name="GreenText" parent="TextAppearance.AppCompat">
-            <item name="android:textColor">#00FF00</item>
-        </style>
+    <style name="GreenText" parent="TextAppearance.AppCompat">
+        <item name="android:textColor">#00FF00</item>
+    </style>
 
     <!--?attr/textColorAlertDialogListItem-->
     <!--<item name="colorPrimary">@color/primaryColor</item>-->
@@ -58,6 +58,28 @@
     <style name="CardViewStyle" parent="CardView">
         <item name="cardCornerRadius">4dp</item>
         <item name="cardElevation">4dp</item>
+    </style>
+
+
+    <style name="DatePickerTheme" parent="ThemeOverlay.MaterialComponents.Dialog.Alert">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/primaryDarkColor</item>
+        <item name="colorAccent">@color/primaryLightColor</item>
+        <item name="android:calendarTextColor">@color/colorPrimary</item>
+        <item name="android:calendarViewStyle">@style/TextAppearance.AppCompat.Medium</item>
+        <item name="android:minWidth">48dp</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="android:buttonBarNegativeButtonStyle">
+            @style/DatePickerTheme.ButtonBarNegativeButtonStyle
+        </item>
+        <item name="android:height">48dp</item>
+        <item name="android:width">48dp</item>
+        <item name="android:contentDescription">Pick date for when account is opened.</item>
+    </style>
+
+
+    <style name="DatePickerTheme.ButtonBarNegativeButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@android:color/holo_red_light</item>
     </style>
 
     <style name="AppTheme.NoActionBar.NoActionBar">

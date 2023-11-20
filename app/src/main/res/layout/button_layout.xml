@@ -21,13 +21,15 @@
         android:layout_height="wrap_content"
         android:hint="@string/hint_text"
         android:textColor="@color/primaryTextColor"
+        android:contentDescription="Search text to find accounts with matching Corp Name"
         android:textColorHint="@color/primaryTextColor">
 
         <AutoCompleteTextView
             android:id="@+id/filled_exposed_dropdown"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/primaryColor"
+            android:background="@color/primaryDarkColor"
+            android:contentDescription="@string/searched_accounts_list"
             android:textColor="@color/primaryTextColor"
             android:textColorHint="@color/primaryTextColor" />
 

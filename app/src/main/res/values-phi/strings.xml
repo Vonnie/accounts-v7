@@ -241,4 +241,16 @@
         \n\nOn the paper list of passwords, reference them by Account Id, shown on the account edit info.</string>
     <string name="list_of_accounts">Listahan ng mga Account</string>
     <string name="main_toolbar_menu">Pangunahing Menu ng Toolbar</string>
+    <string name="searched_accounts_list">Hanapin ang mga Accounts sa Listahan ng mga Accounts</string>
+    <string name="list_of_passwords">Listahan ng mga inirerekomendang mga password</string>
+    <string name="sort_accounts_list_by_corporation_name">I-sort ang Listahan ng mga Accounts ayon sa Pangalan ng Korporasyon</string>
+    <string name="sort_accounts_list_by_account_id">I-sort ang Listahan ng mga Accounts ayon sa ID ng Account</string>
+    <string name="sort_accounts_list_by_open_date">I-sort ang Listahan ng mga Accounts ayon sa Petsa ng Pagbukas</string>
+    <string name="show_welcome_message">Ipakita ang Mensaheng Maligayang Pagdating</string>
+    <string name="show_about_screen">Ipakita ang Tungkol sa Screen</string>
+    <string name="show_suggested_passwords">Ipakita ang Inirerekomendang mga Password</string>
+    <string name="backup_accounts_thru_shared_options">Mag-backup ng mga Accounts sa pamamagitan ng mga opsiyong ibinahagi</string>
+    <string name="restore_accounts_from_shared_options">I-restore ang mga Accounts mula sa mga opsiyong ibinahagi</string>
+    <string name="search_for_accounts_from_account_list">Maghanap ng mga accounts mula sa Listahan ng Account</string>
+    <string name="choose_sort_order_for_accounts_list">Pumili ng porsyento ng pag-sort para sa Listahan ng mga Accounts</string>
 </resources>

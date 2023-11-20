@@ -246,7 +246,7 @@ public class ProfileJsonListIO {
                 writer.name("actvyDt").value(
                         format_ymdtime.format(item.getActvyLong()));
             }
-            Log.d(TAG, "writeMessage: note " + item.getNote());
+//            Log.d(TAG, "writeMessage: note " + item.getNote());
             writer.name("note").value(item.getNote());
 
             writer.endObject();

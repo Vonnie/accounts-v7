@@ -7,6 +7,8 @@ import static androidx.core.content.FileProvider.getUriForFile;
 
 import android.accounts.AccountManager;
 import android.app.Dialog;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothManager;
 import android.content.ActivityNotFoundException;
 //import android.content.ContentResolver;
 import android.content.Context;
@@ -144,6 +146,7 @@ public class MainActivity extends AppCompatActivity
     public static final String ARG_SELECTED_ID = "ARG_SELECTED_ID";
     public static final String ARG_IS_SHEARCH_SHOWN = "ARG_IS_SHEARCH_SHOWN";
     public static final String ARG_EDIT_MODE_ADD = "ARG_EDIT_MODE_ADD";
+    public static final String ARG_EXTRA_SHARE_TYPE = "ARG_EXTRA_SHARE_TYPE";
 
     // whether or not the activity is i 2-pane mode
     // i.e. running in landscape on a tablet
@@ -264,7 +267,9 @@ public class MainActivity extends AppCompatActivity
     private ActivityResultLauncher<Intent> startForResultLauncher;
     private ActivityResultLauncher<Intent> startForResultSendLauncher;
     private ActivityResultLauncher<Intent> startForResultReceiveLauncher;
+    private ActivityResultLauncher<Intent> startForResultBluetoothBackupLauncher;
 
+    private ActivityResultLauncher<Intent> startForResultBluetoothRestoreLauncher;
     private ProfileAdapter adapter;
     private ProfileViewModel profileViewModel;
 
@@ -535,7 +540,8 @@ public class MainActivity extends AppCompatActivity
 //                            int result = activityResult.getResultCode();
                             Intent data = activityResult.getData();
                             Log.d(TAG, "onActivityResult sent file " + data);
-                            Toast.makeText(MainActivity.this, "account.json send complete", Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(MainActivity.this, "account.json send complete", Toast.LENGTH_SHORT).show();
+                            msgDialog("account.json send complete");
                         } else {
                             Log.d(TAG, "onActivityResult sent: canceled " + activityResult.describeContents() + "; " + activityResult.getResultCode());
 //                            Toast.makeText(MainActivity.this, "account.json send incomplete, canceled, incompatible format, or slow response (verify if sent)", Toast.LENGTH_LONG).show();
@@ -643,6 +649,50 @@ public class MainActivity extends AppCompatActivity
                     }
                 });
 
+        startForResultBluetoothBackupLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult activityResult) {
+                        String TABFunc = "startForResultReceiveLauncher:";
+
+                        if (activityResult.getResultCode() == RESULT_OK) {
+//                            Intent data = activityResult.getData();
+//                            assert data != null;
+//
+//                            String shareId = data.getStringExtra(ARG_EXTRA_SHARE_TYPE);
+//                            if (shareId == "backup") {
+
+                            backupAccounts();
+                        } else {
+                            Log.d(TAG, TABFunc + "receive canceled ");
+                            Toast.makeText(MainActivity.this, "Bluetooth Enabled Failed", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+
+        startForResultBluetoothRestoreLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult activityResult) {
+                        String TABFunc = "startForResultReceiveLauncher:";
+
+                        if (activityResult.getResultCode() == RESULT_OK) {
+//                            Intent data = activityResult.getData();
+//                            assert data != null;
+//
+//                            String shareId = data.getStringExtra(ARG_EXTRA_SHARE_TYPE);
+//
+//                            if (shareId == "backup") {
+
+                            restoreAccounts();
+                        } else {
+                            Log.d(TAG, TABFunc + "receive canceled ");
+                            Toast.makeText(MainActivity.this, "Bluetooth Enabled Failed", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
 
 //        if (findViewById(R.id.fragment_container2) == null) {
 //            Log.d(TAG, "onCreate: has null 2nd container");
@@ -1188,22 +1238,28 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 //        Log.d(TAG, "onCreateOptionsMenu: starts");
-        // Inflate the menu; this adds items to the action bar if it is present.
-        this.menu = menu;
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        try {
+            // Inflate the menu; this adds items to the action bar if it is present.
+            this.menu = menu;
+            getMenuInflater().inflate(R.menu.menu_main, menu);
 
-        if (listsortOrder == LISTSORT_CORP_NAME) {
-            menu.findItem(R.id.menuacct_sort_corpname).setChecked(true);
-        } else if (listsortOrder == LISTSORT_PASSPORT_ID) {
-            menu.findItem(R.id.menuacct_sort_passport).setChecked(true);
-        } else if (listsortOrder == LISTSORT_OPEN_DATE) {
-            menu.findItem(R.id.menuacct_sort_opendate).setChecked(true);
+            if (listsortOrder == LISTSORT_CORP_NAME) {
+                menu.findItem(R.id.menuacct_sort_corpname).setChecked(true);
+            } else if (listsortOrder == LISTSORT_PASSPORT_ID) {
+                menu.findItem(R.id.menuacct_sort_passport).setChecked(true);
+            } else if (listsortOrder == LISTSORT_OPEN_DATE) {
+                menu.findItem(R.id.menuacct_sort_opendate).setChecked(true);
 //        } else if (listsortOrder == LISTSORT_CUSTOM_SORT) {
 //            menu.findItem(R.id.menuacct_sort_custom).setChecked(true);
+            }
+
+
+
+            Log.d(TAG, "onCreateOptionsMenu: listsortOrder " + this.listsortOrder);
+        } catch (Exception e) {
+            // Define what your app should do if no activity can handle the intent.
+            Log.d(TAG, "Error onCreateOptionsMenu: " + e.getMessage());
         }
-
-        Log.d(TAG, "onCreateOptionsMenu: listsortOrder " + this.listsortOrder);
-
 //          ========================================================================
 //        For future to throw an account to another device
 //          ========================================================================
@@ -4167,6 +4223,77 @@ public class MainActivity extends AppCompatActivity
         dialog.show();
     }
 
+    private void msgyesnoDialog(String msg, String shareType) {
+
+        AlertDialog.Builder altBx = new AlertDialog.Builder(this);
+        altBx.setTitle("Bluetooth Question");
+        altBx.setMessage(msg);
+        altBx.setIcon(R.drawable.ic_info_24dp);
+
+        altBx.setPositiveButton("Allow", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+
+                Log.d(TAG, "Allow");
+                Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+//                enableBtIntent.putExtra(ARG_EXTRA_SHARE_TYPE, shareType);
+                if (shareType == "backup") {
+                    startForResultBluetoothBackupLauncher.launch(enableBtIntent);
+                } else {
+                    startForResultBluetoothRestoreLauncher.launch(enableBtIntent);
+                }
+
+            }
+        });
+        altBx.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                Log.d(TAG, "Deny");
+            }
+
+        });
+        altBx.show();
+
+    }
+//        final Dialog msgDialog = new Dialog(this);
+//        msgDialog.setContentView(R.layout.diamsg_yesno);
+//        msgDialog.setTitle("Account Information");
+//
+//        TextView text = (TextView) msgDialog.findViewById(R.id.text);
+//        text.setText(msg);
+//        ImageView image = (ImageView) msgDialog.findViewById(R.id.image);
+//        image.setImageResource(R.drawable.ic_info_24dp);
+//        TextView textYes = (TextView) msgDialog.findViewById(R.id.yes);
+//        textYes.setText("Allow");
+//        TextView textNo = (TextView) msgDialog.findViewById(R.id.no);
+//        textYes.setText("Deny");
+//
+//        Button dialogButton = (Button) msgDialog.findViewById(R.id.dialogButtonOK);
+//        // if button is clicked, close the custom dialog
+//        dialogButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+//                public void onClick(DialogInterface dialog, int which) {
+//                    switch (which) {
+//                        // on below line we are setting a click listener
+//                        // for our positive button
+//                        case DialogInterface.BUTTON_POSITIVE:
+//                            // on below line we are displaying a toast message.
+//                            Toast.makeText(MainActivity.this, "Yes clicked", Toast.LENGTH_SHORT).show();
+//                            break;
+//                        // on below line we are setting click listener
+//                        // for our negative button.
+//                        case DialogInterface.BUTTON_NEGATIVE:
+//                            // on below line we are dismissing our dialog box.
+//                            dialog.dismiss();
+//
+//                    }
+//                }
+//            };
+//        }});
+//
+//        msgDialog.show();
+//    }
+
     @Override
     public void setMaxSeq(int maxSeq) {
         this.currentMaxSeq = maxSeq;
@@ -4475,7 +4602,7 @@ public class MainActivity extends AppCompatActivity
     private void writeJsonAccounts() {
         String TABFunc = "writeJsonAccounts";
         String msgError = "";
-        ProfileJsonListIO profileJsonListIO = new ProfileJsonListIO();
+
 //        myShareActionProvider.setOnShareTargetSelectedListener();
 
 //        Intent googlePicker = AccountPicker.newChooseAccountIntent(null, null, new String[]{GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE}, true, null, null, null, null);
@@ -4490,8 +4617,59 @@ public class MainActivity extends AppCompatActivity
 
 
         try {
+
+            BluetoothManager bluetoothManager = getSystemService(BluetoothManager.class);
+            BluetoothAdapter bluetoothAdapter = bluetoothManager.getAdapter();
+            if (bluetoothAdapter == null) {
+                // Device doesn't support Bluetooth
+//                Log.d(TAG, "Device doesn't support Bluetooth");
+                msgDialog("Device doesn't support Bluetooth, you may need for backup");
+                return;
+            }
+
+            if (!bluetoothAdapter.isEnabled()) {
+//                Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+//                startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+//                Log.d(TAG, "Device Bluetooth disabled");
+                msgyesnoDialog("Device Bluetooth disabled, you may need for backup. Enable Bluetooth?", "backup");
+                return;
+            } else {
+                Log.d(TAG, "Device Bluetooth enabled");
+                backupAccounts();
+            }
+
+//            // Get the default Bluetooth adapter
+//            BluetoothAdapter bluetoothAdapter = BluetoothManager.getAdapter();
+//
+//            // Check if Bluetooth is supported on the device
+//            if (bluetoothAdapter == null) {
+//                System.out.println("Bluetooth is not supported on this device");
+//            } else {
+//                // Check if Bluetooth is enabled
+//                if (bluetoothAdapter.isEnabled()) {
+//                    System.out.println("Bluetooth is enabled");
+//                } else {
+//                    System.out.println("Bluetooth is disabled");
+//                }
+//            }
+        } catch (Exception e2) {
+            e2.printStackTrace();
+            System.out.println(e2.getMessage());
+            msgError = "jsonError: " + e2.getMessage();
+            Log.v(TAG, msgError);
+            Toast.makeText(this, R.string.toast_export_error, Toast.LENGTH_SHORT).show();
+        }
+
+
+    }
+
+    private void backupAccounts() {
+        String TABFunc = "BackupAccounts";
+        String msgError = "";
+        ProfileJsonListIO profileJsonListIO = new ProfileJsonListIO();
+        try {
             File dirStorage = getExternalFilesDir("passport");
-            Log.d(TAG, TABFunc + " path found " + dirStorage.getPath());
+//            Log.d(TAG, TABFunc + " path found " + dirStorage.getPath());
 
             if (!dirStorage.exists()) {
                 dirStorage.mkdirs();
@@ -4499,13 +4677,13 @@ public class MainActivity extends AppCompatActivity
             }
 
             File file = new File(dirStorage, "accounts.json");
-            Log.d(TAG, TABFunc + " export filename: " + file.getAbsoluteFile());
+//            Log.d(TAG, TABFunc + " export filename: " + file.getAbsoluteFile());
 
-            if (file.exists()) {
-                Log.d(TAG, TABFunc + " file exists " + file.getAbsoluteFile());
-            } else {
-                Log.d(TAG, TABFunc + " file not exists ");
-            }
+//            if (file.exists()) {
+//                Log.d(TAG, TABFunc + " file exists " + file.getAbsoluteFile());
+//            } else {
+//                Log.d(TAG, TABFunc + " file not exists ");
+//            }
 
             if (file.createNewFile()) {
                 Log.d(TAG, TABFunc + " file created " + file.getAbsoluteFile());
@@ -4573,8 +4751,33 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void requestFilePicker() {
+        String TABFunc = "writeJsonAccounts";
+        String msgError = "";
+
+        BluetoothManager bluetoothManager = getSystemService(BluetoothManager.class);
+        BluetoothAdapter bluetoothAdapter = bluetoothManager.getAdapter();
+        if (bluetoothAdapter == null) {
+            // Device doesn't support Bluetooth
+//                Log.d(TAG, "Device doesn't support Bluetooth");
+            msgDialog("Device doesn't support Bluetooth, you may need for backup");
+            return;
+        }
+
+        if (!bluetoothAdapter.isEnabled()) {
+//                Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+//                startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+//                Log.d(TAG, "Device Bluetooth disabled");
+            msgyesnoDialog("Device Bluetooth disabled, you may need for restore. Enable Bluetooth?", "restore");
+            return;
+        } else {
+            Log.d(TAG, "Device Bluetooth enabled");
+            restoreAccounts();
+        }
+    }
+
+    private void restoreAccounts() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("*/*");
+        intent.setType("*/json");
         intent.addFlags(FLAG_GRANT_READ_URI_PERMISSION | FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
         Intent chooseFile = Intent.createChooser(intent, "Choose a file");
 //            startActivityForResult(chooseFile, PICK_FILE_REQUEST);

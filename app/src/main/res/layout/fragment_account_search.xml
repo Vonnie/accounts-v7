@@ -25,7 +25,10 @@
             android:id="@+id/filled_exposed_dropdown"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/primaryDarkColor"
+            android:textColor="@color/primaryTextColor"
             android:textColorHint="@color/primaryDarkColor"
+            android:contentDescription="@string/searched_accounts_list"
             />
 <!--            android:background="@color/primaryDarkColor"-->
 <!--            android:textColor="@color/secondaryTextColor"-->

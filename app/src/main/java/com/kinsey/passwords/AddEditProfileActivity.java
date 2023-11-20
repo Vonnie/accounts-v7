@@ -87,7 +87,7 @@ public class AddEditProfileActivity extends AppCompatActivity
     //    private TextView mtvOpenDate;
     private Button btnOpenDate;
 
-    private DatePickerDialog picker;
+//    private DatePickerDialog picker;
 
     //    private DatePicker mDtePickOpen;
     private TextView tvActvyDate;
@@ -891,19 +891,22 @@ public class AddEditProfileActivity extends AppCompatActivity
             mDay = cldrOpened.get(Calendar.DAY_OF_MONTH);
 
 
-            DatePickerDialog datePickerDialog = new DatePickerDialog(this,
+            DatePickerDialog datePickerDialog = new DatePickerDialog(this, R.style.DatePickerTheme,
                     new DatePickerDialog.OnDateSetListener() {
 
                         @Override
                         public void onDateSet(DatePicker view, int year,
                                               int monthOfYear, int dayOfMonth) {
 
-//                            btnOpenDate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
-                            btnOpenDate.setText(R.string.opened + " " + (monthOfYear + 1) + "/" + dayOfMonth + "/" + year);
                             Calendar c2 = Calendar.getInstance();
                             c2.set(year, monthOfYear, dayOfMonth);
                             lngOpenDate = c2.getTimeInMillis();
                             Log.d(TAG, "callback date long " + lngOpenDate);
+//                            btnOpenDate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+//                            btnOpenDate.setText(R.string.opened + " " + (monthOfYear + 1) + "/" + dayOfMonth + "/" + year);
+                            Date dteOpen = new Date(lngOpenDate);
+                            btnOpenDate.setText("OPENED " + format_mdy.format(dteOpen));
+                            cldrOpened.setTime(dteOpen);
 
                         }
                     }, mYear, mMonth, mDay);

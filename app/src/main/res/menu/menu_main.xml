@@ -10,41 +10,6 @@
     <!--app:showAsAction="always" />-->
 
 
-    <item
-        android:icon="@drawable/ic_filter_none"
-        android:title="@string/menu_main_sort"
-        app:showAsAction="ifRoom">
-
-        <menu>
-            <group
-                android:id="@+id/group_sort"
-                android:checkableBehavior="single"
-                android:enabled="true"
-                android:visible="true">
-
-                <item
-                    android:id="@+id/menuacct_sort_corpname"
-                    android:checked="true"
-                    android:orderInCategory="212"
-                    android:title="@string/menuacct_sort_corpname" />
-                <item
-                    android:id="@+id/menuacct_sort_passport"
-                    android:orderInCategory="213"
-                    android:title="@string/menuacct_sort_passport"
-                    app:showAsAction="ifRoom" />
-                <item
-                    android:id="@+id/menuacct_sort_opendate"
-                    android:orderInCategory="214"
-                    android:title="@string/menuacct_sort_opendate"
-                    app:showAsAction="ifRoom" />
-                <!--                <item-->
-                <!--                    android:id="@+id/menuacct_sort_custom"-->
-                <!--                    android:orderInCategory="215"-->
-                <!--                    android:title="@string/menuacct_sort_custom"-->
-                <!--                    app:showAsAction="ifRoom" />-->
-            </group>
-        </menu>
-    </item>
 
     <item
         android:id="@+id/menumain_search"
@@ -52,7 +17,8 @@
         android:title="@string/menu_search"
         android:checkable="true"
         android:checked="false"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="ifRoom"
+        android:contentDescription="@string/search_for_accounts_from_account_list" />
 
 
     <!--    <item-->
@@ -114,26 +80,71 @@
 <!--                android:title="@string/menuacct_backup_restore_accts"-->
 <!--                app:showAsAction="ifRoom" />-->
 
+
+            <item
+                android:icon="@drawable/ic_filter_none"
+                android:orderInCategory="121"
+                android:title="@string/menu_main_sort"
+                app:showAsAction="always"
+                android:contentDescription="@string/choose_sort_order_for_accounts_list">
+
+                <menu>
+                    <group
+                        android:id="@+id/group_sort"
+                        android:checkableBehavior="single"
+                        android:enabled="true"
+                        android:visible="true">
+
+                        <item
+                            android:id="@+id/menuacct_sort_corpname"
+                            android:checked="true"
+                            android:orderInCategory="212"
+                            android:title="@string/menuacct_sort_corpname"
+                            android:contentDescription="@string/sort_accounts_list_by_corporation_name" />
+                        <item
+                            android:id="@+id/menuacct_sort_passport"
+                            android:orderInCategory="213"
+                            android:title="@string/menuacct_sort_passport"
+                            app:showAsAction="ifRoom"
+                            android:contentDescription="@string/sort_accounts_list_by_account_id" />
+                        <item
+                            android:id="@+id/menuacct_sort_opendate"
+                            android:orderInCategory="214"
+                            android:title="@string/menuacct_sort_opendate"
+                            app:showAsAction="ifRoom"
+                            android:contentDescription="@string/sort_accounts_list_by_open_date"/>
+                        <!--                <item-->
+                        <!--                    android:id="@+id/menuacct_sort_custom"-->
+                        <!--                    android:orderInCategory="215"-->
+                        <!--                    android:title="@string/menuacct_sort_custom"-->
+                        <!--                    app:showAsAction="ifRoom" />-->
+                    </group>
+                </menu>
+            </item>
+
             <item
                 android:id="@+id/menumain_notify"
                 android:icon="@drawable/ic_warning_black_24dp"
                 android:orderInCategory="123"
                 android:title="@string/welcome_message"
-                app:showAsAction="ifRoom" />
+                app:showAsAction="ifRoom"
+                android:contentDescription="@string/show_welcome_message"/>
 
             <item
                 android:id="@+id/menumain_about"
                 android:icon="@drawable/ic_help_outline_black"
                 android:orderInCategory="124"
                 android:title="@string/menuacct_about"
-                app:showAsAction="ifRoom" />
+                app:showAsAction="ifRoom"
+                android:contentDescription="@string/show_about_screen"/>
 
             <item
                 android:id="@+id/menumain_showSuggests"
                 android:icon="@drawable/ic_vpn_key_black"
                 android:orderInCategory="125"
                 android:title="@string/menu_suggests"
-                app:showAsAction="ifRoom" />
+                app:showAsAction="ifRoom"
+                android:contentDescription="@string/show_suggested_passwords"/>
 
             <item
                 android:id="@+id/vw_shared"
@@ -141,14 +152,16 @@
                 android:orderInCategory="126"
                 android:title="@string/menuvw_share"
                 app:actionProviderClass="androidx.appcompat.widget.ShareActionProvider"
-                app:showAsAction="ifRoom" />
+                app:showAsAction="ifRoom"
+                android:contentDescription="@string/backup_accounts_thru_shared_options"/>
             <item
                 android:id="@+id/vw_shared_from"
                 android:icon="@drawable/ic_share_black"
                 android:orderInCategory="127"
                 android:title="@string/menuvw_share_from"
                 app:actionProviderClass="androidx.appcompat.widget.ShareActionProvider"
-                app:showAsAction="ifRoom" />
+                app:showAsAction="ifRoom"
+                android:contentDescription="@string/restore_accounts_from_shared_options"/>
 
 <!--            <item-->
 <!--                android:id="@+id/action_share"-->

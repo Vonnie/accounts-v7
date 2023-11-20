@@ -13,7 +13,7 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/account_items_list_opendate"
-        android:contentDescription="@string/account_item_open_date"
+        android:contentDescription="@string/list_of_accounts"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

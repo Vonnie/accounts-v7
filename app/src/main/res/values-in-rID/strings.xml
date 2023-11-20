@@ -241,4 +241,16 @@
     \n\nPada daftar kertas kata sandi, rujuk mereka dengan ID Akun, yang ditampilkan pada informasi pengeditan akun.</string>
     <string name="list_of_accounts">Daftar Akun</string>
     <string name="main_toolbar_menu">Menu Toolbar Utama</string>
+    <string name="searched_accounts_list">Cari Akun di Daftar Akun</string>
+    <string name="list_of_passwords">Daftar kata sandi yang disarankan</string>
+    <string name="sort_accounts_list_by_corporation_name">Urutkan Daftar Akun berdasarkan Nama Perusahaan</string>
+    <string name="sort_accounts_list_by_account_id">Urutkan Daftar Akun berdasarkan ID Akun</string>
+    <string name="sort_accounts_list_by_open_date">Urutkan Daftar Akun berdasarkan Tanggal Dibuka</string>
+    <string name="show_welcome_message">Tampilkan Pesan Selamat Datang</string>
+    <string name="show_about_screen">Tampilkan Layar Tentang</string>
+    <string name="show_suggested_passwords">Tampilkan Kata Sandi yang Disarankan</string>
+    <string name="backup_accounts_thru_shared_options">Cadangkan Akun melalui opsi bersama</string>
+    <string name="restore_accounts_from_shared_options">Pulihkan Akun dari opsi bersama</string>
+    <string name="search_for_accounts_from_account_list">Cari akun dari Daftar Akun</string>
+    <string name="choose_sort_order_for_accounts_list">Pilih urutan penyortiran untuk Daftar Akun</string>
 </resources>
